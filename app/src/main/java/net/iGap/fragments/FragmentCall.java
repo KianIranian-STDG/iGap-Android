@@ -133,9 +133,9 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
 
         if (realmResults == null) {
-            Realm realm = Realm.getDefaultInstance();
-            realmResults = getRealmResult(mSelectedStatus, realm);
-            realm.close();
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realmResults = getRealmResult(mSelectedStatus, realm);
+            }
         }
 
         realmResults.addChangeListener((realmCallLogs, changeSet) -> {
@@ -253,8 +253,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
             if (G.userLogin) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
                         positiveText(R.string.B_ok).onPositive((dialog, which) -> {
-                    Realm realm_ = Realm.getDefaultInstance();
-                    try {
+                    try (Realm realm_ = Realm.getDefaultInstance()) {
                         setViewState(false);
                         RealmCallLog realmCallLog = realm_.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
                         new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
@@ -262,8 +261,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
                         mSelectedLogList.clear();
                     } catch (Exception e) {
                         e.printStackTrace();
-                    } finally {
-                        realm_.close();
                     }
                 }).negativeText(R.string.B_cancel).show();
             } else {
@@ -283,8 +280,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
             if (G.userLogin) {
                 new MaterialDialog.Builder(getActivity()).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_log).positiveText(R.string.B_ok).onPositive((dialog, which) -> {
 
-                    Realm realm_ = Realm.getDefaultInstance();
-                    try {
+                    try (Realm realm_ = Realm.getDefaultInstance()) {
 
                         List<Long> logIds = new ArrayList<>();
 
@@ -304,8 +300,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                    } finally {
-                        realm_.close();
                     }
 
 
@@ -326,9 +320,9 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     private void getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter filter) {
         if (realmResults != null) realmResults.removeAllChangeListeners();
         mSelectedStatus = filter;
-        Realm realm = Realm.getDefaultInstance();
-        realmResults = getRealmResult(mSelectedStatus, realm);
-        realm.close();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realmResults = getRealmResult(mSelectedStatus, realm);
+        }
         mRecyclerView.setAdapter(new CallAdapter(realmResults));
         checkListIsEmpty();
     }
@@ -465,15 +459,12 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
             if (G.userLogin) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
                         positiveText(R.string.B_ok).onPositive((dialog, which) -> {
-                    Realm realm = Realm.getDefaultInstance();
-                    try {
+                    try (Realm realm = Realm.getDefaultInstance()) {
                         RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
                         new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
                         emptuListView.setVisibility(View.VISIBLE);
                     } catch (Exception e) {
                         e.printStackTrace();
-                    } finally {
-                        realm.close();
                     }
                 }).negativeText(R.string.B_cancel).show();
             } else {

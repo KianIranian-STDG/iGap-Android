@@ -29,47 +29,45 @@ public class RealmWallpaper extends RealmObject {
     private RealmList<RealmWallpaperProto> realmWallpaperProto;
 
     public static void updateField(final List<ProtoGlobal.Wallpaper> protoList, final String localPath) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            final RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).findFirst();
 
-        Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
 
-        final RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).findFirst();
+                    RealmWallpaper item;
 
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+                    if (realmWallpaper == null) {
+                        final RealmWallpaper rw = new RealmWallpaper();
+                        item = realm.copyToRealm(rw);
+                    } else {
+                        item = realmWallpaper;
+                    }
 
-                RealmWallpaper item;
+                    if (protoList != null) {
+                        item.setWallPaperList(realm, protoList);
+                        item.setLastTimeGetList(TimeUtils.currentLocalTime());
+                    }
 
-                if (realmWallpaper == null) {
-                    final RealmWallpaper rw = new RealmWallpaper();
-                    item = realm.copyToRealm(rw);
-                } else {
-                    item = realmWallpaper;
-                }
+                    if (localPath.length() > 0) {
 
-                if (protoList != null) {
-                    item.setWallPaperList(realm, protoList);
-                    item.setLastTimeGetList(TimeUtils.currentLocalTime());
-                }
+                        ArrayList<String> localList = item.getLocalList();
 
-                if (localPath.length() > 0) {
+                        if (localList == null) {
 
-                    ArrayList<String> localList = item.getLocalList();
-
-                    if (localList == null) {
-
-                        localList = new ArrayList<String>();
-                        localList.add(localPath);
-                        item.setLocalList(localList);
-                    } else if (localList.indexOf(localPath) == -1) {
-                        localList.add(0, localPath);
-                        item.setLocalList(localList);
+                            localList = new ArrayList<>();
+                            localList.add(localPath);
+                            item.setLocalList(localList);
+                        } else if (localList.indexOf(localPath) == -1) {
+                            localList.add(0, localPath);
+                            item.setLocalList(localList);
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        realm.close();
+        }
     }
 
     public RealmList<RealmWallpaperProto> getWallPaperList() {

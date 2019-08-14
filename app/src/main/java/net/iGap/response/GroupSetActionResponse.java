@@ -34,28 +34,27 @@ public class GroupSetActionResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoGroupSetAction.GroupSetActionResponse.Builder builder = (ProtoGroupSetAction.GroupSetActionResponse.Builder) message;
-        final Realm realm = Realm.getDefaultInstance();
 
-        if (G.userId != builder.getUserId()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            if (G.userId != builder.getUserId()) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
 
-                    if (G.userId != builder.getUserId()) {
-                        HelperGetAction.fillOrClearAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+                        if (G.userId != builder.getUserId()) {
+                            HelperGetAction.fillOrClearAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+                        }
                     }
+                });
+                if (G.onSetAction != null) {
+                    G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
                 }
-            });
-            if (G.onSetAction != null) {
-                G.onSetAction.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
-            }
 
-            if (G.onSetActionInRoom != null) {
-                G.onSetActionInRoom.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+                if (G.onSetActionInRoom != null) {
+                    G.onSetActionInRoom.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
+                }
             }
         }
-
-        realm.close();
     }
 
     @Override

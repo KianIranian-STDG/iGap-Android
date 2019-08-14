@@ -34,24 +34,22 @@ public class RealmRoomMessageWallet extends RealmObject {
     private RealmRoomMessageWalletPayment realmRoomMessageWalletPayment;
     private RealmRoomMessageWalletMoneyTransfer realmRoomMessageWalletMoneyTransfer;
 
-    public static RealmRoomMessageWallet put(final ProtoGlobal.RoomMessageWallet input) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmRoomMessageWallet put(Realm realm, final ProtoGlobal.RoomMessageWallet input) {
         RealmRoomMessageWallet messageWallet;
         messageWallet = realm.createObject(RealmRoomMessageWallet.class, AppUtils.makeRandomId());
 
         messageWallet.setType(input.getType().toString());
 
         if (input.getType() == CARD_TO_CARD) {
-            messageWallet.setRealmRoomMessageWalletCardToCard(RealmRoomMessageWalletCardToCard.put(input.getCardToCard()));
+            messageWallet.setRealmRoomMessageWalletCardToCard(RealmRoomMessageWalletCardToCard.put(realm, input.getCardToCard()));
         } else if (input.getType() == MONEY_TRANSFER) {
-            messageWallet.setRealmRoomMessageWalletMoneyTransfer(RealmRoomMessageWalletMoneyTransfer.put(input.getMoneyTransfer()));
+            messageWallet.setRealmRoomMessageWalletMoneyTransfer(RealmRoomMessageWalletMoneyTransfer.put(realm, input.getMoneyTransfer()));
         } else if (input.getType() == PAYMENT ) {
-            messageWallet.setRealmRoomMessageWalletPayment(RealmRoomMessageWalletPayment.put(input.getMoneyTransfer()));
+            messageWallet.setRealmRoomMessageWalletPayment(RealmRoomMessageWalletPayment.put(realm, input.getMoneyTransfer()));
         } else {
 
         }
 
-        realm.close();
 
         return messageWallet;
     }

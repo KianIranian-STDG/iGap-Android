@@ -424,30 +424,29 @@ public class G extends Application {
     }
 
     public static String getApiToken() {
-        Realm realm = Realm.getDefaultInstance();
         String result = "Bearer ";
-
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (realmUserInfo != null) {
-            result += realmUserInfo.getAccessToken();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                result += realmUserInfo.getAccessToken();
+            }
         }
-        realm.close();
         return result;
 
     }
 
     public static void refreshRealmUi() {
         if (Looper.myLooper() == Looper.getMainLooper()) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.refresh();
-            realm.close();
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.refresh();
+            }
         } else {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.refresh();
-                    realm.close();
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        realm.refresh();
+                    }
                 }
             });
         }

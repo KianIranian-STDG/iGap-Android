@@ -117,6 +117,7 @@ public class FragmentShowAvatars extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        realm = Realm.getDefaultInstance();
         return inflater.inflate(R.layout.activity_show_image, container, false);
     }
 
@@ -143,10 +144,7 @@ public class FragmentShowAvatars extends BaseFragment {
             appBarLayout.setVisibility(View.VISIBLE);
         }
 
-        if (realm != null) {
-            realm.close();
-        }
-
+        realm.close();
     }
 
     @Override
@@ -263,7 +261,6 @@ public class FragmentShowAvatars extends BaseFragment {
 
     private void fillListAvatar(From from) {
 
-        realm = Realm.getDefaultInstance();
 
         boolean isRoomExist = false;
 

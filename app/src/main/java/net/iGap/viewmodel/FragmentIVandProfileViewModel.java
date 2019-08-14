@@ -27,6 +27,7 @@ public class FragmentIVandProfileViewModel {
 
 
     public FragmentIVandProfileViewModel() {
+        mRealm = Realm.getDefaultInstance();
     }
 
     public static void scanBarCode(Activity activity) {

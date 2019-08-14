@@ -173,6 +173,7 @@ public class FragmentPassCodeViewModel {
 
     public FragmentPassCodeViewModel(FragmentPassCodeBinding fragmentPassCodeBinding) {
         this.binding = fragmentPassCodeBinding;
+        realm = Realm.getDefaultInstance();
         getInfo();
     }
 
@@ -599,7 +600,6 @@ public class FragmentPassCodeViewModel {
     private void getInfo() {
 
         checkFingerPrint();
-        realm = Realm.getDefaultInstance();
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         realmUserInfo = realm.where(RealmUserInfo.class).findFirst();

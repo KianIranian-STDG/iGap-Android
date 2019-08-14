@@ -28,35 +28,32 @@ public class RealmCallConfig extends RealmObject {
     private RealmList<RealmIceServer> realmIceServer = null;
 
     public static void updateSignalingConfiguration(final ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.Builder builder) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            final RealmCallConfig realmCall = realm.where(RealmCallConfig.class).findFirst();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
 
-        Realm realm = Realm.getDefaultInstance();
+                    RealmCallConfig item;
 
-        final RealmCallConfig realmCall = realm.where(RealmCallConfig.class).findFirst();
+                    if (realmCall == null) {
+                        RealmCallConfig _rc = new RealmCallConfig();
+                        item = realm.copyToRealm(_rc);
+                    } else {
+                        item = realmCall;
+                    }
 
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+                    item.setVoice_calling(builder.getVoiceCalling());
+                    item.setVideo_calling(builder.getVideoCalling());
+                    item.setScreen_sharing(builder.getScreenSharing());
 
-                RealmCallConfig item;
+                    item.setIceServer(realm, builder.getIceServerList());
 
-                if (realmCall == null) {
-                    RealmCallConfig _rc = new RealmCallConfig();
-                    item = realm.copyToRealm(_rc);
-                } else {
-                    item = realmCall;
+                    G.needGetSignalingConfiguration = false;
                 }
+            });
 
-                item.setVoice_calling(builder.getVoiceCalling());
-                item.setVideo_calling(builder.getVideoCalling());
-                item.setScreen_sharing(builder.getScreenSharing());
-
-                item.setIceServer(realm, builder.getIceServerList());
-
-                G.needGetSignalingConfiguration = false;
-            }
-        });
-
-        realm.close();
+        }
     }
 
     public boolean isVoice_calling() {

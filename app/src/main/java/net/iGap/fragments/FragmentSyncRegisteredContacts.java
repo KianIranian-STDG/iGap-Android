@@ -96,6 +96,8 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        realm = Realm.getDefaultInstance();
+
         fragmentSyncRegisteredContactsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_sync_registered_contacts, container, false);
         return fragmentSyncRegisteredContactsBinding.getRoot();
     }
@@ -278,11 +280,16 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (realm != null && !realm.isClosed()) {
-            realm.close();
-        }
+
         G.onUserContactdelete = null;
         G.onContactsGetList = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        realm.close();
     }
 
     @Override
@@ -341,27 +348,27 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                     s = "98" + s;
                 contacts.get(i).setPhone(s);
             }
-            Realm realm = Realm.getDefaultInstance();
-            RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            try (Realm realm = Realm.getDefaultInstance()) {
+                RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
 
 
-            ArrayList<StructListOfContact> slc = new ArrayList();
+                ArrayList<StructListOfContact> slc = new ArrayList();
 
-            for (int i = 0; i < contacts.size(); i++) {
-                boolean helpIndex = false;
-                for (int j = 0; j < mList.size(); j++) {
-                    if (contacts.get(i).getPhone().equalsIgnoreCase(String.valueOf(mList.get(j).getPhone()))) {
-                        helpIndex = true;
-                        break;
+                for (int i = 0; i < contacts.size(); i++) {
+                    boolean helpIndex = false;
+                    for (int j = 0; j < mList.size(); j++) {
+                        if (contacts.get(i).getPhone().equalsIgnoreCase(String.valueOf(mList.get(j).getPhone()))) {
+                            helpIndex = true;
+                            break;
+                        }
+                    }
+                    if (!helpIndex) {
+                        slc.add(contacts.get(i));
                     }
                 }
-                if (!helpIndex) {
-                    slc.add(contacts.get(i));
-                }
-            }
-            realm.close();
 
-            return slc;
+                return slc;
+            }
         }
 
         @Override

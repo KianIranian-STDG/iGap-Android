@@ -19,22 +19,22 @@ public class RealmGeoGetConfiguration extends RealmObject {
     private String mapCache;
 
     public static void putOrUpdate(final String mapCache) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmGeoGetConfiguration realmGeoGetConfiguration = realm.where(RealmGeoGetConfiguration.class).findFirst();
-                if (realmGeoGetConfiguration == null) {
-                    realmGeoGetConfiguration = realm.createObject(RealmGeoGetConfiguration.class);
-                } else {
-                    if (realmGeoGetConfiguration.getMapCache() != null && !realmGeoGetConfiguration.getMapCache().equals(mapCache)) {
-                        FragmentiGapMap.deleteMapFileCash();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmGeoGetConfiguration realmGeoGetConfiguration = realm.where(RealmGeoGetConfiguration.class).findFirst();
+                    if (realmGeoGetConfiguration == null) {
+                        realmGeoGetConfiguration = realm.createObject(RealmGeoGetConfiguration.class);
+                    } else {
+                        if (realmGeoGetConfiguration.getMapCache() != null && !realmGeoGetConfiguration.getMapCache().equals(mapCache)) {
+                            FragmentiGapMap.deleteMapFileCash();
+                        }
                     }
+                    realmGeoGetConfiguration.setMapCache(mapCache);
                 }
-                realmGeoGetConfiguration.setMapCache(mapCache);
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public String getMapCache() {

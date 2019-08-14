@@ -574,33 +574,33 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     }
 
     private void setPicture() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
-        if (registeredInfo != null) {
-            loadOrDownloadPicture(registeredInfo);
-        } else {
-            //todo: add callback and remove delay :D
-            new RequestUserInfo().userInfo(userId);
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Realm realm = Realm.getDefaultInstance();
-                    RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+            if (registeredInfo != null) {
+                loadOrDownloadPicture(registeredInfo, realm);
+            } else {
+                //todo: add callback and remove delay :D
+                new RequestUserInfo().userInfo(userId);
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try (Realm realm = Realm.getDefaultInstance()) {
+                            RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
 
-                    if (registeredInfo != null) {
-                        loadOrDownloadPicture(registeredInfo);
+                            if (registeredInfo != null) {
+                                loadOrDownloadPicture(registeredInfo, realm);
+                            }
+                        }
                     }
-                    realm.close();
-                }
-            }, 3000);
+                }, 3000);
+            }
         }
-        realm.close();
     }
 
-    private void loadOrDownloadPicture(RealmRegisteredInfo registeredInfo) {
+    private void loadOrDownloadPicture(RealmRegisteredInfo registeredInfo, Realm realm) {
         try {
             callBackTxtName.set(registeredInfo.getDisplayName());
-            RealmAttachment av = registeredInfo.getLastAvatar().getFile();
+            RealmAttachment av = registeredInfo.getLastAvatar(realm).getFile();
             ProtoFileDownload.FileDownload.Selector se = ProtoFileDownload.FileDownload.Selector.FILE;
             String dirPath = AndroidUtils.getFilePathWithCashId(av.getCacheId(), av.getName(), G.DIR_IMAGE_USER, false);
 

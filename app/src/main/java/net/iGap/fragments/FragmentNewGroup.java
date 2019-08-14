@@ -463,11 +463,11 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     }
 
     private void showInitials() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        imgProfileHelper.setVisibility(View.GONE);
-        imgCircleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
-        realm.close();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            imgProfileHelper.setVisibility(View.GONE);
+            imgCircleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
+        }
     }
 
     private void setImage(final String imagePath) {

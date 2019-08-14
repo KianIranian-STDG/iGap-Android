@@ -29,16 +29,13 @@ public class RealmThumbnail extends RealmObject {
     private int height;
     private String cacheId;
 
-    public static RealmThumbnail put(long id, final long messageId, final ProtoGlobal.Thumbnail thumbnail) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmThumbnail put(Realm realm, long id, final long messageId, final ProtoGlobal.Thumbnail thumbnail) {
         RealmThumbnail realmThumbnail = realm.createObject(RealmThumbnail.class, id);
         realmThumbnail.setCacheId(thumbnail.getCacheId());
         realmThumbnail.setWidth(thumbnail.getWidth());
         realmThumbnail.setSize(thumbnail.getSize());
         realmThumbnail.setHeight(thumbnail.getHeight());
         realmThumbnail.setMessageId(messageId);
-
-        realm.close();
 
         return realmThumbnail;
     }

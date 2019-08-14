@@ -668,11 +668,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             }
         }
 
-        if (mRealm != null && !mRealm.isClosed()) {
-            mRealm.close();
-            mRealm = null;
-        }
-
         if (MusicPlayer.chatLayout != null) {
             MusicPlayer.chatLayout.setVisibility(View.GONE);
         }
@@ -1592,6 +1587,12 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        mRealm = Realm.getDefaultInstance();
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         G.onAudioFocusChangeListener = this;
@@ -1643,6 +1644,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mRealm.close();
         try {
             getNotificationManager().cancel(notificationId);
         } catch (NullPointerException e) {

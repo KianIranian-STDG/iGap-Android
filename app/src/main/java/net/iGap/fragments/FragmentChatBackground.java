@@ -69,7 +69,6 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
     private AdapterChatBackground adapterChatBackgroundSetting;
     private AdapterSolidChatBackground adapterSolidChatbackground;
     private ArrayList<StructWallpaper> wList;
-    private Realm realmChatBackground;
     private Fragment fragment;
     private RippleView chB_ripple_menu_button;
     private boolean isSolidColor = false;
@@ -84,7 +83,6 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        realmChatBackground = Realm.getDefaultInstance();
         return attachToSwipeBack(inflater.inflate(R.layout.activity_chat_background, container, false));
     }
 
@@ -228,13 +226,6 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         }
     }
 
-    private Realm getRealmChatBackground() {
-        if (realmChatBackground == null || realmChatBackground.isClosed()) {
-            realmChatBackground = Realm.getDefaultInstance();
-        }
-        return realmChatBackground;
-    }
-
     private void getImageListFromServer() {
         G.onGetWallpaper = new OnGetWallpaper() {
             @Override
@@ -265,54 +256,51 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         StructWallpaper sw = new StructWallpaper();
         sw.setWallpaperType(WallpaperType.addNew);
         wList.add(sw);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).findFirst();
 
-        Realm realm = Realm.getDefaultInstance();
+            if (realmWallpaper != null) {
 
-        RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).findFirst();
+                if (realmWallpaper.getLocalList() != null) {
+                    for (String localPath : realmWallpaper.getLocalList()) {
+                        if (new File(localPath).exists()) {
+                            StructWallpaper _swl = new StructWallpaper();
+                            _swl.setWallpaperType(WallpaperType.local);
+                            _swl.setPath(localPath);
+                            wList.add(_swl);
 
-        if (realmWallpaper != null) {
-
-            if (realmWallpaper.getLocalList() != null) {
-                for (String localPath : realmWallpaper.getLocalList()) {
-                    if (new File(localPath).exists()) {
-                        StructWallpaper _swl = new StructWallpaper();
-                        _swl.setWallpaperType(WallpaperType.local);
-                        _swl.setPath(localPath);
-                        wList.add(_swl);
-
+                        }
                     }
                 }
-            }
 
-            if (realmWallpaper.getWallPaperList() != null) {
-                for (RealmWallpaperProto wallpaper : realmWallpaper.getWallPaperList()) {
-                    StructWallpaper _swp = new StructWallpaper();
-                    _swp.setWallpaperType(WallpaperType.proto);
-                    _swp.setProtoWallpaper(wallpaper);
-                    wList.add(_swp);
-                    solidList.add(_swp.getProtoWallpaper().getColor());
+                if (realmWallpaper.getWallPaperList() != null) {
+                    for (RealmWallpaperProto wallpaper : realmWallpaper.getWallPaperList()) {
+                        StructWallpaper _swp = new StructWallpaper();
+                        _swp.setWallpaperType(WallpaperType.proto);
+                        _swp.setProtoWallpaper(wallpaper);
+                        wList.add(_swp);
+                        solidList.add(_swp.getProtoWallpaper().getColor());
+                    }
                 }
-            }
 
-            if (getInfoFromServer) {
+                if (getInfoFromServer) {
 
-                long time = realmWallpaper.getLastTimeGetList();
-                if (time > 0) {
+                    long time = realmWallpaper.getLastTimeGetList();
+                    if (time > 0) {
 
-                    if (time + (2 * 60 * 60 * 1000) < TimeUtils.currentLocalTime()) {
+                        if (time + (2 * 60 * 60 * 1000) < TimeUtils.currentLocalTime()) {
+                            getImageListFromServer();
+                        }
+                    } else {
                         getImageListFromServer();
                     }
-                } else {
+                }
+            } else {
+                if (getInfoFromServer) {
                     getImageListFromServer();
                 }
             }
-        } else {
-            if (getInfoFromServer) {
-                getImageListFromServer();
-            }
         }
-
-        realm.close();
     }
 
     @Override

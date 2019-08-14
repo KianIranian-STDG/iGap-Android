@@ -485,16 +485,18 @@ public class ActivityManageSpaceViewModel {
         txtOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Realm realm = Realm.getDefaultInstance();
-                RealmRoomMessage.ClearAllMessage(realm);
-                RealmRoom.clearAllScrollPositions();
-                final long DbTotalSize = new File(realm.getConfiguration().getPath()).length();
-                realm.close();
-                callbackCleanUp.set(FileUtils.formatFileSize(DbTotalSize));
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    RealmRoomMessage.ClearAllMessage(realm);
+                    RealmRoom.clearAllScrollPositions();
+                    final long DbTotalSize = new File(realm.getConfiguration().getPath()).length();
 
-                MusicPlayer.closeLayoutMediaPlayer();
+                    callbackCleanUp.set(FileUtils.formatFileSize(DbTotalSize));
 
-                inDialog.dismiss();
+                    MusicPlayer.closeLayoutMediaPlayer();
+
+                    inDialog.dismiss();
+
+                }
             }
         });
 
@@ -577,10 +579,10 @@ public class ActivityManageSpaceViewModel {
         final long total = sizeFolderPhoto + sizeFolderVideo + sizeFolderDocument + sizeFolderAudio + sizeFolderMap + sizeFolderOtherFiles + sizeFolderOtherFilesBackground + sizeFolderOtherFilesImageUser;
 
         callbackClearCache.set(FileUtils.formatFileSize(total));
-
-        Realm realm = Realm.getDefaultInstance();
-        final long DbTotalSize = new File(realm.getConfiguration().getPath()).length();
-        realm.close();
+        final long DbTotalSize;
+        try (Realm realm = Realm.getDefaultInstance()) {
+            DbTotalSize = new File(realm.getConfiguration().getPath()).length();
+        }
 
         callbackCleanUp.set(FileUtils.formatFileSize(DbTotalSize));
 

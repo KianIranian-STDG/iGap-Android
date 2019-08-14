@@ -75,12 +75,13 @@ public class FragmentRegistrationNicknameViewModel implements OnUserAvatarRespon
         this.avatarHandler = avatarHandler;
         this.sharedPreferences = sharedPreferences;
         //ToDo: create repository and move this to that
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (realmUserInfo != null) {
-            RealmAvatar.deleteAvatarWithOwnerId(G.userId);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                RealmAvatar.deleteAvatarWithOwnerId(G.userId);
+            }
         }
-        realm.close();
+
         FragmentEditImage.completeEditImage = (path, message, textImageList) -> {
             pathImageUser = path;
             int lastUploadedAvatarId = idAvatar + 1;
@@ -180,25 +181,25 @@ public class FragmentRegistrationNicknameViewModel implements OnUserAvatarRespon
     }
 
     public void OnClickBtnLetsGo(String name, String lastName) {
-        Realm realm = Realm.getDefaultInstance();
-        if (name.length() > 0) {
-            showErrorName.setValue(false);
-            if (lastName.length() > 0) {
-                showErrorLastName.setValue(false);
-                if (reagentPhoneNumber.get().isEmpty() || isValidReagentPhoneNumber()) {
-                    showReagentPhoneNumberError.setValue(false);
-                    hideKeyboard.setValue(true);
-                    setNickName(name, lastName, reagentPhoneNumber.get().isEmpty());
+        try (Realm realm = Realm.getDefaultInstance()) {
+            if (name.length() > 0) {
+                showErrorName.setValue(false);
+                if (lastName.length() > 0) {
+                    showErrorLastName.setValue(false);
+                    if (reagentPhoneNumber.get().isEmpty() || isValidReagentPhoneNumber()) {
+                        showReagentPhoneNumberError.setValue(false);
+                        hideKeyboard.setValue(true);
+                        setNickName(name, lastName, reagentPhoneNumber.get().isEmpty());
+                    } else {
+                        showReagentPhoneNumberError.setValue(true);
+                    }
                 } else {
-                    showReagentPhoneNumberError.setValue(true);
+                    showErrorLastName.setValue(true);
                 }
             } else {
-                showErrorLastName.setValue(true);
+                showErrorName.setValue(true);
             }
-        } else {
-            showErrorName.setValue(true);
         }
-        realm.close();
     }
 
     private boolean isValidReagentPhoneNumber() {
@@ -234,10 +235,10 @@ public class FragmentRegistrationNicknameViewModel implements OnUserAvatarRespon
                 new OnUserProfileSetRepresentative() {
                     @Override
                     public void onSetRepresentative(String phone) {
-                        Realm realm = Realm.getDefaultInstance();
-                        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                        RealmUserInfo.setRepresentPhoneNumber(realm, realmUserInfo, phone);
-                        realm.close();
+                        try (Realm realm = Realm.getDefaultInstance()) {
+                            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                            RealmUserInfo.setRepresentPhoneNumber(realm, realmUserInfo, phone);
+                        }
                         getUserInfo();
                     }
 
@@ -253,9 +254,9 @@ public class FragmentRegistrationNicknameViewModel implements OnUserAvatarRespon
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 G.handler.post(() -> {
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, user));
-                    realm.close();
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, user));
+                    }
                     G.displayName = user.getDisplayName();
                     prgVisibility.set(View.GONE);
                     goToMain.setValue(userId);

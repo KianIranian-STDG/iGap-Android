@@ -33,117 +33,116 @@ import io.realm.Realm;
 public class HelperPublicMethod {
 
     public static void goToChatRoom(final long peerId, final OnComplete onComplete, final OnError onError) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
 
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+            if (realmRoom != null) {
 
-        if (realmRoom != null) {
-
-            if (onComplete != null) {
-                onComplete.complete();
-            }
-
-            goToRoom(realmRoom.getId(), -1);
-        } else {
-            G.onChatGetRoom = new OnChatGetRoom() {
-                @Override
-                public void onChatGetRoom(final ProtoGlobal.Room room) {
-
-                    if (onError != null) {
-                        onError.error();
-                    }
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(realm1 -> {
-                        RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
-                        room1.setDeleted(true);
-                    });
-                    realm.close();
-                    getUserInfo(peerId, room.getId(), onComplete, onError);
-
-                    G.onChatGetRoom = null;
+                if (onComplete != null) {
+                    onComplete.complete();
                 }
 
-                @Override
-                public void onChatGetRoomTimeOut() {
-
-                    if (onError != null) {
-                        onError.error();
-                    }
-                }
-
-                @Override
-                public void onChatGetRoomError(int majorCode, int minorCode) {
-
-                    if (onError != null) {
-                        onError.error();
-                    }
-                }
-            };
-
-            if (G.userLogin) {
-                new RequestChatGetRoom().chatGetRoom(peerId);
+                goToRoom(realmRoom.getId(), -1);
             } else {
-                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-                if (onError != null) {
-                    onError.error();
+                G.onChatGetRoom = new OnChatGetRoom() {
+                    @Override
+                    public void onChatGetRoom(final ProtoGlobal.Room room) {
+
+                        if (onError != null) {
+                            onError.error();
+                        }
+                        try (Realm realm = Realm.getDefaultInstance()) {
+                            realm.executeTransaction(realm1 -> {
+                                RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
+                                room1.setDeleted(true);
+                            });
+                        }
+                        getUserInfo(peerId, room.getId(), onComplete, onError);
+
+                        G.onChatGetRoom = null;
+                    }
+
+                    @Override
+                    public void onChatGetRoomTimeOut() {
+
+                        if (onError != null) {
+                            onError.error();
+                        }
+                    }
+
+                    @Override
+                    public void onChatGetRoomError(int majorCode, int minorCode) {
+
+                        if (onError != null) {
+                            onError.error();
+                        }
+                    }
+                };
+
+                if (G.userLogin) {
+                    new RequestChatGetRoom().chatGetRoom(peerId);
+                } else {
+                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                    if (onError != null) {
+                        onError.error();
+                    }
                 }
             }
         }
-        realm.close();
     }
 
     public static void goToChatRoomFromFirstContact(final long peerId, final OnComplete onComplete, final OnError onError) {
 
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
 
-        if (realmRoom != null) {
+            if (realmRoom != null) {
 
-            if (onComplete != null) {
-                onComplete.complete();
-            }
-
-            goToRoom(realmRoom.getId(), -1);
-        } else {
-            G.onChatGetRoom = new OnChatGetRoom() {
-                @Override
-                public void onChatGetRoom(final ProtoGlobal.Room room) {
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(realm1 -> {
-                        RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
-                        room1.setDeleted(true);
-                    });
-                    realm.close();
-                    getUserInfo(peerId, room.getId(), onComplete, onError);
-
-                    G.onChatGetRoom = null;
+                if (onComplete != null) {
+                    onComplete.complete();
                 }
 
-                @Override
-                public void onChatGetRoomTimeOut() {
-                    if (onError != null) {
-                        onError.error();
-                    }
-                }
-
-                @Override
-                public void onChatGetRoomError(int majorCode, int minorCode) {
-                    if (onError != null) {
-                        onError.error();
-                    }
-                }
-            };
-
-            if (G.userLogin) {
-                new RequestChatGetRoom().chatGetRoom(peerId);
+                goToRoom(realmRoom.getId(), -1);
             } else {
-                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-                if (onError != null) {
-                    onError.error();
+                G.onChatGetRoom = new OnChatGetRoom() {
+                    @Override
+                    public void onChatGetRoom(final ProtoGlobal.Room room) {
+                        try (Realm realm = Realm.getDefaultInstance()) {
+                            realm.executeTransaction(realm1 -> {
+                                RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
+                                room1.setDeleted(true);
+                            });
+                        }
+                        getUserInfo(peerId, room.getId(), onComplete, onError);
+
+                        G.onChatGetRoom = null;
+                    }
+
+                    @Override
+                    public void onChatGetRoomTimeOut() {
+                        if (onError != null) {
+                            onError.error();
+                        }
+                    }
+
+                    @Override
+                    public void onChatGetRoomError(int majorCode, int minorCode) {
+                        if (onError != null) {
+                            onError.error();
+                        }
+                    }
+                };
+
+                if (G.userLogin) {
+                    new RequestChatGetRoom().chatGetRoom(peerId);
+                } else {
+                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                    if (onError != null) {
+                        onError.error();
+                    }
                 }
             }
         }
-        realm.close();
     }
 
     private static void getUserInfo(final long peerId, final long roomId, final OnComplete onComplete, final OnError onError) {

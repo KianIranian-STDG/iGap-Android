@@ -194,26 +194,25 @@ public class AvatarHandler {
         LooperThreadHelper.getInstance().getHandler().post(new Runnable() {
             @Override
             public void run() {
-                Realm realm = Realm.getDefaultInstance();
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            if (src == null) {
+                                return;
+                            }
 
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        if (src == null) {
-                            return;
+                            String avatarPath = copyAvatar(src, avatar);
+                            RealmAvatar a = RealmAvatar.putOrUpdate(realm, ownerId, avatar);
+                            a.getFile().setLocalFilePath(avatarPath);
+
+                            if (onAvatarAdd != null && avatarPath != null) {
+                                onAvatarAdd.onAvatarAdd(avatarPath);
+                            }
+                            AvatarHandler.this.notifyAll(avatarPath, ownerId, true, a.getFile().getId(), a.getId());
                         }
-
-                        String avatarPath = copyAvatar(src, avatar);
-                        RealmAvatar a = RealmAvatar.putOrUpdate(realm, ownerId, avatar);
-                        a.getFile().setLocalFilePath(avatarPath);
-
-                        if (onAvatarAdd != null && avatarPath != null) {
-                            onAvatarAdd.onAvatarAdd(avatarPath);
-                        }
-                        AvatarHandler.this.notifyAll(avatarPath, ownerId, true, a.getFile().getId(), a.getId());
-                    }
-                });
-                realm.close();
+                    });
+                }
             }
         });
     }
@@ -222,19 +221,20 @@ public class AvatarHandler {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                final Realm realm = Realm.getDefaultInstance();
                 baseParam.useCache = false;
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmAvatar.deleteAvatar(realm, avatarOwnerId);
-                    }
-                }, () -> {
-                    G.refreshRealmUi();
-                    getAvatar(baseParam);
-                }, error -> {
-                });
-                realm.close();
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmAvatar.deleteAvatar(realm, avatarOwnerId);
+                        }
+                    }, () -> {
+                        G.refreshRealmUi();
+                        getAvatar(baseParam);
+                    }, error -> {
+                    });
+                }
+
             }
         });
     }
@@ -337,9 +337,9 @@ public class AvatarHandler {
         LooperThreadHelper.getInstance().getHandler().post(new Runnable() {
             @Override
             public void run() {
-                Realm realm = Realm.getDefaultInstance();
-                getAvatarImage(baseParam, realm);
-                realm.close();
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    getAvatarImage(baseParam, realm);
+                }
             }
         });
     }
@@ -375,21 +375,19 @@ public class AvatarHandler {
                         final ArrayList<Long> ownerIdList = new ArrayList<>();
                         final ArrayList<Long> fileIdList = new ArrayList<>();
                         final ArrayList<Long> avatarIdList = new ArrayList<>();
-                        Realm realm = Realm.getDefaultInstance();
-
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).equalTo("file.token", token).findAll()) {
-                                    realmAvatar1.getFile().setLocalThumbnailPath(filepath);
-                                    ownerIdList.add(realmAvatar1.getOwnerId());
-                                    fileIdList.add(realmAvatar1.getFile().getId());
-                                    avatarIdList.add(realmAvatar1.getId());
+                        try (Realm realm = Realm.getDefaultInstance()) {
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).equalTo("file.token", token).findAll()) {
+                                        realmAvatar1.getFile().setLocalThumbnailPath(filepath);
+                                        ownerIdList.add(realmAvatar1.getOwnerId());
+                                        fileIdList.add(realmAvatar1.getFile().getId());
+                                        avatarIdList.add(realmAvatar1.getId());
+                                    }
                                 }
-                            }
-                        });
-
-                        realm.close();
+                            });
+                        }
                         for (int i = 0; i < ownerIdList.size(); i++) {
                             AvatarHandler.this.notifyAll(filepath, ownerIdList.get(i), false, fileIdList.get(i), avatarIdList.get(i));
                         }
@@ -476,37 +474,36 @@ public class AvatarHandler {
      * @return initials[0] , color[1]
      */
     public String[] showInitials(long ownerId, AvatarType avatarType) {
-        Realm realm = Realm.getDefaultInstance();
-        String initials = null;
-        String color = null;
-        if (avatarType == AvatarType.USER) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            String initials = null;
+            String color = null;
+            if (avatarType == AvatarType.USER) {
 
-            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, ownerId);
-            if (realmRegisteredInfo != null) {
-                initials = realmRegisteredInfo.getInitials();
-                color = realmRegisteredInfo.getColor();
-            } else {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, ownerId).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, ownerId);
+                if (realmRegisteredInfo != null) {
+                    initials = realmRegisteredInfo.getInitials();
+                    color = realmRegisteredInfo.getColor();
+                } else {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, ownerId).findFirst();
+                    if (realmRoom != null) {
+                        initials = realmRoom.getInitials();
+                        color = realmRoom.getColor();
+                    }
+                }
+            } else if (avatarType == AvatarType.ROOM) {
+
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, ownerId).findFirst();
                 if (realmRoom != null) {
                     initials = realmRoom.getInitials();
                     color = realmRoom.getColor();
                 }
             }
-        } else if (avatarType == AvatarType.ROOM) {
 
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, ownerId).findFirst();
-            if (realmRoom != null) {
-                initials = realmRoom.getInitials();
-                color = realmRoom.getColor();
+            if (initials != null && color != null) {
+                return new String[]{initials, color};
             }
+            return null;
         }
-        realm.close();
-
-        if (initials != null && color != null) {
-            return new String[]{initials, color};
-        }
-
-        return null;
     }
 
     public enum AvatarType {

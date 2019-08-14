@@ -42,10 +42,10 @@ public class ContactManager {
         if (results == null) {
             // contact paging and remove it for crash
             /*getIgapContact();*/
-            Realm realm = Realm.getDefaultInstance();
-            results = realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
+            try (Realm realm = Realm.getDefaultInstance()) {
+                results = realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
+            }
             /*contactSize = results.size();*/
-            realm.close();
         }
 
         // contact paging and remove it for crash
@@ -63,10 +63,9 @@ public class ContactManager {
     private static void getIgapContact() {
         if (results == null) {
             //todo : fixed query
-            Realm realm = Realm.getDefaultInstance();
-            results = realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
-            /*contactSize = results.size();*/
-            realm.close();
+            try (Realm realm = Realm.getDefaultInstance()) {
+                results = realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
+            }
         }
     }
 

@@ -49,21 +49,20 @@ public class UserInfoResponse extends MessageHandler {
         super.handler();
         final ProtoUserInfo.UserInfoResponse.Builder builder = (ProtoUserInfo.UserInfoResponse.Builder) message;
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(@NonNull Realm realm) {
-                if (identity != null && identity instanceof String) {
-                    if (identity.equals(RequestUserContactImport.KEY))
-                        RealmContacts.putOrUpdate(realm, builder.getUser());
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(@NonNull Realm realm) {
+                    if (identity != null && identity instanceof String) {
+                        if (identity.equals(RequestUserContactImport.KEY))
+                            RealmContacts.putOrUpdate(realm, builder.getUser());
+                    }
+
+                    RealmRegisteredInfo.putOrUpdate(realm, builder.getUser());
+                    RealmAvatar.putOrUpdateAndManageDelete(realm, builder.getUser().getId(), builder.getUser().getAvatar());
                 }
-
-                RealmRegisteredInfo.putOrUpdate(realm, builder.getUser());
-                RealmAvatar.putOrUpdateAndManageDelete(realm, builder.getUser().getId(), builder.getUser().getAvatar());
-            }
-        });
-
-        realm.close();
+            });
+        }
 
         LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
             @Override

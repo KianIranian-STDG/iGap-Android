@@ -50,19 +50,19 @@ public class UserContactsGetListResponse extends MessageHandler {
         if (HelperTimeOut.timeoutChecking(0, getListTime, 0)) {//Config.GET_CONTACT_LIST_TIME_OUT
             getListTime = System.currentTimeMillis();
 
-            final Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.delete(RealmContacts.class);
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.delete(RealmContacts.class);
 
-                    for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
-                        RealmRegisteredInfo.putOrUpdate(realm, registerUser);
-                        RealmContacts.putOrUpdate(realm, registerUser);
+                        for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
+                            RealmRegisteredInfo.putOrUpdate(realm, registerUser);
+                            RealmContacts.putOrUpdate(realm, registerUser);
+                        }
                     }
-                }
-            });
-            realm.close();
+                });
+            }
 
             G.refreshRealmUi();
             G.handler.post(new Runnable() {

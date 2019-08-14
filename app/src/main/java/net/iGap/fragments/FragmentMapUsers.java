@@ -68,6 +68,12 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        realmMapUsers.close();
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -314,9 +320,6 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (realmMapUsers != null && !realmMapUsers.isClosed()) {
-            realmMapUsers.close();
-        }
         ((ActivityMain) G.fragmentActivity).setOnBackPressedListener(FragmentMapUsers.this, true);
     }
 
@@ -328,7 +331,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             FragmentiGapMap.rippleMoreMap.setVisibility(View.GONE);
         }
         if (FragmentiGapMap.fabGps != null) {
-            FragmentiGapMap.fabGps.setVisibility(View.GONE);
+            FragmentiGapMap.fabGps.show();
         }
     }
 
@@ -354,56 +357,54 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             if (item == null) {
                 return;
             }
-            Realm realm = Realm.getDefaultInstance();
-            RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, item.getUserId());
-            if (registeredInfo == null) {
-                realm.close();
-                return;
-            }
+            try (Realm realm = Realm.getDefaultInstance()) {
+                RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, item.getUserId());
+                if (registeredInfo == null) {
+                    return;
+                }
 
-            if (G.selectedLanguage.equals("en")) {
-                holder.arrow.setRotation(270);
-            } else {
-                holder.arrow.setRotation(90);
-            }
+                if (G.selectedLanguage.equals("en")) {
+                    holder.arrow.setRotation(270);
+                } else {
+                    holder.arrow.setRotation(90);
+                }
 
 //            holder.arrow.setTextColor(Color.parseColor(G.appBarColor));
 
-            holder.layoutMap.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (getActivity()!=null) {
-                        new HelperFragment(getActivity().getSupportFragmentManager(),FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
+                holder.layoutMap.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (getActivity()!=null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(),FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
+                        }
                     }
-                }
-            });
+                });
 
-            if (HelperCalander.isPersianUnicode) {
-                holder.username.setGravity(Gravity.RIGHT);
-            } else {
-                holder.username.setGravity(Gravity.LEFT);
-            }
-
-            holder.username.setText(registeredInfo.getDisplayName());
-            if (item.isHasComment()) {
-                if (item.getComment() == null || item.getComment().isEmpty()) {
-                    holder.comment.setText(context.getResources().getString(R.string.comment_waiting));
-                    new RequestGeoGetComment().getComment(item.getUserId());
+                if (HelperCalander.isPersianUnicode) {
+                    holder.username.setGravity(Gravity.RIGHT);
                 } else {
-                    holder.comment.setText(item.getComment());
+                    holder.username.setGravity(Gravity.LEFT);
                 }
-            } else {
-                holder.comment.setText(context.getResources().getString(R.string.comment_no));
+
+                holder.username.setText(registeredInfo.getDisplayName());
+                if (item.isHasComment()) {
+                    if (item.getComment() == null || item.getComment().isEmpty()) {
+                        holder.comment.setText(context.getResources().getString(R.string.comment_waiting));
+                        new RequestGeoGetComment().getComment(item.getUserId());
+                    } else {
+                        holder.comment.setText(item.getComment());
+                    }
+                } else {
+                    holder.comment.setText(context.getResources().getString(R.string.comment_no));
+                }
+
+                holder.distance.setText(String.format(G.context.getString(R.string.distance), item.getDistance()));
+                if (HelperCalander.isPersianUnicode) {
+                    holder.distance.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.distance.getText().toString()));
+                }
+
+                avatarHandler.getAvatar(new ParamWithAvatarType(holder.avatar, item.getUserId()).avatarType(AvatarHandler.AvatarType.USER));
             }
-
-            holder.distance.setText(String.format(G.context.getString(R.string.distance), item.getDistance()));
-            if (HelperCalander.isPersianUnicode) {
-                holder.distance.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.distance.getText().toString()));
-            }
-
-            avatarHandler.getAvatar(new ParamWithAvatarType(holder.avatar, item.getUserId()).avatarType(AvatarHandler.AvatarType.USER));
-
-            realm.close();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {

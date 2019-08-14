@@ -40,82 +40,79 @@ public class HelperGetOwnerInfo {
 
     private static void checkRoomExist(long id, final Listener listener) {
 
-        Realm realm = Realm.getDefaultInstance();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
 
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+            if (realmRoom == null) {
 
-        if (realmRoom == null) {
+                G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
+                    @Override
+                    public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, RequestClientGetRoom.IdentityClientGetRoom identity) {
 
-            G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
-                @Override
-                public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, RequestClientGetRoom.IdentityClientGetRoom identity) {
-
-                    if (identity.createRoomMode == RequestClientGetRoom.CreateRoomMode.requestFromOwner) {
-                        if (listener != null) {
-                            listener.OnResponse();
+                        if (identity.createRoomMode == RequestClientGetRoom.CreateRoomMode.requestFromOwner) {
+                            if (listener != null) {
+                                listener.OnResponse();
+                            }
                         }
                     }
+
+                    @Override
+                    public void onError(int majorCode, int minorCode) {
+
+                    }
+
+                    @Override
+                    public void onTimeOut() {
+
+                    }
+                };
+
+                new RequestClientGetRoom().clientGetRoom(id, RequestClientGetRoom.CreateRoomMode.requestFromOwner);
+            } else {
+
+                if (listener != null) {
+                    listener.OnResponse();
                 }
-
-                @Override
-                public void onError(int majorCode, int minorCode) {
-
-                }
-
-                @Override
-                public void onTimeOut() {
-
-                }
-            };
-
-            new RequestClientGetRoom().clientGetRoom(id, RequestClientGetRoom.CreateRoomMode.requestFromOwner);
-        } else {
-
-            if (listener != null) {
-                listener.OnResponse();
             }
         }
-
-        realm.close();
     }
 
     private static void checkUserExist(long userId, final Listener listener) {
 
-        Realm realm = Realm.getDefaultInstance();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
 
-        RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+            if (registeredInfo == null) {
 
-        if (registeredInfo == null) {
+                G.onUserInfoResponse = new OnUserInfoResponse() {
+                    @Override
+                    public void onUserInfo(ProtoGlobal.RegisteredUser user, String identity) {
 
-            G.onUserInfoResponse = new OnUserInfoResponse() {
-                @Override
-                public void onUserInfo(ProtoGlobal.RegisteredUser user, String identity) {
-
-                    if (listener != null) {
-                        listener.OnResponse();
+                        if (listener != null) {
+                            listener.OnResponse();
+                        }
                     }
+
+                    @Override
+                    public void onUserInfoTimeOut() {
+
+                    }
+
+                    @Override
+                    public void onUserInfoError(int majorCode, int minorCode) {
+
+                    }
+                };
+
+                new RequestUserInfo().userInfo(userId);
+            } else {
+
+                if (listener != null) {
+                    listener.OnResponse();
                 }
-
-                @Override
-                public void onUserInfoTimeOut() {
-
-                }
-
-                @Override
-                public void onUserInfoError(int majorCode, int minorCode) {
-
-                }
-            };
-
-            new RequestUserInfo().userInfo(userId);
-        } else {
-
-            if (listener != null) {
-                listener.OnResponse();
             }
-        }
 
-        realm.close();
+        }
     }
 
     enum RoomType {

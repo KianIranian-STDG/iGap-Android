@@ -81,14 +81,11 @@ public class FragmentUserProfile extends BaseMainFragments {
 
         viewModel.goToAddMemberPage.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
-                Realm realm = Realm.getDefaultInstance();
-                Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
                 try {
+                    Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
                 } catch (Exception e) {
                     e.getStackTrace();
-                } finally {
-                    realm.close();
                 }
             }
         });
@@ -220,9 +217,7 @@ public class FragmentUserProfile extends BaseMainFragments {
         viewModel.setUserAvatarPath.observe(getViewLifecycleOwner(), changeImageModel -> {
             if (changeImageModel != null) {
                 if (changeImageModel.getImagePath() == null || !new File(changeImageModel.getImagePath()).exists()) {
-                    //Realm realm1 = Realm.getDefaultInstance();
                     binding.fupUserImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) binding.fupUserImage.getContext().getResources().getDimension(R.dimen.dp100), changeImageModel.getInitials(), changeImageModel.getColor()));
-                    //realm1.close();
                 } else {
                     G.imageLoader.displayImage(AndroidUtils.suitablePath(changeImageModel.getImagePath()), binding.fupUserImage);
                 }

@@ -149,6 +149,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        realmFragmentMain = Realm.getDefaultInstance();
         return inflater.inflate(R.layout.activity_main_rooms, container, false);
     }
 
@@ -157,7 +158,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         super.onCreate(savedInstanceState);
         isNeedResume = true;
         G.onVersionCallBack = this;
-        realmFragmentMain = Realm.getDefaultInstance();
     }
 
     @Override
@@ -187,7 +187,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                     .setTabletMode(true)
                     .setListener(this);
             layoutToolbar.addView(mHelperToolbar.getView());
-            RealmUserInfo userInfo = realmFragmentMain.where(RealmUserInfo.class).findFirst();
+            RealmUserInfo userInfo = getRealmFragmentMain().where(RealmUserInfo.class).findFirst();
             mHelperToolbar.getTabletUserName().setText(userInfo.getUserInfo().getDisplayName());
             mHelperToolbar.getTabletUserPhone().setText(userInfo.getUserInfo().getPhoneNumber());
             avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getTabletUserAvatar(), userInfo.getUserId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
@@ -739,12 +739,10 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
 
-        if (realmFragmentMain != null && !realmFragmentMain.isClosed()) {
-            realmFragmentMain.close();
-        }
+        realmFragmentMain.close();
     }
 
     @Override

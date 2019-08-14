@@ -1,11 +1,15 @@
 package net.iGap.fragments;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatTextView;
@@ -79,17 +83,30 @@ public class FragmentChannelProfile extends BaseFragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                long roomId = -1;
+                boolean v = false;
+                if (getArguments() != null) {
+                    roomId = getArguments().getLong(ROOM_ID);
+                    v = getArguments().getBoolean(IS_NOT_JOIN);
+                }
+                return (T) new FragmentChannelProfileViewModel(FragmentChannelProfile.this, roomId, v);
+            }
+        }).get(FragmentChannelProfileViewModel.class);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_profile_channel, container, false);
-        long roomId = -1;
-        boolean v = false;
-        if (getArguments() != null) {
-            roomId = getArguments().getLong(ROOM_ID);
-            v = getArguments().getBoolean(IS_NOT_JOIN);
-        }
-        viewModel = new FragmentChannelProfileViewModel(this, roomId, v);
+
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return attachToSwipeBack(binding.getRoot());
