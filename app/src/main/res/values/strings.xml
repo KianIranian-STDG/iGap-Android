@@ -1960,5 +1960,5 @@ Want to get it?</string>
     <string name="play_sound_in_chat">Play Message Sound In Chat</string>
     <string name="charge_type_error_message">Please Select Charge Type</string>
     <string name="charge_price_error_message">Please select Charge Price</string>
-
+    <string name="no_channels_in_category">There are no channels in this category!</string>
 </resources>

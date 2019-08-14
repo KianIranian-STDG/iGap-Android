@@ -1963,6 +1963,7 @@
     <string name="play_sound_in_chat">پخش صدای ارسال پیام در گفتگو</string>
     <string name="charge_type_error_message">لطفا نوع شارژ را انتخاب کنید.</string>
     <string name="charge_price_error_message">لطفا مبلغ شارژ را انتخاب کنید.</string>
+    <string name="no_channels_in_category">هیچ کانالی در این دسته بندی وجود ندارد!</string>
 
 
 </resources>

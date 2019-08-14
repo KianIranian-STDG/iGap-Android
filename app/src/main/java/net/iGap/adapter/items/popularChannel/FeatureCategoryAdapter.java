@@ -1,4 +1,4 @@
-package net.iGap.adapter.items.favoritechannel;
+package net.iGap.adapter.items.popularChannel;
 
 
 import android.support.annotation.NonNull;
@@ -13,25 +13,24 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.libs.bottomNavigation.Util.Utils;
-import net.iGap.model.FavoriteChannel.Channel;
+import net.iGap.model.popularChannel.Channel;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder> {
+public class FeatureCategoryAdapter extends RecyclerView.Adapter<FeatureCategoryAdapter.ChannelViewHolder> {
     private List<Channel> channelList;
     private OnClickedChannelEventCallBack onClickedChannelEventCallBack;
 
-    public ChannelAdapter(List<Channel> channelList) {
+    FeatureCategoryAdapter(List<Channel> channelList) {
         this.channelList = channelList;
     }
-
 
     @NonNull
     @Override
     public ChannelViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view =LayoutInflater.from(G.fragmentActivity).inflate(R.layout.item_favorite_channel_rv_row,viewGroup,false);
+        View view = LayoutInflater.from(G.fragmentActivity).inflate(R.layout.item_favorite_channel_rv_row, viewGroup, false);
         return new ChannelViewHolder(view);
     }
 
@@ -45,12 +44,20 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
         return channelList.size();
     }
 
-    public class ChannelViewHolder extends RecyclerView.ViewHolder {
+    void setOnClickedChannelEventCallBack(OnClickedChannelEventCallBack onClickedChannelEventCallBack) {
+        this.onClickedChannelEventCallBack = onClickedChannelEventCallBack;
+    }
+
+    public interface OnClickedChannelEventCallBack {
+        void onClickedChannel(Channel channel);
+    }
+
+    class ChannelViewHolder extends RecyclerView.ViewHolder {
         private CircleImageView channelImage;
         private TextView channelTitle;
         private CardView root;
 
-        public ChannelViewHolder(@NonNull View itemView) {
+        ChannelViewHolder(@NonNull View itemView) {
             super(itemView);
             channelImage = itemView.findViewById(R.id.circle_item_popular_rv_linear);
             channelTitle = itemView.findViewById(R.id.tv_item_popular_rv_linear);
@@ -60,23 +67,18 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
         }
 
 
-        public void bindChannel(Channel channel) {
+        void bindChannel(Channel channel) {
             ImageLoadingService.load(channel.getIcon(), channelImage);
-            if (G.selectedLanguage.equals("fa"))
+            if (G.isAppRtl)
                 channelTitle.setText(channel.getTitle());
-            if (G.selectedLanguage.equals("en"))
+            else
                 channelTitle.setText(channel.getTitleEn());
 
-            itemView.setOnClickListener(v -> onClickedChannelEventCallBack.onClickedChannel(channel));
+            itemView.setOnClickListener(v -> {
+                if (onClickedChannelEventCallBack != null)
+                    onClickedChannelEventCallBack.onClickedChannel(channel);
+            });
 
         }
-    }
-
-    public void setOnClickedChannelEventCallBack(OnClickedChannelEventCallBack onClickedChannelEventCallBack) {
-        this.onClickedChannelEventCallBack = onClickedChannelEventCallBack;
-    }
-
-    public interface OnClickedChannelEventCallBack {
-        void onClickedChannel(Channel channel);
     }
 }
