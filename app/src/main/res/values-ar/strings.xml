@@ -2896,4 +2896,5 @@
     <string name="play_sound_in_chat">تشغيل رسالة إرسال صوت في الدردشة</string>
     <string name="charge_type_error_message">يرجى اختيار نوع الشحن.</string>
     <string name="charge_price_error_message">يرجى تحديد مبلغ التهمة.</string>
+    <string name="no_channels_in_category">لا توجد قنوات في هذه الفئة!</string>
 </resources>

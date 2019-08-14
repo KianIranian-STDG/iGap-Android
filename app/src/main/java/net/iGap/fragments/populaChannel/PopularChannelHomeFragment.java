@@ -1,5 +1,6 @@
 package net.iGap.fragments.populaChannel;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.model.popularChannel.Category;
 import net.iGap.model.popularChannel.Channel;
+import net.iGap.model.popularChannel.Slide;
 import net.iGap.viewmodel.PopularChannelHomeViewModel;
 
 public class PopularChannelHomeFragment extends BaseFragment implements ToolbarListener {
@@ -60,8 +62,8 @@ public class PopularChannelHomeFragment extends BaseFragment implements ToolbarL
             }
 
             @Override
-            public void onSlideClick(int position) {
-                viewModel.onSlideClick(position);
+            public void onSlideClick(Slide slide) {
+                viewModel.onSlideClick(PopularChannelHomeFragment.this, slide);
             }
 
             @Override
@@ -106,5 +108,11 @@ public class PopularChannelHomeFragment extends BaseFragment implements ToolbarL
     public void onLeftIconClickListener(View view) {
         if (getActivity() != null)
             getActivity().onBackPressed();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        adapter.onConfigurationChanged(newConfig);
     }
 }

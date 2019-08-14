@@ -17,6 +17,7 @@ public interface FavoriteChannelApi {
     @GET("category/{categoryId}")
     Call<ChildChannel> getChildChannel(
             @Path("categoryId") String path,
-            @Query("page") int page
+            @Query("start") int start,
+            @Query("display") int display
     );
 }

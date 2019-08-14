@@ -10,10 +10,6 @@ import net.iGap.libs.bannerslider.event.OnSlideClickListener;
 import net.iGap.libs.bannerslider.viewholder.ImageSlideViewHolder;
 
 
-/**
- * @author S.Shahini
- * @since 12/16/17
- */
 public class SliderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ViewGroup.LayoutParams imageViewLayoutParams;
     private OnSlideClickListener onSlideClickListener;

@@ -24,39 +24,47 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ll_moreChannel_toolBar">
 
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/sv_popularChannel_more"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/cv_popularChannel_more"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/dp4"
-                android:visibility="gone"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="1dp">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <net.iGap.libs.bannerslider.BannerSlider
-                    android:id="@+id/bs_popularChannel_more"
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cv_popularChannel_more"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:slider_animateIndicators="true"
-                    app:slider_indicatorSize="4dp"
-                    app:slider_loopSlides="true"
-                    app:slider_selectedSlideIndicator="@drawable/indicator_circle_selected"
-                    app:slider_unselectedSlideIndicator="@drawable/indicator_circle_unselected" />
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/dp4"
+                    android:visibility="gone"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="1dp">
 
-            </android.support.v7.widget.CardView>
+                    <net.iGap.libs.bannerslider.BannerSlider
+                        android:id="@+id/bs_popularChannel_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:slider_animateIndicators="true"
+                        app:slider_indicatorSize="4dp"
+                        app:slider_loopSlides="true"
+                        app:slider_selectedSlideIndicator="@drawable/indicator_circle_selected"
+                        app:slider_unselectedSlideIndicator="@drawable/indicator_circle_unselected" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_moreChannel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                </android.support.v7.widget.CardView>
 
-        </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_moreChannel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:paddingBottom="@dimen/dp100" />
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
 
 
     </android.support.v4.widget.SwipeRefreshLayout>
@@ -65,7 +73,7 @@
         android:id="@+id/tv_popularChannel_emptyText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="هیچ کانالی در این دسته بندی وجود ندارد!"
+        android:text="@string/no_channels_in_category"
         android:textSize="@dimen/smallTextSize"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/sr_popularChannel_moreChannel"

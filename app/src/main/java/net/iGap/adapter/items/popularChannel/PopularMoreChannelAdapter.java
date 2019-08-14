@@ -1,6 +1,7 @@
 package net.iGap.adapter.items.popularChannel;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.ImageLoadingService;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.popularChannel.Channel;
 
 import java.util.ArrayList;
@@ -78,6 +80,9 @@ public class PopularMoreChannelAdapter extends RecyclerView.Adapter<PopularMoreC
                 if (callBack != null)
                     callBack.onChannelClick(channel);
             });
+
+            CardView root = itemView.findViewById(R.id.card_item_pop_grid);
+            Utils.setCardsBackground(root, R.color.white, R.color.gray_6c);
         }
 
     }

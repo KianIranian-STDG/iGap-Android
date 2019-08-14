@@ -5,12 +5,9 @@ import android.arch.lifecycle.MutableLiveData;
 import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
 import net.iGap.helper.HelperUrl;
-import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.model.popularChannel.Channel;
 import net.iGap.model.popularChannel.ChildChannel;
-import net.iGap.viewmodel.BaseViewModel;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,9 +25,9 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
         super.onCreateViewModel();
     }
 
-    public void getFirstPage(String id, int page) {
+    public void getFirstPage(String id, int start, int end) {
         progressMutableLiveData.postValue(true);
-        channelApi.getChildChannel(id, page).enqueue(new Callback<ChildChannel>() {
+        channelApi.getChildChannel(id, start, end).enqueue(new Callback<ChildChannel>() {
             @Override
             public void onResponse(Call<ChildChannel> call, Response<ChildChannel> response) {
                 progressMutableLiveData.postValue(false);
@@ -38,10 +35,11 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
                 if (response.isSuccessful() && response.body() != null) {
                     moreChannelMutableLiveData.postValue(response.body());
 
-                    if (response.body().getChannels().size() > 0)
-                        emptyViewMutableLiveData.postValue(false);
-                    else
-                        emptyViewMutableLiveData.postValue(true);
+                    if (response.body().getChannels() != null)
+                        if (response.body().getChannels().size() > 0)
+                            emptyViewMutableLiveData.postValue(false);
+                        else
+                            emptyViewMutableLiveData.postValue(true);
                 }
             }
 

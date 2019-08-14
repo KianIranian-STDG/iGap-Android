@@ -1,9 +1,11 @@
 package net.iGap.fragments.populaChannel;
 
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,13 +33,16 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
     private TextView emptyTextView;
     private BannerSlider slider;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView recyclerView;
+    private NestedScrollView scrollView;
 
     private String id;
     private int page = 1;
     private String title;
-    private GridLayoutManager layoutManager;
+    private String scale;
+    private int pageMax = 20;
+    private int itemSize;
 
+    private PopularChannelMoreSliderAdapter sliderAdapter;
     private PopularMoreChannelViewModel viewModel;
     private PopularMoreChannelAdapter adapter;
 
@@ -55,27 +60,25 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
         super.onViewCreated(view, savedInstanceState);
         setupViews();
 
-        viewModel.getFirstPage(id, page);
+        viewModel.getFirstPage(id, 0, pageMax);
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            viewModel.getFirstPage(id, 1);
+            pageMax = 20;
             page = 1;
+            viewModel.getFirstPage(id, 0, pageMax);
         });
 
 
         viewModel.getMoreChannelMutableLiveData().observe(getViewLifecycleOwner(), childChannel -> {
             if (childChannel != null) {
-                if (childChannel.getChannels().size() > 0)
-                    adapter.setChannels(childChannel.getChannels());
-
-                if (childChannel.getInfo().getAdvertisement() != null && childChannel.getInfo().getHasAd()) {
+                if (childChannel.getInfo().getAdvertisement() != null && childChannel.getInfo().getHasAd() && page == 1) {
                     sliderCv.setVisibility(View.VISIBLE);
-                    String scale = childChannel.getInfo().getAdvertisement().getmScale();
+                    scale = childChannel.getInfo().getAdvertisement().getmScale();
                     String[] scales = scale.split(":");
                     float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
                     slider.getLayoutParams().height = Math.round(height);
                     int playBackTime = childChannel.getInfo().getAdvertisement().getmPlaybackTime();
-                    PopularChannelMoreSliderAdapter sliderAdapter = new PopularChannelMoreSliderAdapter(childChannel.getInfo().getAdvertisement().getSlides(), scale);
+                    sliderAdapter = new PopularChannelMoreSliderAdapter(childChannel.getInfo().getAdvertisement().getSlides(), scale);
                     slider.postDelayed(() -> {
                         slider.setAdapter(sliderAdapter);
                         slider.setSelectedSlide(0);
@@ -86,6 +89,16 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
                         });
                     }, 200);
                 }
+
+                if (childChannel.getChannels().size() > 0) {
+                    if (page == 1) {
+                        adapter.setChannels(childChannel.getChannels());
+                    } else
+                        adapter.addChannel(childChannel.getChannels());
+
+                    itemSize = childChannel.getChannels().size();
+                }
+
             }
         });
 
@@ -106,14 +119,22 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
         });
 
 
-//        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-//                page++;
-//                viewModel.getFirstPage(id, page);
-//            }
-//        });
+        scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (nestedScrollView1, i, i1, i2, i3) -> {
+            if (itemSize >= pageMax) {
+                int nextPage = pageMax + pageMax;
+                viewModel.getFirstPage(id, pageMax, nextPage);
+                page = page + 1;
+            }
+        });
+    }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        String[] scales = scale.split(":");
+        float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+        slider.getLayoutParams().height = Math.round(height);
+        sliderAdapter.setScale(scale);
     }
 
     public void setupViews() {
@@ -125,16 +146,16 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
                 .setLeftIcon(R.string.back_icon);
 
         LinearLayout toolBarContainer = rootView.findViewById(R.id.ll_moreChannel_toolBar);
-        recyclerView = rootView.findViewById(R.id.rv_moreChannel);
+        RecyclerView recyclerView = rootView.findViewById(R.id.rv_moreChannel);
         swipeRefreshLayout = rootView.findViewById(R.id.sr_popularChannel_moreChannel);
         emptyTextView = rootView.findViewById(R.id.tv_popularChannel_emptyText);
         sliderCv = rootView.findViewById(R.id.cv_popularChannel_more);
         slider = rootView.findViewById(R.id.bs_popularChannel_more);
-        swipeRefreshLayout = rootView.findViewById(R.id.sr_popularChannel_moreChannel);
+        scrollView = rootView.findViewById(R.id.sv_popularChannel_more);
 
-        layoutManager = new GridLayoutManager(getContext(), 4);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
         recyclerView.setAdapter(adapter);
+        recyclerView.setNestedScrollingEnabled(false);
 
         toolBarContainer.addView(helperToolbar.getView());
     }
@@ -151,5 +172,9 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
     public void onLeftIconClickListener(View view) {
         if (getActivity() != null)
             getActivity().onBackPressed();
+    }
+
+    public int getPage() {
+        return page;
     }
 }

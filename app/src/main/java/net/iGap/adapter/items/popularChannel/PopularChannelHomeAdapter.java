@@ -1,5 +1,6 @@
 package net.iGap.adapter.items.popularChannel;
 
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,6 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.iGap.G;
@@ -29,6 +33,8 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
 
     private List<Datum> data = new ArrayList<>();
     private OnFavoriteChannelCallBack callBack;
+    private String bannerScale;
+    private SliderViewHolder sliderViewHolder;
 
     public void setData(List<Datum> data) {
         this.data = data;
@@ -71,8 +77,9 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
         if (data != null)
             switch (viewType) {
                 case TYPE_POPULAR_CHANNEL_SLIDE:
-                    SliderViewHolder sliderViewHolder = (SliderViewHolder) viewHolder;
-                    String[] scales = data.get(i).getInfo().getScale().split(":");
+                    sliderViewHolder = (SliderViewHolder) viewHolder;
+                    bannerScale = data.get(i).getInfo().getScale();
+                    String[] scales = bannerScale.split(":");
                     float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
                     sliderViewHolder.itemView.getLayoutParams().height = Math.round(height);
                     sliderViewHolder.bindSlid(data.get(i).getSlides(), data.get(i).getInfo().getPlaybackTime());
@@ -110,18 +117,26 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public void onConfigurationChanged(Configuration newConfig) {
+        String[] scales = bannerScale.split(":");
+        float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+        sliderViewHolder.itemView.getLayoutParams().height = Math.round(height);
+        sliderViewHolder.adapter.setScale(bannerScale);
+    }
+
     public interface OnFavoriteChannelCallBack {
         void onCategoryClick(Category category);
 
         void onChannelClick(Channel channel);
 
-        void onSlideClick(int position);
+        void onSlideClick(Slide slide);
 
         void onMoreClick(String moreId, String title);
     }
 
     public class SliderViewHolder extends RecyclerView.ViewHolder {
         private BannerSlider slider;
+        private PopularChannelSliderAdapter adapter;
 
         public SliderViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -130,15 +145,19 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
 
         void bindSlid(List<Slide> slides, long interval) {
             slider.postDelayed(() -> {
-                slider.setAdapter(new PopularChannelSliderAdapter(slides));
+                adapter = new PopularChannelSliderAdapter(slides);
+                slider.setAdapter(adapter);
                 slider.setSelectedSlide(0);
                 slider.setInterval((int) interval);
-            }, 100);
 
-            slider.setOnSlideClickListener(position -> {
-                if (callBack != null)
-                    callBack.onSlideClick(position);
-            });
+                slider.setOnSlideClickListener(position -> {
+                    if (callBack != null)
+                        if (slides.size() == 1)
+                            callBack.onSlideClick(slides.get(0));
+                        else
+                            callBack.onSlideClick(slides.get(position));
+                });
+            }, 100);
         }
 
     }
@@ -171,6 +190,15 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
                 if (callBack != null)
                     callBack.onMoreClick(moreId, title);
             });
+
+            RelativeLayout relativeLayoutRow = itemView.findViewById(R.id.rl_item_pop_rows);
+            LinearLayout linearLayoutRow = itemView.findViewById(R.id.ll_item_pop_rows);
+            ImageView imageViewMore = itemView.findViewById(R.id.iv_item_popular_more);
+            if (G.isDarkTheme) {
+                relativeLayoutRow.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.shape_favorite_channel_all_them));
+                linearLayoutRow.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.shape_favorite_channel_dark_them));
+                imageViewMore.setColorFilter(itemView.getContext().getResources().getColor(R.color.navigation_dark_mode_bg));
+            }
         }
     }
 
