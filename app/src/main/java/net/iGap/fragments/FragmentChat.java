@@ -1714,7 +1714,6 @@ public class FragmentChat extends BaseFragment
         if (chatPeerId == G.userId) {
             isCloudRoom = true;
         }
-        //+realm.close();
 
         viewAttachFile = rootView.findViewById(R.id.layout_attach_file);
         iconMute = mHelperToolbar.getChatMute();
@@ -3027,7 +3026,6 @@ public class FragmentChat extends BaseFragment
                 if (isShowLayoutUnreadMessage) {
                     removeLayoutUnreadMessage();
                 }
-                //final Realm realmMessage = Realm.getDefaultInstance();
 
                 HelperSetAction.setCancel(mRoomId);
 
@@ -3113,7 +3111,6 @@ public class FragmentChat extends BaseFragment
                     scrollToEnd();
                 }
 
-                //realmMessage.close();
             }
         });
 
@@ -3260,7 +3257,6 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        //realm.close();
     }
 
     private void removeEditedMessage() {
@@ -3838,8 +3834,6 @@ public class FragmentChat extends BaseFragment
                 }
             }
 
-            //+Realm realm = Realm.getDefaultInstance();
-
             isAllSenderId = true;
 
             for (AbstractMessage message : selectedItems) {
@@ -3914,7 +3908,6 @@ public class FragmentChat extends BaseFragment
                 mBtnDeleteSelected.setVisibility(View.GONE);
             }
 
-            //realm.close();
 
             if (isPinAvailable) pinedMessageLayout.setVisibility(View.GONE);
             ll_AppBarSelected.setVisibility(View.VISIBLE);
@@ -4236,7 +4229,6 @@ public class FragmentChat extends BaseFragment
         }
         sendCancelAction();
 
-        //+Realm realm = Realm.getDefaultInstance();
         final long messageId = AppUtils.makeRandomId();
         final long updateTime = TimeUtils.currentLocalTime();
         final long senderID = G.userId;
@@ -4294,7 +4286,6 @@ public class FragmentChat extends BaseFragment
         }
         messageInfo.channelExtra = structChannelExtra;
         mAdapter.add(new VoiceItem(mAdapter, chatType, this).setMessage(messageInfo));
-        //realm.close();
         scrollToEnd();
         clearReplyView();
     }
@@ -5398,7 +5389,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void checkAction() {
-        //+Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         if (realmRoom != null && realmRoom.getActionState() != null) {
             G.handler.post(new Runnable() {
@@ -5443,7 +5433,6 @@ public class FragmentChat extends BaseFragment
                 }
             });
         }
-        //realm.close();
     }
 
     /**
@@ -5533,7 +5522,6 @@ public class FragmentChat extends BaseFragment
      */
     private void addItemAfterStartUpload(final FileUploadStructure struct) {
         try {
-            //Realm realm = Realm.getDefaultInstance();
             RealmRoomMessage roomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
             if (roomMessage != null) {
                 AbstractMessage message = null;
@@ -5555,7 +5543,6 @@ public class FragmentChat extends BaseFragment
                     }
                 }
             }
-            //realm.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -5642,7 +5629,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void muteNotification(final long roomId) {
-        //+Realm realm = Realm.getDefaultInstance();
 
         isMuteNotification = !isMuteNotification;
         new RequestClientMuteRoom().muteRoom(roomId, isMuteNotification);
@@ -5654,7 +5640,6 @@ public class FragmentChat extends BaseFragment
             txtChannelMute.setText(R.string.mute);
             iconMute.setVisibility(View.GONE);
         }
-        //realm.close();
     }
 
     private void removeLayoutUnreadMessage() {
@@ -6151,7 +6136,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void getDraft() {
-        //+Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         if (realmRoom != null) {
             RealmRoomDraft draft = realmRoom.getDraft();
@@ -6160,7 +6144,6 @@ public class FragmentChat extends BaseFragment
                 edtChat.setText(draft.getMessage());
             }
         }
-        //realm.close();
 //        clearLocalDraft();
     }
 
@@ -6442,8 +6425,6 @@ public class FragmentChat extends BaseFragment
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-
-                //+Realm realm = Realm.getDefaultInstance();
                 RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
                 RealmContacts realmContacts = getRealmChat().where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
                 if (realmRegisteredInfo != null && realmRegisteredInfo.getId() != G.userId) {
@@ -6490,7 +6471,6 @@ public class FragmentChat extends BaseFragment
                         }
                     }
                 }
-                //realm.close();
             }
         });
     }
@@ -6508,16 +6488,12 @@ public class FragmentChat extends BaseFragment
                 vgSpamUser.setVisibility(View.GONE);
                 if (registeredInfo != null) {
 
-                    //+Realm realm = Realm.getDefaultInstance();
-
                     getRealmChat().executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
                             registeredInfo.setDoNotshowSpamBar(true);
                         }
                     });
-
-                    //realm.close();
                 }
             }
         });
@@ -7206,7 +7182,6 @@ public class FragmentChat extends BaseFragment
 
                 }
             });
-            //+Realm realm = Realm.getDefaultInstance();
             thumbnail.setVisibility(View.VISIBLE);
             if (chatItem.forwardedFrom != null) {
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom);
@@ -7243,7 +7218,6 @@ public class FragmentChat extends BaseFragment
                 replayFrom.setText(getString(R.string.edit));
             }
 
-            //realm.close();
             // I set tag to retrieve it later when sending message
             mReplayLayout.setTag(chatItem);
         }
@@ -8248,8 +8222,6 @@ public class FragmentChat extends BaseFragment
 
                 final ProtoGlobal.Room.Type type = realmRoom.getType();
 
-                //final Realm realm = Realm.getDefaultInstance();
-
                 getRealmChat().executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -8272,12 +8244,10 @@ public class FragmentChat extends BaseFragment
                             }
                         }
 
-                        //realm.close();
                     }
                 }, new Realm.Transaction.OnError() {
                     @Override
                     public void onError(Throwable error) {
-                        //realm.close();
                     }
                 });
             }
@@ -8482,7 +8452,6 @@ public class FragmentChat extends BaseFragment
      * manage save changeState , unread message , load from local or need get message from server and finally load message
      */
     private void getMessages() {
-        //+Realm realm = Realm.getDefaultInstance();
 
         ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction;
         ArrayList<StructMessageInfo> messageInfos = new ArrayList<>();
@@ -8703,8 +8672,6 @@ public class FragmentChat extends BaseFragment
         if (unreadCount > 0)
             recyclerView.scrollToPosition(0);
 
-
-        //realm.close();
     }
 
     /**
@@ -8907,7 +8874,6 @@ public class FragmentChat extends BaseFragment
                         switchAddItem(structMessageInfos, false);
                     }
 
-                    //realm.close();
                 }
 
                 @Override
@@ -9010,10 +8976,9 @@ public class FragmentChat extends BaseFragment
     }
 
     private long gapDetection(RealmResults<RealmRoomMessage> results, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-        Realm realm = Realm.getDefaultInstance();
-        long res = gapDetection(realm.copyFromRealm(results), direction);
-        realm.close();
-        return res;
+        try (Realm realm = Realm.getDefaultInstance()) {
+            return gapDetection(realm.copyFromRealm(results), direction);
+        }
     }
 
     /**

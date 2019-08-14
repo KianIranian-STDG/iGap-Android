@@ -56,7 +56,6 @@ public final class MessageLoader {
         ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();
 
         if (messageId == 0) {
-            //realm.close();
             return new Object[]{structMessageInfos, false, false};
         }
 
@@ -121,8 +120,6 @@ public final class MessageLoader {
                 structMessageInfos.add(StructMessageInfo.convert(realm, realmRoomMessage));
             }
         }
-
-        //realm.close();
 
         return new Object[]{structMessageInfos, hasMore, hasSpaceToGap};
     }
@@ -220,7 +217,6 @@ public final class MessageLoader {
                     /**
                      * clear all gap state because not exist any more message
                      */
-                    //Realm realm = Realm.getDefaultInstance();
                     //realm.executeTransaction(new Realm.Transaction() {
                     //    @Override
                     //    public void execute(Realm realm) {
@@ -238,7 +234,6 @@ public final class MessageLoader {
                     //        }
                     //    }
                     //});
-                    //realm.close();
                 }
 
                 onMessageReceive.onError(majorCode, minorCode, messageIdGetHistory, direction);
@@ -263,7 +258,6 @@ public final class MessageLoader {
      * @return [0] -> gapMessageId, [1] -> reachMessageId
      */
     public static Object[] gapExist(Realm realm, long roomId, long messageId, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-        //Realm realm = Realm.getDefaultInstance();
         RealmRoomMessage realmRoomMessage = null;
         long gapMessageId = 0;
         long reachMessageId = 0;
@@ -344,7 +338,6 @@ public final class MessageLoader {
             }
         }
 
-        //realm.close();
 
         return new Object[]{gapMessageId, reachMessageId};
     }

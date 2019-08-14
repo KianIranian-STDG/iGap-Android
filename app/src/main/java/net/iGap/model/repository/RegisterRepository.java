@@ -253,19 +253,19 @@ public class RegisterRepository {
         G.onUserLogin = new OnUserLogin() {
             @Override
             public void onLogin() {
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, userId, userName, phoneNumber, token, authorHash));
-                BotInit.setCheckDrIgap(true);
-                if (newUser) {
-                    goToWelcomePage.postValue(userId);
-                    HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_NEW_USER);
-                } else {
-                    // get user info for set nick name and after from that go to ActivityMain
-                    getUserInfo();
-                    requestUserInfo();
-                    HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_USER);
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, userId, userName, phoneNumber, token, authorHash));
+                    BotInit.setCheckDrIgap(true);
+                    if (newUser) {
+                        goToWelcomePage.postValue(userId);
+                        HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_NEW_USER);
+                    } else {
+                        // get user info for set nick name and after from that go to ActivityMain
+                        getUserInfo();
+                        requestUserInfo();
+                        HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_USER);
+                    }
                 }
-                realm.close();
             }
 
             @Override
@@ -288,12 +288,12 @@ public class RegisterRepository {
     private void requestLogin() {
         if (G.socketConnection) {
             if (token == null) {
-                Realm realm = Realm.getDefaultInstance();
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    token = realmUserInfo.getToken();
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        token = realmUserInfo.getToken();
+                    }
                 }
-                realm.close();
             }
             new RequestUserLogin().userLogin(token);
         } else {
@@ -331,15 +331,16 @@ public class RegisterRepository {
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(realm1 -> {
-                    G.displayName = user.getDisplayName();
-                    G.userId = user.getId();
-                    RealmUserInfo.putOrUpdate(realm1, user);
-                    G.onUserInfoResponse = null;
-                    goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
-                });
-                realm.close();
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    realm.executeTransaction(realm1 -> {
+                        G.displayName = user.getDisplayName();
+                        G.userId = user.getId();
+                        RealmUserInfo.putOrUpdate(realm1, user);
+                        G.onUserInfoResponse = null;
+                        goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
+                    });
+                }
+
             }
 
             @Override
@@ -357,12 +358,12 @@ public class RegisterRepository {
     private void requestUserInfo() {
         if (G.socketConnection) {
             if (userId == 0) {
-                Realm realm = Realm.getDefaultInstance();
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    userId = realmUserInfo.getUserId();
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        userId = realmUserInfo.getUserId();
+                    }
                 }
-                realm.close();
             }
             new RequestUserInfo().userInfo(userId);
         } else {

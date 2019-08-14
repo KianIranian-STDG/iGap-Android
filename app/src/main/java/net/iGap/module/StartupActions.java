@@ -113,39 +113,39 @@ public final class StartupActions {
         new Thread(HelperUploadFile::new).start();
 
         if (realmConfiguration()) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(@NotNull Realm realm) {
-                    try {
-                        long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
-                        RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
-                        RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class);
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(@NotNull Realm realm) {
+                        try {
+                            long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
+                            RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
+                            RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class);
 
-                        for (RealmRoom room : realmRooms) {
-                            if (room.getLastMessage() != null) {
-                                roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
+                            for (RealmRoom room : realmRooms) {
+                                if (room.getLastMessage() != null) {
+                                    roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
+                                }
                             }
+
+                            RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
+                                    .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0)
+                                    .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
+                                    .limit(100).findAll();
+
+                            for (RealmRoomMessage var : realmRoomMessages)
+                                var.removeFromRealm(realm);
+
+                        } catch (OutOfMemoryError error) {
+                            error.printStackTrace();
+                            HelperLog.setErrorLog(new Exception(error.getMessage()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            HelperLog.setErrorLog(e);
                         }
-
-                        RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
-                                .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0)
-                                .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
-                                .limit(100).findAll();
-
-                        for (RealmRoomMessage var : realmRoomMessages)
-                            var.removeFromRealm(realm);
-
-                    } catch (OutOfMemoryError error) {
-                        error.printStackTrace();
-                        HelperLog.setErrorLog(new Exception(error.getMessage()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        HelperLog.setErrorLog(e);
                     }
-                }
-            });
-            realm.close();
+                });
+            }
 
             new Thread(() -> checkDataUsage()).start();
             new Thread(() -> mainUserInfo()).start();
@@ -156,11 +156,11 @@ public final class StartupActions {
     }
 
     private void checkDataUsage() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmDataUsage> realmDataUsage = realm.where(RealmDataUsage.class).findAll();
-        if (realmDataUsage.size() == 0)
-            HelperDataUsage.initializeRealmDataUsage();
-        realm.close();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmResults<RealmDataUsage> realmDataUsage = realm.where(RealmDataUsage.class).findAll();
+            if (realmDataUsage.size() == 0)
+                HelperDataUsage.initializeRealmDataUsage();
+        }
     }
 
     private void manageTime() {
@@ -565,27 +565,24 @@ public final class StartupActions {
      * fill main user info in global variables
      */
     private void mainUserInfo() {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
 
-        Realm realm = Realm.getDefaultInstance();
+            if (userInfo != null && userInfo.getUserRegistrationState()) {
 
-        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                userId = userInfo.getUserId();
+                G.isPassCode = userInfo.isPassCode();
 
-        if (userInfo != null && userInfo.getUserRegistrationState()) {
+                if (userInfo.getAuthorHash() != null) {
+                    authorHash = userInfo.getAuthorHash();
+                }
 
-            userId = userInfo.getUserId();
-            G.isPassCode = userInfo.isPassCode();
+                if (userInfo.getUserInfo().getDisplayName() != null) {
+                    displayName = userInfo.getUserInfo().getDisplayName();
+                }
 
-            if (userInfo.getAuthorHash() != null) {
-                authorHash = userInfo.getAuthorHash();
             }
-
-            if (userInfo.getUserInfo().getDisplayName() != null) {
-                displayName = userInfo.getUserInfo().getDisplayName();
-            }
-
         }
-
-        realm.close();
     }
 
     /**
@@ -605,23 +602,8 @@ public final class StartupActions {
             return false;
         }
 
-        //  new SecureRandom().nextBytes(key);
-
-
-        // An encrypted Realm file can be opened in Realm Studio by using a Hex encoded version
-        // of the key. Copy the key from Logcat, then download the Realm file from the device using
-        // the method described here: https://stackoverflow.com/a/28486297/1389357
-        // The path is normally `/data/data/io.realm.examples.encryption/files/default.realm`
-
-     /*   RealmConfiguration configuration = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm")
-                .schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build();
-        DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuration);*/
         RealmConfiguration configuredRealm = getInstance();
-
-        /*if (configuration!=null)
-            Realm.deleteRealm(configuration);*/
         Realm.setDefaultConfiguration(configuredRealm);
-        /*configuredRealm.close();*/
         return true;
     }
 

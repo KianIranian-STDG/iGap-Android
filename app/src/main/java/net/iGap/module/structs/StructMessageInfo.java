@@ -95,10 +95,8 @@ public class StructMessageInfo implements Parcelable {
         this.roomId = roomId;
         this.messageID = messageID;
 
-        //+Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realmChat, Long.parseLong(senderID));
         this.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar(realmChat)) : null;
-        //realm.close();
 
 
         this.senderID = senderID;
@@ -122,7 +120,6 @@ public class StructMessageInfo implements Parcelable {
     public StructMessageInfo(Realm realmChat, long roomId, String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String fileMime, String filePic, String localThumbnailPath, String localFilePath, byte[] fileHash, long time, long replayToMessageId) {
         this.roomId = roomId;
         this.messageID = messageID;
-        //+Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realmChat, Long.parseLong(senderID));
         this.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar(realmChat)) : null;
 
@@ -142,18 +139,14 @@ public class StructMessageInfo implements Parcelable {
         this.time = time;
         this.replayTo = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replayToMessageId).findFirst();
 
-
-        //realm.close();
     }
 
     public StructMessageInfo(Realm realmChat, long roomId, String messageID, String senderID, String status, ProtoGlobal.RoomMessageType messageType, MyType.SendType sendType, String localThumbnailPath, String localFilePath, long time) {
         this.roomId = roomId;
         this.messageID = messageID;
 
-        //+Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realmChat, Long.parseLong(senderID));
         this.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar(realmChat)) : null;
-        //realm.close();
 
         this.senderID = senderID;
         this.status = status;
@@ -172,10 +165,8 @@ public class StructMessageInfo implements Parcelable {
         this.roomId = roomId;
         this.messageID = messageID;
 
-        //+Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realmChat, Long.parseLong(senderID));
         this.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar(realmChat)) : null;
-        //realm.close();
 
         this.senderID = senderID;
         this.status = status;
@@ -195,7 +186,6 @@ public class StructMessageInfo implements Parcelable {
         this.roomId = roomId;
         this.messageID = messageID;
 
-        //+Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realmChat, Long.parseLong(senderID));
         this.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar(realmChat)) : null;
 
@@ -211,7 +201,6 @@ public class StructMessageInfo implements Parcelable {
         this.attachment.setLocalFilePath(Long.parseLong(messageID), localFilePath);
         this.time = time;
         this.replayTo = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replayToMessageId).findFirst();
-        //realm.close();
     }
 
     protected StructMessageInfo(Parcel in) {
@@ -253,7 +242,6 @@ public class StructMessageInfo implements Parcelable {
         info.roomId = roomId;
         info.messageID = Long.toString(messageID);
 
-        //+Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realmChat, senderID);
         info.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar(realmChat)) : null;
 
@@ -269,7 +257,6 @@ public class StructMessageInfo implements Parcelable {
         if (replayToMessageId != -1) {
             info.replayTo = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replayToMessageId).findFirst();
         }
-        //realm.close();
         // audio exclusive
         info.songArtist = songArtist;
         info.songLength = songLength;
@@ -283,7 +270,6 @@ public class StructMessageInfo implements Parcelable {
         info.messageID = Long.toString(messageID);
         info.senderID = Long.toString(senderID);
 
-        //+Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realmChat, senderID);
         info.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar(realmChat)) : null;
 
@@ -295,7 +281,6 @@ public class StructMessageInfo implements Parcelable {
         if (replayToMessageId != 0) {
             info.replayTo = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replayToMessageId).findFirst();
         }
-        //realm.close();
         // contact exclusive
         info.userInfo = new StructRegisteredInfo(lastName, firstName, number, senderID);
         return info;

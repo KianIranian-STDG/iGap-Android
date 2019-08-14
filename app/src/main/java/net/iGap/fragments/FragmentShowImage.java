@@ -389,7 +389,6 @@ public class FragmentShowImage extends BaseFragment {
             txtImageDesc.setVisibility(View.GONE);
         }
 
-        //+Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), realmRoomMessageFinal.getUserId());
 
         if (realmRegisteredInfo != null) {
@@ -413,8 +412,6 @@ public class FragmentShowImage extends BaseFragment {
             txtImageTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageTime.getText().toString()));
             txtImageDate.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageDate.getText().toString()));
         }
-
-        //realm.close();
 
     }
 

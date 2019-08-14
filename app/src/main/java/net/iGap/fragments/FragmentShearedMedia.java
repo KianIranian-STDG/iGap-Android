@@ -883,8 +883,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         recyclerView.setAdapter(adapter);
 
         isChangeSelectType = false;
-
-        //realm.close();
     }
 
     //********************************************************************************************
