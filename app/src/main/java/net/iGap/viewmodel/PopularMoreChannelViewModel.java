@@ -1,4 +1,4 @@
-package net.iGap.fragments.populaChannel;
+package net.iGap.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 
@@ -26,7 +26,6 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
     @Override
     public void onCreateViewModel() {
         super.onCreateViewModel();
-        BannerSlider.init(new SliderBannerImageLoadingService());
     }
 
     public void getFirstPage(String id, int page) {

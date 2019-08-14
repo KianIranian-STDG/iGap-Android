@@ -21,6 +21,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bannerslider.BannerSlider;
+import net.iGap.viewmodel.PopularMoreChannelViewModel;
 
 
 public class PopularMoreChannelFragment extends BaseFragment implements ToolbarListener {
@@ -79,8 +80,6 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
                         slider.setAdapter(sliderAdapter);
                         slider.setSelectedSlide(0);
                         slider.setLoopSlides(true);
-                        slider.setAnimateIndicators(true);
-                        slider.setIndicatorSize(12);
                         slider.setInterval(playBackTime);
                         slider.setOnSlideClickListener(position -> {
                             viewModel.onSlideClick(PopularMoreChannelFragment.this, childChannel, position);

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:slider_animateIndicators="true"
-        app:slider_indicatorSize="5dp"
+        app:slider_indicatorSize="4dp"
         app:slider_loopSlides="true"
         app:slider_selectedSlideIndicator="@drawable/indicator_circle_selected"
         app:slider_unselectedSlideIndicator="@drawable/indicator_circle_unselected" />

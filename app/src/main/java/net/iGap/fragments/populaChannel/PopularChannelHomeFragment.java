@@ -19,6 +19,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.model.popularChannel.Category;
 import net.iGap.model.popularChannel.Channel;
+import net.iGap.viewmodel.PopularChannelHomeViewModel;
 
 public class PopularChannelHomeFragment extends BaseFragment implements ToolbarListener {
     private PopularChannelHomeViewModel viewModel;

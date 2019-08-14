@@ -1,5 +1,6 @@
 package net.iGap.helper;
 
+import android.os.Build;
 import android.widget.ImageView;
 
 import com.squareup.picasso.OkHttp3Downloader;
@@ -9,12 +10,18 @@ import net.iGap.R;
 import net.iGap.api.apiService.RetrofitFactory;
 
 public class ImageLoadingService {
+    private static Picasso picasso;
 
     public static void load(String url, ImageView imageView) {
-        new Picasso.Builder(imageView.getContext())
-                .downloader(new OkHttp3Downloader(new RetrofitFactory().httpClient))
-                .build().load(url)
-                .error(R.drawable.ic_error)
-                .into(imageView);
+        if (picasso == null)
+            if (Build.VERSION.SDK_INT < 22) {
+                picasso = new Picasso.Builder(imageView.getContext())
+                        .downloader(new OkHttp3Downloader(new RetrofitFactory().httpClient)).build();
+            } else {
+                picasso = new Picasso.Builder(imageView.getContext()).build();
+            }
+
+        if (picasso != null)
+            picasso.load(url).error(R.drawable.ic_error).into(imageView);
     }
 }

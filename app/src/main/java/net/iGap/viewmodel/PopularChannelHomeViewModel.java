@@ -1,4 +1,4 @@
-package net.iGap.fragments.populaChannel;
+package net.iGap.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.support.v4.app.FragmentTransaction;
@@ -8,6 +8,8 @@ import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
+import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
+import net.iGap.fragments.populaChannel.PopularMoreChannelFragment;
 import net.iGap.helper.HelperUrl;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.model.popularChannel.Channel;
