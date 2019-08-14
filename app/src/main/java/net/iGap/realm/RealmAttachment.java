@@ -58,26 +58,26 @@ public class RealmAttachment extends RealmObject {
     private String localFilePath;
 
     public static void updateToken(long fakeId, String token) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, fakeId).findFirst();
-        if (attachment != null) {
-            attachment.setToken(token);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, fakeId).findFirst();
+            if (attachment != null) {
+                attachment.setToken(token);
+            }
         }
-        realm.close();
     }
 
     public static void updateFileSize(final long messageId, final long fileSize) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
-                if (attachment != null) {
-                    attachment.setSize(fileSize);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
+                    if (attachment != null) {
+                        attachment.setSize(fileSize);
+                    }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public static RealmAttachment putOrUpdate(Realm realm, long messageId, RealmAttachment realmAttachment, ProtoGlobal.File attachment) {
@@ -215,35 +215,33 @@ public class RealmAttachment extends RealmObject {
     }
 
     public static void setThumbnailPathDataBaseAttachment(final String cashID, final String path) {
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(@NonNull Realm realm) {
-                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
-                for (RealmAttachment attachment : attachments) {
-                    attachment.setLocalThumbnailPath(path);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(@NonNull Realm realm) {
+                    RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
+                    for (RealmAttachment attachment : attachments) {
+                        attachment.setLocalThumbnailPath(path);
+                    }
                 }
-            }
-        });
+            });
 
-        realm.close();
+        }
     }
 
     public static void setFilePAthToDataBaseAttachment(final String cashID, final String path) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
-
-                for (RealmAttachment attachment : attachments) {
-                    attachment.setLocalFilePath(path);
+                    for (RealmAttachment attachment : attachments) {
+                        attachment.setLocalFilePath(path);
+                    }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public RealmThumbnail getLargeThumbnail() {
