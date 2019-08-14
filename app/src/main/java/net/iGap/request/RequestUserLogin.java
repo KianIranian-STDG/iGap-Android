@@ -71,8 +71,13 @@ public class RequestUserLogin {
         }
 
         if (pInfo != null) {
-            AppVersion = pInfo.versionName.replace(".beta", "").replace("beta", "");
-            AppVersion = pInfo.versionName.replace(".newUi", "").replace("newUi", "");
+            AppVersion = pInfo.versionName
+                    .replace(".beta", "")
+                    .replace("beta", "")
+                    .replace(".newUi", "")
+                    .replace(".local", "")
+                    .replace("local", "")
+                    .replace("newUi", "");
             AppBuildVersion = pInfo.versionCode;
         }
         Device = Build.BRAND;
