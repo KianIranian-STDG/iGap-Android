@@ -3345,7 +3345,7 @@ public class FragmentChat extends BaseFragment
                     getRealmChat().executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            roomMessage.setRealmAdditional(RealmAdditional.put(jsonArray.toString(), AdditionalType.UNDER_MESSAGE_BUTTON));
+                            roomMessage.setRealmAdditional(RealmAdditional.put(realm, jsonArray.toString(), AdditionalType.UNDER_MESSAGE_BUTTON));
                         }
                     });
 
@@ -3401,7 +3401,7 @@ public class FragmentChat extends BaseFragment
             dataJsonArray.add(rootObject);
             rootJsonArray.add(dataJsonArray);
 
-            getRealmChat().executeTransaction(realm -> roomMessage.setRealmAdditional(RealmAdditional.put(rootJsonArray.toString(), AdditionalType.CARD_TO_CARD_MESSAGE)));
+            getRealmChat().executeTransaction(realm -> roomMessage.setRealmAdditional(RealmAdditional.put(realm, rootJsonArray.toString(), AdditionalType.CARD_TO_CARD_MESSAGE)));
 
             edtChat.setText("");
             lastMessageId = roomMessage.getMessageId();

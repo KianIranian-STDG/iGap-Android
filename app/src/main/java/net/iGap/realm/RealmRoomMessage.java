@@ -429,7 +429,7 @@ public class RealmRoomMessage extends RealmObject {
 
         if (input.getAdditionalType() != 0 && !input.getAdditionalData().isEmpty()) {
             if (message.getRealmAdditional() == null) {
-                message.setRealmAdditional(RealmAdditional.put(input));
+                message.setRealmAdditional(RealmAdditional.put(realm, input));
             }
         }
 
@@ -1114,7 +1114,7 @@ public class RealmRoomMessage extends RealmObject {
         roomMessage.setUserId(G.userId);
         roomMessage.setCreateTime(TimeUtils.currentLocalTime());
         if (additionalData != null)
-            roomMessage.setRealmAdditional(RealmAdditional.put(additionalData, additionalTaype));
+            roomMessage.setRealmAdditional(RealmAdditional.put(realm, additionalData, additionalTaype));
 
         return roomMessage;
     }
