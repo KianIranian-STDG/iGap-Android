@@ -1,8 +1,8 @@
 package net.iGap.api;
 
 
-import net.iGap.model.FavoriteChannel.ChildChannel;
-import net.iGap.model.FavoriteChannel.ParentChannel;
+import net.iGap.model.popularChannel.ChildChannel;
+import net.iGap.model.popularChannel.ParentChannel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

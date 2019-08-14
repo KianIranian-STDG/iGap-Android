@@ -1,4 +1,4 @@
-package net.iGap.fragments.favoritechannel;
+package net.iGap.adapter.items.popularChannel;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -14,15 +14,15 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.libs.bottomNavigation.Util.Utils;
-import net.iGap.model.FavoriteChannel.Category;
+import net.iGap.model.popularChannel.Category;
 
 import java.util.List;
 
-public class FavoriteCategoryAdapter extends RecyclerView.Adapter<FavoriteCategoryAdapter.FragmentGridViewHolder> {
+public class NormalCategoryAdapter extends RecyclerView.Adapter<NormalCategoryAdapter.FragmentGridViewHolder> {
     private List<Category> categoryList;
     private OnClickedItemEventCallBack onClickedItemEventCallBack;
 
-    public FavoriteCategoryAdapter(List<Category> categoryList) {
+    public NormalCategoryAdapter(List<Category> categoryList) {
         this.categoryList = categoryList;
     }
 
@@ -73,16 +73,16 @@ public class FavoriteCategoryAdapter extends RecyclerView.Adapter<FavoriteCatego
 
         public void bindChannel(Category category) {
             ImageLoadingService.load(category.getIcon(), channelImageGrid);
-            if (G.selectedLanguage.equals("fa"))
+            if (G.isAppRtl)
                 channelTitleGrid.setText(category.getTitle());
+            else
+                channelTitleGrid.setText(category.getTitleEn());
 
             itemView.setOnClickListener(view -> {
                 if (onClickedItemEventCallBack != null)
                     onClickedItemEventCallBack.onClickedItem(category);
             });
 
-            if (G.selectedLanguage.equals("en"))
-                channelTitleGrid.setText(category.getTitleEn());
 
         }
     }

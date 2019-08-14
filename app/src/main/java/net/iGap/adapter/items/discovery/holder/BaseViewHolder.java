@@ -35,7 +35,7 @@ import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
-import net.iGap.fragments.favoritechannel.PopularChannelFragment;
+import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
 import net.iGap.fragments.poll.PollFragment;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
@@ -306,7 +306,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case UNRECOGNIZED:
                 break;
             case FAVORITE_CHANNEL:
-                new HelperFragment(activity.getSupportFragmentManager(), new PopularChannelFragment()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), new PopularChannelHomeFragment()).setReplace(false).load();
                 break;
         }
     }

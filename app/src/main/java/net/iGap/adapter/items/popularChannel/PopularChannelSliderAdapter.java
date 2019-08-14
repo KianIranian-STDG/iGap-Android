@@ -1,15 +1,15 @@
-package net.iGap.fragments.favoritechannel;
+package net.iGap.adapter.items.popularChannel;
 
 import net.iGap.libs.bannerslider.adapters.SliderAdapter;
 import net.iGap.libs.bannerslider.viewholder.ImageSlideViewHolder;
-import net.iGap.model.FavoriteChannel.Slide;
+import net.iGap.model.popularChannel.Slide;
 
 import java.util.List;
 
-class ChannelBannerSliderAdapter extends SliderAdapter {
+class PopularChannelSliderAdapter extends SliderAdapter {
     private List<Slide> slides;
 
-    public ChannelBannerSliderAdapter(List<Slide> slides) {
+    public PopularChannelSliderAdapter(List<Slide> slides) {
         this.slides = slides;
     }
 
