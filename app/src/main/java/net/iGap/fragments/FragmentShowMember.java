@@ -989,24 +989,22 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         }
 
         StructContactInfo convertRealmToStruct(RealmMember realmMember) {
-            Realm realm = Realm.getDefaultInstance();
-            String role = realmMember.getRole();
-            long id = realmMember.getPeerId();
-            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, id);
-            if (realmRegisteredInfo != null) {
-                StructContactInfo s = new StructContactInfo(realmRegisteredInfo.getId(), realmRegisteredInfo.getDisplayName(), realmRegisteredInfo.getStatus(), false, false, realmRegisteredInfo.getPhoneNumber() + "");
-                s.role = role;
-                s.avatar = realmRegisteredInfo.getLastAvatar();
-                s.initials = realmRegisteredInfo.getInitials();
-                s.color = realmRegisteredInfo.getColor();
-                s.lastSeen = realmRegisteredInfo.getLastSeen();
-                s.status = realmRegisteredInfo.getStatus();
-                s.userID = userId;
-                realm.close();
-                return s;
+            try (Realm realm = Realm.getDefaultInstance()) {
+                String role = realmMember.getRole();
+                long id = realmMember.getPeerId();
+                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, id);
+                if (realmRegisteredInfo != null) {
+                    StructContactInfo s = new StructContactInfo(realmRegisteredInfo.getId(), realmRegisteredInfo.getDisplayName(), realmRegisteredInfo.getStatus(), false, false, realmRegisteredInfo.getPhoneNumber() + "");
+                    s.role = role;
+                    s.avatar = realmRegisteredInfo.getLastAvatar();
+                    s.initials = realmRegisteredInfo.getInitials();
+                    s.color = realmRegisteredInfo.getColor();
+                    s.lastSeen = realmRegisteredInfo.getLastSeen();
+                    s.status = realmRegisteredInfo.getStatus();
+                    s.userID = userId;
+                    return s;
+                }
             }
-
-            realm.close();
             return null;
         }
 

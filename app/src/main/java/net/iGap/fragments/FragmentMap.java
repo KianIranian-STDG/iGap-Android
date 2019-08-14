@@ -105,16 +105,6 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     private net.iGap.module.MaterialDesignTextView itemIcon;
     private Location location;
 
-     /*       Realm realm = Realm.getDefaultInstance();
-        ProtoGlobal.Room.Type type=  RealmRoom.detectType(mMessage.roomId);
-        if (type== ProtoGlobal.Room.Type.CHAT|| type== ProtoGlobal.Room.Type.GROUP)
-        {
-
-
-            RealmRegisteredInfo realmRegisteredInfo =  realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID,12342).findFirst();
-        }else{
-
-        }*/
 
     public static FragmentMap getInctance(Double latitude, Double longitude, Mode mode, int type, long roomId, String senderID) {
 

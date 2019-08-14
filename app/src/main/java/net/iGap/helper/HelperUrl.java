@@ -1167,64 +1167,56 @@ public class HelperUrl {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                final Realm realm = Realm.getDefaultInstance();
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmRegisteredInfo.putOrUpdate(realm, user);
+                        }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
 
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRegisteredInfo.putOrUpdate(realm, user);
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
+                            goToActivity(activity, roomId, user.getId(), user.getBot() ? ChatEntry.chat : chatEntery, 0);
 
-                        goToActivity(activity, roomId, user.getId(), user.getBot() ? ChatEntry.chat : chatEntery, 0);
-
-                        realm.close();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        realm.close();
-                    }
-                });
+                        }
+                    });
+                }
             }
         });
     }
 
     private static void goToRoom(FragmentActivity activity, String username, final ProtoGlobal.Room room, long messageId) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
 
-        final Realm realm = Realm.getDefaultInstance();
+            if (realmRoom != null) {
 
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
-
-        if (realmRoom != null) {
-
-            if (realmRoom.isDeleted()) {
-                addRoomToDataBaseAndGoToRoom(activity, username, room, messageId);
-            } else {
-                closeDialogWaiting();
-
-                if (room.getId() != FragmentChat.lastChatRoomId) {
-                    new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity(activity);
+                if (realmRoom.isDeleted()) {
+                    addRoomToDataBaseAndGoToRoom(activity, username, room, messageId);
                 } else {
-                    try {
-                        if (activity != null) {
-                            activity.getSupportFragmentManager().popBackStack();
-                            new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity(activity);
+                    closeDialogWaiting();
+
+                    if (room.getId() != FragmentChat.lastChatRoomId) {
+                        new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity(activity);
+                    } else {
+                        try {
+                            if (activity != null) {
+                                activity.getSupportFragmentManager().popBackStack();
+                                new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity(activity);
+                            }
+                        } catch (Exception e) {
+                            HelperLog.setErrorLog(e);
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        HelperLog.setErrorLog(e);
-                        e.printStackTrace();
                     }
                 }
+
+            } else {
+                addRoomToDataBaseAndGoToRoom(activity, username, room, messageId);
             }
 
-        } else {
-            addRoomToDataBaseAndGoToRoom(activity, username, room, messageId);
         }
-
-        realm.close();
     }
 
     private static void addRoomToDataBaseAndGoToRoom(FragmentActivity activity, final String username, final ProtoGlobal.Room room, long messageId) {
@@ -1234,40 +1226,33 @@ public class HelperUrl {
             @Override
             public void run() {
 
-                final Realm realm = Realm.getDefaultInstance();
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
 
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-
-                        RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
-                        realmRoom1.setDeleted(true);                            // if in chat activity join to room set deleted goes to false
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        realm.refresh();
-                        if (room.getId() != FragmentChat.lastChatRoomId) {
-                            new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity(activity);
-                        } else {
-                            try {
-                                if (activity != null) {
-                                    activity.getSupportFragmentManager().popBackStack();
-                                    new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity(activity);
+                            RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
+                            realmRoom1.setDeleted(true);                            // if in chat activity join to room set deleted goes to false
+                        }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            if (room.getId() != FragmentChat.lastChatRoomId) {
+                                new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity(activity);
+                            } else {
+                                try {
+                                    if (activity != null) {
+                                        activity.getSupportFragmentManager().popBackStack();
+                                        new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity(activity);
+                                    }
+                                } catch (Exception e) {
+                                    HelperLog.setErrorLog(e);
+                                    e.printStackTrace();
                                 }
-                            } catch (Exception e) {
-                                HelperLog.setErrorLog(e);
-                                e.printStackTrace();
                             }
                         }
-                        realm.close();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        realm.close();
-                    }
-                });
+                    });
+                }
             }
         });
     }

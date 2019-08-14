@@ -433,14 +433,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             @Override
             public void onClick(View view) {
                 ArrayList<Parcelable> messageInfos = new ArrayList<>(SelectedList.size());
-                //RealmRoomMessage rm;
                 for (StructShearedMedia media : SelectedList) {
-
-                    //rm = mRealmList.where().equalTo(RealmRoomMessageFields.MESSAGE_ID, Id).findFirst();
-                    //if (rm != null) {
-                        //+Realm realm = Realm.getDefaultInstance();
-                        messageInfos.add(Parcels.wrap(StructMessageInfo.convert(getRealm(), media.item)));
-                    //}
+                    messageInfos.add(Parcels.wrap(StructMessageInfo.convert(getRealm(), media.item)));
                 }
                 FragmentChat.mForwardMessages = messageInfos;
                 adapter.resetSelected();
@@ -1048,7 +1042,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                //+final Realm realm = Realm.getDefaultInstance();
 
                 getRealm().executeTransactionAsync(new Realm.Transaction() {
                     @Override
@@ -1057,16 +1050,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                             RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
                         }
                     }
-                    //}, new Realm.Transaction.OnSuccess() {
-                    //    @Override
-                    //    public void onSuccess() {
-                    //        realm.close();
-                    //    }
-                    //}, new Realm.Transaction.OnError() {
-                    //    @Override
-                    //    public void onError(Throwable error) {
-                    //        realm.close();
-                    //    }
                 });
             }
         });
