@@ -31,6 +31,7 @@ public class FragmentPaymentViewModel extends ViewModel {
     public ObservableField<Drawable> observeBackGround = new ObservableField<>();
     public MutableLiveData<Integer> goToPaymentBillPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToPaymentCharge = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToButInternetPackage = new MutableLiveData<>();
     public MutableLiveData<FragmentPaymentInquiryViewModel.OperatorType> goToPaymentInquiryPage = new MutableLiveData<>();
 
     public FragmentPaymentViewModel() {
@@ -62,6 +63,10 @@ public class FragmentPaymentViewModel extends ViewModel {
 
     public void onClickInquiryTelecom() {
         goToPaymentInquiryPage.setValue(FragmentPaymentInquiryViewModel.OperatorType.telecome);
+    }
+
+    public void onClickBuyInternetPackage(){
+        goToButInternetPackage.setValue(true);
     }
 
 }

@@ -16,6 +16,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.IBackHandler;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.internetpackage.BuyInternetPackageFragment;
 import net.iGap.viewmodel.FragmentPaymentViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -94,6 +95,12 @@ public class FragmentPayment extends BaseFragment {
         fragmentPaymentViewModel.goToPaymentCharge.observe(this, go -> {
             if (getActivity() != null && go != null && go) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentCharge.newInstance()).setReplace(false).load();
+            }
+        });
+
+        fragmentPaymentViewModel.goToButInternetPackage.observe(getViewLifecycleOwner(), go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new BuyInternetPackageFragment()).setReplace(false).load(true);
             }
         });
 
