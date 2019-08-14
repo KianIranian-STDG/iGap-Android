@@ -32,25 +32,25 @@ public class HelperCalculateKeepMedia {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Realm realm = Realm.getDefaultInstance();
-                RealmResults<RealmRoomMessage> mRealmList = realm.where(RealmRoomMessage.class).findAll();
-                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putLong(SHP_SETTING.KEY_KEEP_MEDIA_TIME, G.currentTime);
-                editor.apply();
-                for (int i = 0; i < mRealmList.size(); i++) {
-                    if (mRealmList.get(i).getAttachment() != null) {
-                        String filePath = mRealmList.get(i).getAttachment().getLocalFilePath();
-                        if (filePath != null) {
-                            new File(filePath).delete();
-                        }
-                        String filePathThumbnail = mRealmList.get(i).getAttachment().getLocalThumbnailPath();
-                        if (filePathThumbnail != null) {
-                            new File(filePathThumbnail).delete();
+                try (Realm realm = Realm.getDefaultInstance()) {RealmResults<RealmRoomMessage> mRealmList = realm.where(RealmRoomMessage.class).findAll();
+                    SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putLong(SHP_SETTING.KEY_KEEP_MEDIA_TIME, G.currentTime);
+                    editor.apply();
+                    for (int i = 0; i < mRealmList.size(); i++) {
+                        if (mRealmList.get(i).getAttachment() != null) {
+                            String filePath = mRealmList.get(i).getAttachment().getLocalFilePath();
+                            if (filePath != null) {
+                                new File(filePath).delete();
+                            }
+                            String filePathThumbnail = mRealmList.get(i).getAttachment().getLocalThumbnailPath();
+                            if (filePathThumbnail != null) {
+                                new File(filePathThumbnail).delete();
+                            }
                         }
                     }
+
                 }
-                realm.close();
             }
         }).start();
     }

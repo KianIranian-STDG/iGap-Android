@@ -341,27 +341,27 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                     s = "98" + s;
                 contacts.get(i).setPhone(s);
             }
-            Realm realm = Realm.getDefaultInstance();
-            RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            try (Realm realm = Realm.getDefaultInstance()) {
+                RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
 
 
-            ArrayList<StructListOfContact> slc = new ArrayList();
+                ArrayList<StructListOfContact> slc = new ArrayList();
 
-            for (int i = 0; i < contacts.size(); i++) {
-                boolean helpIndex = false;
-                for (int j = 0; j < mList.size(); j++) {
-                    if (contacts.get(i).getPhone().equalsIgnoreCase(String.valueOf(mList.get(j).getPhone()))) {
-                        helpIndex = true;
-                        break;
+                for (int i = 0; i < contacts.size(); i++) {
+                    boolean helpIndex = false;
+                    for (int j = 0; j < mList.size(); j++) {
+                        if (contacts.get(i).getPhone().equalsIgnoreCase(String.valueOf(mList.get(j).getPhone()))) {
+                            helpIndex = true;
+                            break;
+                        }
+                    }
+                    if (!helpIndex) {
+                        slc.add(contacts.get(i));
                     }
                 }
-                if (!helpIndex) {
-                    slc.add(contacts.get(i));
-                }
-            }
-            realm.close();
 
-            return slc;
+                return slc;
+            }
         }
 
         @Override

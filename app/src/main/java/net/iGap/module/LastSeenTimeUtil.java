@@ -137,41 +137,39 @@ public class LastSeenTimeUtil {
      */
 
     private static synchronized void updateLastSeenTime() {
-
-        Realm realm = Realm.getDefaultInstance();
-
-        ArrayList<Long> userIdList = new ArrayList<>();
-        for (Iterator<Map.Entry<Long, Long>> it = hashMapLastSeen.entrySet().iterator(); it.hasNext(); ) {
-            Map.Entry<Long, Long> entry = it.next();
-            long userId = entry.getKey();
-            long value = entry.getValue();
-            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
-            if (realmRegisteredInfo != null) {
-                if (realmRegisteredInfo.getStatus() != null && realmRegisteredInfo.getMainStatus() != null && !realmRegisteredInfo.getStatus().equals("online") && !realmRegisteredInfo.getStatus().equals("آنلاین") && !realmRegisteredInfo.getMainStatus().equals(ProtoGlobal.RegisteredUser.Status.LONG_TIME_AGO.toString())) {
-                    String showLastSeen;
-                    if (timeOut(realmRegisteredInfo.getLastSeen() * DateUtils.SECOND_IN_MILLIS)) {
-                        showLastSeen = computeDays(realmRegisteredInfo.getLastSeen(), true);
-                        userIdList.add(userId);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            ArrayList<Long> userIdList = new ArrayList<>();
+            for (Iterator<Map.Entry<Long, Long>> it = hashMapLastSeen.entrySet().iterator(); it.hasNext(); ) {
+                Map.Entry<Long, Long> entry = it.next();
+                long userId = entry.getKey();
+                long value = entry.getValue();
+                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+                if (realmRegisteredInfo != null) {
+                    if (realmRegisteredInfo.getStatus() != null && realmRegisteredInfo.getMainStatus() != null && !realmRegisteredInfo.getStatus().equals("online") && !realmRegisteredInfo.getStatus().equals("آنلاین") && !realmRegisteredInfo.getMainStatus().equals(ProtoGlobal.RegisteredUser.Status.LONG_TIME_AGO.toString())) {
+                        String showLastSeen;
+                        if (timeOut(realmRegisteredInfo.getLastSeen() * DateUtils.SECOND_IN_MILLIS)) {
+                            showLastSeen = computeDays(realmRegisteredInfo.getLastSeen(), true);
+                            userIdList.add(userId);
+                        } else {
+                            showLastSeen = getMinute(realmRegisteredInfo.getLastSeen());
+                        }
+                        if (G.onLastSeenUpdateTiming != null) {
+                            G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, showLastSeen);
+                        }
                     } else {
-                        showLastSeen = getMinute(realmRegisteredInfo.getLastSeen());
+                        userIdList.add(userId);
                     }
-                    if (G.onLastSeenUpdateTiming != null) {
-                        G.onLastSeenUpdateTiming.onLastSeenUpdate(userId, showLastSeen);
-                    }
-                } else {
-                    userIdList.add(userId);
                 }
             }
+
+            // i separate hashMap remove from iterator , because i guess remove in that iterator make bug in app , but i'm not insuring
+            for (long userId : userIdList) {
+                hashMapLastSeen.remove(userId);
+            }
+            userIdList.clear();
+
         }
 
-        // i separate hashMap remove from iterator , because i guess remove in that iterator make bug in app , but i'm not insuring
-        for (long userId : userIdList) {
-            hashMapLastSeen.remove(userId);
-        }
-
-        realm.close();
-
-        userIdList.clear();
         if (hashMapLastSeen.size() > 0) {
             G.handler.postDelayed(new Runnable() {
                 @Override

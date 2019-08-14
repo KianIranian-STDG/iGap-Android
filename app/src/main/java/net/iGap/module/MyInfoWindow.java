@@ -255,8 +255,8 @@ public class MyInfoWindow extends InfoWindow {
     }
 
     /*public void onOpen(Object arg0) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+    try (Realm realm = Realm.getDefaultInstance()) {
+     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
         if (realmRegisteredInfo == null) {
             return;
         }
@@ -329,8 +329,9 @@ public class MyInfoWindow extends InfoWindow {
 
             new RequestGeoGetComment().getComment(userId);
         }
+}
 
-        realm.close();
+
     }*/
 
 }

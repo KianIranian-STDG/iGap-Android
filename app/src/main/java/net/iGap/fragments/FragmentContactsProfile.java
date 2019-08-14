@@ -224,9 +224,8 @@ public class FragmentContactsProfile extends BaseFragment {
             public void onClick(View view) {
 
                 if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || enterFrom.equals("Others")) { // Others is from FragmentMapUsers adapter
-
-                    Realm realm = Realm.getDefaultInstance();
-                    final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+try (Realm realm = Realm.getDefaultInstance()) {
+final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
 
                     if (realmRoom != null) {
                         new HelperFragment().removeAll(true);
@@ -258,7 +257,8 @@ public class FragmentContactsProfile extends BaseFragment {
 
                         new RequestChatGetRoom().chatGetRoom(userId);
                     }
-                    realm.close();
+}
+
                 } else {
                     popBackStackFragment();
                 }

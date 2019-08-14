@@ -246,7 +246,6 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
                 new RequestChatGetRoom().chatGetRoom(userId);
             }
-            realm.close();
         } else {
             goBack.setValue(true);
         }

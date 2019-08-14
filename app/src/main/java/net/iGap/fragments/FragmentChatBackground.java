@@ -265,54 +265,51 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         StructWallpaper sw = new StructWallpaper();
         sw.setWallpaperType(WallpaperType.addNew);
         wList.add(sw);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).findFirst();
 
-        Realm realm = Realm.getDefaultInstance();
+            if (realmWallpaper != null) {
 
-        RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).findFirst();
+                if (realmWallpaper.getLocalList() != null) {
+                    for (String localPath : realmWallpaper.getLocalList()) {
+                        if (new File(localPath).exists()) {
+                            StructWallpaper _swl = new StructWallpaper();
+                            _swl.setWallpaperType(WallpaperType.local);
+                            _swl.setPath(localPath);
+                            wList.add(_swl);
 
-        if (realmWallpaper != null) {
-
-            if (realmWallpaper.getLocalList() != null) {
-                for (String localPath : realmWallpaper.getLocalList()) {
-                    if (new File(localPath).exists()) {
-                        StructWallpaper _swl = new StructWallpaper();
-                        _swl.setWallpaperType(WallpaperType.local);
-                        _swl.setPath(localPath);
-                        wList.add(_swl);
-
+                        }
                     }
                 }
-            }
 
-            if (realmWallpaper.getWallPaperList() != null) {
-                for (RealmWallpaperProto wallpaper : realmWallpaper.getWallPaperList()) {
-                    StructWallpaper _swp = new StructWallpaper();
-                    _swp.setWallpaperType(WallpaperType.proto);
-                    _swp.setProtoWallpaper(wallpaper);
-                    wList.add(_swp);
-                    solidList.add(_swp.getProtoWallpaper().getColor());
+                if (realmWallpaper.getWallPaperList() != null) {
+                    for (RealmWallpaperProto wallpaper : realmWallpaper.getWallPaperList()) {
+                        StructWallpaper _swp = new StructWallpaper();
+                        _swp.setWallpaperType(WallpaperType.proto);
+                        _swp.setProtoWallpaper(wallpaper);
+                        wList.add(_swp);
+                        solidList.add(_swp.getProtoWallpaper().getColor());
+                    }
                 }
-            }
 
-            if (getInfoFromServer) {
+                if (getInfoFromServer) {
 
-                long time = realmWallpaper.getLastTimeGetList();
-                if (time > 0) {
+                    long time = realmWallpaper.getLastTimeGetList();
+                    if (time > 0) {
 
-                    if (time + (2 * 60 * 60 * 1000) < TimeUtils.currentLocalTime()) {
+                        if (time + (2 * 60 * 60 * 1000) < TimeUtils.currentLocalTime()) {
+                            getImageListFromServer();
+                        }
+                    } else {
                         getImageListFromServer();
                     }
-                } else {
+                }
+            } else {
+                if (getInfoFromServer) {
                     getImageListFromServer();
                 }
             }
-        } else {
-            if (getInfoFromServer) {
-                getImageListFromServer();
-            }
         }
-
-        realm.close();
     }
 
     @Override

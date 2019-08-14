@@ -574,27 +574,27 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     }
 
     private void setPicture() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
-        if (registeredInfo != null) {
-            loadOrDownloadPicture(registeredInfo, realm);
-        } else {
-            //todo: add callback and remove delay :D
-            new RequestUserInfo().userInfo(userId);
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Realm realm = Realm.getDefaultInstance();
-                    RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+            if (registeredInfo != null) {
+                loadOrDownloadPicture(registeredInfo, realm);
+            } else {
+                //todo: add callback and remove delay :D
+                new RequestUserInfo().userInfo(userId);
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try (Realm realm = Realm.getDefaultInstance()) {
+                            RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
 
-                    if (registeredInfo != null) {
-                        loadOrDownloadPicture(registeredInfo, realm);
+                            if (registeredInfo != null) {
+                                loadOrDownloadPicture(registeredInfo, realm);
+                            }
+                        }
                     }
-                    realm.close();
-                }
-            }, 3000);
+                }, 3000);
+            }
         }
-        realm.close();
     }
 
     private void loadOrDownloadPicture(RealmRegisteredInfo registeredInfo, Realm realm) {

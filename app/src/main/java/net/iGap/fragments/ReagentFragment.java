@@ -370,11 +370,10 @@ public class ReagentFragment extends FragmentToolBarBack implements OnCountryCod
 
             }
         });
-
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        RealmUserInfo.setRepresentPhoneNumber(realm, realmUserInfo, phone);
-        realm.close();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            RealmUserInfo.setRepresentPhoneNumber(realm, realmUserInfo, phone);
+        }
     }
 
     @Override

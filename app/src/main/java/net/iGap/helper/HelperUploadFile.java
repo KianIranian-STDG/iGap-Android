@@ -417,14 +417,14 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
 
         HelperSetAction.sendCancel(uploadStructure.messageId);
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmAttachment.updateToken(uploadStructure.messageId, uploadStructure.token);
-            }
-        });
-        realm.close();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmAttachment.updateToken(uploadStructure.messageId, uploadStructure.token);
+                }
+            });
+        }
 
         /**
          * this code should exist in under of other codes in this block

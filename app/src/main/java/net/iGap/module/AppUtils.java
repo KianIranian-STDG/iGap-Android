@@ -260,17 +260,16 @@ public final class AppUtils {
 
                     view.setImageBitmap(bitmap);
                     final String savedPath = AppUtils.saveMapToFile(bitmap, message.getLocation().getLocationLat(), message.getLocation().getLocationLong());
-
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            if (message.getLocation() != null) {
-                                message.getLocation().setImagePath(savedPath);
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                if (message.getLocation() != null) {
+                                    message.getLocation().setImagePath(savedPath);
+                                }
                             }
-                        }
-                    });
-                    realm.close();
+                        });
+                    }
                 }
             });
         }
@@ -572,17 +571,17 @@ public final class AppUtils {
     }
 
     public static String computeLastMessage(long roomId) {
-        Realm realm = Realm.getDefaultInstance();
-        String lastMessage = "";
-        RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
-        for (RealmRoomMessage realmRoomMessage : realmList) {
-            if (realmRoomMessage != null && !realmRoomMessage.isDeleted()) {
-                lastMessage = AppUtils.rightLastMessage(realmRoomMessage);
-                break;
+        try (Realm realm = Realm.getDefaultInstance()) {
+            String lastMessage = "";
+            RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            for (RealmRoomMessage realmRoomMessage : realmList) {
+                if (realmRoomMessage != null && !realmRoomMessage.isDeleted()) {
+                    lastMessage = AppUtils.rightLastMessage(realmRoomMessage);
+                    break;
+                }
             }
+            return lastMessage;
         }
-        realm.close();
-        return lastMessage;
     }
 
     public static MaterialDialog.Builder buildResendDialog(Context context, int failedMessagesCount, final IResendMessage listener) {

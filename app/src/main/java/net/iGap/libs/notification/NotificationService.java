@@ -43,47 +43,47 @@ public class NotificationService extends FirebaseMessagingService {
         WebSocketClient.reconnect(false);
         Log.d("bagi", "FCM" + remoteMessage.getData() + "");
         if (remoteMessage.getData().containsKey(MESSAGE_ID)) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    try {
-                        final long messageId = Long.valueOf(remoteMessage.getData().get(MESSAGE_ID));
-                        final long roomId = Long.valueOf(remoteMessage.getData().get(ROOM_ID));
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        try {
+                            final long messageId = Long.valueOf(remoteMessage.getData().get(MESSAGE_ID));
+                            final long roomId = Long.valueOf(remoteMessage.getData().get(ROOM_ID));
 
-                        if (RealmNotificationRoomMessage.canShowNotif(realm, messageId, roomId)) {
+                            if (RealmNotificationRoomMessage.canShowNotif(realm, messageId, roomId)) {
 
-                            String loc_key = remoteMessage.getData().get(MESSAGE_TYPE);
-                            ProtoGlobal.Room.Type roomType;
+                                String loc_key = remoteMessage.getData().get(MESSAGE_TYPE);
+                                ProtoGlobal.Room.Type roomType;
 
-                            if (loc_key.contains("CHANNEL")) {
-                                roomType = ProtoGlobal.Room.Type.CHANNEL;
-                            } else if (loc_key.contains("GROUP")) {
-                                roomType = ProtoGlobal.Room.Type.GROUP;
-                            } else {
-                                roomType = ProtoGlobal.Room.Type.CHAT;
+                                if (loc_key.contains("CHANNEL")) {
+                                    roomType = ProtoGlobal.Room.Type.CHANNEL;
+                                } else if (loc_key.contains("GROUP")) {
+                                    roomType = ProtoGlobal.Room.Type.GROUP;
+                                } else {
+                                    roomType = ProtoGlobal.Room.Type.CHAT;
+                                }
+
+                                JSONArray loc_args = new JSONArray(remoteMessage.getData().get("loc_args"));
+                                String text = loc_args.getString(1);
+
+                                RealmNotificationRoomMessage.putToDataBase(realm, messageId, roomId);
+
+                                ProtoGlobal.RoomMessage roomMessage = ProtoGlobal.RoomMessage.newBuilder()
+                                        .setMessage(text)
+                                        .setUpdateTime((int) (remoteMessage.getSentTime() / 1000))
+                                        .build();
+
+                                Log.d("bagi", "FcmSHOWNOTIF" + remoteMessage.getData() + "");
+                                HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType);
+
                             }
-
-                            JSONArray loc_args = new JSONArray(remoteMessage.getData().get("loc_args"));
-                            String text = loc_args.getString(1);
-
-                            RealmNotificationRoomMessage.putToDataBase(realm, messageId, roomId);
-
-                            ProtoGlobal.RoomMessage roomMessage = ProtoGlobal.RoomMessage.newBuilder()
-                                    .setMessage(text)
-                                    .setUpdateTime((int) (remoteMessage.getSentTime() / 1000))
-                                    .build();
-
-                            Log.d("bagi", "FcmSHOWNOTIF" + remoteMessage.getData() + "");
-                            HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType);
-
+                        }catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    }catch (Exception e) {
-                        e.printStackTrace();
                     }
-                }
-            });
-            realm.close();
+                });
+            }
         }
     }
 

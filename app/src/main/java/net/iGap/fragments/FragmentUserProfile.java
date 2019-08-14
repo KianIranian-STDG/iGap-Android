@@ -81,14 +81,11 @@ public class FragmentUserProfile extends BaseMainFragments {
 
         viewModel.goToAddMemberPage.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
-                Realm realm = Realm.getDefaultInstance();
-                Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
-                try {
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
                 } catch (Exception e) {
                     e.getStackTrace();
-                } finally {
-                    realm.close();
                 }
             }
         });

@@ -96,13 +96,14 @@ public class HelperLogMessage {
     }
 
     private static SpannableStringBuilder extractLog(StructMyLog log, boolean withLink) throws InvalidProtocolBufferException {
-        Realm realm = Realm.getDefaultInstance();
-        String authorName = getAuthorName(log, realm);
-        String targetName = getTargetName(log, realm);
-        String finalTypeRoom = getRoomTypeString(log, realm);
-        String LogMessageTypeString = getLogTypeString(ProtoGlobal.RoomMessageLog.parseFrom(log.messageLog).getType(), ProtoGlobal.RoomMessage.Author.parseFrom(log.author));
-        realm.close();
-        return getLogMessage(authorName, targetName, finalTypeRoom, LogMessageTypeString, log, withLink);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            String authorName = getAuthorName(log, realm);
+            String targetName = getTargetName(log, realm);
+            String finalTypeRoom = getRoomTypeString(log, realm);
+            String LogMessageTypeString = getLogTypeString(ProtoGlobal.RoomMessageLog.parseFrom(log.messageLog).getType(), ProtoGlobal.RoomMessage.Author.parseFrom(log.author));
+            return getLogMessage(authorName, targetName, finalTypeRoom, LogMessageTypeString, log, withLink);
+        }
+
     }
 
     private static String getAuthorName(StructMyLog log, Realm realm) throws InvalidProtocolBufferException {
@@ -406,78 +407,76 @@ public class HelperLogMessage {
     }
 
     private static void gotToUserRoom(final long id) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
+            if (realmRoom != null) {
+                //Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+                //intent.putExtra("RoomId", realmRoom.getId());
+                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //G.currentActivity.startActivity(intent);
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
-        if (realmRoom != null) {
-            //Intent intent = new Intent(G.currentActivity, ActivityChat.class);
-            //intent.putExtra("RoomId", realmRoom.getId());
-            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //G.currentActivity.startActivity(intent);
+                //Intent intent = new Intent(G.context, ActivityContactsProfile.class);
+                //intent.putExtra("peerId", id);
+                //intent.putExtra("RoomId", realmRoom.getId());
+                //intent.putExtra("enterFrom", "GROUP");
+                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //G.currentActivity.startActivity(intent);
 
-            //Intent intent = new Intent(G.context, ActivityContactsProfile.class);
-            //intent.putExtra("peerId", id);
-            //intent.putExtra("RoomId", realmRoom.getId());
-            //intent.putExtra("enterFrom", "GROUP");
-            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //G.currentActivity.startActivity(intent);
+                FragmentContactsProfile contactsProfile = new FragmentContactsProfile();
+                Bundle bundle = new Bundle();
+                bundle.putLong("peerId", id);
+                bundle.putLong("RoomId", realmRoom.getId());
+                bundle.putString("enterFrom", "GROUP");
+                contactsProfile.setArguments(bundle);
+                //ToDo:fixed it and change to do not use G.currentActivity
+                new HelperFragment(G.currentActivity.getSupportFragmentManager(),contactsProfile).setReplace(false).load();
 
-            FragmentContactsProfile contactsProfile = new FragmentContactsProfile();
-            Bundle bundle = new Bundle();
-            bundle.putLong("peerId", id);
-            bundle.putLong("RoomId", realmRoom.getId());
-            bundle.putString("enterFrom", "GROUP");
-            contactsProfile.setArguments(bundle);
-            //ToDo:fixed it and change to do not use G.currentActivity
-            new HelperFragment(G.currentActivity.getSupportFragmentManager(),contactsProfile).setReplace(false).load();
+            } else {
+                G.onChatGetRoom = new OnChatGetRoom() {
+                    @Override
+                    public void onChatGetRoom(final ProtoGlobal.Room room) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                FragmentContactsProfile contactsProfile = new FragmentContactsProfile();
+                                Bundle bundle = new Bundle();
+                                bundle.putLong("peerId", id);
+                                bundle.putLong("RoomId", room.getId());
+                                bundle.putString("enterFrom", "GROUP");
+                                contactsProfile.setArguments(bundle);
+                                //ToDo:fixed it and change to do not use G.currentActivity
+                                new HelperFragment(G.currentActivity.getSupportFragmentManager(),contactsProfile).setReplace(false).load();
+                                G.onChatGetRoom = null;
+                            }
+                        });
+                    }
 
-        } else {
-            G.onChatGetRoom = new OnChatGetRoom() {
-                @Override
-                public void onChatGetRoom(final ProtoGlobal.Room room) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            FragmentContactsProfile contactsProfile = new FragmentContactsProfile();
-                            Bundle bundle = new Bundle();
-                            bundle.putLong("peerId", id);
-                            bundle.putLong("RoomId", room.getId());
-                            bundle.putString("enterFrom", "GROUP");
-                            contactsProfile.setArguments(bundle);
-                            //ToDo:fixed it and change to do not use G.currentActivity
-                            new HelperFragment(G.currentActivity.getSupportFragmentManager(),contactsProfile).setReplace(false).load();
-                            G.onChatGetRoom = null;
-                        }
-                    });
-                }
+                    @Override
+                    public void onChatGetRoomTimeOut() {
 
-                @Override
-                public void onChatGetRoomTimeOut() {
+                    }
 
-                }
+                    @Override
+                    public void onChatGetRoomError(int majorCode, int minorCode) {
 
-                @Override
-                public void onChatGetRoomError(int majorCode, int minorCode) {
+                    }
+                };
 
-                }
-            };
-
-            new RequestChatGetRoom().chatGetRoom(id);
+                new RequestChatGetRoom().chatGetRoom(id);
+            }
         }
-
-        realm.close();
     }
 
     private static void goToRoom(Long roomId) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        //ToDo:fixed it and change to do not use G.currentActivity
-        if (realmRoom != null) {
-            new GoToChatActivity(realmRoom.getId()).startActivity(G.currentActivity);
-        } else {
-            RealmRoom.needUpdateRoomInfo(roomId);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            //ToDo:fixed it and change to do not use G.currentActivity
+            if (realmRoom != null) {
+                new GoToChatActivity(realmRoom.getId()).startActivity(G.currentActivity);
+            } else {
+                RealmRoom.needUpdateRoomInfo(roomId);
+            }
         }
-        realm.close();
     }
 
 
