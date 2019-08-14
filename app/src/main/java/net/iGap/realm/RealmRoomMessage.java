@@ -363,7 +363,7 @@ public class RealmRoomMessage extends RealmObject {
 
             if (message.getAttachment().getSmallThumbnail() == null) {
                 long smallId = SUID.id().get();
-                RealmThumbnail smallThumbnail = RealmThumbnail.put(smallId, message.getAttachment().getId(), input.getAttachment().getSmallThumbnail());
+                RealmThumbnail smallThumbnail = RealmThumbnail.put(realm, smallId, message.getAttachment().getId(), input.getAttachment().getSmallThumbnail());
                 message.getAttachment().setSmallThumbnail(smallThumbnail);
             }
 
@@ -380,7 +380,7 @@ public class RealmRoomMessage extends RealmObject {
             Long id = null;
             if (message.getLocation() != null) id = message.getLocation().getId();
 
-            message.setLocation(RealmRoomMessageLocation.put(input.getLocation(), id));
+            message.setLocation(RealmRoomMessageLocation.put(realm, input.getLocation(), id));
         }
         if (input.hasLog()) {
             if (input.getReplyTo() != null) {
@@ -390,11 +390,11 @@ public class RealmRoomMessage extends RealmObject {
             }
         }
         if (input.hasContact()) {
-            message.setRoomMessageContact(RealmRoomMessageContact.put(input.getContact()));
+            message.setRoomMessageContact(RealmRoomMessageContact.put(realm, input.getContact()));
         }
 
         if (input.hasWallet()) {
-            message.setRoomMessageWallet(RealmRoomMessageWallet.put(input.getWallet()));
+            message.setRoomMessageWallet(RealmRoomMessageWallet.put(realm, input.getWallet()));
         }
 
 

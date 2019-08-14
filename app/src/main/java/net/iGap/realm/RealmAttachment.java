@@ -94,10 +94,10 @@ public class RealmAttachment extends RealmObject {
         realmAttachment.setWidth(attachment.getWidth());
 
         long smallMessageThumbnail = SUID.id().get();
-        RealmThumbnail.put(smallMessageThumbnail, messageId, attachment.getSmallThumbnail());
+        RealmThumbnail.put(realm, smallMessageThumbnail, messageId, attachment.getSmallThumbnail());
 
         long largeMessageThumbnail = SUID.id().get();
-        RealmThumbnail.put(largeMessageThumbnail, messageId, attachment.getSmallThumbnail());
+        RealmThumbnail.put(realm, largeMessageThumbnail, messageId, attachment.getSmallThumbnail());
 
         realmAttachment.setSmallThumbnail(realm.where(RealmThumbnail.class).equalTo(RealmThumbnailFields.ID, smallMessageThumbnail).findFirst());
         realmAttachment.setLargeThumbnail(realm.where(RealmThumbnail.class).equalTo(RealmThumbnailFields.ID, largeMessageThumbnail).findFirst());
@@ -117,9 +117,9 @@ public class RealmAttachment extends RealmObject {
             realmAttachment.setHeight(file.getHeight());
 
             long largeId = SUID.id().get();
-            RealmThumbnail.put(largeId, id, file.getLargeThumbnail());
+            RealmThumbnail.put(realm, largeId, id, file.getLargeThumbnail());
             long smallId = SUID.id().get();
-            RealmThumbnail.put(smallId, id, file.getSmallThumbnail());
+            RealmThumbnail.put(realm, smallId, id, file.getSmallThumbnail());
 
             RealmThumbnail largeThumbnail = realm.where(RealmThumbnail.class).equalTo("id", largeId).findFirst();
             realmAttachment.setLargeThumbnail(largeThumbnail);

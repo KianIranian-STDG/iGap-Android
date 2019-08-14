@@ -29,8 +29,7 @@ public class RealmRoomMessageLocation extends RealmObject {
     private double locationLong;
     private String imagePath; // this field not important now, because we use from 'locationLat' and 'locationLat' params for detect location path
 
-    public static RealmRoomMessageLocation put(final ProtoGlobal.RoomMessageLocation input, Long id) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmRoomMessageLocation put(Realm realm, final ProtoGlobal.RoomMessageLocation input, Long id) {
         RealmRoomMessageLocation messageLocation = null;
         if (id != null) {
             messageLocation = realm.where(RealmRoomMessageLocation.class).equalTo(RealmRoomMessageLocationFields.ID, id).findFirst();
@@ -40,7 +39,6 @@ public class RealmRoomMessageLocation extends RealmObject {
         }
         messageLocation.setLocationLat(input.getLat());
         messageLocation.setLocationLong(input.getLon());
-        realm.close();
 
         return messageLocation;
     }
@@ -55,7 +53,7 @@ public class RealmRoomMessageLocation extends RealmObject {
 
     @Override
     public String toString() {
-        return Double.toString(getLocationLat()) + "," + Double.toString(getLocationLong());
+        return getLocationLat() + "," + getLocationLong();
     }
 
     public double getLocationLat() {

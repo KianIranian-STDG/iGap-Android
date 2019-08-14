@@ -182,7 +182,7 @@ public class RealmRoom extends RealmObject {
                 break;
             case CHAT:
                 realmRoom.setType(RoomType.CHAT);
-                realmRoom.setChatRoom(RealmChatRoom.convert(room.getChatRoomExtra()));
+                realmRoom.setChatRoom(RealmChatRoom.convert(realm, room.getChatRoomExtra()));
                 /**
                  * update user info for detect current status(online,offline,...)
                  * and also update another info

@@ -577,7 +577,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
         if (registeredInfo != null) {
-            loadOrDownloadPicture(registeredInfo);
+            loadOrDownloadPicture(registeredInfo, realm);
         } else {
             //todo: add callback and remove delay :D
             new RequestUserInfo().userInfo(userId);
@@ -588,7 +588,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                     RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
 
                     if (registeredInfo != null) {
-                        loadOrDownloadPicture(registeredInfo);
+                        loadOrDownloadPicture(registeredInfo, realm);
                     }
                     realm.close();
                 }
@@ -597,10 +597,10 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         realm.close();
     }
 
-    private void loadOrDownloadPicture(RealmRegisteredInfo registeredInfo) {
+    private void loadOrDownloadPicture(RealmRegisteredInfo registeredInfo, Realm realm) {
         try {
             callBackTxtName.set(registeredInfo.getDisplayName());
-            RealmAttachment av = registeredInfo.getLastAvatar().getFile();
+            RealmAttachment av = registeredInfo.getLastAvatar(realm).getFile();
             ProtoFileDownload.FileDownload.Selector se = ProtoFileDownload.FileDownload.Selector.FILE;
             String dirPath = AndroidUtils.getFilePathWithCashId(av.getCacheId(), av.getName(), G.DIR_IMAGE_USER, false);
 

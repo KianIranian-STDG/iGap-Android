@@ -496,7 +496,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                 item.type = SearchType.contact;
                 item.initials = contact.getInitials();
                 item.color = contact.getColor();
-                item.avatar = contact.getLastAvatar();
+                item.avatar = contact.getLastAvatar(realm);
                 list.add(item);
             }
         }
@@ -534,7 +534,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                 item.type = SearchType.contact;
                 item.initials = contact.getInitials();
                 item.color = contact.getColor();
-                item.avatar = contact.getLastAvatar();
+                item.avatar = contact.getLastAvatar(realm);
                 list.add(item);
             }
         }

@@ -21,8 +21,7 @@ public class RealmStickersDetails extends RealmObject {
     private String groupId;
 
 
-    public static RealmStickersDetails put(String st_id, long refId, String name, String avatarToken, String uri, long avatarSize, String avatarName, int sort, String groupId) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmStickersDetails put(Realm realm, String st_id, long refId, String name, String avatarToken, String uri, long avatarSize, String avatarName, int sort, String groupId) {
 
         RealmStickersDetails realmStickersDetails = realm.where(RealmStickersDetails.class).equalTo("token", avatarToken).findFirst();
         if (realmStickersDetails == null) {
@@ -48,26 +47,6 @@ public class RealmStickersDetails extends RealmObject {
                 }
             });
         }
-
-        realm.close();
-        return realmStickersDetails;
-    }
-
-    public static RealmStickersDetails updateUriStickersDetails(String avatarToken, String uri) {
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmStickersDetails realmStickersDetails = realm.where(RealmStickersDetails.class).equalTo("token", avatarToken).findFirst();
-        if (realmStickersDetails != null) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realmStickersDetails.setUri(uri);
-                }
-            });
-
-        }
-
-        realm.close();
 
         return realmStickersDetails;
     }

@@ -996,7 +996,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 if (realmRegisteredInfo != null) {
                     StructContactInfo s = new StructContactInfo(realmRegisteredInfo.getId(), realmRegisteredInfo.getDisplayName(), realmRegisteredInfo.getStatus(), false, false, realmRegisteredInfo.getPhoneNumber() + "");
                     s.role = role;
-                    s.avatar = realmRegisteredInfo.getLastAvatar();
+                    s.avatar = realmRegisteredInfo.getLastAvatar(realm);
                     s.initials = realmRegisteredInfo.getInitials();
                     s.color = realmRegisteredInfo.getColor();
                     s.lastSeen = realmRegisteredInfo.getLastSeen();

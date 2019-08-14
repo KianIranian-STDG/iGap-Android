@@ -31,8 +31,7 @@ public class RealmRoomMessageWalletPayment extends RealmObject implements RealmM
     private String cardNumber;
     private long rrn;
 
-    public static RealmRoomMessageWalletPayment put(final ProtoGlobal.RoomMessageWallet.MoneyTransfer input) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmRoomMessageWalletPayment put(Realm realm, final ProtoGlobal.RoomMessageWallet.MoneyTransfer input) {
         RealmRoomMessageWalletPayment messageWallet = realm.createObject(RealmRoomMessageWalletPayment.class);
 
         messageWallet.setFromUserId(input.getFromUserId());
@@ -44,8 +43,6 @@ public class RealmRoomMessageWalletPayment extends RealmObject implements RealmM
         messageWallet.setDescription(input.getDescription());
         messageWallet.setCardNumber(input.getCardNumber());
         messageWallet.setRrn(input.getRrn());
-
-        realm.close();
 
         return messageWallet;
     }

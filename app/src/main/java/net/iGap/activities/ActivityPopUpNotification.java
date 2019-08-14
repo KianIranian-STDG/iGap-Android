@@ -215,21 +215,21 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 txtLastSeen.setText("");
             }
 
-            setAvatar(realmRegisteredInfo);
+            setAvatar(realmRegisteredInfo, realm);
         }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
 
-    private void setAvatar(RealmRegisteredInfo realmRegisteredInfo) {
+    private void setAvatar(RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
 
         String avatarPath = null;
-        if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatars() != null && realmRegisteredInfo.getLastAvatar() != null) {
-            String mainFilePath = realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath();
+        if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatars(realm) != null && realmRegisteredInfo.getLastAvatar(realm) != null) {
+            String mainFilePath = realmRegisteredInfo.getLastAvatar(realm).getFile().getLocalFilePath();
             if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
                 avatarPath = mainFilePath;
             } else {
-                avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
+                avatarPath = realmRegisteredInfo.getLastAvatar(realm).getFile().getLocalThumbnailPath();
             }
         }
 

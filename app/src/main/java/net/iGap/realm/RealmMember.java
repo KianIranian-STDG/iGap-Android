@@ -221,47 +221,41 @@ public class RealmMember extends RealmObject {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                final Realm realm = Realm.getDefaultInstance();
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    final List<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member> members = new ArrayList<>();
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
 
-                final List<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member> members = new ArrayList<>();
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, Long.parseLong(identity)).findFirst();
+                            if (realmRoom != null) {
 
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, Long.parseLong(identity)).findFirst();
-                        if (realmRoom != null) {
+                                members.clear();
+                                newMembers.clear();
+                                for (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : builder.getMemberList()) {
 
-                            members.clear();
-                            newMembers.clear();
-                            for (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : builder.getMemberList()) {
-
-                                final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, member.getUserId());
-                                if (realmRegisteredInfo != null) {
-                                    newMembers.add(RealmMember.put(realm, member.getUserId(), member.getRole().toString()));
-                                } else {
-                                    members.add(member);
+                                    final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, member.getUserId());
+                                    if (realmRegisteredInfo != null) {
+                                        newMembers.add(RealmMember.put(realm, member.getUserId(), member.getRole().toString()));
+                                    } else {
+                                        members.add(member);
+                                    }
                                 }
+
+                                newMembers.addAll(0, realmRoom.getChannelRoom().getMembers());
+                                realmRoom.getChannelRoom().setMembers(newMembers);
                             }
-
-                            newMembers.addAll(0, realmRoom.getChannelRoom().getMembers());
-                            realmRoom.getChannelRoom().setMembers(newMembers);
                         }
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-
-                        realm.close();
-                        if (G.onChannelGetMemberList != null) {
-                            G.onChannelGetMemberList.onChannelGetMemberList(members);
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            if (G.onChannelGetMemberList != null) {
+                                G.onChannelGetMemberList.onChannelGetMemberList(members);
+                            }
                         }
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        realm.close();
-                    }
-                });
+                    });
+                }
+
             }
         });
     }
@@ -272,46 +266,40 @@ public class RealmMember extends RealmObject {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                final Realm realm = Realm.getDefaultInstance();
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members = new ArrayList<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member>();
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
 
-                final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members = new ArrayList<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member>();
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
+                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, Long.parseLong(identity)).findFirst();
+                            if (realmRoom != null) {
 
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, Long.parseLong(identity)).findFirst();
-                        if (realmRoom != null) {
+                                members.clear();
+                                newMembers.clear();
+                                for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : builder.getMemberList()) {
 
-                            members.clear();
-                            newMembers.clear();
-                            for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : builder.getMemberList()) {
-
-                                final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, member.getUserId());
-                                if (realmRegisteredInfo != null) {
-                                    newMembers.add(RealmMember.put(realm, member.getUserId(), member.getRole().toString()));
-                                } else {
-                                    members.add(member);
+                                    final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, member.getUserId());
+                                    if (realmRegisteredInfo != null) {
+                                        newMembers.add(RealmMember.put(realm, member.getUserId(), member.getRole().toString()));
+                                    } else {
+                                        members.add(member);
+                                    }
                                 }
-                            }
 
-                            newMembers.addAll(0, realmRoom.getGroupRoom().getMembers());
-                            realmRoom.getGroupRoom().setMembers(newMembers);
+                                newMembers.addAll(0, realmRoom.getGroupRoom().getMembers());
+                                realmRoom.getGroupRoom().setMembers(newMembers);
+                            }
                         }
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        realm.close();
-                        if (G.onGroupGetMemberList != null) {
-                            G.onGroupGetMemberList.onGroupGetMemberList(members);
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            if (G.onGroupGetMemberList != null) {
+                                G.onGroupGetMemberList.onGroupGetMemberList(members);
+                            }
                         }
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        realm.close();
-                    }
-                });
+                    });
+                }
             }
         });
     }

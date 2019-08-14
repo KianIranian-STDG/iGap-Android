@@ -345,14 +345,14 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             userBlockState.set(isBlockUser ? R.string.un_block_user : R.string.block);
             registeredInfo.addChangeListener(element -> isBlockUser = registeredInfo.isBlockUser());
 
-            if (registeredInfo.getLastAvatar() != null) {
-                String mainFilePath = registeredInfo.getLastAvatar().getFile().getLocalFilePath();
+            if (registeredInfo.getLastAvatar(getRealm()) != null) {
+                String mainFilePath = registeredInfo.getLastAvatar(getRealm()).getFile().getLocalFilePath();
                 if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
                     avatarPath = mainFilePath;
                 } else {
-                    avatarPath = registeredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
+                    avatarPath = registeredInfo.getLastAvatar(getRealm()).getFile().getLocalThumbnailPath();
                 }
-                avatarList = registeredInfo.getAvatars();
+                avatarList = registeredInfo.getAvatars(getRealm());
             }
         }
 

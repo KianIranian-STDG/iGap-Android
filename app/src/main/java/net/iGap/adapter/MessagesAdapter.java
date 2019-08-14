@@ -158,19 +158,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         return failedMessages;
     }
 
-
-    public void updateChatAvatar(long userId, RealmRegisteredInfo registeredInfo) {
-        for (Item item : getAdapterItems()) {
-            if (item.mMessage != null && !item.mMessage.isSenderMe() && item.mMessage.senderID.equalsIgnoreCase(Long.toString(userId))) {
-                int pos = getAdapterItems().indexOf(item);
-                item.mMessage.senderAvatar = StructMessageAttachment.convert(registeredInfo.getLastAvatar());
-                item.mMessage.initials = registeredInfo.getInitials();
-                item.mMessage.senderColor = registeredInfo.getColor();
-                notifyItemChanged(pos);
-            }
-        }
-    }
-
     /**
      * update message text
      *

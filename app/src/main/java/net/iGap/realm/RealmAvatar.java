@@ -126,22 +126,6 @@ public class RealmAvatar extends RealmObject {
         return null;
     }
 
-    public static RealmAvatar convert(long userId, final RealmAttachment attachment) {
-        Realm realm = Realm.getDefaultInstance();
-
-        // don't put it into transaction
-        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst();
-        if (realmAvatar == null) {
-            realmAvatar = realm.createObject(RealmAvatar.class, attachment.getId());
-            realmAvatar.setOwnerId(userId);
-        }
-        realmAvatar.setFile(attachment);
-
-        realm.close();
-
-        return realmAvatar;
-    }
-
     public long getOwnerId() {
         return ownerId;
     }

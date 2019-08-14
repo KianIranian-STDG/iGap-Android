@@ -83,13 +83,13 @@ public class Contacts {
                 StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", true, false, "");
                 structContactInfo.initials = realmContacts.getInitials();
                 structContactInfo.color = realmContacts.getColor();
-                structContactInfo.avatar = realmRegisteredInfo.getLastAvatar();
+                structContactInfo.avatar = realmRegisteredInfo.getLastAvatar(realm);
                 items.add(structContactInfo);
             } else {
                 StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", false, false, "");
                 structContactInfo.initials = realmContacts.getInitials();
                 structContactInfo.color = realmContacts.getColor();
-                structContactInfo.avatar = realmRegisteredInfo.getLastAvatar();
+                structContactInfo.avatar = realmRegisteredInfo.getLastAvatar(realm);
                 items.add(structContactInfo);
             }
             lastHeader = header;
