@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.request.RequestOptions;
@@ -302,15 +304,14 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 dialPhoneNumber(activity, discoveryField.value, activity);
                 break;
             case SHOW_ALERT:/** tested **/
-            new HelperFragment(activity.getSupportFragmentManager(),new BuyInternetPackageFragment()).setReplace(false).load(true);
-                /*new MaterialDialog.Builder(activity).content(discoveryField.value).positiveText(R.string.dialog_ok)
+                new MaterialDialog.Builder(activity).content(discoveryField.value).positiveText(R.string.dialog_ok)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                             }
                         })
-                        .show();*/
+                        .show();
                 break;
             case STREAM_PLAY:
                 // coming soon
