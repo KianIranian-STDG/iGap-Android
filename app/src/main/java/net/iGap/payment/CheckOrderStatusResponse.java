@@ -24,6 +24,6 @@ public class CheckOrderStatusResponse {
     }
 
     public boolean isPaymentSuccess() {
-        return status.equals("SUCCESS");
+        return status.equals("SUCCESS") || status.equals("PAID");
     }
 }

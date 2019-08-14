@@ -25,6 +25,8 @@ public class PaymentViewModel extends ViewModel {
     private ObservableInt paymentStateIcon = new ObservableInt(R.string.icon_card_to_card);
     private ObservableInt paymentStatusTextColor = new ObservableInt(R.color.black);
     private ObservableInt showButtons = new ObservableInt(View.GONE);
+    private ObservableInt showPaymentStatus = new ObservableInt(View.GONE);
+    private ObservableInt closeButtonColor = new ObservableInt(R.color.accent);
     private ObservableField<String> paymentType = new ObservableField<>();
     private ObservableField<String> title = new ObservableField<>();
     private ObservableField<String> description = new ObservableField<>();
@@ -32,7 +34,6 @@ public class PaymentViewModel extends ViewModel {
     private ObservableField<String> paymentStatus = new ObservableField<>();
     private ObservableField<String> price = new ObservableField<>();
     private ObservableDouble paymentRRN = new ObservableDouble();
-    private MutableLiveData<String> showErrorMessage = new MutableLiveData<>();
     private MutableLiveData<PaymentResult> goBack = new MutableLiveData<>();
     private MutableLiveData<String> goToWebPage = new MutableLiveData<>();
     private MutableLiveData<Boolean> needUpdateGooglePlay = new MutableLiveData<>();
@@ -88,6 +89,14 @@ public class PaymentViewModel extends ViewModel {
         return showButtons;
     }
 
+    public ObservableInt getShowPaymentStatus() {
+        return showPaymentStatus;
+    }
+
+    public ObservableInt getCloseButtonColor() {
+        return closeButtonColor;
+    }
+
     public ObservableField<String> getPaymentType() {
         return paymentType;
     }
@@ -114,10 +123,6 @@ public class PaymentViewModel extends ViewModel {
 
     public ObservableField<String> getPrice() {
         return price;
-    }
-
-    public MutableLiveData<String> getShowErrorMessage() {
-        return showErrorMessage;
     }
 
     public MutableLiveData<PaymentResult> getGoBack() {
@@ -163,6 +168,7 @@ public class PaymentViewModel extends ViewModel {
             showMainView.set(View.VISIBLE);
             showButtons.set(View.INVISIBLE);
             showPaymentErrorMessage.set(View.VISIBLE);
+            showPaymentStatus.set(View.VISIBLE);
             paymentStateIcon.set(R.string.close_icon);
             paymentStatusTextColor.set(R.color.red);
             paymentStatus.set(payment.getMessage());
@@ -214,6 +220,7 @@ public class PaymentViewModel extends ViewModel {
             @Override
             public void onSuccess(CheckOrderStatusResponse data) {
                 showPaymentErrorMessage.set(View.VISIBLE);
+                showPaymentStatus.set(View.VISIBLE);
                 showRetryView.set(View.GONE);
                 showLoadingView.set(View.GONE);
                 showMainView.set(View.VISIBLE);
@@ -230,6 +237,7 @@ public class PaymentViewModel extends ViewModel {
                     paymentStatusTextColor.set(R.color.red);
                     paymentStateIcon.set(R.string.close_icon);
                 }
+                closeButtonColor.set(R.color.accent);
                 paymentRRN.set(data.getPaymentInfo().getRrn());
                 paymentResult = new PaymentResult(data.getPaymentInfo().getOrderId(), data.isPaymentSuccess());
             }
@@ -252,12 +260,19 @@ public class PaymentViewModel extends ViewModel {
 
     private void onErrorHandler(@NotNull ErrorModel error) {
         showLoadingView.set(View.GONE);
-        showErrorMessage.setValue(error.getMessage());
-        showRetryView.set(View.VISIBLE);
+        showPaymentStatus.set(View.VISIBLE);
+        paymentStatus.set(error.getMessage());
+        paymentStateIcon.set(R.string.error_icon);
+        paymentStatusTextColor.set(R.color.layout_background_top_connectivity);
     }
 
     private void onFailedHandler(boolean isNeedUpdateGooglePlay) {
         showLoadingView.set(View.GONE);
+        paymentStateIcon.set(R.string.error_icon);
+        paymentStatusTextColor.set(R.color.layout_background_top_connectivity);
+        showPaymentStatus.set(View.VISIBLE);
+        paymentStatus.set("error");
+        closeButtonColor.set(R.color.red);
         showRetryView.set(View.VISIBLE);
         needUpdateGooglePlay.setValue(isNeedUpdateGooglePlay);
     }
