@@ -1667,11 +1667,9 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (realmMapUsers != null && !realmMapUsers.isClosed()) {
-            realmMapUsers.close();
-        }
+    public void onDestroyView() {
+        super.onDestroyView();
+        realmMapUsers.close();
     }
 
     @Override

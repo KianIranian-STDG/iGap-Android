@@ -134,6 +134,10 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     private boolean isBot = false;
     private boolean isCloud ;
 
+    public FragmentContactsProfileViewModel() {
+        realm = Realm.getDefaultInstance();
+    }
+
     public void init(long roomId, long userId, String enterFrom, AvatarHandler avatarHandler) {
         this.roomId = roomId;
         this.userId = userId;
@@ -549,6 +553,8 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         if (registeredInfo != null) {
             registeredInfo.removeAllChangeListeners();
         }
+
+        realm.close();
     }
 
     //===============================================================================
@@ -676,12 +682,6 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
         if (mRoom != null) {
             mRoom.removeAllChangeListeners();
-        }
-    }
-
-    public void onDestroy() {
-        if (realm != null && !realm.isClosed()) {
-            realm.close();
         }
     }
 

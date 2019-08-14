@@ -212,6 +212,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        realmShearedMedia = Realm.getDefaultInstance();
         return attachToSwipeBack(inflater.inflate(R.layout.activity_sheared_media, container, false));
     }
 
@@ -219,7 +220,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        realmShearedMedia = Realm.getDefaultInstance();
         //mediaLayout = (LinearLayout) view.findViewById(R.id.asm_ll_music_layout);
         //MusicPlayer.setMusicPlayer(mediaLayout);
 
@@ -254,11 +254,15 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        realmShearedMedia.close();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        if (realmShearedMedia != null && !realmShearedMedia.isClosed()) {
-            realmShearedMedia.close();
-        }
 
         MusicPlayer.shearedMediaLayout = null;
 

@@ -142,6 +142,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        realm = Realm.getDefaultInstance();
         if (isSwipe) {
             return attachToSwipeBack(inflater.inflate(R.layout.fragment_contacts, container, false));
         } else {
@@ -478,11 +479,10 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (realm != null && !realm.isClosed()) {
-            realm.close();
-        }
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        realm.close();
     }
 
     @Override

@@ -683,7 +683,6 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
     @Override
     public void onDestroy() {
         super.onDestroy();
-        viewModel.onDestroy();
     }
 
     /**

@@ -165,6 +165,8 @@ public class FragmentShowImage extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+        realmShowImage.close();
         /*if (appBarLayout != null) {
             appBarLayout.setVisibility(View.VISIBLE);
         }*/
@@ -536,10 +538,6 @@ public class FragmentShowImage extends BaseFragment {
         if (videoController != null) {
             videoController.hide();
             videoController = null;
-        }
-
-        if (realmShowImage != null && !realmShowImage.isClosed()) {
-            realmShowImage.close();
         }
     }
 

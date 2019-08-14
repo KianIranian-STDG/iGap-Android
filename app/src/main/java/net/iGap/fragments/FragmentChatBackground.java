@@ -69,7 +69,6 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
     private AdapterChatBackground adapterChatBackgroundSetting;
     private AdapterSolidChatBackground adapterSolidChatbackground;
     private ArrayList<StructWallpaper> wList;
-    private Realm realmChatBackground;
     private Fragment fragment;
     private RippleView chB_ripple_menu_button;
     private boolean isSolidColor = false;
@@ -84,7 +83,6 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        realmChatBackground = Realm.getDefaultInstance();
         return attachToSwipeBack(inflater.inflate(R.layout.activity_chat_background, container, false));
     }
 
@@ -226,13 +224,6 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
                 adapterChatBackgroundSetting.notifyItemInserted(1);
             }
         }
-    }
-
-    private Realm getRealmChatBackground() {
-        if (realmChatBackground == null || realmChatBackground.isClosed()) {
-            realmChatBackground = Realm.getDefaultInstance();
-        }
-        return realmChatBackground;
     }
 
     private void getImageListFromServer() {

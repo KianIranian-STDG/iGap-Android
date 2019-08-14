@@ -128,6 +128,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
 
     public FragmentChannelProfileViewModel(FragmentChannelProfile fragmentChannelProfile, long roomId, boolean isNotJoin) {
 
+        realmChannelProfile = Realm.getDefaultInstance();
         this.fragment = fragmentChannelProfile;
 
         this.roomId = roomId;
@@ -150,8 +151,6 @@ public class FragmentChannelProfileViewModel extends ViewModel
                 showLoading.set(View.GONE);
             }
         };
-
-        realmChannelProfile = Realm.getDefaultInstance();
 
         mRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (mRoom == null || mRoom.getChannelRoom() == null) {
@@ -190,11 +189,11 @@ public class FragmentChannelProfileViewModel extends ViewModel
         isMuteNotification.set(mRoom.getMute());
 
         subscribersCount.set(mRoom.getChannelRoom().getParticipantsCountLabel());
-        administratorsCount.set(String.valueOf(RealmMember.filterMember(realmChannelProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-        moderatorsCount.set(String.valueOf(RealmMember.filterMember(realmChannelProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+        administratorsCount.set(String.valueOf(RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
+        moderatorsCount.set(String.valueOf(RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
 
-        admins = RealmMember.filterMember(realmChannelProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
-        moderators = RealmMember.filterMember(realmChannelProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
+        admins = RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
+        moderators = RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
 
         admins.addChangeListener((realmMembers, changeSet) -> administratorsCount.set(realmMembers.size() + ""));
         moderators.addChangeListener((realmMembers, changeSet) -> moderatorsCount.set(realmMembers.size() + ""));
@@ -369,9 +368,12 @@ public class FragmentChannelProfileViewModel extends ViewModel
     public void onDestroy() {
         admins.removeAllChangeListeners();
         moderators.removeAllChangeListeners();
-        if (realmChannelProfile != null && !realmChannelProfile.isClosed()) {
-            realmChannelProfile.close();
-        }
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        realmChannelProfile.close();
     }
 
     public void leaveChannel() {

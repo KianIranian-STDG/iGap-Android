@@ -123,6 +123,10 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     private String memberCount;
     private RealmNotificationSetting realmNotificationSetting;
 
+    public FragmentGroupProfileViewModel() {
+        realmGroupProfile = Realm.getDefaultInstance();
+    }
+
     public void init(FragmentGroupProfile fragmentGroupProfile, long roomId, boolean isNotJoin) {
 
         this.fragment = fragmentGroupProfile;
@@ -420,9 +424,8 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         if (realmRoom != null) {
             realmRoom.removeAllChangeListeners();
         }
-        if (realmGroupProfile != null && !realmGroupProfile.isClosed()) {
-            realmGroupProfile.close();
-        }
+
+        realmGroupProfile.close();
         super.onCleared();
     }
 

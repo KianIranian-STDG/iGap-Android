@@ -68,6 +68,12 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        realmMapUsers.close();
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -314,9 +320,6 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (realmMapUsers != null && !realmMapUsers.isClosed()) {
-            realmMapUsers.close();
-        }
         ((ActivityMain) G.fragmentActivity).setOnBackPressedListener(FragmentMapUsers.this, true);
     }
 

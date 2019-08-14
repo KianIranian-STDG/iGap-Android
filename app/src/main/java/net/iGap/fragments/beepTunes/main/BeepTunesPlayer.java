@@ -69,6 +69,7 @@ public class BeepTunesPlayer extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        realm = Realm.getDefaultInstance();
         rootView = inflater.inflate(R.layout.fragment_beeptunes_player, container, false);
         return rootView;
     }
@@ -251,10 +252,9 @@ public class BeepTunesPlayer extends BaseFragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (!realm.isClosed())
-            realm.close();
+    public void onDestroyView() {
+        super.onDestroyView();
+        realm.close();
     }
 
     public MutableLiveData<PlayingSong> getSongFromPlayerLiveData() {

@@ -89,7 +89,7 @@ public class FragmentMediaPlayer extends BaseFragment {
     private int offset;
     private RealmResults<RealmRoomMessage> mRealmList;
     private ArrayList<RealmRoomMessage> mediaList;
-    private static Realm mRealm;
+    private Realm mRealm;
     private RecyclerView.OnScrollListener onScrollListener;
     private boolean canUpdateAfterDownload = false;
     protected ArrayMap<Long, Boolean> needDownloadList = new ArrayMap<>();
@@ -101,6 +101,7 @@ public class FragmentMediaPlayer extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
 
+        mRealm = Realm.getDefaultInstance();
         if (G.twoPaneMode) {
             fragmentMediaPlayerBinding = DataBindingUtil.inflate(inflater, R.layout.activity_media_player, container, false);
             return fragmentMediaPlayerBinding.getRoot();
@@ -113,6 +114,12 @@ public class FragmentMediaPlayer extends BaseFragment {
                 return fragmentMediaPlayerBinding.getRoot();
             }
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mRealm.close();
     }
 
     @Override

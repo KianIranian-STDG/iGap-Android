@@ -269,9 +269,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onDestroy() {
         super.onDestroy();
         if (G.ISOK) {
-            if (mRealm != null && !mRealm.isClosed()) {
-                mRealm.close();
-            }
+            mRealm.close();
+
             if (G.imageLoader != null) {
                 G.imageLoader.clearMemoryCache();
             }
@@ -368,6 +367,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setContentView(R.layout.activity_main);
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         if (G.ISOK) {
+            mRealm = Realm.getDefaultInstance();
             try (Realm realm = Realm.getDefaultInstance()) {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (realmUserInfo != null) {
@@ -463,11 +463,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 isNeedToRegister = true;
                 Intent intent = new Intent(this, ActivityRegisteration.class);
                 startActivity(intent);
-
-                if (mRealm != null && !mRealm.isClosed()) {
-                    mRealm.close();
-                }
-
                 finish();
                 return;
             }

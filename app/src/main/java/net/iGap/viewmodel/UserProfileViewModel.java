@@ -156,6 +156,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private int getIvanScoreTime = 0;
 
     public UserProfileViewModel() {
+        mRealm = Realm.getDefaultInstance();
         userInfo = getRealm().where(RealmUserInfo.class).findFirst();
         updateUserInfoUI();
         if (checkValidationForRealm(userInfo)) {

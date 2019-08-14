@@ -96,6 +96,8 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        realm = Realm.getDefaultInstance();
+
         fragmentSyncRegisteredContactsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_sync_registered_contacts, container, false);
         return fragmentSyncRegisteredContactsBinding.getRoot();
     }
@@ -278,11 +280,16 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (realm != null && !realm.isClosed()) {
-            realm.close();
-        }
+
         G.onUserContactdelete = null;
         G.onContactsGetList = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        realm.close();
     }
 
     @Override

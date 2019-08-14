@@ -253,8 +253,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
             if (G.userLogin) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
                         positiveText(R.string.B_ok).onPositive((dialog, which) -> {
-                    Realm realm_ = Realm.getDefaultInstance();
-                    try {
+                    try (Realm realm_ = Realm.getDefaultInstance()) {
                         setViewState(false);
                         RealmCallLog realmCallLog = realm_.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
                         new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
@@ -262,8 +261,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
                         mSelectedLogList.clear();
                     } catch (Exception e) {
                         e.printStackTrace();
-                    } finally {
-                        realm_.close();
                     }
                 }).negativeText(R.string.B_cancel).show();
             } else {

@@ -134,7 +134,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     private boolean isOne = true;
     private Realm mRealm;
 
-    private Realm realmGroupProfile;
     private HelperToolbar mHelperToolbar;
     private TextView mBtnAdd;
     private boolean isGroup;
@@ -1034,10 +1033,10 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
 
     private Realm getRealm() {
-        if (realmGroupProfile == null || realmGroupProfile.isClosed()) {
-            realmGroupProfile = Realm.getDefaultInstance();
+        if (mRealm == null || mRealm.isClosed()) {
+            mRealm = Realm.getDefaultInstance();
         }
-        return realmGroupProfile;
+        return mRealm;
     }
 
 }

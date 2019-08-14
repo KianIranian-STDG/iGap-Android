@@ -1,6 +1,9 @@
 package net.iGap.fragments;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -85,11 +88,22 @@ public class EditChannelFragment extends BaseFragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new EditChannelViewModel(getArguments() != null ? getArguments().getLong(ROOM_ID) : -1);
+            }
+        }).get(EditChannelViewModel.class);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_channel, container, false);
-        viewModel = new EditChannelViewModel(getArguments() != null ? getArguments().getLong(ROOM_ID) : -1);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return attachToSwipeBack(binding.getRoot());
@@ -122,70 +136,70 @@ public class EditChannelFragment extends BaseFragment {
         binding.toolbar.addView(mHelperToolbar.getView());
 
 
-        viewModel.goToMembersPage.observe(this, b -> {
+        viewModel.goToMembersPage.observe(getViewLifecycleOwner(), b -> {
             if (b != null && b) {
                 showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString());
             }
         });
 
-        viewModel.goToAdministratorPage.observe(this, b -> {
+        viewModel.goToAdministratorPage.observe(getViewLifecycleOwner(), b -> {
             if (b != null && b) {
                 showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
             }
         });
 
-        viewModel.goToModeratorPage.observe(this, aBoolean -> {
+        viewModel.goToModeratorPage.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
             }
         });
 
-        viewModel.initEmoji.observe(this, aBoolean -> {
+        viewModel.initEmoji.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null) {
                 emojiPopup.toggle();
             }
         });
 
-        viewModel.showDialogLeaveGroup.observe(this, aBoolean -> {
+        viewModel.showDialogLeaveGroup.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 /*groupLeft();*/
             }
         });
 
-        viewModel.showSelectImageDialog.observe(this, aBoolean -> {
+        viewModel.showSelectImageDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 startDialogSelectPicture();
             }
         });
-        viewModel.showConvertChannelDialog.observe(this, aBoolean -> {
+        viewModel.showConvertChannelDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null) {
                 showPopUp(aBoolean);
             }
         });
-        viewModel.showDeleteChannelDialog.observe(this, aBoolean -> {
+        viewModel.showDeleteChannelDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null) {
                 deleteChannel(aBoolean);
             }
         });
 
-        viewModel.goBack.observe(this, aBoolean -> {
+        viewModel.goBack.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 popBackStackFragment();
             }
         });
 
-        viewModel.goToChatRoom.observe(this, go -> {
+        viewModel.goToChatRoom.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() instanceof ActivityMain && go != null && go) {
                 ((ActivityMain) getActivity()).removeAllFragmentFromMain();
                 /*new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);*/
             }
         });
 
-        viewModel.onSignClickListener.observe(this, isClicked -> {
+        viewModel.onSignClickListener.observe(getViewLifecycleOwner(), isClicked -> {
             binding.signedMessage.setChecked(!binding.signedMessage.isChecked());
         });
 
-        viewModel.onReactionMessageClickListener.observe(this, isClicked -> {
+        viewModel.onReactionMessageClickListener.observe(getViewLifecycleOwner(), isClicked -> {
             binding.rateMessage.setChecked(!binding.rateMessage.isChecked());
         });
 

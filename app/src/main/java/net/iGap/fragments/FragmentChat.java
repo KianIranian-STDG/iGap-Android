@@ -718,6 +718,7 @@ public class FragmentChat extends BaseFragment
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        realmChat = Realm.getDefaultInstance();
         isNeedResume = true;
         G.locationListener = this;
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
@@ -834,7 +835,6 @@ public class FragmentChat extends BaseFragment
         txtChannelMute = rootView.findViewById(R.id.chl_txt_mute_channel);
         layoutMute = rootView.findViewById(R.id.chl_ll_channel_footer);
 
-        realmChat = Realm.getDefaultInstance();
         gongingRunnable = new Runnable() {
             @Override
             public void run() {
@@ -942,6 +942,8 @@ public class FragmentChat extends BaseFragment
     public void onResume() {
         isPaused = false;
         super.onResume();
+        Log.d("bagi", Realm.getGlobalInstanceCount(Realm.getDefaultConfiguration())+ "global");
+        Log.d("bagi", Realm.getLocalInstanceCount(Realm.getDefaultConfiguration())+ "local");
 
         if (FragmentShearedMedia.list != null && FragmentShearedMedia.list.size() > 0) {
             deleteSelectedMessageFromAdapter(FragmentShearedMedia.list);
@@ -1182,6 +1184,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        realmChat.close();
 
         if (emojiPopup != null)
             emojiPopup.releaseMemory();
@@ -1246,12 +1249,6 @@ public class FragmentChat extends BaseFragment
 
         if (G.locationListener != null)
             G.locationListener = null;
-
-
-        if (realmChat != null && !realmChat.isClosed()) {
-            realmChat.close();
-        }
-
 
     }
 

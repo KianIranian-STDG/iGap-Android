@@ -79,6 +79,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
     public EditChannelViewModel(long roomId) {
         this.roomId = roomId;
 
+        realmChannelProfile = Realm.getDefaultInstance();
         G.onChannelAvatarAdd = this;
         G.onChannelAvatarDelete = this;
         /*G.onChannelAddMember = this;*/
@@ -134,7 +135,6 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
             });
         };
 
-        realmChannelProfile = Realm.getDefaultInstance();
 
         RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         //todo:fixed it
@@ -182,8 +182,8 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
             e.getStackTrace();
         }*/
         subscribersCount.set(String.valueOf(realmChannelRoom.getParticipantsCountLabel()));
-        administratorsCount.set(String.valueOf(RealmMember.filterMember(realmChannelProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-        moderatorsCount.set(String.valueOf(RealmMember.filterMember(realmChannelProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+        administratorsCount.set(String.valueOf(RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
+        moderatorsCount.set(String.valueOf(RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
 
         if (role == ChannelChatRole.OWNER) {
             leaveChannelText.set(R.string.channel_delete);
@@ -241,6 +241,12 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
         } else {
             initEmoji.setValue(false);
         }
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        realmChannelProfile.close();
     }
 
     public void onSignMessageClick() {
@@ -384,6 +390,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
         }
         return realmChannelProfile;
     }
+
 
     @Override
     public void OnChannelUpdateReactionStatusError() {
