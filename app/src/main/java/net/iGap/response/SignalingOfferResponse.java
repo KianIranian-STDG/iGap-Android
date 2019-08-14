@@ -44,19 +44,17 @@ public class SignalingOfferResponse extends MessageHandler {
             String callerSdp = builder.getCallerSdp();
             Long callerUserID = builder.getCallerUserId();
             net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type type = builder.getType();
+            try (Realm realm = Realm.getDefaultInstance()) {
+                RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
 
-            Realm realm = Realm.getDefaultInstance();
-            RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
-
-            if (realmCallConfig == null) {
-                new RequestSignalingGetConfiguration().signalingGetConfiguration();
-            } else {
-                if (G.iSignalingOffer != null) {
-                    G.iSignalingOffer.onOffer(callerUserID, type, callerSdp);
+                if (realmCallConfig == null) {
+                    new RequestSignalingGetConfiguration().signalingGetConfiguration();
+                } else {
+                    if (G.iSignalingOffer != null) {
+                        G.iSignalingOffer.onOffer(callerUserID, type, callerSdp);
+                    }
                 }
             }
-
-            realm.close();
         }
     }
 

@@ -246,52 +246,51 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                         @Override
                         public void run() {
 
-                            final Realm realm = Realm.getDefaultInstance();
-                            realm.executeTransactionAsync(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    final RealmList<RealmMember> newMemberList = new RealmList<>();
-                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
-                                    if (realmRoom != null) {
-                                        if (realmRoom.getType() == GROUP) {
-                                            for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : listMembers) {
-                                                if (Long.parseLong(messageOne) == member.getUserId()) {
-                                                    mCurrentUpdateCount++;
-                                                    newMemberList.add(RealmMember.put(realm, member));
-                                                    newMemberList.addAll(0, realmRoom.getGroupRoom().getMembers());
-                                                    realmRoom.getGroupRoom().setMembers(newMemberList);
-                                                    newMemberList.clear();
-                                                    break;
+                            try (Realm realm = Realm.getDefaultInstance()) {
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        final RealmList<RealmMember> newMemberList = new RealmList<>();
+                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+                                        if (realmRoom != null) {
+                                            if (realmRoom.getType() == GROUP) {
+                                                for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : listMembers) {
+                                                    if (Long.parseLong(messageOne) == member.getUserId()) {
+                                                        mCurrentUpdateCount++;
+                                                        newMemberList.add(RealmMember.put(realm, member));
+                                                        newMemberList.addAll(0, realmRoom.getGroupRoom().getMembers());
+                                                        realmRoom.getGroupRoom().setMembers(newMemberList);
+                                                        newMemberList.clear();
+                                                        break;
+                                                    }
                                                 }
-                                            }
-                                        } else {
-                                            for (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : listMembersChannal) {
-                                                if (Long.parseLong(messageOne) == member.getUserId()) {
-                                                    mCurrentUpdateCount++;
-                                                    newMemberList.add(RealmMember.put(realm, member));
-                                                    newMemberList.addAll(0, realmRoom.getChannelRoom().getMembers());
-                                                    realmRoom.getChannelRoom().setMembers(newMemberList);
-                                                    newMemberList.clear();
-                                                    break;
+                                            } else {
+                                                for (ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member : listMembersChannal) {
+                                                    if (Long.parseLong(messageOne) == member.getUserId()) {
+                                                        mCurrentUpdateCount++;
+                                                        newMemberList.add(RealmMember.put(realm, member));
+                                                        newMemberList.addAll(0, realmRoom.getChannelRoom().getMembers());
+                                                        realmRoom.getChannelRoom().setMembers(newMemberList);
+                                                        newMemberList.clear();
+                                                        break;
+                                                    }
                                                 }
                                             }
                                         }
+
                                     }
+                                }, new Realm.Transaction.OnSuccess() {
+                                    @Override
+                                    public void onSuccess() {
+                                        fillItem();
 
-                                }
-                            }, new Realm.Transaction.OnSuccess() {
-                                @Override
-                                public void onSuccess() {
-                                    fillItem();
-                                    realm.close();
-
-                                }
-                            }, new Realm.Transaction.OnError() {
-                                @Override
-                                public void onError(Throwable error) {
-                                    realm.close();
-                                }
-                            });
+                                    }
+                                }, new Realm.Transaction.OnError() {
+                                    @Override
+                                    public void onError(Throwable error) {
+                                    }
+                                });
+                            }
                         }
                     });
                 } else {
@@ -722,18 +721,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     }
 
     private void resetMemberState(final long roomId, final long memberId) {
-        //G.handler.post(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        Realm realm = Realm.getDefaultInstance();
-        //        RealmMember realmMember = realm.where(RealmMember.class).equalTo(RealmMemberFields.PEER_ID, memberId).findFirst();
-        //        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        //        if (realmRoom != null && realmMember != null) {
-        //            mAdapter.set(mAdapter.getPosition(memberId), new MemberItem(realmRoom.getType(), mMainRole, userID).setInfo(realmMember).withIdentifier(memberId));
-        //        }
-        //        realm.close();
-        //    }
-        //});
+
     }
 
     private void removeMember(long roomId, final long memberId) {

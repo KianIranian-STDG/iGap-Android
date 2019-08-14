@@ -137,52 +137,52 @@ public class RealmChannelRoom extends RealmObject {
 
     public static ChannelChatRole detectMemberRole(long roomId, long messageSenderId) {
         ChannelChatRole role = ChannelChatRole.UNRECOGNIZED;
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            if (realmRoom.getChannelRoom() != null) {
-                RealmList<RealmMember> realmMembers = realmRoom.getChannelRoom().getMembers();
-                for (RealmMember realmMember : realmMembers) {
-                    if (realmMember.getPeerId() == messageSenderId) {
-                        role = ChannelChatRole.valueOf(realmMember.getRole());
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null) {
+                if (realmRoom.getChannelRoom() != null) {
+                    RealmList<RealmMember> realmMembers = realmRoom.getChannelRoom().getMembers();
+                    for (RealmMember realmMember : realmMembers) {
+                        if (realmMember.getPeerId() == messageSenderId) {
+                            role = ChannelChatRole.valueOf(realmMember.getRole());
+                        }
                     }
                 }
             }
         }
-        realm.close();
         return role;
     }
 
     public static ProtoGlobal.ChannelRoom.Role detectMemberRoleServerEnum(long roomId, long messageSenderId) {
         ProtoGlobal.ChannelRoom.Role role = ProtoGlobal.ChannelRoom.Role.UNRECOGNIZED;
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            if (realmRoom.getChannelRoom() != null) {
-                RealmList<RealmMember> realmMembers = realmRoom.getChannelRoom().getMembers();
-                for (RealmMember realmMember : realmMembers) {
-                    if (realmMember.getPeerId() == messageSenderId) {
-                        role = ProtoGlobal.ChannelRoom.Role.valueOf(realmMember.getRole());
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null) {
+                if (realmRoom.getChannelRoom() != null) {
+                    RealmList<RealmMember> realmMembers = realmRoom.getChannelRoom().getMembers();
+                    for (RealmMember realmMember : realmMembers) {
+                        if (realmMember.getPeerId() == messageSenderId) {
+                            role = ProtoGlobal.ChannelRoom.Role.valueOf(realmMember.getRole());
+                        }
                     }
                 }
             }
         }
-        realm.close();
         return role;
     }
 
     public static void updateReactionStatus(final long roomId, final boolean statusReaction) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom != null && realmRoom.getChannelRoom() != null) {
-                    realmRoom.getChannelRoom().setReactionStatus(statusReaction);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                    if (realmRoom != null && realmRoom.getChannelRoom() != null) {
+                        realmRoom.getChannelRoom().setReactionStatus(statusReaction);
+                    }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public ChannelChatRole getRole() {
