@@ -399,7 +399,7 @@
 
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">User is blocked, no possibility to verify</string>
-    <string name="Enter_Code">Destruction` Code</string>
+    <string name="Enter_Code">Destruction Code</string>
     <string name="E_2">Need to Log in</string>
     <string name="E_335">Bad payload</string>
     <string name="E_336">Internal Server Error</string>
