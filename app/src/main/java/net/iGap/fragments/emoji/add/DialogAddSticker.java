@@ -63,46 +63,44 @@ public class DialogAddSticker extends DialogFragment {
     }
 
     private void getSticker(String groupID) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
+            if (realmStickers == null) {
+                mAPIService.getSticker(groupID).enqueue(new Callback<StructEachSticker>() {
+                    @Override
+                    public void onResponse(Call<StructEachSticker> call, Response<StructEachSticker> response) {
+                        progressBar.setVisibility(View.GONE);
+                        if (response.body() != null) {
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
-        if (realmStickers == null) {
-            mAPIService.getSticker(groupID).enqueue(new Callback<StructEachSticker>() {
-                @Override
-                public void onResponse(Call<StructEachSticker> call, Response<StructEachSticker> response) {
-                    progressBar.setVisibility(View.GONE);
-                    if (response.body() != null) {
+                            if (response.body().getOk() && response.body().getData() != null) {
 
-                        if (response.body().getOk() && response.body().getData() != null) {
-
-                            StructGroupSticker item = response.body().getData();
-                            try (Realm realm = Realm.getDefaultInstance()) {
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), false);
-                                    }
-                                });
+                                StructGroupSticker item = response.body().getData();
+                                try (Realm realm = Realm.getDefaultInstance()) {
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            RealmStickers.put(realm, item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), false);
+                                        }
+                                    });
+                                }
+                                mAdapterAddDialogSticker.updateAdapter(item.getStickers());
                             }
-                            mAdapterAddDialogSticker.updateAdapter(item.getStickers());
                         }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<StructEachSticker> call, Throwable t) {
-                    progressBar.setVisibility(View.GONE);
+                    @Override
+                    public void onFailure(Call<StructEachSticker> call, Throwable t) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+            } else {
+                progressBar.setVisibility(View.GONE);
+                StructGroupSticker eachSticker = RealmStickers.getEachSticker(groupID);
+                if (eachSticker != null) {
+                    mAdapterAddDialogSticker.updateAdapter(eachSticker.getStickers());
                 }
-            });
-        } else {
-            progressBar.setVisibility(View.GONE);
-            StructGroupSticker eachSticker = RealmStickers.getEachSticker(groupID);
-            if (eachSticker != null) {
-                mAdapterAddDialogSticker.updateAdapter(eachSticker.getStickers());
             }
         }
-        realm.close();
-
     }
 
     @Override

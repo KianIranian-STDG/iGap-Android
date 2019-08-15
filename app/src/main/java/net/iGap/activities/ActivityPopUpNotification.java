@@ -203,36 +203,33 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         color = mList.get(position).color;
         txtName.setText(mList.get(position).name);
 
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, mList.get(position).senderId);
-        if (realmRegisteredInfo != null) {
-            if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                txtLastSeen.setText(LastSeenTimeUtil.computeTime(realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, mList.get(position).senderId);
+            if (realmRegisteredInfo != null) {
+                if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
+                } else {
+                    txtLastSeen.setText(realmRegisteredInfo.getStatus());
+                }
             } else {
-                txtLastSeen.setText(realmRegisteredInfo.getStatus());
+                txtLastSeen.setText("");
             }
-        } else {
-            txtLastSeen.setText("");
+
+            setAvatar(realmRegisteredInfo, realm);
         }
-
-        setAvatar(realmRegisteredInfo);
-
-        realm.close();
-
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
 
-    private void setAvatar(RealmRegisteredInfo realmRegisteredInfo) {
+    private void setAvatar(RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
 
         String avatarPath = null;
-        if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatars() != null && realmRegisteredInfo.getLastAvatar() != null) {
-            String mainFilePath = realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath();
+        if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatars(realm) != null && realmRegisteredInfo.getLastAvatar(realm) != null) {
+            String mainFilePath = realmRegisteredInfo.getLastAvatar(realm).getFile().getLocalFilePath();
             if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
                 avatarPath = mainFilePath;
             } else {
-                avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
+                avatarPath = realmRegisteredInfo.getLastAvatar(realm).getFile().getLocalThumbnailPath();
             }
         }
 

@@ -74,152 +74,152 @@ public class RealmUserInfo extends RealmObject {
     }
 
     public static void setPushNotification(final String pushToken) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setPushNotificationToken(pushToken);
-                } else {
-                    realmUserInfo = realm.createObject(RealmUserInfo.class);
-                    realmUserInfo.setPushNotificationToken(pushToken);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.setPushNotificationToken(pushToken);
+                    } else {
+                        realmUserInfo = realm.createObject(RealmUserInfo.class);
+                        realmUserInfo.setPushNotificationToken(pushToken);
+                    }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public static void insertAccessToken(final String accessToken) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.accessToken = accessToken;
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.accessToken = accessToken;
+                    }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public static void sendPushNotificationToServer() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (realmUserInfo != null) {
-            String token = realmUserInfo.getPushNotificationToken();
-            if (token != null && token.length() > 0) {
-                new RequestClientRegisterDevice().clientRegisterDevice(token);
-            } else {
-                HelperLog.setErrorLog(new Exception("FCM Token is Empty!" + token));
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                String token = realmUserInfo.getPushNotificationToken();
+                if (token != null && token.length() > 0) {
+                    new RequestClientRegisterDevice().clientRegisterDevice(token);
+                } else {
+                    HelperLog.setErrorLog(new Exception("FCM Token is Empty!" + token));
+                }
             }
         }
-        realm.close();
     }
 
     public static void updateGender(final ProtoGlobal.Gender gender) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setGender(gender);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.setGender(gender);
+                    }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public static void updateSelfRemove(final int selfRemove) {
-        Realm realm1 = Realm.getDefaultInstance();
-        realm1.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setSelfRemove(selfRemove);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.setSelfRemove(selfRemove);
+                    }
                 }
-            }
-        });
-        realm1.close();
+            });
+        }
     }
 
     public static void updateEmail(final String email) {
-        Realm realm1 = Realm.getDefaultInstance();
-        realm1.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setEmail(email);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.setEmail(email);
+                    }
                 }
-            }
-        });
-        realm1.close();
+            });
+        }
     }
 
     public static void updateNickname(final String displayName, final String initials) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    RealmRegisteredInfo realmRegisteredInfo = realmUserInfo.getUserInfo();
-                    if (realmRegisteredInfo != null) {
-                        realmRegisteredInfo.setDisplayName(displayName);
-                        realmRegisteredInfo.setInitials(initials);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        RealmRegisteredInfo realmRegisteredInfo = realmUserInfo.getUserInfo();
+                        if (realmRegisteredInfo != null) {
+                            realmRegisteredInfo.setDisplayName(displayName);
+                            realmRegisteredInfo.setInitials(initials);
+                        }
                     }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public static void updateUsername(final String username) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    RealmRegisteredInfo realmRegisteredInfo = realmUserInfo.getUserInfo();
-                    if (realmRegisteredInfo != null) {
-                        realmRegisteredInfo.setUsername(username);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        RealmRegisteredInfo realmRegisteredInfo = realmUserInfo.getUserInfo();
+                        if (realmRegisteredInfo != null) {
+                            realmRegisteredInfo.setUsername(username);
+                        }
                     }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
 
     public static void updateImportContactLimit() {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setImportContactLimit(true);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.setImportContactLimit(true);
+                    }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public static boolean isLimitImportContacts() {
         boolean result = false;
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (userInfo != null) {
-            if (userInfo.isImportContactLimit()) {
-                result = true;
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (userInfo != null) {
+                if (userInfo.isImportContactLimit()) {
+                    result = true;
+                }
             }
         }
-        realm.close();
         return result;
     }
 

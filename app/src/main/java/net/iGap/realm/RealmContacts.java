@@ -57,48 +57,48 @@ public class RealmContacts extends RealmObject {
     }
 
     public static void deleteContact(final String phone) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone)).findFirst();
-                if (contact != null) {
-                    contact.deleteFromRealm();
-                }
-            }
-        });
-        realm.close();
-    }
-
-    public static void updateName(final long userId, final String firstName, final String lastName, final String initials) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
-                if (contact != null) {
-                    contact.setFirst_name(firstName);
-                    contact.setLast_name(lastName);
-                    contact.setDisplay_name((firstName + " " + lastName).trim());
-                    contact.setInitials(initials);
-                }
-            }
-        });
-        realm.close();
-    }
-
-    public static void updateBlock(final long userId, final boolean block) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
-        if (realmContacts != null) {
+        try (Realm realm = Realm.getDefaultInstance()) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    realmContacts.setBlockUser(block);
+                    RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone)).findFirst();
+                    if (contact != null) {
+                        contact.deleteFromRealm();
+                    }
                 }
             });
         }
-        realm.close();
+    }
+
+    public static void updateName(final long userId, final String firstName, final String lastName, final String initials) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+                    if (contact != null) {
+                        contact.setFirst_name(firstName);
+                        contact.setLast_name(lastName);
+                        contact.setDisplay_name((firstName + " " + lastName).trim());
+                        contact.setInitials(initials);
+                    }
+                }
+            });
+        }
+    }
+
+    public static void updateBlock(final long userId, final boolean block) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+            if (realmContacts != null) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realmContacts.setBlockUser(block);
+                    }
+                });
+            }
+        }
     }
 
 

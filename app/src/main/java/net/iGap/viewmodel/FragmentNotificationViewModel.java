@@ -313,64 +313,58 @@ public class FragmentNotificationViewModel {
     private void getInfo() {
         switch (roomType) {
             case GROUP: {
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                Realm realm = Realm.getDefaultInstance();
-
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-                if (realmRoom != null && realmRoom.getGroupRoom() != null) {
-                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                    if (realmGroupRoom != null) {
-                        if (realmGroupRoom.getRealmNotificationSetting() == null) {
-                            setRealm(realm, realmGroupRoom, null, null);
-                        } else {
-                            realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
+                    if (realmRoom != null && realmRoom.getGroupRoom() != null) {
+                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                        if (realmGroupRoom != null) {
+                            if (realmGroupRoom.getRealmNotificationSetting() == null) {
+                                setRealm(realm, realmGroupRoom, null, null);
+                            } else {
+                                realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
+                            }
+                            getRealm();
                         }
-                        getRealm();
                     }
                 }
-
-                realm.close();
             }
 
             break;
             case CHANNEL: {
-                Realm realm = Realm.getDefaultInstance();
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                if (realmRoom != null && realmRoom.getChannelRoom() != null) {
-                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                    if (realmChannelRoom != null) {
-                        if (realmChannelRoom.getRealmNotificationSetting() == null) {
-                            setRealm(realm, null, realmChannelRoom, null);
-                        } else {
-                            realmNotificationSetting = realmChannelRoom.getRealmNotificationSetting();
+                    if (realmRoom != null && realmRoom.getChannelRoom() != null) {
+                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                        if (realmChannelRoom != null) {
+                            if (realmChannelRoom.getRealmNotificationSetting() == null) {
+                                setRealm(realm, null, realmChannelRoom, null);
+                            } else {
+                                realmNotificationSetting = realmChannelRoom.getRealmNotificationSetting();
+                            }
+                            getRealm();
                         }
-                        getRealm();
                     }
                 }
-
-                realm.close();
                 break;
             }
             case CHAT: {
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                Realm realm = Realm.getDefaultInstance();
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-                if (realmRoom != null && realmRoom.getChatRoom() != null) {
-                    RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                    if (realmChatRoom != null) {
-                        if (realmChatRoom.getRealmNotificationSetting() == null) {
-                            setRealm(realm, null, null, realmChatRoom);
-                        } else {
-                            realmNotificationSetting = realmChatRoom.getRealmNotificationSetting();
+                    if (realmRoom != null && realmRoom.getChatRoom() != null) {
+                        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                        if (realmChatRoom != null) {
+                            if (realmChatRoom.getRealmNotificationSetting() == null) {
+                                setRealm(realm, null, null, realmChatRoom);
+                            } else {
+                                realmNotificationSetting = realmChatRoom.getRealmNotificationSetting();
+                            }
+                            getRealm();
                         }
-                        getRealm();
                     }
                 }
-
-                realm.close();
 
                 break;
             }

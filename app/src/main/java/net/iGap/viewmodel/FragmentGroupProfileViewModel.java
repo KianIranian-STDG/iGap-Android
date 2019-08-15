@@ -123,6 +123,10 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     private String memberCount;
     private RealmNotificationSetting realmNotificationSetting;
 
+    public FragmentGroupProfileViewModel() {
+        realmGroupProfile = Realm.getDefaultInstance();
+    }
+
     public void init(FragmentGroupProfile fragmentGroupProfile, long roomId, boolean isNotJoin) {
 
         this.fragment = fragmentGroupProfile;
@@ -138,7 +142,9 @@ public class FragmentGroupProfileViewModel extends ViewModel {
             RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
             if (realmGroupRoom != null) {
                 if (realmGroupRoom.getRealmNotificationSetting() == null) {
-                    setRealm(Realm.getDefaultInstance(), realmGroupRoom, null, null);
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        setRealm(realm, realmGroupRoom, null, null);
+                    }
                 } else {
                     realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
                 }
@@ -418,9 +424,8 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         if (realmRoom != null) {
             realmRoom.removeAllChangeListeners();
         }
-        if (realmGroupProfile != null && !realmGroupProfile.isClosed()) {
-            realmGroupProfile.close();
-        }
+
+        realmGroupProfile.close();
         super.onCleared();
     }
 
@@ -485,7 +490,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
                     @Override
                     public void run() {
                         setMemberCount(roomIdUser);
-                        //+Realm realm = Realm.getDefaultInstance();
                         RealmRegisteredInfo realmRegistered = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);
 
                         if (realmRegistered == null) {
@@ -493,7 +497,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
                                 new RequestUserInfo().userInfo(userId, roomId + "");
                             }
                         }
-                        //realm.close();
                     }
                 });
             }

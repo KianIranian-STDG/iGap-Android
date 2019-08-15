@@ -121,17 +121,16 @@ public class RealmPhoneContacts extends RealmObject {
     }
 
     private static void addListToDB(final List<StructListOfContact> list) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                for (int i = 0; i < list.size(); i++) {
-                    addContactToDB(list.get(i), realm);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    for (int i = 0; i < list.size(); i++) {
+                        addContactToDB(list.get(i), realm);
+                    }
                 }
-            }
-        });
-
-        realm.close();
+            });
+        }
     }
 
     private static void addContactToDB(final StructListOfContact item, Realm realm) {
@@ -153,30 +152,28 @@ public class RealmPhoneContacts extends RealmObject {
         if (list == null) {
             return notImportedList;
         }
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                for (int i = 0; i < list.size(); i++) {
-                    StructListOfContact _item = list.get(i);
-                    if (_item == null || _item.getPhone() == null || _item.getPhone().length() == 0) {
-                        continue;
-                    }
-
-                    try {
-                        if (realm.where(RealmPhoneContacts.class).equalTo(RealmPhoneContactsFields.PHONE, checkString(_item)).findFirst() == null) {
-                            notImportedList.add(_item);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    for (int i = 0; i < list.size(); i++) {
+                        StructListOfContact _item = list.get(i);
+                        if (_item == null || _item.getPhone() == null || _item.getPhone().length() == 0) {
+                            continue;
                         }
-                    } catch (IllegalArgumentException e) {
-                        HelperLog.setErrorLog(e);
+
+                        try {
+                            if (realm.where(RealmPhoneContacts.class).equalTo(RealmPhoneContactsFields.PHONE, checkString(_item)).findFirst() == null) {
+                                notImportedList.add(_item);
+                            }
+                        } catch (IllegalArgumentException e) {
+                            HelperLog.setErrorLog(e);
+                        }
+
                     }
-
                 }
-            }
-        });
-
-        realm.close();
+            });
+        }
 
         return notImportedList;
     }

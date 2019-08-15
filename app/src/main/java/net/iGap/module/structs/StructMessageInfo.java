@@ -76,22 +76,22 @@ public class StructMessageInfo implements Parcelable {
     }
 
     public StructMessageInfo(RealmRoomMessage realmRoomMessage) {
-        Realm realm = Realm.getDefaultInstance();
-        if (realmRoomMessage.isManaged()) {
-            this.realmRoomMessage = realm.copyFromRealm(realmRoomMessage);
-        } else {
-            this.realmRoomMessage = realmRoomMessage;
-        }
+        try (Realm realm = Realm.getDefaultInstance()) {
+            if (realmRoomMessage.isManaged()) {
+                this.realmRoomMessage = realm.copyFromRealm(realmRoomMessage);
+            } else {
+                this.realmRoomMessage = realmRoomMessage;
+            }
 
-        if (!realmRoomMessage.isSenderMe()) {
-            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, realmRoomMessage.getUserId());
-            if (realmRegisteredInfo != null) {
-                senderAvatar = StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar());
-                senderColor = realmRegisteredInfo.getColor();
-                initials = realmRegisteredInfo.getInitials();
+            if (!realmRoomMessage.isSenderMe()) {
+                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, realmRoomMessage.getUserId());
+                if (realmRegisteredInfo != null) {
+                    senderAvatar = StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar(realm));
+                    senderColor = realmRegisteredInfo.getColor();
+                    initials = realmRegisteredInfo.getInitials();
+                }
             }
         }
-        realm.close();
     }
 
     public void setContactValues(String firstName, String lastName, String number) {
@@ -184,25 +184,25 @@ public class StructMessageInfo implements Parcelable {
             return realmRoomMessage.getChannelExtra();
         } else {
             new Thread(() -> {
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(realm1 -> {
-                    RealmRoomMessage newMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
-                    RealmChannelExtra channelExtra = realm1.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
-                    if (newMessage != null && channelExtra != null) {
-                        newMessage.setChannelExtra(channelExtra);
-                    }
-                });
-                realm.close();
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    realm.executeTransaction(realm1 -> {
+                        RealmRoomMessage newMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
+                        RealmChannelExtra channelExtra = realm1.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
+                        if (newMessage != null && channelExtra != null) {
+                            newMessage.setChannelExtra(channelExtra);
+                        }
+                    });
+                }
             }).start();
 
+            try (Realm realm = Realm.getDefaultInstance()) {
+                RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
+                if (realmChannelExtra != null) {
+                    realmChannelExtra = realm.copyFromRealm(realmChannelExtra);
+                }
 
-            Realm realm = Realm.getDefaultInstance();
-            RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
-            if (realmChannelExtra != null) {
-                realmChannelExtra = realm.copyFromRealm(realmChannelExtra);
+                return realmChannelExtra;
             }
-            realm.close();
-            return realmChannelExtra;
         }
     }
 

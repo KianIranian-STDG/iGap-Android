@@ -69,49 +69,49 @@ public class RealmChannelExtra extends RealmObject {
     }
 
     public static void setVote(final long messageId, final ProtoGlobal.RoomMessageReaction messageReaction, final String counterLabel) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
-                if (realmChannelExtra != null) {
-                    if (messageReaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
-                        realmChannelExtra.setThumbsUp(counterLabel);
-                    } else {
-                        realmChannelExtra.setThumbsDown(counterLabel);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+                    if (realmChannelExtra != null) {
+                        if (messageReaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
+                            realmChannelExtra.setThumbsUp(counterLabel);
+                        } else {
+                            realmChannelExtra.setThumbsDown(counterLabel);
+                        }
                     }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public static void updateMessageStats(final List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats> statsArrayList) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                for (ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : statsArrayList) {
-                    RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, stats.getMessageId()).findFirst();
-                    if (realmChannelExtra != null) {
-                        realmChannelExtra.setThumbsUp(stats.getThumbsUpLabel());
-                        realmChannelExtra.setThumbsDown(stats.getThumbsDownLabel());
-                        realmChannelExtra.setViewsLabel(stats.getViewsLabel());
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    for (ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : statsArrayList) {
+                        RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, stats.getMessageId()).findFirst();
+                        if (realmChannelExtra != null) {
+                            realmChannelExtra.setThumbsUp(stats.getThumbsUpLabel());
+                            realmChannelExtra.setThumbsDown(stats.getThumbsDownLabel());
+                            realmChannelExtra.setViewsLabel(stats.getViewsLabel());
+                        }
                     }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public static boolean hasChannelExtra(long messageId) {
         boolean hasChannelExtra = false;
-        Realm realm = Realm.getDefaultInstance();
-        RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
-        if (realmChannelExtra != null) {
-            hasChannelExtra = true;
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+            if (realmChannelExtra != null) {
+                hasChannelExtra = true;
+            }
         }
-        realm.close();
 
         return hasChannelExtra;
     }

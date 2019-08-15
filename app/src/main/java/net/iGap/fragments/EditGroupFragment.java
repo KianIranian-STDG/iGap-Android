@@ -2,6 +2,9 @@ package net.iGap.fragments;
 
 import android.app.Activity;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -66,11 +69,22 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new EditGroupViewModel(getArguments() != null ? getArguments().getLong(ROOM_ID) : -1);
+            }
+        }).get(EditGroupViewModel.class);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_group, container, false);
-        viewModel = new EditGroupViewModel(getArguments() != null ? getArguments().getLong(ROOM_ID) : -1);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return attachToSwipeBack(binding.getRoot());
@@ -105,40 +119,40 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
         attachFile = new AttachFile(G.fragmentActivity);
 
-        viewModel.goToMembersPage.observe(this, b -> {
+        viewModel.goToMembersPage.observe(getViewLifecycleOwner(), b -> {
             if (b != null && b) {
                 showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString());
             }
         });
 
-        viewModel.goToAdministratorPage.observe(this, b -> {
+        viewModel.goToAdministratorPage.observe(getViewLifecycleOwner(), b -> {
             if (b != null && b) {
                 showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
             }
         });
 
-        viewModel.goToPermissionPage.observe(this, new Observer<Boolean>() {
+        viewModel.goToPermissionPage.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean b) {
 
             }
         });
 
-        viewModel.goBack.observe(this, aBoolean -> popBackStackFragment());
+        viewModel.goBack.observe(getViewLifecycleOwner(), aBoolean -> popBackStackFragment());
 
-        viewModel.showSelectImageDialog.observe(this, aBoolean -> {
+        viewModel.showSelectImageDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 startDialogSelectPicture();
             }
         });
 
-        viewModel.showDialogChatHistory.observe(this, aBoolean -> {
+        viewModel.showDialogChatHistory.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
                 showDialog();
             }
         });
 
-        viewModel.goToModeratorPage.observe(this, aBoolean -> showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()));
+        viewModel.goToModeratorPage.observe(getViewLifecycleOwner(), aBoolean -> showListForCustomRole(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()));
 
         viewModel.initEmoji.observe(this, aBoolean -> {
             if (aBoolean != null) {
@@ -146,7 +160,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
             }
         });
 
-        viewModel.showDialogLeaveGroup.observe(this, aBoolean -> {
+        viewModel.showDialogLeaveGroup.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 groupLeft();
             }

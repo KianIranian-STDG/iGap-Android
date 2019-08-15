@@ -201,33 +201,33 @@ public class IGashtRepository {
     }
 
     public void registeredOrder(ResponseCallback<RegisterTicketResponse> callback) {
-        Realm realm = Realm.getDefaultInstance();
-        igashtApi.registerOrder(new IGashtOrder(realm.where(RealmUserInfo.class).findFirst().getUserInfo().getPhoneNumber(),
-                1,
-                selectedProvince.getId(),
-                selectedLocation.getId(),
-                selectedServiceList
-        )).enqueue(new Callback<RegisterTicketResponse>() {
-            @Override
-            public void onResponse(@NotNull Call<RegisterTicketResponse> call, @NotNull Response<RegisterTicketResponse> response) {
-                if (response.code() == 200) {
-                    callback.onSuccess(response.body());
-                } else {
-                    try {
-                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            igashtApi.registerOrder(new IGashtOrder(realm.where(RealmUserInfo.class).findFirst().getUserInfo().getPhoneNumber(),
+                    1,
+                    selectedProvince.getId(),
+                    selectedLocation.getId(),
+                    selectedServiceList
+            )).enqueue(new Callback<RegisterTicketResponse>() {
+                @Override
+                public void onResponse(@NotNull Call<RegisterTicketResponse> call, @NotNull Response<RegisterTicketResponse> response) {
+                    if (response.code() == 200) {
+                        callback.onSuccess(response.body());
+                    } else {
+                        try {
+                            callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(@NotNull Call<RegisterTicketResponse> call, @NotNull Throwable t) {
-                t.printStackTrace();
-                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
-            }
-        });
-        realm.close();
+                @Override
+                public void onFailure(@NotNull Call<RegisterTicketResponse> call, @NotNull Throwable t) {
+                    t.printStackTrace();
+                    callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
+                }
+            });
+        }
     }
 
     public void addToVoucherList(IGashtServiceAmount amount) {

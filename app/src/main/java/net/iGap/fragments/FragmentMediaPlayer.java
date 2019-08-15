@@ -101,6 +101,7 @@ public class FragmentMediaPlayer extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
 
+        mRealm = Realm.getDefaultInstance();
         if (G.twoPaneMode) {
             fragmentMediaPlayerBinding = DataBindingUtil.inflate(inflater, R.layout.activity_media_player, container, false);
             return fragmentMediaPlayerBinding.getRoot();
@@ -113,6 +114,12 @@ public class FragmentMediaPlayer extends BaseFragment {
                 return fragmentMediaPlayerBinding.getRoot();
             }
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mRealm.close();
     }
 
     @Override
@@ -456,7 +463,6 @@ public class FragmentMediaPlayer extends BaseFragment {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                //+final Realm realm = Realm.getDefaultInstance();
 
                 getRealm().executeTransaction(new Realm.Transaction() {
                     @Override

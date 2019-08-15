@@ -63,29 +63,27 @@ public class GoToChatActivity {
         String roomName = "";
 
         if (FragmentChat.mForwardMessages != null || HelperGetDataFromOtherApp.hasSharedData) {
-            Realm realm = Realm.getDefaultInstance();
 
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomid).findFirst();
+            try (Realm realm = Realm.getDefaultInstance()) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomid).findFirst();
 
-            if (realmRoom != null) {
-                roomName = realmRoom.getTitle();
+                if (realmRoom != null) {
+                    roomName = realmRoom.getTitle();
 
-                if (realmRoom.getReadOnly()) {
-                    if (activity != null && !(activity).isFinishing()) {
-                        new MaterialDialog.Builder(activity).title(R.string.dialog_readonly_chat).positiveText(R.string.ok).show();
+                    if (realmRoom.getReadOnly()) {
+                        if (activity != null && !(activity).isFinishing()) {
+                            new MaterialDialog.Builder(activity).title(R.string.dialog_readonly_chat).positiveText(R.string.ok).show();
+                        }
+                        return;
                     }
-                    realm.close();
-                    return;
-                }
-            } else if (peerID > 0) {
-                RealmRegisteredInfo _RegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, peerID);
+                } else if (peerID > 0) {
+                    RealmRegisteredInfo _RegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, peerID);
 
-                if (_RegisteredInfo != null) {
-                    roomName = _RegisteredInfo.getDisplayName();
+                    if (_RegisteredInfo != null) {
+                        roomName = _RegisteredInfo.getDisplayName();
+                    }
                 }
             }
-
-            realm.close();
         }
 
         if (HelperGetDataFromOtherApp.hasSharedData) {

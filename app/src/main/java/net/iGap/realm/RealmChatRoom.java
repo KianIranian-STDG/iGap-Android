@@ -29,25 +29,21 @@ public class RealmChatRoom extends RealmObject {
      * @param room ProtoGlobal.ChatRoom
      * @return RealmChatRoom
      */
-    public static RealmChatRoom convert(ProtoGlobal.ChatRoom room) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmChatRoom convert(Realm realm, ProtoGlobal.ChatRoom room) {
         RealmChatRoom realmChatRoom = realm.where(RealmChatRoom.class).equalTo(RealmChatRoomFields.PEER_ID, room.getPeer().getId()).findFirst();
         if (realmChatRoom == null) {
             realmChatRoom = realm.createObject(RealmChatRoom.class, room.getPeer().getId());
         }
-        realm.close();
         return realmChatRoom;
     }
 
     public boolean isVerified() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, peer_id).findFirst();
-        if (realmRegisteredInfo != null) {
-            boolean result = realmRegisteredInfo.isVerified();
-            realm.close();
-            return result;
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, peer_id).findFirst();
+            if (realmRegisteredInfo != null) {
+                return realmRegisteredInfo.isVerified();
+            }
         }
-        realm.close();
         return false;
     }
 

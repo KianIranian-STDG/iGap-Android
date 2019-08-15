@@ -2,8 +2,6 @@ package net.iGap.fragments.beepTunes.main;
 
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
-
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.libs.bannerslider.BannerImageLoadingService;
 
@@ -16,11 +14,11 @@ public class SliderBannerImageLoadingService implements BannerImageLoadingServic
 
     @Override
     public void loadImage(int resource, ImageView imageView) {
-        Picasso.get().load(resource).into(imageView);
+//        Picasso.get().load(resource).into(imageView);
     }
 
     @Override
     public void loadImage(String url, int placeHolder, int errorDrawable, ImageView imageView) {
-        Picasso.get().load(url).placeholder(placeHolder).error(errorDrawable).into(imageView);
+//        Picasso.get().load(url).placeholder(placeHolder).error(errorDrawable).into(imageView);
     }
 }

@@ -46,40 +46,39 @@ public class CallSelectFragment extends BottomSheetDialogFragment {
         if (G.userLogin) {
 
             if (!G.isInCall) {
-                Realm realm = Realm.getDefaultInstance();
-                RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
 
-                if (realmCallConfig == null) {
-                    new RequestSignalingGetConfiguration().signalingGetConfiguration();
-                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-                } else if (!G.isCalling) {
-                    if (G.currentActivity != null) {
-                        Intent intent = new Intent(G.currentActivity, ActivityCall.class);
-                        intent.putExtra(ActivityCall.USER_ID_STR, userID);
-                        intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
-                        intent.putExtra(ActivityCall.CALL_TYPE, callTYpe);
-                        ActivityCall.isGoingfromApp = true;
-                        G.currentActivity.startActivity(intent);
+                    if (realmCallConfig == null) {
+                        new RequestSignalingGetConfiguration().signalingGetConfiguration();
+                        HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                    } else if (!G.isCalling) {
+                        if (G.currentActivity != null) {
+                            Intent intent = new Intent(G.currentActivity, ActivityCall.class);
+                            intent.putExtra(ActivityCall.USER_ID_STR, userID);
+                            intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
+                            intent.putExtra(ActivityCall.CALL_TYPE, callTYpe);
+                            ActivityCall.isGoingfromApp = true;
+                            G.currentActivity.startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(G.context, ActivityCall.class);
+                            intent.putExtra(ActivityCall.USER_ID_STR, userID);
+                            intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
+                            intent.putExtra(ActivityCall.CALL_TYPE, callTYpe);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            ActivityCall.isGoingfromApp = true;
+                            G.context.startActivity(intent);
+                        }
+
+
                     } else {
-                        Intent intent = new Intent(G.context, ActivityCall.class);
-                        intent.putExtra(ActivityCall.USER_ID_STR, userID);
-                        intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
-                        intent.putExtra(ActivityCall.CALL_TYPE, callTYpe);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        ActivityCall.isGoingfromApp = true;
-                        G.context.startActivity(intent);
+                        try {
+                            WebRTC.getInstance().leaveCall();
+                        } catch (Exception e) {
+                        }
+
                     }
-
-
-                } else {
-                    try {
-                        WebRTC.getInstance().leaveCall();
-                    } catch (Exception e) {
-                    }
-
                 }
-
-                realm.close();
             }
         } else {
 

@@ -103,11 +103,11 @@ public class UserLoginResponse extends MessageHandler {
          * (( hint : call following request after set G.userLogin=true ))
          */
 
-        Realm realm = Realm.getDefaultInstance();
-        if (G.needGetSignalingConfiguration || realm.where(RealmCallConfig.class).findFirst() == null) {
-            new RequestSignalingGetConfiguration().signalingGetConfiguration();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            if (G.needGetSignalingConfiguration || realm.where(RealmCallConfig.class).findFirst() == null) {
+                new RequestSignalingGetConfiguration().signalingGetConfiguration();
+            }
         }
-        realm.close();
 
         WebSocketClient.waitingForReconnecting = false;
         WebSocketClient.allowForReconnecting = true;
@@ -126,12 +126,12 @@ public class UserLoginResponse extends MessageHandler {
         super.timeOut();
 
         if (G.isSecure) {
-            Realm realm = Realm.getDefaultInstance();
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
-                new RequestUserLogin().userLogin(userInfo.getToken());
+            try (Realm realm = Realm.getDefaultInstance()) {
+                RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
+                    new RequestUserLogin().userLogin(userInfo.getToken());
+                }
             }
-            realm.close();
         } else {
             WebSocketClient.getInstance().disconnect();
         }

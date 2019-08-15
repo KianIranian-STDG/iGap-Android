@@ -66,145 +66,145 @@ public class HelperDataUsage {
 
     public static void insertDataUsage(ProtoGlobal.RoomMessageType type, boolean conectivityType, boolean isDownloaded) {
         new Thread(() -> {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(realm1 -> {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realm1 -> {
 
-                RealmResults<RealmDataUsage> realmDataUsage = realm1.where(RealmDataUsage.class).equalTo("connectivityType", conectivityType).findAll();
+                    RealmResults<RealmDataUsage> realmDataUsage = realm1.where(RealmDataUsage.class).equalTo("connectivityType", conectivityType).findAll();
 
-                if (conectivityType) {
+                    if (conectivityType) {
 
-                    for (RealmDataUsage usage : realmDataUsage) {
+                        for (RealmDataUsage usage : realmDataUsage) {
 
-                        usage.setConnectivityType(conectivityType);
+                            usage.setConnectivityType(conectivityType);
 
-                        if (isDownloaded) {
+                            if (isDownloaded) {
+                                if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
+                                    usage.setNumDownloadedFile(usage.getNumDownloadedFile() + 1);
+
+                                if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
+
+                                    usage.setDownloadSize(usage.getDownloadSize() + wDownloadedImageSize);
+
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+                                    usage.setDownloadSize(usage.getDownloadSize() + wDownloadedVideoSize);
+
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.FILE.toString())) {
+
+                                    usage.setDownloadSize(usage.getDownloadSize() + wDownloadedFileSize);
+
+
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
+
+                                    usage.setDownloadSize(usage.getDownloadSize()  +wDownloadedAudioSize);
+
+
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.UNRECOGNIZED.toString())) {
+
+                                    usage.setDownloadSize(usage.getDownloadSize() + wDownloadedOtherSize);
+
+                                }
+
+                            } else {
+                                if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
+                                    usage.setNumUploadedFiles(usage.getNumUploadedFiles() + 1);
+
+                                if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
+
+                                    usage.setUploadSize(usage.getUploadSize() + wUploadedImageSize);
+
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+
+                                    usage.setUploadSize(usage.getUploadSize() + wUploadedVideoSize);
+
+
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.FILE.toString())) {
+
+                                    usage.setUploadSize(usage.getUploadSize() + wUploadedFileSize);
+
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
+
+                                    usage.setUploadSize(usage.getUploadSize() + wUploadedAudioSize);
+
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.UNRECOGNIZED.toString())) {
+
+                                    usage.setUploadSize(usage.getUploadSize() + wUploadedOtherSize);
+
+
+                                }
+                            }
+
+
+                        }
+                    } else {
+                        for (RealmDataUsage usage : realmDataUsage) {
+
+                            usage.setConnectivityType(conectivityType);
+
                             if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
                                 usage.setNumDownloadedFile(usage.getNumDownloadedFile() + 1);
-
-                            if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
-
-                                usage.setDownloadSize(usage.getDownloadSize() + wDownloadedImageSize);
-
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-                                usage.setDownloadSize(usage.getDownloadSize() + wDownloadedVideoSize);
-
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.FILE.toString())) {
-
-                                usage.setDownloadSize(usage.getDownloadSize() + wDownloadedFileSize);
+                            if (isDownloaded) {
 
 
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
+                                if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
 
-                                usage.setDownloadSize(usage.getDownloadSize()  +wDownloadedAudioSize);
+                                    usage.setDownloadSize(usage.getDownloadSize() + dDownloadedImageSize);
+
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+
+                                    usage.setDownloadSize(usage.getDownloadSize() + dDownloadedVideoSize);
+
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.FILE.toString())) {
+
+                                    usage.setDownloadSize(usage.getDownloadSize() + dDownloadedFileSize);
 
 
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.UNRECOGNIZED.toString())) {
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
 
-                                usage.setDownloadSize(usage.getDownloadSize() + wDownloadedOtherSize);
+                                    usage.setDownloadSize(usage.getDownloadSize()  +dDownloadedAudioSize);
 
+
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.UNRECOGNIZED.toString())) {
+
+                                    usage.setDownloadSize(usage.getDownloadSize() + dDownloadedOtherSize);
+
+                                }
+
+                            } else {
+                                if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
+                                    usage.setNumUploadedFiles(usage.getNumUploadedFiles() + 1);
+
+                                if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
+
+                                    usage.setUploadSize(usage.getUploadSize() + dUploadedImageSize);
+
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+
+                                    usage.setUploadSize(usage.getUploadSize() + dUploadedVideoSize);
+
+
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.FILE.toString())) {
+
+                                    usage.setUploadSize(usage.getUploadSize() + dUploadedFileSize);
+
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
+
+                                    usage.setUploadSize(usage.getUploadSize() + dUploadedAudioSize);
+
+                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.UNRECOGNIZED.toString())) {
+
+                                    usage.setUploadSize(usage.getUploadSize() + dUploadedOtherSize);
+
+
+                                }
                             }
 
-                        } else {
-                            if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
-                                usage.setNumUploadedFiles(usage.getNumUploadedFiles() + 1);
-
-                            if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
-
-                                usage.setUploadSize(usage.getUploadSize() + wUploadedImageSize);
-
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-
-                                usage.setUploadSize(usage.getUploadSize() + wUploadedVideoSize);
 
 
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.FILE.toString())) {
-
-                                usage.setUploadSize(usage.getUploadSize() + wUploadedFileSize);
-
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
-
-                                usage.setUploadSize(usage.getUploadSize() + wUploadedAudioSize);
-
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.UNRECOGNIZED.toString())) {
-
-                                usage.setUploadSize(usage.getUploadSize() + wUploadedOtherSize);
-
-
-                            }
                         }
-
-
                     }
-                } else {
-                    for (RealmDataUsage usage : realmDataUsage) {
 
-                        usage.setConnectivityType(conectivityType);
-
-                        if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
-                            usage.setNumDownloadedFile(usage.getNumDownloadedFile() + 1);
-                        if (isDownloaded) {
-
-
-                            if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
-
-                                usage.setDownloadSize(usage.getDownloadSize() + dDownloadedImageSize);
-
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-
-                                usage.setDownloadSize(usage.getDownloadSize() + dDownloadedVideoSize);
-
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.FILE.toString())) {
-
-                                usage.setDownloadSize(usage.getDownloadSize() + dDownloadedFileSize);
-
-
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
-
-                                usage.setDownloadSize(usage.getDownloadSize()  +dDownloadedAudioSize);
-
-
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.UNRECOGNIZED.toString())) {
-
-                                usage.setDownloadSize(usage.getDownloadSize() + dDownloadedOtherSize);
-
-                            }
-
-                        } else {
-                            if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
-                                usage.setNumUploadedFiles(usage.getNumUploadedFiles() + 1);
-
-                            if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
-
-                                usage.setUploadSize(usage.getUploadSize() + dUploadedImageSize);
-
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-
-                                usage.setUploadSize(usage.getUploadSize() + dUploadedVideoSize);
-
-
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.FILE.toString())) {
-
-                                usage.setUploadSize(usage.getUploadSize() + dUploadedFileSize);
-
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
-
-                                usage.setUploadSize(usage.getUploadSize() + dUploadedAudioSize);
-
-                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.UNRECOGNIZED.toString())) {
-
-                                usage.setUploadSize(usage.getUploadSize() + dUploadedOtherSize);
-
-
-                            }
-                        }
-
-
-
-                    }
-                }
-
-            });
-            realm.close();
+                });
+            }
 
         }).start();
 
@@ -311,94 +311,93 @@ public class HelperDataUsage {
 
     public static void initializeRealmDataUsage() {
         String[] typeList = {"IMAGE", "VIDEO", "AUDIO", "FILE", "UNRECOGNIZED"};
-        Realm realm = Realm.getDefaultInstance();
-        for (int i = 0; i < typeList.length; i++) {
-            int finalI = i;
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmDataUsage realmDataUsage = realm.createObject(RealmDataUsage.class);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            for (int i = 0; i < typeList.length; i++) {
+                int finalI = i;
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmDataUsage realmDataUsage = realm.createObject(RealmDataUsage.class);
 
 
-                    realmDataUsage.setNumUploadedFiles(0);
-                    realmDataUsage.setNumDownloadedFile(0);
+                        realmDataUsage.setNumUploadedFiles(0);
+                        realmDataUsage.setNumDownloadedFile(0);
 
-                    realmDataUsage.setConnectivityType(false);
+                        realmDataUsage.setConnectivityType(false);
 
-                    realmDataUsage.setUploadSize(0);
-
-
-                    realmDataUsage.setDownloadSize(0);
+                        realmDataUsage.setUploadSize(0);
 
 
-                    realmDataUsage.setType(typeList[finalI]);
-                }
-            });
-
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmDataUsage realmDataUsage = realm.createObject(RealmDataUsage.class);
+                        realmDataUsage.setDownloadSize(0);
 
 
-                    realmDataUsage.setNumUploadedFiles(0);
-                    realmDataUsage.setNumDownloadedFile(0);
+                        realmDataUsage.setType(typeList[finalI]);
+                    }
+                });
 
-                    realmDataUsage.setConnectivityType(true);
-
-                    realmDataUsage.setUploadSize(0);
-
-
-                    realmDataUsage.setDownloadSize(0);
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmDataUsage realmDataUsage = realm.createObject(RealmDataUsage.class);
 
 
-                    realmDataUsage.setType(typeList[finalI]);
-                }
+                        realmDataUsage.setNumUploadedFiles(0);
+                        realmDataUsage.setNumDownloadedFile(0);
 
-            });
+                        realmDataUsage.setConnectivityType(true);
 
+                        realmDataUsage.setUploadSize(0);
+
+
+                        realmDataUsage.setDownloadSize(0);
+
+
+                        realmDataUsage.setType(typeList[finalI]);
+                    }
+
+                });
+
+            }
         }
-        realm.close();
 
     }
 
     public static void clearUsageRealm(boolean connectivityType) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            if (connectivityType) {
+                RealmResults<RealmDataUsage> wifiRealmList = realm.where(RealmDataUsage.class).equalTo("connectivityType", true).findAll();
+                for (RealmDataUsage usage : wifiRealmList) {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            usage.setDownloadSize(0);
+                            usage.setUploadSize(0);
+                            usage.setNumDownloadedFile(0);
+                            usage.setNumUploadedFiles(0);
+                        }
+                    });
 
-        Realm realm = Realm.getDefaultInstance();
-        if (connectivityType) {
-            RealmResults<RealmDataUsage> wifiRealmList = realm.where(RealmDataUsage.class).equalTo("connectivityType", true).findAll();
-            for (RealmDataUsage usage : wifiRealmList) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        usage.setDownloadSize(0);
-                        usage.setUploadSize(0);
-                        usage.setNumDownloadedFile(0);
-                        usage.setNumUploadedFiles(0);
-                    }
-                });
 
+                }
+            } else {
+                RealmResults<RealmDataUsage> dataRealmList = realm.where(RealmDataUsage.class).equalTo("connectivityType", false).findAll();
+                for (RealmDataUsage usage : dataRealmList) {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            usage.setUploadSize(0);
+                            usage.setDownloadSize(0);
+                            usage.setNumDownloadedFile(0);
+                            usage.setNumUploadedFiles(0);
+                        }
+                    });
+
+
+                }
 
             }
-        } else {
-            RealmResults<RealmDataUsage> dataRealmList = realm.where(RealmDataUsage.class).equalTo("connectivityType", false).findAll();
-            for (RealmDataUsage usage : dataRealmList) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        usage.setUploadSize(0);
-                        usage.setDownloadSize(0);
-                        usage.setNumDownloadedFile(0);
-                        usage.setNumUploadedFiles(0);
-                    }
-                });
-
-
-            }
-
+            clearStatics();
         }
-        clearStatics();
-        realm.close();
     }
 
     private static void clearStatics() {

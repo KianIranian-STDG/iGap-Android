@@ -212,6 +212,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        realmShearedMedia = Realm.getDefaultInstance();
         return attachToSwipeBack(inflater.inflate(R.layout.activity_sheared_media, container, false));
     }
 
@@ -219,7 +220,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        realmShearedMedia = Realm.getDefaultInstance();
         //mediaLayout = (LinearLayout) view.findViewById(R.id.asm_ll_music_layout);
         //MusicPlayer.setMusicPlayer(mediaLayout);
 
@@ -254,11 +254,15 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        realmShearedMedia.close();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        if (realmShearedMedia != null && !realmShearedMedia.isClosed()) {
-            realmShearedMedia.close();
-        }
 
         MusicPlayer.shearedMediaLayout = null;
 
@@ -433,14 +437,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             @Override
             public void onClick(View view) {
                 ArrayList<Parcelable> messageInfos = new ArrayList<>(SelectedList.size());
-                //RealmRoomMessage rm;
                 for (StructShearedMedia media : SelectedList) {
-
-                    //rm = mRealmList.where().equalTo(RealmRoomMessageFields.MESSAGE_ID, Id).findFirst();
-                    //if (rm != null) {
-                        //+Realm realm = Realm.getDefaultInstance();
-                        messageInfos.add(Parcels.wrap(new StructMessageInfo(media.item)));
-                    //}
+                    messageInfos.add(Parcels.wrap(new StructMessageInfo(media.item)));
                 }
                 FragmentChat.mForwardMessages = messageInfos;
                 adapter.resetSelected();
@@ -889,8 +887,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         recyclerView.setAdapter(adapter);
 
         isChangeSelectType = false;
-
-        //realm.close();
     }
 
     //********************************************************************************************
@@ -1044,13 +1040,13 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     }
 
     public void saveDataToLocal(final List<ProtoGlobal.RoomMessage> RoomMessages, final long roomId) {
-        final Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realm1 -> {
-            for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
-                RealmRoomMessage.putOrUpdate(realm1, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
-            }
-        });
-        realm.close();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(realm1 -> {
+                for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
+                    RealmRoomMessage.putOrUpdate(realm1, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
+                }
+            });
+        }
     }
 
     //********************************************************************************************

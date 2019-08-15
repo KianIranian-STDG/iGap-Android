@@ -36,8 +36,7 @@ public class RealmRoomMessageContact extends RealmObject {
     @PrimaryKey
     private long id;
 
-    public static RealmRoomMessageContact put(final ProtoGlobal.RoomMessageContact input) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmRoomMessageContact put(Realm realm, final ProtoGlobal.RoomMessageContact input) {
         RealmRoomMessageContact messageContact = realm.createObject(RealmRoomMessageContact.class, AppUtils.makeRandomId());
         messageContact.setLastName(input.getLastName());
         messageContact.setFirstName(input.getFirstName());
@@ -48,7 +47,6 @@ public class RealmRoomMessageContact extends RealmObject {
         for (String email : input.getEmailList()) {
             messageContact.addEmail(email);
         }
-        realm.close();
 
         return messageContact;
     }
@@ -107,15 +105,15 @@ public class RealmRoomMessageContact extends RealmObject {
     }
 
     public void addPhone(String phone) {
-        Realm realm = Realm.getDefaultInstance();
-        phones.add(RealmString.string(realm, phone));
-        realm.close();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            phones.add(RealmString.string(realm, phone));
+        }
     }
 
     public void addEmail(String email) {
-        Realm realm = Realm.getDefaultInstance();
-        phones.add(RealmString.string(realm, email));
-        realm.close();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            phones.add(RealmString.string(realm, email));
+        }
     }
 
     public String getLastPhoneNumber() {

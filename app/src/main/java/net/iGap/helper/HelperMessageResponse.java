@@ -34,98 +34,96 @@ public class HelperMessageResponse {
 
     public static void handleMessage(final long roomId, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType, final ProtoResponse.Response response, final String identity) {
 
-        final Realm realm = Realm.getDefaultInstance();
-
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-
-                /**
-                 * put message to realm
-                 */
-                RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setGap());
-                final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                /**
-                 * because user may have more than one device, his another device should not
-                 * be recipient but sender. so I check current userId with room message user id,
-                 * and if not equals and response is null, so we sure recipient is another user
-                 */
-                if (!roomMessage.getAuthor().getHash().equals(authorHash)) {
-                    /**
-                     * i'm recipient
-                     *
-                     * if author has user check that client have latest info for this user or no
-                     * if author don't have use this means that message is from channel so client
-                     * don't have user id for message sender for get info
-                     */
-                    if (roomMessage.getAuthor().hasUser()) {
-                        RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
-                    }
-
-
-                    //} else if (!response.getId().isEmpty()) {
-                    //    /**
-                    //     * i'm the sender
-                    //     *
-                    //     * delete message that created with fake messageId as identity
-                    //     * because in new version of realm client can't update primary key
-                    //     */
-                    //    RealmRoomMessage.deleteMessage(realm, Long.parseLong(identity));
-                }
-
-                if (identity != null && identity.length() > 0) {
-                    RealmRoomMessage.deleteMessage(realm, Long.parseLong(identity), roomId);
-                }
-
-                if (room == null) {
-                    /**
-                     * if first message received but the room doesn't exist, send request for create new room
-                     */
-                    new RequestClientGetRoom().clientGetRoom(roomId, null);
-                } else {
-                    room.setDeleted(false);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
 
                     /**
-                     * update unread count if new messageId that received is bigger than latest messageId that exist
+                     * put message to realm
                      */
-
-                    if (!roomMessage.getAuthor().getHash().equals(authorHash) && (room.getLastMessage() == null || (room.getLastMessage() != null && room.getLastMessage().getMessageId() < roomMessage.getMessageId()))) {
-                        room.setUnreadCount(room.getUnreadCount() + 1);
-                    }
-
+                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setGap());
+                    final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                    /**
+                     * because user may have more than one device, his another device should not
+                     * be recipient but sender. so I check current userId with room message user id,
+                     * and if not equals and response is null, so we sure recipient is another user
+                     */
                     if (!roomMessage.getAuthor().getHash().equals(authorHash)) {
-                        if (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN && RealmNotificationRoomMessage.canShowNotif(realm, roomMessage.getMessageId(), roomId)) {
-                            RealmNotificationRoomMessage.putToDataBase(realm, roomMessage.getMessageId(), roomId);
-                            HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType, room, realm);
+                        /**
+                         * i'm recipient
+                         *
+                         * if author has user check that client have latest info for this user or no
+                         * if author don't have use this means that message is from channel so client
+                         * don't have user id for message sender for get info
+                         */
+                        if (roomMessage.getAuthor().hasUser()) {
+                            RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                         }
+
+
+                        //} else if (!response.getId().isEmpty()) {
+                        //    /**
+                        //     * i'm the sender
+                        //     *
+                        //     * delete message that created with fake messageId as identity
+                        //     * because in new version of realm client can't update primary key
+                        //     */
+                        //    RealmRoomMessage.deleteMessage(realm, Long.parseLong(identity));
                     }
 
-                    /**
-                     * update last message sent/received in room table
-                     */
-                    if (room.getLastMessage() != null) {
-                        if (room.getLastMessage().getMessageId() <= roomMessage.getMessageId()) {
+                    if (identity != null && identity.length() > 0) {
+                        RealmRoomMessage.deleteMessage(realm, Long.parseLong(identity), roomId);
+                    }
+
+                    if (room == null) {
+                        /**
+                         * if first message received but the room doesn't exist, send request for create new room
+                         */
+                        new RequestClientGetRoom().clientGetRoom(roomId, null);
+                    } else {
+                        room.setDeleted(false);
+
+                        /**
+                         * update unread count if new messageId that received is bigger than latest messageId that exist
+                         */
+
+                        if (!roomMessage.getAuthor().getHash().equals(authorHash) && (room.getLastMessage() == null || (room.getLastMessage() != null && room.getLastMessage().getMessageId() < roomMessage.getMessageId()))) {
+                            room.setUnreadCount(room.getUnreadCount() + 1);
+                        }
+
+                        if (!roomMessage.getAuthor().getHash().equals(authorHash)) {
+                            if (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN && RealmNotificationRoomMessage.canShowNotif(realm, roomMessage.getMessageId(), roomId)) {
+                                RealmNotificationRoomMessage.putToDataBase(realm, roomMessage.getMessageId(), roomId);
+                                HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType, room, realm);
+                            }
+                        }
+
+                        /**
+                         * update last message sent/received in room table
+                         */
+                        if (room.getLastMessage() != null) {
+                            if (room.getLastMessage().getMessageId() <= roomMessage.getMessageId()) {
+                                room.setLastMessage(realmRoomMessage);
+                            }
+                        } else {
                             room.setLastMessage(realmRoomMessage);
                         }
-                    } else {
-                        room.setLastMessage(realmRoomMessage);
                     }
                 }
+            });
+
+            if (response.getId().isEmpty()) {
+                /**
+                 * invoke following callback when i'm not the sender, because i already done everything after sending message
+                 */
+                G.chatSendMessageUtil.onMessageReceive(roomId, roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, roomType);
+            } else {
+                /**
+                 * invoke following callback when I'm the sender and the message has updated
+                 */
+                G.chatSendMessageUtil.onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
             }
-        });
-
-        if (response.getId().isEmpty()) {
-            /**
-             * invoke following callback when i'm not the sender, because i already done everything after sending message
-             */
-            G.chatSendMessageUtil.onMessageReceive(roomId, roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, roomType);
-        } else {
-            /**
-             * invoke following callback when I'm the sender and the message has updated
-             */
-            G.chatSendMessageUtil.onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
         }
-
-        realm.close();
     }
 }

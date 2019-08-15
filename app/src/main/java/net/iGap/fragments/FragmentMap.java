@@ -105,16 +105,6 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     private net.iGap.module.MaterialDesignTextView itemIcon;
     private Location location;
 
-     /*       Realm realm = Realm.getDefaultInstance();
-        ProtoGlobal.Room.Type type=  RealmRoom.detectType(mMessage.roomId);
-        if (type== ProtoGlobal.Room.Type.CHAT|| type== ProtoGlobal.Room.Type.GROUP)
-        {
-
-
-            RealmRegisteredInfo realmRegisteredInfo =  realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID,12342).findFirst();
-        }else{
-
-        }*/
 
     public static FragmentMap getInctance(Double latitude, Double longitude, Mode mode, int type, long roomId, String senderID) {
 
@@ -310,48 +300,42 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
             rvSendPosition.setVisibility(View.GONE);
             fabOpenMap.setOnClickListener(this);
 
-            Realm realm = Realm.getDefaultInstance();
+            try (Realm realm = Realm.getDefaultInstance()) {
+                CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fabOpenMap.getLayoutParams();
 
-            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fabOpenMap.getLayoutParams();
+                if (HelperCalander.isPersianUnicode) {
+                    //  params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                    params.anchorGravity = Gravity.LEFT | Gravity.BOTTOM;
 
-            if (HelperCalander.isPersianUnicode) {
-                //  params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                params.anchorGravity = Gravity.LEFT | Gravity.BOTTOM;
+                    txtUserName.setGravity(Gravity.RIGHT);
+                    ((RelativeLayout.LayoutParams) txtUserName.getLayoutParams()).addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 
-                txtUserName.setGravity(Gravity.RIGHT);
-                ((RelativeLayout.LayoutParams) txtUserName.getLayoutParams()).addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-
-            } else {
-                //    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                params.anchorGravity = Gravity.RIGHT | Gravity.BOTTOM;
+                } else {
+                    //    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    params.anchorGravity = Gravity.RIGHT | Gravity.BOTTOM;
 
 
-                txtUserName.setGravity(Gravity.LEFT);
-                ((RelativeLayout.LayoutParams) txtUserName.getLayoutParams()).addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                    txtUserName.setGravity(Gravity.LEFT);
+                    ((RelativeLayout.LayoutParams) txtUserName.getLayoutParams()).addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 
+                }
+
+                if (type == ProtoGlobal.Room.Type.CHAT.getNumber() || type == ProtoGlobal.Room.Type.GROUP.getNumber()) {
+
+                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(senderId)).findFirst();
+                    txtUserName.setText(realmRegisteredInfo.getDisplayName());
+
+                    setAvatar(Long.parseLong(senderId));
+
+
+                } else {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRegisteredInfoFields.ID, roomId).findFirst();
+                    txtUserName.setText(realmRoom.getTitle());
+
+                    setAvatar(roomId);
+
+                }
             }
-
-            if (type == ProtoGlobal.Room.Type.CHAT.getNumber() || type == ProtoGlobal.Room.Type.GROUP.getNumber()) {
-
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(senderId)).findFirst();
-                txtUserName.setText(realmRegisteredInfo.getDisplayName());
-
-                setAvatar(Long.parseLong(senderId));
-
-
-            } else {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRegisteredInfoFields.ID, roomId).findFirst();
-                txtUserName.setText(realmRoom.getTitle());
-
-                setAvatar(roomId);
-
-            }
-
-
-            realm.close();
-            //  HelperAvatar.
-
-
         }
     }
 

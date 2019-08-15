@@ -80,37 +80,37 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
     }
 
     private void initData(boolean type) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmDataUsage> wifiRealmDataUsages;
-        RealmResults<RealmDataUsage> dataRealmDataUsages;
-        if (type) {
-            mHelperToolbar.setDefaultTitle(getResources().getString(R.string.wifi_data_usage));
-            totalReceivedByte = 0;
-            totalSendByte = 0;
-            wifiRealmDataUsages = realm.where(RealmDataUsage.class).equalTo("connectivityType", true).findAll();
-            if (wifiRealmDataUsages.size() == 0)
-                wifiRealmDataUsages = realm.where(RealmDataUsage.class).findAll();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmResults<RealmDataUsage> wifiRealmDataUsages;
+            RealmResults<RealmDataUsage> dataRealmDataUsages;
+            if (type) {
+                mHelperToolbar.setDefaultTitle(getResources().getString(R.string.wifi_data_usage));
+                totalReceivedByte = 0;
+                totalSendByte = 0;
+                wifiRealmDataUsages = realm.where(RealmDataUsage.class).equalTo("connectivityType", true).findAll();
+                if (wifiRealmDataUsages.size() == 0)
+                    wifiRealmDataUsages = realm.where(RealmDataUsage.class).findAll();
 
-            for (RealmDataUsage usage : wifiRealmDataUsages) {
-                usageArrayList.add(new DataUsageStruct(0, usage.getDownloadSize(), usage.getUploadSize(), usage.getNumUploadedFiles(), usage.getNumDownloadedFile(), usage.getType()));
-                totalReceivedByte += usage.getDownloadSize();
-                totalSendByte += usage.getUploadSize();
-            }
+                for (RealmDataUsage usage : wifiRealmDataUsages) {
+                    usageArrayList.add(new DataUsageStruct(0, usage.getDownloadSize(), usage.getUploadSize(), usage.getNumUploadedFiles(), usage.getNumDownloadedFile(), usage.getType()));
+                    totalReceivedByte += usage.getDownloadSize();
+                    totalSendByte += usage.getUploadSize();
+                }
 
-        } else {
-            mHelperToolbar.setDefaultTitle(getResources().getString(R.string.mobile_data_usage));
-            totalReceivedByte = 0;
-            totalSendByte = 0;
-            dataRealmDataUsages = realm.where(RealmDataUsage.class).equalTo("connectivityType", false).findAll();
-            if (dataRealmDataUsages.size() == 0)
-                dataRealmDataUsages = realm.where(RealmDataUsage.class).findAll();
-            for (RealmDataUsage usage : dataRealmDataUsages) {
-                usageArrayList.add(new DataUsageStruct(0, usage.getDownloadSize(), usage.getUploadSize(), usage.getNumUploadedFiles(), usage.getNumDownloadedFile(), usage.getType()));
-                totalReceivedByte += usage.getDownloadSize();
-                totalSendByte += usage.getUploadSize();
+            } else {
+                mHelperToolbar.setDefaultTitle(getResources().getString(R.string.mobile_data_usage));
+                totalReceivedByte = 0;
+                totalSendByte = 0;
+                dataRealmDataUsages = realm.where(RealmDataUsage.class).equalTo("connectivityType", false).findAll();
+                if (dataRealmDataUsages.size() == 0)
+                    dataRealmDataUsages = realm.where(RealmDataUsage.class).findAll();
+                for (RealmDataUsage usage : dataRealmDataUsages) {
+                    usageArrayList.add(new DataUsageStruct(0, usage.getDownloadSize(), usage.getUploadSize(), usage.getNumUploadedFiles(), usage.getNumDownloadedFile(), usage.getType()));
+                    totalReceivedByte += usage.getDownloadSize();
+                    totalSendByte += usage.getUploadSize();
+                }
             }
         }
-        realm.close();
     }
 
     @Override

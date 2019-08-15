@@ -612,13 +612,12 @@ public class HelperNotification {
     }
 
     public void addMessage(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (room != null) {
-            addMessage(roomId, roomMessage, roomType, room, realm);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (room != null) {
+                addMessage(roomId, roomMessage, roomType, room, realm);
+            }
         }
-        realm.close();
-
     }
 
     public void addMessage(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, RealmRoom room, Realm realm) {

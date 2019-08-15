@@ -165,6 +165,8 @@ public class FragmentShowImage extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+        realmShowImage.close();
         /*if (appBarLayout != null) {
             appBarLayout.setVisibility(View.VISIBLE);
         }*/
@@ -389,7 +391,6 @@ public class FragmentShowImage extends BaseFragment {
             txtImageDesc.setVisibility(View.GONE);
         }
 
-        //+Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), realmRoomMessageFinal.getUserId());
 
         if (realmRegisteredInfo != null) {
@@ -413,8 +414,6 @@ public class FragmentShowImage extends BaseFragment {
             txtImageTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageTime.getText().toString()));
             txtImageDate.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageDate.getText().toString()));
         }
-
-        //realm.close();
 
     }
 
@@ -539,10 +538,6 @@ public class FragmentShowImage extends BaseFragment {
         if (videoController != null) {
             videoController.hide();
             videoController = null;
-        }
-
-        if (realmShowImage != null && !realmShowImage.isClosed()) {
-            realmShowImage.close();
         }
     }
 

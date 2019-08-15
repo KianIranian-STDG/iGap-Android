@@ -59,43 +59,43 @@ public class Contacts {
      */
     public static List<StructContactInfo> retrieve(String filter) {
         ArrayList<StructContactInfo> items = new ArrayList<>();
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmResults<RealmContacts> contacts;
-        if (filter == null) {
-            contacts = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
-        } else {
-            contacts = realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, filter).findAll().sort(RealmContactsFields.DISPLAY_NAME);
-        }
-
-        String lastHeader = "";
-        for (int i = 0; i < contacts.size(); i++) {
-            RealmContacts realmContacts = contacts.get(i);
-            if (realmContacts == null) {
-                continue;
-            }
-            String header = realmContacts.getDisplay_name();
-            long peerId = realmContacts.getId();
-            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, realmContacts.getId());
-
-            // new header exists
-            if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
-                StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", true, false, "");
-                structContactInfo.initials = realmContacts.getInitials();
-                structContactInfo.color = realmContacts.getColor();
-                structContactInfo.avatar = realmRegisteredInfo.getLastAvatar();
-                items.add(structContactInfo);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmResults<RealmContacts> contacts;
+            if (filter == null) {
+                contacts = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
             } else {
-                StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", false, false, "");
-                structContactInfo.initials = realmContacts.getInitials();
-                structContactInfo.color = realmContacts.getColor();
-                structContactInfo.avatar = realmRegisteredInfo.getLastAvatar();
-                items.add(structContactInfo);
+                contacts = realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, filter).findAll().sort(RealmContactsFields.DISPLAY_NAME);
             }
-            lastHeader = header;
+
+            String lastHeader = "";
+            for (int i = 0; i < contacts.size(); i++) {
+                RealmContacts realmContacts = contacts.get(i);
+                if (realmContacts == null) {
+                    continue;
+                }
+                String header = realmContacts.getDisplay_name();
+                long peerId = realmContacts.getId();
+                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, realmContacts.getId());
+
+                // new header exists
+                if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
+                    StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", true, false, "");
+                    structContactInfo.initials = realmContacts.getInitials();
+                    structContactInfo.color = realmContacts.getColor();
+                    structContactInfo.avatar = realmRegisteredInfo.getLastAvatar(realm);
+                    items.add(structContactInfo);
+                } else {
+                    StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", false, false, "");
+                    structContactInfo.initials = realmContacts.getInitials();
+                    structContactInfo.color = realmContacts.getColor();
+                    structContactInfo.avatar = realmRegisteredInfo.getLastAvatar(realm);
+                    items.add(structContactInfo);
+                }
+                lastHeader = header;
+            }
+
         }
 
-        realm.close();
         return items;
     }
 

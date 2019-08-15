@@ -134,6 +134,10 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     private boolean isBot = false;
     private boolean isCloud ;
 
+    public FragmentContactsProfileViewModel() {
+        realm = Realm.getDefaultInstance();
+    }
+
     public void init(long roomId, long userId, String enterFrom, AvatarHandler avatarHandler) {
         this.roomId = roomId;
         this.userId = userId;
@@ -214,15 +218,15 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                 G.onChatGetRoom = new OnChatGetRoom() {
                     @Override
                     public void onChatGetRoom(final ProtoGlobal.Room room) {
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
-                                realmRoom1.setDeleted(true);
-                            }
-                        });
-                        realm.close();
+                        try (Realm realm = Realm.getDefaultInstance()) {
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
+                                    realmRoom1.setDeleted(true);
+                                }
+                            });
+                        }
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -246,7 +250,6 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
                 new RequestChatGetRoom().chatGetRoom(userId);
             }
-            realm.close();
         } else {
             goBack.setValue(true);
         }
@@ -345,14 +348,14 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             userBlockState.set(isBlockUser ? R.string.un_block_user : R.string.block);
             registeredInfo.addChangeListener(element -> isBlockUser = registeredInfo.isBlockUser());
 
-            if (registeredInfo.getLastAvatar() != null) {
-                String mainFilePath = registeredInfo.getLastAvatar().getFile().getLocalFilePath();
+            if (registeredInfo.getLastAvatar(getRealm()) != null) {
+                String mainFilePath = registeredInfo.getLastAvatar(getRealm()).getFile().getLocalFilePath();
                 if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
                     avatarPath = mainFilePath;
                 } else {
-                    avatarPath = registeredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
+                    avatarPath = registeredInfo.getLastAvatar(getRealm()).getFile().getLocalThumbnailPath();
                 }
-                avatarList = registeredInfo.getAvatars();
+                avatarList = registeredInfo.getAvatars(getRealm());
             }
         }
 
@@ -550,6 +553,8 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         if (registeredInfo != null) {
             registeredInfo.removeAllChangeListeners();
         }
+
+        realm.close();
     }
 
     //===============================================================================
@@ -677,12 +682,6 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
         if (mRoom != null) {
             mRoom.removeAllChangeListeners();
-        }
-    }
-
-    public void onDestroy() {
-        if (realm != null && !realm.isClosed()) {
-            realm.close();
         }
     }
 

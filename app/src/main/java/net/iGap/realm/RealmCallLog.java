@@ -51,16 +51,16 @@ public class RealmCallLog extends RealmObject {
     }
 
     public static void addLogList(final List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> list) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                for (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item : list) {
-                    addLog(item, realm);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    for (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item : list) {
+                        addLog(item, realm);
+                    }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public static void clearCallLog(final long clearId) {
@@ -80,14 +80,14 @@ public class RealmCallLog extends RealmObject {
      * should be check state of call and clear should be execute synchronise
      */
     private static void clearAllCallLog() {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.where(RealmCallLog.class).findAll().deleteAllFromRealm();
-            }
-        });
-        realm.close();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realm.where(RealmCallLog.class).findAll().deleteAllFromRealm();
+                }
+            });
+        }
     }
 
     /**

@@ -94,6 +94,14 @@
                     android:onClick="@{()->fragmentPaymentViewModel.onClickInquiryTelecom()}"
                     android:text="@string/bills_inquiry_telecom" />
 
+                <android.support.design.button.MaterialButton
+                    style="?iGapButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp6"
+                    android:onClick="@{()->fragmentPaymentViewModel.onClickBuyInternetPackage()}"
+                    android:text="@string/buy_internet_package_title" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

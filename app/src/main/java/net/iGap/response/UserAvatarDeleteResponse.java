@@ -38,14 +38,14 @@ public class UserAvatarDeleteResponse extends MessageHandler {
         if (G.onUserAvatarDelete != null) {
             G.onUserAvatarDelete.onUserAvatarDelete(userAvatarDeleteResponse.getId(), identity);
         } else {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmAvatar.deleteAvatar(realm, userAvatarDeleteResponse.getId());
-                }
-            });
-            realm.close();
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmAvatar.deleteAvatar(realm, userAvatarDeleteResponse.getId());
+                    }
+                });
+            }
         }
 
         G.handler.postDelayed(new Runnable() {

@@ -38,15 +38,14 @@ public class UserAvatarAddResponse extends MessageHandler {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmAvatar.putOrUpdate(realm, G.userId, userAvatarAddResponse.getAvatar());
-                    }
-                });
-
-                realm.close();
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmAvatar.putOrUpdate(realm, G.userId, userAvatarAddResponse.getAvatar());
+                        }
+                    });
+                }
             }
         }).start();
 

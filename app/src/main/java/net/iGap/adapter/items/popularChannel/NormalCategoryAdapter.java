@@ -1,4 +1,4 @@
-package net.iGap.adapter.items.favoritechannel;
+package net.iGap.adapter.items.popularChannel;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -14,20 +14,20 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.libs.bottomNavigation.Util.Utils;
-import net.iGap.model.FavoriteChannel.Category;
+import net.iGap.model.popularChannel.Category;
 
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.FragmentGridViewHolder> {
+public class NormalCategoryAdapter extends RecyclerView.Adapter<NormalCategoryAdapter.FragmentGridViewHolder> {
     private List<Category> categoryList;
     private OnClickedItemEventCallBack onClickedItemEventCallBack;
-    public boolean clickable;
 
-    public CategoryAdapter(boolean clickable, List<Category> categoryList) {
-        this.clickable = clickable;
+    public NormalCategoryAdapter(List<Category> categoryList) {
         this.categoryList = categoryList;
+    }
+
+    public void setOnClickedItemEventCallBack(OnClickedItemEventCallBack onClickedItemEventCallBack) {
+        this.onClickedItemEventCallBack = onClickedItemEventCallBack;
     }
 
     @NonNull
@@ -45,6 +45,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Fragme
     @Override
     public int getItemCount() {
         return categoryList.size();
+    }
+
+
+    public interface OnClickedItemEventCallBack {
+        void onClickedItem(Category category);
     }
 
     public class FragmentGridViewHolder extends RecyclerView.ViewHolder {
@@ -68,23 +73,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Fragme
 
         public void bindChannel(Category category) {
             ImageLoadingService.load(category.getIcon(), channelImageGrid);
-            if (G.selectedLanguage.equals("fa"))
+            if (G.isAppRtl)
                 channelTitleGrid.setText(category.getTitle());
-            itemView.setOnClickListener(view -> {
-                if (clickable)
-                    onClickedItemEventCallBack.onClickedItem(category);
-            });
-            if (G.selectedLanguage.equals("en"))
+            else
                 channelTitleGrid.setText(category.getTitleEn());
 
+            itemView.setOnClickListener(view -> {
+                if (onClickedItemEventCallBack != null)
+                    onClickedItemEventCallBack.onClickedItem(category);
+            });
+
+
         }
-    }
-
-    public void setOnClickedItemEventCallBack(OnClickedItemEventCallBack onClickedItemEventCallBack) {
-        this.onClickedItemEventCallBack = onClickedItemEventCallBack;
-    }
-
-    public interface OnClickedItemEventCallBack {
-        void onClickedItem(Category category);
     }
 }

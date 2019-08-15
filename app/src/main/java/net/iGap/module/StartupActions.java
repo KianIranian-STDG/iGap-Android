@@ -155,11 +155,11 @@ public final class StartupActions {
     }
 
     private void checkDataUsage() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmDataUsage> realmDataUsage = realm.where(RealmDataUsage.class).findAll();
-        if (realmDataUsage.size() == 0)
-            HelperDataUsage.initializeRealmDataUsage();
-        realm.close();
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmResults<RealmDataUsage> realmDataUsage = realm.where(RealmDataUsage.class).findAll();
+            if (realmDataUsage.size() == 0)
+                HelperDataUsage.initializeRealmDataUsage();
+        }
     }
 
     private void manageTime() {
@@ -564,27 +564,24 @@ public final class StartupActions {
      * fill main user info in global variables
      */
     private void mainUserInfo() {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
 
-        Realm realm = Realm.getDefaultInstance();
+            if (userInfo != null && userInfo.getUserRegistrationState()) {
 
-        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                userId = userInfo.getUserId();
+                G.isPassCode = userInfo.isPassCode();
 
-        if (userInfo != null && userInfo.getUserRegistrationState()) {
+                if (userInfo.getAuthorHash() != null) {
+                    authorHash = userInfo.getAuthorHash();
+                }
 
-            userId = userInfo.getUserId();
-            G.isPassCode = userInfo.isPassCode();
+                if (userInfo.getUserInfo().getDisplayName() != null) {
+                    displayName = userInfo.getUserInfo().getDisplayName();
+                }
 
-            if (userInfo.getAuthorHash() != null) {
-                authorHash = userInfo.getAuthorHash();
             }
-
-            if (userInfo.getUserInfo().getDisplayName() != null) {
-                displayName = userInfo.getUserInfo().getDisplayName();
-            }
-
         }
-
-        realm.close();
     }
 
     /**
@@ -604,23 +601,8 @@ public final class StartupActions {
             return false;
         }
 
-        //  new SecureRandom().nextBytes(key);
-
-
-        // An encrypted Realm file can be opened in Realm Studio by using a Hex encoded version
-        // of the key. Copy the key from Logcat, then download the Realm file from the device using
-        // the method described here: https://stackoverflow.com/a/28486297/1389357
-        // The path is normally `/data/data/io.realm.examples.encryption/files/default.realm`
-
-     /*   RealmConfiguration configuration = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm")
-                .schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build();
-        DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuration);*/
         RealmConfiguration configuredRealm = getInstance();
-
-        /*if (configuration!=null)
-            Realm.deleteRealm(configuration);*/
         Realm.setDefaultConfiguration(configuredRealm);
-        /*configuredRealm.close();*/
         return true;
     }
 

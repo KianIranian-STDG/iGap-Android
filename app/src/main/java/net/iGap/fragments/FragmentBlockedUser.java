@@ -81,9 +81,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (realmBlockedUser != null && !realmBlockedUser.isClosed()) {
-            realmBlockedUser.close();
-        }
+        realmBlockedUser.close();
     }
 
     @Override

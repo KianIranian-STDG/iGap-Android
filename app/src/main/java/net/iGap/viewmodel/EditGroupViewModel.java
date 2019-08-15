@@ -81,6 +81,8 @@ public class EditGroupViewModel extends ViewModel {
 
 
     public EditGroupViewModel(Long roomId) {
+
+        realmGroupProfile = Realm.getDefaultInstance();
         this.roomId = roomId;
         RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
@@ -90,7 +92,8 @@ public class EditGroupViewModel extends ViewModel {
             RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
             if (realmGroupRoom != null) {
                 if (realmGroupRoom.getRealmNotificationSetting() == null) {
-                    setRealm(Realm.getDefaultInstance(), realmGroupRoom, null, null);
+
+                    setRealm(getRealm(), realmGroupRoom, null, null);
                 } else {
                     realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
                 }
@@ -125,8 +128,8 @@ public class EditGroupViewModel extends ViewModel {
         }*/
 
         //ToDo: add this code to repository
-        adminMembers = RealmMember.filterMember(realmGroupProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
-        moderatorMembers = RealmMember.filterMember(realmGroupProfile, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
+        adminMembers = RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
+        moderatorMembers = RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
         administratorsCount.set(String.valueOf(adminMembers.size()));
         moderatorsCount.set(String.valueOf(moderatorMembers.size()));
 
@@ -158,6 +161,12 @@ public class EditGroupViewModel extends ViewModel {
             realmGroupProfile = Realm.getDefaultInstance();
         }
         return realmGroupProfile;
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        realmGroupProfile.close();
     }
 
     //TODO: move this code to repository

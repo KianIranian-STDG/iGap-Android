@@ -264,12 +264,12 @@ public class WebRTC {
     PeerConnection peerConnectionInstance() {
         if (peerConnection == null) {
             List<PeerConnection.IceServer> iceServers = new ArrayList<>();
-            Realm realm = Realm.getDefaultInstance();
-            RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
-            for (RealmIceServer ice : realmCallConfig.getIceServer()) {
-                iceServers.add(new PeerConnection.IceServer(ice.getUrl(), ice.getUsername(), ice.getCredential()));
+            try (Realm realm = Realm.getDefaultInstance()) {
+                RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
+                for (RealmIceServer ice : realmCallConfig.getIceServer()) {
+                    iceServers.add(new PeerConnection.IceServer(ice.getUrl(), ice.getUsername(), ice.getCredential()));
+                }
             }
-            realm.close();
 
             PeerConnection.RTCConfiguration configuration = new PeerConnection.RTCConfiguration(iceServers);
             configuration.bundlePolicy = PeerConnection.BundlePolicy.MAXBUNDLE;

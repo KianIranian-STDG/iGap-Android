@@ -37,11 +37,12 @@ public class MyDialog {
      * create custom dialog for main page
      */
     public static void showDialogMenuItemRooms(FragmentActivity activity, final String itemName, final ProtoGlobal.Room.Type mType, boolean isMute, final String role, long peerId, RealmRoom mInfo, final OnComplete complete, boolean isPinned) {
+        int pinCount;
+        try (Realm realm = Realm.getDefaultInstance()) {
+            RealmResults realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_PINNED, true).findAll();
+            pinCount = realmRoom.size();
+        }
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_PINNED, true).findAll();
-        int pinCount = realmRoom.size();
-        realm.close();
 
         List<String> items = new ArrayList<>();
         if (isPinned) {

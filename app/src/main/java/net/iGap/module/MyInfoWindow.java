@@ -79,25 +79,27 @@ public class MyInfoWindow extends InfoWindow {
         if (userId == G.userId) {
             return;
         }
+        String displayName = "";
 
-        Realm realm2 = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm2, userId);
-        if (realmRegisteredInfo == null) {
-            RealmRegisteredInfo.getRegistrationInfo(userId, new OnInfo() {
-                @Override
-                public void onInfo(Long registeredId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            onOpen(arg);
-                        }
-                    });
-                }
-            });
-            realm2.close();
-            return;
+        try (Realm realm2 = Realm.getDefaultInstance()) {
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm2, userId);
+            if (realmRegisteredInfo == null) {
+                RealmRegisteredInfo.getRegistrationInfo(userId, new OnInfo() {
+                    @Override
+                    public void onInfo(Long registeredId) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onOpen(arg);
+                            }
+                        });
+                    }
+                });
+                return;
+            }
+            displayName = realmRegisteredInfo.getDisplayName();
         }
-        realm2.close();
+
 
      /*   RealmCallConfig callConfig = realm.where(RealmCallConfig.class).findFirst();
         if (callConfig != null) {
@@ -125,7 +127,7 @@ public class MyInfoWindow extends InfoWindow {
         TextView txtName = view.findViewById(R.id.txt_name_info_map);
         final TextView txtComment = view.findViewById(R.id.txt_info_comment);
 
-        txtName.setText(realmRegisteredInfo.getDisplayName());
+        txtName.setText(displayName);
         txtName.setTypeface(G.typeface_IRANSansMobile_Bold, Typeface.BOLD);
 
         if (G.selectedLanguage.equals("en")) {
@@ -253,8 +255,8 @@ public class MyInfoWindow extends InfoWindow {
     }
 
     /*public void onOpen(Object arg0) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+    try (Realm realm = Realm.getDefaultInstance()) {
+     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
         if (realmRegisteredInfo == null) {
             return;
         }
@@ -327,8 +329,9 @@ public class MyInfoWindow extends InfoWindow {
 
             new RequestGeoGetComment().getComment(userId);
         }
+}
 
-        realm.close();
+
     }*/
 
 }

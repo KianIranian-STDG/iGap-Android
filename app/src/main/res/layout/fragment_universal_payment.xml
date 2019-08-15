@@ -140,9 +140,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@{viewModel.getPaymentStatus()}"
+            android:text="@{viewModel.paymentStatus}"
             android:textStyle="bold"
-            android:visibility="@{viewModel.showPaymentErrorMessage}"
+            android:visibility="@{viewModel.showPaymentStatus}"
             app:layout_constraintBottom_toTopOf="@id/paymentRRN"
             app:layout_constraintEnd_toEndOf="@id/priceTitle"
             app:layout_constraintStart_toStartOf="@id/priceTitle" />
@@ -178,24 +178,37 @@
             style="?iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp4"
+            android:layout_marginLeft="@dimen/dp4"
             android:layout_marginBottom="@dimen/dp8"
             android:onClick="@{()->viewModel.onCloseClick()}"
             android:text="@string/close"
-            android:visibility="@{viewModel.showPaymentErrorMessage}"
+            android:visibility="@{viewModel.showPaymentStatus}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/retryView"
+            app:layout_constraintWidth_percent=".45" />
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/retryView"
+            style="@style/BaseIGapButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->viewModel.onRetryClick()}"
+            android:text="@string/retry"
+            android:visibility="@{viewModel.showRetryView}"
+            app:backgroundTint="@color/layout_background_top_connectivity"
+            app:layout_constraintBottom_toBottomOf="@id/closeButton"
+            app:layout_constraintEnd_toStartOf="@id/closeButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent=".5" />
+            app:layout_constraintTop_toTopOf="@id/closeButton"
+            app:layout_constraintWidth_percent=".45" />
 
         <android.support.design.button.MaterialButton
             android:id="@+id/cancelButton"
             style="@style/BaseIGapButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp8"
-            android:layout_marginLeft="@dimen/dp8"
-            android:layout_marginEnd="@dimen/dp4"
-            android:layout_marginRight="@dimen/dp4"
             android:layout_marginBottom="@dimen/dp8"
             android:onClick="@{()->viewModel.onCancelClick()}"
             android:text="@string/cancel"
@@ -203,17 +216,14 @@
             app:backgroundTint="@color/red"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/acceptButton"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent=".45" />
 
         <android.support.design.button.MaterialButton
             android:id="@+id/acceptButton"
             style="@style/BaseIGapButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp4"
-            android:layout_marginLeft="@dimen/dp4"
-            android:layout_marginEnd="@dimen/dp8"
-            android:layout_marginRight="@dimen/dp8"
             android:onClick="@{()->viewModel.onAcceptClick()}"
             android:text="@string/pay"
             android:visibility="@{viewModel.showButtons}"
@@ -221,28 +231,14 @@
             app:layout_constraintBottom_toBottomOf="@id/cancelButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/cancelButton"
-            app:layout_constraintTop_toTopOf="@id/cancelButton" />
+            app:layout_constraintTop_toTopOf="@id/cancelButton"
+            app:layout_constraintWidth_percent=".45" />
 
         <ProgressBar
             android:id="@+id/loadingView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="@{viewModel.showLoadingView}"
-            app:layout_constraintBottom_toBottomOf="@id/v"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/v" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/retryView"
-            style="@style/myIconTextViewStyle"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="@dimen/dp48"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:onClick="@{()->viewModel.onRetryClick()}"
-            android:text="@string/retry_icon"
-            android:textSize="@dimen/largeTextSize"
-            android:visibility="@{viewModel.showRetryView}"
             app:layout_constraintBottom_toBottomOf="@id/v"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -93,12 +93,6 @@ public class PaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getShowErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
-            if (getContext() != null && errorMessage != null) {
-                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
-            }
-        });
-
         viewModel.getGoToWebPage().observe(getViewLifecycleOwner(), webLink -> {
             if (getActivity() != null && webLink != null) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webLink));

@@ -26,6 +26,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,6 +87,8 @@ import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.enums.SendingStep;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.payment.PaymentCallBack;
+import net.iGap.payment.PaymentResult;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
@@ -1861,7 +1864,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     public void onBotBtnClick(View v, ButtonEntity buttonEntity) {
-        try (final Realm realm = Realm.getDefaultInstance()) {
+        try (Realm realm = Realm.getDefaultInstance()) {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
                 //TODO: fixed this and do not use G.currentActivity
                 HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity,((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
@@ -1929,6 +1932,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             } else if (v.getId() == ButtonActionType.PAY_DIRECT) {
                 JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
+                Log.wtf(this.getClass().getName(),"tag: " + ((ArrayList<String>) v.getTag()).get(0));
                 RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getRoomId()).findFirst();
                 long peerId;
                 if (room != null && room.getChatRoom() != null) {
@@ -1936,7 +1940,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 } else {
                     peerId = mMessage.getUserId();
                 }
-                DirectPayHelper.directPayBot(jsonObject, peerId);
+                new HelperFragment(G.currentActivity.getSupportFragmentManager()).loadPayment(room.getTitle(), jsonObject.getString("token"), new PaymentCallBack() {
+                    @Override
+                    public void onPaymentFinished(PaymentResult result) {
+
+                    }
+                });
             } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
                 JSONObject rootJsonObject = new JSONObject(buttonEntity.getJsonObject());
                 JSONObject valueObject = rootJsonObject.getJSONObject("value");

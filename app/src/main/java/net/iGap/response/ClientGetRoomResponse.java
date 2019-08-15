@@ -107,31 +107,29 @@ public class ClientGetRoomResponse extends MessageHandler {
                                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        final Realm realm = Realm.getDefaultInstance();
-
-                                        realm.executeTransactionAsync(new Realm.Transaction() {
-                                            @Override
-                                            public void execute(Realm realm) {
-                                                putOrUpdate(clientGetRoom.getRoom(), realm);
-                                            }
-                                        }, new Realm.Transaction.OnSuccess() {
-                                            @Override
-                                            public void onSuccess() {
-                                                G.handler.post(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        if (G.onClientGetRoomResponse != null) {
-                                                            G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identityClientGetRoom);
+                                        try (Realm realm = Realm.getDefaultInstance()) {
+                                            realm.executeTransactionAsync(new Realm.Transaction() {
+                                                @Override
+                                                public void execute(Realm realm) {
+                                                    putOrUpdate(clientGetRoom.getRoom(), realm);
+                                                }
+                                            }, new Realm.Transaction.OnSuccess() {
+                                                @Override
+                                                public void onSuccess() {
+                                                    G.handler.post(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            if (G.onClientGetRoomResponse != null) {
+                                                                G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identityClientGetRoom);
+                                                            }
+                                                            if (G.onClientGetRoomResponseRoomList != null) {
+                                                                G.onClientGetRoomResponseRoomList.onClientGetRoomResponse(clientGetRoom.getRoom().getId());
+                                                            }
                                                         }
-                                                        if (G.onClientGetRoomResponseRoomList != null) {
-                                                            G.onClientGetRoomResponseRoomList.onClientGetRoomResponse(clientGetRoom.getRoom().getId());
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                        });
-
-                                        realm.close();
+                                                    });
+                                                }
+                                            });
+                                        }
                                     }
                                 });
                             }

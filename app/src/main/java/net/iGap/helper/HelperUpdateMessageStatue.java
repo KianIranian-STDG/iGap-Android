@@ -26,36 +26,36 @@ public class HelperUpdateMessageStatue {
         if (!response.getId().isEmpty()) { // I'm sender
             RealmClientCondition.deleteOfflineAction(messageId, status);
         } else {  // I'm recipient
-            final Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    /**
-                     * clear unread count if another account was saw this message
-                     */
-                    RealmRoom.clearUnreadCount(roomId, authorHash, status, messageId);
-
-                    /**
-                     * find message from database and update its status
-                     */
-                    RealmRoomMessage roomMessage = RealmRoomMessage.setStatusServerResponse(realm, messageId, statusVersion, status);
-                    if (roomMessage != null) {
-                        if (G.chatUpdateStatusUtil != null) {
-                            G.chatUpdateStatusUtil.onChatUpdateStatus(roomId, messageId, status, statusVersion);
-                        }
-                    } else if (status == ProtoGlobal.RoomMessageStatus.SEEN) {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
                         /**
-                         * reason : getRoomList will be updated status in Realm and after that when
-                         * client get status here and was in chat will not be updated status in second
-                         * so i use from this block for avoid from this problem
+                         * clear unread count if another account was saw this message
                          */
-                        if (G.chatUpdateStatusUtil != null) {
-                            G.chatUpdateStatusUtil.onChatUpdateStatus(roomId, messageId, status, statusVersion);
+                        RealmRoom.clearUnreadCount(roomId, authorHash, status, messageId);
+
+                        /**
+                         * find message from database and update its status
+                         */
+                        RealmRoomMessage roomMessage = RealmRoomMessage.setStatusServerResponse(realm, messageId, statusVersion, status);
+                        if (roomMessage != null) {
+                            if (G.chatUpdateStatusUtil != null) {
+                                G.chatUpdateStatusUtil.onChatUpdateStatus(roomId, messageId, status, statusVersion);
+                            }
+                        } else if (status == ProtoGlobal.RoomMessageStatus.SEEN) {
+                            /**
+                             * reason : getRoomList will be updated status in Realm and after that when
+                             * client get status here and was in chat will not be updated status in second
+                             * so i use from this block for avoid from this problem
+                             */
+                            if (G.chatUpdateStatusUtil != null) {
+                                G.chatUpdateStatusUtil.onChatUpdateStatus(roomId, messageId, status, statusVersion);
+                            }
                         }
                     }
-                }
-            });
-            realm.close();
+                });
+            }
         }
     }
 }

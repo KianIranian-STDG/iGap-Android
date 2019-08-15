@@ -140,27 +140,27 @@ public class StructMessageAttachment implements Parcelable {
 
     public void setLocalFilePath(final long messageId, @Nullable final String path) {
         this.localFilePath = path;
-        Realm realm = Realm.getDefaultInstance();
-        final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
-        if (realmAttachment == null) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
-                    messageAttachment.setLocalFilePath(path);
-                }
-            });
-        } else {
-            if (realmAttachment.getLocalFilePath() == null) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
+            if (realmAttachment == null) {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        realmAttachment.setLocalFilePath(path);
+                        RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
+                        messageAttachment.setLocalFilePath(path);
                     }
                 });
+            } else {
+                if (realmAttachment.getLocalFilePath() == null) {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            realmAttachment.setLocalFilePath(path);
+                        }
+                    });
+                }
             }
         }
-        realm.close();
     }
 
     @Nullable
@@ -170,25 +170,25 @@ public class StructMessageAttachment implements Parcelable {
 
     public void setLocalThumbnailPath(final long messageId, @Nullable final String localPath) {
         this.localThumbnailPath = localPath;
-        Realm realm = Realm.getDefaultInstance();
-        final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
-        if (realmAttachment == null) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
-                    messageAttachment.setLocalThumbnailPath(localPath);
-                }
-            });
-        } else {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realmAttachment.setLocalThumbnailPath(localPath);
-                }
-            });
+        try (Realm realm = Realm.getDefaultInstance()) {
+            final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
+            if (realmAttachment == null) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
+                        messageAttachment.setLocalThumbnailPath(localPath);
+                    }
+                });
+            } else {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realmAttachment.setLocalThumbnailPath(localPath);
+                    }
+                });
+            }
         }
-        realm.close();
     }
 
     public boolean isFileExistsOnLocal() {
