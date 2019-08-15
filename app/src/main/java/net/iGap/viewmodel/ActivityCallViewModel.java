@@ -23,7 +23,6 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
-import net.iGap.fragments.QuickDeclineMessageFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperPublicMethod;
