@@ -23,6 +23,7 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
+import net.iGap.fragments.QuickDeclineMessageFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperPublicMethod;
@@ -81,6 +82,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     public MutableLiveData<Integer> playSound = new MutableLiveData<>();
     public MutableLiveData<Boolean> setAudioManagerSpeakerphoneOn = new MutableLiveData<>();
     public MutableLiveData<Boolean> setAudioManagerWithBluetooth = new MutableLiveData<>();
+    private MutableLiveData<Long> quickDeclineMessageLiveData = new MutableLiveData<>();
 
 
     private boolean isIncomingCall;
@@ -178,9 +180,9 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
     public void onClickBtnChat() {
         if (!isConnected && isIncomingCall) {
-            endCall();
-        }
-        HelperPublicMethod.goToChatRoom(userId, null, null);
+            quickDeclineMessageLiveData.postValue(userId);
+        }else
+            HelperPublicMethod.goToChatRoom(userId, null, null);
     }
 
     public void addPersonClickListener() {
@@ -492,7 +494,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         setAudioManagerSpeakerphoneOn.setValue(on);
     }
 
-    private void endCall() {
+    public void endCall() {
         UserStatusController.getInstance().setOffline();
         G.isInCall = false;
         G.callStripLayoutVisiblityListener.setValue(false);
@@ -687,5 +689,9 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     @Override
     public void onServiceDisconnected(int profile) {
 
+    }
+
+    public MutableLiveData<Long> getQuickDeclineMessageLiveData() {
+        return quickDeclineMessageLiveData;
     }
 }

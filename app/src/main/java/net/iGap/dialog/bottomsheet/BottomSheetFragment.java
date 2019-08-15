@@ -2,8 +2,8 @@ package net.iGap.dialog.bottomsheet;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -20,6 +20,7 @@ import net.iGap.databinding.FragmentBottomSheetDialogBinding;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.BottomSheetListAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
@@ -31,6 +32,16 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
 
     public BottomSheetFragment setData(List<String> itemListId, int range, BottomSheetItemClickCallback bottomSheetItemClickCallback) {
         this.itemList = itemListId;
+        this.range = range;
+        this.bottomSheetItemClickCallback = bottomSheetItemClickCallback;
+        return this;
+    }
+
+    public BottomSheetFragment setListDataWithResourceId(Context context,List<Integer> itemListId, int range, BottomSheetItemClickCallback bottomSheetItemClickCallback) {
+        this.itemList = new ArrayList<>();
+        for (int i = 0; i < itemListId.size(); i++) {
+            this.itemList.add(context.getString(itemListId.get(i)));
+        }
         this.range = range;
         this.bottomSheetItemClickCallback = bottomSheetItemClickCallback;
         return this;

@@ -2907,4 +2907,8 @@
     <string name="charge_type_error_message">يرجى اختيار نوع الشحن.</string>
     <string name="charge_price_error_message">يرجى تحديد مبلغ التهمة.</string>
     <string name="no_channels_in_category">لا توجد قنوات في هذه الفئة!</string>
+    <string name="message_decline_write_new">إنشاء رسالة جديدة …</string>
+    <string name="message_decline_call_later">أنا ، أنا أتصل بك مرة أخرى.</string>
+    <string name="message_decline_Please_call_later">يمكنك الاتصال مرة أخرى في وقت لاحق؟</string>
+    <string name="message_decline_please_text_me">يرجى نص لي.</string>
 </resources>

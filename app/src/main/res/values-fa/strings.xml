@@ -1964,6 +1964,11 @@
     <string name="charge_type_error_message">لطفا نوع شارژ را انتخاب کنید.</string>
     <string name="charge_price_error_message">لطفا مبلغ شارژ را انتخاب کنید.</string>
     <string name="no_channels_in_category">هیچ کانالی در این دسته بندی وجود ندارد!</string>
+    <string name="message_decline_write_new">نوشتن پیام جدید…</string>
+    <string name="message_decline_call_later">با شما تماس میگیرم.</string>
+    <string name="message_decline_Please_call_later">ممکن است بعدا تماس بگیرید؟</string>
+    <string name="message_decline_please_text_me">لطفا پیام بدهید.</string>
+
 
 
 </resources>

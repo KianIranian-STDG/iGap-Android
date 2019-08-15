@@ -11,19 +11,18 @@
 package net.iGap.helper;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnUserInfoResponse;
+import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
+import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestUserInfo;
 
@@ -55,6 +54,68 @@ public class HelperPublicMethod {
                             realm.executeTransaction(realm1 -> {
                                 RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
                                 room1.setDeleted(true);
+                            });
+                        }
+                        getUserInfo(peerId, room.getId(), onComplete, onError);
+
+                        G.onChatGetRoom = null;
+                    }
+
+                    @Override
+                    public void onChatGetRoomTimeOut() {
+
+                        if (onError != null) {
+                            onError.error();
+                        }
+                    }
+
+                    @Override
+                    public void onChatGetRoomError(int majorCode, int minorCode) {
+
+                        if (onError != null) {
+                            onError.error();
+                        }
+                    }
+                };
+
+                if (G.userLogin) {
+                    new RequestChatGetRoom().chatGetRoom(peerId);
+                } else {
+                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                    if (onError != null) {
+                        onError.error();
+                    }
+                }
+            }
+        }
+    }
+
+
+    public static void goToChatRoomWithMessage(final long peerId,String message, final OnComplete onComplete, final OnError onError) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+
+            if (realmRoom != null) {
+
+                if (onComplete != null) {
+                    onComplete.complete();
+                }
+
+                goToRoomWithTextMessage(realmRoom.getId(),message,realmRoom.getType(), -1);
+
+            } else {
+                G.onChatGetRoom = new OnChatGetRoom() {
+                    @Override
+                    public void onChatGetRoom(final ProtoGlobal.Room room) {
+
+                        if (onError != null) {
+                            onError.error();
+                        }
+                        try (Realm realm = Realm.getDefaultInstance()) {
+                            realm.executeTransaction(realm1 -> {
+                                RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
+                                room1.setDeleted(true);
+                                goToRoomWithTextMessage(room1.getId(),message,room1.getType(), -1);
                             });
                         }
                         getUserInfo(peerId, room.getId(), onComplete, onError);
@@ -207,6 +268,24 @@ public class HelperPublicMethod {
 
         Intent intent = new Intent(G.context, ActivityMain.class);
         intent.putExtra(ActivityMain.openChat, roomid);
+        if (peerId >= 0) {
+            intent.putExtra("PeerID", peerId);
+        }
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        G.context.startActivity(intent);
+    }
+
+    private static void goToRoomWithTextMessage(long roomId, String message, ProtoGlobal.Room.Type type, long peerId) {
+
+        if (message != null && message.length() > 0 && roomId > 0) {
+            String identity = Long.toString(System.currentTimeMillis());
+            RealmRoomMessage.makeTextMessage(roomId, Long.parseLong(identity), message);
+            new ChatSendMessageUtil().newBuilder(type, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(identity);
+        }
+
+        Intent intent = new Intent(G.context, ActivityMain.class);
+        intent.putExtra(ActivityMain.openChat, roomId);
         if (peerId >= 0) {
             intent.putExtra("PeerID", peerId);
         }

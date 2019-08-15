@@ -1961,4 +1961,8 @@ Want to get it?</string>
     <string name="charge_type_error_message">Please Select Charge Type</string>
     <string name="charge_price_error_message">Please select Charge Price</string>
     <string name="no_channels_in_category">There are no channels in this category!</string>
+    <string name="message_decline_write_new">Compose new message…</string>
+    <string name="message_decline_call_later">I,II call you back.</string>
+    <string name="message_decline_Please_call_later">Can you call back later?</string>
+    <string name="message_decline_please_text_me">Please text me.</string>
 </resources>
