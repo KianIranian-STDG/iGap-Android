@@ -3,6 +3,7 @@ package net.iGap.helper;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -148,6 +149,7 @@ public class GoToChatActivity {
     }
 
     private void loadChatFragment(FragmentActivity activity){
+        Log.wtf(this.getClass().getName(),"loadChatFragment");
         FragmentChat fragmentChat = new FragmentChat();
         fragmentChat.setArguments(getBundle());
         if (G.twoPaneMode){

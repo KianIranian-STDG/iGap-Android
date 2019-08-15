@@ -180,7 +180,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         ViewGroup layoutToolbar = view.findViewById(R.id.amr_layout_toolbar);
 
-        if (G.twoPaneMode && G.isLandscape) {
+        /*if (G.twoPaneMode && G.isLandscape) {
             mHelperToolbar = HelperToolbar.create()
                     .setContext(getContext())
                     .setTabletIcons(R.string.add_icon, R.string.edit_icon, R.string.search_icon)
@@ -191,7 +191,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             mHelperToolbar.getTabletUserName().setText(userInfo.getUserInfo().getDisplayName());
             mHelperToolbar.getTabletUserPhone().setText(userInfo.getUserInfo().getPhoneNumber());
             avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getTabletUserAvatar(), userInfo.getUserId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
-        } else {
+        } else {*/
             mHelperToolbar = HelperToolbar.create()
                     .setContext(getContext())
                     .setLeftIcon(R.string.edit_icon)
@@ -204,7 +204,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                     .setSearchBoxShown(true, false)
                     .setListener(this);
             layoutToolbar.addView(mHelperToolbar.getView());
-        }
+        /*}*/
 
         mBtnRemoveSelected = view.findViewById(R.id.amr_btn_delete_selected);
         TextView mBtnClearCacheSelected = view.findViewById(R.id.amr_btn_clear_cache_selected);
@@ -867,14 +867,14 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             mRecyclerView.setLayoutParams(marginLayoutParams)*/
             isChatMultiSelectEnable = false;
             refreshChatList(0, true);
-            if (G.isLandscape && G.twoPaneMode) {
+            /*if (G.isLandscape && G.twoPaneMode) {
                 mHelperToolbar.getTabletAddIcon().setVisibility(View.VISIBLE);
                 mHelperToolbar.getTabletSearchIcon().setVisibility(View.VISIBLE);
                 mHelperToolbar.getTabletEditIcon().setText(R.string.edit_icon);
-            } else {
+            } else {*/
                 mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
                 mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
-            }
+            /*}*/
             if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
             mHelperToolbar.setLeftIcon(R.string.edit_icon);
             mSelectedRoomList.clear();
@@ -885,18 +885,18 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             mRecyclerView.setLayoutParams(marginLayoutParams);*/
             isChatMultiSelectEnable = true;
             refreshChatList(0, true);
-            if (G.twoPaneMode && G.isLandscape) {
+            /*if (G.twoPaneMode && G.isLandscape) {
                 mHelperToolbar.getTabletAddIcon().setVisibility(View.INVISIBLE);
                 mHelperToolbar.getTabletSearchIcon().setVisibility(View.INVISIBLE);
                 mHelperToolbar.getTabletEditIcon().setText(R.string.close_icon);
-            } else {
+            } else {*/
                 mHelperToolbar.getRightButton().setVisibility(View.GONE);
                 mHelperToolbar.getScannerButton().setVisibility(View.GONE);
                 mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
                 if (!mHelperToolbar.getmSearchBox().isShown()) {
                     mHelperToolbar.animateSearchBox(false, 0, 0);
                 }
-            }
+            /*}*/
             mHelperToolbar.setLeftIcon(R.string.back_icon);
 
         }

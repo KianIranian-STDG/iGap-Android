@@ -59,12 +59,10 @@ import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentLanguage;
-import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
-import net.iGap.fragments.FragmentiGapMap;
-import net.iGap.fragments.TabletMainFragment;
+import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
@@ -498,20 +496,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 };
 
                 designLayout(chatLayoutMode.none);
-
-                DisplayMetrics displayMetrics = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                int height = displayMetrics.heightPixels;
-                int width = displayMetrics.widthPixels;
-
-                int size = Math.min(width, height) - 50;
-
-                FrameLayout frameFragmentContainer = findViewById(R.id.detailFrame);
-                ViewGroup.LayoutParams lp = frameFragmentContainer.getLayoutParams();
-                lp.width = size;
-                lp.height = size;
-
-                findViewById(R.id.fullScreenFrame).setOnClickListener(view -> onBackPressed());
+                new HelperFragment(getSupportFragmentManager(), new TabletEmptyChatFragment()).load(true);
+                setDialogFragmentSize();
 
                 G.iTowPanModDesinLayout = new ITowPanModDesinLayout() {
                     @Override
@@ -666,11 +652,37 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             setContentView(textView);
             showToast(textView);
         }
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                Log.wtf(this.getClass().getName(),"------------------------------------------------");
+                for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount() ; i++){
+                    Log.wtf(this.getClass().getName(),"fragment: "+ getSupportFragmentManager().getBackStackEntryAt(i).getName());
+                }
+                Log.wtf(this.getClass().getName(),"------------------------------------------------");
+            }
+        });
         Log.wtf(this.getClass().getName(), "onCreate");
     }
 
     private boolean checkValidationForRealm(RealmUserInfo realmUserInfo) {
         return realmUserInfo != null && realmUserInfo.isManaged() && realmUserInfo.isValid() && realmUserInfo.isLoaded();
+    }
+
+    private void setDialogFragmentSize() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        int size = Math.min(width, height) - 50;
+
+        FrameLayout frameFragmentContainer = findViewById(R.id.detailFrame);
+        ViewGroup.LayoutParams lp = frameFragmentContainer.getLayoutParams();
+        lp.width = size;
+        lp.height = size;
+
+        findViewById(R.id.fullScreenFrame).setOnClickListener(view -> onBackPressed());
     }
 
     private void showToast(View view) {
@@ -1076,14 +1088,32 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
             if (beforeState != G.isLandscape) {
-                designLayout(chatLayoutMode.none);
+                /*designLayout(chatLayoutMode.none);*/
+                Log.wtf(this.getClass().getName(), "onConfigurationChanged");
+                setViewConfigurationChanged();
             }
-
-
+            setDialogFragmentSize();
         }
-
         super.onConfigurationChanged(newConfig);
         G.rotationState = newConfig.orientation;
+    }
+
+    private void setViewConfigurationChanged() {
+        if (G.twoPaneMode) {
+            if (G.isLandscape) {
+                Log.wtf(this.getClass().getName(), "isLandscape");
+                findViewById(R.id.mainFrame).setVisibility(View.VISIBLE);
+                findViewById(R.id.roomListFrame).setVisibility(View.VISIBLE);
+            } else {
+                Log.wtf(this.getClass().getName(), "not Landscape");
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                if (fragment instanceof FragmentChat) {
+                    findViewById(R.id.roomListFrame).setVisibility(View.GONE);
+                } else {
+                    findViewById(R.id.mainFrame).setVisibility(View.GONE);
+                }
+            }
+        }
     }
 
     //******************************************************************************************************************************
@@ -1182,6 +1212,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
+        Log.wtf(this.getClass().getName(), "onBackPressed");
         if (G.ISOK) {
             if (G.onBackPressedWebView != null) {
                 if (G.onBackPressedWebView.onBack()) {
@@ -1193,70 +1224,85 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (G.onBackPressedExplorer.onBack()) {
                     return;
                 }
-            } else if (G.onBackPressedChat != null) {
+            }/* else if (G.onBackPressedChat != null) {
+                Log.wtf(this.getClass().getName(),"onBackPressedChat");
                 if (G.onBackPressedChat.onBack()) {
                     return;
                 }
-            }
+            }*/
 
             if (onBackPressedListener != null) {
+                Log.wtf(this.getClass().getName(), "onBackPressedChat");
                 onBackPressedListener.doBack();
             }
             if (G.twoPaneMode) {
                 if (findViewById(R.id.fullScreenFrame).getVisibility() == View.VISIBLE) {//handle back in fragment show like dialog
-                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.detailFrame);
-                    if (fragment != null) {
+                    Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fullScreenFrame);
+                    if (frag == null) {
+                        Log.wtf(this.getClass().getName(), "pop from: detailFrame");
+                        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.detailFrame);
+                        if (fragment != null) {
+                            getSupportFragmentManager().popBackStackImmediate();
+                        }
+                        Fragment fragmentShowed = getSupportFragmentManager().findFragmentById(R.id.detailFrame);
+                        if (fragmentShowed == null) {
+                            findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
+                        }
+                    } else {
+                        Log.wtf(this.getClass().getName(), "pop from: fullScreenFrame");
                         getSupportFragmentManager().popBackStackImmediate();
-                    }
-                    Fragment fragmentShowed = getSupportFragmentManager().findFragmentById(R.id.detailFrame);
-                    if (fragmentShowed == null) {
                         findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
                     }
                 } else {
-                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
-                    if (fragment instanceof BottomNavigationFragment) {
-                        Fragment f = ((BottomNavigationFragment) fragment).getViewPagerCurrentFragment();
-                        if (f != null && f.getChildFragmentManager().getBackStackEntryCount() > 1) {
-                            f.getChildFragmentManager().popBackStackImmediate();
-                            if (f instanceof TabletMainFragment) {
-                                ((TabletMainFragment) f).handleFirstFragment();
+                    if (getSupportFragmentManager().getBackStackEntryCount() > 2) {
+                        Log.wtf(this.getClass().getName(), "pop from: backStack");
+                        if (getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(FragmentChat.class.getName())) {
+                            if (G.isLandscape) {
+                                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.roomListFrame);
+                                if (fragment instanceof BottomNavigationFragment) {
+                                    if (((BottomNavigationFragment) fragment).isAllowToBackPressed()) {
+                                        getSupportFragmentManager().popBackStackImmediate();
+                                    }
+                                } else {
+                                    getSupportFragmentManager().popBackStackImmediate();
+                                }
+                            } else {
+                                getSupportFragmentManager().popBackStackImmediate();
+                                findViewById(R.id.mainFrame).setVisibility(View.GONE);
+                                findViewById(R.id.roomListFrame).setVisibility(View.VISIBLE);
                             }
                         } else {
-                            if (((BottomNavigationFragment) fragment).isFirstTabItem()) {
-                                finish();
-                            }
+                            getSupportFragmentManager().popBackStackImmediate();
                         }
                     } else {
-                        finish();
-                    }
-                }
-            } else {
-                if (getSupportFragmentManager() != null ) {
-                    if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                        if (getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment) {
-                            ((PaymentFragment) getSupportFragmentManager().findFragmentById(R.id.mainFrame)).onBackPressed();
-                        } else {
-                            super.onBackPressed();
-                        }
-                    } else {
-                        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.roomListFrame);
                         if (fragment instanceof BottomNavigationFragment) {
                             if (((BottomNavigationFragment) fragment).isAllowToBackPressed()) {
                                 if (((BottomNavigationFragment) fragment).isFirstTabItem()) {
+                                    Log.wtf(this.getClass().getName(), "pop from: finish");
                                     finish();
                                 }
                             }
                         }
                     }
-                }else{
-                    super.onBackPressed();
                 }
-                /*if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() < 1) {
-                    if (!this.isFinishing()) {
-                        resume();
+            } else {
+                if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                    if (getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment) {
+                        ((PaymentFragment) getSupportFragmentManager().findFragmentById(R.id.mainFrame)).onBackPressed();
+                    } else {
+                        super.onBackPressed();
+                    }
+                } else {
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                    if (fragment instanceof BottomNavigationFragment) {
+                        if (((BottomNavigationFragment) fragment).isAllowToBackPressed()) {
+                            if (((BottomNavigationFragment) fragment).isFirstTabItem()) {
+                                finish();
+                            }
+                        }
                     }
                 }
-                designLayout(chatLayoutMode.none);*/
             }
         } else {
             super.onBackPressed();
@@ -1340,7 +1386,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void enterPassword() {
-
         Intent intent = new Intent(ActivityMain.this, ActivityEnterPassCode.class);
         startActivity(intent);
     }
@@ -1461,13 +1506,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public void designLayout(final chatLayoutMode mode) {
         if (G.twoPaneMode) {
-            findViewById(R.id.roomListFrame).setVisibility(G.isLandscape ? View.VISIBLE : View.GONE);
-            if (G.isLandscape) {
-                new HelperFragment(getSupportFragmentManager(), FragmentMain.newInstance(FragmentMain.MainType.all)).load(true);
+            findViewById(R.id.mainFrame).setVisibility(G.isLandscape ? View.VISIBLE : View.GONE);
+            /*if (G.isLandscape) {
+                new HelperFragment(getSupportFragmentManager(), new TabletEmptyChatFragment()).load(true);
             } else {
                 //todo: check if exist fragment remove it
-                /*new HelperFragment(getSupportFragmentManager(),new FragmentMain()).remove();*/
-            }
+                new HelperFragment(getSupportFragmentManager(),new FragmentMain()).remove();
+            }*/
                     /*if (frameFragmentContainer != null) {
                         if (frameFragmentContainer.getChildCount() == 0) {
                             *//*if (frameFragmentBack != null) {
@@ -1751,17 +1796,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void goToUserProfile() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.roomListFrame);
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).goToUserProfile();
         }
     }
 
     public void goToChatPage(FragmentChat fragmentChat) {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
-        if (fragment instanceof BottomNavigationFragment) {
-            ((BottomNavigationFragment) fragment).setChatPage(fragmentChat);
+        Log.wtf(this.getClass().getName(), "goToChatPage");
+        if (findViewById(R.id.mainFrame).getVisibility() != View.VISIBLE) {
+            findViewById(R.id.mainFrame).setVisibility(View.VISIBLE);
+            findViewById(R.id.roomListFrame).setVisibility(View.GONE);
         }
+        new HelperFragment(getSupportFragmentManager(), fragmentChat).setReplace(false).load();
     }
 
     //removeAllFragmentLoadedLikeDialogInTabletMode
@@ -1786,7 +1833,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    public void setForwardMessage(boolean enable){
+    public void setForwardMessage(boolean enable) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).setForwardMessage(enable);

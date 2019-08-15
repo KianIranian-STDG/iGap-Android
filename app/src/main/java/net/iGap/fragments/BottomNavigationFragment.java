@@ -70,31 +70,16 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
             case 2:
-                if (G.twoPaneMode) {
-                    fragment = fragmentManager.findFragmentByTag(TabletMainFragment.class.getName());
-                    if (fragment == null) {
-                        fragment = new TabletMainFragment();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    } /*else {
-                        Log.wtf(this.getClass().getName(),"loadFragment in else position2");
-                        if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof TabletMainFragment)) {
-                            fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
-                        }
-                        fragmentTransaction.show(fragment).commit();
-                    }*/
-                    fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                fragment = fragmentManager.findFragmentByTag(FragmentMain.class.getName());
+                if (fragment == null) {
+                    fragment = FragmentMain.newInstance(FragmentMain.MainType.all);
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 } else {
-                    fragment = fragmentManager.findFragmentByTag(FragmentMain.class.getName());
-                    if (fragment == null) {
-                        fragment = FragmentMain.newInstance(FragmentMain.MainType.all);
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
-                    } else {
-                        if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
-                            fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
-                        }
-                        fragmentTransaction.show(fragment).commit();
+                    if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
+                        fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
                     }
+                    fragmentTransaction.show(fragment).commit();
                 }
                 break;
             case 3:
@@ -199,10 +184,10 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }
     }
 
-    public void setForwardMessage(boolean enable){
+    public void setForwardMessage(boolean enable) {
         Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentMain.class.getName());
 
-        if (fragment instanceof FragmentMain){
+        if (fragment instanceof FragmentMain) {
             ((FragmentMain) fragment).setForwardMessage(enable);
         }
     }

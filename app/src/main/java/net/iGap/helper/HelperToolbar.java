@@ -631,7 +631,7 @@ public class HelperToolbar {
     }
 
     public void checkPassCodeVisibility() {
-        if (!G.isLandscape) {
+        if (passCodeBtn != null) {
             if (G.isPassCode) {
                 passCodeBtn.setVisibility(View.VISIBLE);
                 ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
