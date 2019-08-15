@@ -368,10 +368,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         super.bindView(holder, payloads);
 
         NewChatItemHolder mHolder;
-        if (holder instanceof NewChatItemHolder)
+        if (holder instanceof NewChatItemHolder) {
             mHolder = (NewChatItemHolder) holder;
-        else
+        } else if (holder instanceof LogItem.ViewHolder ||
+                holder instanceof LogWalletCardToCard.ViewHolder ||
+                holder instanceof LogWallet.ViewHolder) {
+            messageClickListener.onItemShowingMessageId(mMessage);
             return;
+        } else {
+            return;
+        }
 
         mHolder.getItemContainer().setOnClickListener(new View.OnClickListener() {
             @Override
