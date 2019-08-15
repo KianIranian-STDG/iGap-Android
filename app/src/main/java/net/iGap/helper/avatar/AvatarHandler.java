@@ -127,27 +127,36 @@ public class AvatarHandler {
     }
 
     private void notifyMe(String avatarPath, long avatarOwnerId, boolean isMain, long fileId, long avatarId) {
+        ArrayList<Long> myLimitedList;
+        ConcurrentHashMap<Long, CacheValue> myAvatarCache;
+        int limit;
+        if (isMain) {
+            myAvatarCache = avatarCacheMain;
+            myLimitedList = limitedListMain;
+            limit = 1;
+        } else {
+            myAvatarCache = avatarCache;
+            myLimitedList = limitedList;
+            limit = 20;
+        }
+
+        CacheValue cache = myAvatarCache.get(avatarOwnerId);
+        if (cache != null && cache.fileId == fileId) {
+            return;
+        }
+        
         final Bitmap bmImg = BitmapFactory.decodeFile(avatarPath);
         if (bmImg != null) {
             synchronized (mutex3) {
-                ArrayList<Long> myLimitedList;
-                ConcurrentHashMap<Long, CacheValue> myAvatarCache;
-                int limit;
-                if (isMain) {
-                    myAvatarCache = avatarCacheMain;
-                    myLimitedList = limitedListMain;
-                    limit = 1;
-                } else {
-                    myAvatarCache = avatarCache;
-                    myLimitedList = limitedList;
-                    limit = 15;
-                }
-
                 myAvatarCache.put(avatarOwnerId, new CacheValue(bmImg, fileId, avatarId));
                 int index = myLimitedList.indexOf(avatarOwnerId);
                 if (index < 0) {
                     if (myLimitedList.size() > limit) {
                         Long ss = myLimitedList.remove(0);
+//                        CacheValue cacheValue = myAvatarCache.get(ss);
+//                        if (cacheValue != null && cacheValue.bitmap != null) {
+//                            cacheValue.bitmap.recycle();
+//                        }
                         myAvatarCache.remove(ss);
                     }
                     myLimitedList.add(avatarOwnerId);
