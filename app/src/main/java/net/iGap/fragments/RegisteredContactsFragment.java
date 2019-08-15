@@ -265,8 +265,12 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         realmRecyclerView = view.findViewById(R.id.recycler_view);
         realmRecyclerView.setLayoutManager(new ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false, 1000));
         realmRecyclerView.setNestedScrollingEnabled(false);
-        FastScroller fastScroller = view.findViewById(R.id.fast_scroller);
-        fastScroller.setRecyclerView(realmRecyclerView);
+        if (realmRecyclerView.getAdapter().getItemCount() > 0) {
+            FastScroller fastScroller = view.findViewById(R.id.fast_scroller);
+            fastScroller.setRecyclerView(realmRecyclerView);
+        } else {
+            view.findViewById(R.id.fast_scroller).setVisibility(View.GONE);
+        }
 
 
         onClickRecyclerView = (v, position) -> {
