@@ -2927,11 +2927,10 @@ public class FragmentChat extends BaseFragment
                 gongingHandler.removeCallbacks(gongingRunnable);
                 gongingHandler.postDelayed(gongingRunnable, 1000);
 
-                if (pastVisibleItems + visibleItemCount >= totalItemCount && !isAnimateStart) {
-                    isScrollEnd = false;
+                if (pastVisibleItems + visibleItemCount + 1 >= totalItemCount && !isAnimateStart) {
                     isAnimateStart = true;
                     isAnimateStart = false;
-                    llScrollNavigate.setVisibility(View.GONE);
+                    setDownBtnGone();
 //                    llScrollNavigate.animate()
 //                            .alpha(0.0f)
 //                            .translationY(llScrollNavigate.getHeight() / 2)
