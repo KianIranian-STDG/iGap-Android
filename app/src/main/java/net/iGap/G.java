@@ -371,6 +371,8 @@ public class G extends Application {
     public static OnMplResult onMplResult;
     public static OnVersionCallBack onVersionCallBack;
     public static OnContactImport onContactImport;
+    public static OnMplTransaction onMplTransaction;
+    public static OnMplTransactionInfo onMplTransactionInfo;
     /*public static OnUserProfileSetRepresentative onUserProfileSetRepresentative;*/
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;

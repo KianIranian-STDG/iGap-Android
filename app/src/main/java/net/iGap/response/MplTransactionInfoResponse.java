@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoMplTransactionInfo;
 
 public class MplTransactionInfoResponse extends MessageHandler {
@@ -31,16 +32,21 @@ public class MplTransactionInfoResponse extends MessageHandler {
         super.handler();
         ProtoMplTransactionInfo.MplTransactionInfoResponse.Builder builder = (ProtoMplTransactionInfo.MplTransactionInfoResponse.Builder) message;
 
-        //todo :// handle response
+        if (G.onMplTransactionInfo != null)
+            G.onMplTransactionInfo.onMplTransAction(builder.getTransaction());
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        if (G.onMplTransactionInfo != null)
+            G.onMplTransactionInfo.onError();
     }
 
     @Override
     public void error() {
         super.error();
+        if (G.onMplTransactionInfo != null)
+            G.onMplTransactionInfo.onError();
     }
 }
