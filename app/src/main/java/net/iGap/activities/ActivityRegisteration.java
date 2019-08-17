@@ -111,6 +111,8 @@ public class ActivityRegisteration extends ActivityEnhanced {
         String[] Permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (!hasPermissions(Permissions)) {
             ActivityCompat.requestPermissions(this, Permissions, 100);
+        }else{
+            startApp();
         }
     }
 

@@ -17,6 +17,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,9 +118,10 @@ public class FragmentIntroduce extends BaseFragment {
     }
 
     private void startRegistration() {
+        Log.wtf(this.getClass().getName(),"startRegistration");
         if (getActivity() != null) {
             if (G.socketConnection) {
-                getActivity().getSupportFragmentManager().popBackStackImmediate();
+                getActivity().getSupportFragmentManager().popBackStack();
                 getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, new FragmentRegister()).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
             } else {
                 G.handler.post(() -> HelperError.showSnackMessage(getString(R.string.waiting_for_connection), false));
