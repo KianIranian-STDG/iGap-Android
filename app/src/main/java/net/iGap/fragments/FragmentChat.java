@@ -2830,6 +2830,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View v) {
                 cancelAllRequestFetchHistory();
+                //Todo : also needed: block future Request
 
                 latestButtonClickTime = System.currentTimeMillis();
                 /**
@@ -2881,12 +2882,16 @@ public class FragmentChat extends BaseFragment
                      * and just need go to end position in list otherwise we should clear all
                      * items and reload again from bottom
                      */
-                    if (!addToView) {
-                        resetMessagingValue();
-                        getMessages();
-                    } else {
-                        scrollToEnd();
-                    }
+
+//                    if (!addToView) {
+//                        resetMessagingValue();
+//                        getMessages();
+//                    } else {
+//                        scrollToEnd();
+//                    }
+                    // Todo : Temporally fix bug please use above code with better performance.
+                    resetMessagingValue();
+                    getMessages();
                 }
             }
         });
