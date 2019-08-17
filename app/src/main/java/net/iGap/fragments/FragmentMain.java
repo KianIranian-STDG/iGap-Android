@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,9 +135,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private ViewGroup mLayoutMultiSelectedActions;
     private TextView mBtnRemoveSelected;
     private RealmResults<RealmRoom> results;
-    private ConstraintLayout root ;
-    private ConstraintSet constraintSet ;
-    private ViewGroup selectLayoutRoot ;
+    private ConstraintLayout root;
+    private ConstraintSet constraintSet;
+    private ViewGroup selectLayoutRoot;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -192,18 +193,18 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             mHelperToolbar.getTabletUserPhone().setText(userInfo.getUserInfo().getPhoneNumber());
             avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getTabletUserAvatar(), userInfo.getUserId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
         } else {*/
-            mHelperToolbar = HelperToolbar.create()
-                    .setContext(getContext())
-                    .setLeftIcon(R.string.edit_icon)
-                    .setRightIcons(R.string.add_icon)
-                    .setFragmentActivity(getActivity())
-                    .setPassCodeVisibility(true, R.string.unlock_icon)
-                    .setScannerVisibility(true, R.string.scan_qr_code_icon)
-                    .setLogoShown(true)
-                    .setPlayerEnable(true)
-                    .setSearchBoxShown(true, false)
-                    .setListener(this);
-            layoutToolbar.addView(mHelperToolbar.getView());
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.string.edit_icon)
+                .setRightIcons(R.string.add_icon)
+                .setFragmentActivity(getActivity())
+                .setPassCodeVisibility(true, R.string.unlock_icon)
+                .setScannerVisibility(true, R.string.scan_qr_code_icon)
+                .setLogoShown(true)
+                .setPlayerEnable(true)
+                .setSearchBoxShown(true, false)
+                .setListener(this);
+        layoutToolbar.addView(mHelperToolbar.getView());
         /*}*/
 
         mBtnRemoveSelected = view.findViewById(R.id.amr_btn_delete_selected);
@@ -248,8 +249,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                     .onPositive((dialog, which) -> {
                         dialog.dismiss();
 
-                        for (RealmRoom room : unreadList){
-                            markAsRead(room.getType() , room.getId());
+                        for (RealmRoom room : unreadList) {
+                            markAsRead(room.getType(), room.getId());
                         }
 
                         onLeftIconClickListener(v);
@@ -320,13 +321,13 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         try {
             if (mRecyclerView != null) {
 
-                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown() && isChatMultiSelectEnable){
+                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown() && isChatMultiSelectEnable) {
                     setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_music_player);
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
                     return;
                 }
 
-                if (G.isInCall && isChatMultiSelectEnable){
+                if (G.isInCall && isChatMultiSelectEnable) {
                     setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_call_layout);
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
                     return;
@@ -338,9 +339,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
                 } else if (G.isInCall) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp60), 0, 0);
-                }else if (isChatMultiSelectEnable){
+                } else if (isChatMultiSelectEnable) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp1), 0, 0);
-                }else {
+                } else {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
                 }
             }
@@ -855,48 +856,30 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     @Override
     public void onLeftIconClickListener(View view) {
 
-        if (!(G.isLandscape && G.twoPaneMode) && FragmentChat.mForwardMessages != null){
+        if (!(G.isLandscape && G.twoPaneMode) && FragmentChat.mForwardMessages != null) {
             revertToolbarFromForwardMode();
             return;
         }
 
         if (isChatMultiSelectEnable) {
             mLayoutMultiSelectedActions.setVisibility(View.GONE);
-            /*ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
-            marginLayoutParams.setMargins(0, (int) context.getResources().getDimension(R.dimen.margin_for_below_layouts_of_toolbar_with_search), 0, 10);
-            mRecyclerView.setLayoutParams(marginLayoutParams)*/
             isChatMultiSelectEnable = false;
             refreshChatList(0, true);
-            /*if (G.isLandscape && G.twoPaneMode) {
-                mHelperToolbar.getTabletAddIcon().setVisibility(View.VISIBLE);
-                mHelperToolbar.getTabletSearchIcon().setVisibility(View.VISIBLE);
-                mHelperToolbar.getTabletEditIcon().setText(R.string.edit_icon);
-            } else {*/
-                mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
-                mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
-            /*}*/
+            mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
+            mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
             if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
             mHelperToolbar.setLeftIcon(R.string.edit_icon);
             mSelectedRoomList.clear();
         } else {
             mLayoutMultiSelectedActions.setVisibility(View.VISIBLE);
-            /*ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) mRecyclerView.getLayoutParams();
-            marginLayoutParams.setMargins(0, (int) context.getResources().getDimension(R.dimen.margin_for_below_layouts_of_toolbar_with_room_selected_mode), 0, 10);
-            mRecyclerView.setLayoutParams(marginLayoutParams);*/
             isChatMultiSelectEnable = true;
             refreshChatList(0, true);
-            /*if (G.twoPaneMode && G.isLandscape) {
-                mHelperToolbar.getTabletAddIcon().setVisibility(View.INVISIBLE);
-                mHelperToolbar.getTabletSearchIcon().setVisibility(View.INVISIBLE);
-                mHelperToolbar.getTabletEditIcon().setText(R.string.close_icon);
-            } else {*/
-                mHelperToolbar.getRightButton().setVisibility(View.GONE);
-                mHelperToolbar.getScannerButton().setVisibility(View.GONE);
-                mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
-                if (!mHelperToolbar.getmSearchBox().isShown()) {
-                    mHelperToolbar.animateSearchBox(false, 0, 0);
-                }
-            /*}*/
+            mHelperToolbar.getRightButton().setVisibility(View.GONE);
+            mHelperToolbar.getScannerButton().setVisibility(View.GONE);
+            mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+            if (!mHelperToolbar.getmSearchBox().isShown()) {
+                mHelperToolbar.animateSearchBox(false, 0, 0);
+            }
             mHelperToolbar.setLeftIcon(R.string.back_icon);
 
         }
@@ -905,7 +888,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     public void revertToolbarFromForwardMode() {
-        FragmentChat.mForwardMessages = null ;
+        FragmentChat.mForwardMessages = null;
         mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
         mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
         mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
@@ -971,7 +954,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 .show();
     }
 
-    public void checkPassCodeIconVisibility(){
+    public void checkPassCodeIconVisibility() {
 
         if (mHelperToolbar != null) {
             mHelperToolbar.checkPassCodeVisibility();
@@ -1020,8 +1003,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         }
     }
 
-    private void setMargin(int mTop){
-        constraintSet.setMargin(selectLayoutRoot.getId() , ConstraintSet.TOP , i_Dp(mTop));
+    private void setMargin(int mTop) {
+        constraintSet.setMargin(selectLayoutRoot.getId(), ConstraintSet.TOP, i_Dp(mTop));
         constraintSet.applyTo(root);
     }
 
@@ -1059,13 +1042,13 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     @Override
     public boolean isAllowToBackPressed() {
-        if (isChatMultiSelectEnable){
+        if (isChatMultiSelectEnable) {
             onLeftIconClickListener(null);
             return false;
-        }else if (FragmentChat.mForwardMessages != null){
+        } else if (FragmentChat.mForwardMessages != null) {
             revertToolbarFromForwardMode();
             return false;
-        }else {
+        } else {
             return true;
         }
     }
@@ -1665,16 +1648,16 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     //check state of forward message from chat room and show on toolbar
-    public void setForwardMessage(boolean enable){
+    public void setForwardMessage(boolean enable) {
 
-        if (!(G.isLandscape && G.twoPaneMode) && FragmentChat.mForwardMessages != null){
-            if (enable){
+        if (!(G.isLandscape && G.twoPaneMode) && FragmentChat.mForwardMessages != null) {
+            if (enable) {
                 mHelperToolbar.setDefaultTitle(getString(R.string.send_message_to) + "...");
                 mHelperToolbar.getRightButton().setVisibility(View.GONE);
                 mHelperToolbar.getScannerButton().setVisibility(View.GONE);
                 if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
                 mHelperToolbar.setLeftIcon(R.string.back_icon);
-            }else {
+            } else {
                 revertToolbarFromForwardMode();
             }
         }
