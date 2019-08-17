@@ -119,9 +119,8 @@ public class FragmentIntroduce extends BaseFragment {
     private void startRegistration() {
         if (getActivity() != null) {
             if (G.socketConnection) {
-                FragmentRegister fragment = new FragmentRegister();
-                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commitAllowingStateLoss();
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
+                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, new FragmentRegister()).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
             } else {
                 G.handler.post(() -> HelperError.showSnackMessage(getString(R.string.waiting_for_connection), false));
             }
