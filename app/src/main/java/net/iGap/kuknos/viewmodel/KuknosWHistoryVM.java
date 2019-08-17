@@ -4,19 +4,25 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.os.Handler;
 
+import net.iGap.api.apiService.ApiResponse;
+import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosWHistoryM;
 import net.iGap.kuknos.service.model.KuknosWalletBalanceInfoM;
 import net.iGap.kuknos.service.model.KuknosWalletsAccountM;
+
+import org.stellar.sdk.responses.Page;
+import org.stellar.sdk.responses.operations.OperationResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class KuknosWHistoryVM extends ViewModel {
 
-    private MutableLiveData<List<KuknosWHistoryM>> listMutableLiveData;
+    private MutableLiveData<Page<OperationResponse>> listMutableLiveData;
     private MutableLiveData<ErrorM> errorM;
     private MutableLiveData<Boolean> progressState;
+    private PanelRepo panelRepo = new PanelRepo();
 
     public KuknosWHistoryVM() {
         if (listMutableLiveData == null) {
@@ -31,37 +37,30 @@ public class KuknosWHistoryVM extends ViewModel {
         }
     }
 
-    private void initModel() {
-        KuknosWHistoryM temp = new KuknosWHistoryM("2019/05/12","10.0256","Buy House");
-        List<KuknosWHistoryM> listTemp = new ArrayList<>();
-        listTemp.add(temp);
-        listTemp.add(temp);
-        listTemp.add(temp);
-        listTemp.add(temp);
-        listTemp.add(temp);
-        listTemp.add(temp);
-        listMutableLiveData.setValue(listTemp);
-    }
-
     public void getDataFromServer() {
-        progressState.setValue(true);
-        // TODO Hard code in here baby
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        panelRepo.getUserHistory(new ApiResponse<Page<OperationResponse>>() {
             @Override
-            public void run() {
-                // hard code
-                initModel();
-                progressState.setValue(false);
+            public void onResponse(Page<OperationResponse> operationResponsePage) {
+                listMutableLiveData.setValue(operationResponsePage);
             }
-        }, 1000);
+
+            @Override
+            public void onFailed(String error) {
+
+            }
+
+            @Override
+            public void setProgressIndicator(boolean visibility) {
+                progressState.setValue(visibility);
+            }
+        });
     }
 
-    public MutableLiveData<List<KuknosWHistoryM>> getListMutableLiveData() {
+    public MutableLiveData<Page<OperationResponse>> getListMutableLiveData() {
         return listMutableLiveData;
     }
 
-    public void setListMutableLiveData(MutableLiveData<List<KuknosWHistoryM>> listMutableLiveData) {
+    public void setListMutableLiveData(MutableLiveData<Page<OperationResponse>> listMutableLiveData) {
         this.listMutableLiveData = listMutableLiveData;
     }
 

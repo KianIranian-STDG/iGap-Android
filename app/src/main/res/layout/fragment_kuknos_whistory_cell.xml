@@ -19,12 +19,47 @@
 
         <android.support.v7.widget.AppCompatTextView
             style="?textTitleColorSettingTheme"
+            android:id="@+id/kuknos_wHistoryCell_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="38dp"
+            android:layout_weight="5"
+            android:text="To Amir"
+            android:textSize="@dimen/dp12"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/myIconTextViewStyleGray"
+            android:id="@+id/kuknos_wHistoryCell_icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/download_ic"
+            android:textSize="@dimen/dp28"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            style="?textTitleColorSettingTheme"
             android:id="@+id/kuknos_wHistoryCell_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="38dp"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:text="2018/06/15"
+            android:textSize="@dimen/dp12"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            style="?textTitleColorSettingTheme"
+            android:id="@+id/kuknos_wHistoryCell_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="38dp"
+            android:layout_weight="2"
+            android:text="2120"
             android:textSize="@dimen/dp12"
             android:gravity="center"
             android:layout_gravity="center_vertical"/>
@@ -35,20 +70,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="38dp"
-            android:layout_weight="2"
-            android:text="20.012"
-            android:textSize="@dimen/dp12"
-            android:gravity="center"
-            android:layout_gravity="center_vertical"/>
-
-        <android.support.v7.widget.AppCompatTextView
-            style="?textTitleColorSettingTheme"
-            android:id="@+id/kuknos_wHistoryCell_desc"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="38dp"
             android:layout_weight="4"
-            android:text="To Amir"
+            android:text="20.012"
             android:textSize="@dimen/dp12"
             android:gravity="center"
             android:layout_gravity="center_vertical"/>

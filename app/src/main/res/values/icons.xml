@@ -241,4 +241,6 @@
     <string name="error_icon">.</string>
     <string name="valid_icon">ß</string>
     <string name="valid_wallet">4</string>
+    <string name="download_ic">ï</string>
+    <string name="upload_ic">ì</string>
 </resources>

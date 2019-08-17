@@ -2097,4 +2097,8 @@
     <string name="Kuknos_transaction_error7">Your credit is not enough.</string>
     <string name="Kuknos_transaction_error8">Something went wrong. Please try again later.</string>
     <string name="kuknos_send_walletIDError2">Wallet Address is NOT valid.</string>
+    <string name="kuknos_wHistory_sent">Sent</string>
+    <string name="kuknos_wHistory_receive">Receive</string>
+    <string name="kuknos_wHistory_time">Time</string>
+    <string name="kuknos_wHistory_creatAccount">Create Account</string>
 </resources>

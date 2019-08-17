@@ -15,9 +15,11 @@ import org.stellar.sdk.Network;
 import org.stellar.sdk.PaymentOperation;
 import org.stellar.sdk.Server;
 import org.stellar.sdk.Transaction;
+import org.stellar.sdk.requests.RequestBuilder;
 import org.stellar.sdk.responses.AccountResponse;
+import org.stellar.sdk.responses.Page;
 import org.stellar.sdk.responses.SubmitTransactionResponse;
-import org.stellar.sdk.xdr.TransactionResultCode;
+import org.stellar.sdk.responses.operations.OperationResponse;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -25,7 +27,7 @@ import java.util.Objects;
 public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
 
     enum API {
-        USER_ACCOUNT, PAYMENT_SEND
+        USER_ACCOUNT, PAYMENT_SEND, PAYMENTS_ACCOUNT
     }
 
     private ApiResponse<T> response;
@@ -73,6 +75,8 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
                 return getUserdata(ts[0]);
             case PAYMENT_SEND:
                 return paymentToOther(ts[0], ts[1], ts[2], ts[3]);
+            case PAYMENTS_ACCOUNT:
+                return paymentsUser(ts[0]);
         }
         return null;
     }
@@ -126,7 +130,7 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
                 // A memo allows you to add your own metadata to a transaction. It's
                 // optional and does not affect how Stellar treats the transaction.
                 .addMemo(Memo.text(memo))
-                .setOperationFee(100)
+                .setOperationFee(1000)
                 // Wait a maximum of three minutes for the transaction
                 .setTimeout(1)
                 .build();
@@ -186,6 +190,19 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
                 break;
         }
         return error;
+    }
+
+    private T paymentsUser(String accountID) {
+        Server server = new Server(KUKNOS_Horizan_Server);
+        try {
+            Page<OperationResponse> response = server.payments().forAccount(accountID).limit(100).order(RequestBuilder.Order.DESC).execute();
+            successStatus = true;
+            return (T) response;
+        } catch (IOException e) {
+            successStatus = false;
+            e.printStackTrace();
+            return (T) e.getMessage();
+        }
     }
 
 }

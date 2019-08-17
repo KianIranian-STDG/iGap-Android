@@ -28,6 +28,9 @@ import net.iGap.kuknos.view.adapter.WalletSpinnerAdapter;
 import net.iGap.kuknos.viewmodel.KuknosWHistoryVM;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
+import org.stellar.sdk.responses.Page;
+import org.stellar.sdk.responses.operations.OperationResponse;
+
 import java.util.List;
 
 public class KuknosWHistoryFrag extends BaseFragment {
@@ -92,10 +95,10 @@ public class KuknosWHistoryFrag extends BaseFragment {
     }
 
     private void onDataChanged() {
-        kuknosWHistoryVM.getListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<List<KuknosWHistoryM>>() {
+        kuknosWHistoryVM.getListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<Page<OperationResponse>>() {
             @Override
-            public void onChanged(@Nullable List<KuknosWHistoryM> kuknosWHistoryMS) {
-                if (kuknosWHistoryMS.size() != 0) {
+            public void onChanged(@Nullable Page<OperationResponse> operationResponsePage) {
+                if (operationResponsePage.getRecords().size() != 0) {
                     WalletHistoryRAdapter mAdapter = new WalletHistoryRAdapter(kuknosWHistoryVM.getListMutableLiveData().getValue(), getContext());
                     binding.kuknosWHistoryRecycler.setAdapter(mAdapter);
                 }

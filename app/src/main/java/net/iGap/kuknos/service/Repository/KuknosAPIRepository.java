@@ -19,7 +19,9 @@ import net.iGap.module.api.beepTunes.SearchTrack;
 import net.iGap.module.api.beepTunes.TrackInfo;
 
 import org.stellar.sdk.responses.AccountResponse;
+import org.stellar.sdk.responses.Page;
 import org.stellar.sdk.responses.SubmitTransactionResponse;
+import org.stellar.sdk.responses.operations.OperationResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -75,6 +77,11 @@ public class KuknosAPIRepository {
     public void paymentUser(KuknosSendM model, ApiResponse<SubmitTransactionResponse> apiResponse) {
         KuknosAPIAsync<SubmitTransactionResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.PAYMENT_SEND);
         temp.execute(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo());
+    }
+
+    public void getUserHistory(String userID, ApiResponse<Page<OperationResponse>> apiResponse) {
+        KuknosAPIAsync<Page<OperationResponse>> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.PAYMENTS_ACCOUNT);
+        temp.execute(userID);
     }
 
     // todo clean this comment - old mudule
