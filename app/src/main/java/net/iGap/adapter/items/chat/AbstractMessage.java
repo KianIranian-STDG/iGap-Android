@@ -852,7 +852,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         if (G.isDarkTheme) {
-            viewHolder.getChatBloke().setBackgroundResource(R.drawable.shape_message_receive_dark);
+            viewHolder.getChatBloke().setBackgroundResource(R.drawable.chat_item_receive_bg_dark);
             setThemeColor(viewHolder.getViewsLabelTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getEyeIconTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getVoteUpTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
@@ -863,7 +863,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             setThemeColor(viewHolder.getSignatureTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
         } else {
-            viewHolder.getChatBloke().setBackgroundResource(R.drawable.shape_message_receive_light);
+            viewHolder.getChatBloke().setBackgroundResource(R.drawable.chat_item_receive_bg_light);
             setThemeColor(viewHolder.getViewsLabelTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getEyeIconTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getVoteUpTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
@@ -929,11 +929,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         if (G.isDarkTheme) {
-            viewHolder.getChatBloke().setBackgroundResource(R.drawable.rectangle_send_round_color_dark);
+            viewHolder.getChatBloke().setBackgroundResource(R.drawable.chat_item_sent_bg_dark);
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.send_message_time_dark));
             setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.send_message_time_dark));
         } else {
-            viewHolder.getChatBloke().setBackgroundResource(R.drawable.rectangle_send_round_color);
+            viewHolder.getChatBloke().setBackgroundResource(R.drawable.chat_item_sent_bg_light);
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.send_message_time_light));
             setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.send_message_time_light));
         }
