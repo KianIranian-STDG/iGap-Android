@@ -12,13 +12,16 @@ package net.iGap.adapter.items.chat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.CountDownTimer;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -133,6 +136,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private RealmChannelExtra realmChannelExtra;
     private RealmRoom realmRoomForwardedFrom;
     private MessagesAdapter<AbstractMessage> mAdapter;
+    private final Drawable SEND_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_sent_bg_light) ;
+    private final Drawable RECEIVED_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_receive_bg_light);
 
 
     /**
@@ -852,7 +857,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         if (G.isDarkTheme) {
-            viewHolder.getChatBloke().setBackgroundResource(R.drawable.chat_item_receive_bg_dark);
+            viewHolder.getChatBloke().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_dark))));
             setThemeColor(viewHolder.getViewsLabelTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getEyeIconTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getVoteUpTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
@@ -863,7 +868,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             setThemeColor(viewHolder.getSignatureTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
         } else {
-            viewHolder.getChatBloke().setBackgroundResource(R.drawable.chat_item_receive_bg_light);
+            viewHolder.getChatBloke().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_light))));
             setThemeColor(viewHolder.getViewsLabelTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getEyeIconTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getVoteUpTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
@@ -929,11 +934,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         if (G.isDarkTheme) {
-            viewHolder.getChatBloke().setBackgroundResource(R.drawable.chat_item_sent_bg_dark);
+            viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_dark))));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.send_message_time_dark));
             setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.send_message_time_dark));
         } else {
-            viewHolder.getChatBloke().setBackgroundResource(R.drawable.chat_item_sent_bg_light);
+            viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_light))));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.send_message_time_light));
             setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.send_message_time_light));
         }
@@ -943,6 +948,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     private void setThemeColor(TextView textView, int themeColor) {
         textView.setTextColor(themeColor);
+    }
+
+
+    public Drawable tintDrawable(Drawable drawable, ColorStateList colors) {
+        final Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTintList(wrappedDrawable, colors);
+        return wrappedDrawable;
     }
 
     @CallSuper

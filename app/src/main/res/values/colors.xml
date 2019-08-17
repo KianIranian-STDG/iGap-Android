@@ -276,5 +276,8 @@
     <color name="gray100">#F5F5F5</color>
     <color name="chat_bubble_color">#f5ffec</color>
     <color name="chat_bubble_color_dark">#565656</color>
-
+    <color name="chat_item_receive_light">#ececee</color>
+    <color name="chat_item_receive_dark">#565656</color>
+    <color name="chat_item_send_light">#f5ffec</color>
+    <color name="chat_item_send_dark">#3d3d3d</color>
 </resources>
