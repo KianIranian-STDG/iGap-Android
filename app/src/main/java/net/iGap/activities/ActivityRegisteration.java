@@ -1,8 +1,13 @@
 package net.iGap.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -44,22 +49,7 @@ public class ActivityRegisteration extends ActivityEnhanced {
 
         repository = RegisterRepository.getInstance();
 
-        try {
-            HelperPermission.getStoragePermision(this, new OnGetPermission() {
-                @Override
-                public void Allow() throws IOException {
-                    startApp();
-                }
-
-                @Override
-                public void deny() {
-                    //finish();
-                    startApp();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        grantReadAndRightStoragePermission();
 
         repository.goToMainPage.observe(this, data -> {
             if (data != null) {
@@ -110,6 +100,31 @@ public class ActivityRegisteration extends ActivityEnhanced {
         super.onSaveInstanceState(savedInstanceState);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 100) {
+            startApp();
+        }
+    }
+
+    private void grantReadAndRightStoragePermission() {
+        String[] Permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (!hasPermissions(Permissions)) {
+            ActivityCompat.requestPermissions(this, Permissions, 100);
+        }
+    }
+
+    private boolean hasPermissions(String... permissions) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private void startApp() {
         StartupActions.makeFolder();
 
@@ -154,29 +169,25 @@ public class ActivityRegisteration extends ActivityEnhanced {
     }
 
     private void loadFragmentIntroduce() {
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                if (!ActivityRegisteration.this.isFinishing()) {
-
-                    try {
-                        FragmentIntroduce fragment = new FragmentIntroduce();
-                        getSupportFragmentManager().beginTransaction()
-                                .add(R.id.ar_layout_root, fragment)
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
-                                .commit();
-                    } catch (Exception e) {
-                        HelperLog.setErrorLog(e);
-                    }
-                }
-            }
-        }, 1000);
+        try {
+            getSupportFragmentManager().beginTransaction().addToBackStack(FragmentIntroduce.class.getName())
+                    .add(R.id.ar_layout_root, new FragmentIntroduce(),FragmentIntroduce.class.getName())
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
+                    .commit();
+        } catch (Exception e) {
+            HelperLog.setErrorLog(e);
+        }
     }
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        repository.clearInstance();
     }
 
     private void goToMainPage(long userId) {
