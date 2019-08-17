@@ -384,6 +384,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             intentFilter.addAction("android.intent.action.PHONE_STATE");
             MyPhonStateService myPhonStateService = new MyPhonStateService();
 
+            //add it for handle ssl handshake error
+            checkGoogleUpdate();
+
             registerReceiver(myPhonStateService, intentFilter);
             G.refreshWalletBalance = this;
 
