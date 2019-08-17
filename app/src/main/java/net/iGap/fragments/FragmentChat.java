@@ -2912,7 +2912,7 @@ public class FragmentChat extends BaseFragment
                 super.onScrolled(recyclerView, dx, dy);
                 int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
                 int totalItemCount = recyclerView.getLayoutManager().getItemCount();
-                int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
                 cardFloatingTime.setVisibility(View.VISIBLE);
                 long item = mAdapter.getItemByPosition(layoutManager.findFirstVisibleItemPosition());
@@ -2924,7 +2924,7 @@ public class FragmentChat extends BaseFragment
                 gongingHandler.removeCallbacks(gongingRunnable);
                 gongingHandler.postDelayed(gongingRunnable, 1000);
 
-                if (pastVisibleItems + visibleItemCount + 1 >= totalItemCount && !isAnimateStart) {
+                if (totalItemCount - pastVisibleItems <= 1 && !isAnimateStart) {
                     isAnimateStart = true;
                     isAnimateStart = false;
                     setDownBtnGone();
