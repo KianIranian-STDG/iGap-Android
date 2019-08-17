@@ -219,18 +219,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             deleteAvatar.postValue(new DeleteAvatarModel(userId, finalMAvatarId));
         };
 
-        G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
-            @Override
-            public void onChangePhoto(final String imagePath) {
-                setUserAvatarPath.postValue(new ChangeImageModel(imagePath, userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
-            }
-
-            @Override
-            public void onChangeInitials(final String initials, final String color) {
-                setUserAvatarPath.postValue(new ChangeImageModel(null, initials, color));
-            }
-        };
-
         G.onUserAvatarResponse = this;
 
         getIVandScore();
@@ -848,11 +836,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         if (pathSaveImage == null) {
             setUserAvatar.setValue(userId);
         } else {
-
             avatarHandler.avatarAdd(userId, pathSaveImage, avatar, avatarPath -> G.handler.post(() -> {
                 showLoading.set(View.GONE);
-                if (G.onChangeUserPhotoListener != null) {
-                    G.onChangeUserPhotoListener.onChangePhoto(avatarPath);
+                if (checkValidationForRealm(userInfo)) {
+                    setUserAvatarPath.postValue(new ChangeImageModel(avatarPath, userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
                 }
             }));
             pathSaveImage = null;
