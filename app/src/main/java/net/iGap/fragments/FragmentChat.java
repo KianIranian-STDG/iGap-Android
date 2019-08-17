@@ -2830,64 +2830,75 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View v) {
                 cancelAllRequestFetchHistory();
+                getRealmChat().executeTransactionAsync(realm -> {
 
-                latestButtonClickTime = System.currentTimeMillis();
-                /**
-                 * have unread
-                 */
-                if (countNewMessage > 0 && firstUnreadMessageInChat != null) {
+                }, () -> {
+                    latestButtonClickTime = System.currentTimeMillis();
                     /**
-                     * if unread message is exist in list set position to this item and create
-                     * unread layout otherwise should clear list and load from unread again
+                     * have unread
                      */
+                    if (countNewMessage > 0 && firstUnreadMessageInChat != null) {
+                        /**
+                         * if unread message is exist in list set position to this item and create
+                         * unread layout otherwise should clear list and load from unread again
+                         */
 
-                    firstUnreadMessage = firstUnreadMessageInChat;
-                    if (!firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
-                        resetAndGetFromEnd();
-                        return;
-                    }
-
-                    int position = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
-                    if (position > 0) {
-                        mAdapter.add(position, new UnreadMessage(mAdapter, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), makeUnreadMessage(countNewMessage))).withIdentifier(SUID.id().get()));
-                        isShowLayoutUnreadMessage = true;
-                        LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
-                        linearLayout.scrollToPositionWithOffset(position, 0);
-                    } else {
-                        resetMessagingValue();
-                        unreadCount = countNewMessage;
                         firstUnreadMessage = firstUnreadMessageInChat;
-                        getMessages();
-
-                        if (firstUnreadMessage == null) {
+                        if (!firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
                             resetAndGetFromEnd();
                             return;
                         }
 
-                        int position1 = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
-                        if (position1 > 0) {
+                        int position = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
+                        if (position > 0) {
+                            mAdapter.add(position, new UnreadMessage(mAdapter, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), makeUnreadMessage(countNewMessage))).withIdentifier(SUID.id().get()));
+                            isShowLayoutUnreadMessage = true;
                             LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
-                            linearLayout.scrollToPositionWithOffset(position1 - 1, 0);
+                            linearLayout.scrollToPositionWithOffset(position, 0);
+                        } else {
+                            resetMessagingValue();
+                            unreadCount = countNewMessage;
+                            firstUnreadMessage = firstUnreadMessageInChat;
+                            getMessages();
+
+                            if (firstUnreadMessage == null) {
+                                resetAndGetFromEnd();
+                                return;
+                            }
+
+                            int position1 = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
+                            if (position1 > 0) {
+                                LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
+                                linearLayout.scrollToPositionWithOffset(position1 - 1, 0);
+                            }
                         }
-                    }
-                    firstUnreadMessageInChat = null;
-                    countNewMessage = 0;
-                    txtNewUnreadMessage.setVisibility(View.GONE);
-                    txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
-                } else {
-                    setDownBtnGone();
-                    /**
-                     * if addToView is true this means that all new message is in adapter
-                     * and just need go to end position in list otherwise we should clear all
-                     * items and reload again from bottom
-                     */
-                    if (!addToView) {
+                        firstUnreadMessageInChat = null;
+                        countNewMessage = 0;
+                        txtNewUnreadMessage.setVisibility(View.GONE);
+                        txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
+                    } else {
+                        setDownBtnGone();
+                        /**
+                         * if addToView is true this means that all new message is in adapter
+                         * and just need go to end position in list otherwise we should clear all
+                         * items and reload again from bottom
+                         */
+//                            if (!addToView) {
+//                                resetMessagingValue();
+//                                getMessages();
+//                            } else {
+//                                scrollToEnd();
+//                            }
+
+                        //Todo : above code have better performance bug with bug!
+                        // please fix and use it.
+
                         resetMessagingValue();
                         getMessages();
-                    } else {
-                        scrollToEnd();
                     }
-                }
+                });
+
+
             }
         });
 
