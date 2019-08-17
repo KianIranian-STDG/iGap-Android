@@ -180,6 +180,21 @@
                 app:layout_constraintEnd_toEndOf="@id/registerButton"
                 app:layout_constraintStart_toStartOf="@id/registerButton" />
 
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/retryView"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp48"
+                android:textSize="@dimen/largeTextSize"
+                android:text="@string/retry"
+                android:gravity="center"
+                android:onClick="@{()->fragmentRegisterViewModel.onRetryClick()}"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:visibility="@{fragmentRegisterViewModel.showRetryView}"
+                app:layout_constraintStart_toStartOf="@id/loading"
+                app:layout_constraintEnd_toEndOf="@id/loading"
+                app:layout_constraintTop_toTopOf="@id/loading"
+                app:layout_constraintBottom_toBottomOf="@id/loading"/>
+
             <android.support.design.button.MaterialButton
                 android:id="@+id/registerButton"
                 style="?iGapButton"
