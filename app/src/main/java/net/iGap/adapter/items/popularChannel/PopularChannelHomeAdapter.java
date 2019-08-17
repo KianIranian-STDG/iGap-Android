@@ -80,7 +80,7 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
                     sliderViewHolder = (SliderViewHolder) viewHolder;
                     bannerScale = data.get(i).getInfo().getScale();
                     String[] scales = bannerScale.split(":");
-                    float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+                    float height = Resources.getSystem().getDisplayMetrics().widthPixels * 0.9f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
                     sliderViewHolder.itemView.getLayoutParams().height = Math.round(height);
                     sliderViewHolder.bindSlid(data.get(i).getSlides(), data.get(i).getInfo().getPlaybackTime());
                     break;

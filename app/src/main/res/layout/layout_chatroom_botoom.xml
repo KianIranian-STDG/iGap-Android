@@ -4,8 +4,9 @@
     android:id="@+id/root_chatRoom_bottom_view"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="54dp"
+    android:layout_height="wrap_content"
     android:gravity="bottom"
+    android:minHeight="54dp"
     android:layoutDirection="ltr"
     android:clickable="true">
 

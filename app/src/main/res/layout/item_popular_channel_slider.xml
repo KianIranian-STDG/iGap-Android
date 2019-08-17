@@ -5,13 +5,16 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="@dimen/dp4"
-    app:cardCornerRadius="4dp"
+    app:cardCornerRadius="12dp"
+    app:cardUseCompatPadding="false"
+    app:cardPreventCornerOverlap="false"
     app:cardElevation="1dp">
 
     <net.iGap.libs.bannerslider.BannerSlider
         android:id="@+id/fc_advertisementItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         app:slider_animateIndicators="true"
         app:slider_indicatorSize="4dp"
         app:slider_loopSlides="true"

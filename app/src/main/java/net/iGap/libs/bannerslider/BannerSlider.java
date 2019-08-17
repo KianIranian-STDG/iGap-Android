@@ -29,12 +29,6 @@ import net.iGap.libs.bannerslider.indicators.IndicatorShape;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
-/**
- * @author S.Shahini
- * @since 12/16/17
- */
-
 public class BannerSlider extends FrameLayout {
     private static final String TAG = "Slider";
 

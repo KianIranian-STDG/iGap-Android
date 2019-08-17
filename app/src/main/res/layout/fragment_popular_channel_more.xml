@@ -41,7 +41,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/dp4"
                     android:visibility="gone"
-                    app:cardCornerRadius="4dp"
+                    app:cardCornerRadius="12dp"
                     app:cardElevation="1dp">
 
                     <net.iGap.libs.bannerslider.BannerSlider
