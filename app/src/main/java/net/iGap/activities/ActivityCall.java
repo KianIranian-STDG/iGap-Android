@@ -11,6 +11,9 @@
 package net.iGap.activities;
 
 import android.Manifest;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothProfile;
@@ -188,7 +191,13 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
 
         binding = DataBindingUtil.setContentView(ActivityCall.this, R.layout.activity_call);
-        viewModel = new ActivityCallViewModel(getIntent().getExtras().getLong(USER_ID_STR), getIntent().getExtras().getBoolean(INCOMING_CALL_STR), (ProtoSignalingOffer.SignalingOffer.Type) getIntent().getExtras().getSerializable(CALL_TYPE));
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new ActivityCallViewModel(getIntent().getExtras().getLong(USER_ID_STR), getIntent().getExtras().getBoolean(INCOMING_CALL_STR), (ProtoSignalingOffer.SignalingOffer.Type) getIntent().getExtras().getSerializable(CALL_TYPE));
+            }
+        }).get(ActivityCallViewModel.class);
         binding.setActivityCallViewModel(viewModel);
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
