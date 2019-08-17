@@ -1185,9 +1185,6 @@ public class FragmentChat extends BaseFragment
     public void onDestroyView() {
         super.onDestroyView();
         realmChat.close();
-
-        if (emojiPopup != null)
-            emojiPopup.releaseMemory();
     }
 
     @Override
