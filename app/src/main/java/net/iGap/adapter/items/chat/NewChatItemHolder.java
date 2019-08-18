@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -56,7 +57,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     private LinearLayout voteDownContainer;
     private LinearLayout messageDetailContainer;
     private FrameLayout forwardContainer;
-    private ImageView channelForwardIv;
+    private AppCompatImageView channelForwardIv;
 
     public NewChatItemHolder(@NonNull View itemView) {
         super(itemView);
@@ -64,7 +65,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         ConstraintSet set = new ConstraintSet();
         itemContainer = new LinearLayout(getContext());
 
-        channelForwardIv = new ImageView(getContext());
+        channelForwardIv = new AppCompatImageView(getContext());
         forwardContainer = new FrameLayout(getContext());
 
         voteContainer = new LinearLayout(getContext());

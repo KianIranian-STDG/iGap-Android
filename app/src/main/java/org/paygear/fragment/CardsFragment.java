@@ -919,7 +919,7 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
             transactionLayout.setPadding(dp8, dp8, dp8, dp8);
             layout.addView(transactionLayout);
 
-            ImageView transactionHistory = new ImageView(context);
+            AppCompatImageView transactionHistory = new AppCompatImageView(context);
             transactionHistory.setLayoutParams(new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             ViewCompat.setBackground(transactionHistory, RaadCommonUtils.getRectShape(context, R.color.add_card_plus_back, 12, 0));

@@ -1,5 +1,6 @@
 package net.iGap.libs.bannerslider.adapters;
 
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ public class SliderRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == SlideType.IMAGE.getValue()) {
-            ImageView imageView = new ImageView(parent.getContext());
+            AppCompatImageView imageView = new AppCompatImageView(parent.getContext());
             imageView.setLayoutParams(imageViewLayoutParams);
             imageView.setAdjustViewBounds(true);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
