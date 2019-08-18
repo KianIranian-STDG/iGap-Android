@@ -10,12 +10,13 @@ import android.widget.TextView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.module.FontIconTextView;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MplTransActionAdapter extends RecyclerView.Adapter<MplTransActionAdapter.MplTransActionViewHolder> {
+public class MplTransactionAdapter extends RecyclerView.Adapter<MplTransactionAdapter.MplTransactionViewHolder> {
 
     private List<ProtoGlobal.MplTransaction> mplTransactions = new ArrayList<>();
     private OnMplTransActionAdapterCallBack callBack;
@@ -30,16 +31,15 @@ public class MplTransActionAdapter extends RecyclerView.Adapter<MplTransActionAd
         notifyDataSetChanged();
     }
 
-
     @NonNull
     @Override
-    public MplTransActionViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MplTransactionViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View rootView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_mpl_transactin_list, viewGroup, false);
-        return new MplTransActionViewHolder(rootView);
+        return new MplTransactionViewHolder(rootView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MplTransActionViewHolder mplTransActionViewHolder, int i) {
+    public void onBindViewHolder(@NonNull MplTransactionViewHolder mplTransActionViewHolder, int i) {
         mplTransActionViewHolder.bindTransaction(mplTransactions.get(i));
     }
 
@@ -57,16 +57,16 @@ public class MplTransActionAdapter extends RecyclerView.Adapter<MplTransActionAd
         void onClick(String token);
     }
 
-    public class MplTransActionViewHolder extends RecyclerView.ViewHolder {
+    public class MplTransactionViewHolder extends RecyclerView.ViewHolder {
         private TextView transferActionTypeTv;
-        private ImageView transferActionTypeIv;
+        private FontIconTextView transferActionTypeIv;
         private TextView transferActionTimeTv;
         private TextView transferActionOrderIdTv;
 
-        public MplTransActionViewHolder(@NonNull View rootView) {
+        public MplTransactionViewHolder(@NonNull View rootView) {
             super(rootView);
             transferActionTypeTv = rootView.findViewById(R.id.tv_itemMplTransAction_type);
-            transferActionTypeIv = rootView.findViewById(R.id.iv_itemMplTransAction_type);
+            transferActionTypeIv = rootView.findViewById(R.id.tv_itemMplTransAction_typeIcon);
             transferActionTimeTv = rootView.findViewById(R.id.tv_itemMplTransAction_time);
             transferActionOrderIdTv = rootView.findViewById(R.id.tv_itemMplTransAction_orderId);
         }
@@ -75,21 +75,27 @@ public class MplTransActionAdapter extends RecyclerView.Adapter<MplTransActionAd
             switch (mplTransaction.getType()) {
                 case BILL:
                     transferActionTypeTv.setText("Bill");
+                    transferActionTypeIv.setText(itemView.getContext().getResources().getString(R.string.iconCardToCard));
                     break;
                 case NONE:
                     transferActionTypeTv.setText("Non");
+                    transferActionTypeIv.setText(itemView.getContext().getResources().getString(R.string.iconCardToCard));
                     break;
                 case SALES:
                     transferActionTypeTv.setText("sales");
+                    transferActionTypeIv.setText(itemView.getContext().getResources().getString(R.string.iconCardToCard));
                     break;
                 case TOPUP:
                     transferActionTypeTv.setText("topup");
+                    transferActionTypeIv.setText(itemView.getContext().getResources().getString(R.string.iconCardToCard));
                     break;
                 case CARD_TO_CARD:
                     transferActionTypeTv.setText("Card to Card");
+                    transferActionTypeIv.setText(itemView.getContext().getResources().getString(R.string.iconCardToCard));
                     break;
                 case UNRECOGNIZED:
                     transferActionTypeTv.setText("UNRECOGNIZED");
+                    transferActionTypeIv.setText(itemView.getContext().getResources().getString(R.string.iconCardToCard));
                     break;
             }
 

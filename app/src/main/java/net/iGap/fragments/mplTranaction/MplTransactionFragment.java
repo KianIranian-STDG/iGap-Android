@@ -17,26 +17,28 @@ import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 
-public class MplTransactionFragment extends BaseFragment {
+public class MplTransactionFragment extends BaseFragment implements ToolbarListener {
 
     private static final String TAG = "abbasiMpl";
-    private View rootView;
     private MplTransactionViewModel viewModel;
-    private MplTransActionAdapter adapter;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private MplTransactionAdapter adapter;
+
+    private View rootView;
     private TextView typeAllTv;
     private TextView typeTopUpTv;
     private TextView typeCardToCardTv;
     private TextView typeSalesTv;
     private TextView typeBillTv;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_mpl_trancaction, container, false);
         viewModel = new MplTransactionViewModel();
-        adapter = new MplTransActionAdapter();
+        adapter = new MplTransactionAdapter();
         return rootView;
     }
 
@@ -107,7 +109,12 @@ public class MplTransactionFragment extends BaseFragment {
         viewModel.getAllMplTransactionList();
 
         HelperToolbar toolbar = HelperToolbar.create()
-                .setContext(getContext());
+                .setContext(G.fragmentActivity)
+                .setListener(this)
+                .setLogoShown(true)
+                .setDefaultTitle("سوابق تراکنش")
+                .setLeftIcon(R.string.back_icon);
+
         toolBarContainer.addView(toolbar.getView());
     }
 
@@ -142,4 +149,9 @@ public class MplTransactionFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void onLeftIconClickListener(View view) {
+        if (getActivity() != null)
+            getActivity().onBackPressed();
+    }
 }

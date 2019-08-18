@@ -33,7 +33,7 @@ public class MplTransactionInfoResponse extends MessageHandler {
         ProtoMplTransactionInfo.MplTransactionInfoResponse.Builder builder = (ProtoMplTransactionInfo.MplTransactionInfoResponse.Builder) message;
 
         if (G.onMplTransactionInfo != null)
-            G.onMplTransactionInfo.onMplTransAction(builder.getTransaction());
+            G.onMplTransactionInfo.onMplTransAction(builder.getTransaction(), builder.getStatus());
     }
 
     @Override

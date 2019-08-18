@@ -11,6 +11,7 @@ import net.iGap.viewmodel.BaseViewModel;
 public class MplTransactionInfoViewModel extends BaseViewModel implements OnMplTransactionInfo {
 
     private MutableLiveData<ProtoGlobal.MplTransaction> transactionInfoLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> errorTransActionInfoLiveData = new MutableLiveData<>();
 
     @Override
     public void onCreateViewModel() {
@@ -25,8 +26,11 @@ public class MplTransactionInfoViewModel extends BaseViewModel implements OnMplT
     }
 
     @Override
-    public void onMplTransAction(ProtoGlobal.MplTransaction transaction) {
-        transactionInfoLiveData.postValue(transaction);
+    public void onMplTransAction(ProtoGlobal.MplTransaction transaction, int status) {
+        if (status == 0) {
+            transactionInfoLiveData.postValue(transaction);
+        } else
+            errorTransActionInfoLiveData.postValue(true);
         getProgressLiveData().postValue(false);
     }
 
@@ -42,5 +46,9 @@ public class MplTransactionInfoViewModel extends BaseViewModel implements OnMplT
 
     public MutableLiveData<ProtoGlobal.MplTransaction> getTransactionInfoLiveData() {
         return transactionInfoLiveData;
+    }
+
+    public MutableLiveData<Boolean> getErrorTransActionInfoLiveData() {
+        return errorTransActionInfoLiveData;
     }
 }

@@ -39,6 +39,7 @@ import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.beepTunes.main.BeepTunesFragment;
+import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
@@ -1011,26 +1012,30 @@ public class HelperToolbar {
     }
 
     private void onScannerClickListener() {
-        if (!G.isWalletRegister) {
-            new HelperFragment(mFragmentActivity.getSupportFragmentManager() ,FragmentWalletAgrement.newInstance(ActivityMain.userPhoneNumber.substring(2))).load();
-        } else {
-            Intent intent = new Intent(mContext, WalletActivity.class);
-            intent.putExtra("Language", "fa");
-            intent.putExtra("Mobile", "0" + ActivityMain.userPhoneNumber.substring(2));
-            intent.putExtra("PrimaryColor", G.appBarColor);
-            intent.putExtra("DarkPrimaryColor", G.appBarColor);
-            intent.putExtra("AccentColor", G.appBarColor);
-            intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
-            intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-            intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-            intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-            intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-            intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
-            intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-            intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
-            intent.putExtra("isScan",true);
-            G.fragmentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
-        }
+//        if (!G.isWalletRegister) {
+//            new HelperFragment(mFragmentActivity.getSupportFragmentManager() ,FragmentWalletAgrement.newInstance(ActivityMain.userPhoneNumber.substring(2))).load();
+//        } else {
+//            Intent intent = new Intent(mContext, WalletActivity.class);
+//            intent.putExtra("Language", "fa");
+//            intent.putExtra("Mobile", "0" + ActivityMain.userPhoneNumber.substring(2));
+//            intent.putExtra("PrimaryColor", G.appBarColor);
+//            intent.putExtra("DarkPrimaryColor", G.appBarColor);
+//            intent.putExtra("AccentColor", G.appBarColor);
+//            intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
+//            intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
+//            intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
+//            intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
+//            intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
+//            intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
+//            intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
+//            intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+//            intent.putExtra("isScan",true);
+//            G.fragmentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
+//        }
+
+        new HelperFragment(mFragmentActivity.getSupportFragmentManager() ,new MplTransactionFragment()).load();
+
+
     }
 
     private void initViews(ViewMaker view) {
