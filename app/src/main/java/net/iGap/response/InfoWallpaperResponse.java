@@ -20,9 +20,9 @@ public class InfoWallpaperResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public InfoWallpaperResponse(int actionId, Object protoClass, String identity) {
+    public InfoWallpaperResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -36,8 +36,16 @@ public class InfoWallpaperResponse extends MessageHandler {
         ProtoInfoWallpaper.InfoWallpaperResponse.Builder builder = (ProtoInfoWallpaper.InfoWallpaperResponse.Builder) message;
         List<ProtoGlobal.Wallpaper> wallpaperList = builder.getWallpaperList();
 
-        if (G.onGetWallpaper != null) {
-            G.onGetWallpaper.onGetWallpaperList(wallpaperList);
+        ProtoInfoWallpaper.InfoWallpaper.Builder builderRequest = (ProtoInfoWallpaper.InfoWallpaper.Builder) identity;
+
+        if (builderRequest.getType() ==  ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER){
+            if (G.onGetProfileWallpaper != null) {
+                G.onGetProfileWallpaper.onGetWallpaperList(wallpaperList);
+            }
+        }else {
+            if (G.onGetWallpaper != null) {
+                G.onGetWallpaper.onGetWallpaperList(wallpaperList);
+            }
         }
     }
 
