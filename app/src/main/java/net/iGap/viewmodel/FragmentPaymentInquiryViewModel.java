@@ -10,6 +10,7 @@ package net.iGap.viewmodel;
  */
 
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
@@ -36,7 +37,7 @@ import java.util.HashMap;
 
 import static net.iGap.fragments.FragmentPaymentBill.addCommasToNumericString;
 
-public class FragmentPaymentInquiryViewModel {
+public class FragmentPaymentInquiryViewModel extends ViewModel {
 
     public enum OperatorType {
         mci, telecome;
@@ -78,18 +79,10 @@ public class FragmentPaymentInquiryViewModel {
     public ObservableField<String> midTermAmount = new ObservableField<>("");
     public ObservableField<String> midTermMessage = new ObservableField<>("");
 
-    public ObservableField<Drawable> observeBackGround = new ObservableField<>();
-
     private OperatorType operatorType;
-    private FragmentPaymentInquiryBinding fragmentPaymentInquiryBinding;
 
-    public FragmentPaymentInquiryViewModel(FragmentPaymentInquiryBinding fragmentPaymentInquiryBinding, OperatorType operatorType) {
-        this.fragmentPaymentInquiryBinding = fragmentPaymentInquiryBinding;
+    public FragmentPaymentInquiryViewModel(OperatorType operatorType) {
         this.operatorType = operatorType;
-
-        Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green_sticker);
-        myIcon.setColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN);
-        observeBackGround.set(myIcon);
 
         switch (operatorType) {
             case mci:
@@ -108,7 +101,7 @@ public class FragmentPaymentInquiryViewModel {
         }
     }
 
-    public void onItemSelectBillType(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemSelectBillType(int position) {
         switch (position) {
             case 0:
                 observeMci.set(View.VISIBLE);
@@ -128,7 +121,7 @@ public class FragmentPaymentInquiryViewModel {
 
     }
 
-    public static boolean isNumeric(String strNum) {
+    public boolean isNumeric(String strNum) {
         try {
             long d = Long.parseLong(strNum);
         } catch (NumberFormatException | NullPointerException nfe) {
@@ -137,7 +130,7 @@ public class FragmentPaymentInquiryViewModel {
         return true;
     }
 
-    public void onInquiryClick(View view) {
+    public void onInquiryClick(String phoneNumber) {
 
         if (view != null) {
             closeKeyboard(view);
@@ -331,7 +324,7 @@ public class FragmentPaymentInquiryViewModel {
         });
     }
 
-    public void onLastTermPayment(View v) {
+    public void onLastTermPayment() {
 
         if (!G.userLogin) {
             HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
@@ -343,7 +336,7 @@ public class FragmentPaymentInquiryViewModel {
         fragmentPaymentInquiryBinding.getBackHandler().onBack();
     }
 
-    public void onMidTermPayment(View v) {
+    public void onMidTermPayment() {
 
         if (!G.userLogin) {
             HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);

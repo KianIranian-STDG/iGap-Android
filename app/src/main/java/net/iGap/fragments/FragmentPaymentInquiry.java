@@ -1,8 +1,12 @@
 package net.iGap.fragments;
 
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,16 +20,18 @@ import net.iGap.interfaces.IBackHandler;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FragmentPaymentInquiry extends BaseFragment {
 
     private FragmentPaymentInquiryBinding fragmentPaymentInquiryBinding;
+    private FragmentPaymentInquiryViewModel viewModel;
 
 
     public static FragmentPaymentInquiry newInstance(FragmentPaymentInquiryViewModel.OperatorType type, String phone) {
-
         Bundle args = new Bundle();
         args.putSerializable("type", type);
 
@@ -39,25 +45,30 @@ public class FragmentPaymentInquiry extends BaseFragment {
         return fragmentPaymentInquiry;
     }
 
-    public FragmentPaymentInquiry() {
-        // Required empty public constructor
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new FragmentPaymentInquiryViewModel((FragmentPaymentInquiryViewModel.OperatorType) getArguments().getSerializable("type"));
+            }
+        }).get(FragmentPaymentInquiryViewModel.class);
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentPaymentInquiryBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_payment_inquiry, container, false);
+        fragmentPaymentInquiryBinding.setViewModel(viewModel);
+        fragmentPaymentInquiryBinding.setLifecycleOwner(this);
         return attachToSwipeBack(fragmentPaymentInquiryBinding.getRoot());
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        FragmentPaymentInquiryViewModel.OperatorType type = (FragmentPaymentInquiryViewModel.OperatorType) getArguments().getSerializable("type");
-
-        FragmentPaymentInquiryViewModel fragmentPaymentInquiryViewModel = new FragmentPaymentInquiryViewModel(fragmentPaymentInquiryBinding, type);
-        fragmentPaymentInquiryBinding.setFragmentPaymentInquiryViewModel(fragmentPaymentInquiryViewModel);
 
         String phone = getArguments().getString("phone");
         if (phone != null && phone.length() > 0) {
@@ -65,23 +76,17 @@ public class FragmentPaymentInquiry extends BaseFragment {
             fragmentPaymentInquiryViewModel.onInquiryClick(null);
         }
 
-
-        HelperToolbar toolbar = HelperToolbar.create()
+        fragmentPaymentInquiryBinding.fpiLayoutToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLogoShown(true)
-                .setDefaultTitle(fragmentPaymentInquiryViewModel.observeTitleToolbar.getValue())
+                .setDefaultTitle(viewModel.observeTitleToolbar.getValue())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
                         popBackStackFragment();
                     }
-                });
-
-        fragmentPaymentInquiryBinding.fpiLayoutToolbar.addView(toolbar.getView());
-
-        IBackHandler iBackHandler = this::popBackStackFragment;
-        fragmentPaymentInquiryBinding.setBackHandler(iBackHandler);
+                }).getView());
 
     }
 

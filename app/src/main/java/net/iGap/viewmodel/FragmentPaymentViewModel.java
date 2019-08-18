@@ -11,42 +11,23 @@ package net.iGap.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.databinding.ObservableField;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.view.View;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentPaymentBill;
-import net.iGap.fragments.FragmentPaymentCharge;
-import net.iGap.fragments.FragmentPaymentInquiry;
-import net.iGap.helper.CardToCardHelper;
-import net.iGap.helper.HelperFragment;
 
 public class FragmentPaymentViewModel extends ViewModel {
 
-    public ObservableField<Drawable> observeBackGround = new ObservableField<>();
     public MutableLiveData<Integer> goToPaymentBillPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToPaymentCharge = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToButInternetPackage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToCardToCardPage = new MutableLiveData<>();
     public MutableLiveData<FragmentPaymentInquiryViewModel.OperatorType> goToPaymentInquiryPage = new MutableLiveData<>();
-
-    public FragmentPaymentViewModel() {
-
-        Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green_sticker);
-        myIcon.setColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN);
-        observeBackGround.set(myIcon);
-    }
 
     public void onClickCharge() {
         goToPaymentCharge.setValue(true);
     }
 
     public void onClickCardToCard() {
-        CardToCardHelper.CallCardToCard(G.currentActivity);
+        goToCardToCardPage.setValue(true);
     }
 
     public void onClickBill() {

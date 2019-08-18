@@ -1,6 +1,7 @@
 package net.iGap.fragments;
 
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,10 +12,10 @@ import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentBinding;
+import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
-import net.iGap.interfaces.IBackHandler;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.internetpackage.BuyInternetPackageFragment;
 import net.iGap.viewmodel.FragmentPaymentViewModel;
@@ -29,19 +30,21 @@ public class FragmentPayment extends BaseFragment {
     private FragmentPaymentViewModel fragmentPaymentViewModel;
     private FragmentPaymentBinding fragmentPaymentBinding;
 
-
     public static FragmentPayment newInstance() {
         return new FragmentPayment();
     }
 
-    public FragmentPayment() {
-        // Required empty public constructor
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fragmentPaymentViewModel = ViewModelProviders.of(this).get(FragmentPaymentViewModel.class);
     }
-
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentPaymentBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_payment, container, false);
+        fragmentPaymentBinding.setFragmentPaymentViewModel(fragmentPaymentViewModel);
+        fragmentPaymentBinding.setLifecycleOwner(this);
         return attachToSwipeBack(fragmentPaymentBinding.getRoot());
     }
 
@@ -49,22 +52,8 @@ public class FragmentPayment extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         HelperTracker.sendTracker(HelperTracker.TRACKER_FINANCIAL_SERVICES);
-        initDataBinding();
-    }
 
-    private void initDataBinding() {
-
-        fragmentPaymentViewModel = new FragmentPaymentViewModel();
-        fragmentPaymentBinding.setFragmentPaymentViewModel(fragmentPaymentViewModel);
-
-        IBackHandler iBackHandler = new IBackHandler() {
-            @Override
-            public void onBack() {
-                popBackStackFragment();
-            }
-        };
-
-        HelperToolbar toolbar = HelperToolbar.create()
+        fragmentPaymentBinding.fpToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
@@ -74,25 +63,21 @@ public class FragmentPayment extends BaseFragment {
                     public void onLeftIconClickListener(View view) {
                         popBackStackFragment();
                     }
-                });
+                }).getView());
 
-        fragmentPaymentBinding.fpToolbar.addView(toolbar.getView());
-
-        fragmentPaymentBinding.setBackHandler(iBackHandler);
-
-        fragmentPaymentViewModel.goToPaymentBillPage.observe(this, type -> {
+        fragmentPaymentViewModel.goToPaymentBillPage.observe(getViewLifecycleOwner(), type -> {
             if (getActivity() != null && type != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentBill.newInstance(type)).setReplace(false).load();
             }
         });
 
-        fragmentPaymentViewModel.goToPaymentInquiryPage.observe(this, type -> {
+        fragmentPaymentViewModel.goToPaymentInquiryPage.observe(getViewLifecycleOwner(), type -> {
             if (getActivity() != null && type != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentInquiry.newInstance(type, null)).setReplace(false).load();
             }
         });
 
-        fragmentPaymentViewModel.goToPaymentCharge.observe(this, go -> {
+        fragmentPaymentViewModel.goToPaymentCharge.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentCharge.newInstance()).setReplace(false).load();
             }
@@ -104,5 +89,13 @@ public class FragmentPayment extends BaseFragment {
             }
         });
 
+        fragmentPaymentViewModel.goToCardToCardPage.observe(getViewLifecycleOwner(), isGo -> {
+            if (getActivity() != null && isGo != null && isGo) {
+                CardToCardHelper.CallCardToCard(getActivity());
+            }
+        });
+
+        fragmentPaymentBinding.setBackHandler(this::popBackStackFragment);
     }
+
 }

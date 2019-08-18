@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
-        <import type="android.graphics.Color" />
-
-        <import type="android.view.View" />
-
-        <import type="net.iGap.G" />
-
         <variable
-            name="fragmentPaymentInquiryViewModel"
+            name="viewModel"
             type="net.iGap.viewmodel.FragmentPaymentInquiryViewModel" />
-
-        <variable
-            name="backHandler"
-            type="net.iGap.interfaces.IBackHandler" />
     </data>
 
     <LinearLayout
@@ -26,8 +15,7 @@
         android:clickable="true"
         android:focusable="true"
         android:layoutDirection="locale"
-        android:orientation="vertical"
-        tools:ignore="MissingPrefix">
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/fpi_layout_toolbar"
@@ -75,7 +63,7 @@
                             android:layout_weight="1"
                             android:entries="@array/bill_type"
                             android:minHeight="@dimen/dp44"
-                            android:onItemSelected="@{fragmentPaymentInquiryViewModel::onItemSelectBillType}" />
+                            android:onItemSelected="@{(parent,view,position,id)->viewModel.onItemSelectBillType(position)}" />
 
 
                     </LinearLayout>
@@ -108,10 +96,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/dp44"
                                 android:background="@drawable/background_cancel_money_action"
+                                android:gravity="center"
                                 android:hint="@string/phone"
                                 android:inputType="phone"
                                 android:maxLength="11"
-                                android:gravity="center"
                                 android:minHeight="@dimen/dp44"
                                 android:paddingLeft="@dimen/dp10"
                                 android:paddingRight="@dimen/dp10"
@@ -165,10 +153,10 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/dp44"
                                     android:background="@drawable/background_cancel_money_action"
+                                    android:gravity="center"
                                     android:hint="@string/area_code"
                                     android:inputType="phone"
                                     android:maxLength="4"
-                                    android:gravity="center"
                                     android:minHeight="@dimen/dp44"
                                     android:paddingLeft="@dimen/dp10"
                                     android:paddingRight="@dimen/dp10"
@@ -216,10 +204,10 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/dp44"
                                     android:background="@drawable/background_cancel_money_action"
+                                    android:gravity="center"
                                     android:hint="@string/phone"
                                     android:inputType="phone"
                                     android:maxLength="8"
-                                    android:gravity="center"
                                     android:minHeight="@dimen/dp44"
                                     android:paddingLeft="@dimen/dp10"
                                     android:paddingRight="@dimen/dp10"
@@ -249,7 +237,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/dp12"
                         android:layout_marginBottom="@dimen/dp12"
-                        android:onClick="@{fragmentPaymentInquiryViewModel::onInquiryClick}"
+                        android:onClick="@{()->viewModel.onInquiryClick(fpi_edt_mci.getEditableText().toString())}"
                         android:text="@string/inquiry"
                         android:textAllCaps="false" />
 
@@ -269,7 +257,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp6"
                     android:orientation="vertical"
-                    android:visibility="@{fragmentPaymentInquiryViewModel.observeInquiry ?   View.VISIBLE  : View.GONE }">
+                    android:visibility="@{viewModel.observeInquiry}">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -278,34 +266,32 @@
                         android:background="@drawable/background_cancel_money_action"
                         android:orientation="vertical">
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="@string/last_term"
                             android:textSize="@dimen/dp16" />
 
-                        <TextView
-                            fontPath="fonts/IRANSansMobile.ttf"
+                        <android.support.v7.widget.AppCompatTextView
                             style="?textTitleColorSettingTheme"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp6"
                             android:layout_marginBottom="@dimen/dp6"
                             android:gravity="center"
-                            android:text="@{fragmentPaymentInquiryViewModel.lastTermMessage}"
+                            android:text="@{viewModel.lastTermMessage}"
                             android:textSize="@dimen/dp16"
-                            android:visibility="@{fragmentPaymentInquiryViewModel.observableLastTermMessage ?   View.VISIBLE  : View.GONE }" />
+                            android:visibility="@{viewModel.observableLastTermMessage ?   View.VISIBLE  : View.GONE }" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
                             android:layout_marginStart="@dimen/dp8"
                             android:layout_marginEnd="@dimen/dp8"
-                            android:visibility="@{fragmentPaymentInquiryViewModel.observableLastTermMessage ?  View.GONE : View.VISIBLE }">
+                            android:orientation="vertical"
+                            android:visibility="@{viewModel.observableLastTermMessage ?  View.GONE : View.VISIBLE }">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -313,23 +299,21 @@
                                 android:layout_marginTop="@dimen/dp8"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <android.support.v7.widget.AppCompatTextView
                                     style="?textSubColorSettingTheme"
-                                    fontPath="fonts/IRANSansMobile.ttf"
                                     android:layout_width="@dimen/dp110"
                                     android:layout_height="wrap_content"
                                     android:gravity="start"
                                     android:text="@string/billing_id"
                                     android:textSize="@dimen/dp16" />
 
-                                <TextView
+                                <android.support.v7.widget.AppCompatTextView
                                     style="?textTitleColorSettingTheme"
-                                    fontPath="fonts/IRANSansMobile.ttf"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:gravity="start"
-                                    android:text="@{fragmentPaymentInquiryViewModel.lastTermBillId}"
+                                    android:text="@{viewModel.lastTermBillId}"
                                     android:textSize="@dimen/dp16" />
                             </LinearLayout>
 
@@ -340,23 +324,21 @@
                                 android:layout_marginTop="@dimen/dp8"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <android.support.v7.widget.AppCompatTextView
                                     style="?textSubColorSettingTheme"
-                                    fontPath="fonts/IRANSansMobile.ttf"
                                     android:layout_width="@dimen/dp110"
                                     android:layout_height="wrap_content"
                                     android:gravity="start"
                                     android:text="@string/payment_code"
                                     android:textSize="@dimen/dp16" />
 
-                                <TextView
+                                <android.support.v7.widget.AppCompatTextView
                                     style="?textTitleColorSettingTheme"
-                                    fontPath="fonts/IRANSansMobile.ttf"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:gravity="start"
-                                    android:text="@{fragmentPaymentInquiryViewModel.lastTermPayId}"
+                                    android:text="@{viewModel.lastTermPayId}"
                                     android:textSize="@dimen/dp16" />
                             </LinearLayout>
 
@@ -366,40 +348,34 @@
                                 android:layout_marginTop="@dimen/dp8"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <android.support.v7.widget.AppCompatTextView
                                     style="?textSubColorSettingTheme"
-                                    fontPath="fonts/IRANSansMobile.ttf"
                                     android:layout_width="@dimen/dp110"
                                     android:layout_height="wrap_content"
                                     android:gravity="start"
                                     android:text="@string/amount"
                                     android:textSize="@dimen/dp16" />
 
-                                <TextView
+                                <android.support.v7.widget.AppCompatTextView
                                     style="?textTitleColorSettingTheme"
-                                    fontPath="fonts/IRANSansMobile.ttf"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:gravity="start"
-                                    android:text="@{fragmentPaymentInquiryViewModel.lastTermAmount}"
+                                    android:text="@{viewModel.lastTermAmount}"
                                     android:textSize="@dimen/dp16" />
                             </LinearLayout>
-
 
                             <android.support.design.button.MaterialButton
                                 style="?iGapButton"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/dp20"
-                                android:onClick="@{fragmentPaymentInquiryViewModel::onLastTermPayment}"
+                                android:onClick="@{()->viewModel.onLastTermPayment()}"
                                 android:text="@string/last_term_payment"
                                 android:textAllCaps="false" />
 
-
                         </LinearLayout>
-
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -408,36 +384,34 @@
                         android:layout_marginBottom="@dimen/dp10"
                         android:background="@drawable/background_cancel_money_action"
                         android:orientation="vertical"
-                        android:visibility="@{fragmentPaymentInquiryViewModel.observeMidTerm}">
+                        android:visibility="@{viewModel.observeMidTerm}">
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="@string/mid_term"
                             android:textSize="@dimen/dp16" />
 
-                        <TextView
+                        <android.support.v7.widget.AppCompatTextView
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp6"
                             android:layout_marginBottom="@dimen/dp6"
                             android:gravity="center"
-                            android:text="@{fragmentPaymentInquiryViewModel.midTermMessage}"
+                            android:text="@{viewModel.midTermMessage}"
                             android:textSize="@dimen/dp16"
-                            android:visibility="@{fragmentPaymentInquiryViewModel.observableMidTermMessage ? View.VISIBLE : View.GONE }" />
+                            android:visibility="@{viewModel.observableMidTermMessage ? View.VISIBLE : View.GONE }" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginEnd="@dimen/dp8"
                             android:layout_marginStart="@dimen/dp8"
-                            android:visibility="@{fragmentPaymentInquiryViewModel.observableMidTermMessage ?  View.GONE : View.VISIBLE }">
+                            android:layout_marginEnd="@dimen/dp8"
+                            android:orientation="vertical"
+                            android:visibility="@{viewModel.observableMidTermMessage ?  View.GONE : View.VISIBLE }">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -445,22 +419,21 @@
                                 android:layout_marginTop="@dimen/dp8"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <android.support.v7.widget.AppCompatTextView
                                     style="?textSubColorSettingTheme"
-                                    fontPath="fonts/IRANSansMobile.ttf"
                                     android:layout_width="@dimen/dp110"
                                     android:layout_height="wrap_content"
                                     android:gravity="start"
                                     android:text="@string/billing_id"
                                     android:textSize="@dimen/dp16" />
 
-                                <TextView
+                                <android.support.v7.widget.AppCompatTextView
                                     style="?textTitleColorSettingTheme"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:gravity="start"
-                                    android:text="@{fragmentPaymentInquiryViewModel.midTermBillId}"
+                                    android:text="@{viewModel.midTermBillId}"
                                     android:textSize="@dimen/dp16" />
                             </LinearLayout>
 
@@ -470,23 +443,21 @@
                                 android:layout_marginTop="@dimen/dp8"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <android.support.v7.widget.AppCompatTextView
                                     style="?textSubColorSettingTheme"
-                                    fontPath="fonts/IRANSansMobile.ttf"
                                     android:layout_width="@dimen/dp110"
                                     android:layout_height="wrap_content"
                                     android:gravity="start"
                                     android:text="@string/payment_code"
                                     android:textSize="@dimen/dp16" />
 
-                                <TextView
+                                <android.support.v7.widget.AppCompatTextView
                                     style="?textTitleColorSettingTheme"
-                                    fontPath="fonts/IRANSansMobile.ttf"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:gravity="start"
-                                    android:text="@{fragmentPaymentInquiryViewModel.midTermPayId}"
+                                    android:text="@{viewModel.midTermPayId}"
                                     android:textSize="@dimen/dp16" />
                             </LinearLayout>
 
@@ -496,23 +467,21 @@
                                 android:layout_marginTop="@dimen/dp8"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <android.support.v7.widget.AppCompatTextView
                                     style="?textSubColorSettingTheme"
-                                    fontPath="fonts/IRANSansMobile.ttf"
                                     android:layout_width="@dimen/dp110"
                                     android:layout_height="wrap_content"
                                     android:gravity="start"
                                     android:text="@string/amount"
                                     android:textSize="@dimen/dp16" />
 
-                                <TextView
+                                <android.support.v7.widget.AppCompatTextView
                                     style="?textTitleColorSettingTheme"
-                                    fontPath="fonts/IRANSansMobile.ttf"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:gravity="start"
-                                    android:text="@{fragmentPaymentInquiryViewModel.midTermAmount}"
+                                    android:text="@{viewModel.midTermAmount}"
                                     android:textSize="@dimen/dp16" />
                             </LinearLayout>
 
@@ -522,7 +491,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/dp20"
-                                android:onClick="@{fragmentPaymentInquiryViewModel::onMidTermPayment}"
+                                android:onClick="@{()->viewModel.onMidTermPayment()}"
                                 android:text="@string/intermediate_payment"
                                 android:textAllCaps="false" />
 

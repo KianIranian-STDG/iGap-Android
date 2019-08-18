@@ -16,11 +16,9 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
-import net.iGap.activities.ActivityRegisteration;
 import net.iGap.databinding.FragmentSettingBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperError;
@@ -102,8 +100,8 @@ public class FragmentSetting extends BaseFragment {
         });
 
         viewModel.goToManageSpacePage.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean != null && aBoolean) {
-                startActivity(new Intent(G.fragmentActivity, ActivityManageSpace.class));
+            if (getActivity() != null && aBoolean != null && aBoolean) {
+                startActivity(new Intent(getActivity(), ActivityManageSpace.class));
             }
         });
 
@@ -113,7 +111,7 @@ public class FragmentSetting extends BaseFragment {
             }
         });
 
-        viewModel.goToNotificationAndSoundPage.observe(this, go -> {
+        viewModel.goToNotificationAndSoundPage.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentNotificationAndSound()).setReplace(false).load();
             }
@@ -139,7 +137,7 @@ public class FragmentSetting extends BaseFragment {
 
         viewModel.showError.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
-                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
+                HelperError.showSnackMessage(getString(R.string.error), false);
             }
         });
 
