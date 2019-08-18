@@ -113,6 +113,7 @@ import net.iGap.payment.Payment;
 import net.iGap.payment.PaymentFragment;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoInfoWallpaper;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoom;
@@ -122,6 +123,7 @@ import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmStickers;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.realm.RealmWallpaper;
+import net.iGap.realm.RealmWallpaperFields;
 import net.iGap.request.RequestInfoWallpaper;
 import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserVerifyNewDevice;
@@ -730,7 +732,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void getWallpaperAsDefault() {
         try {
-            RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).findFirst();
+            RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE , ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
             if (realmWallpaper != null) {
                 if (realmWallpaper.getWallPaperList() != null && realmWallpaper.getWallPaperList().size() > 0) {
                     RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
@@ -785,10 +787,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void getImageListFromServer() {
+        Log.e("wallpaper" , "request in main ");
         G.onGetWallpaper = new OnGetWallpaper() {
             @Override
             public void onGetWallpaperList(final List<ProtoGlobal.Wallpaper> list) {
-                RealmWallpaper.updateField(list, "");
+                Log.e("wallpaper" , "resp in main");
+                RealmWallpaper.updateField(list, "" , ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE);
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -798,7 +802,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
 
-        new RequestInfoWallpaper().infoWallpaper();
+        new RequestInfoWallpaper().infoWallpaper(ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND);
     }
 
     @Override

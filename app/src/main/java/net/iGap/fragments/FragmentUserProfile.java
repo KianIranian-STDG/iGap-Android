@@ -87,6 +87,14 @@ public class FragmentUserProfile extends BaseMainFragments {
         super.onViewCreated(view, savedInstanceState);
         Log.wtf(this.getClass().getName(), "onViewCreated");
 
+        viewModel.changeUserProfileWallpaper.observe(getViewLifecycleOwner() , drawable -> {
+            if (drawable != null){
+                binding.fupBgAvatar.setImageDrawable(drawable);
+            }else {
+                binding.fupBgAvatar.setImageResource(R.drawable.test_bg);
+            }
+        });
+
         viewModel.goToAddMemberPage.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
                 try {
