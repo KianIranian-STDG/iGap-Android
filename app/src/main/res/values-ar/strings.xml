@@ -2912,4 +2912,7 @@
     <string name="message_decline_Please_call_later">يمكنك الاتصال مرة أخرى في وقت لاحق؟</string>
     <string name="message_decline_please_text_me">يرجى نص لي.</string>
     <string name="of_from_total">فی %s</string>
+    <string name="app_version_change_log">قائمة التغييرات</string>
+    <string name="updated_version_title">الإصدار الخاص بك هو التحديث</string>
+    <string name="check_update_title">اختر التحديث</string>
 </resources>

@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.text.HtmlCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -70,6 +71,7 @@ import net.iGap.realm.RealmWallpaper;
 import net.iGap.realm.RealmWallpaperFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestGeoGetConfiguration;
+import net.iGap.request.RequestInfoUpdate;
 import net.iGap.request.RequestInfoWallpaper;
 import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserIVandGetScore;
@@ -138,6 +140,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public SingleLiveEvent<Boolean> goToSettingPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goToUserScorePage = new SingleLiveEvent<>();
     public SingleLiveEvent<Long> goToShowAvatarPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> showDialogBeLastVersion = new SingleLiveEvent<>();
+    public SingleLiveEvent<String> showDialogUpdate = new SingleLiveEvent<>();
     public MutableLiveData<Long> setUserAvatar = new MutableLiveData<>();
     public SingleLiveEvent<DeleteAvatarModel> deleteAvatar = new SingleLiveEvent<>();
     public SingleLiveEvent<ChangeImageModel> setUserAvatarPath = new SingleLiveEvent<>();
@@ -583,6 +587,31 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 }
             }
         }
+    }
+
+    public void onChangeLogClick() {
+        showLoading.set(View.VISIBLE);
+        new RequestInfoUpdate().infoUpdate(BuildConfig.VERSION_CODE, new RequestInfoUpdate.updateInfoCallback() {
+            @Override
+            public void onSuccess(int lastVersion, String Body) {
+                showLoading.set(View.GONE);
+                if (lastVersion == BuildConfig.VERSION_CODE) {
+                    showDialogBeLastVersion.postValue(true);
+                } else {
+                    showDialogUpdate.postValue(HtmlCompat.fromHtml(Body, HtmlCompat.FROM_HTML_MODE_LEGACY).toString());
+                }
+            }
+
+            @Override
+            public void onError(int major, int minor) {
+                showLoading.set(View.GONE);
+                if (major == 5 && minor == 1) {
+                    showError.setValue(R.string.connection_error);
+                } else {
+                    showError.setValue(R.string.error);
+                }
+            }
+        });
     }
 
     private void getUserCredit() {

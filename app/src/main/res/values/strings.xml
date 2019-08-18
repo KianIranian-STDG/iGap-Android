@@ -1966,4 +1966,7 @@ Want to get it?</string>
     <string name="message_decline_Please_call_later">Can you call back later?</string>
     <string name="message_decline_please_text_me">Please text me.</string>
     <string name="of_from_total">of %s</string>
+    <string name="app_version_change_log">Change Log</string>
+    <string name="updated_version_title">Your Version Is Update</string>
+    <string name="check_update_title">Check Update</string>
 </resources>

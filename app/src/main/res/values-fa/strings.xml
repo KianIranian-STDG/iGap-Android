@@ -1969,5 +1969,7 @@
     <string name="message_decline_Please_call_later">ممکن است بعدا تماس بگیرید؟</string>
     <string name="message_decline_please_text_me">لطفا پیام بدهید.</string>
     <string name="of_from_total">از %s</string>
-
+    <string name="app_version_change_log">لیست تغییرات</string>
+    <string name="updated_version_title">نسخه شما به روز شده است</string>
+    <string name="check_update_title">کنترل بروزرسانی</string>
 </resources>

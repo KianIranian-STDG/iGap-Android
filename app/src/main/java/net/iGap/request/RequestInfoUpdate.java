@@ -10,21 +10,26 @@
 
 package net.iGap.request;
 
-import net.iGap.proto.ProtoBillInquiryMci;
 import net.iGap.proto.ProtoInfoUpdate;
 
 public class RequestInfoUpdate {
 
-    public void infoUpdate(int appId, int appBuildVersion) {
+    public void infoUpdate(int appBuildVersion, updateInfoCallback callback) {
         ProtoInfoUpdate.InfoUpdate.Builder builder = ProtoInfoUpdate.InfoUpdate.newBuilder();
-        builder.setAppId(appId);
+        builder.setAppId(2);
         builder.setAppBuildVersion(appBuildVersion);
 
-        RequestWrapper requestWrapper = new RequestWrapper(505, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(505, builder, callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public interface updateInfoCallback {
+        void onSuccess(int lastVersion,String Body);
+
+        void onError(int major, int minor);
     }
 }
