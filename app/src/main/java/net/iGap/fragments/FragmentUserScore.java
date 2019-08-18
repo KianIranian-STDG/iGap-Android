@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,7 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -32,12 +34,18 @@ public class FragmentUserScore extends BaseFragment {
 
     private UserScoreViewModel viewModel;
     private FragmentUserScoreBinding binding;
+    private static final int REQUEST_CODE_QR_IVAND_CODE = 543;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(UserScoreViewModel.class);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_score, container, false);
-        viewModel = new UserScoreViewModel();
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return attachToSwipeBack(binding.getRoot());
@@ -71,7 +79,10 @@ public class FragmentUserScore extends BaseFragment {
 
         binding.toolbar.addView(t.getView());
 
-        viewModel.userRankPointer.observe(this, integer -> {
+        binding.rvScoreList.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvScoreList.setAdapter(new IvandScoreAdapter());
+
+        viewModel.getUserRankPointer().observe(getViewLifecycleOwner(), integer -> {
             if (integer != null) {
                 ConstraintSet set = new ConstraintSet();
                 set.clone(binding.root);
@@ -81,36 +92,38 @@ public class FragmentUserScore extends BaseFragment {
             }
         });
 
-        viewModel.ivandScore.observe(this , iVandScores -> {
+        viewModel.getIvandScore().observe(getViewLifecycleOwner(), iVandScores -> {
+            if (binding.rvScoreList.getAdapter() instanceof IvandScoreAdapter && iVandScores != null) {
+                ((IvandScoreAdapter) binding.rvScoreList.getAdapter()).setItems(iVandScores);
+            }
+        });
 
-            if (iVandScores != null && iVandScores.size() != 0 ){
-
-                binding.rvScoreList.setLayoutManager(new LinearLayoutManager(getContext()));
-                IvandScoreAdapter adapter = new IvandScoreAdapter();
-                adapter.setItems(iVandScores);
-                binding.rvScoreList.setAdapter(adapter);
-
+        viewModel.getGoToScannerPage().observe(getViewLifecycleOwner(), isGo -> {
+            if (getActivity() != null && isGo != null && isGo) {
+                IntentIntegrator integrator = new IntentIntegrator(getActivity());
+                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+                integrator.setRequestCode(REQUEST_CODE_QR_IVAND_CODE);
+                integrator.setBeepEnabled(false);
+                integrator.setPrompt("");
+                integrator.initiateScan();
             }
         });
     }
 
 
-    private class IvandScoreAdapter extends RecyclerView.Adapter<IvandScoreAdapter.ViewHolder>{
+    private class IvandScoreAdapter extends RecyclerView.Adapter<IvandScoreAdapter.ViewHolder> {
 
-        private List<ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore> items ;
-
-        public IvandScoreAdapter() {
-
-        }
+        private List<ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore> items;
 
         public void setItems(List<ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore> items) {
             this.items = items;
+            notifyDataSetChanged();
         }
 
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_score_items , viewGroup , false));
+            return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_score_items, viewGroup, false));
         }
 
         @Override
@@ -120,12 +133,12 @@ public class FragmentUserScore extends BaseFragment {
 
         @Override
         public int getItemCount() {
-            return items.size();
+            return items != null ? items.size() : 0;
         }
 
-        private class ViewHolder extends RecyclerView.ViewHolder{
+        private class ViewHolder extends RecyclerView.ViewHolder {
 
-            AppCompatTextView title , count ;
+            AppCompatTextView title, count;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -136,19 +149,19 @@ public class FragmentUserScore extends BaseFragment {
 
             private void bindView(ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore iVandScore) {
 
-                if (G.selectedLanguage.equals("fa")){
+                if (G.selectedLanguage.equals("fa")) {
                     title.setText(iVandScore.getFaName());
-                }else {
+                } else {
                     title.setText(iVandScore.getEnName());
                 }
 
                 count.setText(checkPersianNumber(String.valueOf(iVandScore.getScore())) + " " + getString(R.string.point));
             }
 
-            private String checkPersianNumber(String text){
-                if (HelperCalander.isPersianUnicode){
+            private String checkPersianNumber(String text) {
+                if (HelperCalander.isPersianUnicode) {
                     return HelperCalander.convertToUnicodeFarsiNumber(text);
-                }else {
+                } else {
                     return text;
                 }
             }

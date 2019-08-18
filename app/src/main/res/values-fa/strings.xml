@@ -1968,7 +1968,6 @@
     <string name="message_decline_call_later">با شما تماس میگیرم.</string>
     <string name="message_decline_Please_call_later">ممکن است بعدا تماس بگیرید؟</string>
     <string name="message_decline_please_text_me">لطفا پیام بدهید.</string>
-
-
+    <string name="of_from_total">از %s</string>
 
 </resources>
