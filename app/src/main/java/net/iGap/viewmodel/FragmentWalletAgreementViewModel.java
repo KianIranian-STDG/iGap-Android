@@ -36,7 +36,7 @@ import ir.radsense.raadcore.model.Auth;
 public class FragmentWalletAgreementViewModel extends ViewModel {
 
 
-    public ObservableField<String> callbackTxtAgreement = new ObservableField<>("");
+    private ObservableField<String> callbackTxtAgreement = new ObservableField<>("");
     private MutableLiveData<Boolean> showDialogAcceptTerms = new MutableLiveData<>();
     private MutableLiveData<Integer> showErrorMessage = new MutableLiveData<>();
     private MutableLiveData<GoToWalletPage> goToWalletPage = new MutableLiveData<>();
@@ -48,6 +48,10 @@ public class FragmentWalletAgreementViewModel extends ViewModel {
         this.isScan = isScan;
         G.onReceivePageInfoWalletAgreement = body -> callbackTxtAgreement.set(Html.fromHtml(body).toString());
         new RequestInfoPage().infoPage("WALLET_AGREEMENT");
+    }
+
+    public ObservableField<String> getCallbackTxtAgreement() {
+        return callbackTxtAgreement;
     }
 
     public MutableLiveData<Boolean> getShowDialogAcceptTerms() {
@@ -76,6 +80,8 @@ public class FragmentWalletAgreementViewModel extends ViewModel {
     }
 
     private void goToWalletPage() {
+
+        //ToDo: why have delay ?!!!
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
