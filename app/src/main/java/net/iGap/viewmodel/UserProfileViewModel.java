@@ -184,7 +184,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 updateUserInfoUI();
             });
         }
-    }
+
 
         appVersion.set(BuildConfig.VERSION_NAME);
         isDarkMode.set(G.isDarkTheme);
