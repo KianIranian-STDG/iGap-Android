@@ -375,7 +375,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         } else if (holder instanceof LogItem.ViewHolder ||
                 holder instanceof LogWalletCardToCard.ViewHolder ||
                 holder instanceof LogWallet.ViewHolder) {
-            messageClickListener.onItemShowingMessageId(mMessage);
+            messageClickListener.onItemShowingMessageId(structMessage);
             return;
         } else {
             return;
