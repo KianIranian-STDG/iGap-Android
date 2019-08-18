@@ -1562,7 +1562,7 @@ public class FragmentChat extends BaseFragment
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(G.twoPaneMode ? R.string.close_icon : R.string.back_icon)
                 .setRightIcons(R.string.more_icon, R.string.voice_call_icon, R.string.video_call_icon)
                 .setLogoShown(false)
                 .setChatRoom(true)
@@ -9293,7 +9293,13 @@ public class FragmentChat extends BaseFragment
             return;
         }
         closeKeyboard(view);
-        popBackStackFragment();
+        if (G.twoPaneMode){
+            if (getActivity() instanceof ActivityMain){
+                ((ActivityMain) getActivity()).goToTabletEmptyPage();
+            }
+        }else {
+            popBackStackFragment();
+        }
     }
 
     @Override

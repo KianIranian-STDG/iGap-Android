@@ -658,11 +658,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
-                Log.wtf(this.getClass().getName(),"------------------------------------------------");
-                for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount() ; i++){
-                    Log.wtf(this.getClass().getName(),"fragment: "+ getSupportFragmentManager().getBackStackEntryAt(i).getName());
+                Log.wtf(this.getClass().getName(), "------------------------------------------------");
+                for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
+                    Log.wtf(this.getClass().getName(), "fragment: " + getSupportFragmentManager().getBackStackEntryAt(i).getName());
                 }
-                Log.wtf(this.getClass().getName(),"------------------------------------------------");
+                Log.wtf(this.getClass().getName(), "------------------------------------------------");
             }
         });
         Log.wtf(this.getClass().getName(), "onCreate");
@@ -1090,11 +1090,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 G.isLandscape = false;
             }
 
-            if (beforeState != G.isLandscape) {
-                /*designLayout(chatLayoutMode.none);*/
+            /*if (beforeState != G.isLandscape) {
+             *//*designLayout(chatLayoutMode.none);*//*
                 Log.wtf(this.getClass().getName(), "onConfigurationChanged");
                 setViewConfigurationChanged();
-            }
+            }*/
             setDialogFragmentSize();
         }
         super.onConfigurationChanged(newConfig);
@@ -1509,7 +1509,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public void designLayout(final chatLayoutMode mode) {
         if (G.twoPaneMode) {
-            findViewById(R.id.mainFrame).setVisibility(G.isLandscape ? View.VISIBLE : View.GONE);
+            /*findViewById(R.id.mainFrame).setVisibility(G.isLandscape ? View.VISIBLE : View.GONE);*/
             /*if (G.isLandscape) {
                 new HelperFragment(getSupportFragmentManager(), new TabletEmptyChatFragment()).load(true);
             } else {
@@ -1807,11 +1807,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public void goToChatPage(FragmentChat fragmentChat) {
         Log.wtf(this.getClass().getName(), "goToChatPage");
-        if (findViewById(R.id.mainFrame).getVisibility() != View.VISIBLE) {
-            findViewById(R.id.mainFrame).setVisibility(View.VISIBLE);
-            findViewById(R.id.roomListFrame).setVisibility(View.GONE);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+        if (fragment instanceof FragmentChat) {
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
         }
-        new HelperFragment(getSupportFragmentManager(), fragmentChat).setReplace(false).load();
+        getSupportFragmentManager().beginTransaction().add(R.id.mainFrame, fragmentChat).commit();
+        /*new HelperFragment(getSupportFragmentManager(), fragmentChat).setReplace(false).load();*/
     }
 
     //removeAllFragmentLoadedLikeDialogInTabletMode
@@ -1821,7 +1822,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void removeAllFragmentFromMain() {
-        getSupportFragmentManager().popBackStack(BottomNavigationFragment.class.getName(), 0);
+        if (G.twoPaneMode) {
+            findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+            if (fragment instanceof FragmentChat) {
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+            getSupportFragmentManager().popBackStack(TabletEmptyChatFragment.class.getName(), 0);
+        } else {
+            getSupportFragmentManager().popBackStack(BottomNavigationFragment.class.getName(), 0);
+        }
     }
 
     /**
@@ -1841,5 +1851,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).setForwardMessage(enable);
         }
+    }
+
+    public void goToTabletEmptyPage() {
+        Log.wtf(this.getClass().getName(), "goToTabletEmptyPage");
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+        if (fragment instanceof FragmentChat) {
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        }
+
     }
 }
