@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -39,60 +40,45 @@
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/backgroundImage"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/dp8"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/igasht_bg"
+                android:src="@drawable/image_igasht_province"
                 app:imageUrl="@{viewModel.backgroundImageUrl}"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/iGashtTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/main_font"
-                android:text="@string/igasht_title"
-                android:textColor="@color/white"
-                android:textSize="@dimen/dp32"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/chooseProvinceTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/backgroundImage"
-                app:layout_constraintVertical_bias="0.3"
-                app:layout_constraintVertical_chainStyle="packed" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/chooseProvinceTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="28dp"
                 android:fontFamily="@font/main_font"
                 android:text="@string/igasht_choose_province_title"
                 android:textColor="@color/white"
                 android:textSize="@dimen/largeTextSize"
                 android:visibility="@{viewModel.showMainView}"
                 app:layout_constraintBottom_toTopOf="@id/v"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iGashtTitle" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <android.support.design.card.MaterialCardView
                 android:id="@+id/v"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
                 android:visibility="@{viewModel.showMainView}"
                 app:cardCornerRadius="@dimen/dp20"
                 app:cardUseCompatPadding="true"
                 app:contentPadding="@dimen/dp8"
-                app:layout_constraintBottom_toTopOf="@id/loadingView"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/chooseProvinceTitle"
-                app:layout_constraintWidth_percent=".8">
+                app:layout_constraintWidth_percent=".8"
+                tools:layout_editor_absoluteY="332dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -142,27 +128,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="@{viewModel.showLoadingView}"
-                app:layout_constraintBottom_toTopOf="@id/searchButton"
-                app:layout_constraintTop_toBottomOf="@id/v"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <android.support.design.button.MaterialButton
-                android:id="@+id/searchButton"
-                style="@style/BaseIGapButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{()->viewModel.onSearchPlaceButtonClick()}"
-                android:text="@string/igasht_search_by_location"
-                android:visibility="@{viewModel.showMainView}"
-                app:backgroundTint="@color/buttonColor"
-                app:icon="@drawable/ic_location"
-                app:iconGravity="textStart"
-                app:iconTint="@color/white"
-                app:layout_constraintBottom_toBottomOf="@id/backgroundImage"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/loadingView" />
+                app:layout_constraintTop_toBottomOf="@id/v" />
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/myIconTextViewStyle"
@@ -176,6 +144,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/backgroundImage" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp200"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="579dp"
+                android:background=/>
         </android.support.constraint.ConstraintLayout>
 
         <!-- </ScrollView>-->

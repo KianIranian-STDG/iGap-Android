@@ -23,6 +23,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
+import net.iGap.igasht.provinceselect.IGashtProvinceFragment;
 import net.iGap.internetpackage.BuyInternetPackageFragment;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
@@ -143,12 +144,13 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case TRAFFIC_BILL_MENU:/** tested **/
-                try {
+            new HelperFragment(activity.getSupportFragmentManager(),new IGashtProvinceFragment()).setReplace(false).load(true);
+                /*try {
                     JSONObject jsonObject = new JSONObject(discoveryField.value);
                     new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills_crime, jsonObject)).setReplace(false).load();
                 } catch (JSONException e) {
                     new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills_crime)).setReplace(false).load();
-                }
+                }*/
                 break;
             case PHONE_BILL_MENU:/** tested **/
                 new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.telecome, null)).setReplace(false).load();
