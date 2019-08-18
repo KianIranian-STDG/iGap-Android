@@ -211,6 +211,7 @@ public class RealmRoom extends RealmObject {
         if (room.hasFirstUnreadMessage()) {
             RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(realm, room.getId(), room.getFirstUnreadMessage(), new StructMessageOption());
             realmRoomMessage.setFutureMessageId(room.getFirstUnreadMessage().getMessageId());
+            realmRoomMessage.setPreviousMessageId(room.getFirstUnreadMessage().getMessageId());
             realmRoom.setFirstUnreadMessage(realmRoomMessage);
         }
 
