@@ -473,10 +473,9 @@
                 android:background="?attr/selectableItemBackground"
                 android:onClick="@{()->viewModel.onQRCodeScannerClick()}"
                 app:layout_constraintBottom_toBottomOf="@id/scanQRIcon"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fup_btn_invite_friends"
-                app:layout_constraintWidth_percent=".85" />
+                app:layout_constraintEnd_toEndOf="@id/fup_btn_invite_friends"
+                app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
+                app:layout_constraintTop_toBottomOf="@id/fup_btn_invite_friends" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/nearByIcon"
@@ -510,10 +509,9 @@
                 android:background="?attr/selectableItemBackground"
                 android:onClick="@{()->viewModel.onNearByClick()}"
                 app:layout_constraintBottom_toBottomOf="@id/nearByIcon"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fup_btn_qr_scanner"
-                app:layout_constraintWidth_percent=".85" />
+                app:layout_constraintEnd_toEndOf="@id/fup_btn_invite_friends"
+                app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
+                app:layout_constraintTop_toBottomOf="@id/fup_btn_qr_scanner" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/fup_btn_dark_view_handler_view"
@@ -560,10 +558,9 @@
                 android:layout_marginTop="@dimen/dp8"
                 android:background="?attr/selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="@id/fup_btn_dark_view_handler_view"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fup_btn_nearBy"
-                app:layout_constraintWidth_percent=".85" />
+                app:layout_constraintEnd_toEndOf="@id/fup_btn_invite_friends"
+                app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
+                app:layout_constraintTop_toBottomOf="@id/fup_btn_nearBy" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/fup_btn_faq_view_handler_view"
@@ -598,10 +595,9 @@
                 android:background="?attr/selectableItemBackground"
                 android:onClick="@{()->viewModel.onFAQClick()}"
                 app:layout_constraintBottom_toBottomOf="@id/fup_btn_faq_view_handler_view"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fup_btn_dark_mode"
-                app:layout_constraintWidth_percent=".85" />
+                app:layout_constraintEnd_toEndOf="@id/fup_btn_invite_friends"
+                app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
+                app:layout_constraintTop_toBottomOf="@id/fup_btn_dark_mode" />
 
             <View
                 android:id="@+id/fup_splitter_4"
@@ -620,16 +616,11 @@
                 style="?textTitleColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/dp32"
-                android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginTop="@dimen/dp4"
-                android:layout_marginBottom="@dimen/dp16"
-                android:fontFamily="@font/main_font"
-                android:paddingBottom="@dimen/dp10"
+                android:padding="@dimen/dp4"
                 android:text="@string/app_version"
                 android:textSize="@dimen/standardTextSize"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
                 app:layout_constraintTop_toBottomOf="@id/fup_splitter_4" />
 
             <android.support.v7.widget.AppCompatTextView
@@ -637,19 +628,31 @@
                 style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/dp32"
-                android:layout_marginRight="@dimen/dp32"
-                android:paddingBottom="@dimen/dp10"
                 android:text="@{viewModel.appVersion}"
                 android:textSize="@dimen/smallTextSize"
                 app:layout_constraintBottom_toBottomOf="@id/versionTitle"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/fup_btn_invite_friends"
                 app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintStart_toEndOf="@id/versionTitle"
                 app:layout_constraintTop_toTopOf="@id/versionTitle" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/versionChange"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp4"
+                android:layout_marginBottom="@dimen/dp16"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{()->viewModel.onChangeLogClick()}"
+                android:padding="@dimen/dp4"
+                android:text="@string/check_update_title"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/fup_btn_invite_friends"
+                app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
+                app:layout_constraintTop_toBottomOf="@id/versionTitle"
+                app:layout_constraintVertical_bias="0" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/name"
@@ -834,7 +837,7 @@
                 android:id="@+id/profileViewGroup"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:constraint_referenced_ids="inviteTitle,inviteIcon,scanQRIcon,scanQRTitle,nearByIcon,nearByTitle,darkTheme,darkThemeTitle,fup_btn_dark_view_handler_view,fup_btn_faq_view_handler_view,faqTitle,fup_user_name,fup_user_tel,fup_user_bio,cloudIcon,cloudTitle,settingIcon,settingTitle,addIcon,addTitle,fup_splitter_1,fup_btn_credit,fup_splitter_2,fup_btn_score,fup_splitter_3,inviteIcon,inviteTitle,fup_btn_qr_scanner,fup_btn_nearBy,fup_btn_dark_mode,fup_btn_faq,fup_splitter_4,versionTitle,fup_txt_app_version,userFullName"
+                app:constraint_referenced_ids="inviteTitle,inviteIcon,scanQRIcon,scanQRTitle,nearByIcon,nearByTitle,darkTheme,darkThemeTitle,fup_btn_dark_view_handler_view,fup_btn_faq_view_handler_view,faqTitle,fup_user_name,fup_user_tel,fup_user_bio,cloudIcon,cloudTitle,settingIcon,settingTitle,addIcon,addTitle,fup_splitter_1,fup_btn_credit,fup_splitter_2,fup_btn_score,fup_splitter_3,inviteIcon,inviteTitle,fup_btn_qr_scanner,fup_btn_nearBy,fup_btn_dark_mode,fup_btn_faq,fup_splitter_4,versionTitle,fup_txt_app_version,userFullName,versionChange"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />
 

@@ -1981,5 +1981,7 @@
     <string name="mpl_transaction_nul">شما هیچ تراکنشی در ۵ روز گذشته ندارید!</string>
 
     <string name="of_from_total">از %s</string>
-
+    <string name="app_version_change_log">لیست تغییرات</string>
+    <string name="updated_version_title">نسخه شما به روز شده است</string>
+    <string name="check_update_title">کنترل بروزرسانی</string>
 </resources>
