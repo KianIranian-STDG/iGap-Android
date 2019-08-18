@@ -144,7 +144,7 @@
 
                         <android.support.v7.widget.AppCompatAutoCompleteTextView
                             android:id="@+id/provinceSearchText"
-                            android:layout_width="0dp"
+                            android:layout_width="289dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp8"
                             android:layout_marginLeft="@dimen/dp8"
@@ -169,7 +169,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:background="?attr/selectableItemBackgroundBorderless"
-                            android:text="@string/search_icon" />
+                            android:text="@string/search_icon"
+                            android:visibility="@{viewModel.showMainView}"
+                            android:onClick="@{()->viewModel.onSearchPlaceButtonClick()}"/>
 
                     </LinearLayout>
                 </android.support.design.card.MaterialCardView>
