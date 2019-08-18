@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.module.EndlessRecyclerViewScrollListener;
+import net.iGap.proto.ProtoGlobal;
 
 public class MplTransactionFragment extends BaseFragment implements ToolbarListener {
 
@@ -33,6 +36,11 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
     private TextView typeBillTv;
     private TextView emptyView;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
+    private int page = 1;
+    private int start;
+    private int end;
 
     @Nullable
     @Override
@@ -50,11 +58,18 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
 
         viewModel.getMplTransactionLiveData().observe(getViewLifecycleOwner(), mplTransaction -> {
             if (mplTransaction != null) {
-                if (mplTransaction.size() > 0)
-                    adapter.setTransAction(mplTransaction);
-                else
-                    emptyView.setVisibility(View.VISIBLE);
+                if (mplTransaction.size() > 0) {
+                    if (page == 1) {
+                        adapter.setTransAction(mplTransaction);
+                    } else {
+                        adapter.addTransAction(mplTransaction);
+                    }
+                    start = adapter.getItemCount();
+                    end = start + MplTransactionViewModel.PAGINATION_LIMIT;
+                    page = page + 1;
+                }
             }
+
         });
 
         viewModel.getProgressMutableLiveData().observe(getViewLifecycleOwner(), progress -> {
@@ -62,7 +77,26 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
                 swipeRefreshLayout.setRefreshing(progress);
         });
 
-        swipeRefreshLayout.setOnRefreshListener(() -> viewModel.getAllMplTransactionList());
+        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.i(TAG, "onScrolled: ");
+                viewModel.getMorePageOffset(7, 11);
+            }
+        });
+
+//
+//        RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(@NotNull RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                viewModel.getMorePageOffset(start, end);
+//            }
+//        };
+
+//        recyclerView.addOnScrollListener(onScrollListener);
+
+        swipeRefreshLayout.setOnRefreshListener(() -> viewModel.getFirstPageMplTransactionList(ProtoGlobal.MplTransaction.Type.NONE));
 
         adapter.setCallBack(token -> {
             if (token != null)
@@ -71,34 +105,34 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
 
         typeAllTv.setOnClickListener(v -> {
             setEnableButton(typeAllTv, typeBillTv, typeCardToCardTv, typeSalesTv, typeTopUpTv);
-            viewModel.getAllMplTransactionList();
+            viewModel.getFirstPageMplTransactionList(ProtoGlobal.MplTransaction.Type.NONE);
         });
 
         typeBillTv.setOnClickListener(v -> {
             setEnableButton(typeBillTv, typeAllTv, typeCardToCardTv, typeSalesTv, typeTopUpTv);
-            viewModel.getBillMplTransactionList();
+            viewModel.getFirstPageMplTransactionList(ProtoGlobal.MplTransaction.Type.BILL);
         });
 
         typeCardToCardTv.setOnClickListener(v -> {
             setEnableButton(typeCardToCardTv, typeAllTv, typeBillTv, typeSalesTv, typeTopUpTv);
-            viewModel.getCardToCardMplTransactionList();
+            viewModel.getFirstPageMplTransactionList(ProtoGlobal.MplTransaction.Type.CARD_TO_CARD);
         });
 
         typeSalesTv.setOnClickListener(v -> {
             setEnableButton(typeSalesTv, typeAllTv, typeBillTv, typeCardToCardTv, typeTopUpTv);
-            viewModel.getSaleMplTransactionList();
+            viewModel.getFirstPageMplTransactionList(ProtoGlobal.MplTransaction.Type.SALES);
         });
 
         typeTopUpTv.setOnClickListener(v -> {
             setEnableButton(typeTopUpTv, typeAllTv, typeBillTv, typeCardToCardTv, typeSalesTv);
-            viewModel.getTopUpMplTransactionList();
+            viewModel.getFirstPageMplTransactionList(ProtoGlobal.MplTransaction.Type.TOPUP);
         });
 
     }
 
     private void setUpViews() {
         LinearLayout toolBarContainer = rootView.findViewById(R.id.ll_mplTransaction_toolBar);
-        RecyclerView recyclerView = rootView.findViewById(R.id.rv_mplTransaction);
+        recyclerView = rootView.findViewById(R.id.rv_mplTransaction);
         swipeRefreshLayout = rootView.findViewById(R.id.sl_itemMplTransAction);
         typeAllTv = rootView.findViewById(R.id.tv_mplTransaction_all);
         typeTopUpTv = rootView.findViewById(R.id.tv_mplTransaction_topup);
@@ -107,11 +141,13 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
         typeBillTv = rootView.findViewById(R.id.tv_mplTransaction_bill);
         emptyView = rootView.findViewById(R.id.tv_mplTransaction_emptyView);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
         setEnableButton(typeAllTv, typeBillTv, typeCardToCardTv, typeSalesTv, typeTopUpTv);
-        viewModel.getAllMplTransactionList();
+        viewModel.getFirstPageMplTransactionList(ProtoGlobal.MplTransaction.Type.NONE);
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(G.fragmentActivity)

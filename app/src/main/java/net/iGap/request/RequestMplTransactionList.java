@@ -15,7 +15,7 @@ import net.iGap.proto.ProtoMplTransactionList;
 
 public class RequestMplTransactionList {
 
-    public void mplTransactionList( ProtoGlobal.MplTransaction.Type type , int limit , int offset) {
+    public void mplTransactionList(ProtoGlobal.MplTransaction.Type type, int offset, int limit) {
 
         ProtoMplTransactionList.MplTransactionList.Builder builder = ProtoMplTransactionList.MplTransactionList.newBuilder();
         builder.setType(type);

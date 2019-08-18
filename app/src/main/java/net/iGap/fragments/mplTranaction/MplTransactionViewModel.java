@@ -11,8 +11,10 @@ import net.iGap.viewmodel.BaseViewModel;
 import java.util.List;
 
 public class MplTransactionViewModel extends BaseViewModel implements OnMplTransaction {
+    public static final int PAGINATION_LIMIT = 5;
     private MutableLiveData<List<ProtoGlobal.MplTransaction>> mplTransactionLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> progressMutableLiveData = new MutableLiveData<>();
+    private ProtoGlobal.MplTransaction.Type type;
 
     @Override
     public void onCreateViewModel() {
@@ -32,29 +34,15 @@ public class MplTransactionViewModel extends BaseViewModel implements OnMplTrans
     }
 
 
-    public void getAllMplTransactionList() {
+    public void getFirstPageMplTransactionList(ProtoGlobal.MplTransaction.Type type) {
         progressMutableLiveData.postValue(true);
-        new RequestMplTransactionList().mplTransactionList(ProtoGlobal.MplTransaction.Type.NONE, 100, 0);
+        this.type = type;
+        new RequestMplTransactionList().mplTransactionList(type, 0, PAGINATION_LIMIT);
     }
 
-    public void getBillMplTransactionList() {
+    public void getMorePageOffset(int start, int end) {
         progressMutableLiveData.postValue(true);
-        new RequestMplTransactionList().mplTransactionList(ProtoGlobal.MplTransaction.Type.BILL, 100, 0);
-    }
-
-    public void getTopUpMplTransactionList() {
-        progressMutableLiveData.postValue(true);
-        new RequestMplTransactionList().mplTransactionList(ProtoGlobal.MplTransaction.Type.TOPUP, 100, 0);
-    }
-
-    public void getSaleMplTransactionList() {
-        progressMutableLiveData.postValue(true);
-        new RequestMplTransactionList().mplTransactionList(ProtoGlobal.MplTransaction.Type.SALES, 100, 0);
-    }
-
-    public void getCardToCardMplTransactionList() {
-        progressMutableLiveData.postValue(true);
-        new RequestMplTransactionList().mplTransactionList(ProtoGlobal.MplTransaction.Type.CARD_TO_CARD, 100, 0);
+        new RequestMplTransactionList().mplTransactionList(type, start, end);
     }
 
     public MutableLiveData<List<ProtoGlobal.MplTransaction>> getMplTransactionLiveData() {
@@ -64,4 +52,5 @@ public class MplTransactionViewModel extends BaseViewModel implements OnMplTrans
     public MutableLiveData<Boolean> getProgressMutableLiveData() {
         return progressMutableLiveData;
     }
+
 }
