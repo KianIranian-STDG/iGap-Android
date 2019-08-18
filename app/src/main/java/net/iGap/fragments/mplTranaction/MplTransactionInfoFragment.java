@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,12 +22,14 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MplTransactionInfoFragment extends BaseFragment implements ToolbarListener {
+    private static final String TAG = "abbasiMpl";
     private View rootView;
     private String token;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -36,9 +39,8 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
     private TextView dataTv;
     private TextView timeTv;
     private TextView statusIv;
-    private View statusRootView;
-    private View rvContainer;
-    private RecyclerView recyclerView;
+    private CardView statusRootView;
+    private CardView rvContainer;
     private TextView emptyView;
 
     public static MplTransactionInfoFragment getInstance(String token) {
@@ -67,23 +69,24 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
             List<MilTransActionStruct> data = new ArrayList<>();
 
             if (mplTransaction != null) {
+                setDate(mplTransaction.getPayTime());
+
                 switch (mplTransaction.getType()) {
                     case CARD_TO_CARD:
                         ProtoGlobal.MplTransaction.CardToCard transactionCardToCard = mplTransaction.getCardtocard();
                         data = new ArrayList<>();
 
                         setStatus(transactionCardToCard.getStatus());
-                        setData(transactionCardToCard.getRequestDateTime());
 
-                        data.add(new MilTransActionStruct("BankName", transactionCardToCard.getBankName()));
-                        data.add(new MilTransActionStruct("OwnerName", transactionCardToCard.getCardOwnerName()));
-                        data.add(new MilTransActionStruct("DestBank", transactionCardToCard.getDestBankName()));
-                        data.add(new MilTransActionStruct("DestCard", transactionCardToCard.getDestCardNumber()));
-                        data.add(new MilTransActionStruct("SourceCard", transactionCardToCard.getSourceCardNumber()));
-                        data.add(new MilTransActionStruct("Amount", String.valueOf(transactionCardToCard.getAmount())));
-                        data.add(new MilTransActionStruct("OrderId", String.valueOf(transactionCardToCard.getOrderId())));
-                        data.add(new MilTransActionStruct("RRN", String.valueOf(transactionCardToCard.getRRN())));
-                        data.add(new MilTransActionStruct("TraceNo", String.valueOf(transactionCardToCard.getTraceNo())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.bank), transactionCardToCard.getBankName()));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.card_owner), transactionCardToCard.getCardOwnerName()));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.destination_bank), transactionCardToCard.getDestBankName()));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.destination_card), transactionCardToCard.getDestCardNumber()));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.source_card), transactionCardToCard.getSourceCardNumber()));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.amount), String.valueOf(transactionCardToCard.getAmount())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_order_id), String.valueOf(transactionCardToCard.getOrderId())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_rrn), String.valueOf(transactionCardToCard.getRRN())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_trace), String.valueOf(transactionCardToCard.getTraceNo())));
 
                         break;
                     case TOPUP:
@@ -92,15 +95,14 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
 
                         setStatus(transactionTopUp.getStatus());
 
-                        data.add(new MilTransActionStruct("Merchant name", transactionTopUp.getMerchantName()));
-                        data.add(new MilTransActionStruct("Card Number", transactionTopUp.getCardNumber()));
-                        data.add(new MilTransActionStruct("StatusDescription", transactionTopUp.getStatusDescription()));
-                        data.add(new MilTransActionStruct("TerminalNo", String.valueOf(transactionTopUp.getTerminalNo())));
-                        data.add(new MilTransActionStruct("TraceNo", String.valueOf(transactionTopUp.getTraceNo())));
-                        data.add(new MilTransActionStruct("Amount", String.valueOf(transactionTopUp.getAmount())));
-                        data.add(new MilTransActionStruct("MobileNumber", String.valueOf(transactionTopUp.getChargeMobileNumber())));
-                        data.add(new MilTransActionStruct("OrderId", String.valueOf(transactionTopUp.getOrderId())));
-                        data.add(new MilTransActionStruct("RRN", String.valueOf(transactionTopUp.getRRN())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_merchent_name), transactionTopUp.getMerchantName()));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.card_number), transactionTopUp.getCardNumber()));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.terminal_no), String.valueOf(transactionTopUp.getTerminalNo())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_trace), String.valueOf(transactionTopUp.getTraceNo())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.amount), String.valueOf(transactionTopUp.getAmount())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mobile_number), String.valueOf(transactionTopUp.getChargeMobileNumber())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_order_id), String.valueOf(transactionTopUp.getOrderId())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_rrn), String.valueOf(transactionTopUp.getRRN())));
 
 
                         break;
@@ -110,14 +112,13 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
 
                         setStatus(transactionSales.getStatus());
 
-                        data.add(new MilTransActionStruct("MerchantName", transactionSales.getMerchantName()));
-                        data.add(new MilTransActionStruct("CardNumber", transactionSales.getCardNumber()));
-                        data.add(new MilTransActionStruct("TerminalNo", String.valueOf(transactionSales.getTerminalNo())));
-                        data.add(new MilTransActionStruct("TraceNo", String.valueOf(transactionSales.getTraceNo())));
-                        data.add(new MilTransActionStruct("Amount", String.valueOf(transactionSales.getAmount())));
-                        data.add(new MilTransActionStruct("OrderId", String.valueOf(transactionSales.getOrderId())));
-                        data.add(new MilTransActionStruct("Amount", String.valueOf(transactionSales.getAmount())));
-                        data.add(new MilTransActionStruct("RRN", String.valueOf(transactionSales.getRRN())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_merchent_name), transactionSales.getMerchantName()));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.card_number), transactionSales.getCardNumber()));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.terminal_no), String.valueOf(transactionSales.getTerminalNo())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_trace), String.valueOf(transactionSales.getTraceNo())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.amount), String.valueOf(transactionSales.getAmount())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_order_id), String.valueOf(transactionSales.getOrderId())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_rrn), String.valueOf(transactionSales.getRRN())));
 
                         break;
                     case BILL:
@@ -126,17 +127,16 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
 
                         setStatus(transactionBill.getStatus());
 
-                        data.add(new MilTransActionStruct("BillId", transactionBill.getBillId()));
-                        data.add(new MilTransActionStruct("BillType", transactionBill.getBillType()));
-                        data.add(new MilTransActionStruct("CardNumber", transactionBill.getCardNumber()));
-                        data.add(new MilTransActionStruct("MerchantName", transactionBill.getMerchantName()));
-                        data.add(new MilTransActionStruct("PayId", transactionBill.getPayId()));
-                        data.add(new MilTransActionStruct("StatusDescription", transactionBill.getStatusDescription()));
-                        data.add(new MilTransActionStruct("Amount", String.valueOf(transactionBill.getAmount())));
-                        data.add(new MilTransActionStruct("OrderId", String.valueOf(transactionBill.getOrderId())));
-                        data.add(new MilTransActionStruct("RRN", String.valueOf(transactionBill.getRRN())));
-                        data.add(new MilTransActionStruct("TerminalNo", String.valueOf(transactionBill.getTerminalNo())));
-                        data.add(new MilTransActionStruct("TraceNo", String.valueOf(transactionBill.getTraceNo())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.billing_id), transactionBill.getBillId()));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.bill_type), transactionBill.getBillType()));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.card_number), transactionBill.getCardNumber()));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_merchent_name), transactionBill.getMerchantName()));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.pay_id), transactionBill.getPayId()));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.amount), String.valueOf(transactionBill.getAmount())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_order_id), String.valueOf(transactionBill.getOrderId())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_rrn), String.valueOf(transactionBill.getRRN())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.terminal_no), String.valueOf(transactionBill.getTerminalNo())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_trace), String.valueOf(transactionBill.getTraceNo())));
 
                         break;
                 }
@@ -174,7 +174,7 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
     private void setupViews() {
         LinearLayout toolBarContainer = rootView.findViewById(R.id.ll_mplTransactionInfo_toolBar);
         swipeRefreshLayout = rootView.findViewById(R.id.sl_mplTransactionInfo);
-        recyclerView = rootView.findViewById(R.id.rv_mplTransActionInfo);
+        RecyclerView recyclerView = rootView.findViewById(R.id.rv_mplTransActionInfo);
         rvContainer = rootView.findViewById(R.id.cl_mplTransactionInfo_rv);
         statusTv = rootView.findViewById(R.id.tv_mplTransactionInfo_stats);
         dataTv = rootView.findViewById(R.id.tv_mplTransactionInfo_data);
@@ -190,10 +190,14 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
                 .setContext(G.fragmentActivity)
                 .setListener(this)
                 .setLogoShown(true)
-                .setDefaultTitle("سوابق تراکنش")
+                .setDefaultTitle(getResources().getString(R.string.payment_history))
                 .setLeftIcon(R.string.back_icon);
 
         toolBarContainer.addView(toolbar.getView());
+
+        Utils.setCardsBackground(statusRootView, R.color.white, R.color.toolbar_search_box_dark_bg);
+        Utils.setCardsBackground(rvContainer, R.color.white, R.color.toolbar_search_box_dark_bg);
+
     }
 
     private void setStatus(int status) {
@@ -204,20 +208,22 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
     }
 
     private void successfulStatus() {
-        statusTv.setText("وضعیت \n موفق");
         statusTv.setTextColor(getResources().getColor(R.color.green));
         statusIv.setTextColor(getResources().getColor(R.color.green));
+        statusIv.setText(getResources().getString(R.string.check_icon));
+        statusTv.setText(getResources().getString(R.string.successful_payment));
     }
 
     private void unsuccessfulStatus() {
-        statusTv.setText("وضعیت \n ناموفق");
         statusTv.setTextColor(getResources().getColor(R.color.red));
         statusIv.setTextColor(getResources().getColor(R.color.red));
         statusIv.setText(getResources().getString(R.string.error_icon));
     }
 
-    private void setData(long data) {
-        dataTv.setText(HelperCalander.getTimeForMainRoom(data));
+    private void setDate(long date) {
+        date = date * 1000L;
+        dataTv.setText(HelperCalander.getTimeForMainRoom(date) + "\n" + HelperCalander.getPersianCalander(date));
+        timeTv.setText(HelperCalander.getClocktime(date, G.isAppRtl));
     }
 
     @Override

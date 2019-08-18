@@ -1,70 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="4dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="1dp">
+    android:layout_height="56dp">
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <View
+        android:id="@+id/view3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <net.iGap.module.FontIconTextView
-            android:id="@+id/tv_itemMplTransAction_typeIcon"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:text="@string/copy_icon"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:textSize="25dp"
-            android:background="@drawable/background_mpl_transaction"
-            android:gravity="center"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tv_itemMplTransAction_time"
+        style="?textTitleColorSettingTheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="@dimen/smallTextSize"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_itemMplTransAction_orderId"
+        app:layout_constraintEnd_toEndOf="@+id/tv_itemMplTransAction_type"
+        app:layout_constraintTop_toTopOf="@+id/tv_itemMplTransAction_orderId"
+        tools:text="1359" />
 
-        <TextView
-            android:id="@+id/tv_itemMplTransAction_time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_itemMplTransAction_type"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_itemMplTransAction_type"
-            tools:text="1359" />
+    <TextView
+        android:id="@+id/tv_itemMplTransAction_type"
+        style="?textTitleColorSettingTheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Card To Card"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintBottom_toTopOf="@+id/tv_itemMplTransAction_orderId"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
-        <TextView
-            android:id="@+id/tv_itemMplTransAction_type"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            app:layout_constraintVertical_chainStyle="packed"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="Card To Card"
-            app:layout_constraintBottom_toTopOf="@+id/tv_itemMplTransAction_orderId"
-            app:layout_constraintEnd_toStartOf="@+id/tv_itemMplTransAction_time"
-            app:layout_constraintStart_toEndOf="@+id/tv_itemMplTransAction_typeIcon"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_itemMplTransAction_orderId"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="54654621352"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/tv_itemMplTransAction_type"
-            app:layout_constraintStart_toStartOf="@+id/tv_itemMplTransAction_type"
-            app:layout_constraintTop_toBottomOf="@+id/tv_itemMplTransAction_type" />
+    <TextView
+        android:id="@+id/tv_itemMplTransAction_orderId"
+        style="?textTitleColorSettingTheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="54654621352"
+        android:textSize="@dimen/smallTextSize"
+        app:layout_constraintBottom_toTopOf="@+id/view3"
+        app:layout_constraintEnd_toStartOf="@+id/tv_itemMplTransAction_time"
+        app:layout_constraintStart_toStartOf="@+id/tv_itemMplTransAction_type"
+        app:layout_constraintTop_toBottomOf="@+id/tv_itemMplTransAction_type" />
 
 
-    </android.support.constraint.ConstraintLayout>
-</android.support.v7.widget.CardView>
+</android.support.constraint.ConstraintLayout>

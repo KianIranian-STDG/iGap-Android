@@ -12,6 +12,7 @@ public class MplTransactionInfoViewModel extends BaseViewModel implements OnMplT
 
     private MutableLiveData<ProtoGlobal.MplTransaction> transactionInfoLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> errorTransActionInfoLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> progressLiveData = new MutableLiveData<>();
 
     @Override
     public void onCreateViewModel() {
@@ -21,7 +22,7 @@ public class MplTransactionInfoViewModel extends BaseViewModel implements OnMplT
     }
 
     public void getTransactionInfo(String token) {
-        getProgressLiveData().postValue(true);
+        progressLiveData.postValue(true);
         new RequestMplTransactionInfo().mplTransactionInfo(token);
     }
 
@@ -31,17 +32,16 @@ public class MplTransactionInfoViewModel extends BaseViewModel implements OnMplT
             transactionInfoLiveData.postValue(transaction);
         } else
             errorTransActionInfoLiveData.postValue(true);
-        getProgressLiveData().postValue(false);
+        progressLiveData.postValue(false);
     }
 
     @Override
     public void onError() {
-        getProgressLiveData().postValue(false);
+        progressLiveData.postValue(false);
     }
 
-    @Override
     public MutableLiveData<Boolean> getProgressLiveData() {
-        return super.getProgressLiveData();
+        return progressLiveData;
     }
 
     public MutableLiveData<ProtoGlobal.MplTransaction> getTransactionInfoLiveData() {

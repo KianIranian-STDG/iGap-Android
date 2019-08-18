@@ -112,7 +112,7 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
                 .setContext(G.fragmentActivity)
                 .setListener(this)
                 .setLogoShown(true)
-                .setDefaultTitle("سوابق تراکنش")
+                .setDefaultTitle(getResources().getString(R.string.payment_history))
                 .setLeftIcon(R.string.back_icon);
 
         toolBarContainer.addView(toolbar.getView());

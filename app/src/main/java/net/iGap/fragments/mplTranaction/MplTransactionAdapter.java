@@ -5,12 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
-import net.iGap.module.FontIconTextView;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.ArrayList;
@@ -59,14 +57,12 @@ public class MplTransactionAdapter extends RecyclerView.Adapter<MplTransactionAd
 
     public class MplTransactionViewHolder extends RecyclerView.ViewHolder {
         private TextView transferActionTypeTv;
-        private FontIconTextView transferActionTypeIv;
         private TextView transferActionTimeTv;
         private TextView transferActionOrderIdTv;
 
         public MplTransactionViewHolder(@NonNull View rootView) {
             super(rootView);
             transferActionTypeTv = rootView.findViewById(R.id.tv_itemMplTransAction_type);
-            transferActionTypeIv = rootView.findViewById(R.id.tv_itemMplTransAction_typeIcon);
             transferActionTimeTv = rootView.findViewById(R.id.tv_itemMplTransAction_time);
             transferActionOrderIdTv = rootView.findViewById(R.id.tv_itemMplTransAction_orderId);
         }
@@ -74,33 +70,21 @@ public class MplTransactionAdapter extends RecyclerView.Adapter<MplTransactionAd
         public void bindTransaction(ProtoGlobal.MplTransaction mplTransaction) {
             switch (mplTransaction.getType()) {
                 case BILL:
-                    transferActionTypeTv.setText("Bill");
-                    transferActionTypeIv.setText(itemView.getContext().getResources().getString(R.string.iconCardToCard));
-                    break;
-                case NONE:
-                    transferActionTypeTv.setText("Non");
-                    transferActionTypeIv.setText(itemView.getContext().getResources().getString(R.string.iconCardToCard));
+                    transferActionTypeTv.setText(itemView.getContext().getResources().getString(R.string.bills));
                     break;
                 case SALES:
-                    transferActionTypeTv.setText("sales");
-                    transferActionTypeIv.setText(itemView.getContext().getResources().getString(R.string.iconCardToCard));
+                    transferActionTypeTv.setText(itemView.getContext().getResources().getString(R.string.mpl_transaction_sales));
                     break;
                 case TOPUP:
-                    transferActionTypeTv.setText("topup");
-                    transferActionTypeIv.setText(itemView.getContext().getResources().getString(R.string.iconCardToCard));
+                    transferActionTypeTv.setText(itemView.getContext().getResources().getString(R.string.mpl_transaction_topup));
                     break;
                 case CARD_TO_CARD:
-                    transferActionTypeTv.setText("Card to Card");
-                    transferActionTypeIv.setText(itemView.getContext().getResources().getString(R.string.iconCardToCard));
-                    break;
-                case UNRECOGNIZED:
-                    transferActionTypeTv.setText("UNRECOGNIZED");
-                    transferActionTypeIv.setText(itemView.getContext().getResources().getString(R.string.iconCardToCard));
+                    transferActionTypeTv.setText(itemView.getContext().getResources().getString(R.string.card_to_card));
                     break;
             }
 
-            transferActionTimeTv.setText(HelperCalander.getTimeForMainRoom(mplTransaction.getPayTime()));
-            transferActionOrderIdTv.setText(String.valueOf(mplTransaction.getOrderId()));
+            transferActionTimeTv.setText(HelperCalander.getPersianCalander(mplTransaction.getPayTime() * 1000L));
+            transferActionOrderIdTv.setText(itemView.getContext().getResources().getString(R.string.pay_id) + " : " + mplTransaction.getOrderId());
 
             itemView.setOnClickListener(v -> {
                 if (callBack != null)
@@ -108,7 +92,5 @@ public class MplTransactionAdapter extends RecyclerView.Adapter<MplTransactionAd
             });
 
         }
-
-
     }
 }

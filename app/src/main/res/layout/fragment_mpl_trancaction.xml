@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -80,7 +81,7 @@
                 android:paddingRight="@dimen/round_buttons_large_padding"
                 android:paddingBottom="@dimen/round_buttons_small_padding"
                 android:singleLine="true"
-                android:text="topup"
+                android:text="@string/mpl_transaction_topup"
                 android:textColor="@color/gray_4c"
                 android:textSize="@dimen/smallTextSize" />
 
@@ -98,7 +99,7 @@
                 android:paddingRight="@dimen/round_buttons_large_padding"
                 android:paddingBottom="@dimen/round_buttons_small_padding"
                 android:singleLine="true"
-                android:text="card to card"
+                android:text="@string/card_to_card"
                 android:textColor="@color/gray_4c"
                 android:textSize="@dimen/smallTextSize" />
 
@@ -115,7 +116,7 @@
                 android:paddingRight="@dimen/round_buttons_large_padding"
                 android:paddingBottom="@dimen/round_buttons_small_padding"
                 android:singleLine="true"
-                android:text="sales"
+                android:text="@string/mpl_transaction_sales"
                 android:textColor="@color/gray_4c"
                 android:textSize="@dimen/smallTextSize" />
 
@@ -132,7 +133,7 @@
                 android:paddingRight="@dimen/round_buttons_large_padding"
                 android:paddingBottom="@dimen/round_buttons_small_padding"
                 android:singleLine="true"
-                android:text="bill"
+                android:text="@string/bills"
                 android:textColor="@color/gray_4c"
                 android:textSize="@dimen/smallTextSize" />
 

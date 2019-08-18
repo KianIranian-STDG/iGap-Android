@@ -1968,7 +1968,12 @@
     <string name="message_decline_call_later">با شما تماس میگیرم.</string>
     <string name="message_decline_Please_call_later">ممکن است بعدا تماس بگیرید؟</string>
     <string name="message_decline_please_text_me">لطفا پیام بدهید.</string>
-
-
+    <string name="mpl_transaction_rrn">شماره مرجع</string>
+    <string name="mpl_transaction_trace">شماره پیگیری</string>
+    <string name="mpl_transaction_order_id">شماره سفارش</string>
+    <string name="pay_id">شناسه پرداخت</string>
+    <string name="mpl_transaction_sales">پرداخت اینترنتی</string>
+    <string name="mpl_transaction_topup">شارژ موبایل</string>
+    <string name="mpl_transaction_empty">اطلاعات موجود نمیباشد!</string>
 
 </resources>

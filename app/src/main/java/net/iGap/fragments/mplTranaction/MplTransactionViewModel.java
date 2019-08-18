@@ -34,27 +34,27 @@ public class MplTransactionViewModel extends BaseViewModel implements OnMplTrans
 
     public void getAllMplTransactionList() {
         progressMutableLiveData.postValue(true);
-        new RequestMplTransactionList().mplTransactionList(ProtoGlobal.MplTransaction.Type.NONE, 50, 0);
+        new RequestMplTransactionList().mplTransactionList(ProtoGlobal.MplTransaction.Type.NONE, 100, 0);
     }
 
     public void getBillMplTransactionList() {
         progressMutableLiveData.postValue(true);
-        new RequestMplTransactionList().mplTransactionList(ProtoGlobal.MplTransaction.Type.BILL, 50, 0);
+        new RequestMplTransactionList().mplTransactionList(ProtoGlobal.MplTransaction.Type.BILL, 100, 0);
     }
 
     public void getTopUpMplTransactionList() {
         progressMutableLiveData.postValue(true);
-        new RequestMplTransactionList().mplTransactionList(ProtoGlobal.MplTransaction.Type.TOPUP, 50, 0);
+        new RequestMplTransactionList().mplTransactionList(ProtoGlobal.MplTransaction.Type.TOPUP, 100, 0);
     }
 
     public void getSaleMplTransactionList() {
         progressMutableLiveData.postValue(true);
-        new RequestMplTransactionList().mplTransactionList(ProtoGlobal.MplTransaction.Type.SALES, 50, 0);
+        new RequestMplTransactionList().mplTransactionList(ProtoGlobal.MplTransaction.Type.SALES, 100, 0);
     }
 
     public void getCardToCardMplTransactionList() {
         progressMutableLiveData.postValue(true);
-        new RequestMplTransactionList().mplTransactionList(ProtoGlobal.MplTransaction.Type.CARD_TO_CARD, 50, 0);
+        new RequestMplTransactionList().mplTransactionList(ProtoGlobal.MplTransaction.Type.CARD_TO_CARD, 100, 0);
     }
 
     public MutableLiveData<List<ProtoGlobal.MplTransaction>> getMplTransactionLiveData() {
