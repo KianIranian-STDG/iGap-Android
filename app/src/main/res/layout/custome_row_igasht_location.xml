@@ -14,6 +14,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="152dp"
+        android:background="@drawable/shape_igasht_strokegray"
         app:layout_constraintBottom_toTopOf="@id/addToFavoriteButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.645"
@@ -37,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:maxLines="1"
             android:paddingStart="@dimen/dp4"
             android:paddingEnd="@dimen/dp4"
             android:textSize="@dimen/largeTextSize"
@@ -53,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:maxLines="1"
             android:padding="@dimen/dp4"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="@id/itemImage"
@@ -61,24 +64,44 @@
             app:layout_constraintTop_toBottomOf="@id/itemTitle" />
 
         <View
+            android:id="@+id/view2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:background="@color/gray"
-            app:layout_constraintBottom_toBottomOf="@+id/itemAddress"
-            android:layout_marginTop="@dimen/dp8"
-            tools:layout_editor_absoluteX="0dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/itemLocation"
             style="?textTitleColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_width="259dp"
+            android:layout_height="39dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/iv_location"
+            app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/iv_location"
+            style="@style/baseFontIcon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/location_pin_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="116:83"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/itemImage" />
+            app:layout_constraintWidth_percent=".3" />
+
     </android.support.constraint.ConstraintLayout>
     <!--<android.support.v7.widget.AppCompatTextView
         android:id="@+id/itemPrice"
