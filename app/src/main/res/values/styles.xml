@@ -805,7 +805,7 @@
     </style>
 
     <style name="myIconTextViewStyle" parent="baseFontIcon">
-        <item name="android:theme">?textTitleColorSettingTheme</item>
+        <item name="android:theme">?<textTitleColorSe></textTitleColorSe>ttingTheme</item>
     </style>
 
     <style name="greenIconTextViewStyle" parent="baseFontIcon">

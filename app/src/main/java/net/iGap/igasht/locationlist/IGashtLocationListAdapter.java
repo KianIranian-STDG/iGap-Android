@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.squareup.picasso.Picasso;
 
@@ -31,15 +32,14 @@ public class IGashtLocationListAdapter extends RecyclerView.Adapter<IGashtLocati
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custome_row_igasht_location, viewGroup, false));
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.itemTitleTextView.setText(items.get(i).getNameWithLanguage());
         viewHolder.itemAddressTextView.setText(items.get(i).getAddressWithLanguage());
-        viewHolder.itemLikeCountTextView.setText("126");
+      /*  viewHolder.itemLikeCountTextView.setText("126");*/
         viewHolder.itemLocationTextView.setText(items.get(i).getLocation());
         Picasso.get().load("test").placeholder(R.drawable.logo).error(R.drawable.ic_error_igap).fit().centerCrop().into(viewHolder.itemImageView);
-        viewHolder.addToFavoriteButton.setOnClickListener(v -> locationItemClickListener.addToFavorite(viewHolder.getAdapterPosition()));
+//        viewHolder.addToFavoriteButton.setOnClickListener(v -> locationItemClickListener.addToFavorite(viewHolder.getAdapterPosition()));
         viewHolder.buyTicketButton.setOnClickListener(v -> locationItemClickListener.buyTicket(viewHolder.getAdapterPosition()));
         viewHolder.itemView.setOnClickListener(v -> locationItemClickListener.onItem(viewHolder.getAdapterPosition()));
     }
@@ -54,13 +54,13 @@ public class IGashtLocationListAdapter extends RecyclerView.Adapter<IGashtLocati
         private AppCompatImageView itemImageView;
         private AppCompatTextView itemTitleTextView;
         private AppCompatTextView itemAddressTextView;
-        private AppCompatTextView itemLikeCountTextView;
+        /*  private AppCompatTextView itemLikeCountTextView;
+         private AppCompatTextView itemVisitTimeTextView;
+          private AppCompatTextView itemPriceTextView;
+          private AppCompatTextView itemPriceForeignTextView;
+        private MaterialButton addToFavoriteButton;*/
         private AppCompatTextView itemLocationTextView;
-        /*private AppCompatTextView itemVisitTimeTextView;
-        private AppCompatTextView itemPriceTextView;
-        private AppCompatTextView itemPriceForeignTextView;*/
-        private MaterialButton addToFavoriteButton;
-        private MaterialButton buyTicketButton;
+        private Button buyTicketButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,15 +68,15 @@ public class IGashtLocationListAdapter extends RecyclerView.Adapter<IGashtLocati
             itemImageView = itemView.findViewById(R.id.itemImage);
             itemTitleTextView = itemView.findViewById(R.id.itemTitle);
             itemAddressTextView = itemView.findViewById(R.id.itemAddress);
-            itemLikeCountTextView = itemView.findViewById(R.id.itemLikeCount);
+/*            itemLikeCountTextView = itemView.findViewById(R.id.itemLikeCount);
+            addToFavoriteButton = itemView.findViewById(R.id.addToFavoriteButton);*/
             itemLocationTextView = itemView.findViewById(R.id.itemLocation);
-            addToFavoriteButton = itemView.findViewById(R.id.addToFavoriteButton);
             buyTicketButton = itemView.findViewById(R.id.buyTicketButton);
         }
     }
 
     public interface onLocationItemClickListener {
-        void addToFavorite(int position);
+//        void addToFavorite(int position);
 
         void buyTicket(int position);
 

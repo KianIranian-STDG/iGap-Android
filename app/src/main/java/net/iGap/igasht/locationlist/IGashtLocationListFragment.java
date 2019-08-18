@@ -78,10 +78,10 @@ public class IGashtLocationListFragment extends IGashtBaseView {
         ((IGashtLocationViewModel) viewModel).getLocationList().observe(getViewLifecycleOwner(), data -> {
             if (binding.locationListView.getAdapter() instanceof IGashtLocationListAdapter && data != null) {
                 ((IGashtLocationListAdapter) binding.locationListView.getAdapter()).setItems(data, new IGashtLocationListAdapter.onLocationItemClickListener() {
-                    @Override
-                    public void addToFavorite(int position) {
-                        ((IGashtLocationViewModel) viewModel).addToFavorite(position);
-                    }
+//                    @Override
+//                    public void addToFavorite(int position) {
+//                        ((IGashtLocationViewModel) viewModel).addToFavorite(position);
+//                    }
 
                     @Override
                     public void buyTicket(int position) {
