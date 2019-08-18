@@ -2920,7 +2920,8 @@
     <string name="mpl_transaction_card">بطاقة إلى بطاقة</string>
     <string name="mpl_transaction_empty">لا توجد معلومات متاحة</string>
     <string name="mpl_terminal_no">رقم المحطة</string>
-    <string name="mpl_do_you_want_save_receipt">آیا میخواهید رسید را ذخیره کنید؟</string>
+    <string name="mpl_do_you_want_save_receipt">هل تريد حفظ الإيصال؟</string>
+    <string name="mpl_transaction_nul">ليس لديك أي معاملات في آخر 5 أيام!</string>
 
 
 </resources>

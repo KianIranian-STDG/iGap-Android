@@ -23,6 +23,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
+import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.internetpackage.BuyInternetPackageFragment;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
@@ -308,6 +309,12 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case FAVORITE_CHANNEL:
                 new HelperFragment(activity.getSupportFragmentManager(), new PopularChannelHomeFragment()).setReplace(false).load();
+                break;
+            case FINANCIAL_HISTORY:
+                new HelperFragment(activity.getSupportFragmentManager(), new MplTransactionFragment()).setReplace(false).load();
+                break;
+            case INTERNET_PACKAGE_MENU:
+                new HelperFragment(activity.getSupportFragmentManager(), new BuyInternetPackageFragment()).setReplace(false).load();
                 break;
         }
     }

@@ -1975,6 +1975,7 @@ Want to get it?</string>
     <string name="mpl_transaction_empty">No information available!</string>
     <string name="mpl_transaction_card">Card To Card</string>
     <string name="mpl_terminal_no">Terminal No</string>
-    <string name="mpl_do_you_want_save_receipt">آیا میخواهید رسید را ذخیره کنید؟</string>
+    <string name="mpl_do_you_want_save_receipt">Do you want save receipt?</string>
+    <string name="mpl_transaction_nul">You have no transactions in the last 5 days!</string>
 
 </resources>

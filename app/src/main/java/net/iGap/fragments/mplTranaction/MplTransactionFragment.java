@@ -31,6 +31,7 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
     private TextView typeCardToCardTv;
     private TextView typeSalesTv;
     private TextView typeBillTv;
+    private TextView emptyView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
@@ -49,7 +50,10 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
 
         viewModel.getMplTransactionLiveData().observe(getViewLifecycleOwner(), mplTransaction -> {
             if (mplTransaction != null) {
-                adapter.setTransAction(mplTransaction);
+                if (mplTransaction.size() > 0)
+                    adapter.setTransAction(mplTransaction);
+                else
+                    emptyView.setVisibility(View.VISIBLE);
             }
         });
 
@@ -101,6 +105,7 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
         typeCardToCardTv = rootView.findViewById(R.id.tv_mplTransaction_cardToCard);
         typeSalesTv = rootView.findViewById(R.id.tv_mplTransaction_sales);
         typeBillTv = rootView.findViewById(R.id.tv_mplTransaction_bill);
+        emptyView = rootView.findViewById(R.id.tv_mplTransaction_emptyView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);

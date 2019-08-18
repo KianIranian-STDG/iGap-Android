@@ -1978,6 +1978,7 @@
     <string name="mpl_transaction_card">کارت به کارت</string>
     <string name="mpl_terminal_no">شماره پایانه</string>
     <string name="mpl_do_you_want_save_receipt">آیا مایل به ذخیره ی رسید هستید؟</string>
+    <string name="mpl_transaction_nul">شما هیچ تراکنشی در ۵ روز گذشته ندارید!</string>
 
 
 </resources>
