@@ -11,6 +11,9 @@
 package net.iGap.activities;
 
 import android.Manifest;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothProfile;
@@ -38,7 +41,6 @@ import android.support.constraint.ConstraintSet;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.ActivityCompat;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +53,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityCallBinding;
+import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.HelperLog;
+import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnVideoCallFrame;
@@ -63,6 +67,9 @@ import net.iGap.webrtc.WebRTC;
 
 import org.webrtc.EglBase;
 import org.webrtc.VideoFrame;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.bluetooth.BluetoothProfile.HEADSET;
 
@@ -184,7 +191,13 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
 
         binding = DataBindingUtil.setContentView(ActivityCall.this, R.layout.activity_call);
-        viewModel = new ActivityCallViewModel(getIntent().getExtras().getLong(USER_ID_STR), getIntent().getExtras().getBoolean(INCOMING_CALL_STR), (ProtoSignalingOffer.SignalingOffer.Type) getIntent().getExtras().getSerializable(CALL_TYPE));
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new ActivityCallViewModel(getIntent().getExtras().getLong(USER_ID_STR), getIntent().getExtras().getBoolean(INCOMING_CALL_STR), (ProtoSignalingOffer.SignalingOffer.Type) getIntent().getExtras().getSerializable(CALL_TYPE));
+            }
+        }).get(ActivityCallViewModel.class);
         binding.setActivityCallViewModel(viewModel);
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -249,6 +262,26 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             }
             finish();
         };
+
+        viewModel.getQuickDeclineMessageLiveData().observe(this, userId -> {
+            if (userId != null) {
+                List<Integer> strings = new ArrayList<>();
+
+                strings.add(R.string.message_decline_please_text_me);
+                strings.add(R.string.message_decline_Please_call_later);
+                strings.add(R.string.message_decline_call_later);
+                strings.add(R.string.message_decline_write_new);
+
+                new BottomSheetFragment().setListDataWithResourceId(this, strings, -1, position -> {
+                    viewModel.endCall();
+                    if (position == 3) {
+                        HelperPublicMethod.goToChatRoom(userId, null, null);
+                    } else {
+                        HelperPublicMethod.goToChatRoomWithMessage(userId, this.getString(strings.get(position)), null, null);
+                    }
+                }).show(getSupportFragmentManager(), null);
+            }
+        });
     }
 
     @Override
@@ -300,6 +333,12 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         }
         if (G.onHoldBackgroundChanegeListener != null) {
             G.onHoldBackgroundChanegeListener = null;
+        }
+
+        if (player != null) {
+            if (player.isPlaying())
+                player.stop();
+            player.release();
         }
     }
 

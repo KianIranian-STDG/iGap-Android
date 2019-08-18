@@ -3,11 +3,6 @@ package net.iGap.libs.bannerslider.adapters;
 import net.iGap.libs.bannerslider.SlideType;
 import net.iGap.libs.bannerslider.viewholder.ImageSlideViewHolder;
 
-/**
- * @author S.Shahini
- * @since 3/4/18
- */
-
 public abstract class SliderAdapter {
     public abstract int getItemCount();
 

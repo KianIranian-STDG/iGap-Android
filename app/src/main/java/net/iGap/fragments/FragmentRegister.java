@@ -148,11 +148,13 @@ public class FragmentRegister extends BaseFragment {
             }
         });
 
-        fragmentRegisterViewModel.showConfirmPhoneNumberDialog.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (getActivity() != null && aBoolean != null && aBoolean) {
+        fragmentRegisterViewModel.showConfirmPhoneNumberDialog.observe(getViewLifecycleOwner(), phoneNumber -> {
+            if (getActivity() != null && phoneNumber != null) {
                 new DefaultRoundDialog(getActivity()).setMessage(getString(R.string.Re_dialog_verify_number_part1) + "\n" +
-                        fragmentRegisterViewModel.callbackEdtCodeNumber.get() + "" + fragmentRegisterViewModel.callBackEdtPhoneNumber.get() + "\n" +
-                        getString(R.string.Re_dialog_verify_number_part2)).setPositiveButton(R.string.B_ok, (dialog, which) -> fragmentRegisterViewModel.confirmPhoneNumber()).setNegativeButton(R.string.B_edit, null).show();
+                        phoneNumber + "\n" + getString(R.string.Re_dialog_verify_number_part2))
+                        .setPositiveButton(R.string.B_ok, (dialog, which) -> fragmentRegisterViewModel.confirmPhoneNumber())
+                        .setNegativeButton(R.string.B_edit, null)
+                        .show();
             }
         });
 
@@ -221,9 +223,9 @@ public class FragmentRegister extends BaseFragment {
             }
         });
 
-        fragmentRegisterViewModel.showError.observe(getViewLifecycleOwner(), isShow -> {
-            if (isShow != null && isShow) {
-                HelperError.showSnackMessage(getString(R.string.error), false);
+        fragmentRegisterViewModel.showError.observe(getViewLifecycleOwner(), messageRes -> {
+            if (messageRes != null) {
+                HelperError.showSnackMessage(getString(messageRes), false);
             }
         });
     }

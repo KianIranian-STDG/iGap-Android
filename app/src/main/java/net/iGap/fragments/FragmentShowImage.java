@@ -21,6 +21,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -269,7 +270,8 @@ public class FragmentShowImage extends BaseFragment {
 
             @Override
             public void onComplete(RippleView rippleView) {
-                G.fragmentActivity.onBackPressed();
+                Log.wtf(this.getClass().getName(),"on back");
+                popBackStackFragment();
             }
         });
 

@@ -77,6 +77,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     private boolean mIsMultiSelectEnable = false;
     private List<RealmCallLog> mSelectedLogList = new ArrayList<>();
     private ViewGroup mMultiSelectLayout, mFiltersLayout;
+    private Realm mRealm;
 
 
     public static FragmentCall newInstance(boolean openInFragmentMain) {
@@ -90,8 +91,15 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mRealm = Realm.getDefaultInstance();
         RealmCallLog.manageClearCallLog();
         return inflater.inflate(R.layout.fragment_call, container, false);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mRealm.close();
     }
 
     @Override
@@ -133,9 +141,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
 
         if (realmResults == null) {
-            try (Realm realm = Realm.getDefaultInstance()) {
-                realmResults = getRealmResult(mSelectedStatus, realm);
-            }
+            realmResults = getRealmResult(mSelectedStatus, mRealm);
         }
 
         realmResults.addChangeListener((realmCallLogs, changeSet) -> {
@@ -280,8 +286,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
             if (G.userLogin) {
                 new MaterialDialog.Builder(getActivity()).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_log).positiveText(R.string.B_ok).onPositive((dialog, which) -> {
 
-                    try (Realm realm_ = Realm.getDefaultInstance()) {
-
+                    try {
                         List<Long> logIds = new ArrayList<>();
 
                         for (int i = 0; i < mSelectedLogList.size(); i++) {
@@ -320,9 +325,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     private void getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter filter) {
         if (realmResults != null) realmResults.removeAllChangeListeners();
         mSelectedStatus = filter;
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realmResults = getRealmResult(mSelectedStatus, realm);
-        }
+        realmResults = getRealmResult(mSelectedStatus, mRealm);
         mRecyclerView.setAdapter(new CallAdapter(realmResults));
         checkListIsEmpty();
     }

@@ -740,8 +740,57 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
                 }
             }
 
-        }else {
+
+            balance.setText(RaadCommonUtils.formatPrice(card.balance, false));
+            cashableBalance.setText(RaadCommonUtils.formatPrice(card.cashOutBalance, false));
+            //long giftPrice = card.balance - card.cashOutBalance;
+            //giftBalance.setText(RaadCommonUtils.formatPrice(giftPrice, false));
+            view.findViewById(R.id.bals_layout).setVisibility(View.GONE);
+
+
+
+        } else {
             view.findViewById(R.id.pin_layout).setVisibility(View.GONE);
+
+
+            // get total of all card club...
+            long total = 0L;
+            long balance1 = 0L;
+            long balanceTotal = 0L;
+
+
+            for (Card item : mCards) {
+
+
+                if (item.isRaadCard()) {
+
+                    balance1 = item.balance;
+
+                } else {
+
+                    if (item.type == 1 && (item.bankCode == 69 && item.clubId != null)) {
+                        total = total + item.balance;
+
+                    }
+
+
+                }
+
+
+                balanceTotal = card.balance + total;
+                balance.setText(RaadCommonUtils.formatPrice(balanceTotal, false));
+
+
+            }
+
+            cashableBalance.setText(RaadCommonUtils.formatPrice(card.balance, false));
+            giftBalance.setText(RaadCommonUtils.formatPrice(total, false));
+
+            if (total == 0) {
+                view.findViewById(R.id.bals_layout).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.balance_layout).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
+            }
+
         }
 
 
@@ -774,44 +823,6 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
 
 
 
-        // get total of all card club...
-        long total= 0L;
-        long balance1 = 0L;
-        long balanceTotal = 0L;
-
-
-        for (Card item : RaadApp.cards) {
-
-
-            if (item.isRaadCard()) {
-
-                balance1 = item.balance;
-
-            }else{
-
-                if (item.type == 1 && (item.bankCode == 69 && item.clubId != null)) {
-                    total = total + item.balance;
-
-                }
-
-
-            }
-
-
-            balanceTotal =  card.balance + total ;
-            balance.setText(RaadCommonUtils.formatPrice(balanceTotal, false));
-
-
-
-        }
-
-        cashableBalance.setText(RaadCommonUtils.formatPrice(card.balance, false));
-        giftBalance.setText(RaadCommonUtils.formatPrice(total, false));
-
-        if (total == 0) {
-            view.findViewById(R.id.bals_layout).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.balance_layout).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
-        }
 
         /*reload page*/
         reload.setOnClickListener(new View.OnClickListener() {

@@ -293,7 +293,12 @@
 #Gson
 # Gson specific classes
 -dontwarn sun.misc.**
-#-keep class com.google.gson.stream.** { *; }
+-keep class com.google.gson.stream.** { *; }
+-keep class sun.misc.Unsafe { *; }
+-keepclassmembers,allowobfuscation class * {
+                                    @com.google.gson.annotations.SerializedName <fields>;
+                                  }
+
 
 # Prevent proguard from stripping interface information from TypeAdapterFactory,
 # JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)

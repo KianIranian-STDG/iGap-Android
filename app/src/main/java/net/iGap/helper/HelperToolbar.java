@@ -631,7 +631,7 @@ public class HelperToolbar {
     }
 
     public void checkPassCodeVisibility() {
-        if (!G.isLandscape) {
+        if (passCodeBtn != null) {
             if (G.isPassCode) {
                 passCodeBtn.setVisibility(View.VISIBLE);
                 ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
@@ -885,6 +885,17 @@ public class HelperToolbar {
     }
 
     private void connectionStateChecker(LifecycleOwner owner) {
+
+        //check first time state then for every changes observer will change title
+        if (G.connectionState != null) {
+            if (G.connectionState == ConnectionState.CONNECTING) {
+                mTxtLogo.setText(R.string.connecting);
+                checkIGapFont();
+            }else if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK){
+                mTxtLogo.setText(R.string.waiting_for_network);
+                checkIGapFont();
+            }
+        }
 
         G.connectionStateMutableLiveData.observe(owner, new android.arch.lifecycle.Observer<ConnectionState>() {
             @Override

@@ -294,31 +294,6 @@ public class FragmentShowAvatars extends BaseFragment {
         if (isRoomExist) {
 
             avatarList = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll().sort(RealmAvatarFields.ID, Sort.DESCENDING);
-            avatarList.addChangeListener(new RealmChangeListener<RealmResults<RealmAvatar>>() {
-                @Override
-                public void onChange(RealmResults<RealmAvatar> element) {
-
-                    if (avatarListSize != element.size()) {
-
-                        avatarListSize = element.size();
-
-                        viewPager.setAdapter(new FragmentShowAvatars.AdapterViewPager());
-
-                        if (avatarListSize > 0) {
-                            viewPager.getAdapter().notifyDataSetChanged();
-                            txtImageNumber.setText(viewPager.getCurrentItem() + 1 + " " + G.fragmentActivity.getResources().getString(R.string.of) + " " + avatarListSize);
-                            if (HelperCalander.isPersianUnicode) {
-                                txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
-                            }
-                        } else {
-                            //  G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
-
-                            popBackStackFragment();
-                        }
-                    }
-                }
-            });
-
             avatarListSize = avatarList.size();
         }
     }
@@ -327,6 +302,29 @@ public class FragmentShowAvatars extends BaseFragment {
 
         mAdapter = new FragmentShowAvatars.AdapterViewPager();
         viewPager.setAdapter(mAdapter);
+
+        avatarList.addChangeListener(new RealmChangeListener<RealmResults<RealmAvatar>>() {
+            @Override
+            public void onChange(RealmResults<RealmAvatar> element) {
+
+                if (avatarListSize != element.size()) {
+
+                    avatarListSize = element.size();
+
+                    if (avatarListSize > 0) {
+                        mAdapter.dataChanged();
+                        txtImageNumber.setText(viewPager.getCurrentItem() + 1 + " " + G.fragmentActivity.getResources().getString(R.string.of) + " " + avatarListSize);
+                        if (HelperCalander.isPersianUnicode) {
+                            txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
+                        }
+                    } else {
+                        //  G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
+
+                        popBackStackFragment();
+                    }
+                }
+            }
+        });
 
         txtImageNumber.setText(1 + " " + G.fragmentActivity.getResources().getString(R.string.of) + " " + avatarList.size());
         if (HelperCalander.isPersianUnicode) {
@@ -549,10 +547,25 @@ public class FragmentShowAvatars extends BaseFragment {
     }
 
     private class AdapterViewPager extends PagerAdapter {
+        Bitmap[] bitmaps;
+
+        public AdapterViewPager() {
+            bitmaps = new Bitmap[avatarList.size()];
+        }
 
         @Override
         public int getCount() {
             return avatarList.size();
+        }
+
+        public void dataChanged() {
+            for (Bitmap bitmap: bitmaps) {
+                if (bitmap != null) {
+                    bitmap.recycle();
+                }
+            }
+            bitmaps = new Bitmap[avatarList.size()];
+            this.notifyDataSetChanged();
         }
 
         @Override
@@ -588,13 +601,13 @@ public class FragmentShowAvatars extends BaseFragment {
 
             File file = new File(path);
             if (file.exists()) {
-                loadFileToImageView(touchImageView, file);
+                loadFileToImageView(touchImageView, file, position);
                 progress.setVisibility(View.GONE);
             } else {
                 path = ra.getLocalThumbnailPath() != null ? ra.getLocalThumbnailPath() : "";
                 file = new File(path);
                 if (file.exists()) {
-                    loadFileToImageView(touchImageView, file);
+                    loadFileToImageView(touchImageView, file, position);
                 } else {
                     // if thumpnail not exist download it
                     ProtoFileDownload.FileDownload.Selector selector = null;
@@ -621,7 +634,7 @@ public class FragmentShowAvatars extends BaseFragment {
                                         @Override
                                         public void run() {
                                             if (touchImageView != null) {
-                                                loadFileToImageView(touchImageView, new File(path));
+                                                loadFileToImageView(touchImageView, new File(path), position);
                                             }
 
                                         }
@@ -676,13 +689,21 @@ public class FragmentShowAvatars extends BaseFragment {
             return layout;
         }
 
-        private void loadFileToImageView(ImageView imageView, File file) {
+        private void loadFileToImageView(ImageView imageView, File file, int pos) {
             if (imageView == null)
                 return;
+
+            if (bitmaps[pos] != null) {
+                bitmaps[pos].recycle();
+            }
+
             Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
             if (myBitmap == null) {
                 return;
             }
+
+            bitmaps[pos] = myBitmap;
+
             imageView.setImageBitmap(myBitmap);
         }
 
@@ -712,7 +733,7 @@ public class FragmentShowAvatars extends BaseFragment {
                         public void run() {
                             progress.withProgress(progres);
                             if (progres == 100) {
-                                loadFileToImageView(touchImageView, new File(path));
+                                loadFileToImageView(touchImageView, new File(path), position);
                             }
                         }
                     });
@@ -735,6 +756,9 @@ public class FragmentShowAvatars extends BaseFragment {
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
+            if (bitmaps[position] != null) {
+                bitmaps[position].recycle();
+            }
             container.removeView((View) object);
         }
     }

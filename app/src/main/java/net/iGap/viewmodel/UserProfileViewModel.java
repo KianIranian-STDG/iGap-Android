@@ -219,18 +219,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             deleteAvatar.postValue(new DeleteAvatarModel(userId, finalMAvatarId));
         };
 
-        G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
-            @Override
-            public void onChangePhoto(final String imagePath) {
-                setUserAvatarPath.postValue(new ChangeImageModel(imagePath, userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
-            }
-
-            @Override
-            public void onChangeInitials(final String initials, final String color) {
-                setUserAvatarPath.postValue(new ChangeImageModel(null, initials, color));
-            }
-        };
-
         G.onUserAvatarResponse = this;
 
         getIVandScore();
@@ -367,24 +355,19 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             goToChatPage.setValue(new GoToChatModel(realmRoom.getId(), userInfo.getUserId()));
         } else {
             if (retryRequestTime < 3) {
-                G.onChatGetRoom = new OnChatGetRoom() {
+                new RequestChatGetRoom().chatGetRoom(userInfo.getUserId(), new RequestChatGetRoom.OnChatRoomReady() {
                     @Override
-                    public void onChatGetRoom(ProtoGlobal.Room room) {
+                    public void onReady(ProtoGlobal.Room room) {
                         RealmRoom.putOrUpdate(room);
-                        G.onChatGetRoom = null;
                         G.handler.post(() -> {
+                            G.refreshRealmUi();
                             showLoading.set(View.GONE);
                             goToChatPage.postValue(new GoToChatModel(room.getId(), userInfo.getUserId()));
                         });
                     }
 
                     @Override
-                    public void onChatGetRoomTimeOut() {
-
-                    }
-
-                    @Override
-                    public void onChatGetRoomError(int majorCode, int minorCode) {
+                    public void onError(int majorCode, int minorCode) {
                         if (majorCode == 5 && minorCode == 1) {
                             G.handler.postDelayed(() -> onCloudMessageClick(), 2000);
                         } else {
@@ -392,8 +375,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                             showError.postValue(R.string.error);
                         }
                     }
-                };
-                new RequestChatGetRoom().chatGetRoom(userInfo.getUserId());
+                });
             } else {
                 showLoading.set(View.GONE);
                 showError.setValue(R.string.error);
@@ -848,11 +830,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         if (pathSaveImage == null) {
             setUserAvatar.setValue(userId);
         } else {
-
             avatarHandler.avatarAdd(userId, pathSaveImage, avatar, avatarPath -> G.handler.post(() -> {
                 showLoading.set(View.GONE);
-                if (G.onChangeUserPhotoListener != null) {
-                    G.onChangeUserPhotoListener.onChangePhoto(avatarPath);
+                if (checkValidationForRealm(userInfo)) {
+                    setUserAvatarPath.postValue(new ChangeImageModel(avatarPath, userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
                 }
             }));
             pathSaveImage = null;

@@ -392,7 +392,7 @@ public final class StartupActions {
         float yInches = metrics.heightPixels / metrics.ydpi;
         float xInches = metrics.widthPixels / metrics.xdpi;
         double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
-        if (diagonalInches >= 6.5) {
+        if (diagonalInches >= 7) {
             G.twoPaneMode = true;
         } else {
             G.twoPaneMode = false;

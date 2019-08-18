@@ -10,13 +10,13 @@ package net.iGap.viewmodel;
  */
 
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothProfile;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.annotation.StringRes;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -50,7 +50,7 @@ import java.util.TimerTask;
 
 import io.realm.Realm;
 
-public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
+public class ActivityCallViewModel extends ViewModel implements BluetoothProfile.ServiceListener {
 
     public ObservableInt showPeerSurface = new ObservableInt(View.GONE);
     public ObservableInt showRendererSurface = new ObservableInt(View.GONE);
@@ -81,6 +81,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     public MutableLiveData<Integer> playSound = new MutableLiveData<>();
     public MutableLiveData<Boolean> setAudioManagerSpeakerphoneOn = new MutableLiveData<>();
     public MutableLiveData<Boolean> setAudioManagerWithBluetooth = new MutableLiveData<>();
+    private MutableLiveData<Long> quickDeclineMessageLiveData = new MutableLiveData<>();
 
 
     private boolean isIncomingCall;
@@ -178,9 +179,9 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
     public void onClickBtnChat() {
         if (!isConnected && isIncomingCall) {
-            endCall();
-        }
-        HelperPublicMethod.goToChatRoom(userId, null, null);
+            quickDeclineMessageLiveData.postValue(userId);
+        }else
+            HelperPublicMethod.goToChatRoom(userId, null, null);
     }
 
     public void addPersonClickListener() {
@@ -492,7 +493,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         setAudioManagerSpeakerphoneOn.setValue(on);
     }
 
-    private void endCall() {
+    public void endCall() {
         UserStatusController.getInstance().setOffline();
         G.isInCall = false;
         G.callStripLayoutVisiblityListener.setValue(false);
@@ -687,5 +688,9 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     @Override
     public void onServiceDisconnected(int profile) {
 
+    }
+
+    public MutableLiveData<Long> getQuickDeclineMessageLiveData() {
+        return quickDeclineMessageLiveData;
     }
 }

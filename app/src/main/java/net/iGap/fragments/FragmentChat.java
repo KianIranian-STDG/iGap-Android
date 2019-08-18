@@ -1184,9 +1184,6 @@ public class FragmentChat extends BaseFragment
     public void onDestroyView() {
         super.onDestroyView();
         realmChat.close();
-
-        if (emojiPopup != null)
-            emojiPopup.releaseMemory();
     }
 
     @Override
@@ -1564,7 +1561,7 @@ public class FragmentChat extends BaseFragment
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(G.twoPaneMode ? R.string.close_icon : R.string.back_icon)
                 .setRightIcons(R.string.more_icon, R.string.voice_call_icon, R.string.video_call_icon)
                 .setLogoShown(false)
                 .setChatRoom(true)
@@ -2829,6 +2826,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View v) {
                 cancelAllRequestFetchHistory();
+                //Todo : also needed: block future Request
 
                 latestButtonClickTime = System.currentTimeMillis();
                 /**
@@ -2880,12 +2878,16 @@ public class FragmentChat extends BaseFragment
                      * and just need go to end position in list otherwise we should clear all
                      * items and reload again from bottom
                      */
-                    if (!addToView) {
-                        resetMessagingValue();
-                        getMessages();
-                    } else {
-                        scrollToEnd();
-                    }
+
+//                    if (!addToView) {
+//                        resetMessagingValue();
+//                        getMessages();
+//                    } else {
+//                        scrollToEnd();
+//                    }
+                    // Todo : Temporally fix bug please use above code with better performance.
+                    resetMessagingValue();
+                    getMessages();
                 }
             }
         });
@@ -2911,7 +2913,7 @@ public class FragmentChat extends BaseFragment
                 super.onScrolled(recyclerView, dx, dy);
                 int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
                 int totalItemCount = recyclerView.getLayoutManager().getItemCount();
-                int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
 
                 cardFloatingTime.setVisibility(View.VISIBLE);
                 long item = mAdapter.getItemByPosition(layoutManager.findFirstVisibleItemPosition());
@@ -2923,11 +2925,10 @@ public class FragmentChat extends BaseFragment
                 gongingHandler.removeCallbacks(gongingRunnable);
                 gongingHandler.postDelayed(gongingRunnable, 1000);
 
-                if (pastVisibleItems + visibleItemCount >= totalItemCount && !isAnimateStart) {
-                    isScrollEnd = false;
+                if (totalItemCount - pastVisibleItems <= 1 && !isAnimateStart) {
                     isAnimateStart = true;
                     isAnimateStart = false;
-                    llScrollNavigate.setVisibility(View.GONE);
+                    setDownBtnGone();
 //                    llScrollNavigate.animate()
 //                            .alpha(0.0f)
 //                            .translationY(llScrollNavigate.getHeight() / 2)
@@ -9342,7 +9343,13 @@ public class FragmentChat extends BaseFragment
             return;
         }
         closeKeyboard(view);
-        popBackStackFragment();
+        if (G.twoPaneMode){
+            if (getActivity() instanceof ActivityMain){
+                ((ActivityMain) getActivity()).goToTabletEmptyPage();
+            }
+        }else {
+            popBackStackFragment();
+        }
     }
 
     @Override

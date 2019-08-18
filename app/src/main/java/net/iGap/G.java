@@ -255,7 +255,6 @@ public class G extends Application {
     public static OnUserInfoResponse onUserInfoResponse;
     public static OnUserAvatarResponse onUserAvatarResponse;
     public static OnGroupAvatarResponse onGroupAvatarResponse;
-    public static OnChangeUserPhotoListener onChangeUserPhotoListener;
     public static OnClearChatHistory onClearChatHistory;
     public static OnDeleteChatFinishActivity onDeleteChatFinishActivity;
     public static OnClientGetRoomHistoryResponse onClientGetRoomHistoryResponse;

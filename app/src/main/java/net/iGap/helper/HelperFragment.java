@@ -10,10 +10,21 @@ import android.util.Log;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.fragments.EditChannelFragment;
+import net.iGap.fragments.EditGroupFragment;
+import net.iGap.fragments.FragmentChannelProfile;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.FragmentContactsProfile;
+import net.iGap.fragments.FragmentEditImage;
+import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentMain;
+import net.iGap.fragments.FragmentShearedMedia;
+import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.fragments.BottomNavigationFragment;
+import net.iGap.fragments.ShowCustomList;
+import net.iGap.fragments.TabletEmptyChatFragment;
+import net.iGap.fragments.filterImage.EditImageFragment;
 import net.iGap.payment.PaymentCallBack;
 import net.iGap.payment.PaymentFragment;
 
@@ -240,7 +251,7 @@ public class HelperFragment {
 
     public void popBackStack(int count) {
         for (int i = 0; i < count; i++) {
-            Log.wtf(this.getClass().getName(), "fragment: " + fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() -1 - i).getName());
+            Log.wtf(this.getClass().getName(), "fragment: " + fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1 - i).getName());
             fragmentManager.popBackStackImmediate();
         }
     }
@@ -279,13 +290,7 @@ public class HelperFragment {
         }
 
         if (G.twoPaneMode) {
-            if (fragmentClassName.equals(FragmentMain.class.getName())) {
-                if (G.isLandscape) {
-                    return R.id.roomListFrame;
-                } else {
-                    return R.id.mainFrame;
-                }
-            } else if (fragmentClassName.equals(FragmentShowImage.class.getName())) {
+            if (fragmentClassName.equals(FragmentShowImage.class.getName()) || fragmentClassName.equals(FragmentShowAvatars.class.getName())) {
                 /*if (G.isLandscape) {*/
                 if (G.iTowPanModDesinLayout != null) {
                     G.iTowPanModDesinLayout.setBackChatVisibility(true);
@@ -295,28 +300,40 @@ public class HelperFragment {
                     return R.id.mainFrame;
                 }*/
             } else if (isChatFragment(fragmentClassName)) {
-                if (G.iTowPanModDesinLayout != null) {
+                /*if (G.iTowPanModDesinLayout != null) {
                     G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.show);
-                }
-                //TODO: fixed it in tablet mode load fragment Chat
-                return 0/*R.id.am_frame_chat_container*/;
+                }*/
+                return R.id.mainFrame;
             } else if (fragmentClassName.equals(BottomNavigationFragment.class.getName())) {
+                return R.id.roomListFrame;
+            } else if (fragmentClassName.equals(TabletEmptyChatFragment.class.getName())) {
                 return R.id.mainFrame;
             } else {
-                if (G.iTowPanModDesinLayout != null) {
-                    G.iTowPanModDesinLayout.setBackChatVisibility(true);
+                if (isRelatedToChat(fragmentClassName)) {
+                    if (G.iTowPanModDesinLayout != null) {
+                        G.iTowPanModDesinLayout.setBackChatVisibility(true);
+                    }
+                    return R.id.detailFrame;
+                } else {
+                    return R.id.roomListFrame;
                 }
-                return R.id.detailFrame;
             }
         } else {
             return R.id.mainFrame;
         }
     }
 
-    public void loadPayment(String title, String token, PaymentCallBack callBack){
-        fragment = PaymentFragment.getInstance(title,token ,callBack);
+    public void loadPayment(String title, String token, PaymentCallBack callBack) {
+        fragment = PaymentFragment.getInstance(title, token, callBack);
         setAnimation(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
         replace = false;
         load();
+    }
+
+    private boolean isRelatedToChat(String fragmentName) {
+        return fragmentName.equals(FragmentChannelProfile.class.getName()) || fragmentName.equals(EditChannelFragment.class.getName()) ||
+                fragmentName.equals(FragmentGroupProfile.class.getName()) || fragmentName.equals(EditGroupFragment.class.getName()) ||
+                fragmentName.equals(FragmentContactsProfile.class.getName()) || fragmentName.equals(ShowCustomList.class.getName()) ||
+                fragmentName.equals(FragmentShearedMedia.class.getName()) || fragmentName.equals(FragmentEditImage.class.getName());
     }
 }

@@ -265,8 +265,12 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         realmRecyclerView = view.findViewById(R.id.recycler_view);
         realmRecyclerView.setLayoutManager(new ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false, 1000));
         realmRecyclerView.setNestedScrollingEnabled(false);
-        FastScroller fastScroller = view.findViewById(R.id.fast_scroller);
-        fastScroller.setRecyclerView(realmRecyclerView);
+        if (realmRecyclerView.getAdapter().getItemCount() > 0) {
+            FastScroller fastScroller = view.findViewById(R.id.fast_scroller);
+            fastScroller.setRecyclerView(realmRecyclerView);
+        } else {
+            view.findViewById(R.id.fast_scroller).setVisibility(View.GONE);
+        }
 
 
         onClickRecyclerView = (v, position) -> {
@@ -344,8 +348,10 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 bundle1.putString("TYPE", ProtoGlobal.Room.Type.GROUP.name());
                 bundle1.putBoolean("NewRoom", true);
                 fragment.setArguments(bundle1);
-                if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
+                if (FragmentNewGroup.onRemoveFragmentNewGroup != null) {
+                    Log.wtf(this.getClass().getName(),"onRemoveFragmentNewGroup");
                     FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
+                }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });

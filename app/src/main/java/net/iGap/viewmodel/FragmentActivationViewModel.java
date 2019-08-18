@@ -119,7 +119,7 @@ public class FragmentActivationViewModel extends ViewModel {
                 } else if (error.getMajorCode() == 108) {
                     showWaitDialog.setValue(new WaitTimeModel(R.string.USER_VERIFY_MANY_TRIES, error.getWaitTime(), error.getMajorCode()));
                 } else if (error.getMajorCode() == 5 && error.getMinorCode() == 1) {
-                    userVerification(verifyCode.getValue());
+                    userVerification(verificationCode);
                 }
             }
         });
