@@ -1,8 +1,14 @@
 package net.iGap.fragments.mplTranaction;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +21,7 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -25,16 +32,23 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.proto.ProtoGlobal;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import ir.radsense.raadcore.utils.RaadCommonUtils;
 
 public class MplTransactionInfoFragment extends BaseFragment implements ToolbarListener {
     private static final String TAG = "abbasiMpl";
-    private View rootView;
-    private String token;
-    private SwipeRefreshLayout swipeRefreshLayout;
+
     private MplTransactionInfoViewModel viewModel;
     private MplTransactionInfoAdapter adapter;
+
+    private View rootView;
+    private String token;
     private TextView statusTv;
     private TextView dataTv;
     private TextView timeTv;
@@ -42,6 +56,9 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
     private CardView statusRootView;
     private CardView rvContainer;
     private TextView emptyView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    private boolean isInValid = true;
 
     public static MplTransactionInfoFragment getInstance(String token) {
         MplTransactionInfoFragment mplTransactionInfoFragment = new MplTransactionInfoFragment();
@@ -189,10 +206,15 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
         });
 
         viewModel.getErrorTransActionInfoLiveData().observe(getViewLifecycleOwner(), isInvalid -> {
-            if (isInvalid != null && isInvalid)
-                emptyView.setVisibility(View.VISIBLE);
-            else
-                emptyView.setVisibility(View.GONE);
+            if (isInvalid != null) {
+                if (isInvalid) {
+                    emptyView.setVisibility(View.VISIBLE);
+                    isInValid = false;
+                } else {
+                    emptyView.setVisibility(View.GONE);
+                    isInValid = true;
+                }
+            }
         });
 
         viewModel.getProgressLiveData().observe(getViewLifecycleOwner(), progress -> {
@@ -224,6 +246,7 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
                 .setContext(G.fragmentActivity)
                 .setListener(this)
                 .setLogoShown(true)
+                .setRightIcons(R.string.download_icon)
                 .setDefaultTitle(getResources().getString(R.string.payment_history))
                 .setLeftIcon(R.string.back_icon);
 
@@ -265,6 +288,50 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
     public void onLeftIconClickListener(View view) {
         if (getActivity() != null)
             getActivity().onBackPressed();
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+        if (isInValid)
+            new AlertDialog.Builder(getContext())
+                    .setMessage(getResources().getString(R.string.mpl_do_you_want_save_receipt))
+                    .setPositiveButton(getResources().getString(R.string.yes), (dialog, which) -> saveReceipt())
+                    .setNegativeButton(getResources().getString(R.string.no), (dialog, which) -> dialog.dismiss())
+                    .create()
+                    .show();
+    }
+
+
+    private void saveReceipt() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            int result = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+                return;
+            }
+        }
+
+        rootView.setDrawingCacheEnabled(true);
+        rootView.buildDrawingCache();
+
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "iGpap Transaction Log");
+
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.US).format(new Date());
+        String fileName = "receipt_" + timeStamp + ".jpg";
+        File savedFile = RaadCommonUtils.saveBitmap(rootView.getDrawingCache(), new File(mediaStorageDir, fileName));
+        if (savedFile != null) {
+            Toast.makeText(getActivity(), R.string.receipt_saved, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public class MilTransActionStruct {

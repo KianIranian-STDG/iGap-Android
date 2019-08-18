@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.proto.ProtoGlobal;
@@ -57,12 +58,14 @@ public class MplTransactionAdapter extends RecyclerView.Adapter<MplTransactionAd
 
     public class MplTransactionViewHolder extends RecyclerView.ViewHolder {
         private TextView transferActionTypeTv;
+        private TextView transferActionDataTv;
         private TextView transferActionTimeTv;
         private TextView transferActionOrderIdTv;
 
         public MplTransactionViewHolder(@NonNull View rootView) {
             super(rootView);
             transferActionTypeTv = rootView.findViewById(R.id.tv_itemMplTransAction_type);
+            transferActionDataTv = rootView.findViewById(R.id.tv_itemMplTransAction_date);
             transferActionTimeTv = rootView.findViewById(R.id.tv_itemMplTransAction_time);
             transferActionOrderIdTv = rootView.findViewById(R.id.tv_itemMplTransAction_orderId);
         }
@@ -83,7 +86,8 @@ public class MplTransactionAdapter extends RecyclerView.Adapter<MplTransactionAd
                     break;
             }
 
-            transferActionTimeTv.setText(HelperCalander.getPersianCalander(mplTransaction.getPayTime() * 1000L));
+            transferActionDataTv.setText(HelperCalander.getPersianCalander(mplTransaction.getPayTime() * 1000L));
+            transferActionTimeTv.setText(HelperCalander.getClocktime(mplTransaction.getPayTime() * 1000L, G.isAppRtl));
             transferActionOrderIdTv.setText(itemView.getContext().getResources().getString(R.string.pay_id) + " : " + mplTransaction.getOrderId());
 
             itemView.setOnClickListener(v -> {

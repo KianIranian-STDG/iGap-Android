@@ -1915,7 +1915,7 @@ Want to get it?</string>
     <string name="str_frag_sync_contactWelcome">Welcome to iGap</string>
     <string name="str_frag_sync_skipBtn">Get Started</string>
     <string name="str_frag_sync_error">Something went wrong. Please try again.</string>
-    <string name="download_icon">ï</string>
+    <string name="download_icon">\ue933</string>
     <string name="igasht_title">آیگشت</string>
     <string name="igasht_choose_province_title">شهر مورد نظر خود را انتخاب کنید</string>
     <string name="igasht_search_by_location">جستجو بر اساس موقعیت</string>
@@ -1975,5 +1975,6 @@ Want to get it?</string>
     <string name="mpl_transaction_empty">No information available!</string>
     <string name="mpl_transaction_card">Card To Card</string>
     <string name="mpl_terminal_no">Terminal No</string>
+    <string name="mpl_do_you_want_save_receipt">آیا میخواهید رسید را ذخیره کنید؟</string>
 
 </resources>
