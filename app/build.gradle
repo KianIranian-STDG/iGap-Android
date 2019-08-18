@@ -219,7 +219,7 @@ dependencies {
     release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protoMain8'
     release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain8'
     release_CharImplementation 'com.github.KianIranian-STDG:Proto:protoMain8'
-    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta8'
+    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta12'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'

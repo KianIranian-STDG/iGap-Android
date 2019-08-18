@@ -185,6 +185,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30502, "ProtoInfoTime.InfoTimeResponse");
         lookupMap.put(30503, "ProtoInfoPage.InfoPageResponse");
         lookupMap.put(30504, "ProtoInfoWallpaper.InfoWallpaperResponse");
+        lookupMap.put(30505, "ProtoInfoUpdate.InfoUpdateResponse");
 
         // Client 6xx , 306xx
         lookupMap.put(30600, "ProtoClientCondition.ClientConditionResponse");
