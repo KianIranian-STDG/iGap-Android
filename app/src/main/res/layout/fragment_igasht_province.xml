@@ -51,86 +51,23 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/chooseProvinceTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="28dp"
-                android:fontFamily="@font/main_font"
-                android:text="@string/igasht_choose_province_title"
-                android:textColor="@color/white"
-                android:textSize="@dimen/largeTextSize"
-                android:visibility="@{viewModel.showMainView}"
-                app:layout_constraintBottom_toTopOf="@id/v"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <android.support.design.card.MaterialCardView
-                android:id="@+id/v"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:visibility="@{viewModel.showMainView}"
-                app:cardCornerRadius="@dimen/dp20"
-                app:cardUseCompatPadding="true"
-                app:contentPadding="@dimen/dp8"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintWidth_percent=".8"
-                tools:layout_editor_absoluteY="332dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/clearProvinceSearch"
-                        style="@style/baseFontIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:onClick="@{()->viewModel.onClearProVinceSearchClick()}"
-                        android:text="@string/close_icon" />
-
-                    <android.support.v7.widget.AppCompatAutoCompleteTextView
-                        android:id="@+id/provinceSearchText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp8"
-                        android:layout_marginLeft="@dimen/dp8"
-                        android:layout_weight="1"
-                        android:background="@color/transparent"
-                        android:completionThreshold="0" />
-
-                    <View
-                        android:layout_width="@dimen/dp1"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/dp8"
-                        android:layout_marginTop="@dimen/dp4"
-                        android:layout_marginRight="@dimen/dp8"
-                        android:layout_marginBottom="@dimen/dp4"
-                        android:background="@color/gray" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/baseFontIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/search_icon" />
-
-                </LinearLayout>
-            </android.support.design.card.MaterialCardView>
-
             <ProgressBar
                 android:id="@+id/loadingView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="188dp"
+                android:layout_marginLeft="188dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="304dp"
                 android:visibility="@{viewModel.showLoadingView}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/v" />
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+                app:layout_constraintVertical_bias="0.656" />
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/myIconTextViewStyle"
@@ -140,17 +77,102 @@
                 android:onClick="@{()->viewModel.onRetryClick()}"
                 android:text="@string/retry_icon"
                 android:visibility="@{viewModel.showViewRefresh}"
-                app:layout_constraintBottom_toBottomOf="@id/backgroundImage"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/backgroundImage" />
+                tools:layout_editor_absoluteX="40dp"
+                tools:layout_editor_absoluteY="416dp" />
 
-            <android.support.v7.widget.CardView
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/frameLayout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp200"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="579dp"
-                android:background=/>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/shape_igasht_gradient_yellow"
+                android:orientation="vertical"
+                android:padding="@dimen/dp8"
+                app:layout_constraintEnd_toEndOf="@+id/backgroundImage"
+                app:layout_constraintStart_toStartOf="@+id/backgroundImage"
+                app:layout_constraintTop_toBottomOf="@+id/backgroundImage">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/chooseProvinceTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
+                    android:fontFamily="@font/main_font"
+                    android:text="@string/igasht_choose_province_title"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/largeTextSize"
+                    android:visibility="@{viewModel.showMainView}"
+                    app:layout_constraintEnd_toEndOf="@+id/frameLayout"
+                    app:layout_constraintStart_toStartOf="@+id/frameLayout"
+                    app:layout_constraintTop_toTopOf="@+id/frameLayout" />
+
+                <android.support.design.card.MaterialCardView
+                    android:id="@+id/v"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="@{viewModel.showMainView}"
+                    app:cardCornerRadius="@dimen/dp20"
+                    app:cardUseCompatPadding="true"
+                    app:contentPadding="@dimen/dp8"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/chooseProvinceTitle"
+                    app:layout_constraintStart_toStartOf="@+id/chooseProvinceTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/chooseProvinceTitle"
+                    app:layout_constraintWidth_percent=".8">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/clearProvinceSearch"
+                            style="@style/baseFontIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:onClick="@{()->viewModel.onClearProVinceSearchClick()}"
+                            android:text="@string/close_icon" />
+
+                        <android.support.v7.widget.AppCompatAutoCompleteTextView
+                            android:id="@+id/provinceSearchText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp8"
+                            android:layout_marginLeft="@dimen/dp8"
+                            android:layout_weight="1"
+                            android:background="@color/transparent"
+                            android:completionThreshold="0" />
+
+                        <View
+                            android:layout_width="@dimen/dp1"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/dp8"
+                            android:layout_marginTop="@dimen/dp4"
+                            android:layout_marginRight="@dimen/dp8"
+                            android:layout_marginBottom="@dimen/dp4"
+                            android:background="@color/gray" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/baseFontIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/search_icon" />
+
+                    </LinearLayout>
+                </android.support.design.card.MaterialCardView>
+            </android.support.constraint.ConstraintLayout>
         </android.support.constraint.ConstraintLayout>
 
         <!-- </ScrollView>-->
