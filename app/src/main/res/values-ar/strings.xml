@@ -2911,4 +2911,5 @@
     <string name="message_decline_call_later">أنا ، أنا أتصل بك مرة أخرى.</string>
     <string name="message_decline_Please_call_later">يمكنك الاتصال مرة أخرى في وقت لاحق؟</string>
     <string name="message_decline_please_text_me">يرجى نص لي.</string>
+    <string name="of_from_total">فی %s</string>
 </resources>

@@ -155,7 +155,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     //Todo: fixed it
     private int getIvanScoreTime = 0;
 
-    public UserProfileViewModel() {
+    public UserProfileViewModel(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
+        this.sharedPreferences = sharedPreferences;
+        this.avatarHandler = avatarHandler;
         mRealm = Realm.getDefaultInstance();
         userInfo = getRealm().where(RealmUserInfo.class).findFirst();
         updateUserInfoUI();
@@ -167,12 +169,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 updateUserInfoUI();
             });
         }
-    }
 
-    public void init(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
-
-        this.sharedPreferences = sharedPreferences;
-        this.avatarHandler = avatarHandler;
+        appVersion.set(BuildConfig.VERSION_NAME);
+        isDarkMode.set(G.isDarkTheme);
 
         //set user info text gravity
         if (G.selectedLanguage.equals("en")) {
@@ -180,9 +179,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         } else {
             textsGravity.set(Gravity.RIGHT);
         }
+    }
 
-        appVersion.set(BuildConfig.VERSION_NAME);
-        isDarkMode.set(G.isDarkTheme);
+    public void init() {
 
         //set credit amount
         if (G.selectedCard != null) {

@@ -1,79 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
-  <data>
-
-    <import type="android.graphics.Color" />
-
-    <import type="net.iGap.G" />
-
-    <variable
-      name="backHandler"
-      type="net.iGap.interfaces.IBackHandler" />
-
-    <variable
-      name="fragmentWalletAgreementViewModel"
-      type="net.iGap.viewmodel.FragmentWalletAgreementViewModel" />
-
-
-  </data>
-
-  <LinearLayout
-    style="?backgroundColorSettingTheme"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true"
-    android:focusable="true"
-    android:orientation="vertical"
-    tools:ignore="MissingPrefix">
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.FragmentWalletAgreementViewModel" />
+    </data>
 
     <LinearLayout
+        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/fwa_layoutToolbar"/>
-
-    <ScrollView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:id="@+id/fwa_layoutToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
 
-        <android.support.v7.widget.AppCompatTextView
-          android:id="@+id/txtAgreement_register"
-          style="?textTitleColorSettingTheme"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_margin="@dimen/dp8"
-          android:lineSpacingExtra="@dimen/dp4"
-          android:padding="@dimen/dp4"
-          android:text="@{fragmentWalletAgreementViewModel.callbackTxtAgreement , default = @string/loading_wallet_agreement}"
-          android:textSize="@dimen/dp14" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <CheckBox
-          style="?textTitleColorSettingTheme"
-          android:id="@+id/fpc_checkBox_trabord"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="start"
-            android:layout_marginLeft="@dimen/dp10"
-            android:layout_marginStart="@dimen/dp10"
-          android:textSize="@dimen/dp14"
-            android:button="@drawable/check_box_background"
-          android:layout_marginBottom="@dimen/dp32"
-          android:onCheckedChanged="@{fragmentWalletAgreementViewModel::checkBoxAgreement}"
-          android:text="@string/i_agree_with_the_terms" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-      </LinearLayout>
-    </ScrollView>
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/txtAgreement_register"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/dp8"
+                    android:lineSpacingExtra="@dimen/dp4"
+                    android:padding="@dimen/dp4"
+                    android:text="@{viewModel.callbackTxtAgreement}"
+                    android:textSize="@dimen/dp14" />
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/fpc_checkBox_trabord"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="@dimen/dp10"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginBottom="@dimen/dp32"
+                    android:button="@drawable/check_box_background"
+                    android:onCheckedChanged="@{(buttonView,isChecked)->viewModel.checkBoxAgreement(isChecked)}"
+                    android:text="@string/i_agree_with_the_terms"
+                    android:textSize="@dimen/dp14" />
+
+            </LinearLayout>
+        </ScrollView>
 
 
-  </LinearLayout>
+    </LinearLayout>
 </layout>
