@@ -994,7 +994,7 @@ public class RealmRoomMessage extends RealmObject {
         return timeMessage;
     }
 
-    public static RealmRoomMessage makeTextMessage(final long roomId, final String message, final long replyMessageId) {
+    public static RealmRoomMessage makeTextMessage(final long roomId, final String message, final long replyMessageId, String additinalData, int additionalType) {
         if (message.isEmpty()) {
             return null;
         }
@@ -1013,6 +1013,15 @@ public class RealmRoomMessage extends RealmObject {
         roomMessage.setUserId(G.userId);
         roomMessage.setAuthorHash(G.authorHash);
         roomMessage.setCreateTime(currentTime);
+        if (additinalData != null) {
+            RealmAdditional realmAdditional = new RealmAdditional();
+            realmAdditional.setId(AppUtils.makeRandomId());
+            realmAdditional.setAdditionalData(additinalData);
+            realmAdditional.setAdditionalType(additionalType);
+
+            roomMessage.setRealmAdditional(realmAdditional);
+        }
+
         /**
          *  user wants to replay to a message
          */
@@ -1036,6 +1045,10 @@ public class RealmRoomMessage extends RealmObject {
         }).start();
 
         return roomMessage;
+    }
+
+    public static RealmRoomMessage makeTextMessage(final long roomId, final String message, final long replyMessageId) {
+        return makeTextMessage(roomId, message, replyMessageId, null, 0);
     }
 
     public static void makeTextMessage(final long roomId, final long messageId, final String message) {

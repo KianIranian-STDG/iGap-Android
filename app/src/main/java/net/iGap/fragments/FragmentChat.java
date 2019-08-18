@@ -3294,27 +3294,25 @@ public class FragmentChat extends BaseFragment
         String mplCardNumber = cardNumber.replace("-", "");
         int mplAmount = Integer.parseInt(amount.replace(",", ""));
 
-        final RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, description, replyMessageId());
+        JsonArray rootJsonArray = new JsonArray();
+        JsonArray dataJsonArray = new JsonArray();
+
+        JsonObject valueObject = new JsonObject();
+        valueObject.addProperty("cardNumber", mplCardNumber);
+        valueObject.addProperty("amount", mplAmount);
+        valueObject.addProperty("userId", G.userId);
+
+        JsonObject rootObject = new JsonObject();
+        rootObject.addProperty("label", "Card to Card");
+        rootObject.addProperty("imageUrl", "");
+        rootObject.addProperty("actionType", "27");
+        rootObject.add("value", valueObject);
+
+        dataJsonArray.add(rootObject);
+        rootJsonArray.add(dataJsonArray);
+
+        final RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, description, replyMessageId(), rootJsonArray.toString(), AdditionalType.CARD_TO_CARD_MESSAGE);
         if (roomMessage != null) {
-
-            JsonArray rootJsonArray = new JsonArray();
-            JsonArray dataJsonArray = new JsonArray();
-
-            JsonObject valueObject = new JsonObject();
-            valueObject.addProperty("cardNumber", mplCardNumber);
-            valueObject.addProperty("amount", mplAmount);
-            valueObject.addProperty("userId", G.userId);
-
-            JsonObject rootObject = new JsonObject();
-            rootObject.addProperty("label", "Card to Card");
-            rootObject.addProperty("imageUrl", "");
-            rootObject.addProperty("actionType", "27");
-            rootObject.add("value", valueObject);
-
-            dataJsonArray.add(rootObject);
-            rootJsonArray.add(dataJsonArray);
-
-            getRealmChat().executeTransaction(realm -> roomMessage.setRealmAdditional(RealmAdditional.put(realm, rootJsonArray.toString(), AdditionalType.CARD_TO_CARD_MESSAGE)));
 
             edtChat.setText("");
             lastMessageId = roomMessage.getMessageId();
