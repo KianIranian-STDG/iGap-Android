@@ -2,6 +2,7 @@ package net.iGap.igasht.provinceselect;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.view.View;
 
 import net.iGap.R;
@@ -14,6 +15,7 @@ import java.util.List;
 public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtResponse<IGashtProvince>> {
 
     private ObservableField<String> backgroundImageUrl = new ObservableField<>();
+    private ObservableInt selectIcon = new ObservableInt(R.string.down_arrow_icon);
     private MutableLiveData<List<IGashtProvince>> provinceList = new MutableLiveData<>();
     private MutableLiveData<Boolean> goToShowLocationListPage = new MutableLiveData<>();
     private MutableLiveData<Boolean> clearEditText = new MutableLiveData<>();
@@ -41,6 +43,10 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
         return clearEditText;
     }
 
+    public ObservableInt getSelectIcon() {
+        return selectIcon;
+    }
+
     public void onClearProVinceSearchClick() {
         repository.setSelectedProvince(null);
         clearEditText.setValue(true);
@@ -60,6 +66,14 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
 
     public void onRetryClick() {
         getProvinceList();
+    }
+
+    public void onProvinceSearchTextChange(String s) {
+        if (s.length() > 0) {
+            selectIcon.set(R.string.close_icon);
+        } else {
+            selectIcon.set(R.string.down_arrow_icon);
+        }
     }
 
     private void getProvinceList() {

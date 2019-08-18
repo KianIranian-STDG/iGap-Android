@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -43,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
+                android:layout_margin="@dimen/dp8"
                 android:src="@drawable/image_igasht_province"
                 app:imageUrl="@{viewModel.backgroundImageUrl}"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -55,19 +56,14 @@
                 android:id="@+id/loadingView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="188dp"
-                android:layout_marginLeft="188dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="304dp"
                 android:visibility="@{viewModel.showLoadingView}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/frameLayout"
-                app:layout_constraintVertical_bias="0.656" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="175dp" />
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/myIconTextViewStyle"
@@ -77,8 +73,10 @@
                 android:onClick="@{()->viewModel.onRetryClick()}"
                 android:text="@string/retry_icon"
                 android:visibility="@{viewModel.showViewRefresh}"
-                tools:layout_editor_absoluteX="40dp"
-                tools:layout_editor_absoluteY="416dp" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/frameLayout"
@@ -107,7 +105,7 @@
                     android:fontFamily="@font/main_font"
                     android:text="@string/igasht_choose_province_title"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/largeTextSize"
+                    style="@style/myIconTextViewStyle"
                     android:visibility="@{viewModel.showMainView}"
                     app:layout_constraintEnd_toEndOf="@+id/frameLayout"
                     app:layout_constraintStart_toStartOf="@+id/frameLayout"
@@ -121,7 +119,7 @@
                     android:layout_marginTop="32dp"
                     android:layout_marginBottom="8dp"
                     android:visibility="@{viewModel.showMainView}"
-                    app:cardCornerRadius="@dimen/dp20"
+                    app:cardCornerRadius="@dimen/dp8"
                     app:cardUseCompatPadding="true"
                     app:contentPadding="@dimen/dp8"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -142,7 +140,7 @@
                             android:layout_gravity="center"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:onClick="@{()->viewModel.onClearProVinceSearchClick()}"
-                            android:text="@string/close_icon" />
+                            android:text="@{viewModel.selectIcon}" />
 
                         <android.support.v7.widget.AppCompatAutoCompleteTextView
                             android:id="@+id/provinceSearchText"
@@ -151,8 +149,10 @@
                             android:layout_marginStart="@dimen/dp8"
                             android:layout_marginLeft="@dimen/dp8"
                             android:layout_weight="1"
+                            android:afterTextChanged="@{(s)->viewModel.onProvinceSearchTextChange(s.toString())}"
                             android:background="@color/transparent"
-                            android:completionThreshold="0" />
+                            android:completionThreshold="0"
+                            android:maxLines="1" />
 
                         <View
                             android:layout_width="@dimen/dp1"
@@ -168,6 +168,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:background="?attr/selectableItemBackgroundBorderless"
                             android:text="@string/search_icon" />
 
                     </LinearLayout>
