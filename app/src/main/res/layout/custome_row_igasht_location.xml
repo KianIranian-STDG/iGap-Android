@@ -2,66 +2,77 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/dp8"
     android:layout_marginBottom="@dimen/dp8">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="370dp"
-        android:layout_height="162dp"
+        android:id="@+id/constraintLayout4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp4"
+        android:layout_marginLeft="@dimen/dp4"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="152dp"
+        android:layout_marginEnd="@dimen/dp4"
+        android:layout_marginRight="@dimen/dp4"
         android:background="@drawable/shape_igasht_strokegray"
-        app:layout_constraintBottom_toTopOf="@id/addToFavoriteButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.645"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <net.iGap.module.RadiusImageView
-            android:id="@+id/itemImage"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="116:83"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".3" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/itemTitle"
-            style="?textTitleColorSettingTheme"
-            android:layout_width="0dp"
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:maxLines="1"
-            android:paddingStart="@dimen/dp4"
-            android:paddingEnd="@dimen/dp4"
-            android:textSize="@dimen/largeTextSize"
-            app:layout_constraintBottom_toTopOf="@id/itemAddress"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/itemImage"
-            app:layout_constraintTop_toTopOf="@id/itemImage"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/itemAddress"
-            style="?textTitleColorSettingTheme"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:maxLines="1"
+            android:layout_marginBottom="@dimen/dp8"
             android:padding="@dimen/dp4"
-            android:textSize="@dimen/standardTextSize"
-            app:layout_constraintBottom_toBottomOf="@id/itemImage"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/itemTitle"
-            app:layout_constraintTop_toBottomOf="@id/itemTitle" />
+            app:layout_constraintBottom_toTopOf="@id/view2"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <net.iGap.module.RadiusImageView
+                android:id="@+id/itemImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/dp8"
+                app:layout_constraintDimensionRatio="116:83"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent=".3" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/itemTitle"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:maxLines="1"
+                android:paddingStart="@dimen/dp4"
+                android:paddingEnd="@dimen/dp4"
+                android:textSize="@dimen/largeTextSize"
+                app:layout_constraintBottom_toTopOf="@id/itemAddress"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/itemImage"
+                app:layout_constraintTop_toTopOf="@id/itemImage"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/itemAddress"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:maxLines="1"
+                android:padding="@dimen/dp4"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintBottom_toBottomOf="@id/itemImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/itemTitle"
+                app:layout_constraintTop_toBottomOf="@id/itemTitle" />
+        </android.support.constraint.ConstraintLayout>
 
         <View
             android:id="@+id/view2"
@@ -77,31 +88,44 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/itemLocation"
-            style="?textTitleColorSettingTheme"
-            android:layout_width="259dp"
-            android:layout_height="39dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:padding="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/iv_location"
-            app:layout_constraintTop_toBottomOf="@+id/view2" />
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/iv_location"
-            style="@style/baseFontIcon"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:text="@string/location_pin_icon"
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
+            android:padding="@dimen/dp4"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="116:83"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent=".3" />
+            app:layout_constraintTop_toBottomOf="@id/view2">
 
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/itemLocation"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:maxLines="1"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_location"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/iv_location"
+                app:layout_constraintTop_toBottomOf="@+id/iv_location"
+                app:layout_constraintTop_toTopOf="@+id/iv_location" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/iv_location"
+                style="@style/baseFontIcon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/dp8"
+                android:text="@string/location_pin_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="116:83"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent=".3" />
+
+        </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
     <!--<android.support.v7.widget.AppCompatTextView
         android:id="@+id/itemPrice"
@@ -122,22 +146,21 @@
         app:layout_constraintTop_toBottomOf="@id/itemPrice" />-->
 
     <android.support.design.button.MaterialButton
-        android:id="@+id/addToFavoriteButton"
-        style="@style/BaseIGapButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/igasht_add_to_favorite_title"
-        app:backgroundTint="@color/md_blue_700"
-        tools:layout_editor_absoluteX="81dp"
-        tools:layout_editor_absoluteY="432dp" />
-
-    <android.support.design.button.MaterialButton
         android:id="@+id/buyTicketButton"
         style="?iGapButton"
-        android:layout_width="221dp"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/dp48"
-        android:text="@string/igasht_buy_ticket_title"
-        tools:layout_editor_absoluteX="81dp"
-        tools:layout_editor_absoluteY="488dp" />
+        android:layout_marginStart="@dimen/dp4"
+        android:layout_marginLeft="@dimen/dp4"
+        android:layout_marginEnd="@dimen/dp4"
+        android:layout_marginRight="@dimen/dp4"
+        android:background="@drawable/shape_igasht_yellow"
+        android:text="انتخاب محل"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="@dimen/dp16"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
 
 </android.support.constraint.ConstraintLayout>
