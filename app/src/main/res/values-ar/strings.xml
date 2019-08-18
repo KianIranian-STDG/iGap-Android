@@ -2911,10 +2911,15 @@
     <string name="message_decline_call_later">أنا ، أنا أتصل بك مرة أخرى.</string>
     <string name="message_decline_Please_call_later">يمكنك الاتصال مرة أخرى في وقت لاحق؟</string>
     <string name="message_decline_please_text_me">يرجى نص لي.</string>
-    <string name="mpl_transaction_rrn">RRN</string>
-    <string name="mpl_transaction_trace">Trace Number</string>
-    <string name="mpl_transaction_order_id">Order Id</string>
-    <string name="pay_id">شناسه پرداخت</string>
-    <string name="mpl_transaction_sales">Sales</string>
-    <string name="mpl_transaction_topup">TopUp</string>
+    <string name="mpl_transaction_rrn">إعادة الرقم</string>
+    <string name="mpl_transaction_trace">تتبع عدد</string>
+    <string name="mpl_transaction_order_id">رقم التعريف الخاص بالطلب</string>
+    <string name="pay_id">معرف الدفع</string>
+    <string name="mpl_transaction_sales">مبيعات</string>
+    <string name="mpl_transaction_topup">ائتمان</string>
+    <string name="mpl_transaction_card">بطاقة إلى بطاقة</string>
+    <string name="mpl_transaction_empty">لا توجد معلومات متاحة</string>
+    <string name="mpl_terminal_no">رقم المحطة</string>
+
+
 </resources>

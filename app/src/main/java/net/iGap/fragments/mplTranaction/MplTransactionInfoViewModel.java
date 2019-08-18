@@ -17,8 +17,7 @@ public class MplTransactionInfoViewModel extends BaseViewModel implements OnMplT
     @Override
     public void onCreateViewModel() {
         super.onCreateViewModel();
-        if (G.onMplTransactionInfo == null)
-            G.onMplTransactionInfo = this;
+        G.onMplTransactionInfo = this;
     }
 
     public void getTransactionInfo(String token) {

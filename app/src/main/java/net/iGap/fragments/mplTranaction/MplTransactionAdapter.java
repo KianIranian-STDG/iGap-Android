@@ -79,7 +79,7 @@ public class MplTransactionAdapter extends RecyclerView.Adapter<MplTransactionAd
                     transferActionTypeTv.setText(itemView.getContext().getResources().getString(R.string.mpl_transaction_topup));
                     break;
                 case CARD_TO_CARD:
-                    transferActionTypeTv.setText(itemView.getContext().getResources().getString(R.string.card_to_card));
+                    transferActionTypeTv.setText(itemView.getContext().getResources().getString(R.string.mpl_transaction_card));
                     break;
             }
 

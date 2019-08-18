@@ -78,6 +78,14 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
 
                         setStatus(transactionCardToCard.getStatus());
 
+                        if (transactionCardToCard.getStatus() != 0) {
+                            TextView transactionDesc = rootView.findViewById(R.id.tv_mplTransActionInfo_description);
+                            transactionDesc.setText(transactionCardToCard.getStatusDescription());
+                            TextView desTitle = rootView.findViewById(R.id.tv_mplTransActionInfo_descriptionTitle);
+                            desTitle.setVisibility(View.VISIBLE);
+                            transactionDesc.setVisibility(View.VISIBLE);
+                        }
+
                         data.add(new MilTransActionStruct(getResources().getString(R.string.bank), transactionCardToCard.getBankName()));
                         data.add(new MilTransActionStruct(getResources().getString(R.string.card_owner), transactionCardToCard.getCardOwnerName()));
                         data.add(new MilTransActionStruct(getResources().getString(R.string.destination_bank), transactionCardToCard.getDestBankName()));
@@ -95,9 +103,18 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
 
                         setStatus(transactionTopUp.getStatus());
 
+
+                        if (transactionTopUp.getStatus() != 0) {
+                            TextView transactionDesc = rootView.findViewById(R.id.tv_mplTransActionInfo_description);
+                            transactionDesc.setText(transactionTopUp.getStatusDescription());
+                            TextView desTitle = rootView.findViewById(R.id.tv_mplTransActionInfo_descriptionTitle);
+                            desTitle.setVisibility(View.VISIBLE);
+                            transactionDesc.setVisibility(View.VISIBLE);
+                        }
+
                         data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_merchent_name), transactionTopUp.getMerchantName()));
                         data.add(new MilTransActionStruct(getResources().getString(R.string.card_number), transactionTopUp.getCardNumber()));
-                        data.add(new MilTransActionStruct(getResources().getString(R.string.terminal_no), String.valueOf(transactionTopUp.getTerminalNo())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_terminal_no), String.valueOf(transactionTopUp.getTerminalNo())));
                         data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_trace), String.valueOf(transactionTopUp.getTraceNo())));
                         data.add(new MilTransActionStruct(getResources().getString(R.string.amount), String.valueOf(transactionTopUp.getAmount())));
                         data.add(new MilTransActionStruct(getResources().getString(R.string.mobile_number), String.valueOf(transactionTopUp.getChargeMobileNumber())));
@@ -112,9 +129,17 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
 
                         setStatus(transactionSales.getStatus());
 
+                        if (transactionSales.getStatus() != 0) {
+                            TextView transactionDesc = rootView.findViewById(R.id.tv_mplTransActionInfo_description);
+                            transactionDesc.setText(transactionSales.getStatusDescription());
+                            TextView desTitle = rootView.findViewById(R.id.tv_mplTransActionInfo_descriptionTitle);
+                            desTitle.setVisibility(View.VISIBLE);
+                            transactionDesc.setVisibility(View.VISIBLE);
+                        }
+
                         data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_merchent_name), transactionSales.getMerchantName()));
                         data.add(new MilTransActionStruct(getResources().getString(R.string.card_number), transactionSales.getCardNumber()));
-                        data.add(new MilTransActionStruct(getResources().getString(R.string.terminal_no), String.valueOf(transactionSales.getTerminalNo())));
+                        data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_terminal_no), String.valueOf(transactionSales.getTerminalNo())));
                         data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_trace), String.valueOf(transactionSales.getTraceNo())));
                         data.add(new MilTransActionStruct(getResources().getString(R.string.amount), String.valueOf(transactionSales.getAmount())));
                         data.add(new MilTransActionStruct(getResources().getString(R.string.mpl_transaction_order_id), String.valueOf(transactionSales.getOrderId())));
@@ -126,6 +151,14 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
                         data = new ArrayList<>();
 
                         setStatus(transactionBill.getStatus());
+
+                        if (transactionBill.getStatus() != 0) {
+                            TextView transactionDesc = rootView.findViewById(R.id.tv_mplTransActionInfo_description);
+                            transactionDesc.setText(transactionBill.getStatusDescription());
+                            TextView desTitle = rootView.findViewById(R.id.tv_mplTransActionInfo_descriptionTitle);
+                            desTitle.setVisibility(View.VISIBLE);
+                            transactionDesc.setVisibility(View.VISIBLE);
+                        }
 
                         data.add(new MilTransActionStruct(getResources().getString(R.string.billing_id), transactionBill.getBillId()));
                         data.add(new MilTransActionStruct(getResources().getString(R.string.bill_type), transactionBill.getBillType()));
@@ -141,6 +174,7 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
                         break;
                 }
             }
+
             adapter.setData(data);
 
             statusRootView.setVisibility(View.VISIBLE);
@@ -218,6 +252,7 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
         statusTv.setTextColor(getResources().getColor(R.color.red));
         statusIv.setTextColor(getResources().getColor(R.color.red));
         statusIv.setText(getResources().getString(R.string.error_icon));
+        statusTv.setText(getResources().getString(R.string.unsuccessful_payment));
     }
 
     private void setDate(long date) {

@@ -1973,4 +1973,7 @@ Want to get it?</string>
     <string name="mpl_transaction_sales">Sales</string>
     <string name="mpl_transaction_topup">TopUp</string>
     <string name="mpl_transaction_empty">No information available!</string>
+    <string name="mpl_transaction_card">Card To Card</string>
+    <string name="mpl_terminal_no">Terminal No</string>
+
 </resources>

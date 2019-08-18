@@ -1975,5 +1975,8 @@
     <string name="mpl_transaction_sales">پرداخت اینترنتی</string>
     <string name="mpl_transaction_topup">شارژ موبایل</string>
     <string name="mpl_transaction_empty">اطلاعات موجود نمیباشد!</string>
+    <string name="mpl_transaction_card">کارت به کارت</string>
+    <string name="mpl_terminal_no">شماره پایانه</string>
+
 
 </resources>

@@ -18,6 +18,8 @@
             android:id="@+id/rv_mplTransaction"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/dp100"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -99,7 +101,7 @@
                 android:paddingRight="@dimen/round_buttons_large_padding"
                 android:paddingBottom="@dimen/round_buttons_small_padding"
                 android:singleLine="true"
-                android:text="@string/card_to_card"
+                android:text="@string/mpl_transaction_card"
                 android:textColor="@color/gray_4c"
                 android:textSize="@dimen/smallTextSize" />
 

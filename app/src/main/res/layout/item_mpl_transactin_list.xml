@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="56dp">
+    android:layout_height="wrap_content"
+    android:padding="4dp">
 
     <View
         android:id="@+id/view3"
@@ -52,6 +53,7 @@
         style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="54654621352"
         android:textSize="@dimen/smallTextSize"
         app:layout_constraintBottom_toTopOf="@+id/view3"
