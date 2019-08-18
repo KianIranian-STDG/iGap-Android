@@ -59,14 +59,14 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
         viewModel.getMplTransactionLiveData().observe(getViewLifecycleOwner(), mplTransaction -> {
             if (mplTransaction != null) {
                 if (mplTransaction.size() > 0) {
-                    if (page == 1) {
+                    /*if (page == 1) {*/
                         adapter.setTransAction(mplTransaction);
-                    } else {
+                    /*} else {
                         adapter.addTransAction(mplTransaction);
-                    }
+                    }*/
                     start = adapter.getItemCount();
                     end = start + MplTransactionViewModel.PAGINATION_LIMIT;
-                    page = page + 1;
+                    page++;
                 }
             }
 
@@ -81,7 +81,7 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 Log.i(TAG, "onScrolled: ");
-                viewModel.getMorePageOffset(7, 11);
+                viewModel.getMorePageOffset(start, end);
             }
         });
 

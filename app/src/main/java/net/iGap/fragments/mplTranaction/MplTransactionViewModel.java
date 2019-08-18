@@ -8,10 +8,12 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestMplTransactionList;
 import net.iGap.viewmodel.BaseViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MplTransactionViewModel extends BaseViewModel implements OnMplTransaction {
-    public static final int PAGINATION_LIMIT = 5;
+    public static final int PAGINATION_LIMIT = 20;
+    private List<ProtoGlobal.MplTransaction> tmp = new ArrayList<>();
     private MutableLiveData<List<ProtoGlobal.MplTransaction>> mplTransactionLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> progressMutableLiveData = new MutableLiveData<>();
     private ProtoGlobal.MplTransaction.Type type;
@@ -24,7 +26,12 @@ public class MplTransactionViewModel extends BaseViewModel implements OnMplTrans
 
     @Override
     public void onMplTransAction(List<ProtoGlobal.MplTransaction> mplTransactions) {
-        mplTransactionLiveData.postValue(mplTransactions);
+        if (tmp != null) {
+            tmp.addAll(mplTransactions);
+        } else {
+            tmp.addAll(mplTransactions);
+        }
+        mplTransactionLiveData.postValue(tmp);
         progressMutableLiveData.postValue(false);
     }
 
@@ -37,6 +44,7 @@ public class MplTransactionViewModel extends BaseViewModel implements OnMplTrans
     public void getFirstPageMplTransactionList(ProtoGlobal.MplTransaction.Type type) {
         progressMutableLiveData.postValue(true);
         this.type = type;
+        tmp.clear();
         new RequestMplTransactionList().mplTransactionList(type, 0, PAGINATION_LIMIT);
     }
 
