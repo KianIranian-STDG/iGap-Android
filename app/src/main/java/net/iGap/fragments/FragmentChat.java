@@ -2883,15 +2883,12 @@ public class FragmentChat extends BaseFragment
                      * items and reload again from bottom
                      */
 
-//                    if (!addToView) {
-//                        resetMessagingValue();
-//                        getMessages();
-//                    } else {
-//                        scrollToEnd();
-//                    }
-                    // Todo : Temporally fix bug please use above code with better performance.
-                    resetMessagingValue();
-                    getMessages();
+                    if (!addToView) {
+                        resetMessagingValue();
+                        getMessages();
+                    } else {
+                        scrollToEnd();
+                    }
                 }
             }
         });

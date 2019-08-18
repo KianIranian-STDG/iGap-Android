@@ -215,9 +215,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             if (realmRoom != null) {
                 goToChatPage.setValue(realmRoom.getId());
             } else {
-                G.onChatGetRoom = new OnChatGetRoom() {
+                new RequestChatGetRoom().chatGetRoom(userId, new RequestChatGetRoom.OnChatRoomReady() {
                     @Override
-                    public void onChatGetRoom(final ProtoGlobal.Room room) {
+                    public void onReady(ProtoGlobal.Room room) {
                         try (Realm realm = Realm.getDefaultInstance()) {
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
@@ -232,23 +232,15 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                             public void run() {
                                 G.refreshRealmUi();
                                 goToChatPage.setValue(room.getId());
-                                G.onChatGetRoom = null;
                             }
                         });
                     }
 
                     @Override
-                    public void onChatGetRoomTimeOut() {
+                    public void onError(int major, int minor) {
 
                     }
-
-                    @Override
-                    public void onChatGetRoomError(int majorCode, int minorCode) {
-
-                    }
-                };
-
-                new RequestChatGetRoom().chatGetRoom(userId);
+                });
             }
         } else {
             goBack.setValue(true);
