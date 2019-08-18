@@ -430,13 +430,13 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         mRecyclerView.setAdapter(roomAdapter);
 
-        G.onNotifyTime = () -> {
+        G.onNotifyTime = () -> G.handler.post(() -> {
             if (mRecyclerView != null) {
                 if (mRecyclerView.getAdapter() != null) {
                     mRecyclerView.getAdapter().notifyDataSetChanged();
                 }
             }
-        };
+        });
 
     }
 
@@ -556,9 +556,11 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
      */
     @Override
     public void onChange() {
-        if (mRecyclerView.getAdapter() != null) {
-            mRecyclerView.getAdapter().notifyDataSetChanged();
-        }
+        G.handler.post(() -> {
+            if (mRecyclerView.getAdapter() != null) {
+                mRecyclerView.getAdapter().notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
