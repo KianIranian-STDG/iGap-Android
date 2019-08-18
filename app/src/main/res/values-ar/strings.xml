@@ -2911,5 +2911,18 @@
     <string name="message_decline_call_later">أنا ، أنا أتصل بك مرة أخرى.</string>
     <string name="message_decline_Please_call_later">يمكنك الاتصال مرة أخرى في وقت لاحق؟</string>
     <string name="message_decline_please_text_me">يرجى نص لي.</string>
+    <string name="mpl_transaction_rrn">إعادة الرقم</string>
+    <string name="mpl_transaction_trace">تتبع عدد</string>
+    <string name="mpl_transaction_order_id">رقم التعريف الخاص بالطلب</string>
+    <string name="pay_id">معرف الدفع</string>
+    <string name="mpl_transaction_sales">مبيعات</string>
+    <string name="mpl_transaction_topup">ائتمان</string>
+    <string name="mpl_transaction_card">بطاقة إلى بطاقة</string>
+    <string name="mpl_transaction_empty">لا توجد معلومات متاحة</string>
+    <string name="mpl_terminal_no">رقم المحطة</string>
+    <string name="mpl_do_you_want_save_receipt">هل تريد حفظ الإيصال؟</string>
+    <string name="mpl_transaction_nul">ليس لديك أي معاملات في آخر 5 أيام!</string>
+
+
     <string name="of_from_total">فی %s</string>
 </resources>

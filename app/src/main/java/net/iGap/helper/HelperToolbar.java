@@ -39,6 +39,7 @@ import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.beepTunes.main.BeepTunesFragment;
+import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
