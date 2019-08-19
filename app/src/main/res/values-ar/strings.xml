@@ -2931,4 +2931,8 @@
     <string name="check_update_title">اختر التحديث</string>
     <string name="unblock">رفع الحظر</string>
     <string name="view_profile">عرض المستخدم</string>
+    <string name="there_is_no_car_available">لا يوجد سيارة متاحة.</string>
+    <string name="add_car">أضف سيارة</string>
+    <string name="cars_plaque">لوحة سيارات</string>
+    <string name="see_pay_title">رسوم الطرق</string>
 </resources>

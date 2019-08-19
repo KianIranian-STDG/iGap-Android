@@ -1,10 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.seePay.FragmentSeePay">
+<layout>
 
+    <data>
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.FragmentSeePayViewModel" />
+    </data>
 
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        style="?backgroundColorSettingTheme"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layoutDirection="locale"
+        tools:context=".fragments.seePay.FragmentSeePay">
 
-</FrameLayout>
+        <LinearLayout
+            android:id="@+id/fsp_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/toolbar_height"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/txt_no_car"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp40"
+            android:fontFamily="@font/main_font"
+            android:text="@string/there_is_no_car_available"
+            android:textSize="@dimen/largeTextSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fsp_toolbar" />
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/btn_add_car"
+            style="?iGapButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp20"
+            android:minWidth="@dimen/dp200"
+            android:text="@string/add_car"
+            android:onClick="@{()-> viewModel.onAddCarClick()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_no_car" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/lbl_plaques"
+            style="?textSubColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp20"
+            android:text="@string/cars_plaque"
+            android:textSize="@dimen/largeTextSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fsp_toolbar" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_plaques"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp20"
+            android:layout_marginTop="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp20"
+            android:minHeight="@dimen/dp300"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lbl_plaques" />
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/btn_add_car_"
+            style="?iGapButtonStroke"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp20"
+            android:minWidth="@dimen/dp200"
+            android:text="@string/add_car"
+            android:onClick="@{()-> viewModel.onAddCarClick()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_plaques" />
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/btn_inquiry"
+            style="?iGapButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp20"
+            android:minWidth="@dimen/dp200"
+            android:text="@string/inquiry"
+            android:onClick="@{()-> viewModel.onInquiryClick()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_add_car_" />
+
+        <android.support.constraint.Group
+            android:id="@+id/state_no_car"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="visible"
+            app:constraint_referenced_ids="btn_add_car , txt_no_car" />
+
+        <android.support.constraint.Group
+            android:id="@+id/state_has_car"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:constraint_referenced_ids="btn_inquiry , btn_add_car_ , rv_plaques ,lbl_plaques " />
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

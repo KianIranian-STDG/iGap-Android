@@ -1987,4 +1987,8 @@
     <string name="check_update_title">کنترل بروزرسانی</string>
     <string name="unblock">رفع انسداد</string>
     <string name="view_profile">مشاهده پروفایل</string>
+    <string name="there_is_no_car_available">شما خودرویی ثبت نکرده اید.</string>
+    <string name="add_car">افزودن خودرو</string>
+    <string name="cars_plaque">شماره پلاک خودرو</string>
+    <string name="see_pay_title">عوارض بزرگراه</string>
 </resources>
