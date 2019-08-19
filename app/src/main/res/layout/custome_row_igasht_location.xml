@@ -4,8 +4,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/dp8"
-    android:layout_marginBottom="@dimen/dp8">
+    android:paddingBottom="@dimen/dp8">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout4"
@@ -25,16 +24,14 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp8"
-            android:padding="@dimen/dp4"
+            android:layout_marginBottom="@dimen/dp2"
             app:layout_constraintBottom_toTopOf="@id/view2"
             app:layout_constraintTop_toTopOf="parent">
-
             <net.iGap.module.RadiusImageView
                 android:id="@+id/itemImage"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_margin="@dimen/dp8"
+                android:layout_margin="@dimen/dp4"
                 app:layout_constraintDimensionRatio="116:83"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -90,8 +87,7 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp8"
-            android:padding="@dimen/dp4"
+            android:layout_marginTop="@dimen/dp2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view2">
 
@@ -116,7 +112,7 @@
                 style="@style/baseFontIcon"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_margin="@dimen/dp8"
+                android:layout_margin="@dimen/dp4"
                 android:text="@string/location_pin_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="116:83"
@@ -125,23 +121,6 @@
 
         </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
-    <!--<android.support.v7.widget.AppCompatTextView
-        android:id="@+id/itemPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dp8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/itemVisitTime" />-->
-
-    <!--<android.support.v7.widget.AppCompatTextView
-        android:id="@+id/itemPriceForeign"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dp8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/itemPrice" />-->
 
     <Button
         android:id="@+id/buyTicketButton"
@@ -151,6 +130,7 @@
         android:layout_marginLeft="@dimen/dp4"
         android:layout_marginEnd="@dimen/dp4"
         android:layout_marginRight="@dimen/dp4"
+        android:layout_marginBottom="@dimen/dp16"
         android:background="@drawable/shape_igasht_yellow"
         android:text="انتخاب محل"
         android:textColor="@color/white"
@@ -158,7 +138,6 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/constraintLayout4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4"
-        android:layout_marginBottom="@dimen/dp4"/>
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
 
 </android.support.constraint.ConstraintLayout>

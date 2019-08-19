@@ -35,61 +35,48 @@
             android:id="@+id/itemImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="@dimen/dp8"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp16"
+            android:layout_marginRight="@dimen/dp8"
             app:imageUrl="@{viewModel.locationItem.locationName}"
             app:layout_constraintDimensionRatio="116:83"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintWidth_percent=".3" />
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/itemLikeIcon"
-            style="@style/myIconTextViewStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/heart_icon"
-            android:textColor="@color/red"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="16dp" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/itemLikeCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="126"
-            android:textColor="@color/red"
-            android:textSize="@dimen/largeTextSize"
-            android:textStyle="bold"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="56dp" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/itemTitle"
             style="?textTitleColorSettingTheme"
-            android:layout_width="0dp"
+            android:layout_width="232dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="8dp"
             android:paddingStart="@dimen/dp4"
             android:paddingEnd="@dimen/dp4"
             android:text="@{viewModel.locationItem.nameWithLanguage}"
+            android:textColor="@color/red"
             android:textSize="@dimen/largeTextSize"
-            app:layout_constraintBottom_toTopOf="@id/itemAddress"
-            app:layout_constraintEnd_toStartOf="@id/itemLikeCount"
             app:layout_constraintStart_toEndOf="@id/itemImage"
-            app:layout_constraintTop_toTopOf="@id/itemImage"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintTop_toTopOf="@+id/itemImage" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/itemAddress"
             style="?textTitleColorSettingTheme"
-            android:layout_width="0dp"
+            android:layout_width="231dp"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dp4"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:paddingStart="@dimen/dp4"
+            android:paddingEnd="@dimen/dp4"
             android:text="@{viewModel.locationItem.addressWithLanguage}"
             android:textSize="@dimen/standardTextSize"
-            app:layout_constraintBottom_toBottomOf="@id/itemImage"
-            app:layout_constraintEnd_toEndOf="@id/itemTitle"
-            app:layout_constraintStart_toStartOf="@id/itemTitle"
-            app:layout_constraintTop_toBottomOf="@id/itemTitle" />
+            app:layout_constraintBottom_toBottomOf="@+id/itemImage"
+            app:layout_constraintEnd_toEndOf="@+id/itemTitle"
+            app:layout_constraintTop_toBottomOf="@+id/itemTitle" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/itemLocation"
@@ -97,13 +84,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp8"
-            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="@dimen/dp8"
             android:padding="8dp"
             android:text="@{viewModel.locationItem.location}"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/itemImage" />
+            app:layout_constraintTop_toBottomOf="@+id/itemImage" />
 
         <LinearLayout
             android:id="@+id/v"
