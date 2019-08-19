@@ -65,36 +65,24 @@ public class RealmMember extends RealmObject {
         return realmMember;
     }
 
-    public static void deleteAllMembers(long roomId, String selectedRole) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-            if (realmRoom != null) {
-                if (realmRoom.getType() == GROUP) {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            if (realmRoom.getGroupRoom().getMembers() != null) {
-                                if (!selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
-                                    realmRoom.getGroupRoom().getMembers().where().equalTo(RealmMemberFields.ROLE, selectedRole).findAll().deleteAllFromRealm();
-                                } else {
-                                    realmRoom.getGroupRoom().getMembers().where().findAll().deleteAllFromRealm();
-                                }
-                            }
-                        }
-                    });
-                } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            if (realmRoom.getChannelRoom().getMembers() != null) {
-                                if (!selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
-                                    realmRoom.getChannelRoom().getMembers().where().equalTo(RealmMemberFields.ROLE, selectedRole).findAll().deleteAllFromRealm();
-                                } else {
-                                    realmRoom.getChannelRoom().getMembers().where().findAll().deleteAllFromRealm();
-                                }
-                            }
-                        }
-                    });
+    public static void deleteAllMembers(Realm realm, long roomId, String selectedRole) {
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null) {
+            if (realmRoom.getType() == GROUP) {
+                if (realmRoom.getGroupRoom().getMembers() != null) {
+                    if (!selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
+                        realmRoom.getGroupRoom().getMembers().where().equalTo(RealmMemberFields.ROLE, selectedRole).findAll().deleteAllFromRealm();
+                    } else {
+                        realmRoom.getGroupRoom().getMembers().where().findAll().deleteAllFromRealm();
+                    }
+                }
+            } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                if (realmRoom.getChannelRoom().getMembers() != null) {
+                    if (!selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
+                        realmRoom.getChannelRoom().getMembers().where().equalTo(RealmMemberFields.ROLE, selectedRole).findAll().deleteAllFromRealm();
+                    } else {
+                        realmRoom.getChannelRoom().getMembers().where().findAll().deleteAllFromRealm();
+                    }
                 }
             }
         }

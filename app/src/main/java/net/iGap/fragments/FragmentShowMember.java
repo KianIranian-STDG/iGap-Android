@@ -385,12 +385,14 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             @Override
             public void run() {
                 mCurrentUpdateCount = 0;
-                RealmMember.deleteAllMembers(mRoomID, selectedRole);
-                if (roomType == GROUP) {
-                    new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
-                } else {
-                    new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit, ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.valueOf(selectedRole));
-                }
+                getRealm().executeTransactionAsync(realm -> RealmMember.deleteAllMembers(realm, mRoomID, selectedRole), () -> {
+                    if (roomType == GROUP) {
+                        new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
+                    } else {
+                        new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit, ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.valueOf(selectedRole));
+                    }
+                });
+
             }
         });
     }
