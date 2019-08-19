@@ -1134,8 +1134,8 @@
     <string name="forgot_Unlock_with_your_passcode">رمز ورود را فراموش کرده اید؟</string>
 
     <string name="limit_passcode"> کد قفل گشا باید متشکل از حداقل ۴ حرف و یا عدد باشد</string>
-    <string name="block_the_user">مسدودی کردن مخاطب</string>
-    <string name="block_the_user_text">آیا از مسدودی کردن ارتباط این مخاطب اطمینان دارید؟</string>
+    <string name="block_the_user">مسدود کردن مخاطب</string>
+    <string name="block_the_user_text">آیا از مسدود کردن ارتباط این مخاطب اطمینان دارید؟</string>
     <string name="unblock_the_user">رفع مسدودیت مخاطب</string>
     <string name="unblock_the_user_text">آیا از رفع مسدودیت ارتباط این مخاطب اطمینان دارید؟</string>
     <string name="PIN">پین</string>
@@ -1517,6 +1517,7 @@
     <string name="province">استان</string>
     <string name="edit_profile_hint">این اطلاعات به صورت رمزنگاری شده روی سرورهای امن کیف پول ذخیره می‌شوند و فقط در صورت نیاز با مجوز شما به سایر نرم افزارهای طرف سوم انتقال داده خواهد شد. کاربرد این اطلاعات به منظور راحتی فرآیندهای خرید می‌باشد.</string>
     <string name="username">شناسه کاربری</string>
+    <string name="username_copied">شناسه کاربری کپی شد.</string>
     <string name="select_city">انتخاب شهر</string>
     <string name="select_province">انتخاب استان</string>
     <string name="mobile_number">شماره موبایل</string>

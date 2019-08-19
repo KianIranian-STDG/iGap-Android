@@ -2,6 +2,8 @@ package net.iGap.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -12,6 +14,7 @@ import android.view.View;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.CallSelectFragment;
@@ -58,6 +61,8 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmModel;
 import io.realm.RealmObjectChangeListener;
+
+import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class FragmentContactsProfileViewModel extends ViewModel implements OnUserContactEdit, OnUserUpdateStatus, OnUserInfoResponse {
 
@@ -109,6 +114,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
     public MutableLiveData<GoToSharedMediaModel> goToShearedMediaPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> blockDialogListener = new MutableLiveData<>();
+    public MutableLiveData<String> copyUserNameToClipBoard = new MutableLiveData<>();
 
     public List<String> items;
     private Realm realm;
@@ -287,6 +293,14 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             }
         };
         new RequestUserContactsDelete().contactsDelete(phone.get());
+    }
+
+    public void onUserNameClicked(){
+
+        if (registeredInfo != null){
+            copyUserNameToClipBoard.postValue(registeredInfo.getUsername());
+        }
+
     }
 
     //type: 1=image 2=video 3=audio 4=voice 5=gif 6=file 7=link

@@ -2464,6 +2464,7 @@
     <string name="province">مقاطعة</string>
     <string name="edit_profile_hint">يتم تخزين هذه المعلومات مشفرة على خوادم محفظة آمنة ولن يتم إرسالها إلا إلى برامج طرف ثالث إذا لزم الأمر. يتم استخدام هذه المعلومات لتسهيل عمليات الشراء.</string>
     <string name="username">معرف المستخدم</string>
+    <string name="username_copied">اسم المستخدم نسخ</string>
     <string name="select_city">اختر مدينة</string>
     <string name="select_province">اختر المقاطعة</string>
     <string name="mobile_number">رقم الجوال</string>

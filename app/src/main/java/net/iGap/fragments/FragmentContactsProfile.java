@@ -38,6 +38,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -143,6 +144,18 @@ public class FragmentContactsProfile extends BaseFragment {
         binding.toolbarMore.setOnClickListener(v -> viewModel.onMoreButtonClick());
         binding.toolbarVideoCall.setOnClickListener(v -> viewModel.onVideoCallClick());
         binding.toolbarVoiceCall.setOnClickListener(v -> viewModel.onVoiceCallButtonClick());
+
+        viewModel.copyUserNameToClipBoard.observe(getViewLifecycleOwner() , userName -> {
+
+            if (userName == null) return;
+
+            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("LINK_USER", Config.IGAP_LINK_PREFIX + userName);
+            clipboard.setPrimaryClip(clip);
+
+            Toast.makeText(getActivity(), getString(R.string.username_copied), Toast.LENGTH_SHORT).show();
+
+        });
 
         viewModel.menuVisibility.observe(this , visible -> {
             if (visible != null) binding.toolbarMore.setVisibility(visible);
