@@ -87,6 +87,9 @@ public class UserScoreViewModel extends ViewModel {
     }
 
     private void getUserIVandScore() {
+
+        userRankPointer.setValue(0);
+
         new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
             public void getScore(ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder score) {

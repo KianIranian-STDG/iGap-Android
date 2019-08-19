@@ -17,9 +17,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -139,7 +141,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
 
         @Override
         public BlockListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = inflater.inflate(R.layout.contact_item, viewGroup, false);
+            View v = inflater.inflate(R.layout.row_block_list, viewGroup, false);
             return new ViewHolder(v);
         }
 
@@ -151,7 +153,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                 return;
             }
 
-            viewHolder.swipeLayout.getSurfaceView().setOnClickListener(v -> unblock(viewHolder, registeredInfo.getId()));
+           viewHolder.root.setOnClickListener(v -> unblock(viewHolder, registeredInfo.getId()));
 
             viewHolder.title.setText(registeredInfo.getDisplayName());
 
@@ -176,19 +178,25 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
         private void unblock(ViewHolder viewHolder, long id) {
             if (!viewHolder.isOpenDialog) {
                 viewHolder.isOpenDialog = true;
-                MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).content(R.string.un_block_user).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        new RequestUserContactsUnblock().userContactsUnblock(id);
+                MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity)
+                        .content(R.string.un_block_user)
+                        .positiveText(R.string.B_ok)
+                        .neutralText(getString(R.string.view_profile))
+                        .onPositive((dialog12, which) -> {
+                            new RequestUserContactsUnblock().userContactsUnblock(id);
 
-                        if (getItemCount() == 1){
-                            fastScroller.setVisibility(View.GONE);
-                        }
-                    }
-                }).negativeText(R.string.B_cancel).build();
+                            if (getItemCount() == 1){
+                                fastScroller.setVisibility(View.GONE);
+                            }
+                        })
+                        .onNeutral((dialog1, which) -> {
+                            if (getActivity()!=null) {
+                                new HelperFragment(getActivity().getSupportFragmentManager(),FragmentContactsProfile.newInstance(0, id , "Others")).setReplace(false).load();
+                            }
+                        })
+                        .negativeText(R.string.B_cancel).build();
 
                 dialog.setOnDismissListener(dialog1 -> {
-                    viewHolder.swipeLayout.close();
                     viewHolder.isOpenDialog = false;
                 });
                 dialog.show();
@@ -201,22 +209,24 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
             protected CustomTextViewMedium title;
             protected CustomTextViewMedium subtitle;
             RealmRegisteredInfo realmRegisteredInfo;
-            View bottomLine;
-            private SwipeLayout swipeLayout;
             private boolean isOpenDialog = false;
-
+            private View root ;
 
             public ViewHolder(View view) {
                 super(view);
 
+                root = view.findViewById(R.id.item);
                 image = view.findViewById(R.id.imageView);
                 title = view.findViewById(R.id.title);
                 subtitle = view.findViewById(R.id.subtitle);
-                bottomLine = view.findViewById(R.id.bottomLine);
-                bottomLine.setVisibility(View.VISIBLE);
-                view.findViewById(R.id.topLine).setVisibility(View.GONE);
-                swipeLayout = itemView.findViewById(R.id.swipeRevealLayout);
-                swipeLayout.setSwipeEnabled(false);
+
+                if (G.selectedLanguage.equals("en")){
+                    title.setGravity(Gravity.LEFT);
+                    subtitle.setGravity(Gravity.LEFT);
+                }else {
+                    title.setGravity(Gravity.RIGHT);
+                    subtitle.setGravity(Gravity.RIGHT);
+                }
             }
         }
     }
