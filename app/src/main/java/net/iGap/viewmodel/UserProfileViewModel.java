@@ -595,7 +595,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             @Override
             public void onSuccess(int lastVersion, String Body) {
                 showLoading.set(View.GONE);
-                if (lastVersion == BuildConfig.VERSION_CODE) {
+                if (lastVersion <= BuildConfig.VERSION_CODE) {
                     showDialogBeLastVersion.postValue(true);
                 } else {
                     showDialogUpdate.postValue(HtmlCompat.fromHtml(Body, HtmlCompat.FROM_HTML_MODE_LEGACY).toString());
