@@ -121,7 +121,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     private Realm realmGroupProfile;
     private FragmentGroupProfile fragment;
     private String memberCount;
-    private RealmNotificationSetting realmNotificationSetting;
 
     public FragmentGroupProfileViewModel() {
         realmGroupProfile = Realm.getDefaultInstance();
@@ -138,17 +137,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
             goBack.setValue(true);
             return;
-        } else if (realmRoom.getGroupRoom() != null) {
-            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-            if (realmGroupRoom != null) {
-                if (realmGroupRoom.getRealmNotificationSetting() == null) {
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        setRealm(realm, realmGroupRoom, null, null);
-                    }
-                } else {
-                    realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
-                }
-            }
         }
 
         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
@@ -271,9 +259,6 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         }
     }
 
-    private void setRealm(Realm realm, final RealmGroupRoom realmGroupRoom, RealmChannelRoom realmChannelRoom, RealmChatRoom realmChatRoom) {
-        realm.executeTransaction(realm1 -> realmNotificationSetting = RealmNotificationSetting.put(realm1, realmChatRoom, realmGroupRoom, realmChannelRoom));
-    }
 
     public void onClickRippleMenu() {
         List<Integer> items = new ArrayList<>();
