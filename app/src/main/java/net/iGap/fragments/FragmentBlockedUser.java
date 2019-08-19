@@ -10,7 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,7 +17,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +24,6 @@ import android.view.ViewGroup;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.swipe.SwipeLayout;
-import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import net.iGap.G;
@@ -42,6 +39,7 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
 import net.iGap.module.CustomTextViewMedium;
+import net.iGap.module.FastScroller;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -60,10 +58,10 @@ import static net.iGap.G.inflater;
 
 public class FragmentBlockedUser extends BaseFragment implements OnBlockStateChanged, ToolbarListener {
 
-    //private BlockListAdapter mAdapter;
     private Realm realmBlockedUser;
     private StickyRecyclerHeadersDecoration decoration;
     private HelperToolbar mHelperToolbar;
+    private FastScroller fastScroller ;
 
     private Realm getRealmBlockedUser() {
         if (realmBlockedUser == null || realmBlockedUser.isClosed()) {
@@ -93,68 +91,33 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                 .setContext(getContext())
                 .setDefaultTitle(G.context.getResources().getString(R.string.Block_Users))
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.add_icon)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
                         popBackStackFragment();
                     }
-
-                    @Override
-                    public void onRightIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            List<StructContactInfo> userList = Contacts.retrieve(null);
-
-                            Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
-                                @Override
-                                public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
-
-                                    for (int i = 0; i < list.size(); i++) {
-
-                                        new RequestUserContactsBlock().userContactsBlock(list.get(i).peerId);
-                                    }
-                                }
-                            });
-
-                            Bundle bundle = new Bundle();
-                            // if you want to have  single select in select list
-                            fragment.setArguments(bundle);
-                            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-                        }
-                    }
                 });
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fbu_layout_toolbar);
         layoutToolbar.addView(mHelperToolbar.getView());
 
-        //+ manually update
-        //mAdapter = new BlockListAdapter(); // (+ avoid use from realm-adapter) BlockListAdapter blockListAdapter = new BlockListAdapter(results);
-
-        RecyclerView realmRecyclerView = (RecyclerView) view.findViewById(R.id.fbu_realm_recycler_view);
+        RecyclerView realmRecyclerView = view.findViewById(R.id.fbu_realm_recycler_view);
         realmRecyclerView.setItemViewCacheSize(100);
         realmRecyclerView.setItemAnimator(null);
         realmRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
 
-        //+ manually update
-        //RealmResults<RealmRegisteredInfo> results = getRealmBlockedUser().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.BLOCK_USER, true).findAll();
-        //for (RealmRegisteredInfo registeredInfo : results) {
-        //    mAdapter.add(new BlockedUser().setInfo(registeredInfo).withIdentifier(registeredInfo.getId()));
-        //}
-        //realmRecyclerView.setAdapter(mAdapter);// (+ avoid use from realm-adapter) realmRecyclerView.setAdapter(blockListAdapter);
-        //mAdapter.withOnLongClickListener(new FastAdapter.OnLongClickListener() {
-        //    @Override
-        //    public boolean onLongClick(View v, IAdapter adapter, IItem item, int position) {
-        //        openDialogToggleBlock(((BlockedUser) item).registeredInfo.getId());
-        //        return true;
-        //    }
-        //});
-
         RealmResults<RealmRegisteredInfo> results = getRealmBlockedUser().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.BLOCK_USER, true).findAll();
         BlockListAdapter blockListAdapter = new BlockListAdapter(results.sort(RealmRegisteredInfoFields.DISPLAY_NAME));
         realmRecyclerView.setAdapter(blockListAdapter);
-        decoration = new StickyRecyclerHeadersDecoration(new StickyHeader(results.sort(RealmRegisteredInfoFields.DISPLAY_NAME)));
-        realmRecyclerView.addItemDecoration(decoration);
+
+        fastScroller = view.findViewById(R.id.fast_scroller);
+
+        if (realmRecyclerView.getAdapter().getItemCount() > 0) {
+            fastScroller.setRecyclerView(realmRecyclerView);
+        } else {
+            fastScroller.setVisibility(View.GONE);
+        }
     }
 
 
@@ -166,130 +129,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
 
     @Override
     public void onBlockStateChanged(final boolean blocked, final long userId) {
-        //G.handler.post(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        if (blocked) {
-        //            RealmRegisteredInfo realmRegisteredInfo = getRealmBlockedUser().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
-        //            if (realmRegisteredInfo != null) {
-        //                mAdapter.add(new BlockedUser().setInfo(realmRegisteredInfo).withIdentifier(realmRegisteredInfo.getId()));
-        //            }
-        //        } else {
-        //            mAdapter.remove(mAdapter.getPosition(userId));
-        //        }
-        //    }
-        //});
     }
-
-
-    private void openDialogToggleBlock(final long userId) {
-
-    }
-
-
-    /**
-     * ***********************************************************************************
-     * *********************************** FastAdapter ***********************************
-     * ***********************************************************************************
-     */
-
-    //+ manually update
-    //public class BlockListAdapter<Item extends BlockedUser> extends FastItemAdapter<Item> {
-    //
-    //    @Override
-    //    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    //        return super.onCreateViewHolder(parent, viewType);
-    //    }
-    //}
-
-    //+ manually update
-    //public class BlockedUser extends AbstractItem<BlockedUser, BlockedUser.ViewHolder> {
-    //
-    //    RealmRegisteredInfo registeredInfo;
-    //
-    //    public BlockedUser setInfo(RealmRegisteredInfo registeredInfo) {
-    //        this.registeredInfo = registeredInfo;
-    //        return this;
-    //    }
-    //
-    //    @Override
-    //    public void bindView(final ViewHolder viewHolder, List payloads) throws IllegalStateException {
-    //        super.bindView(viewHolder, payloads);
-    //
-    //        if (registeredInfo == null) {
-    //            return;
-    //        }
-    //
-    //        viewHolder.title.setText(registeredInfo.getDisplayName());
-    //        viewHolder.subtitle.setText(registeredInfo.getPhoneNumber());
-    //        if (HelperCalander.isPersianUnicode) {
-    //            viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
-    //        }
-    //
-    //        HelperAvatar.getAvatar(registeredInfo.getId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-    //            @Override
-    //            public void onAvatarGet(final String avatarPath, long ownerId) {
-    //                G.handler.post(new Runnable() {
-    //                    @Override
-    //                    public void run() {
-    //                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), viewHolder.image);
-    //                    }
-    //                });
-    //            }
-    //
-    //            @Override
-    //            public void onShowInitials(final String initials, final String color) {
-    //                G.handler.post(new Runnable() {
-    //                    @Override
-    //                    public void run() {
-    //                        viewHolder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) viewHolder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-    //                    }
-    //                });
-    //            }
-    //        });
-    //    }
-    //
-    //    @Override
-    //    public int getType() {
-    //        return 0;
-    //    }
-    //
-    //    @Override
-    //    public int getLayoutRes() {
-    //        return R.layout.contact_item;
-    //    }
-    //
-    //    @Override
-    //    public ViewHolder getViewHolder(View v) {
-    //        return new ViewHolder(v);
-    //    }
-    //
-    //    public class ViewHolder extends RecyclerView.ViewHolder {
-    //
-    //        RealmRegisteredInfo realmRegisteredInfo;
-    //        protected CircleImageView image;
-    //        protected CustomTextViewMedium title;
-    //        protected CustomTextViewMedium subtitle;
-    //        View bottomLine;
-    //
-    //        public ViewHolder(View view) {
-    //            super(view);
-    //
-    //            image = (CircleImageView) view.findViewById(R.id.imageView);
-    //            title = (CustomTextViewMedium) view.findViewById(R.id.title);
-    //            subtitle = (CustomTextViewMedium) view.findViewById(R.id.subtitle);
-    //            bottomLine = view.findViewById(R.id.bottomLine);
-    //            bottomLine.setVisibility(View.VISIBLE);
-    //            view.findViewById(R.id.topLine).setVisibility(View.GONE);
-    //        }
-    //    }
-    //}
-
-    /**
-     * **********************************************************************************
-     * ********************************** RealmAdapter **********************************
-     * **********************************************************************************
-     */
 
     public class BlockListAdapter extends RealmRecyclerViewAdapter<RealmRegisteredInfo, BlockListAdapter.ViewHolder> {
 
@@ -311,12 +151,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                 return;
             }
 
-            viewHolder.swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    unblock(viewHolder, registeredInfo.getId());
-                }
-            });
+            viewHolder.swipeLayout.getSurfaceView().setOnClickListener(v -> unblock(viewHolder, registeredInfo.getId()));
 
             viewHolder.title.setText(registeredInfo.getDisplayName());
 
@@ -328,37 +163,14 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
             }
             avatarHandler.getAvatar(new ParamWithAvatarType(viewHolder.image, registeredInfo.getId()).avatarType(AvatarHandler.AvatarType.USER));
 
-            viewHolder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
-            viewHolder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
-                @Override
-                public void onStartOpen(SwipeLayout layout) {
-                }
+        }
 
-                @Override
-                public void onOpen(SwipeLayout layout) {
-                    unblock(viewHolder, registeredInfo.getId());
-                }
 
-                @Override
-                public void onStartClose(SwipeLayout layout) {
+        public String getBubbleText(int position) {
+            if (getItem(position) == null)
+                return "-";
 
-                }
-
-                @Override
-                public void onClose(SwipeLayout layout) {
-
-                }
-
-                @Override
-                public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
-
-                }
-
-                @Override
-                public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
-
-                }
-            });
+            return getItem(position).getDisplayName().substring(0, 1).toUpperCase();
         }
 
         private void unblock(ViewHolder viewHolder, long id) {
@@ -368,15 +180,16 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         new RequestUserContactsUnblock().userContactsUnblock(id);
+
+                        if (getItemCount() == 1){
+                            fastScroller.setVisibility(View.GONE);
+                        }
                     }
                 }).negativeText(R.string.B_cancel).build();
 
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        viewHolder.swipeLayout.close();
-                        viewHolder.isOpenDialog = false;
-                    }
+                dialog.setOnDismissListener(dialog1 -> {
+                    viewHolder.swipeLayout.close();
+                    viewHolder.isOpenDialog = false;
                 });
                 dialog.show();
             }
@@ -396,59 +209,15 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
             public ViewHolder(View view) {
                 super(view);
 
-                image = (CircleImageView) view.findViewById(R.id.imageView);
-                title = (CustomTextViewMedium) view.findViewById(R.id.title);
-                subtitle = (CustomTextViewMedium) view.findViewById(R.id.subtitle);
+                image = view.findViewById(R.id.imageView);
+                title = view.findViewById(R.id.title);
+                subtitle = view.findViewById(R.id.subtitle);
                 bottomLine = view.findViewById(R.id.bottomLine);
                 bottomLine.setVisibility(View.VISIBLE);
                 view.findViewById(R.id.topLine).setVisibility(View.GONE);
-
-                //itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                //    @Override
-                //    public boolean onLongClick(View v) {
-                //        openDialogToggleBlock(realmRegisteredInfo.getId());
-                //        return true;
-                //    }
-                //});
-                swipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipeRevealLayout);
-
+                swipeLayout = itemView.findViewById(R.id.swipeRevealLayout);
+                swipeLayout.setSwipeEnabled(false);
             }
-        }
-    }
-
-    private class StickyHeader implements StickyRecyclerHeadersAdapter {
-
-        RealmResults<RealmRegisteredInfo> realmResults;
-
-        StickyHeader(RealmResults<RealmRegisteredInfo> realmResults) {
-            this.realmResults = realmResults;
-        }
-
-        @Override
-        public long getHeaderId(int position) {
-            return realmResults.get(position).getDisplayName().toUpperCase().charAt(0);
-        }
-
-        @Override
-        public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_header_item, parent, false);
-            return new RecyclerView.ViewHolder(view) {
-            };
-        }
-
-        @Override
-        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-            CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
-            textView.setText(realmResults.get(position).getDisplayName().toUpperCase().substring(0, 1));
-
-            if (G.isDarkTheme)
-                textView.setTextColor(G.context.getResources().getColor(R.color.white));
-        }
-
-        @Override
-        public int getItemCount() {
-            return realmResults.size();
         }
     }
 }
