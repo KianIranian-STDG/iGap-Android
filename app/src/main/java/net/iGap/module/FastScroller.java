@@ -25,10 +25,14 @@ import com.mikepenz.fastadapter.IItem;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.ContactItemGroup;
+import net.iGap.fragments.FragmentBlockedUser;
 import net.iGap.fragments.FragmentSyncRegisteredContacts;
 import net.iGap.fragments.RegisteredContactsFragment;
 
 import org.jetbrains.annotations.NotNull;
+
+import io.realm.RealmModel;
+import io.realm.RealmRecyclerViewAdapter;
 
 public class FastScroller extends LinearLayout {
 
@@ -135,8 +139,9 @@ public class FastScroller extends LinearLayout {
                 if (iItem instanceof ContactItemGroup){
                     handle.setText(((ContactItemGroup) iItem).getBubbleText());
                 }
-            }
-            else if(recyclerView.getAdapter() instanceof FragmentSyncRegisteredContacts.ContactListAdapter2) {
+            }else if (recyclerView.getAdapter() instanceof FragmentBlockedUser.BlockListAdapter){
+                handle.setText(((FragmentBlockedUser.BlockListAdapter) recyclerView.getAdapter()).getBubbleText(((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()));
+            } else if(recyclerView.getAdapter() instanceof FragmentSyncRegisteredContacts.ContactListAdapter2) {
                 handle.setText(((FragmentSyncRegisteredContacts.ContactListAdapter2) recyclerView.getAdapter()).getBubbleText(((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()));
             }
 
