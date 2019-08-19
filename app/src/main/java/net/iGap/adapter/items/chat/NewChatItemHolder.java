@@ -9,6 +9,7 @@ import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -27,9 +28,7 @@ import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.FontIconTextView;
 
 import static android.view.Gravity.BOTTOM;
-import static android.view.Gravity.CENTER;
 import static android.view.Gravity.CENTER_VERTICAL;
-import static android.view.Gravity.LEFT;
 
 public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
@@ -43,7 +42,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     private AppCompatTextView voteUpTv;
     private AppCompatTextView signatureTv;
     private TextView viewsLabelTv;
-    private AppCompatTextView editedIndicatorTv;
     private AppCompatTextView messageTimeTv;
     private FontIconTextView messageStatusTv;
     private View cslm_view_left_dis;
@@ -55,7 +53,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     private LinearLayout viewContainer;
     private LinearLayout voteUpContainer;
     private LinearLayout voteDownContainer;
-    private LinearLayout messageDetailContainer;
     private FrameLayout forwardContainer;
     private AppCompatImageView channelForwardIv;
 
@@ -94,36 +91,33 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
         voteDownTv = new AppCompatTextView(getContext());
         voteUpTv = new AppCompatTextView(getContext());
+
         signatureTv = new AppCompatTextView(getContext());
         signatureTv.setId(R.id.tv_chatItem_signature);
         setTextSize(signatureTv, R.dimen.verySmallTextSize);
+        signatureTv.setEllipsize(TextUtils.TruncateAt.END);
+        signatureTv.setSingleLine(true);
+        signatureTv.setGravity(CENTER_VERTICAL);
 
         viewsLabelTv = new TextView(getContext());
         viewsLabelTv.setId(R.id.tv_chatItem_viewLabel);
         viewsLabelTv.setSingleLine(true);
         setTypeFace(viewsLabelTv);
-        setTextSize(viewsLabelTv,R.dimen.verySmallTextSize);
+        setTextSize(viewsLabelTv, R.dimen.verySmallTextSize);
 
         eyeIconTv = new FontIconTextView(getContext());
         eyeIconTv.setId(R.id.ll_chatItem_viewIcon);
         eyeIconTv.setText(R.string.eye_icon);
-        setTextSize(eyeIconTv , R.dimen.standardTextSize);
-
-        editedIndicatorTv = new AppCompatTextView(getContext());
-        editedIndicatorTv.setId(R.id.tv_chatItem_edited);
-        setTextSize(editedIndicatorTv,R.dimen.verySmallTextSize);
-        setTypeFace(editedIndicatorTv);
-        editedIndicatorTv.setText(getResources().getString(R.string.edited));
-        editedIndicatorTv.setGravity(LEFT);
+        setTextSize(eyeIconTv, R.dimen.standardTextSize);
 
         messageStatusTv = new FontIconTextView(getContext());
         messageStatusTv.setId(R.id.tv_chatItem_status);
-        setTextSize(messageStatusTv,R.dimen.largeTextSize);
+        setTextSize(messageStatusTv, R.dimen.largeTextSize);
         cslm_view_left_dis = new View(getContext());
 
         messageTimeTv = new AppCompatTextView(getContext());
         messageTimeTv.setId(R.id.tv_chatItem_time);
-        setTextSize(messageTimeTv,R.dimen.verySmallTextSize);
+        setTextSize(messageTimeTv, R.dimen.verySmallTextSize);
 
         voteUpTv.setSingleLine(true);
         setTextSize(voteUpTv, R.dimen.verySmallTextSize);
@@ -148,25 +142,13 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         voteUpIv = new FontIconTextView(context);
         voteUpIv.setText(R.string.heart_icon);
         voteUpIv.setGravity(BOTTOM);
-        setTextSize(voteUpIv , R.dimen.standardTextSize);
+        setTextSize(voteUpIv, R.dimen.standardTextSize);
 
         voteDownIv = new FontIconTextView(context);
         voteDownIv.setText(R.string.dislike_icon);
         voteDownIv.setGravity(BOTTOM);
         voteDownIv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-        setTextSize(voteDownIv , R.dimen.standardTextSize);
-
-        messageDetailContainer = new LinearLayout(getContext());
-        messageDetailContainer.setOrientation(LinearLayout.HORIZONTAL);
-        messageDetailContainer.setGravity(CENTER_VERTICAL);
-        messageDetailContainer.setId(R.id.ll_chatItem_detailContainer);
-
-        messageDetailContainer.addView(editedIndicatorTv,
-                LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, CENTER,
-                        4, 0, 4, 0));
-        messageDetailContainer.addView(signatureTv,
-                LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, CENTER,
-                        4, 0, 4, 0));
+        setTextSize(voteDownIv, R.dimen.standardTextSize);
 
         if (G.isDarkTheme)
             channelForwardIv.setImageResource(R.drawable.ic_channel_forward_dark);
@@ -176,13 +158,13 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         forwardContainer.addView(channelForwardIv, LayoutCreator.createFrame(26, 26, Gravity.BOTTOM, 4, 4, 8, 4));
         forwardContainer.setVisibility(View.GONE);
 
-        set.constrainWidth(messageDetailContainer.getId(), ConstraintSet.WRAP_CONTENT);
-        set.constrainHeight(messageDetailContainer.getId(), ConstraintSet.MATCH_CONSTRAINT);
+        set.constrainWidth(signatureTv.getId(), ConstraintSet.MATCH_CONSTRAINT);
+        set.constrainHeight(signatureTv.getId(), LayoutCreator.dp(20));
 
         set.constrainHeight(contentBloke.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(contentBloke.getId(), ConstraintSet.WRAP_CONTENT);
 
-        set.connect(contentBloke.getId(), ConstraintSet.BOTTOM, messageTimeTv.getId(), ConstraintSet.TOP, dpToPx(6));
+        set.connect(contentBloke.getId(), ConstraintSet.BOTTOM, messageTimeTv.getId(), ConstraintSet.TOP, dpToPx(2));
 
         set.constrainHeight(messageStatusTv.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(messageStatusTv.getId(), ConstraintSet.WRAP_CONTENT);
@@ -200,7 +182,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         set.constrainWidth(voteDownTv.getId(), ConstraintSet.WRAP_CONTENT);
 
         set.constrainHeight(voteContainer.getId(), ConstraintSet.WRAP_CONTENT);
-        set.constrainWidth(voteContainer.getId(), ConstraintSet.MATCH_CONSTRAINT);
+        set.constrainWidth(voteContainer.getId(), ConstraintSet.WRAP_CONTENT);
 
         set.constrainHeight(viewContainer.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainWidth(viewContainer.getId(), ConstraintSet.WRAP_CONTENT);
@@ -209,18 +191,15 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
                 Gravity.CENTER, dpToPx(2), 0, dpToPx(1), 0));
         viewContainer.addView(eyeIconTv, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        set.connect(viewContainer.getId(), ConstraintSet.LEFT, chatBloke.getId(), ConstraintSet.LEFT);
         set.connect(viewContainer.getId(), ConstraintSet.TOP, messageTimeTv.getId(), ConstraintSet.TOP);
         set.connect(viewContainer.getId(), ConstraintSet.BOTTOM, messageTimeTv.getId(), ConstraintSet.BOTTOM);
 
-        set.connect(voteContainer.getId(), ConstraintSet.LEFT, viewContainer.getId(), ConstraintSet.RIGHT, dpToPx(8));
         set.connect(voteContainer.getId(), ConstraintSet.TOP, messageTimeTv.getId(), ConstraintSet.TOP);
         set.connect(voteContainer.getId(), ConstraintSet.BOTTOM, messageTimeTv.getId(), ConstraintSet.BOTTOM);
 
-        set.connect(messageDetailContainer.getId(), ConstraintSet.RIGHT, messageTimeTv.getId(), ConstraintSet.LEFT);
-        set.connect(messageDetailContainer.getId(), ConstraintSet.LEFT, voteContainer.getId(), ConstraintSet.RIGHT);
-        set.connect(messageDetailContainer.getId(), ConstraintSet.TOP, messageTimeTv.getId(), ConstraintSet.TOP);
-        set.connect(messageDetailContainer.getId(), ConstraintSet.BOTTOM, messageTimeTv.getId(), ConstraintSet.BOTTOM);
+        set.connect(signatureTv.getId(), ConstraintSet.TOP, messageTimeTv.getId(), ConstraintSet.TOP);
+        set.connect(signatureTv.getId(), ConstraintSet.BOTTOM, messageTimeTv.getId(), ConstraintSet.BOTTOM);
+
 
         voteUpContainer.addView(voteUpIv,
                 LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
@@ -237,7 +216,12 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
                         Gravity.CENTER, 0, 0, dpToPx(2), 0));
         voteContainer.addView(voteDownContainer);
 
-        chatBloke.addView(messageDetailContainer);
+        int[] views = {viewContainer.getId(), voteContainer.getId(), signatureTv.getId(), messageTimeTv.getId(), messageStatusTv.getId()};
+        set.createHorizontalChain(chatBloke.getId(), ConstraintSet.LEFT, chatBloke.getId(), ConstraintSet.RIGHT, views,
+                null, ConstraintSet.CHAIN_SPREAD);
+
+
+        chatBloke.addView(signatureTv);
         chatBloke.addView(contentBloke);
         chatBloke.addView(messageTimeTv);
         chatBloke.addView(messageStatusTv);
@@ -245,7 +229,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         chatBloke.addView(viewContainer);
 
         set.applyTo(chatBloke);
-        itemContainer.addView(chatBloke);
+        itemContainer.addView(chatBloke, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
         itemContainer.addView(forwardContainer, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
 
         ((ViewGroup) itemView).addView(itemContainer);
@@ -293,8 +277,8 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         textView.setTypeface(G.typeface_IRANSansMobile);
     }
 
-    protected void setTypeFace(TextView textView,int style) {
-        textView.setTypeface(G.typeface_IRANSansMobile,style);
+    protected void setTypeFace(TextView textView, int style) {
+        textView.setTypeface(G.typeface_IRANSansMobile, style);
     }
 
     protected MessageProgress getProgressBar(int sizeSrc) {
@@ -336,10 +320,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
     public TextView getViewsLabelTv() {
         return viewsLabelTv;
-    }
-
-    public AppCompatTextView getEditedIndicatorTv() {
-        return editedIndicatorTv;
     }
 
     public AppCompatTextView getMessageTimeTv() {
@@ -392,14 +372,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
     public FontIconTextView getEyeIconTv() {
         return eyeIconTv;
-    }
-
-    public LinearLayout getMessageDetailContainer() {
-        return messageDetailContainer;
-    }
-
-    public void setMessageDetailContainer(LinearLayout messageDetailContainer) {
-        this.messageDetailContainer = messageDetailContainer;
     }
 
     public FrameLayout getForwardContainer() {
