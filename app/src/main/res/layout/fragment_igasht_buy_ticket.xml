@@ -115,9 +115,8 @@
 
         <Button
             android:id="@+id/addNewPlaceButton"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:background="@drawable/shape_igasht_violet"
             android:fontFamily="@font/main_font"
             android:onClick="@{()->viewModel.onAddPlaceClick()}"
@@ -126,8 +125,8 @@
             android:textSize="@dimen/dp20"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/totalPrice"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/totalPrice"
+            app:layout_constraintStart_toStartOf="@+id/totalPrice"
             app:layout_constraintWidth_percent=".6" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -149,9 +148,8 @@
 
         <Button
             android:id="@+id/payButton"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/shape_igasht_yellow"
             android:onClick="@{()->viewModel.onPayClick()}"
@@ -160,9 +158,8 @@
             android:textSize="@dimen/dp20"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.487"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/totalPrice"
+            app:layout_constraintStart_toStartOf="@+id/totalPrice"
             app:layout_constraintWidth_percent=".6" />
 
         <ProgressBar

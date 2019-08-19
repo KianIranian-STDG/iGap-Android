@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -31,77 +30,132 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <net.iGap.module.RadiusImageView
-            android:id="@+id/itemImage"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout4"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp8"
-            android:layout_marginLeft="@dimen/dp16"
-            android:layout_marginTop="@dimen/dp8"
-            android:layout_marginEnd="@dimen/dp16"
-            android:layout_marginRight="@dimen/dp8"
-            app:imageUrl="@{viewModel.locationItem.locationName}"
-            app:layout_constraintDimensionRatio="116:83"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
-            app:layout_constraintWidth_percent=".3" />
-
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/itemTitle"
-            style="?textTitleColorSettingTheme"
-            android:layout_width="232dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="@dimen/dp4"
+            android:layout_marginLeft="@dimen/dp4"
             android:layout_marginTop="8dp"
-            android:paddingStart="@dimen/dp4"
-            android:paddingEnd="@dimen/dp4"
-            android:text="@{viewModel.locationItem.nameWithLanguage}"
-            android:textColor="@color/red"
-            android:textSize="@dimen/largeTextSize"
-            app:layout_constraintStart_toEndOf="@id/itemImage"
-            app:layout_constraintTop_toTopOf="@+id/itemImage" />
+            android:layout_marginEnd="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/shape_igasht_strokegray"
+            app:layout_constraintEnd_toEndOf="@id/toolbar"
+            app:layout_constraintStart_toStartOf="@id/toolbar"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/itemAddress"
-            style="?textTitleColorSettingTheme"
-            android:layout_width="231dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:paddingStart="@dimen/dp4"
-            android:paddingEnd="@dimen/dp4"
-            android:text="@{viewModel.locationItem.addressWithLanguage}"
-            android:textSize="@dimen/standardTextSize"
-            app:layout_constraintBottom_toBottomOf="@+id/itemImage"
-            app:layout_constraintEnd_toEndOf="@+id/itemTitle"
-            app:layout_constraintTop_toBottomOf="@+id/itemTitle" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp2"
+                app:layout_constraintBottom_toTopOf="@id/view2"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/itemLocation"
-            style="?textTitleColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp8"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="@dimen/dp8"
-            android:padding="8dp"
-            android:text="@{viewModel.locationItem.location}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/itemImage" />
+                <net.iGap.module.RadiusImageView
+                    android:id="@+id/itemImage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="@dimen/dp4"
+                    app:layout_constraintDimensionRatio="116:83"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent=".3" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/itemTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:maxLines="1"
+                    android:padding="@dimen/dp4"
+                    android:textSize="@dimen/largeTextSize"
+                    app:layout_constraintBottom_toTopOf="@id/itemAddress"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/itemImage"
+                    app:layout_constraintTop_toTopOf="@id/itemImage"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/itemAddress"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:maxLines="1"
+                    android:padding="@dimen/dp4"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintBottom_toBottomOf="@id/itemImage"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/itemTitle"
+                    app:layout_constraintTop_toBottomOf="@id/itemTitle" />
+            </android.support.constraint.ConstraintLayout>
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@color/gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view2">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/itemLocation"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:maxLines="1"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_location"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/iv_location"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_location"
+                    app:layout_constraintTop_toTopOf="@+id/iv_location" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/iv_location"
+                    style="@style/baseFontIcon"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="@dimen/dp4"
+                    android:text="@string/location_pin_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="116:83"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintWidth_percent=".3" />
+
+            </android.support.constraint.ConstraintLayout>
+        </android.support.constraint.ConstraintLayout>
+
 
         <LinearLayout
             android:id="@+id/v"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@{G.isDarkTheme ? @drawable/igasht_tabbar_background_dark : @drawable/igasht_tabbar_background_light}"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/itemLocation"
+            app:layout_constraintTop_toBottomOf="@id/constraintLayout4"
             app:layout_constraintWidth_percent=".9">
 
             <android.support.v7.widget.AppCompatTextView
