@@ -3,6 +3,7 @@ package net.iGap.fragments.mplTranaction;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.pm.PackageManager;
+import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -328,6 +329,7 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
         String fileName = "receipt_" + timeStamp + ".jpg";
         File savedFile = RaadCommonUtils.saveBitmap(rootView.getDrawingCache(), new File(mediaStorageDir, fileName));
         if (savedFile != null) {
+            MediaScannerConnection.scanFile(G.context, new String[]{savedFile.getPath()}, null, null);
             Toast.makeText(getActivity(), R.string.receipt_saved, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
