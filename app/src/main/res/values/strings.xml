@@ -1970,4 +1970,6 @@ Want to get it?</string>
     <string name="app_version_change_log">Change Log</string>
     <string name="updated_version_title">Your Version Is Update</string>
     <string name="check_update_title">Check Update</string>
+    <string name="unblock">Unblock</string>
+    <string name="view_profile">View Profile</string>
 </resources>
