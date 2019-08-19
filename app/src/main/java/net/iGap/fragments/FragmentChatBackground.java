@@ -20,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,9 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoInfoWallpaper;
 import net.iGap.realm.RealmWallpaper;
+import net.iGap.realm.RealmWallpaperFields;
 import net.iGap.realm.RealmWallpaperProto;
 import net.iGap.request.RequestInfoWallpaper;
 
@@ -217,7 +220,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         if (filePath != null) {
 
             if (new File(filePath).exists()) {
-                RealmWallpaper.updateField(null, filePath);
+                RealmWallpaper.updateField(null, filePath , ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE);
 
                 fillList(false);
 
@@ -230,7 +233,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         G.onGetWallpaper = new OnGetWallpaper() {
             @Override
             public void onGetWallpaperList(final List<ProtoGlobal.Wallpaper> list) {
-                RealmWallpaper.updateField(list, "");
+                RealmWallpaper.updateField(list, "" , ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE);
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -242,7 +245,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
             }
         };
 
-        new RequestInfoWallpaper().infoWallpaper();
+        new RequestInfoWallpaper().infoWallpaper(ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND);
     }
 
     private void fillList(boolean getInfoFromServer) {
@@ -257,7 +260,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         sw.setWallpaperType(WallpaperType.addNew);
         wList.add(sw);
         try (Realm realm = Realm.getDefaultInstance()) {
-            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).findFirst();
+            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE , ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
 
             if (realmWallpaper != null) {
 

@@ -2870,7 +2870,6 @@ public class FragmentChat extends BaseFragment
                     txtNewUnreadMessage.setVisibility(View.GONE);
                     txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
                 } else {
-                    setDownBtnGone();
                     /**
                      * if addToView is true this means that all new message is in adapter
                      * and just need go to end position in list otherwise we should clear all
@@ -8461,7 +8460,6 @@ public class FragmentChat extends BaseFragment
                 countNewMessage = unreadCount;
                 txtNewUnreadMessage.setVisibility(View.VISIBLE);
                 txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
-                setDownBtnVisible();
                 firstUnreadMessageInChat = firstUnreadMessage;
             }
 

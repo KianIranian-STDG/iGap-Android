@@ -315,6 +315,7 @@ public class G extends Application {
     public static OnUserContactsUnBlock onUserContactsUnBlock;
     public static OnClientCondition onClientCondition;
     public static OnGetWallpaper onGetWallpaper;
+    public static OnGetWallpaper onGetProfileWallpaper;
     /*public static OnTwoStepPassword onTwoStepPassword;*/
     /*public static TwoStepSecurityConfirmEmail twoStepSecurityConfirmEmail;*/
     /*public static OnSecurityCheckPassword onSecurityCheckPassword;*/
@@ -371,6 +372,8 @@ public class G extends Application {
     public static OnMplResult onMplResult;
     public static OnVersionCallBack onVersionCallBack;
     public static OnContactImport onContactImport;
+    public static OnMplTransaction onMplTransaction;
+    public static OnMplTransactionInfo onMplTransactionInfo;
     /*public static OnUserProfileSetRepresentative onUserProfileSetRepresentative;*/
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;
@@ -411,6 +414,7 @@ public class G extends Application {
     public static boolean appChangeRinggerMode = false;
     public static LocationListener locationListener;
     public static boolean isLocationFromBot = false;
+    public static boolean isNeedToCheckProfileWallpaper = false ;
 
     public static MutableLiveData<ConnectionState> connectionStateMutableLiveData = new MutableLiveData<>();
 

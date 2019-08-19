@@ -14,6 +14,7 @@ import net.iGap.helper.HelperNumerical;
 import net.iGap.module.SerializationUtils;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoInfoWallpaper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +27,12 @@ public class RealmWallpaper extends RealmObject {
 
     private long lastTimeGetList;
     private byte[] localList;
+    private int type;
     private RealmList<RealmWallpaperProto> realmWallpaperProto;
 
-    public static void updateField(final List<ProtoGlobal.Wallpaper> protoList, final String localPath) {
+    public static void updateField(final List<ProtoGlobal.Wallpaper> protoList, final String localPath , int type_) {
         try (Realm realm = Realm.getDefaultInstance()) {
-            final RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).findFirst();
+            final RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE , type_).findFirst();
 
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -44,6 +46,8 @@ public class RealmWallpaper extends RealmObject {
                     } else {
                         item = realmWallpaper;
                     }
+
+                    item.setType(type_);
 
                     if (protoList != null) {
                         item.setWallPaperList(realm, protoList);
@@ -74,6 +78,20 @@ public class RealmWallpaper extends RealmObject {
         return realmWallpaperProto;
     }
 
+    public static void updateWallpaper(List<ProtoGlobal.Wallpaper> wallpaperList) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE , ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
+                    if (realmWallpaper != null) {
+                        realmWallpaper.setWallPaperList(realm, wallpaperList);
+                    }
+                }
+            });
+        }
+    }
+
     public void setWallPaperList(Realm realm, List<ProtoGlobal.Wallpaper> wallpaperListProto) {
 
         for (ProtoGlobal.Wallpaper wallpaper : wallpaperListProto) {
@@ -94,6 +112,14 @@ public class RealmWallpaper extends RealmObject {
         this.localList = SerializationUtils.serialize(list);
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public long getLastTimeGetList() {
         return lastTimeGetList;
     }
@@ -101,4 +127,6 @@ public class RealmWallpaper extends RealmObject {
     public void setLastTimeGetList(long lastTimeGetList) {
         this.lastTimeGetList = lastTimeGetList;
     }
+
+
 }

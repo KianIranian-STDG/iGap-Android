@@ -1968,6 +1968,20 @@
     <string name="message_decline_call_later">با شما تماس میگیرم.</string>
     <string name="message_decline_Please_call_later">ممکن است بعدا تماس بگیرید؟</string>
     <string name="message_decline_please_text_me">لطفا پیام بدهید.</string>
-    <string name="of_from_total">از %s</string>
+    <string name="mpl_transaction_rrn">شماره مرجع</string>
+    <string name="mpl_transaction_trace">شماره پیگیری</string>
+    <string name="mpl_transaction_order_id">شماره سفارش</string>
+    <string name="pay_id">شناسه پرداخت</string>
+    <string name="mpl_transaction_sales">پرداخت اینترنتی</string>
+    <string name="mpl_transaction_topup">شارژ موبایل</string>
+    <string name="mpl_transaction_empty">اطلاعات موجود نمیباشد!</string>
+    <string name="mpl_transaction_card">کارت به کارت</string>
+    <string name="mpl_terminal_no">شماره پایانه</string>
+    <string name="mpl_do_you_want_save_receipt">آیا مایل به ذخیره ی رسید هستید؟</string>
+    <string name="mpl_transaction_nul">شما هیچ تراکنشی در ۵ روز گذشته ندارید!</string>
 
+    <string name="of_from_total">از %s</string>
+    <string name="app_version_change_log">لیست تغییرات</string>
+    <string name="updated_version_title">نسخه شما به روز شده است</string>
+    <string name="check_update_title">کنترل بروزرسانی</string>
 </resources>
