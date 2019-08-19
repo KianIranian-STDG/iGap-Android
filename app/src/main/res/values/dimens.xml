@@ -147,5 +147,6 @@
     <dimen name="contact_icon_size">@dimen/dp22</dimen>
     <dimen name="igap_hint_images">@dimen/dp220</dimen>
 
+    <dimen name="pager_margin">50dp</dimen>
 
 </resources>

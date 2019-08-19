@@ -103,7 +103,16 @@ public class KuknosPanelFrag extends BaseFragment {
                 if (position != (kuknosPanelVM.getKuknosWalletsM().getValue().getBalances().length))
                     kuknosPanelVM.spinnerSelect(position);
                 else {
-                    Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(R.string.kuknos_develop), Snackbar.LENGTH_SHORT);
+                    walletSpinner.setSelection(kuknosPanelVM.getPosition());
+                    FragmentManager fragmentManager = getChildFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosAddAssetFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosAddAssetFrag.newInstance();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                    /*Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(R.string.kuknos_develop), Snackbar.LENGTH_SHORT);
                     snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -111,7 +120,7 @@ public class KuknosPanelFrag extends BaseFragment {
                         }
                     });
                     snackbar.show();
-                    walletSpinner.setSelection(kuknosPanelVM.getPosition());
+                    walletSpinner.setSelection(kuknosPanelVM.getPosition());*/
                 }
             }
 

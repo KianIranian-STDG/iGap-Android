@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.KuknosWHistoryM;
 
 import org.stellar.sdk.responses.Page;
@@ -26,10 +27,13 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
 
     private Page<OperationResponse> kuknosWHistoryMS;
     private Context context;
+    private UserRepo userRepo = new UserRepo();
+    private String accountID;
 
     public WalletHistoryRAdapter(Page<OperationResponse> kuknosWHistoryMS, Context context) {
         this.kuknosWHistoryMS = kuknosWHistoryMS;
         this.context = context;
+        accountID = userRepo.getAccountID();
     }
 
     @NonNull
@@ -81,7 +85,7 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
             amount.setText(HelperCalander.isPersianUnicode ?
                     HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(model.getAmount())))
                     : df.format(Double.valueOf(model.getAmount())));
-            if (model.getSourceAccount().equals(model.getFrom())) {
+            if (accountID.equals(model.getFrom())) {
                 desc.setText(context.getResources().getString(R.string.kuknos_wHistory_sent));
                 icon.setText(context.getResources().getString(R.string.upload_ic));
                 icon.setTextColor(Color.RED);
@@ -89,7 +93,7 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
             else {
                 desc.setText(context.getResources().getString(R.string.kuknos_wHistory_receive));
                 icon.setText(context.getResources().getString(R.string.download_ic));
-                icon.setTextColor(Color.GREEN);
+//                icon.setTextColor(context.getResources().getColor(R.color.buttonColor));
             }
         }
 
@@ -102,7 +106,7 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
                     HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(model.getStartingBalance())))
                     : df.format(Double.valueOf(model.getStartingBalance())));
             desc.setText(context.getResources().getString(R.string.kuknos_wHistory_creatAccount));
-            icon.setTextColor(Color.GREEN);
+//            icon.setTextColor(context.getResources().getColor(R.color.buttonColor));
         }
     }
 }

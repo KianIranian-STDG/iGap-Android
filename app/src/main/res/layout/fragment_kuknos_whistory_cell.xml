@@ -38,6 +38,7 @@
             android:text="@string/download_ic"
             android:textSize="@dimen/dp28"
             android:gravity="center"
+            android:textColor="@color/buttonColor"
             android:layout_gravity="center_vertical"/>
 
         <android.support.v7.widget.AppCompatTextView

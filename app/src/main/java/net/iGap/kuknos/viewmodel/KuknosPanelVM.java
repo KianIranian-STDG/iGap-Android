@@ -86,7 +86,7 @@ public class KuknosPanelVM extends ViewModel {
     public void spinnerSelect(int position) {
         this.position = position;
         AccountResponse.Balance temp = kuknosWalletsM.getValue().getBalances()[position];
-        DecimalFormat df = new DecimalFormat("#,###.00");
+        DecimalFormat df = new DecimalFormat("#,##0.00");
         balance.set(HelperCalander.isPersianUnicode ?
                 HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(temp.getBalance()))) : df.format(Double.valueOf(temp.getBalance())));
         currency.set((temp.getAsset().getType().equals("native") ? "PMN" : temp.getAssetCode()));

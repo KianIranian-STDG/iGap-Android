@@ -33,10 +33,13 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosWalletsAccountM;
+import net.iGap.kuknos.view.adapter.WalletHistorySpinnerAdapter;
 import net.iGap.kuknos.view.adapter.WalletSpinnerAdapter;
 import net.iGap.kuknos.viewmodel.KuknosPanelVM;
 import net.iGap.kuknos.viewmodel.KuknosTradeVM;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+
+import org.stellar.sdk.responses.AccountResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +48,8 @@ public class KuknosTradeFrag extends BaseFragment {
 
     private FragmentKuknosTradeBinding binding;
     private KuknosTradeVM kuknosTradeVM;
-    private Spinner originSpinner;
-    private Spinner destSpinner;
+    Spinner originSpinner;
+    Spinner destSpinner;
 
     public static KuknosTradeFrag newInstance() {
         KuknosTradeFrag kuknosLoginFrag = new KuknosTradeFrag();
@@ -112,22 +115,22 @@ public class KuknosTradeFrag extends BaseFragment {
     }
 
     private void onDataChanged() {
-        kuknosTradeVM.getKuknosOriginWalletsM().observe(getViewLifecycleOwner(), new Observer<KuknosWalletsAccountM>() {
+        kuknosTradeVM.getKuknosOriginWalletsM().observe(getViewLifecycleOwner(), new Observer<ArrayList<AccountResponse.Balance>>() {
             @Override
-            public void onChanged(@Nullable KuknosWalletsAccountM kuknosWalletsAccountM) {
-                if (kuknosWalletsAccountM.getBalanceInfo().size() != 0) {
-                    WalletSpinnerAdapter adapter = new WalletSpinnerAdapter(getContext(),
-                            kuknosWalletsAccountM.getBalanceInfo());
+            public void onChanged(@Nullable ArrayList<AccountResponse.Balance> balances) {
+                if (balances.size() != 0) {
+                    WalletHistorySpinnerAdapter adapter = new WalletHistorySpinnerAdapter(getContext(),
+                            balances);
                     originSpinner.setAdapter(adapter);
                 }
             }
         });
-        kuknosTradeVM.getKuknosDestinationWalletsM().observe(getViewLifecycleOwner(), new Observer<KuknosWalletsAccountM>() {
+        kuknosTradeVM.getKuknosDestinationWalletsM().observe(getViewLifecycleOwner(), new Observer<ArrayList<AccountResponse.Balance>>() {
             @Override
-            public void onChanged(@Nullable KuknosWalletsAccountM kuknosWalletsAccountM) {
-                if (kuknosWalletsAccountM.getBalanceInfo().size() != 0) {
-                    WalletSpinnerAdapter adapter = new WalletSpinnerAdapter(getContext(),
-                            kuknosWalletsAccountM.getBalanceInfo());
+            public void onChanged(@Nullable ArrayList<AccountResponse.Balance> balances) {
+                if (balances.size() != 0) {
+                    WalletHistorySpinnerAdapter adapter = new WalletHistorySpinnerAdapter(getContext(),
+                            balances);
                     destSpinner.setAdapter(adapter);
                 }
             }

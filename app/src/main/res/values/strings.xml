@@ -2101,4 +2101,13 @@
     <string name="kuknos_wHistory_receive">Receive</string>
     <string name="kuknos_wHistory_time">Time</string>
     <string name="kuknos_wHistory_creatAccount">Create Account</string>
+    <string name="kuknos_AddAsset_Title">IGapy</string>
+    <string name="kuknos_AddAsset_SubTitle">IGap</string>
+    <string name="kuknos_AddAsset_Desc">Far far away, behind the word mountains, far from the
+        countries Vokalia and Consonantia, there live the blind texts. Separated they live in
+        Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river
+        named Duden flows by their place and supplies it with the necessary regelialia. It is a
+        paradisematic country, in which roasted parts of sentences fly into your mouth. </string>
+    <string name="kuknos_AddAsset_AddBTN">More Assets</string>
+    <string name="kuknos_AddAsset_title">Current Assets</string>
 </resources>

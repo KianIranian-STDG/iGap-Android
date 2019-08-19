@@ -40,9 +40,6 @@ public class WalletSpinnerAdapter extends BaseAdapter {
 
         View layout = convertView;
 
-        Log.d("amini", "getView: " + position);
-
-
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layout = inflater.inflate(R.layout.fragment_kuknos_panel_spin_cell, parent, false);
 
@@ -57,6 +54,7 @@ public class WalletSpinnerAdapter extends BaseAdapter {
             // set
             walletName.setText(context.getResources().getString(R.string.kuknos_panel_addAsset));
             Picasso.get().load(R.mipmap.kuknos_add).into(walletPic);
+            walletPic.setVisibility(View.VISIBLE);
             // config text
             walletName.setTypeface(null, Typeface.BOLD);
             walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
@@ -75,7 +73,6 @@ public class WalletSpinnerAdapter extends BaseAdapter {
             walletName.setTypeface(null, Typeface.NORMAL);
             walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
             // set
-            Log.d("amini", "getView: asset type" + wallets.get(position).getAssetCode() + " " + wallets.get(position).getAssetCode());
             walletName.setText("" + (wallets.get(position).getAsset().getType().equals("native") ? "PMN" : wallets.get(position).getAssetCode()));
         }
 

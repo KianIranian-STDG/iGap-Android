@@ -19,6 +19,7 @@ import net.iGap.module.api.beepTunes.SearchTrack;
 import net.iGap.module.api.beepTunes.TrackInfo;
 
 import org.stellar.sdk.responses.AccountResponse;
+import org.stellar.sdk.responses.AssetResponse;
 import org.stellar.sdk.responses.Page;
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 import org.stellar.sdk.responses.operations.OperationResponse;
@@ -84,23 +85,13 @@ public class KuknosAPIRepository {
         temp.execute(userID);
     }
 
-    // todo clean this comment - old mudule
+    public void getAssets(ApiResponse<Page<AssetResponse>> apiResponse) {
+        KuknosAPIAsync<Page<AssetResponse>> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.ASSETS);
+        temp.execute();
+    }
 
-    /*public void getUserAccount(String userID, ApiResponse<AccountResponse> apiResponse) {
-        apiResponse.setProgressIndicator(true);
-        apiHorizenService.getUserAccount(userID).enqueue(new Callback<AccountResponse>() {
-            @Override
-            public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
-                apiResponse.onResponse(response.body());
-                apiResponse.setProgressIndicator(false);
-            }
-
-            @Override
-            public void onFailure(Call<AccountResponse> call, Throwable t) {
-                apiResponse.onFailed(t.getMessage());
-                apiResponse.setProgressIndicator(false);
-            }
-        });
-    }*/
-
+    public void changeTrust(String accountSeed, String code, String issuer, ApiResponse<SubmitTransactionResponse> apiResponse) {
+        KuknosAPIAsync<SubmitTransactionResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.CHANGE_TRUST);
+        temp.execute(accountSeed, code, issuer);
+    }
 }

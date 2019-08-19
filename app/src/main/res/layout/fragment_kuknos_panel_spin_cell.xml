@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.45">
+        app:layout_constraintHorizontal_bias="0.5">
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/fragKuknosPimgCell"
@@ -27,6 +27,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
             android:padding="@dimen/dp4"
+            android:visibility="gone"
             android:layout_gravity="center_vertical"/>
 
         <android.support.v7.widget.AppCompatTextView

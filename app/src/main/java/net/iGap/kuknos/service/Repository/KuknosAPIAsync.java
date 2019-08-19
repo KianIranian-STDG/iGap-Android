@@ -8,7 +8,10 @@ import com.google.gson.Gson;
 import net.iGap.R;
 import net.iGap.api.apiService.ApiResponse;
 
+import org.stellar.sdk.Asset;
+import org.stellar.sdk.AssetTypeCreditAlphaNum4;
 import org.stellar.sdk.AssetTypeNative;
+import org.stellar.sdk.ChangeTrustOperation;
 import org.stellar.sdk.KeyPair;
 import org.stellar.sdk.Memo;
 import org.stellar.sdk.Network;
@@ -17,6 +20,7 @@ import org.stellar.sdk.Server;
 import org.stellar.sdk.Transaction;
 import org.stellar.sdk.requests.RequestBuilder;
 import org.stellar.sdk.responses.AccountResponse;
+import org.stellar.sdk.responses.AssetResponse;
 import org.stellar.sdk.responses.Page;
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 import org.stellar.sdk.responses.operations.OperationResponse;
@@ -27,7 +31,7 @@ import java.util.Objects;
 public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
 
     enum API {
-        USER_ACCOUNT, PAYMENT_SEND, PAYMENTS_ACCOUNT
+        USER_ACCOUNT, PAYMENT_SEND, PAYMENTS_ACCOUNT, ASSETS, CHANGE_TRUST
     }
 
     private ApiResponse<T> response;
@@ -77,6 +81,10 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
                 return paymentToOther(ts[0], ts[1], ts[2], ts[3]);
             case PAYMENTS_ACCOUNT:
                 return paymentsUser(ts[0]);
+            case ASSETS:
+                return getAssets();
+            case CHANGE_TRUST:
+                return addTrustline(ts[0], ts[1], ts[2]);
         }
         return null;
     }
@@ -132,7 +140,7 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
                 .addMemo(Memo.text(memo))
                 .setOperationFee(1000)
                 // Wait a maximum of three minutes for the transaction
-                .setTimeout(1)
+                .setTimeout(60)
                 .build();
         // Sign the transaction to prove you are actually the person sending it.
         transaction.sign(source);
@@ -142,8 +150,7 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
             SubmitTransactionResponse response = server.submitTransaction(transaction);
             //todo clean this hard code for monitoring
             Gson gson =  new Gson();
-            Log.d("amini", "paymentToOther: " + gson.toJson(response) + "\n" + response.isSuccess() + "\n" + response.getExtras().getResultCodes().getTransactionResultCode());
-
+            Log.d("amini", "paymentToOther: " + gson.toJson(response) + "\n" + response.isSuccess());
             if (response.isSuccess()) {
                 successStatus = true;
                 return (T) response;
@@ -202,6 +209,69 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
             successStatus = false;
             e.printStackTrace();
             return (T) e.getMessage();
+        }
+    }
+
+    private T getAssets() {
+        Server server = new Server(KUKNOS_Horizan_Server);
+        try {
+            Page<AssetResponse> response = server.assets().execute();
+            successStatus = true;
+            return (T) response;
+        } catch (IOException e) {
+            successStatus = false;
+            e.printStackTrace();
+            return (T) e.getMessage();
+        }
+    }
+
+    private T addTrustline(String AccountSeed, String code, String issuer) {
+        Server server = new Server(KUKNOS_Horizan_Server);
+        Network network = new Network("Kuknos-NET");
+        KeyPair source = KeyPair.fromSecretSeed(AccountSeed);
+        Asset asset = new AssetTypeCreditAlphaNum4(code, issuer);
+
+        Log.d("amini", "addTrustline: " + source.getAccountId());
+
+        // If there was no error, load up-to-date information on your account.
+        AccountResponse sourceAccount = null;
+        try {
+            sourceAccount = server.accounts().account(source.getAccountId());
+        } catch (IOException e) {
+            successStatus = false;
+            e.printStackTrace();
+            return (T) ("" + R.string.kuknos_send_errorServer);
+        }
+
+        Log.d("amini", "addTrustline: " + sourceAccount.getAccountId());
+
+        Transaction transaction = new Transaction.Builder(Objects.requireNonNull(sourceAccount), network)
+                .addOperation(new ChangeTrustOperation.Builder(asset, "" + Integer.MAX_VALUE).build())
+                .addMemo(Memo.text(""))
+                .setTimeout(60)
+                .setOperationFee(1000)
+                .build();
+        // Sign the transaction to prove you are actually the person sending it.
+        transaction.sign(source);
+        try {
+            SubmitTransactionResponse response = server.submitTransaction(transaction);
+            //todo clean this hard code for monitoring
+            Gson gson =  new Gson();
+            Log.d("amini", "paymentToOther: " + gson.toJson(response) + "\n" + response.isSuccess());
+            if (response.isSuccess()) {
+                successStatus = true;
+                return (T) response;
+            }
+            else {
+                // todo change response code for this option
+                successStatus = false;
+                return (T) checkResponseCode(response);
+            }
+        } catch (Exception e) {
+            // todo change response code for this option
+            successStatus = false;
+            e.printStackTrace();
+            return (T) ("" + R.string.kuknos_send_errorServer);
         }
     }
 
