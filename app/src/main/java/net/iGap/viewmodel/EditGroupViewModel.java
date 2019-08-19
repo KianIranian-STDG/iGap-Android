@@ -73,8 +73,6 @@ public class EditGroupViewModel extends ViewModel {
     //TODO: add To repository. this code same in fragment group profile
     private Realm realmGroupProfile;
     private RealmGroupRoom realmGroupRoom;
-    private RealmNotificationSetting realmNotificationSetting;
-    private int realmNotification = 0;
     private String initials;
     RealmResults<RealmMember> adminMembers;
     RealmResults<RealmMember> moderatorMembers;
@@ -88,18 +86,6 @@ public class EditGroupViewModel extends ViewModel {
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
             goBack.setValue(true);
             return;
-        } else if (realmRoom.getGroupRoom() != null) {
-            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-            if (realmGroupRoom != null) {
-                if (realmGroupRoom.getRealmNotificationSetting() == null) {
-
-                    setRealm(getRealm(), realmGroupRoom, null, null);
-                } else {
-                    realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
-                }
-                getRealm();
-                realmNotification = realmNotificationSetting.getNotification();
-            }
         }
 
 
@@ -167,11 +153,6 @@ public class EditGroupViewModel extends ViewModel {
     protected void onCleared() {
         super.onCleared();
         realmGroupProfile.close();
-    }
-
-    //TODO: move this code to repository
-    private void setRealm(Realm realm, final RealmGroupRoom realmGroupRoom, final RealmChannelRoom realmChannelRoom, final RealmChatRoom realmChatRoom) {
-        realm.executeTransaction(realm1 -> realmNotificationSetting = RealmNotificationSetting.put(realm1, realmChatRoom, realmGroupRoom, realmChannelRoom));
     }
 
     public void chooseImage() {

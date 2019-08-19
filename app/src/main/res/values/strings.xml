@@ -1527,6 +1527,7 @@ Want to get it?</string>
     <string name="province">Province</string>
     <string name="edit_profile_hint"> </string>
     <string name="username">Username</string>
+    <string name="username_copied">Username Copied</string>
     <string name="select_city">Select City</string>
     <string name="select_province">Select Province</string>
     <string name="mobile_number">Mobile Number</string>
