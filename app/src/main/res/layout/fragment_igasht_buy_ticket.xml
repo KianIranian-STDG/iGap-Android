@@ -10,63 +10,160 @@
     </data>
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="@dimen/dp4">
+
+        <View
+            android:id="@+id/view_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/shape_igasht_darkgray"
+            app:layout_constraintBottom_toBottomOf="@id/textView6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/textView6" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:padding="@dimen/dp12"
+            android:text="مبلغ"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view10"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginBottom="@dimen/dp8"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/textView6"
+            app:layout_constraintEnd_toStartOf="@+id/textView6"
+            app:layout_constraintStart_toEndOf="@+id/textView8"
+            app:layout_constraintTop_toTopOf="@+id/textView6"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
+            android:text="تعداد"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/textView6"
+            app:layout_constraintEnd_toStartOf="@id/view10"
+            app:layout_constraintTop_toTopOf="@id/textView6" />
+
+        <View
+            android:id="@+id/view11"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginBottom="@dimen/dp8"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/textView6"
+            app:layout_constraintEnd_toStartOf="@id/textView8"
+            app:layout_constraintTop_toTopOf="@id/textView6" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginEnd="@dimen/dp16"
+            android:layout_marginRight="@dimen/dp16"
+            android:text="سرویس"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/textView6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/textView6" />
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/addedPlaceList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
             android:padding="@dimen/dp8"
             android:visibility="@{viewModel.showMainView}"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/addNewPlaceButton"
+            app:layout_constraintEnd_toEndOf="@+id/view_container"
+            app:layout_constraintStart_toStartOf="@+id/view_container"
+            app:layout_constraintTop_toBottomOf="@+id/view_container" />
+
+        <Button
+            android:id="@+id/addNewPlaceButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:background="@drawable/shape_igasht_violet"
+            android:fontFamily="@font/main_font"
+            android:onClick="@{()->viewModel.onAddPlaceClick()}"
+            android:text="@string/igasht_addـexternal_visits"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp20"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/totalPrice"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintWidth_percent=".6" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/totalPrice"
             style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:padding="@dimen/dp4"
             android:text="@{@string/igasht_total_ticket_price(viewModel.totalPrice)}"
             android:textSize="@dimen/largeTextSize"
             android:textStyle="bold"
             android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintBottom_toTopOf="@id/addNewPlaceButton"
+            app:layout_constraintBottom_toTopOf="@+id/payButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <android.support.design.button.MaterialButton
-            android:id="@+id/addNewPlaceButton"
-            style="@style/BaseIGapButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:onClick="@{()->viewModel.onAddPlaceClick()}"
-            android:text="@string/igasht_add_new_place_title"
-            android:visibility="@{viewModel.showMainView}"
-            app:backgroundTint="@color/banafsh"
-            app:layout_constraintBottom_toTopOf="@id/payButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent=".8" />
 
-        <android.support.design.button.MaterialButton
+        <Button
             android:id="@+id/payButton"
-            style="?iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp8"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/shape_igasht_yellow"
             android:onClick="@{()->viewModel.onPayClick()}"
             android:text="@string/igasht_buy_ticket_title"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp20"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.487"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent=".8" />
+            app:layout_constraintWidth_percent=".6" />
 
         <ProgressBar
             android:id="@+id/loadingView"
@@ -90,6 +187,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
     </android.support.constraint.ConstraintLayout>
 </layout>

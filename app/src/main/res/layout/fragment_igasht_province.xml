@@ -102,6 +102,7 @@
                     android:layout_marginEnd="@dimen/dp24"
                     android:layout_marginStart="@dimen/dp24"
                     android:layout_marginRight="@dimen/dp24"
+                    android:textSize="20sp"
                     android:layout_marginLeft="@dimen/dp24"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/main_font"

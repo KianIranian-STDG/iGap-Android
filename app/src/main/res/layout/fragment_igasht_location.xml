@@ -69,75 +69,77 @@
 
         </android.support.constraint.ConstraintLayout>
 
-        <!--<FrameLayout-->
-        <!--android:id="@+id/card_search"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginStart="@dimen/dp24"-->
-        <!--android:layout_marginLeft="@dimen/dp24"-->
-        <!--android:layout_marginTop="4dp"-->
-        <!--android:layout_marginEnd="@dimen/dp24"-->
-        <!--android:layout_marginRight="@dimen/dp24"-->
-        <!--android:layout_marginBottom="4dp"-->
-        <!--android:background="@drawable/shape_igasht_darkgray"-->
-        <!--android:padding="@dimen/dp8"-->
-        <!--android:visibility="@{viewModel.showMainView}"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/constraintLayout_locationList"-->
-        <!--app:layout_constraintVertical_bias="0.0"-->
-        <!--app:layout_constraintWidth_percent=".8">-->
+        <!--<android.support.design.card.MaterialCardView-->
+            <!--android:id="@+id/card_search"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="@dimen/dp8"-->
+            <!--android:layout_marginLeft="@dimen/dp8"-->
+            <!--android:layout_marginTop="@dimen/dp8"-->
+            <!--android:layout_marginEnd="@dimen/dp8"-->
+            <!--android:layout_marginRight="@dimen/dp8"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:visibility="@{viewModel.showMainView}"-->
+            <!--app:cardCornerRadius="@dimen/dp8"-->
+            <!--app:cardUseCompatPadding="true"-->
+            <!--app:contentPadding="@dimen/dp8"-->
+            <!--app:layout_constraintEnd_toEndOf="@+id/chooseProvinceTitle"-->
+            <!--app:layout_constraintStart_toStartOf="@+id/chooseProvinceTitle"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/constraintLayout_locationList"-->
+            <!--app:layout_constraintWidth_percent=".8">-->
 
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
+            <!--<LinearLayout-->
+                <!--android:background="@drawable/shape_igasht_darkgray"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:padding="@dimen/dp8">-->
 
-        <!--<android.support.v7.widget.AppCompatTextView-->
-        <!--style="@style/baseFontIcon"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:background="?attr/selectableItemBackgroundBorderless"-->
-        <!--android:onClick="@{()->viewModel.onSearchPlaceButtonClick()}"-->
-        <!--android:text="@string/search_icon"-->
-        <!--android:visibility="@{viewModel.showMainView}" />-->
+                <!--<android.support.v7.widget.AppCompatTextView-->
+                    <!--style="@style/baseFontIcon"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:background="?attr/selectableItemBackgroundBorderless"-->
+                    <!--android:onClick="@{()->viewModel.onSearchPlaceButtonClick()}"-->
+                    <!--android:text="@string/search_icon"-->
+                    <!--android:visibility="@{viewModel.showMainView}" />-->
 
-        <!--<View-->
-        <!--android:layout_width="@dimen/dp1"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginLeft="@dimen/dp8"-->
-        <!--android:layout_marginTop="@dimen/dp4"-->
-        <!--android:layout_marginRight="@dimen/dp8"-->
-        <!--android:layout_marginBottom="@dimen/dp4"-->
-        <!--android:background="@color/gray" />-->
-
-
-        <!--<android.support.v7.widget.AppCompatAutoCompleteTextView-->
-        <!--android:id="@+id/provinceSearchText"-->
-        <!--android:layout_width="289dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginStart="@dimen/dp8"-->
-        <!--android:layout_marginLeft="@dimen/dp8"-->
-        <!--android:layout_weight="1"-->
-        <!--android:afterTextChanged="@{(s)->viewModel.onProvinceSearchTextChange(s.toString())}"-->
-        <!--android:background="@color/transparent"-->
-        <!--android:completionThreshold="0"-->
-        <!--android:maxLength="30"-->
-        <!--android:maxLines="1" />-->
-
-        <!--<android.support.v7.widget.AppCompatTextView-->
-        <!--android:id="@+id/clearProvinceSearch"-->
-        <!--style="@style/baseFontIcon"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:background="?attr/selectableItemBackgroundBorderless"-->
-        <!--android:onClick="@{()->viewModel.onClearProVinceSearchClick()}"-->
-        <!--android:text="@{viewModel.selectIcon}" />-->
+                <!--<View-->
+                    <!--android:layout_width="@dimen/dp1"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_marginLeft="@dimen/dp8"-->
+                    <!--android:layout_marginTop="@dimen/dp4"-->
+                    <!--android:layout_marginRight="@dimen/dp8"-->
+                    <!--android:layout_marginBottom="@dimen/dp4"-->
+                    <!--android:background="@color/gray" />-->
 
 
-        <!--</LinearLayout>-->
-        <!--</FrameLayout>-->
+                <!--<android.support.v7.widget.AppCompatAutoCompleteTextView-->
+                    <!--android:id="@+id/provinceSearchText"-->
+                    <!--android:layout_width="289dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="@dimen/dp8"-->
+                    <!--android:layout_marginLeft="@dimen/dp8"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:afterTextChanged="@{(s)->viewModel.onProvinceSearchTextChange(s.toString())}"-->
+                    <!--android:background="@color/transparent"-->
+                    <!--android:completionThreshold="0"-->
+                    <!--android:maxLength="30"-->
+                    <!--android:maxLines="1" />-->
+
+                <!--<android.support.v7.widget.AppCompatTextView-->
+                    <!--android:id="@+id/clearProvinceSearch"-->
+                    <!--style="@style/baseFontIcon"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:background="?attr/selectableItemBackgroundBorderless"-->
+                    <!--android:onClick="@{()->viewModel.onClearProVinceSearchClick()}"-->
+                    <!--android:text="@{viewModel.selectIcon}" />-->
+
+
+            <!--</LinearLayout>-->
+        <!--</android.support.design.card.MaterialCardView>-->
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/locationListView"
