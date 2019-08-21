@@ -225,7 +225,7 @@ public class PlaqueView extends ConstraintLayout {
 
     public void setPlaqueAlphabet(String strPAlphabet) {
         this.strPAlphabet = strPAlphabet.trim();
-        pCity.setText(this.strPAlphabet);
+        pAlphabet.setText(this.strPAlphabet);
     }
 
     public String getPlaque1() {

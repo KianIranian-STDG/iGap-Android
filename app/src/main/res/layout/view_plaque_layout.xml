@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/plaque_view_root"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp95"
+    android:layout_height="@dimen/dp80"
     android:background="@drawable/shape_round_stroke_bg">
 
     <net.iGap.module.RadiusImageView
@@ -28,11 +28,11 @@
         android:hint="55"
         android:inputType="number"
         android:maxLength="2"
-        android:minWidth="@dimen/dp52"
+        android:minWidth="@dimen/dp44"
         android:padding="@dimen/dp4"
         android:singleLine="true"
         android:textColor="@color/black"
-        android:textSize="@dimen/dp28"
+        android:textSize="@dimen/dp20"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -49,11 +49,11 @@
         android:hint="ص"
         android:inputType="text"
         android:maxLength="1"
-        android:minWidth="@dimen/dp52"
+        android:minWidth="@dimen/dp44"
         android:padding="@dimen/dp4"
         android:singleLine="true"
         android:textColor="@color/black"
-        android:textSize="@dimen/dp28"
+        android:textSize="@dimen/dp20"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -70,11 +70,11 @@
         android:hint="135"
         android:inputType="number"
         android:maxLength="3"
-        android:minWidth="@dimen/dp70"
+        android:minWidth="@dimen/dp52"
         android:padding="@dimen/dp4"
         android:singleLine="true"
         android:textColor="@color/black"
-        android:textSize="@dimen/dp28"
+        android:textSize="@dimen/dp20"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -100,7 +100,7 @@
         android:layout_marginEnd="@dimen/dp6"
         android:layout_marginRight="@dimen/dp6"
         android:gravity="center_horizontal"
-        android:minWidth="@dimen/dp52"
+        android:minWidth="@dimen/dp44"
         android:orientation="vertical"
         android:padding="@dimen/dp4"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -117,7 +117,7 @@
             android:gravity="center|bottom"
             android:text="ایران"
             android:textColor="@color/black"
-            android:textSize="@dimen/largeTextSize"
+            android:textSize="@dimen/standardTextSize"
             android:textStyle="bold" />
 
         <android.support.v7.widget.AppCompatEditText
@@ -132,7 +132,7 @@
             android:maxLength="2"
             android:singleLine="true"
             android:textColor="@color/black"
-            android:textSize="@dimen/dp28"
+            android:textSize="@dimen/dp20"
             android:textStyle="bold" />
 
     </LinearLayout>

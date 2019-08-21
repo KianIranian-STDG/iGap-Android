@@ -106,14 +106,14 @@
             android:id="@+id/state_no_car"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:constraint_referenced_ids="btn_add_car , txt_no_car" />
 
         <android.support.constraint.Group
             android:id="@+id/state_has_car"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:constraint_referenced_ids="btn_inquiry , btn_add_car_ , rv_plaques ,lbl_plaques " />
 
     </android.support.constraint.ConstraintLayout>
