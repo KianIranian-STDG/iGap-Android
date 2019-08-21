@@ -39,7 +39,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="@dimen/dp4"
             android:layout_marginRight="@dimen/dp4"
-            android:background="@drawable/shape_igasht_strokegray"
             app:layout_constraintEnd_toEndOf="@id/toolbar"
             app:layout_constraintStart_toStartOf="@id/toolbar"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
@@ -138,6 +137,7 @@
                     android:layout_height="0dp"
                     android:layout_margin="@dimen/dp4"
                     android:text="@string/location_pin_icon"
+                    android:textColor="@color/md_yellow_700"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintDimensionRatio="116:83"
                     app:layout_constraintStart_toStartOf="parent"
@@ -168,7 +168,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp4"
                 android:layout_weight="1"
-                android:background="@{G.isDarkTheme ? @drawable/igasht_tab_item_background_dark : @drawable/igasht_tab_item_background_light}"
+                android:background="@{G.isDarkTheme ? @drawable/igasht_tab_item_background_dark : @drawable/shape_igasht_blou}"
                 android:gravity="center"
                 android:onClick="@{()->viewModel.onTabItemClick(true)}"
                 android:padding="@dimen/dp8"
@@ -183,7 +183,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp4"
                 android:layout_weight="1"
-                android:background="@{G.isDarkTheme ? @drawable/igasht_tab_item_background_dark : @drawable/igasht_tab_item_background_light}"
+                android:background="@{G.isDarkTheme ? @drawable/igasht_tab_item_background_dark : @drawable/shape_igasht_blou}"
                 android:gravity="center"
                 android:onClick="@{()->viewModel.onTabItemClick(false)}"
                 android:padding="@dimen/dp8"
@@ -215,6 +215,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
+        <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_margin="@dimen/dp8"-->
+        <!--android:background="@drawable/shape_igasht_strokegray"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.0"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintVertical_bias="0.0"-->
+        <!--app:layout_constraintBottom_toTopOf="@id/toolbar"/>-->
     </android.support.constraint.ConstraintLayout>
 </layout>

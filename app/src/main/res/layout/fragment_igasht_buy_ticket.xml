@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -115,8 +116,8 @@
 
         <Button
             android:id="@+id/addNewPlaceButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="277dp"
+            android:layout_height="0dp"
             android:background="@drawable/shape_igasht_violet"
             android:fontFamily="@font/main_font"
             android:onClick="@{()->viewModel.onAddPlaceClick()}"
@@ -148,8 +149,8 @@
 
         <Button
             android:id="@+id/payButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="277dp"
+            android:layout_height="0dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/shape_igasht_yellow"
             android:onClick="@{()->viewModel.onPayClick()}"
@@ -158,8 +159,8 @@
             android:textSize="@dimen/dp20"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/totalPrice"
-            app:layout_constraintStart_toStartOf="@+id/totalPrice"
+            app:layout_constraintEnd_toEndOf="@+id/addNewPlaceButton"
+            app:layout_constraintStart_toStartOf="@+id/addNewPlaceButton"
             app:layout_constraintWidth_percent=".6" />
 
         <ProgressBar
