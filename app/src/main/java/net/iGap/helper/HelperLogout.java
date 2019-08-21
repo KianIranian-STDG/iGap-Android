@@ -20,10 +20,8 @@ import net.iGap.Theme;
 import net.iGap.activities.ActivityRegisteration;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.request.RequestClientGetRoomList;
-
-import ir.radsense.raadcore.model.Auth;
 
 import static org.paygear.utils.Utils.signOutWallet;
 
@@ -59,6 +57,11 @@ public final class HelperLogout {
                     nMgr.cancelAll();
                 } catch (Exception e) {
                     e.getStackTrace();
+                }
+
+                if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+                    MusicPlayer.stopSound();
+                    MusicPlayer.closeLayoutMediaPlayer();
                 }
             }
         });
