@@ -51,7 +51,7 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
                 .setContext(getContext())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.score_star_icon, R.string.history_icon)
+                .setRightIcons(/*R.string.score_star_icon,*/ R.string.history_icon)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -60,12 +60,12 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
                         }
                     }
 
-                    @Override
+                 /*   @Override
                     public void onRightIconClickListener(View view) {
                         if (getActivity() != null) {
                             new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtFavoritePlaceListFragment()).setReplace(false).load(true);
                         }
-                    }
+                    }*/
 
                     @Override
                     public void onSecondRightIconClickListener(View view) {
