@@ -1965,4 +1965,6 @@ Want to get it?</string>
     <string name="message_decline_call_later">I,II call you back.</string>
     <string name="message_decline_Please_call_later">Can you call back later?</string>
     <string name="message_decline_please_text_me">Please text me.</string>
+    <string name="scan_barcode_to_enter_visit">جهت ورود و بازدید بارکد فوق را اسکن کنید</string>
+    <string name="Your_purchase_code">کد خرید شما</string>
 </resources>
