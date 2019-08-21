@@ -88,12 +88,15 @@ public class AdapterPlaqueList extends RecyclerView.Adapter<AdapterPlaqueList.Pl
             root.setOnClickListener(v -> {
 
                 if (selectedPlaqueList.contains(plaque)) {
-                    selectedPlaqueList.remove(plaque);
+                    selectedPlaqueList.clear();
                     checkBox.setChecked(false);
                 } else {
+                    selectedPlaqueList.clear();
                     selectedPlaqueList.add(plaque);
                     checkBox.setChecked(true);
                 }
+
+                notifyDataSetChanged();
 
             });
 

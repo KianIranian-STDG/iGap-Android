@@ -32,7 +32,7 @@ public class FragmentCPayEdit extends BaseFragment implements ToolbarListener {
     public static FragmentCPayEdit getInstance(String plaque) {
         FragmentCPayEdit fragmentCPay = new FragmentCPayEdit();
         Bundle bundle = new Bundle();
-        bundle.putString("plaque", plaque);
+        bundle.putString(HelperCPay.PLAQUE , plaque);
         fragmentCPay.setArguments(bundle);
         return fragmentCPay;
     }
@@ -55,7 +55,7 @@ public class FragmentCPayEdit extends BaseFragment implements ToolbarListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if ( getArguments() != null) plaqueText = getArguments().getString("plaque", null);
+        if ( getArguments() != null) plaqueText = getArguments().getString(HelperCPay.PLAQUE, null);
         initToolbar();
         setupViewIfEditMode();
 

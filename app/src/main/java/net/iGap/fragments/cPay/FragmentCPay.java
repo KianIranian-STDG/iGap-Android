@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import net.iGap.R;
 import net.iGap.adapter.seePay.AdapterPlaqueList;
@@ -67,7 +68,12 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
         viewModel.onInquiryClickListener.observe(getViewLifecycleOwner() , isOpen -> {
             if (getActivity() == null) return;
 
-            new HelperFragment(getActivity().getSupportFragmentManager() , new FragmentCPayInquiry())
+            if (adapter.getSelectedPlaqueList().size() == 0){
+                Toast.makeText(getContext(), getString(R.string.no_item_selected), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            new HelperFragment(getActivity().getSupportFragmentManager() , FragmentCPayInquiry.getInstance(adapter.getSelectedPlaqueList().get(0)))
                     .setReplace(false)
                     .load();
         });

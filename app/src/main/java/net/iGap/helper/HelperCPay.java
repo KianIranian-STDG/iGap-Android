@@ -2,6 +2,7 @@ package net.iGap.helper;
 
 public class HelperCPay {
 
+    public static String PLAQUE = "plaque";
 
     public static String getPlaqueAlphabet(String s) {
         return "غ";
