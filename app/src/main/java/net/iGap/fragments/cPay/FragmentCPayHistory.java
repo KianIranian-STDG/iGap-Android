@@ -1,4 +1,4 @@
-package net.iGap.fragments.seePay;
+package net.iGap.fragments.cPay;
 
 
 import android.os.Bundle;
@@ -9,16 +9,16 @@ import android.view.ViewGroup;
 
 import net.iGap.R;
 
-public class FragmentSeePayAddCar extends Fragment {
+public class FragmentCPayHistory extends Fragment {
 
 
-    public FragmentSeePayAddCar() {
+    public FragmentCPayHistory() {
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_see_pay_add_car, container, false);
+        return inflater.inflate(R.layout.fragment_see_pay_history, container, false);
     }
 
 }

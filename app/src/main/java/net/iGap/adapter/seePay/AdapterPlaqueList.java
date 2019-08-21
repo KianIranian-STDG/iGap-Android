@@ -1,5 +1,6 @@
 package net.iGap.adapter.seePay;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import java.util.List;
 
 public class AdapterPlaqueList extends RecyclerView.Adapter<AdapterPlaqueList.PlaqueViewHolder> {
 
+    public MutableLiveData<String> onEditClickListener = new MutableLiveData<>();
     private List<String> plaqueList = new ArrayList<>();
     private List<String> selectedPlaqueList = new ArrayList<>();
     private Context mContext;
@@ -97,7 +99,7 @@ public class AdapterPlaqueList extends RecyclerView.Adapter<AdapterPlaqueList.Pl
             view.setOnClickListener(v -> root.performClick());
 
             edit.setOnClickListener(v -> {
-
+                onEditClickListener.postValue(plaque);
             });
         }
 

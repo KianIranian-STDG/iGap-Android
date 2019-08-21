@@ -1,4 +1,4 @@
-package net.iGap.fragments.seePay;
+package net.iGap.fragments.cPay;
 
 
 import android.arch.lifecycle.ViewModelProviders;
@@ -6,7 +6,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,7 @@ import net.iGap.R;
 import net.iGap.adapter.seePay.AdapterPlaqueList;
 import net.iGap.databinding.FragmentSeePayBinding;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentSeePayViewModel;
@@ -23,14 +23,14 @@ import net.iGap.viewmodel.FragmentSeePayViewModel;
 import java.util.ArrayList;
 
 
-public class FragmentSeePay extends BaseFragment implements ToolbarListener {
+public class FragmentCPay extends BaseFragment implements ToolbarListener {
 
     private FragmentSeePayViewModel viewModel ;
     private FragmentSeePayBinding binding ;
     private AdapterPlaqueList adapter ;
     private ArrayList<String> plaqueList = new ArrayList<>();
 
-    public FragmentSeePay() {
+    public FragmentCPay() {
 
     }
 
@@ -66,6 +66,14 @@ public class FragmentSeePay extends BaseFragment implements ToolbarListener {
         adapter.setPlaqueList(plaqueList);
         binding.rvPlaques.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.rvPlaques.setAdapter(adapter);
+
+        adapter.onEditClickListener.observe(getViewLifecycleOwner() , plaque -> {
+            if (plaque != null){
+                new HelperFragment(getActivity().getSupportFragmentManager() , FragmentCPayEdit.getInstance(plaque))
+                        .setReplace(false)
+                        .load();
+            }
+        });
     }
 
     private void initToolbar() {
