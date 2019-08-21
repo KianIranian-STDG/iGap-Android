@@ -23,9 +23,6 @@ import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.locationdetail.buyticket.IGhashtBuyTicketFragment;
 import net.iGap.igasht.locationdetail.subdetail.IGashtLocationSubDetailFragment;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.payment.PaymentCallBack;
-import net.iGap.payment.PaymentFragment;
-import net.iGap.payment.PaymentResult;
 
 public class IGashtLocationDetailFragment extends IGashtBaseView {
 
@@ -109,9 +106,9 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
 
         ((IGashtLocationDetailViewModel) viewModel).getGoPayment().observe(getViewLifecycleOwner(), orderToken -> {
             if (getActivity() != null && orderToken != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.igasht_title),orderToken, result -> {
-                    if (result.isSuccess()){
-                        Toast.makeText(getActivity(),"Successful" , Toast.LENGTH_SHORT).show();
+                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.igasht_title), orderToken, result -> {
+                    if (result.isSuccess()) {
+                        Toast.makeText(getActivity(), "Successful", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
