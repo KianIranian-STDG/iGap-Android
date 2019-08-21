@@ -60,19 +60,19 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
                         }
                     }
 
-                 /*   @Override
+                   @Override
                     public void onRightIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtFavoritePlaceListFragment()).setReplace(false).load(true);
-                        }
-                    }*/
-
-                    @Override
-                    public void onSecondRightIconClickListener(View view) {
                         if (getActivity() != null) {
                             new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
                         }
                     }
+
+                   /* @Override
+                    public void onSecondRightIconClickListener(View view) {
+                        if (getActivity() != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
+                        }
+                    }*/
                 }).getView());
 
         ((IGashtLocationDetailViewModel) viewModel).getLoadBuyTicketView().observe(getViewLifecycleOwner(), loadBuyTicketView -> {

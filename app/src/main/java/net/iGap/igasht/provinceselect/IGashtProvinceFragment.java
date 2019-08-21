@@ -57,19 +57,19 @@ public class IGashtProvinceFragment extends IGashtBaseView {
                         }
                     }
 
-                   /* @Override
-                    public void onRightIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtFavoritePlaceListFragment()).setReplace(false).load(true);
-                        }
-                    }*/
-
                     @Override
-                    public void onSecondRightIconClickListener(View view) {
+                    public void onRightIconClickListener(View view) {
                         if (getActivity() != null) {
                             new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
                         }
                     }
+
+                  /*  @Override
+                    public void onSecondRightIconClickListener(View view) {
+                        if (getActivity() != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
+                        }
+                    }*/
                 }).getView());
 
         binding.provinceSearchText.setOnItemClickListener((parent, view1, position, id) -> ((IGashtProvinceViewModel) viewModel).setSelectedLocation(position));

@@ -57,19 +57,19 @@ public class IGashtLocationListFragment extends IGashtBaseView {
                         }
                     }
 
-                 /*   @Override
-                    public void onRightIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtFavoritePlaceListFragment()).setReplace(false).load(true);
-                        }
-                    }*/
-
                     @Override
-                    public void onSecondRightIconClickListener(View view) {
+                    public void onRightIconClickListener(View view) {
                         if (getActivity() != null) {
                             new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
                         }
                     }
+
+                 /*   @Override
+                    public void onSecondRightIconClickListener(View view) {
+                        if (getActivity() != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
+                        }
+                    }*/
                 }).getView());
 
         binding.locationListView.addItemDecoration(new DividerItemDecoration(binding.locationListView.getContext(), DividerItemDecoration.VERTICAL));
