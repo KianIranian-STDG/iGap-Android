@@ -8,29 +8,84 @@
     android:paddingEnd="@dimen/dp8"
     android:paddingBottom="@dimen/dp4">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/title"
-        style="?textTitleColorSettingTheme"
+    <View
+        android:id="@+id/view_container"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/standardTextSize"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/remove"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/gray"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/remove"
-        style="@style/baseFontIcon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:text="@string/close_icon"
-        android:textColor="@color/red"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/title" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:padding="@dimen/dp12"
+        android:text="0ریال"
+        android:textColor="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <View
+        android:id="@+id/view10"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:layout_marginBottom="@dimen/dp8"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/title"
+        app:layout_constraintEnd_toStartOf="@+id/title"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintTop_toTopOf="@+id/title"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:text="0"
+        android:textColor="@color/gray"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintEnd_toStartOf="@id/view10"
+        app:layout_constraintTop_toTopOf="@id/title" />
+
+    <View
+        android:id="@+id/view11"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:layout_marginBottom="@dimen/dp8"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintEnd_toStartOf="@id/textView8"
+        app:layout_constraintTop_toTopOf="@id/title" />
+
+    <TextView
+        android:id="@+id/remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_marginEnd="@dimen/dp16"
+        android:layout_marginRight="@dimen/dp16"
+        android:text="ورودی"
+        android:textColor="@color/gray"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/title" />
 </android.support.constraint.ConstraintLayout>

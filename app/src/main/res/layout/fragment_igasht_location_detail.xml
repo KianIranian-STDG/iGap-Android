@@ -34,11 +34,7 @@
             android:id="@+id/constraintLayout4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp4"
-            android:layout_marginLeft="@dimen/dp4"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="@dimen/dp4"
-            android:layout_marginRight="@dimen/dp4"
+            android:layout_margin="@dimen/dp4"
             app:layout_constraintEnd_toEndOf="@id/toolbar"
             app:layout_constraintStart_toStartOf="@id/toolbar"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
@@ -68,7 +64,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:maxLines="1"
-                    android:padding="@dimen/dp4"
+                    android:padding="@dimen/dp2"
                     android:textSize="@dimen/largeTextSize"
                     app:layout_constraintBottom_toTopOf="@id/itemAddress"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +80,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:maxLines="1"
-                    android:padding="@dimen/dp4"
+                    android:padding="@dimen/dp2"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintBottom_toBottomOf="@id/itemImage"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -115,6 +111,20 @@
                 app:layout_constraintTop_toBottomOf="@id/view2">
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/iv_location"
+                    style="@style/baseFontIcon"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="@dimen/dp4"
+                    android:text="@string/location_pin_icon"
+                    android:textColor="@color/md_yellow_700"
+                    android:textSize="@dimen/dp32"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="116:83"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintWidth_percent=".3" />
+
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/itemLocation"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -122,6 +132,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:maxLines="1"
+                    android:padding="@dimen/dp2"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_location"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -129,20 +140,6 @@
                     app:layout_constraintStart_toEndOf="@+id/iv_location"
                     app:layout_constraintTop_toBottomOf="@+id/iv_location"
                     app:layout_constraintTop_toTopOf="@+id/iv_location" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/iv_location"
-                    style="@style/baseFontIcon"
-                    android:layout_width="0dp"
-                    android:textSize="@dimen/dp32"
-                    android:layout_height="0dp"
-                    android:layout_margin="@dimen/dp4"
-                    android:text="@string/location_pin_icon"
-                    android:textColor="@color/md_yellow_700"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="116:83"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintWidth_percent=".3" />
 
             </android.support.constraint.ConstraintLayout>
         </android.support.constraint.ConstraintLayout>
@@ -152,12 +149,12 @@
             android:id="@+id/v"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@{G.isDarkTheme ? @drawable/igasht_tabbar_background_dark : @drawable/igasht_tabbar_background_light}"
-            android:orientation="horizontal"
-            android:layout_marginEnd="@dimen/dp4"
             android:layout_marginStart="@dimen/dp4"
             android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginEnd="@dimen/dp4"
             android:layout_marginRight="@dimen/dp4"
+            android:background="@{G.isDarkTheme ? @drawable/igasht_tabbar_background_dark : @drawable/igasht_tabbar_background_light}"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/constraintLayout4"
