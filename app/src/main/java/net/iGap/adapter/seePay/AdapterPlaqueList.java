@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import net.iGap.R;
+import net.iGap.helper.HelperCPay;
 import net.iGap.libs.PlaqueView;
 
 import java.util.ArrayList;
@@ -77,10 +78,10 @@ public class AdapterPlaqueList extends RecyclerView.Adapter<AdapterPlaqueList.Pl
 
             checkBox.setChecked(selectedPlaqueList.contains(plaque));
 
-            String[] plaqueValue = getPlaque(plaque);
+            String[] plaqueValue = HelperCPay.getPlaque(plaque);
 
             plaqueView.setPlaque1(plaqueValue[0]);
-            plaqueView.setPlaqueAlphabet(getPlaqueAlphabet(plaqueValue[1]));
+            plaqueView.setPlaqueAlphabet(HelperCPay.getPlaqueAlphabet(plaqueValue[1]));
             plaqueView.setPlaque2(plaqueValue[2]);
             plaqueView.setPlaqueCity(plaqueValue[3]);
 
@@ -103,19 +104,5 @@ public class AdapterPlaqueList extends RecyclerView.Adapter<AdapterPlaqueList.Pl
             });
         }
 
-        private String getPlaqueAlphabet(String s) {
-            return "غ";
-        }
-
-        public String[] getPlaque(String plaque) {
-            String[] result = {"", "", "", ""};
-
-            result[0] = plaque.substring(0, 2);
-            result[1] = plaque.substring(2, 4);
-            result[2] = plaque.substring(4, 7);
-            result[3] = plaque.substring(7, 9);
-
-            return result;
-        }
     }
 }

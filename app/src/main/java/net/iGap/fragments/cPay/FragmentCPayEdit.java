@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import net.iGap.R;
 import net.iGap.databinding.FragmentCpayEditBinding;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperCPay;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentCPayEditViewModel;
@@ -22,6 +23,7 @@ public class FragmentCPayEdit extends BaseFragment implements ToolbarListener {
 
     private FragmentCPayEditViewModel viewModel ;
     private FragmentCpayEditBinding binding ;
+    private String plaqueText ;
 
     public FragmentCPayEdit() {
 
@@ -53,7 +55,21 @@ public class FragmentCPayEdit extends BaseFragment implements ToolbarListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if ( getArguments() != null) plaqueText = getArguments().getString("plaque", null);
         initToolbar();
+        setupViewIfEditMode();
+
+    }
+
+    private void setupViewIfEditMode() {
+        if (plaqueText == null) return;
+        String[] plaqueValue = HelperCPay.getPlaque(plaqueText);
+
+        binding.fcePlaqueView.setPlaque1(plaqueValue[0]);
+        binding.fcePlaqueView.setPlaqueAlphabet(HelperCPay.getPlaqueAlphabet(plaqueValue[1]));
+        binding.fcePlaqueView.setPlaque2(plaqueValue[2]);
+        binding.fcePlaqueView.setPlaqueCity(plaqueValue[3]);
+
     }
 
     private void initToolbar() {

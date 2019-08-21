@@ -7,4 +7,8 @@ public class FragmentCPayEditViewModel extends ViewModel {
     public FragmentCPayEditViewModel() {
 
     }
+
+    public void onSubmitClicked(){
+
+    }
 }
