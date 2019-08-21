@@ -2929,4 +2929,6 @@
     <string name="app_version_change_log">قائمة التغييرات</string>
     <string name="updated_version_title">الإصدار الخاص بك هو التحديث</string>
     <string name="check_update_title">اختر التحديث</string>
+    <string name="unblock">رفع الحظر</string>
+    <string name="view_profile">عرض المستخدم</string>
 </resources>
