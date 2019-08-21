@@ -146,6 +146,10 @@
 
   </declare-styleable>
 
+  <declare-styleable name="PlaqueView">
+    <attr name="pv_edit_mode" format="boolean"/>
+  </declare-styleable>
+
   <!--circle-->
   <declare-styleable name="CircleSeekBar">
     <attr name="csb_progress" format="integer"/>
