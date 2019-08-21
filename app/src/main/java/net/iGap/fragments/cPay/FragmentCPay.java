@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.adapter.seePay.AdapterPlaqueList;
-import net.iGap.databinding.FragmentSeePayBinding;
+import net.iGap.databinding.FragmentCpayBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class FragmentCPay extends BaseFragment implements ToolbarListener {
 
     private FragmentSeePayViewModel viewModel ;
-    private FragmentSeePayBinding binding ;
+    private FragmentCpayBinding binding ;
     private AdapterPlaqueList adapter ;
     private ArrayList<String> plaqueList = new ArrayList<>();
 
@@ -42,7 +42,7 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater ,R.layout.fragment_see_pay, container, false);
+        binding = DataBindingUtil.inflate(inflater ,R.layout.fragment_cpay, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
