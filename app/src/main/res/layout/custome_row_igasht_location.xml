@@ -27,6 +27,7 @@
             android:layout_marginBottom="@dimen/dp2"
             app:layout_constraintBottom_toTopOf="@id/view2"
             app:layout_constraintTop_toTopOf="parent">
+
             <net.iGap.module.RadiusImageView
                 android:id="@+id/itemImage"
                 android:layout_width="0dp"
@@ -114,8 +115,8 @@
                 android:layout_height="0dp"
                 android:layout_margin="@dimen/dp4"
                 android:text="@string/location_pin_icon"
-                android:textSize="@dimen/dp32"
                 android:textColor="@color/md_yellow_700"
+                android:textSize="@dimen/dp32"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="116:83"
                 app:layout_constraintStart_toStartOf="parent"

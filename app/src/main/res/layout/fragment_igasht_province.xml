@@ -94,12 +94,12 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/chooseProvinceTitle"
-                    style="@style/myIconTextViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp24"
                     android:layout_marginLeft="@dimen/dp24"
                     android:layout_marginTop="@dimen/dp8"
+                    app:fontFamily="@font/main_font"
                     android:layout_marginEnd="@dimen/dp24"
                     android:layout_marginRight="@dimen/dp24"
                     android:layout_marginBottom="@dimen/dp8"
