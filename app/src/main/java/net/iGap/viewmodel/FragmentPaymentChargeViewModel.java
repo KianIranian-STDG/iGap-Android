@@ -69,40 +69,7 @@ public class FragmentPaymentChargeViewModel extends ViewModel {
     private int selectedChargeTypePosition = 0;
     private int selectedPricePosition = 0;
 
-    private HashMap<String, OperatorType> phoneMap = new HashMap<String, OperatorType>() {
-        {
-            put("0910", OperatorType.HAMRAH_AVAL);
-            put("0911", OperatorType.HAMRAH_AVAL);
-            put("0912", OperatorType.HAMRAH_AVAL);
-            put("0913", OperatorType.HAMRAH_AVAL);
-            put("0914", OperatorType.HAMRAH_AVAL);
-            put("0915", OperatorType.HAMRAH_AVAL);
-            put("0916", OperatorType.HAMRAH_AVAL);
-            put("0917", OperatorType.HAMRAH_AVAL);
-            put("0918", OperatorType.HAMRAH_AVAL);
-            put("0919", OperatorType.HAMRAH_AVAL);
-            put("0990", OperatorType.HAMRAH_AVAL);
-            put("0991", OperatorType.HAMRAH_AVAL);
-
-            put("0901", OperatorType.IRANCELL);
-            put("0902", OperatorType.IRANCELL);
-            put("0903", OperatorType.IRANCELL);
-            put("0930", OperatorType.IRANCELL);
-            put("0933", OperatorType.IRANCELL);
-            put("0935", OperatorType.IRANCELL);
-            put("0936", OperatorType.IRANCELL);
-            put("0937", OperatorType.IRANCELL);
-            put("0938", OperatorType.IRANCELL);
-            put("0939", OperatorType.IRANCELL);
-
-            put("0920", OperatorType.RITEL);
-            put("0921", OperatorType.RITEL);
-            put("0922", OperatorType.RITEL);
-
-        }
-    };
-
-    private OperatorType operatorType;
+    private OperatorType.Type operatorType;
 
 
     public FragmentPaymentChargeViewModel() {
@@ -183,13 +150,13 @@ public class FragmentPaymentChargeViewModel extends ViewModel {
                 onPriceChange.setValue(null);
                 break;
             case 1:
-                setAdapterValue(OperatorType.HAMRAH_AVAL);
+                setAdapterValue(OperatorType.Type.HAMRAH_AVAL);
                 break;
             case 2:
-                setAdapterValue(OperatorType.IRANCELL);
+                setAdapterValue(OperatorType.Type.IRANCELL);
                 break;
             case 3:
-                setAdapterValue(OperatorType.RITEL);
+                setAdapterValue(OperatorType.Type.RITEL);
                 break;
         }
     }
@@ -207,7 +174,7 @@ public class FragmentPaymentChargeViewModel extends ViewModel {
     private void setOperator(String phone) {
         if (phone.length() == 11) {
             String s = phone.substring(0, 4);
-            OperatorType opt = phoneMap.get(s);
+            OperatorType.Type opt = new OperatorType().getOperation(s);
             if (opt != null) {
                 setAdapterValue(opt);
             } else {
@@ -216,20 +183,20 @@ public class FragmentPaymentChargeViewModel extends ViewModel {
         }
     }
 
-    private void setAdapterValue(@NotNull OperatorType operator) {
+    private void setAdapterValue(@NotNull OperatorType.Type operator) {
         switch (operator) {
             case HAMRAH_AVAL:
-                operatorType = OperatorType.HAMRAH_AVAL;
+                operatorType = OperatorType.Type.HAMRAH_AVAL;
                 onOpereatorChange.setValue(R.array.charge_type_hamrahe_aval);
                 onPriceChange.setValue(R.array.charge_price);
                 break;
             case IRANCELL:
-                operatorType = OperatorType.IRANCELL;
+                operatorType = OperatorType.Type.IRANCELL;
                 onOpereatorChange.setValue(R.array.charge_type_irancell);
                 onPriceChange.setValue(R.array.charge_price_irancell);
                 break;
             case RITEL:
-                operatorType = OperatorType.RITEL;
+                operatorType = OperatorType.Type.RITEL;
                 onOpereatorChange.setValue(R.array.charge_type_ritel);
                 onPriceChange.setValue(R.array.charge_price);
                 break;
@@ -280,7 +247,7 @@ public class FragmentPaymentChargeViewModel extends ViewModel {
                                     break;
                             }
                             long price = 0;
-                            boolean isIranCell = operatorType == OperatorType.IRANCELL;
+                            boolean isIranCell = operatorType == OperatorType.Type.IRANCELL;
                             switch (selectedPricePosition) {
                                 case 1:
                                     if (isIranCell) {

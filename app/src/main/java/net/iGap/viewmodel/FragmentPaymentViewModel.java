@@ -20,7 +20,7 @@ public class FragmentPaymentViewModel extends ViewModel {
     public MutableLiveData<Boolean> goToPaymentCharge = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToButInternetPackage = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToCardToCardPage = new MutableLiveData<>();
-    public MutableLiveData<FragmentPaymentInquiryViewModel.OperatorType> goToPaymentInquiryPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToPaymentInquiryPage = new MutableLiveData<>();
 
     public void onClickCharge() {
         goToPaymentCharge.setValue(true);
@@ -39,11 +39,11 @@ public class FragmentPaymentViewModel extends ViewModel {
     }
 
     public void onClickInquiryMci() {
-        goToPaymentInquiryPage.setValue(FragmentPaymentInquiryViewModel.OperatorType.mci);
+        goToPaymentInquiryPage.setValue(true);
     }
 
     public void onClickInquiryTelecom() {
-        goToPaymentInquiryPage.setValue(FragmentPaymentInquiryViewModel.OperatorType.telecome);
+        goToPaymentInquiryPage.setValue(false);
     }
 
     public void onClickBuyInternetPackage(){

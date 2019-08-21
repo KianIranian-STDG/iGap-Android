@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentBinding;
+import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -73,7 +74,11 @@ public class FragmentPayment extends BaseFragment {
 
         fragmentPaymentViewModel.goToPaymentInquiryPage.observe(getViewLifecycleOwner(), type -> {
             if (getActivity() != null && type != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentInquiry.newInstance(type, null)).setReplace(false).load();
+                if (type) {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentPaymentInquiryMobile()).setReplace(false).load();
+                } else {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentPaymentInquiryTelephone()).setReplace(false).load();
+                }
             }
         });
 
