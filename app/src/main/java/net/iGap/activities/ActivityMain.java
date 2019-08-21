@@ -315,13 +315,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         if (intent.getAction() != null && intent.getAction().equals("net.iGap.payment")) {
-            Log.wtf(this.getClass().getName(), "status: " + intent.getStringExtra("status"));
-            Log.wtf(this.getClass().getName(), "message: " + intent.getStringExtra("message"));
-            Log.wtf(this.getClass().getName(), "orderId: " + intent.getStringExtra("order_id"));
             FragmentManager fragmentManager = getSupportFragmentManager();
             Fragment fragment = fragmentManager.findFragmentById(R.id.mainFrame);
             if (fragment instanceof PaymentFragment) {
-                Log.wtf(this.getClass().getName(), "jnjgndgg");
                 ((PaymentFragment) fragment).setPaymentResult(new Payment(
                         intent.getStringExtra("status"),
                         intent.getStringExtra("message"),
@@ -334,6 +330,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (intent.getAction() != null && intent.getAction().equals("net.iGap.activities.OPEN_ACCOUNT")) {
             new HelperFragment(getSupportFragmentManager(), new FragmentSetting()).load();
+        }
+
+        if (intent.getAction() != null && intent.getAction().toLowerCase().equals("auto")) {
+//            autoLinkHelper(uri);
         }
 
         Bundle extras = intent.getExtras();
@@ -358,6 +358,40 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
         }
+    }
+
+    private void autoLinkHelper(String uri) {
+        String[] address = uri.toLowerCase().trim().split("/");
+        if (address.length == 0) {
+            return;
+        }
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+
+        if (fragment instanceof BottomNavigationFragment) {
+            switch (address[0]) {
+                case "discovery":
+                    String[] discoveryUri = uri.toLowerCase().trim().replace("discovery/", "").split("/");
+                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.DISCOVERY_FRAGMENT,discoveryUri);
+                    break;
+                case "chat":
+                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CHAT_FRAGMENT,null);
+                    break;
+                case "profile":
+                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.PROFILE_FRAGMENT,null);
+                    break;
+                case "call":
+                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CALL_FRAGMENT,null);
+                    break;
+                case "contact":
+                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CONTACT_FRAGMENT,null);
+                    break;
+
+            }
+        }
+//            new HelperFragment(getSupportFragmentManager(),DiscoveryFragment.newAutoLinkInstance(0,address[1])).setReplace(false).load(true);
+
+
     }
 
     @Override
@@ -1126,7 +1160,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     //******************************************************************************************************************************
 
     private void initTabStrip() {
-        new HelperFragment(getSupportFragmentManager(), new BottomNavigationFragment()).load(true);
+        Fragment fragment = new BottomNavigationFragment();
+        getSupportFragmentManager().beginTransaction().addToBackStack(fragment.getClass().getName()).replace(R.id.mainFrame,fragment,fragment.getClass().getName()).commit();
     }
 
 
@@ -1143,6 +1178,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
             G.isFirstPassCode = false;
         }
+
+        String uri = "discovery/2/301";
+        autoLinkHelper(uri);
     }
 
     @SuppressLint("MissingSuperCall")

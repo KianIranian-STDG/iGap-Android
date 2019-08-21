@@ -21,8 +21,15 @@ import net.iGap.realm.RealmRoom;
 
 public class BottomNavigationFragment extends Fragment implements OnUnreadChange {
 
+    public static final int CONTACT_FRAGMENT = 0;
+    public static final int CALL_FRAGMENT = 1;
+    public static final int CHAT_FRAGMENT = 2;
+    public static final int DISCOVERY_FRAGMENT = 3;
+    public static final int PROFILE_FRAGMENT = 4;
+
     //Todo: create viewModel for this it was test class and become main class :D
     private BottomNavigation bottomNavigation;
+    private String[] uri;
 
     @Nullable
     @Override
@@ -87,6 +94,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 if (fragment == null) {
                     fragment = DiscoveryFragment.newInstance(0);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    ((DiscoveryFragment) fragment).getAutoLinkUri(uri,true,false);
                 }
                 if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
                     fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
@@ -189,6 +197,31 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
         if (fragment instanceof FragmentMain) {
             ((FragmentMain) fragment).setForwardMessage(enable);
+        }
+    }
+
+    public BottomNavigation getBottomNavigation() {
+        return bottomNavigation;
+    }
+
+    public void getSelectedFragment(int position, String[] uri) {
+        this.uri = uri;
+        switch (position) {
+            case CONTACT_FRAGMENT:
+                bottomNavigation.setCurrentItem(CONTACT_FRAGMENT);
+                break;
+            case CALL_FRAGMENT:
+                bottomNavigation.setCurrentItem(CALL_FRAGMENT);
+                break;
+            case CHAT_FRAGMENT:
+                bottomNavigation.setCurrentItem(CHAT_FRAGMENT);
+                break;
+            case DISCOVERY_FRAGMENT:
+                bottomNavigation.setCurrentItem(DISCOVERY_FRAGMENT);
+                break;
+            case PROFILE_FRAGMENT:
+                bottomNavigation.setCurrentItem(PROFILE_FRAGMENT);
+                break;
         }
     }
 }

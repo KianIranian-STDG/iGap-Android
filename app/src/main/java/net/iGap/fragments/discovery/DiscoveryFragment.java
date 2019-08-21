@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.discovery.DiscoveryAdapter;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
-import net.iGap.fragments.BaseFragment;
+import net.iGap.adapter.items.discovery.DiscoveryItemField;
+import net.iGap.adapter.items.discovery.holder.BaseViewHolder;
 import net.iGap.fragments.BaseMainFragments;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
@@ -41,6 +41,9 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     private int page;
     private boolean isSwipeBackEnable = true;
     private HelperToolbar mHelperToolbar;
+    private String[] uri;
+    private static boolean fromAutoLink = false;
+    private static int uriPage =0;
 
     private ArrayList<DiscoveryItem> discoveryArrayList;
 
@@ -53,6 +56,13 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         }
         discoveryFragment.setArguments(bundle);
         return discoveryFragment;
+    }
+
+    public void getAutoLinkUri(String[] uri, boolean isAutoLink,boolean fromDiscovery){
+        fromAutoLink = isAutoLink;
+        this.uri = uri;
+        if (fromDiscovery)
+            uriPage++;
     }
 
     @Nullable
@@ -226,6 +236,19 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                 G.handler.post(() -> {
                     setAdapterData(discoveryArrayList, title);
                     setRefreshing(false);
+
+                    if (fromAutoLink)
+                        for (int i = 0; i < discoveryArrayList.size(); i++) {
+                            ArrayList<DiscoveryItemField> discoveryFields = discoveryArrayList.get(i).discoveryFields;
+                            for (int j = 0; j < discoveryFields.size(); j++) {
+                                if (discoveryFields.get(j).id == Integer.valueOf(uri[uriPage])) {
+                                    BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryArrayList.get(i).discoveryFields.get(j), getActivity(), uri);
+                                    return;
+                                }
+
+                            }
+                        }
+
                 });
             }
 
@@ -282,5 +305,12 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     @Override
     public boolean isAllowToBackPressed() {
         return true;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        fromAutoLink = false;
+        uriPage = 0;
     }
 }
