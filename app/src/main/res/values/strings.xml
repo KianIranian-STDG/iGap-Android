@@ -1988,5 +1988,7 @@ Want to get it?</string>
     <string name="there_is_no_car_available">There is no car available.</string>
     <string name="add_car">Add Car</string>
     <string name="cars_plaque">Cars Plaque</string>
+    <string name="car_plaque">Car Plaque</string>
     <string name="see_pay_title">Road tolls</string>
+    <string name="add_plaque">Submit Plaque</string>
 </resources>

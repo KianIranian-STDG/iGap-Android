@@ -54,7 +54,23 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
 
         initToolbar();
         initRecyclerView();
+        initCallBacks();
 
+    }
+
+    private void initCallBacks() {
+
+        viewModel.onAddClickListener.observe(getViewLifecycleOwner() , isOpen -> {
+            openEditOrAddFragment(null);
+        });
+
+        viewModel.onInquiryClickListener.observe(getViewLifecycleOwner() , isOpen -> {
+            if (getActivity() == null) return;
+
+            new HelperFragment(getActivity().getSupportFragmentManager() , new FragmentCPayInquiry())
+                    .setReplace(false)
+                    .load();
+        });
     }
 
     private void initRecyclerView() {
@@ -69,11 +85,17 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
 
         adapter.onEditClickListener.observe(getViewLifecycleOwner() , plaque -> {
             if (plaque != null){
-                new HelperFragment(getActivity().getSupportFragmentManager() , FragmentCPayEdit.getInstance(plaque))
-                        .setReplace(false)
-                        .load();
+               openEditOrAddFragment(plaque);
             }
         });
+    }
+
+    private void openEditOrAddFragment(String plaque) {
+        if (getActivity() == null) return;
+
+        new HelperFragment(getActivity().getSupportFragmentManager() , FragmentCPayEdit.getInstance(plaque))
+                .setReplace(false)
+                .load();
     }
 
     private void initToolbar() {
@@ -97,6 +119,12 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
 
     @Override
     public void onRightIconClickListener(View view) {
+
+        if (getActivity() == null) return;
+
+        new HelperFragment(getActivity().getSupportFragmentManager() , new FragmentCPayHistory())
+                .setReplace(false)
+                .load();
 
     }
 }
