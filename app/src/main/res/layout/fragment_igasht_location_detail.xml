@@ -22,6 +22,175 @@
         android:focusable="true">
 
         <LinearLayout
+            android:id="@+id/ll_igasht_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp8"
+            android:background="@drawable/shape_igasht_strokegray"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="@id/toolbar"
+            app:layout_constraintStart_toStartOf="@id/toolbar"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp8">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp2"
+                    app:layout_constraintBottom_toTopOf="@id/view2"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <net.iGap.module.RadiusImageView
+                        android:id="@+id/itemImage"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="@dimen/dp4"
+                        app:layout_constraintDimensionRatio="116:83"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".3" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/itemTitle"
+                        style="?textTitleColorSettingTheme"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:maxLines="1"
+                        android:padding="@dimen/dp2"
+                        android:textSize="@dimen/largeTextSize"
+                        app:layout_constraintBottom_toTopOf="@id/itemAddress"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/itemImage"
+                        app:layout_constraintTop_toTopOf="@id/itemImage"
+                        app:layout_constraintVertical_chainStyle="packed" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/itemAddress"
+                        style="?textTitleColorSettingTheme"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:maxLines="1"
+                        android:padding="@dimen/dp2"
+                        android:textSize="@dimen/standardTextSize"
+                        app:layout_constraintBottom_toBottomOf="@id/itemImage"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/itemTitle"
+                        app:layout_constraintTop_toBottomOf="@id/itemTitle" />
+                </android.support.constraint.ConstraintLayout>
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/gray"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view2">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/iv_location"
+                        style="@style/baseFontIcon"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="@dimen/dp4"
+                        android:text="@string/location_pin_icon"
+                        android:textColor="@color/md_yellow_700"
+                        android:textSize="@dimen/dp32"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="116:83"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintWidth_percent=".3" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/itemLocation"
+                        style="?textTitleColorSettingTheme"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:maxLines="1"
+                        android:padding="@dimen/dp2"
+                        android:textSize="@dimen/standardTextSize"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_location"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/iv_location"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_location"
+                        app:layout_constraintTop_toTopOf="@+id/iv_location" />
+
+                </android.support.constraint.ConstraintLayout>
+            </android.support.constraint.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/v"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp8"
+                android:background="@{G.isDarkTheme ? @drawable/igasht_tabbar_background_dark : @drawable/igasht_tabbar_background_light}"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/constraintLayout4"
+                app:layout_constraintWidth_percent=".9">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/buyTicket"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="1"
+                    android:background="@{G.isDarkTheme ? @drawable/igasht_tab_item_background_dark : @drawable/igasht_tab_item_background_light}"
+                    android:gravity="center"
+                    android:onClick="@{()->viewModel.onTabItemClick(true)}"
+                    android:padding="@dimen/dp8"
+                    android:setSelected="@{viewModel.showBuyTicketView}"
+                    android:text="@string/igasht_buy_ticket_title"
+                    android:textColor="@color/igasht_tab_text_color"
+                    android:textSize="@dimen/standardTextSize" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/detail"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="1"
+                    android:background="@{G.isDarkTheme ? @drawable/igasht_tab_item_background_dark : @drawable/igasht_tab_item_background_light}"
+                    android:gravity="center"
+                    android:onClick="@{()->viewModel.onTabItemClick(false)}"
+                    android:padding="@dimen/dp8"
+                    android:setSelected="@{!viewModel.showBuyTicketView}"
+                    android:text="@string/detail_title"
+                    android:textColor="@color/igasht_tab_text_color"
+                    app:layout_constraintBottom_toBottomOf="@id/buyTicket"
+                    app:layout_constraintEnd_toEndOf="@id/v"
+                    app:layout_constraintStart_toEndOf="@id/buyTicket"
+                    app:layout_constraintTop_toTopOf="@id/buyTicket" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,169 +199,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/constraintLayout4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp4"
-            app:layout_constraintEnd_toEndOf="@id/toolbar"
-            app:layout_constraintStart_toStartOf="@id/toolbar"
-            app:layout_constraintTop_toBottomOf="@id/toolbar">
-
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp2"
-                app:layout_constraintBottom_toTopOf="@id/view2"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <net.iGap.module.RadiusImageView
-                    android:id="@+id/itemImage"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_margin="@dimen/dp4"
-                    app:layout_constraintDimensionRatio="116:83"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent=".3" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/itemTitle"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:maxLines="1"
-                    android:padding="@dimen/dp2"
-                    android:textSize="@dimen/largeTextSize"
-                    app:layout_constraintBottom_toTopOf="@id/itemAddress"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/itemImage"
-                    app:layout_constraintTop_toTopOf="@id/itemImage"
-                    app:layout_constraintVertical_chainStyle="packed" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/itemAddress"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:maxLines="1"
-                    android:padding="@dimen/dp2"
-                    android:textSize="@dimen/standardTextSize"
-                    app:layout_constraintBottom_toBottomOf="@id/itemImage"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/itemTitle"
-                    app:layout_constraintTop_toBottomOf="@id/itemTitle" />
-            </android.support.constraint.ConstraintLayout>
-
-            <View
-                android:id="@+id/view2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:background="@color/gray"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view2">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/iv_location"
-                    style="@style/baseFontIcon"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_margin="@dimen/dp4"
-                    android:text="@string/location_pin_icon"
-                    android:textColor="@color/md_yellow_700"
-                    android:textSize="@dimen/dp32"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="116:83"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintWidth_percent=".3" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/itemLocation"
-                    style="?textTitleColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:maxLines="1"
-                    android:padding="@dimen/dp2"
-                    android:textSize="@dimen/standardTextSize"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_location"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/iv_location"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_location"
-                    app:layout_constraintTop_toTopOf="@+id/iv_location" />
-
-            </android.support.constraint.ConstraintLayout>
-        </android.support.constraint.ConstraintLayout>
-
-
-        <LinearLayout
-            android:id="@+id/v"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp4"
-            android:layout_marginLeft="@dimen/dp4"
-            android:layout_marginEnd="@dimen/dp4"
-            android:layout_marginRight="@dimen/dp4"
-            android:background="@{G.isDarkTheme ? @drawable/igasht_tabbar_background_dark : @drawable/igasht_tabbar_background_light}"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/constraintLayout4"
-            app:layout_constraintWidth_percent=".9">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/buyTicket"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/dp4"
-                android:layout_weight="1"
-                android:background="@{G.isDarkTheme ? @drawable/igasht_tab_item_background_dark : @drawable/igasht_tab_item_background_light}"
-                android:gravity="center"
-                android:onClick="@{()->viewModel.onTabItemClick(true)}"
-                android:padding="@dimen/dp8"
-                android:setSelected="@{viewModel.showBuyTicketView}"
-                android:text="@string/igasht_buy_ticket_title"
-                android:textColor="@color/igasht_tab_text_color"
-                android:textSize="@dimen/standardTextSize" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/detail"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/dp4"
-                android:layout_weight="1"
-                android:background="@{G.isDarkTheme ? @drawable/igasht_tab_item_background_dark : @drawable/igasht_tab_item_background_light}"
-                android:gravity="center"
-                android:onClick="@{()->viewModel.onTabItemClick(false)}"
-                android:padding="@dimen/dp8"
-                android:setSelected="@{!viewModel.showBuyTicketView}"
-                android:text="@string/detail_title"
-                android:textColor="@color/igasht_tab_text_color"
-                app:layout_constraintBottom_toBottomOf="@id/buyTicket"
-                app:layout_constraintEnd_toEndOf="@id/v"
-                app:layout_constraintStart_toEndOf="@id/buyTicket"
-                app:layout_constraintTop_toTopOf="@id/buyTicket" />
-        </LinearLayout>
 
         <FrameLayout
             android:id="@+id/detailFrame"
@@ -200,8 +206,10 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/v" />
+            app:layout_constraintTop_toBottomOf="@id/ll_igasht_detail"
+            app:layout_constraintVertical_bias="0.0" />
 
         <ProgressBar
             android:id="@+id/loadingView"
@@ -213,17 +221,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_margin="@dimen/dp8"-->
-        <!--android:background="@drawable/shape_igasht_strokegray"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintHorizontal_bias="0.0"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent"-->
-        <!--app:layout_constraintVertical_bias="0.0"-->
-        <!--app:layout_constraintBottom_toTopOf="@id/toolbar"/>-->
+
     </android.support.constraint.ConstraintLayout>
 </layout>

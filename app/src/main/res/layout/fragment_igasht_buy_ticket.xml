@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -14,6 +13,11 @@
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/dp8"
+        android:layout_marginEnd="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp8"
+        android:layout_marginTop="@dimen/dp2"
+        android:background="@drawable/shape_igasht_strokegray"
         android:padding="@dimen/dp4">
 
         <View
@@ -116,14 +120,14 @@
 
         <Button
             android:id="@+id/addNewPlaceButton"
-            android:layout_width="277dp"
+            android:layout_width="231dp"
             android:layout_height="0dp"
             android:background="@drawable/shape_igasht_violet"
             android:fontFamily="@font/main_font"
             android:onClick="@{()->viewModel.onAddPlaceClick()}"
             android:text="@string/igasht_addـexternal_visits"
             android:textColor="@color/white"
-            android:textSize="@dimen/dp20"
+            android:textSize="@dimen/dp16"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/totalPrice"
             app:layout_constraintEnd_toEndOf="@+id/totalPrice"
@@ -135,8 +139,8 @@
             style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="@dimen/dp4"
+            android:layout_marginBottom="@dimen/dp4"
             android:padding="@dimen/dp4"
             android:text="@{@string/igasht_total_ticket_price(viewModel.totalPrice)}"
             android:textSize="@dimen/largeTextSize"
@@ -149,14 +153,14 @@
 
         <Button
             android:id="@+id/payButton"
-            android:layout_width="277dp"
+            android:layout_width="231dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:background="@drawable/shape_igasht_yellow"
             android:onClick="@{()->viewModel.onPayClick()}"
             android:text="@string/igasht_buy_ticket_title"
             android:textColor="@color/white"
-            android:textSize="@dimen/dp20"
+            android:textSize="@dimen/dp16"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/addNewPlaceButton"
