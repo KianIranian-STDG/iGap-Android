@@ -520,6 +520,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                         btnPlayMusic.setText(context.getString(R.string.play_icon));
                     }
                     stopSound();
+                    closeLayoutMediaPlayer();
                     return;
                 }
 
@@ -602,6 +603,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                                 btnPlayMusic.setText(context.getString(R.string.play_icon));
                             }
                             stopSound();
+                            closeLayoutMediaPlayer();
                             return;
                         }
                         selectedMedia = 0;
