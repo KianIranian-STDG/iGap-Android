@@ -16,24 +16,24 @@ import net.iGap.R;
 
 public class PlaqueView extends ConstraintLayout {
 
-    private AppCompatEditText p1 , p2 , pCity , pAlphabet ;
-    private String strP1 = "" , strP2 = "" , strPCity = "" , strPAlphabet ="";
-    private boolean isEditable = true ;
+    private AppCompatEditText p1, p2, pCity, pAlphabet;
+    private String strP1 = "", strP2 = "", strPCity = "", strPAlphabet = "";
+    private boolean isEditable = true;
 
     public PlaqueView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context , attrs);
+        init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
 
         if (attrs == null) throw new IllegalArgumentException("attribute does not set.");
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs , R.styleable.PlaqueView);
-        isEditable = typedArray.getBoolean(R.styleable.PlaqueView_pv_edit_mode , true);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.PlaqueView);
+        isEditable = typedArray.getBoolean(R.styleable.PlaqueView_pv_edit_mode, true);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.view_plaque_layout , this);
+        inflater.inflate(R.layout.view_plaque_layout, this);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class PlaqueView extends ConstraintLayout {
 
     public void setEditMode(boolean isEditable) {
 
-        if (isEditable){
+        if (isEditable) {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 p1.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
@@ -150,7 +150,7 @@ public class PlaqueView extends ConstraintLayout {
             pAlphabet.setEnabled(true);
 
 
-        }else {
+        } else {
 
             p1.setBackgroundResource(R.color.transparent);
             p2.setBackgroundResource(R.color.transparent);
@@ -167,9 +167,9 @@ public class PlaqueView extends ConstraintLayout {
         requestLayout();
     }
 
-    public boolean isPlaqueCorrect(){
+    public boolean isPlaqueCorrect() {
 
-        if (strP1.length() == 2 && strP2.length() == 3 && pAlphabet.length() != 0 && pCity.length() == 2){
+        if (strP1.length() == 2 && strP2.length() == 3 && pAlphabet.length() != 0 && pCity.length() == 2) {
             return true;
         }
 
@@ -179,22 +179,22 @@ public class PlaqueView extends ConstraintLayout {
     /**
      * @return sample : 11 ص 123 11
      */
-    public String getPlaqueWithAlphabet(){
-        return strP1 + " " + strPAlphabet + " " + strP2 + " " + strPCity ;
+    public String getPlaqueWithAlphabet() {
+        return strP1 + " " + strPAlphabet + " " + strP2 + " " + strPCity;
     }
 
     /**
      * @return 110812355 -> alphabet code
      */
-    public String getPlaqueWithCode(){
-        return strP1 + getAlphabetCode(strPAlphabet) + strP2 + strPCity ;
+    public String getPlaqueWithCode() {
+        return strP1 + getAlphabetCode(strPAlphabet) + strP2 + strPCity;
     }
 
     private String getAlphabetCode(String strPAlphabet) {
-        return "00" ; //todo:// return correct id by list
+        return "00"; //todo:// return correct id by list
     }
 
-    public void setPlauqe(String p1 , String p2 , String pCity , String pAlphabet){
+    public void setPlauqe(String p1, String p2, String pCity, String pAlphabet) {
 
         this.strP1 = p1.trim();
         this.strP2 = p2.trim();
