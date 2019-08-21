@@ -1993,4 +1993,5 @@
     <string name="car_plaque">شماره پلاک خودرو</string>
     <string name="see_pay_title">عوارض بزرگراه</string>
     <string name="add_plaque">ثبت پلاک</string>
+    <string name="from_first">از ابتدا</string>
 </resources>
