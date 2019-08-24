@@ -1106,31 +1106,6 @@ public class RealmRoomMessage extends RealmObject {
         }
     }
 
-    public static void makePositionMessage(final long roomId, final long messageId, final long replyMessageId, final Double latitude, final Double longitude, final String imagePath) {
-        getRealmChat().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, messageId);
-                roomMessage.setLocation(RealmRoomMessageLocation.put(realm, latitude, longitude, imagePath));
-                roomMessage.setCreateTime(TimeUtils.currentLocalTime());
-                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.LOCATION);
-                roomMessage.setRoomId(roomId);
-                roomMessage.setUserId(G.userId);
-                roomMessage.setAuthorHash(G.authorHash);
-                roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-
-                if (replyMessageId > 0) {
-                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replyMessageId).findFirst();
-                    if (realmRoomMessage != null) {
-                        roomMessage.setReplyTo(realmRoomMessage);
-                    }
-                }
-
-                RealmRoom.setLastMessageWithRoomMessage(realm, roomId, roomMessage);
-            }
-        });
-    }
-
     public static void makeForwardMessage(Realm realm, long roomId, long messageId, long forwardedMessageId) {
         RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, forwardedMessageId).findFirst();
         if (roomMessage != null) {

@@ -295,6 +295,7 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageContact;
 import net.iGap.realm.RealmRoomMessageFields;
+import net.iGap.realm.RealmRoomMessageLocation;
 import net.iGap.realm.RealmStickers;
 import net.iGap.realm.RealmString;
 import net.iGap.realm.RealmUserInfo;
@@ -8092,7 +8093,47 @@ public class FragmentChat extends BaseFragment
             removeLayoutUnreadMessage();
         }
         final long messageId = AppUtils.makeRandomId();
-        RealmRoomMessage.makePositionMessage(mRoomId, messageId, replyMessageId(), latitude, longitude, imagePath);
+        RealmRoomMessage roomMessage = new RealmRoomMessage();
+        roomMessage.setMessageId(messageId);
+
+        RealmRoomMessageLocation realmRoomMessageLocation = new RealmRoomMessageLocation();
+        realmRoomMessageLocation.setId(AppUtils.makeRandomId());
+        realmRoomMessageLocation.setLocationLat(latitude);
+        realmRoomMessageLocation.setLocationLong(longitude);
+        realmRoomMessageLocation.setImagePath(imagePath);
+
+        roomMessage.setLocation(realmRoomMessageLocation);
+
+        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.LOCATION);
+        roomMessage.setRoomId(mRoomId);
+        roomMessage.setUserId(G.userId);
+        roomMessage.setAuthorHash(G.authorHash);
+        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+
+        if (replyMessageId() > 0) {
+            RealmRoomMessage realmRoomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replyMessageId()).findFirst();
+            if (realmRoomMessage != null) {
+                roomMessage.setReplyTo(getRealmChat().copyFromRealm(realmRoomMessage));
+            }
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmRoomMessage managedMessage = realm.copyToRealmOrUpdate(roomMessage);
+                            RealmRoom.setLastMessageWithRoomMessage(realm, mRoomId, managedMessage);
+                        }
+                    });
+                }
+            }
+        }).start();
+
+
 
         G.handler.postDelayed(new Runnable() {
             @Override
