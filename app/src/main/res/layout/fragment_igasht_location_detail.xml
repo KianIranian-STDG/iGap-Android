@@ -152,7 +152,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="8dp"
                                 android:layout_marginRight="8dp"
-                                android:maxLines="1"
+                                android:maxLines="2"
                                 android:padding="@dimen/dp2"
                                 android:textSize="@dimen/standardTextSize"
                                 app:layout_constraintBottom_toBottomOf="@+id/iv_location"
