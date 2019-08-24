@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
 
 public class PlaqueView extends ConstraintLayout {
 
@@ -201,26 +202,26 @@ public class PlaqueView extends ConstraintLayout {
         this.strPAlphabet = pAlphabet.trim();
         this.strPCity = pCity.trim();
 
-        this.p1.setText(strP1);
-        this.p2.setText(strP2);
-        this.pCity.setText(strPCity);
+        this.p1.setText(getPersianNumbers(strP1));
+        this.p2.setText(getPersianNumbers(strP2));
+        this.pCity.setText(getPersianNumbers(strPCity));
         this.pAlphabet.setText(strPAlphabet);
 
     }
 
     public void setPlaque1(String strP1) {
         this.strP1 = strP1.trim();
-        p1.setText(this.strP1);
+        p1.setText(getPersianNumbers(this.strP1));
     }
 
     public void setPlaque2(String strP2) {
         this.strP2 = strP2.trim();
-        p2.setText(this.strP2);
+        p2.setText(getPersianNumbers(this.strP2));
     }
 
     public void setPlaqueCity(String strPCity) {
         this.strPCity = strPCity.trim();
-        pCity.setText(this.strPCity);
+        pCity.setText(getPersianNumbers(this.strPCity));
     }
 
     public void setPlaqueAlphabet(String strPAlphabet) {
@@ -258,5 +259,13 @@ public class PlaqueView extends ConstraintLayout {
 
     public AppCompatEditText getEditTextPlaqueAlphabet() {
         return pAlphabet;
+    }
+
+    public String getPersianNumbers(String text){
+        if (isEditable) {
+            return text;
+        }else{
+            return HelperCalander.convertToUnicodeFarsiNumber(text);
+        }
     }
 }
