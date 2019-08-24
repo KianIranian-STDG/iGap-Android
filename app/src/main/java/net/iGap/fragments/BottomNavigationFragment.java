@@ -49,8 +49,10 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         Fragment fragment;
         switch (position) {
             case 0:
+                //fragment = fragmentManager.findFragmentByTag(RegisteredContactsFragment.class.getName());
                 fragment = fragmentManager.findFragmentByTag(KuknosLoginFrag.class.getName());
                 if (fragment == null) {
+                    //fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
                     fragment = KuknosLoginFrag.newInstance();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
