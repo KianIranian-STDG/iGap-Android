@@ -10,6 +10,7 @@ package net.iGap.viewmodel;
  */
 
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -43,7 +44,7 @@ import java.util.Collections;
 
 import io.realm.Realm;
 
-public class FragmentRegistrationNicknameViewModel implements OnUserAvatarResponse {
+public class FragmentRegistrationNicknameViewModel extends ViewModel implements OnUserAvatarResponse {
 
     public long userId;
     private boolean existAvatar = false;

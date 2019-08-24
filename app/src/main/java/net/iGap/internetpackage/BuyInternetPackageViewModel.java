@@ -35,39 +35,6 @@ public class BuyInternetPackageViewModel extends ViewModel {
     private MutableLiveData<Boolean> needUpdateGooglePlay = new MutableLiveData<>();
     private MutableLiveData<String> goToPaymentPage = new MutableLiveData<>();
     private MutableLiveData<Boolean> clearTypeChecked = new MutableLiveData<>();
-
-    private HashMap<String, OperatorType> phoneMap = new HashMap<String, OperatorType>() {
-        {
-            put("0910", OperatorType.HAMRAH_AVAL);
-            put("0911", OperatorType.HAMRAH_AVAL);
-            put("0912", OperatorType.HAMRAH_AVAL);
-            put("0913", OperatorType.HAMRAH_AVAL);
-            put("0914", OperatorType.HAMRAH_AVAL);
-            put("0915", OperatorType.HAMRAH_AVAL);
-            put("0916", OperatorType.HAMRAH_AVAL);
-            put("0917", OperatorType.HAMRAH_AVAL);
-            put("0918", OperatorType.HAMRAH_AVAL);
-            put("0919", OperatorType.HAMRAH_AVAL);
-            put("0990", OperatorType.HAMRAH_AVAL);
-            put("0991", OperatorType.HAMRAH_AVAL);
-
-            put("0901", OperatorType.IRANCELL);
-            put("0902", OperatorType.IRANCELL);
-            put("0903", OperatorType.IRANCELL);
-            put("0930", OperatorType.IRANCELL);
-            put("0933", OperatorType.IRANCELL);
-            put("0935", OperatorType.IRANCELL);
-            put("0936", OperatorType.IRANCELL);
-            put("0937", OperatorType.IRANCELL);
-            put("0938", OperatorType.IRANCELL);
-            put("0939", OperatorType.IRANCELL);
-
-            put("0920", OperatorType.RITEL);
-            put("0921", OperatorType.RITEL);
-            put("0922", OperatorType.RITEL);
-
-        }
-    };
     private MciInternetPackageRepository repository;
     private List<MciInternetPackageFilter> daysFilter;
     private List<MciInternetPackageFilter> trafficFilter;
@@ -143,14 +110,8 @@ public class BuyInternetPackageViewModel extends ViewModel {
 
     public void phoneNumberTextChangeListener(String phoneNumber) {
         if (phoneNumber.length() == 11) {
-            String s = phoneNumber.substring(0, 4);
-            OperatorType opt = phoneMap.get(s);
-            if (opt != null) {
-                if (opt == OperatorType.HAMRAH_AVAL) {
-                    showDetail.set(View.VISIBLE);
-                } else {
-                    showErrorMessage.setValue(R.string.error);
-                }
+            if (new OperatorType().isMci(phoneNumber.substring(0, 4))) {
+                showDetail.set(View.VISIBLE);
             } else {
                 showErrorMessage.setValue(R.string.error);
             }

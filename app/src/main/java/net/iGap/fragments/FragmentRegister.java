@@ -49,7 +49,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.ActivityRegisterBinding;
 import net.iGap.dialog.DefaultRoundDialog;

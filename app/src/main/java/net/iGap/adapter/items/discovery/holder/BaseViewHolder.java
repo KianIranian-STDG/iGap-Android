@@ -29,7 +29,7 @@ import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.fragments.FragmentPaymentCharge;
-import net.iGap.fragments.FragmentPaymentInquiry;
+import net.iGap.fragments.FragmentPaymentInquiryTelephone;
 import net.iGap.fragments.FragmentUserScore;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentWebView;
@@ -37,6 +37,7 @@ import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
+import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
 import net.iGap.fragments.poll.PollFragment;
 import net.iGap.helper.CardToCardHelper;
@@ -50,7 +51,6 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
 import net.iGap.request.RequestGeoGetConfiguration;
-import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -152,10 +152,10 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case PHONE_BILL_MENU:/** tested **/
-                new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.telecome, null)).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), new FragmentPaymentInquiryTelephone()).setReplace(false).load();
                 break;
             case MOBILE_BILL_MENU:/** tested **/
-                new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.mci, null)).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), new FragmentPaymentInquiryMobile()).setReplace(false).load();
                 break;
             case FINANCIAL_MENU:/** tested **/
                 new HelperFragment(activity.getSupportFragmentManager(), FragmentPayment.newInstance()).setReplace(false).load();
