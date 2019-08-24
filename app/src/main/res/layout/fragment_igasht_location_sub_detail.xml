@@ -33,139 +33,139 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_margin="@dimen/dp8"
-                app:imageUrl="@{viewModel.locationDetail.getTopText}"
+                app:imageUrl="@{viewModel.locationDetail.getMainPicture()}"
                 app:layout_constraintDimensionRatio="332:83"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/subTitle"
-                style="?textTitleColorSettingTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp8"
-                android:layout_marginTop="@dimen/dp4"
-                android:layout_marginEnd="@dimen/dp8"
-                android:layout_marginBottom="@dimen/dp4"
-                android:text="@{viewModel.locationDetail.getTopTextWithLanguage}"
-                android:textSize="@dimen/largeTextSize"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/itemImage" />
+            <!--<android.support.v7.widget.AppCompatTextView-->
+                <!--android:id="@+id/subTitle"-->
+                <!--style="?textTitleColorSettingTheme"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="@dimen/dp8"-->
+                <!--android:layout_marginTop="@dimen/dp4"-->
+                <!--android:layout_marginEnd="@dimen/dp8"-->
+                <!--android:layout_marginBottom="@dimen/dp4"-->
+                <!--android:text="@{viewModel.locationDetail.getWifi() ? @string/close_icon : @string/check_icon}"-->
+                <!--android:textSize="@dimen/largeTextSize"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@id/itemImage" />-->
 
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/subDetail"
-                style="?textTitleColorSettingTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp8"
-                android:layout_marginTop="@dimen/dp4"
-                android:layout_marginEnd="@dimen/dp8"
-                android:layout_marginBottom="@dimen/dp4"
-                android:text="@{viewModel.locationDetail.getBottomTextWithLanguage}"
-                app:layout_constraintEnd_toEndOf="@+id/subTitle"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/subTitle"
-                app:layout_constraintTop_toBottomOf="@+id/subTitle" />
+            <!--<android.support.v7.widget.AppCompatTextView-->
+                <!--android:id="@+id/subDetail"-->
+                <!--style="?textTitleColorSettingTheme"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="@dimen/dp8"-->
+                <!--android:layout_marginTop="@dimen/dp4"-->
+                <!--android:layout_marginEnd="@dimen/dp8"-->
+                <!--android:layout_marginBottom="@dimen/dp4"-->
+                <!--android:text="@{viewModel.locationDetail.getBottomTextWithLanguage}"-->
+                <!--app:layout_constraintEnd_toEndOf="@+id/subTitle"-->
+                <!--app:layout_constraintHorizontal_bias="0.0"-->
+                <!--app:layout_constraintStart_toStartOf="@+id/subTitle"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/subTitle" />-->
 
-            <View
-                android:id="@+id/view1"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_margin="@dimen/dp8"
-                android:background="@color/gray"
-                app:layout_constraintEnd_toEndOf="@+id/subDetail"
-                app:layout_constraintStart_toStartOf="@+id/subDetail"
-                app:layout_constraintTop_toBottomOf="@+id/subDetail" />
+            <!--<View-->
+                <!--android:id="@+id/view1"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:layout_margin="@dimen/dp8"-->
+                <!--android:background="@color/gray"-->
+                <!--app:layout_constraintEnd_toEndOf="@+id/subDetail"-->
+                <!--app:layout_constraintStart_toStartOf="@+id/subDetail"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/subDetail" />-->
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/subTitle2"
-                style="?textTitleColorSettingTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp8"
-                android:layout_marginTop="@dimen/dp4"
-                android:layout_marginEnd="@dimen/dp8"
-                android:layout_marginBottom="@dimen/dp4"
-                android:text="@{viewModel.locationDetail.getTopTextWithLanguage}"
-                android:textSize="@dimen/largeTextSize"
-                app:layout_constraintEnd_toEndOf="@+id/view1"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/view1"
-                app:layout_constraintTop_toBottomOf="@+id/view1" />
+            <!--<android.support.v7.widget.AppCompatTextView-->
+                <!--android:id="@+id/subTitle2"-->
+                <!--style="?textTitleColorSettingTheme"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="@dimen/dp8"-->
+                <!--android:layout_marginTop="@dimen/dp4"-->
+                <!--android:layout_marginEnd="@dimen/dp8"-->
+                <!--android:layout_marginBottom="@dimen/dp4"-->
+                <!--android:text="@{viewModel.locationDetail.getTopTextWithLanguage}"-->
+                <!--android:textSize="@dimen/largeTextSize"-->
+                <!--app:layout_constraintEnd_toEndOf="@+id/view1"-->
+                <!--app:layout_constraintHorizontal_bias="0.0"-->
+                <!--app:layout_constraintStart_toStartOf="@+id/view1"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/view1" />-->
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/subDetail2"
-                style="?textTitleColorSettingTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp8"
-                android:layout_marginTop="@dimen/dp4"
-                android:layout_marginEnd="@dimen/dp8"
-                android:layout_marginBottom="@dimen/dp4"
-                android:text="@{viewModel.locationDetail.getBottomTextWithLanguage}"
-                app:layout_constraintEnd_toEndOf="@id/subTitle2"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@id/subTitle2"
-                app:layout_constraintTop_toBottomOf="@+id/subTitle2" />
+            <!--<android.support.v7.widget.AppCompatTextView-->
+                <!--android:id="@+id/subDetail2"-->
+                <!--style="?textTitleColorSettingTheme"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="@dimen/dp8"-->
+                <!--android:layout_marginTop="@dimen/dp4"-->
+                <!--android:layout_marginEnd="@dimen/dp8"-->
+                <!--android:layout_marginBottom="@dimen/dp4"-->
+                <!--android:text="@{viewModel.locationDetail.getBottomTextWithLanguage}"-->
+                <!--app:layout_constraintEnd_toEndOf="@id/subTitle2"-->
+                <!--app:layout_constraintHorizontal_bias="0.0"-->
+                <!--app:layout_constraintStart_toStartOf="@id/subTitle2"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/subTitle2" />-->
 
-            <View
-                android:id="@+id/view2"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_margin="@dimen/dp8"
-                android:background="@color/gray"
-                app:layout_constraintEnd_toEndOf="@+id/subDetail2"
-                app:layout_constraintStart_toStartOf="@+id/subDetail2"
-                app:layout_constraintTop_toBottomOf="@+id/subDetail2" />
+            <!--<View-->
+                <!--android:id="@+id/view2"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:layout_margin="@dimen/dp8"-->
+                <!--android:background="@color/gray"-->
+                <!--app:layout_constraintEnd_toEndOf="@+id/subDetail2"-->
+                <!--app:layout_constraintStart_toStartOf="@+id/subDetail2"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/subDetail2" />-->
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/subTitle3"
-                style="?textTitleColorSettingTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp8"
-                android:layout_marginTop="@dimen/dp4"
-                android:layout_marginEnd="@dimen/dp8"
-                android:layout_marginBottom="@dimen/dp4"
-                android:text="@{viewModel.locationDetail.getTopTextWithLanguage}"
-                android:textSize="@dimen/largeTextSize"
-                app:layout_constraintEnd_toEndOf="@+id/view2"
-                app:layout_constraintStart_toStartOf="@+id/view2"
-                app:layout_constraintTop_toBottomOf="@+id/view2" />
+            <!--<android.support.v7.widget.AppCompatTextView-->
+                <!--android:id="@+id/subTitle3"-->
+                <!--style="?textTitleColorSettingTheme"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="@dimen/dp8"-->
+                <!--android:layout_marginTop="@dimen/dp4"-->
+                <!--android:layout_marginEnd="@dimen/dp8"-->
+                <!--android:layout_marginBottom="@dimen/dp4"-->
+                <!--android:text="@{viewModel.locationDetail.getTopTextWithLanguage}"-->
+                <!--android:textSize="@dimen/largeTextSize"-->
+                <!--app:layout_constraintEnd_toEndOf="@+id/view2"-->
+                <!--app:layout_constraintStart_toStartOf="@+id/view2"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/view2" />-->
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/subDetail3"
-                style="?textTitleColorSettingTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp8"
-                android:layout_marginTop="@dimen/dp4"
-                android:layout_marginEnd="@dimen/dp8"
-                android:layout_marginBottom="@dimen/dp4"
-                android:text="@{viewModel.locationDetail.getBottomTextWithLanguage}"
-                app:layout_constraintEnd_toEndOf="@+id/subTitle3"
-                app:layout_constraintStart_toStartOf="@+id/subTitle3"
-                app:layout_constraintTop_toBottomOf="@+id/subTitle3" />
+            <!--<android.support.v7.widget.AppCompatTextView-->
+                <!--android:id="@+id/subDetail3"-->
+                <!--style="?textTitleColorSettingTheme"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="@dimen/dp8"-->
+                <!--android:layout_marginTop="@dimen/dp4"-->
+                <!--android:layout_marginEnd="@dimen/dp8"-->
+                <!--android:layout_marginBottom="@dimen/dp4"-->
+                <!--android:text="@{viewModel.locationDetail.getBottomTextWithLanguage}"-->
+                <!--app:layout_constraintEnd_toEndOf="@+id/subTitle3"-->
+                <!--app:layout_constraintStart_toStartOf="@+id/subTitle3"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/subTitle3" />-->
 
 
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/subDetail4"
-                style="?textTitleColorSettingTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp8"
-                android:layout_marginTop="@dimen/dp4"
-                android:layout_marginEnd="@dimen/dp8"
-                android:layout_marginBottom="@dimen/dp4"
-                android:text="@{viewModel.locationDetail.getBottomTextWithLanguage}"
-                app:layout_constraintEnd_toEndOf="@+id/subDetail3"
-                app:layout_constraintStart_toStartOf="@+id/subDetail3"
-                app:layout_constraintTop_toBottomOf="@+id/subDetail3" />
+            <!--<android.support.v7.widget.AppCompatTextView-->
+                <!--android:id="@+id/subDetail4"-->
+                <!--style="?textTitleColorSettingTheme"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="@dimen/dp8"-->
+                <!--android:layout_marginTop="@dimen/dp4"-->
+                <!--android:layout_marginEnd="@dimen/dp8"-->
+                <!--android:layout_marginBottom="@dimen/dp4"-->
+                <!--android:text="@{viewModel.locationDetail.getBottomTextWithLanguage}"-->
+                <!--app:layout_constraintEnd_toEndOf="@+id/subDetail3"-->
+                <!--app:layout_constraintStart_toStartOf="@+id/subDetail3"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/subDetail3" />-->
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
