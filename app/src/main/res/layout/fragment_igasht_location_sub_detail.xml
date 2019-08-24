@@ -26,15 +26,7 @@
             android:layout_marginEnd="@dimen/dp6"
             android:layout_marginBottom="@dimen/dp6">
 
-            <View
-                android:id="@+id/view_frame"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/shape_igasht_strokegray"
-                app:layout_constraintBottom_toBottomOf="@+id/subDetail3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/itemImage"
@@ -160,16 +152,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/subTitle3" />
 
 
-            <View
-                android:id="@+id/view_frame2"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/dp4"
-                android:background="@drawable/shape_igasht_strokegray"
-                app:layout_constraintBottom_toBottomOf="@id/subDetail4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/subDetail3" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/subDetail4"
