@@ -53,7 +53,6 @@ import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.helper.CardToCardHelper;
-import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDownloadFile;
@@ -542,11 +541,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * display 'edited' indicator beside message time if message was edited
          */
-        if (mMessage.isEdited()) {
-            mHolder.getEditedIndicatorTv().setVisibility(View.VISIBLE);
-        } else {
-            mHolder.getEditedIndicatorTv().setVisibility(View.GONE);
-        }
+
+        if (mMessage.isEdited())
+            if (mMessage.channelExtra.signature.length() > 0)
+                mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited) + " " + mMessage.channelExtra.signature);
+            else
+                mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited));
+        else
+            mHolder.getSignatureTv().setText("");
         /**
          * display user avatar only if chat type is GROUP
          */
@@ -633,6 +635,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             }
         }
+
+
+        if (mMessage.channelExtra.signature.length() > 0) {
+            mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(200));
+        } else if (mMessage.isEdited) {
+            mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(100));
+        }
     }
 
     /**
@@ -715,7 +724,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (showThump) {
             mHolder.getVoteContainer().setVisibility(View.VISIBLE);
         } else {
-            mHolder.getVoteContainer().setVisibility(View.INVISIBLE);
+            mHolder.getVoteContainer().setVisibility(View.GONE);
         }
 
         /**
@@ -728,7 +737,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         Utils.darkModeHandlerGray(mHolder.getViewsLabelTv());
         Utils.darkModeHandlerGray(mHolder.getSignatureTv());
         Utils.darkModeHandlerGray(mHolder.getEyeIconTv());
-        Utils.darkModeHandlerGray(mHolder.getEditedIndicatorTv());
         Utils.darkModeHandlerGray(mHolder.getMessageStatusTv());
         Utils.darkModeHandlerGray(mHolder.getVoteUpIv());
         Utils.darkModeHandlerGray(mHolder.getVoteDownTv());
@@ -740,19 +748,28 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     mHolder.getVoteUpTv().setText(realmChannelExtra.getThumbsUp());
                     mHolder.getVoteDownTv().setText(realmChannelExtra.getThumbsDown());
                     mHolder.getViewsLabelTv().setText(realmChannelExtra.getViewsLabel());
-                    mHolder.getSignatureTv().setText(realmChannelExtra.getSignature());
+                    if (mMessage.isEdited)
+                        mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + realmChannelExtra.getSignature());
+                    else
+                        mHolder.getSignatureTv().setText(realmChannelExtra.getSignature());
                 }
             } else {
                 mHolder.getVoteUpTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsUp());
                 mHolder.getVoteDownTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsDown());
                 mHolder.getViewsLabelTv().setText(structMessage.getChannelExtra() == null ? "1" : structMessage.getChannelExtra().getViewsLabel());
-                mHolder.getSignatureTv().setText(structMessage.getChannelExtra() == null ? "" : structMessage.getChannelExtra().getSignature());
+                if (mMessage.isEdited)
+                    mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + mMessage.channelExtra.signature);
+                else
+                    mHolder.getSignatureTv().setText(structMessage.getChannelExtra() == null ? "" : structMessage.getChannelExtra().getSignature());
             }
         } else {
             mHolder.getVoteUpTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsUp());
             mHolder.getVoteDownTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsDown());
             mHolder.getViewsLabelTv().setText(structMessage.getChannelExtra() == null ? "1" : structMessage.getChannelExtra().getViewsLabel());
-            mHolder.getSignatureTv().setText(structMessage.getChannelExtra() == null ? "" : structMessage.getChannelExtra().getSignature());
+            if (mMessage.isEdited)
+                mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + mMessage.channelExtra.signature);
+            else
+                mHolder.getSignatureTv().setText(structMessage.getChannelExtra() == null ? "" : structMessage.getChannelExtra().getSignature());
         }
 
         if (mHolder.getSignatureTv().getText().length() > 0) {
@@ -862,7 +879,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             setThemeColor(viewHolder.getVoteUpIv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getVoteDownTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getVoteDownIv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
-            setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getSignatureTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
         } else {
@@ -873,7 +889,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             setThemeColor(viewHolder.getVoteUpIv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getVoteDownTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getVoteDownIv(), G.context.getResources().getColor(R.color.receive_message_time_light));
-            setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getSignatureTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
         }
@@ -934,11 +949,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (G.isDarkTheme) {
             viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_dark))));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.send_message_time_dark));
-            setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.send_message_time_dark));
         } else {
             viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_light))));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.send_message_time_light));
-            setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.send_message_time_light));
         }
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp36);
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);

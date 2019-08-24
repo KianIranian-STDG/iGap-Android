@@ -120,7 +120,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     private boolean isThereAnyMoreItemToLoad = true;
     private ProgressBar progressBar;
-    private int mOffset = 0;
+    private static int mOffset = 0;
     private View viewById;
     private RecyclerView mRecyclerView;
     private long tagId;
@@ -459,7 +459,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void getChatLists() {
-        if (G.isSecure && G.userLogin) {
+        if (G.isSecure && G.userLogin && mOffset == 0) {
             boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
             if (send)
                 progressBar.setVisibility(View.VISIBLE);

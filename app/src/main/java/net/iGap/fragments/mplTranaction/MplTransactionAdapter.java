@@ -86,8 +86,9 @@ public class MplTransactionAdapter extends RecyclerView.Adapter<MplTransactionAd
                     break;
             }
 
+            String time = HelperCalander.getClocktime(mplTransaction.getPayTime()* 1000L, false);
             transferActionDataTv.setText(HelperCalander.getPersianCalander(mplTransaction.getPayTime() * 1000L));
-            transferActionTimeTv.setText(HelperCalander.getClocktime(mplTransaction.getPayTime() * 1000L, G.isAppRtl));
+            transferActionTimeTv.setText(time);
             transferActionOrderIdTv.setText(itemView.getContext().getResources().getString(R.string.pay_id) + " : " + mplTransaction.getOrderId());
 
             itemView.setOnClickListener(v -> {

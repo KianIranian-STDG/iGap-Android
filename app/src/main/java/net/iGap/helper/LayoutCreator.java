@@ -13,7 +13,7 @@ public class LayoutCreator {
     public static final int WRAP_CONTENT = -2;
     public static Context context = G.context;
 
-    private static int getSize(float size) {
+    public static int getSize(float size) {
         return (int) (size < 0 ? size : dp(size));
     }
 
@@ -44,6 +44,34 @@ public class LayoutCreator {
         layoutParams.rightMargin = dp(rightMargin);
         layoutParams.bottomMargin = dp(bottomMargin);
         return layoutParams;
+    }
+
+    public static RelativeLayout.LayoutParams createRelative(int width, int height, int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
+        return createRelative(width, height, leftMargin, topMargin, rightMargin, bottomMargin, -1, -1, -1);
+    }
+
+    public static RelativeLayout.LayoutParams createRelative(int width, int height, int leftMargin, int topMargin, int rightMargin, int bottomMargin, int alignParent) {
+        return createRelative(width, height, leftMargin, topMargin, rightMargin, bottomMargin, alignParent, -1, -1);
+    }
+
+    public static RelativeLayout.LayoutParams createRelative(float width, float height, int leftMargin, int topMargin, int rightMargin, int bottomMargin, int alignRelative, int anchorRelative) {
+        return createRelative(width, height, leftMargin, topMargin, rightMargin, bottomMargin, -1, alignRelative, anchorRelative);
+    }
+
+    public static RelativeLayout.LayoutParams createRelative(int width, int height, int alignParent, int alignRelative, int anchorRelative) {
+        return createRelative(width, height, 0, 0, 0, 0, alignParent, alignRelative, anchorRelative);
+    }
+
+    public static RelativeLayout.LayoutParams createRelative(int width, int height) {
+        return createRelative(width, height, 0, 0, 0, 0, -1, -1, -1);
+    }
+
+    public static RelativeLayout.LayoutParams createRelative(int width, int height, int alignParent) {
+        return createRelative(width, height, 0, 0, 0, 0, alignParent, -1, -1);
+    }
+
+    public static RelativeLayout.LayoutParams createRelative(int width, int height, int alignRelative, int anchorRelative) {
+        return createRelative(width, height, 0, 0, 0, 0, -1, alignRelative, anchorRelative);
     }
 
     public static LinearLayout.LayoutParams createLinear(int width, int height, float weight, int gravity, int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
