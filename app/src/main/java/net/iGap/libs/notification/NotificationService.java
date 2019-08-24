@@ -41,7 +41,11 @@ public class NotificationService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         WebSocketClient.reconnect(false);
-        Log.d("bagi", "FCM" + remoteMessage.getData() + "");
+
+        if (remoteMessage.getData().containsKey("deep")){
+            HelperNotification.sendDeepLink(remoteMessage.getData());
+        }
+
         if (remoteMessage.getData().containsKey(MESSAGE_ID)) {
             try (Realm realm = Realm.getDefaultInstance()) {
                 realm.executeTransaction(new Realm.Transaction() {

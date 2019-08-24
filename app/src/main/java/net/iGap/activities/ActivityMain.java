@@ -85,14 +85,12 @@ import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatSendMessageResponse;
-import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGetWallpaper;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.interfaces.OnMapRegisterStateMain;
 import net.iGap.interfaces.OnPayment;
-import net.iGap.interfaces.OnRefreshActivity;
 import net.iGap.interfaces.OnUpdating;
 import net.iGap.interfaces.OnUserInfoMyClient;
 import net.iGap.interfaces.OnVerifyNewDevice;
@@ -100,7 +98,6 @@ import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
@@ -151,7 +148,16 @@ import static net.iGap.G.userId;
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
 
     public static final String openChat = "openChat";
+    public static final String OPEN_DEEP_LINK = "openDeepLink";
+
+    public static final String DEEP_LINK_DISCOVERY = "discovery";
+    public static final String DEEP_LINK_CONTACT = "contact";
+    public static final String DEEP_LINK_CHAT = "chat";
+    public static final String DEEP_LINK_CALL = "call";
+    public static final String DEEP_LINK_PROFILE = "profile";
+
     public static final String openMediaPlyer = "openMediaPlyer";
+
     public static final int requestCodePaymentCharge = 198;
     public static final int requestCodePaymentBill = 199;
     public static final int requestCodeQrCode = 200;
@@ -332,12 +338,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             new HelperFragment(getSupportFragmentManager(), new FragmentSetting()).load();
         }
 
-        if (intent.getAction() != null && intent.getAction().toLowerCase().equals("auto")) {
-//            autoLinkHelper(uri);
-        }
-
         Bundle extras = intent.getExtras();
+
         if (extras != null) {
+            if (intent.getAction().equals(OPEN_DEEP_LINK)) {
+                autoLinkHelper(extras.getString(OPEN_DEEP_LINK, DEEP_LINK_PROFILE));
+                return;
+            }
 
             long roomId = extras.getLong(ActivityMain.openChat);
             if (!FragmentLanguage.languageChanged && roomId > 0) { // if language changed not need check enter to chat
@@ -362,28 +369,27 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void autoLinkHelper(String uri) {
         String[] address = uri.toLowerCase().trim().split("/");
-        if (address.length == 0) {
+        if (address.length == 0)
             return;
-        }
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
 
         if (fragment instanceof BottomNavigationFragment) {
             switch (address[0]) {
-                case "discovery":
+                case DEEP_LINK_DISCOVERY:
                     String[] discoveryUri = uri.toLowerCase().trim().replace("discovery/", "").split("/");
-                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.DISCOVERY_FRAGMENT,discoveryUri);
+                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.DISCOVERY_FRAGMENT, discoveryUri);
                     break;
-                case "chat":
+                case DEEP_LINK_CHAT:
                     ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CHAT_FRAGMENT,null);
                     break;
-                case "profile":
+                case DEEP_LINK_PROFILE:
                     ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.PROFILE_FRAGMENT,null);
                     break;
-                case "call":
+                case DEEP_LINK_CALL:
                     ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CALL_FRAGMENT,null);
                     break;
-                case "contact":
+                case DEEP_LINK_CONTACT:
                     ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CONTACT_FRAGMENT,null);
                     break;
 
@@ -396,7 +402,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.wtf(this.getClass().getName(), "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -559,7 +564,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
             isOpenChatBeforeSheare = false;
-            checkIntent(getIntent());
 
             initComponent();
 
@@ -1177,10 +1181,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 openActivityPassCode();
             }
             G.isFirstPassCode = false;
+
+            checkIntent(getIntent());
         }
 
-        String uri = "discovery/2/301";
-        autoLinkHelper(uri);
+//        String uri = "discovery/2/301";
+//        autoLinkHelper(uri);
     }
 
     @SuppressLint("MissingSuperCall")
