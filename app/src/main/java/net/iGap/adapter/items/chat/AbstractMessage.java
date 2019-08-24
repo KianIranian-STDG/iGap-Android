@@ -543,8 +543,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         if (mMessage.isEdited())
-            if (mMessage.getChannelExtra().getSignature().length() > 0)
-                mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited) + " " + mMessage.getChannelExtra().getSignature());
+            if (structMessage.getChannelExtra() != null && structMessage.getChannelExtra().getSignature().length() > 0)
+                mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited) + " " + structMessage.getChannelExtra().getSignature());
             else
                 mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited));
         else
@@ -637,7 +637,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
 
-        if (mMessage.getChannelExtra().getSignature().length() > 0) {
+        if (structMessage.getChannelExtra() != null && structMessage.getChannelExtra().getSignature().length() > 0) {
             mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(200));
         } else if (mMessage.isEdited()) {
             mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(100));
@@ -758,7 +758,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 mHolder.getVoteDownTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsDown());
                 mHolder.getViewsLabelTv().setText(structMessage.getChannelExtra() == null ? "1" : structMessage.getChannelExtra().getViewsLabel());
                 if (mMessage.isEdited())
-                    mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + mMessage.getChannelExtra().getSignature());
+                    mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + structMessage.getChannelExtra().getSignature());
                 else
                     mHolder.getSignatureTv().setText(structMessage.getChannelExtra() == null ? "" : structMessage.getChannelExtra().getSignature());
             }
@@ -767,7 +767,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder.getVoteDownTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsDown());
             mHolder.getViewsLabelTv().setText(structMessage.getChannelExtra() == null ? "1" : structMessage.getChannelExtra().getViewsLabel());
             if (mMessage.isEdited())
-                mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + mMessage.getChannelExtra().getSignature());
+                mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + structMessage.getChannelExtra().getSignature());
             else
                 mHolder.getSignatureTv().setText(structMessage.getChannelExtra() == null ? "" : structMessage.getChannelExtra().getSignature());
         }
@@ -1229,7 +1229,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * if type was gif auto file start auto download
          */
         if (sharedPreferences.getInt(key, ((key.equals(SHP_SETTING.KEY_AD_DATA_GIF) || key.equals(SHP_SETTING.KEY_AD_WIFI_GIF)) ? 5 : -1)) != -1) {
-            autoDownload(holder, mMessage.getAttachment());
+            autoDownload(holder, structMessage.getAttachment());
         } else {
 
             MessageProgress _Progress = ((IProgress) holder).getProgress();
@@ -1238,7 +1238,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                 @Override
                 public void onMessageProgressClick(MessageProgress progress) {
-                    forOnCLick(holder, mMessage.getAttachment());
+                    forOnCLick(holder, structMessage.getAttachment());
                 }
             });
         }
@@ -1246,7 +1246,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     private void checkAutoDownload(final VH holder, Context context, HelperCheckInternetConnection.ConnectivityType connectionMode) {
 
-        if (HelperDownloadFile.getInstance().manuallyStoppedDownload.contains(mMessage.getAttachment().getCacheId())) { // for avoid from reDownload in autoDownload state , after that user manually stopped download.
+        if (HelperDownloadFile.getInstance().manuallyStoppedDownload.contains(structMessage.getAttachment().getCacheId())) { // for avoid from reDownload in autoDownload state , after that user manually stopped download.
             return;
         }
 
@@ -1331,7 +1331,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                     @Override
                     public void onMessageProgressClick(MessageProgress progress) {
-                        forOnCLick(holder, mMessage.getAttachment());
+                        forOnCLick(holder, structMessage.getAttachment());
                     }
                 });
                 break;
