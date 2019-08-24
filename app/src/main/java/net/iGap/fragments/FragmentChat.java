@@ -289,6 +289,7 @@ import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmOfflineSeen;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomDraft;
 import net.iGap.realm.RealmRoomFields;
@@ -6428,20 +6429,22 @@ public class FragmentChat extends BaseFragment
         vgSpamUser = rootView.findViewById(R.id.layout_add_contact);
         txtSpamUser = rootView.findViewById(R.id.chat_txt_addContact);
         txtSpamClose = rootView.findViewById(R.id.chat_txt_close);
-        txtSpamClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                vgSpamUser.setVisibility(View.GONE);
-                if (registeredInfo != null) {
-
-                    getRealmChat().executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            registeredInfo.setDoNotshowSpamBar(true);
+        txtSpamClose.setOnClickListener(view -> {
+            vgSpamUser.setVisibility(View.GONE);
+            new Thread(() -> {
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    realm.executeTransaction(realm1 -> {
+                        if (registeredInfo != null) {
+                            RealmRegisteredInfo registeredInfo2 = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registeredInfo.getId()).findFirst();
+                            if (registeredInfo2 != null) {
+                                registeredInfo2.setDoNotshowSpamBar(true);
+                            }
                         }
+
                     });
                 }
-            }
+
+            }).start();
         });
 
         txtSpamUser.setOnClickListener(new View.OnClickListener() {
