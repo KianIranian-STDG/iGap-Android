@@ -2,6 +2,7 @@
 <layout>
 
     <data>
+
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.FragmentCPayEditViewModel" />
@@ -25,15 +26,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Spinner
-            android:id="@+id/fce_sp_car"
-            android:layout_width="@dimen/dp300"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp32"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fce_toolbar" />
-
         <TextView
             android:id="@+id/fce_lbl_plaque"
             style="?textSubColorSettingTheme"
@@ -44,30 +36,64 @@
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fce_sp_car" />
+            app:layout_constraintTop_toBottomOf="@id/fce_toolbar" />
 
         <net.iGap.libs.PlaqueView
-            android:id="@+id/fce_plaque_view"
+            android:id="@+id/plaqueView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:pv_edit_mode="true"
-            app:layout_constraintTop_toBottomOf="@id/fce_lbl_plaque"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="@dimen/dp20"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="@dimen/dp20"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fce_lbl_plaque"
+            app:pv_edit_mode="true" />
 
         <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/fce_edt_phone"
-            android:layout_width="@dimen/dp300"
-            android:layout_height="wrap_content"
+            android:id="@+id/fce_edt_name"
             style="?hintColorSettingTheme"
-            app:layout_constraintTop_toBottomOf="@id/fce_plaque_view"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp32"
             android:layout_marginTop="@dimen/dp32"
-            android:hint="@string/phone_number"
-            android:inputType="phone"/>
+            android:layout_marginRight="@dimen/dp32"
+            android:nextFocusDown="@id/fce_edt_family"
+            android:afterTextChanged="@{(s)->viewModel.onNameEditTextChanged(s.toString())}"
+            android:hint="@string/name"
+            android:singleLine="true"
+            app:layout_constraintEnd_toStartOf="@id/fce_edt_family"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/plaqueView"/>
 
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/fce_edt_family"
+            style="?hintColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp32"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
+            android:nextFocusDown="@id/fce_edt_nationalId"
+            android:afterTextChanged="@{(s)->viewModel.onFamilyEditTextChanged(s.toString())}"
+            android:hint="@string/last_name"
+            android:singleLine="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/fce_edt_name"
+            app:layout_constraintTop_toBottomOf="@id/plaqueView"/>
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/fce_edt_nationalId"
+            style="?hintColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp32"
+            android:afterTextChanged="@{(s)->viewModel.onNationalIdEditTextChanged(s.toString())}"
+            android:hint="@string/national_code"
+            android:inputType="number"
+            android:maxLength="10"
+            android:singleLine="true"
+            app:layout_constraintEnd_toEndOf="@id/fce_edt_family"
+            app:layout_constraintStart_toStartOf="@id/fce_edt_name"
+            app:layout_constraintTop_toBottomOf="@id/fce_edt_name"/>
 
         <android.support.design.button.MaterialButton
             android:id="@+id/btn_add_car_"
@@ -76,12 +102,22 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp32"
             android:minWidth="@dimen/dp200"
+            android:onClick="@{() -> viewModel.onSubmitClicked(plaqueView.isPlaqueCorrect(),plaqueView.getPlaqueWithCode())}"
             android:text="@string/add_plaque"
-            android:onClick="@{() -> viewModel.onSubmitClicked()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fce_edt_phone" />
+            app:layout_constraintTop_toBottomOf="@id/fce_edt_nationalId" />
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/btn_add_car_"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="0.3"/>
 
     </android.support.constraint.ConstraintLayout>
 

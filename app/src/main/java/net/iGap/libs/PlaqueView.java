@@ -182,7 +182,7 @@ public class PlaqueView extends ConstraintLayout {
 
     public boolean isPlaqueCorrect() {
 
-        if (strP1.length() == 2 && strP2.length() == 3 && pAlphabet.length() != 0 && pCity.length() == 2) {
+        if (strP1.length() == 2 && strP2.length() == 3 && strPAlphabet.length() != 0 && strPCity.length() == 2) {
             return true;
         }
 
@@ -204,7 +204,7 @@ public class PlaqueView extends ConstraintLayout {
     }
 
     private String getAlphabetCode(String strPAlphabet) {
-        return "00"; //todo:// return correct id by list
+        return HelperCPay.getPlaqueCode(strPAlphabet);
     }
 
     public void setPlauqe(String p1, String p2, String pCity, String pAlphabet) {

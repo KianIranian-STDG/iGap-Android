@@ -1994,4 +1994,8 @@
     <string name="see_pay_title">عوارض بزرگراه</string>
     <string name="add_plaque">ثبت پلاک</string>
     <string name="from_first">از ابتدا</string>
+    <string name="national_code">کد ملی</string>
+    <string name="plaque_is_not_valid">پلاک وارد شده صحیح نیست.</string>
+    <string name="complete_correct">اطلاعات وارد شده صحیح نیست.</string>
+    <string name="plaque_added">پلاک افزوده شد.</string>
 </resources>
