@@ -4167,7 +4167,7 @@ public class FragmentChat extends BaseFragment
         roomMessage.setUserId(G.userId);
         roomMessage.setCreateTime(updateTime);
 
-        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, getWrittenMessage(), StructMessageInfo.getReplyMessageId(messageInfo), new HelperUploadFile.UpdateListener() {
+        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, getWrittenMessage(), 0, new HelperUploadFile.UpdateListener() {
             @Override
             public void OnProgress(int progress, FileUploadStructure struct) {
                 if (canUpdateAfterDownload) {
