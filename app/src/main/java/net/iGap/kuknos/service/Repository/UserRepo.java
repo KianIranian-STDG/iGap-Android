@@ -8,6 +8,8 @@ import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.KuknosInfoM;
 import net.iGap.kuknos.service.model.KuknosLoginM;
 import net.iGap.kuknos.service.model.KuknosRealmM;
+import net.iGap.kuknos.service.model.KuknosSubmitM;
+import net.iGap.kuknos.service.model.KuknoscheckUserM;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserProfileGetEmail;
 
@@ -28,12 +30,16 @@ public class UserRepo {
 
     // API
 
-    public void checkUser(String phoneNum, String nID, ApiResponse<KuknosLoginM> apiResponse) {
-        kuknosAPIRepository.getUserAuthentication(phoneNum, nID, apiResponse);
+    public void checkUser(String phoneNum, String nID, ApiResponse<KuknoscheckUserM> apiResponse) {
+        kuknosAPIRepository.checkUser(phoneNum, nID, apiResponse);
     }
 
     public void getUserInfo(ApiResponse<KuknosInfoM> apiResponse) {
         kuknosAPIRepository.getUserInfo(apiResponse);
+    }
+
+    public void registerUser(String token, String publicKey, String friendlyID, ApiResponse<KuknosSubmitM> apiResponse) {
+        kuknosAPIRepository.registerUser(token, publicKey, friendlyID, apiResponse);
     }
 
     // generate key pair
@@ -88,6 +94,7 @@ public class UserRepo {
     }
 
     public String getSeedKey() {
+        // if -1 it's sign out. if null it's first time
         return kuknosRealmM.getKuknosSeedKey();
     }
 

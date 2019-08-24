@@ -2,9 +2,9 @@ package net.iGap.kuknos.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.text.TextUtils;
-import android.util.Log;
 
 import net.iGap.R;
 import net.iGap.api.apiService.ApiResponse;
@@ -12,9 +12,11 @@ import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosInfoM;
 import net.iGap.kuknos.service.model.KuknosLoginM;
+import net.iGap.kuknos.service.model.KuknoscheckUserM;
 
 public class KuknosLoginVM extends ViewModel {
 
+    private KuknoscheckUserM kuknoscheckUserM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
     private MutableLiveData<Integer> progressState;
@@ -24,17 +26,10 @@ public class KuknosLoginVM extends ViewModel {
     private boolean isRegisteredBefore = false;
 
     public KuknosLoginVM() {
-        if (error == null) {
-            error = new MutableLiveData<>();
-        }
-        if (nextPage == null) {
-            nextPage = new MutableLiveData<>();
-            nextPage.setValue(false);
-        }
-        if (progressState == null) {
-            progressState = new MutableLiveData<>();
-            progressState.setValue(0);
-        }
+        error = new MutableLiveData<>();
+        nextPage = new MutableLiveData<>();
+        nextPage.setValue(false);
+        progressState = new MutableLiveData<>();
         userNum.set(userRepo.getUserNum());
     }
 
@@ -49,15 +44,16 @@ public class KuknosLoginVM extends ViewModel {
             if (isRegisteredBefore == true)
                 nextPage.setValue(true);
             else
-                registerUser();
+                checkUser();
         }
     }
 
-    private void registerUser() {
-        userRepo.checkUser(userNum.get(), ID.get(), new ApiResponse<KuknosLoginM>() {
+    private void checkUser() {
+        userRepo.checkUser(userNum.get(), ID.get(), new ApiResponse<KuknoscheckUserM>() {
             @Override
-            public void onResponse(KuknosLoginM kuknosLoginM) {
-                if (kuknosLoginM.getOk() == 1) {
+            public void onResponse(KuknoscheckUserM kuknoscheckUserM) {
+                if (kuknoscheckUserM.getToken()!=null) {
+                    KuknosLoginVM.this.kuknoscheckUserM = kuknoscheckUserM;
                     nextPage.setValue(true);
                 }
             }
@@ -73,32 +69,9 @@ public class KuknosLoginVM extends ViewModel {
             @Override
             public void setProgressIndicator(boolean visibility) {
                 if (visibility)
-                    progressState.setValue(3);
+                    progressState.setValue(1);
                 else
                     progressState.setValue(0);
-            }
-        });
-    }
-
-    public void getUserInfo() {
-        userRepo.getUserInfo(new ApiResponse<KuknosInfoM>() {
-            @Override
-            public void onResponse(KuknosInfoM kuknosInfoM) {
-                userNum.set(kuknosInfoM.getPhoneNum());
-                ID.set(kuknosInfoM.getNationalID());
-                isRegisteredBefore = true;
-                progressState.setValue(2);
-            }
-
-            @Override
-            public void onFailed(String error) {
-                progressState.setValue(0);
-            }
-
-            @Override
-            public void setProgressIndicator(boolean visibility) {
-                if (visibility)
-                    progressState.setValue(1);
             }
         });
     }
@@ -151,5 +124,13 @@ public class KuknosLoginVM extends ViewModel {
 
     public void setProgressState(MutableLiveData<Integer> progressState) {
         this.progressState = progressState;
+    }
+
+    public KuknoscheckUserM getKuknoscheckUserM() {
+        return kuknoscheckUserM;
+    }
+
+    public void setKuknoscheckUserM(KuknoscheckUserM kuknoscheckUserM) {
+        this.kuknoscheckUserM = kuknoscheckUserM;
     }
 }

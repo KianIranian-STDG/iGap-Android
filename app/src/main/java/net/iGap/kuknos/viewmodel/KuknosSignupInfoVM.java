@@ -4,7 +4,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableField;
 import android.os.Handler;
-import android.util.Log;
 
 import net.iGap.R;
 import net.iGap.kuknos.service.Repository.UserRepo;
@@ -13,7 +12,6 @@ import net.iGap.kuknos.service.model.KuknosSignupM;
 
 public class KuknosSignupInfoVM extends ViewModel {
 
-    // TODO redundent model if not used
     private MutableLiveData<KuknosSignupM> kuknosSignupM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
@@ -24,7 +22,8 @@ public class KuknosSignupInfoVM extends ViewModel {
     private ObservableField<String> family = new ObservableField<>();
     private ObservableField<String> email = new ObservableField<>();
     private boolean usernameIsValid = false;
-    UserRepo userRepo = new UserRepo();
+    private String token;
+    private UserRepo userRepo = new UserRepo();
 
     public KuknosSignupInfoVM() {
 
@@ -32,34 +31,22 @@ public class KuknosSignupInfoVM extends ViewModel {
         family.set(userRepo.getUserLastName());
         email.set(userRepo.getUserEmail());
 
-        if (kuknosSignupM == null) {
-            kuknosSignupM = new MutableLiveData<KuknosSignupM>();
-        }
-        if (error == null) {
-            error = new MutableLiveData<ErrorM>();
-        }
-        if (nextPage == null) {
-            nextPage = new MutableLiveData<Boolean>();
-        }
-        if (checkUsernameState == null) {
-            checkUsernameState = new MutableLiveData<Integer>();
-            checkUsernameState.setValue(-1);
-        }
-        if (progressSendDServerState == null) {
-            progressSendDServerState = new MutableLiveData<Boolean>();
-            progressSendDServerState.setValue(false);
-        }
+        kuknosSignupM = new MutableLiveData<>();
+        error = new MutableLiveData<>();
+        nextPage = new MutableLiveData<>();
+        checkUsernameState = new MutableLiveData<>();
+        checkUsernameState.setValue(-1);
+        progressSendDServerState = new MutableLiveData<>();
+        progressSendDServerState.setValue(false);
     }
 
     public void onSubmitBtn() {
 
-        Log.d("amini", "onSubmitBtn: " + userRepo.getUserFirstName());
-
         if (!checkEmail()) {
             return;
         }
-        if (usernameIsValid == true) {
-            sendDataServer();
+        if (usernameIsValid) {
+            nextPage.setValue(true);
             return;
         }
         isUsernameValid(true);
@@ -110,7 +97,7 @@ public class KuknosSignupInfoVM extends ViewModel {
                 checkUsernameState.setValue(1);
                 usernameIsValid = true;
                 if (isCallFromBTN)
-                    sendDataServer();
+                    nextPage.setValue(true);
                 //error
 //                checkUsernameState.setValue(2);
 //                error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
@@ -121,23 +108,6 @@ public class KuknosSignupInfoVM extends ViewModel {
     public void cancelUsernameServer() {
         checkUsernameState.setValue(-1);
         // TODO cancel current API checking
-    }
-
-    public void sendDataServer() {
-        progressSendDServerState.setValue(true);
-        // TODO: send data to server
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                progressSendDServerState.setValue(false);
-
-                //success
-                nextPage.setValue(true);
-                //error
-
-            }
-        }, 1000);
     }
 
     //Setter and Getter
@@ -221,4 +191,6 @@ public class KuknosSignupInfoVM extends ViewModel {
     public void setEmail(ObservableField<String> email) {
         this.email = email;
     }
+
+
 }

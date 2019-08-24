@@ -2,6 +2,8 @@ package net.iGap.kuknos.view;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -85,6 +87,13 @@ public class KuknosSignupInfoFrag extends BaseFragment {
         progressSubmitVisibility();
     }
 
+    private void saveUsername() {
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString("Username", kuknosSignupInfoVM.getUsername().get());
+        editor.commit();
+    }
+
     private void onError() {
 
         kuknosSignupInfoVM.getError().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
@@ -111,6 +120,8 @@ public class KuknosSignupInfoFrag extends BaseFragment {
             @Override
             public void onChanged(@Nullable Boolean nextPage) {
                 if (nextPage == true) {
+                    saveUsername();
+
                     FragmentManager fragmentManager = getChildFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     Fragment fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeyFrag.class.getName());

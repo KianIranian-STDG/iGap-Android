@@ -7,16 +7,12 @@ public class KuknosEntryOptionVM extends ViewModel {
 
     private MutableLiveData<Boolean> goNewTPage;
     private MutableLiveData<Boolean> goRestoreTPage;
+    private MutableLiveData<Boolean> goRestoreSeedPage;
 
     public KuknosEntryOptionVM() {
-        if (goNewTPage == null) {
-            goNewTPage = new MutableLiveData<Boolean>();
-            goNewTPage.setValue(false);
-        }
-        if (goRestoreTPage == null) {
-            goRestoreTPage = new MutableLiveData<Boolean>();
-            goRestoreTPage.setValue(false);
-        }
+        goNewTPage = new MutableLiveData<>();
+        goRestoreTPage = new MutableLiveData<>();
+        goRestoreSeedPage = new MutableLiveData<>();
     }
 
     public void onNewTokenClick() {
@@ -25,6 +21,10 @@ public class KuknosEntryOptionVM extends ViewModel {
 
     public void onRestoreTokenClick() {
         goRestoreTPage.setValue(true);
+    }
+
+    public void onRestoreSeedClick() {
+        goRestoreSeedPage.setValue(true);
     }
 
     // Setter and Getter
@@ -45,4 +45,11 @@ public class KuknosEntryOptionVM extends ViewModel {
         this.goRestoreTPage = goRestoreTPage;
     }
 
+    public MutableLiveData<Boolean> getGoRestoreSeedPage() {
+        return goRestoreSeedPage;
+    }
+
+    public void setGoRestoreSeedPage(MutableLiveData<Boolean> goRestoreSeedPage) {
+        this.goRestoreSeedPage = goRestoreSeedPage;
+    }
 }

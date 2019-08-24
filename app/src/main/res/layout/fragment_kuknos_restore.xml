@@ -97,6 +97,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosRDescription"
                 app:layout_constraintWidth_percent="0.8" />
 
+            <CheckBox
+                android:id="@+id/fragKuknosIdPINCheck"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp20"
+                android:text="@string/kuknos_Restore_CheckPIN"
+                android:checked="@={viewmodel.pinCheck}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragKuknosRkeysET"
+                app:layout_constraintWidth_percent="0.8" />
+
             <android.support.design.button.MaterialButton
                 style="?iGapButton"
                 android:id="@+id/fragKuknosIdSubmit"
@@ -109,7 +121,7 @@
                 android:onClick="@{()->viewmodel.onNext()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragKuknosRkeysET"
+                app:layout_constraintTop_toBottomOf="@+id/fragKuknosIdPINCheck"
                 app:layout_constraintWidth_percent="0.7" />
 
             <ProgressBar

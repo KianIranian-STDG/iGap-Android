@@ -86,10 +86,26 @@
                 android:onClick="@{()->viewmodel.onRestoreTokenClick()}"
                 android:text="@string/kuknos_Entry_RT_str"
                 android:textSize="@dimen/dp16"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/fragKuknosERestoreSeed"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosENewToken"
+                app:layout_constraintWidth_percent="0.8" />
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/fragKuknosERestoreSeed"
+                style="?iGapButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:minHeight="100dp"
+                android:onClick="@{()->viewmodel.onRestoreSeedClick()}"
+                android:text="@string/kuknos_Entry_RTSeedKey_str"
+                android:textSize="@dimen/dp16"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragKuknosERestoreToken"
                 app:layout_constraintWidth_percent="0.8" />
 
 

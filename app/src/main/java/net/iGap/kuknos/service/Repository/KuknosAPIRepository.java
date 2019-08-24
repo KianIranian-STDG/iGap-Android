@@ -10,6 +10,8 @@ import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.kuknos.service.model.KuknosInfoM;
 import net.iGap.kuknos.service.model.KuknosLoginM;
 import net.iGap.kuknos.service.model.KuknosSendM;
+import net.iGap.kuknos.service.model.KuknosSubmitM;
+import net.iGap.kuknos.service.model.KuknoscheckUserM;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.AlbumTrack;
 import net.iGap.module.api.beepTunes.Albums;
@@ -65,6 +67,44 @@ public class KuknosAPIRepository {
 
             @Override
             public void onFailure(Call<KuknosInfoM> call, Throwable t) {
+                apiResponse.onFailed(t.getMessage());
+                apiResponse.setProgressIndicator(false);
+            }
+        });
+    }
+
+    public void checkUser(String phoneNum, String nID, ApiResponse<KuknoscheckUserM> apiResponse) {
+        apiResponse.setProgressIndicator(true);
+        apiService.checkUser(phoneNum, nID).enqueue(new Callback<KuknoscheckUserM>() {
+            @Override
+            public void onResponse(Call<KuknoscheckUserM> call, Response<KuknoscheckUserM> response) {
+                apiResponse.onResponse(response.body());
+                apiResponse.setProgressIndicator(false);
+            }
+
+            @Override
+            public void onFailure(Call<KuknoscheckUserM> call, Throwable t) {
+                apiResponse.onFailed(t.getMessage());
+                apiResponse.setProgressIndicator(false);
+            }
+        });
+    }
+
+    public void registerUser(String token, String publicKey, String friendlyID, ApiResponse<KuknosSubmitM> apiResponse) {
+        apiResponse.setProgressIndicator(true);
+        apiService.registerUser(token, publicKey, friendlyID).enqueue(new Callback<KuknosSubmitM>() {
+            @Override
+            public void onResponse(Call<KuknosSubmitM> call, Response<KuknosSubmitM> response) {
+                if (response.isSuccessful())
+                    apiResponse.onResponse(response.body());
+                else if (response.code() == 400) {
+                    apiResponse.onFailed("registeredBefore");
+                }
+                apiResponse.setProgressIndicator(false);
+            }
+
+            @Override
+            public void onFailure(Call<KuknosSubmitM> call, Throwable t) {
                 apiResponse.onFailed(t.getMessage());
                 apiResponse.setProgressIndicator(false);
             }

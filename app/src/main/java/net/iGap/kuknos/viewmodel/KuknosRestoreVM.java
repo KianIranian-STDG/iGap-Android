@@ -20,6 +20,7 @@ public class KuknosRestoreVM extends ViewModel {
     private MutableLiveData<Boolean> nextPage;
     private MutableLiveData<Boolean> progressState;
     private ObservableField<String> keys = new ObservableField<>();
+    private MutableLiveData<Boolean> pinCheck;
     private UserRepo userRepo = new UserRepo();
 
     public KuknosRestoreVM() {
@@ -34,6 +35,7 @@ public class KuknosRestoreVM extends ViewModel {
             progressState = new MutableLiveData<Boolean>();
             progressState.setValue(false);
         }
+        pinCheck = new MutableLiveData<>();
     }
 
     public void onNext() {
@@ -44,7 +46,10 @@ public class KuknosRestoreVM extends ViewModel {
             error.setValue(new ErrorM(true, "Invalid Entry", "0", R.string.kuknos_Restore_Error_invalid_str));
         }
         else {
-            generateKeypair();
+            if (pinCheck.getValue())
+                nextPage.setValue(true);
+            else
+                generateKeypair();
         }
     }
 
@@ -103,5 +108,13 @@ public class KuknosRestoreVM extends ViewModel {
 
     public void setKeys(ObservableField<String> keys) {
         this.keys = keys;
+    }
+
+    public MutableLiveData<Boolean> getPinCheck() {
+        return pinCheck;
+    }
+
+    public void setPinCheck(MutableLiveData<Boolean> pinCheck) {
+        this.pinCheck = pinCheck;
     }
 }

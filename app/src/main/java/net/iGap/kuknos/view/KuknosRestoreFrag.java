@@ -3,6 +3,7 @@ package net.iGap.kuknos.view;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import android.widget.LinearLayout;
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosRestoreBinding;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.generated.callback.OnCheckedChangeListener;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -72,10 +74,20 @@ public class KuknosRestoreFrag extends BaseFragment {
         LinearLayout toolbarLayout = binding.fragKuknosRToolbar;
         Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
+        binding.fragKuknosIdPINCheck.setChecked(false);
 
         onErrorObserver();
         onNextObserver();
         progressState();
+    }
+
+    private void onPINCheck() {
+        kuknosRestoreVM.getPinCheck().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean)
+                binding.fragKuknosIdPINCheck.setText(getResources().getString(R.string.kuknos_Restore_checkBtn));
+            else
+                binding.fragKuknosIdPINCheck.setText(getResources().getString(R.string.kuknos_Restore_Btn));
+        });
     }
 
     private void onErrorObserver() {
@@ -109,10 +121,23 @@ public class KuknosRestoreFrag extends BaseFragment {
                 if (nextPage == true) {
                     FragmentManager fragmentManager = getChildFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosPanelFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    Fragment fragment;
+                    if (binding.fragKuknosIdPINCheck.isChecked()) {
+                        fragment = fragmentManager.findFragmentByTag(KuknosRestorePassFrag.class.getName());
+                        if (fragment == null) {
+                            fragment = KuknosRestorePassFrag.newInstance();
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }
+                        Bundle bundle = new Bundle();
+                        bundle.putString("key_phrase", kuknosRestoreVM.getKeys().get());
+                        fragment.setArguments(bundle);
+                    }
+                    else {
+                        fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
+                        if (fragment == null) {
+                            fragment = KuknosPanelFrag.newInstance();
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }
                     }
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
                 }

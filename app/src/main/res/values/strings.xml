@@ -2111,4 +2111,12 @@
     <string name="kuknos_AddAsset_AddBTN">More Assets</string>
     <string name="kuknos_AddAsset_title">Current Assets</string>
     <string name="kuknos_trade_noItem">There is no record.</string>
+    <string name="kuknos_Restore_CheckPIN">I had set PIN code for my account before.</string>
+    <string name="kuknos_RestorePass_title">Enter a 4 digit PIN</string>
+    <string name="kuknos_RestorePass_message">This 4 numeric PIN will be used to restore your secret keys.</string>
+    <string name="kuknos_RestorePass_btn">Retrieve</string>
+    <string name="kuknos_Restore_checkBtn">Next</string>
+    <string name="kuknos_Entry_RTSeedKey_str">Retrieve With Seed Key</string>
+    <string name="kuknos_SignupInfo_friendlyTial">*igap.net</string>
+
 </resources>

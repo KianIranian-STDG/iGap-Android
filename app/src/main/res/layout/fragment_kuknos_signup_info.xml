@@ -69,7 +69,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosSITitle"
-                app:layout_constraintWidth_percent="0.7" />
+                app:layout_constraintWidth_percent="0.7"/>
 
             <android.support.design.widget.TextInputLayout
                 style="?textTitleColorSettingTheme"
@@ -78,10 +78,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:minHeight="48dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/fragKuknosSIUsernameText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosSIMessage"
-                app:layout_constraintWidth_percent="0.7">
+                app:layout_constraintWidth_percent="0.52"
+                app:layout_constraintHorizontal_chainStyle="packed">
                 <android.support.v7.widget.AppCompatEditText
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosSIUsername"
@@ -98,6 +99,20 @@
                     android:inputType="text"
                     android:imeOptions="actionDone"/>
             </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.AppCompatTextView
+                style="?textTitleColorSettingTheme"
+                android:id="@+id/fragKuknosSIUsernameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/kuknos_SignupInfo_friendlyTial"
+                android:textSize="@dimen/dp18"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/fragKuknosSIUsernameHolder"
+                app:layout_constraintTop_toTopOf="@+id/fragKuknosSIUsernameHolder"
+                app:layout_constraintBottom_toBottomOf="@+id/fragKuknosSIUsernameHolder"
+                app:layout_constraintWidth_percent="0.2" />
 
             <ProgressBar
                 android:id="@+id/fragKuknosSIProgress"
@@ -200,6 +215,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:minHeight="48dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosSIFamilyNameHolder"
@@ -226,7 +242,7 @@
                 android:id="@+id/fragKuknosSISubmit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/dp36"
                 android:minHeight="58dp"
                 android:text="@string/kuknos_SignupInfo_submitBtn"
                 android:textSize="@dimen/dp16"

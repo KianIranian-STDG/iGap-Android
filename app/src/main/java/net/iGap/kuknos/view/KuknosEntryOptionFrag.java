@@ -27,7 +27,6 @@ public class KuknosEntryOptionFrag extends BaseFragment {
 
     private FragmentKuknosEntryOptionBinding binding;
     private KuknosEntryOptionVM kuknosEntryOptionVM;
-    private HelperToolbar mHelperToolbar;
 
     public static KuknosEntryOptionFrag newInstance() {
         KuknosEntryOptionFrag kuknosLoginFrag = new KuknosEntryOptionFrag();
@@ -57,7 +56,7 @@ public class KuknosEntryOptionFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
@@ -74,23 +73,21 @@ public class KuknosEntryOptionFrag extends BaseFragment {
 
         onNewTObserver();
         onRestoreTObserver();
+        onRestoreSeedObserver();
     }
 
     private void onNewTObserver() {
 
-        kuknosEntryOptionVM.getGoNewTPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean nextPage) {
-                if (nextPage == true) {
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosSignupInfoFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosSignupInfoFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        kuknosEntryOptionVM.getGoNewTPage().observe(getViewLifecycleOwner(), nextPage -> {
+            if (nextPage == true) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosSignupInfoFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosSignupInfoFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
 
@@ -98,20 +95,23 @@ public class KuknosEntryOptionFrag extends BaseFragment {
 
     private void onRestoreTObserver() {
 
-        kuknosEntryOptionVM.getGoRestoreTPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean nextPage) {
-                if (nextPage == true) {
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosRestoreFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosRestoreFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        kuknosEntryOptionVM.getGoRestoreTPage().observe(getViewLifecycleOwner(), nextPage -> {
+            if (nextPage == true) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosRestoreFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosRestoreFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
+        });
+    }
+
+    private void onRestoreSeedObserver() {
+        kuknosEntryOptionVM.getGoRestoreSeedPage().observe(getViewLifecycleOwner(), aBoolean -> {
+
         });
     }
 }
