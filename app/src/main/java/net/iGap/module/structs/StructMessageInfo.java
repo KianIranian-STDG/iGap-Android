@@ -106,6 +106,22 @@ public class StructMessageInfo implements Parcelable {
         return realmRoomMessage.getAttachment();
     }
 
+    public void setAttachment(RealmAttachment attachment) {
+        RealmAttachment unManagedAttachment;
+        try (Realm realm = Realm.getDefaultInstance()) {
+            if (realmRoomMessage.isManaged()) {
+                unManagedAttachment = realm.copyFromRealm(attachment);
+            } else {
+                unManagedAttachment = attachment;
+            }
+        }
+
+        if (realmRoomMessage.getForwardMessage() != null) {
+            realmRoomMessage.getForwardMessage().setAttachment(unManagedAttachment);
+        }
+        realmRoomMessage.setAttachment(unManagedAttachment);
+    }
+
     public int getUploadProgress() {
         RealmAttachment attachment = getAttachment();
         return attachment != null && attachment.getToken() != null && !attachment.getToken().isEmpty() ? 100 : 0;
@@ -143,7 +159,7 @@ public class StructMessageInfo implements Parcelable {
         return 0;
     }
 
-    public  <VH extends RecyclerView.ViewHolder> void addAttachmentChangeListener(Realm realm, MessagesAdapter<AbstractMessage> mAdapter, long identifier, IChatItemAttachment<VH> itemVHAbstractMessage, VH holder, ProtoGlobal.RoomMessageType messageType) {
+    public <VH extends RecyclerView.ViewHolder> void addAttachmentChangeListener(Realm realm, MessagesAdapter<AbstractMessage> mAdapter, long identifier, IChatItemAttachment<VH> itemVHAbstractMessage, VH holder, ProtoGlobal.RoomMessageType messageType) {
         removeAttachmentChangeListener();
 
         if (getAttachment() == null) {
@@ -153,7 +169,7 @@ public class StructMessageInfo implements Parcelable {
         liverRealmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, getAttachment().getId()).findFirst();
         if (liverRealmAttachment != null) {
             realmAttachmentRealmChangeListener = realmAttachment -> {
-                realmRoomMessage.setAttachment(realm.copyFromRealm(realmAttachment));
+                setAttachment(realm.copyFromRealm(realmAttachment));
 
                 if (realmAttachment.isFileExistsOnLocalAndIsThumbnail()) {
                     itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);

@@ -608,7 +608,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder.getMessageTimeTv().setText(time);
         }
 
-        prepareAttachmentIfNeeded(holder, structMessage.getAttachment(), mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType());
+        prepareAttachmentIfNeeded(holder, mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType());
 
         /**
          * show vote layout for channel otherwise hide layout also get message state for channel
@@ -1210,13 +1210,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    private void setClickListener(SharedPreferences sharedPreferences, String key, final VH holder, final RealmAttachment attachment) {
+    private void setClickListener(SharedPreferences sharedPreferences, String key, final VH holder) {
 
         /**
          * if type was gif auto file start auto download
          */
         if (sharedPreferences.getInt(key, ((key.equals(SHP_SETTING.KEY_AD_DATA_GIF) || key.equals(SHP_SETTING.KEY_AD_WIFI_GIF)) ? 5 : -1)) != -1) {
-            autoDownload(holder, attachment);
+            autoDownload(holder, mMessage.getAttachment());
         } else {
 
             MessageProgress _Progress = ((IProgress) holder).getProgress();
@@ -1225,15 +1225,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                 @Override
                 public void onMessageProgressClick(MessageProgress progress) {
-                    forOnCLick(holder, attachment);
+                    forOnCLick(holder, mMessage.getAttachment());
                 }
             });
         }
     }
 
-    private void checkAutoDownload(final VH holder, final RealmAttachment attachment, Context context, HelperCheckInternetConnection.ConnectivityType connectionMode) {
+    private void checkAutoDownload(final VH holder, Context context, HelperCheckInternetConnection.ConnectivityType connectionMode) {
 
-        if (HelperDownloadFile.getInstance().manuallyStoppedDownload.contains(attachment.getCacheId())) { // for avoid from reDownload in autoDownload state , after that user manually stopped download.
+        if (HelperDownloadFile.getInstance().manuallyStoppedDownload.contains(mMessage.getAttachment().getCacheId())) { // for avoid from reDownload in autoDownload state , after that user manually stopped download.
             return;
         }
 
@@ -1249,20 +1249,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             case IMAGE_TEXT:
                 switch (connectionMode) {
                     case MOBILE:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_PHOTO, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_PHOTO, holder);
                         break;
                     case WIFI:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_PHOTO, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_PHOTO, holder);
                         break;
                 }
                 break;
             case VOICE:
                 switch (connectionMode) {
                     case MOBILE:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, holder);
                         break;
                     case WIFI:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, holder);
                         break;
                 }
                 break;
@@ -1270,10 +1270,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             case VIDEO_TEXT:
                 switch (connectionMode) {
                     case MOBILE:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_VIDEO, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_VIDEO, holder);
                         break;
                     case WIFI:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_VIDEO, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_VIDEO, holder);
                         break;
                 }
                 break;
@@ -1281,10 +1281,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             case FILE_TEXT:
                 switch (connectionMode) {
                     case MOBILE:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_FILE, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_FILE, holder);
                         break;
                     case WIFI:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_FILE, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_FILE, holder);
                         break;
                 }
                 break;
@@ -1292,10 +1292,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             case AUDIO_TEXT:
                 switch (connectionMode) {
                     case MOBILE:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_MUSIC, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_MUSIC, holder);
                         break;
                     case WIFI:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_MUSIC, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_MUSIC, holder);
                         break;
                 }
                 break;
@@ -1303,10 +1303,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             case GIF_TEXT:
                 switch (connectionMode) {
                     case MOBILE:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_GIF, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_GIF, holder);
                         break;
                     case WIFI:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_GIF, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_GIF, holder);
                         break;
                 }
                 break;
@@ -1318,14 +1318,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                     @Override
                     public void onMessageProgressClick(MessageProgress progress) {
-                        forOnCLick(holder, attachment);
+                        forOnCLick(holder, mMessage.getAttachment());
                     }
                 });
                 break;
         }
     }
 
-    private void prepareAttachmentIfNeeded(final VH holder, final RealmAttachment attachment, final ProtoGlobal.RoomMessageType messageType) {
+    private void prepareAttachmentIfNeeded(final VH holder, final ProtoGlobal.RoomMessageType messageType) {
         /**
          * runs if message has attachment
          */
@@ -1334,6 +1334,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder = (NewChatItemHolder) holder;
         else
             return;
+        RealmAttachment attachment = structMessage.getAttachment();
 
         if (attachment != null) {
 
@@ -1445,16 +1446,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                     @Override
                     public void onMessageProgressClick(MessageProgress progress) {
-                        forOnCLick(holder, attachment);
+                        forOnCLick(holder, structMessage.getAttachment());
                     }
                 });
 
                 if (!attachment.isFileExistsOnLocal()) {
                     if (HelperCheckInternetConnection.currentConnectivityType == null) {
-                        checkAutoDownload(holder, attachment, holder.itemView.getContext(), HelperCheckInternetConnection.ConnectivityType.WIFI);
-                        checkAutoDownload(holder, attachment, holder.itemView.getContext(), HelperCheckInternetConnection.ConnectivityType.MOBILE);
+                        checkAutoDownload(holder, holder.itemView.getContext(), HelperCheckInternetConnection.ConnectivityType.WIFI);
+                        checkAutoDownload(holder, holder.itemView.getContext(), HelperCheckInternetConnection.ConnectivityType.MOBILE);
                     } else {
-                        checkAutoDownload(holder, attachment, holder.itemView.getContext(), HelperCheckInternetConnection.currentConnectivityType);
+                        checkAutoDownload(holder, holder.itemView.getContext(), HelperCheckInternetConnection.currentConnectivityType);
                     }
                 }
 
