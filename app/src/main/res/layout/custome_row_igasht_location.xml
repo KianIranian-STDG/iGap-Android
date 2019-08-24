@@ -6,9 +6,10 @@
     android:layout_height="wrap_content"
     android:paddingBottom="@dimen/dp8">
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/constraintLayout4"
         android:layout_width="0dp"
+        android:orientation="vertical"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp4"
         android:layout_marginLeft="@dimen/dp4"
@@ -123,7 +124,7 @@
                 app:layout_constraintWidth_percent=".3" />
 
         </android.support.constraint.ConstraintLayout>
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/buyTicketButton"
@@ -133,7 +134,6 @@
         android:layout_marginLeft="@dimen/dp4"
         android:layout_marginEnd="@dimen/dp4"
         android:layout_marginRight="@dimen/dp4"
-        android:layout_marginBottom="@dimen/dp16"
         android:background="@drawable/shape_igasht_yellow"
         android:text="انتخاب محل"
         android:textColor="@color/white"

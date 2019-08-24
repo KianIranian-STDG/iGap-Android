@@ -9,6 +9,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import net.iGap.R;
@@ -16,9 +17,9 @@ import net.iGap.databinding.FragmentIgashtLocationBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.igasht.IGashtBaseView;
-import net.iGap.igasht.favoritelocation.IGashtFavoritePlaceListFragment;
 import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.locationdetail.IGashtLocationDetailFragment;
+import net.iGap.igasht.provinceselect.ProvinceSuggestionListAdapter;
 import net.iGap.interfaces.ToolbarListener;
 
 public class IGashtLocationListFragment extends IGashtBaseView {
@@ -74,6 +75,12 @@ public class IGashtLocationListFragment extends IGashtBaseView {
 
         binding.locationListView.addItemDecoration(new DividerItemDecoration(binding.locationListView.getContext(), DividerItemDecoration.VERTICAL));
         binding.locationListView.setAdapter(new IGashtLocationListAdapter());
+        binding.provinceSearchText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ((IGashtLocationViewModel) viewModel).setSelectedProvince(position);
+            }
+        });
 
         ((IGashtLocationViewModel) viewModel).getLocationList().observe(getViewLifecycleOwner(), data -> {
             if (binding.locationListView.getAdapter() instanceof IGashtLocationListAdapter && data != null) {
@@ -96,6 +103,7 @@ public class IGashtLocationListFragment extends IGashtBaseView {
             }
         });
 
+
         ((IGashtLocationViewModel) viewModel).getGoToLocationDetail().observe(getViewLifecycleOwner(), isGo -> {
             if (getActivity() != null && isGo != null) {
                 if (isGo) {
@@ -107,5 +115,12 @@ public class IGashtLocationListFragment extends IGashtBaseView {
         });
 
         ((IGashtLocationViewModel) viewModel).getAddToFavorite().observe(getViewLifecycleOwner(), aBoolean -> Toast.makeText(getContext(), "add to favorite", Toast.LENGTH_SHORT).show());
+
+        ((IGashtLocationViewModel) viewModel).getProvinceList().observe(getViewLifecycleOwner(), data -> {
+            if (data != null) {
+                binding.provinceSearchText.setAdapter(new ProvinceSuggestionListAdapter(getContext(), data));
+            }
+        });
     }
+
 }

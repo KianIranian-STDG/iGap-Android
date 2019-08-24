@@ -36,6 +36,7 @@ public class IGashtRepository {
     private IGashtProvince selectedProvince;
     private IGashtLocationItem selectedLocation;
     private List<IGashtVouchers> selectedServiceList;
+    private List<IGashtProvince> provinceList;
 
     public static IGashtRepository getInstance() {
         if (instance == null) {
@@ -63,6 +64,10 @@ public class IGashtRepository {
         return selectedProvince;
     }
 
+    public List<IGashtProvince> getProvinceList() {
+        return provinceList;
+    }
+
     public IGashtLocationItem getSelectedLocation() {
         return selectedLocation;
     }
@@ -76,6 +81,7 @@ public class IGashtRepository {
             @Override
             public void onResponse(@NotNull Call<BaseIGashtResponse<IGashtProvince>> call, @NotNull Response<BaseIGashtResponse<IGashtProvince>> response) {
                 if (response.code() == 200) {
+                    provinceList = response.body().getData();
                     callback.onSuccess(response.body());
                 } else {
                     try {
