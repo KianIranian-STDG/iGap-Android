@@ -5449,25 +5449,14 @@ public class FragmentChat extends BaseFragment
      */
     private void addItemAfterStartUpload(final FileUploadStructure struct) {
         try {
-            RealmRoomMessage roomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, struct.messageId).findFirst();
-            if (roomMessage != null) {
-                AbstractMessage message = null;
-
-                if (mAdapter != null) {
-                    message = mAdapter.getItemByFileIdentity(struct.messageId);
-
-                    // message doesn't exists
-                    if (message == null) {
-                        switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(roomMessage))), false);
-                        if (!G.userLogin) {
-                            G.handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    makeFailed(struct.messageId);
-                                }
-                            }, 200);
+            if (mAdapter != null) {
+                if (!G.userLogin) {
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            makeFailed(struct.messageId);
                         }
-                    }
+                    }, 200);
                 }
             }
         } catch (Exception e) {
@@ -8075,6 +8064,13 @@ public class FragmentChat extends BaseFragment
             });
         }
 
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                switchAddItem(new ArrayList<>(Collections.singletonList(structMessageInfoNew)), false);
+            }
+        });
+
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -8141,7 +8137,6 @@ public class FragmentChat extends BaseFragment
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                RealmRoomMessage roomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                 switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(roomMessage))), false);
                 chatSendMessageUtil.build(chatType, mRoomId, roomMessage);
                 scrollToEnd();
