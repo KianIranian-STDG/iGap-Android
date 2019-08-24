@@ -15,16 +15,19 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.service.model.KuknosTradeHistoryM;
 import net.iGap.kuknos.service.model.KuknosWHistoryM;
 
+import org.stellar.sdk.responses.OfferResponse;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeHistoryAdapter.ViewHolder> {
 
-    private List<KuknosTradeHistoryM> kuknosTradeHistoryMS;
+    private List<OfferResponse> kuknosTradeHistoryMS;
     private Context context;
     // mode : 0 history / 1 active
     private int mode;
 
-    public WalletTradeHistoryAdapter(List<KuknosTradeHistoryM> kuknosTradeHistoryMS, int mode, Context context) {
+    public WalletTradeHistoryAdapter(ArrayList<OfferResponse> kuknosTradeHistoryMS, int mode, Context context) {
         this.kuknosTradeHistoryMS = kuknosTradeHistoryMS;
         this.context = context;
         this.mode = mode;
@@ -47,9 +50,10 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
         return kuknosTradeHistoryMS.size();
     }
 
-    private void deleteCell(KuknosTradeHistoryM model) {
+    private void deleteCell(OfferResponse model) {
         kuknosTradeHistoryMS.remove(model);
         notifyDataSetChanged();
+        // TODO: 8/21/2019 send delete request to server 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -71,12 +75,12 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
 
         }
 
-        public void initView(KuknosTradeHistoryM model, int mode) {
-            sell.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getSell()) : model.getSell());
+        public void initView(OfferResponse model, int mode) {
+            sell.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getSelling().getType()) : model.getSelling().getType());
             amount.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getAmount()) : model.getAmount());
-            recieve.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getReceive()) : model.getReceive());
+            recieve.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(model.getBuying().getType()) : model.getBuying().getType());
             if (mode == 0) {
-                date.setText(model.getDate());
+                date.setText(model.getLastModifiedTime());
                 date.setVisibility(View.VISIBLE);
                 delete.setVisibility(View.GONE);
             }

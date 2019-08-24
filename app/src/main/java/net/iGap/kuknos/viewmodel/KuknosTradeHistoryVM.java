@@ -4,19 +4,29 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.os.Handler;
 
+import net.iGap.api.apiService.ApiResponse;
+import net.iGap.kuknos.service.Repository.TradeRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosTradeHistoryM;
 import net.iGap.kuknos.service.model.KuknosWHistoryM;
+
+import org.stellar.sdk.responses.OfferResponse;
+import org.stellar.sdk.responses.Page;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class KuknosTradeHistoryVM extends ViewModel {
 
-    private MutableLiveData<List<KuknosTradeHistoryM>> listMutableLiveData;
+    private MutableLiveData<Page<OfferResponse>> listMutableLiveData;
     private MutableLiveData<ErrorM> errorM;
     private MutableLiveData<Boolean> progressState;
-    private int mode = 0;
+    private TradeRepo tradeRepo = new TradeRepo();
+    private API mode;
+
+    public enum API {
+        OFFERS_LIST, TRADES_LIST
+    }
 
     public KuknosTradeHistoryVM() {
         if (listMutableLiveData == null) {
@@ -31,34 +41,43 @@ public class KuknosTradeHistoryVM extends ViewModel {
         }
     }
 
-    private void initModel() {
-        KuknosTradeHistoryM temp;
-        if (mode == 0)
-            temp = new KuknosTradeHistoryM("20.010","10.020","1.010","2019/05/01");
-        else
-            temp = new KuknosTradeHistoryM("21.010","11.020","2.010","2011/01/00");
-        List<KuknosTradeHistoryM> listTemp = new ArrayList<>();
-        listTemp.add(temp);
-        listTemp.add(temp);
-        listTemp.add(temp);
-        listTemp.add(temp);
-        listTemp.add(temp);
-        listTemp.add(temp);
-        listMutableLiveData.setValue(listTemp);
-    }
-
     public void getDataFromServer() {
-        progressState.setValue(true);
-        // TODO Hard code in here baby
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // hard code
-                initModel();
-                progressState.setValue(false);
-            }
-        }, 1000);
+        if (mode == API.OFFERS_LIST) {
+            tradeRepo.getOffersList(new ApiResponse<Page<OfferResponse>>() {
+                @Override
+                public void onResponse(Page<OfferResponse> offerResponsePage) {
+                    listMutableLiveData.setValue(offerResponsePage);
+                }
+
+                @Override
+                public void onFailed(String error) {
+
+                }
+
+                @Override
+                public void setProgressIndicator(boolean visibility) {
+                    progressState.setValue(visibility);
+                }
+            });
+        }
+        else {
+            tradeRepo.getTradesList(new ApiResponse<Page<OfferResponse>>() {
+                @Override
+                public void onResponse(Page<OfferResponse> offerResponsePage) {
+                    listMutableLiveData.setValue(offerResponsePage);
+                }
+
+                @Override
+                public void onFailed(String error) {
+
+                }
+
+                @Override
+                public void setProgressIndicator(boolean visibility) {
+                    progressState.setValue(visibility);
+                }
+            });
+        }
     }
 
     public MutableLiveData<ErrorM> getErrorM() {
@@ -77,19 +96,19 @@ public class KuknosTradeHistoryVM extends ViewModel {
         this.progressState = progressState;
     }
 
-    public MutableLiveData<List<KuknosTradeHistoryM>> getListMutableLiveData() {
+    public MutableLiveData<Page<OfferResponse>> getListMutableLiveData() {
         return listMutableLiveData;
     }
 
-    public void setListMutableLiveData(MutableLiveData<List<KuknosTradeHistoryM>> listMutableLiveData) {
+    public void setListMutableLiveData(MutableLiveData<Page<OfferResponse>> listMutableLiveData) {
         this.listMutableLiveData = listMutableLiveData;
     }
 
-    public int getMode() {
+    public API getMode() {
         return mode;
     }
 
-    public void setMode(int mode) {
+    public void setMode(API mode) {
         this.mode = mode;
     }
 }

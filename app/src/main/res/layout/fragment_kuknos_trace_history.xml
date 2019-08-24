@@ -82,12 +82,29 @@
 
         </LinearLayout>
 
+        <TextView
+            style="?textTitleColorSettingTheme"
+            android:id="@+id/kuknos_tradeHistory_NOitem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp36"
+            android:gravity="center"
+            android:text="@string/kuknos_trade_noItem"
+            android:textStyle="bold"
+            android:textSize="@dimen/dp16"
+            android:singleLine="true"
+            android:layout_margin="@dimen/dp4"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_tradeHistory_header"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/kuknos_tradeHistory_recycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scrollbars="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/kuknos_tradeHistory_header"
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_tradeHistory_NOitem"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

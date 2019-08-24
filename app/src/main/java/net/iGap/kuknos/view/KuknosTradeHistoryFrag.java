@@ -29,6 +29,9 @@ import net.iGap.kuknos.viewmodel.KuknosTradeHistoryVM;
 import net.iGap.kuknos.viewmodel.KuknosWHistoryVM;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
+import org.stellar.sdk.responses.OfferResponse;
+import org.stellar.sdk.responses.Page;
+
 import java.util.List;
 
 public class KuknosTradeHistoryFrag extends BaseFragment {
@@ -45,7 +48,7 @@ public class KuknosTradeHistoryFrag extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         kuknosTradeHistoryVM = ViewModelProviders.of(this).get(KuknosTradeHistoryVM.class);
-        kuknosTradeHistoryVM.setMode(0);
+        kuknosTradeHistoryVM.setMode(KuknosTradeHistoryVM.API.TRADES_LIST);
     }
 
     @Nullable
@@ -78,13 +81,13 @@ public class KuknosTradeHistoryFrag extends BaseFragment {
     }
 
     private void onDataChanged() {
-        kuknosTradeHistoryVM.getListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<List<KuknosTradeHistoryM>>() {
-            @Override
-            public void onChanged(@Nullable List<KuknosTradeHistoryM> kuknosWHistoryMS) {
-                if (kuknosWHistoryMS.size() != 0) {
-                    WalletTradeHistoryAdapter mAdapter = new WalletTradeHistoryAdapter(kuknosTradeHistoryVM.getListMutableLiveData().getValue(), 0, getContext());
-                    binding.kuknosTradeHistoryRecycler.setAdapter(mAdapter);
-                }
+        kuknosTradeHistoryVM.getListMutableLiveData().observe(getViewLifecycleOwner(), offerResponsePage -> {
+            if (offerResponsePage.getRecords().size() != 0) {
+                WalletTradeHistoryAdapter mAdapter = new WalletTradeHistoryAdapter(offerResponsePage.getRecords(), 0, getContext());
+                binding.kuknosTradeHistoryRecycler.setAdapter(mAdapter);
+            }
+            else {
+                binding.kuknosTradeHistoryNOitem.setVisibility(View.VISIBLE);
             }
         });
     }

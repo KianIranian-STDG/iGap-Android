@@ -20,6 +20,7 @@ import net.iGap.module.api.beepTunes.TrackInfo;
 
 import org.stellar.sdk.responses.AccountResponse;
 import org.stellar.sdk.responses.AssetResponse;
+import org.stellar.sdk.responses.OfferResponse;
 import org.stellar.sdk.responses.Page;
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 import org.stellar.sdk.responses.operations.OperationResponse;
@@ -93,5 +94,15 @@ public class KuknosAPIRepository {
     public void changeTrust(String accountSeed, String code, String issuer, ApiResponse<SubmitTransactionResponse> apiResponse) {
         KuknosAPIAsync<SubmitTransactionResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.CHANGE_TRUST);
         temp.execute(accountSeed, code, issuer);
+    }
+
+    public void getOffersList(String userID, ApiResponse<Page<OfferResponse>> apiResponse) {
+        KuknosAPIAsync<Page<OfferResponse>> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.OFFERS_LIST);
+        temp.execute(userID);
+    }
+
+    public void getTradesList(String userID, ApiResponse<Page<OfferResponse>> apiResponse) {
+        KuknosAPIAsync<Page<OfferResponse>> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.TRADES_LIST);
+        temp.execute(userID);
     }
 }

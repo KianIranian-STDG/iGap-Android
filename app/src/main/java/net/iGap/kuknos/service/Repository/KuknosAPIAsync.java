@@ -21,6 +21,7 @@ import org.stellar.sdk.Transaction;
 import org.stellar.sdk.requests.RequestBuilder;
 import org.stellar.sdk.responses.AccountResponse;
 import org.stellar.sdk.responses.AssetResponse;
+import org.stellar.sdk.responses.OfferResponse;
 import org.stellar.sdk.responses.Page;
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 import org.stellar.sdk.responses.operations.OperationResponse;
@@ -31,7 +32,7 @@ import java.util.Objects;
 public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
 
     enum API {
-        USER_ACCOUNT, PAYMENT_SEND, PAYMENTS_ACCOUNT, ASSETS, CHANGE_TRUST
+        USER_ACCOUNT, PAYMENT_SEND, PAYMENTS_ACCOUNT, ASSETS, CHANGE_TRUST, OFFERS_LIST, TRADES_LIST, ADD_OFFER
     }
 
     private ApiResponse<T> response;
@@ -85,6 +86,10 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
                 return getAssets();
             case CHANGE_TRUST:
                 return addTrustline(ts[0], ts[1], ts[2]);
+            case OFFERS_LIST:
+                return getOffersList(ts[0]);
+            case TRADES_LIST:
+                return getTrades(ts[0]);
         }
         return null;
     }
@@ -231,8 +236,6 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
         KeyPair source = KeyPair.fromSecretSeed(AccountSeed);
         Asset asset = new AssetTypeCreditAlphaNum4(code, issuer);
 
-        Log.d("amini", "addTrustline: " + source.getAccountId());
-
         // If there was no error, load up-to-date information on your account.
         AccountResponse sourceAccount = null;
         try {
@@ -242,8 +245,6 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
             e.printStackTrace();
             return (T) ("" + R.string.kuknos_send_errorServer);
         }
-
-        Log.d("amini", "addTrustline: " + sourceAccount.getAccountId());
 
         Transaction transaction = new Transaction.Builder(Objects.requireNonNull(sourceAccount), network)
                 .addOperation(new ChangeTrustOperation.Builder(asset, "" + Integer.MAX_VALUE).build())
@@ -272,6 +273,32 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
             successStatus = false;
             e.printStackTrace();
             return (T) ("" + R.string.kuknos_send_errorServer);
+        }
+    }
+
+    private T getOffersList(String accountID) {
+        Server server = new Server(KUKNOS_Horizan_Server);
+        try {
+            Page<OfferResponse> response = server.offers().forAccount(accountID).limit(100).order(RequestBuilder.Order.DESC).execute();
+            successStatus = true;
+            return (T) response;
+        } catch (Exception e) {
+            successStatus = false;
+            e.printStackTrace();
+            return (T) e.getMessage();
+        }
+    }
+
+    private T getTrades(String accountID) {
+        Server server = new Server(KUKNOS_Horizan_Server);
+        try {
+            Page<OfferResponse> response = server.offers().forAccount(accountID).limit(100).order(RequestBuilder.Order.DESC).execute();
+            successStatus = true;
+            return (T) response;
+        } catch (IOException e) {
+            successStatus = false;
+            e.printStackTrace();
+            return (T) e.getMessage();
         }
     }
 
