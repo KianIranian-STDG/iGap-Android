@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import net.iGap.R;
-import net.iGap.adapter.seePay.AdapterPlaqueList;
+import net.iGap.adapter.cPay.AdapterPlaqueList;
 import net.iGap.databinding.FragmentCpayBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;

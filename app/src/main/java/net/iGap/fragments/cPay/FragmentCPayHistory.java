@@ -7,11 +7,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import net.iGap.R;
+import net.iGap.adapter.cPay.AdapterCPayHistory;
 import net.iGap.databinding.FragmentCpayHistoryBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
@@ -22,6 +24,7 @@ public class FragmentCPayHistory extends BaseFragment implements ToolbarListener
 
     private FragmentCPayHistoryViewModel viewModel ;
     private FragmentCpayHistoryBinding binding ;
+    private AdapterCPayHistory mAdapter ;
 
     public FragmentCPayHistory() {
     }
@@ -45,9 +48,36 @@ public class FragmentCPayHistory extends BaseFragment implements ToolbarListener
         super.onViewCreated(view, savedInstanceState);
         initToolbar();
         initRecyclerView();
+        setupListeners();
+    }
+
+    private void setupListeners() {
+
+        viewModel.getOnFiltersButtonStateChangeListener().observe(getViewLifecycleOwner() , state -> {
+            if (state == null ) return;
+            switch (state){
+                case 1:
+
+                    break;
+
+                case 2 :
+
+                    break;
+
+                case 3 :
+
+                    break;
+            }
+        });
     }
 
     private void initRecyclerView() {
+
+        binding.fchRvHistory.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new AdapterCPayHistory(getContext());
+        binding.fchRvHistory.setAdapter(mAdapter);
+        //mAdapter.setHistoryItems(null);
+
     }
 
     private void initToolbar() {

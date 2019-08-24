@@ -1,4 +1,4 @@
-package net.iGap.adapter.seePay;
+package net.iGap.adapter.cPay;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
@@ -42,8 +42,8 @@ public class AdapterPlaqueList extends RecyclerView.Adapter<AdapterPlaqueList.Pl
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PlaqueViewHolder plaqueViewHolder, int i) {
-        plaqueViewHolder.bind(plaqueList.get(i));
+    public void onBindViewHolder(@NonNull PlaqueViewHolder plaqueViewHolder, int position) {
+        plaqueViewHolder.bind(plaqueList.get(position));
     }
 
     @Override
