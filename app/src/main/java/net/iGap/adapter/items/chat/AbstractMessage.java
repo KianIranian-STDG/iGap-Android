@@ -543,8 +543,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         if (mMessage.isEdited())
-            if (mMessage.channelExtra.signature.length() > 0)
-                mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited) + " " + mMessage.channelExtra.signature);
+            if (mMessage.getChannelExtra().getSignature().length() > 0)
+                mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited) + " " + mMessage.getChannelExtra().getSignature());
             else
                 mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited));
         else
@@ -557,8 +557,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             messageSenderAvatar.setVisibility(View.GONE);
         }
 
-        replyMessageIfNeeded(holder, getRealmChat());
-        forwardMessageIfNeeded(holder, getRealmChat());
+        replyMessageIfNeeded(holder);
+        forwardMessageIfNeeded(holder);
 
         View messageSenderName = mHolder.getContentBloke().findViewById(R.id.messageSenderName);
         if (messageSenderName != null) {
@@ -567,7 +567,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (type == ProtoGlobal.Room.Type.GROUP) {
             if (!mMessage.isSenderMe()) {
-                addSenderNameToGroupIfNeed(mHolder, getRealmChat());
+                addSenderNameToGroupIfNeed(mHolder);
 
                 if (messageSenderAvatar == null) {
                     messageSenderAvatar = ViewMaker.makeCircleImageView();
@@ -620,12 +620,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         mHolder.getViewContainer().setVisibility(View.GONE);
         if (!(holder instanceof StickerItem.ViewHolder)) {
             if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
-                showVote(holder, getRealmChat());
+                showVote(holder);
             } else if ((type == ProtoGlobal.Room.Type.CHAT)) {
                 if (mMessage.getForwardMessage() != null) {
                     if (mMessage.getForwardMessage().getAuthorRoomId() > 0) {
                         if (realmRoomForwardedFrom != null && realmRoomForwardedFrom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                            showVote(holder, getRealmChat());
+                            showVote(holder);
 
                             if (mMessage.isSenderMe()) {
                                 mHolder.getCslm_view_left_dis().setVisibility(View.VISIBLE);
@@ -637,9 +637,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
 
-        if (mMessage.channelExtra.signature.length() > 0) {
+        if (mMessage.getChannelExtra().getSignature().length() > 0) {
             mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(200));
-        } else if (mMessage.isEdited) {
+        } else if (mMessage.isEdited()) {
             mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(100));
         }
     }
@@ -647,10 +647,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     /**
      * show vote views
      */
-    private void showVote(VH holder, Realm realm) {
+    private void showVote(VH holder) {
         // add layout seen in channel
         ((NewChatItemHolder) holder).getViewContainer().setVisibility(View.VISIBLE);
-        voteAction(((NewChatItemHolder) holder), getRealmChat());
+        voteAction(((NewChatItemHolder) holder));
         getChannelMessageState();
     }
 
@@ -684,7 +684,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    private void addSenderNameToGroupIfNeed(final NewChatItemHolder holder, Realm realm) {
+    private void addSenderNameToGroupIfNeed(final NewChatItemHolder holder) {
 
         if (G.showSenderNameInGroup) {
             View messageSenderName = holder.getContentBloke().findViewById(R.id.messageSenderName);
@@ -719,7 +719,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         };
     }
 
-    protected void voteAction(NewChatItemHolder mHolder, Realm realm) {
+    protected void voteAction(NewChatItemHolder mHolder) {
         boolean showThump = G.showVoteChannelLayout && messageClickListener.getShowVoteChannel();
         if (showThump) {
             mHolder.getVoteContainer().setVisibility(View.VISIBLE);
@@ -748,7 +748,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     mHolder.getVoteUpTv().setText(realmChannelExtra.getThumbsUp());
                     mHolder.getVoteDownTv().setText(realmChannelExtra.getThumbsDown());
                     mHolder.getViewsLabelTv().setText(realmChannelExtra.getViewsLabel());
-                    if (mMessage.isEdited)
+                    if (mMessage.isEdited())
                         mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + realmChannelExtra.getSignature());
                     else
                         mHolder.getSignatureTv().setText(realmChannelExtra.getSignature());
@@ -757,8 +757,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 mHolder.getVoteUpTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsUp());
                 mHolder.getVoteDownTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsDown());
                 mHolder.getViewsLabelTv().setText(structMessage.getChannelExtra() == null ? "1" : structMessage.getChannelExtra().getViewsLabel());
-                if (mMessage.isEdited)
-                    mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + mMessage.channelExtra.signature);
+                if (mMessage.isEdited())
+                    mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + mMessage.getChannelExtra().getSignature());
                 else
                     mHolder.getSignatureTv().setText(structMessage.getChannelExtra() == null ? "" : structMessage.getChannelExtra().getSignature());
             }
@@ -766,8 +766,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder.getVoteUpTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsUp());
             mHolder.getVoteDownTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsDown());
             mHolder.getViewsLabelTv().setText(structMessage.getChannelExtra() == null ? "1" : structMessage.getChannelExtra().getViewsLabel());
-            if (mMessage.isEdited)
-                mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + mMessage.channelExtra.signature);
+            if (mMessage.isEdited())
+                mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + mMessage.getChannelExtra().getSignature());
             else
                 mHolder.getSignatureTv().setText(structMessage.getChannelExtra() == null ? "" : structMessage.getChannelExtra().getSignature());
         }
@@ -969,7 +969,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     @CallSuper
-    protected void replyMessageIfNeeded(VH holder, Realm realm) {
+    protected void replyMessageIfNeeded(VH holder) {
         NewChatItemHolder mHolder;
         if (holder instanceof NewChatItemHolder)
             mHolder = (NewChatItemHolder) holder;
@@ -1075,7 +1075,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     @CallSuper
-    protected void forwardMessageIfNeeded(VH holder, Realm realm) {
+    protected void forwardMessageIfNeeded(VH holder) {
         NewChatItemHolder mHolder;
         if (holder instanceof NewChatItemHolder)
             mHolder = (NewChatItemHolder) holder;
