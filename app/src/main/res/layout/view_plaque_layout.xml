@@ -37,29 +37,40 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintLeft_toRightOf="@id/pv_iv_country"
-        app:layout_constraintRight_toLeftOf="@id/pv_et_pAlphabet"
+        app:layout_constraintRight_toLeftOf="@id/pv_layout_alphabet"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/pv_et_pAlphabet"
+    <RelativeLayout
+        android:id="@+id/pv_layout_alphabet"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:fontFamily="@font/main_font"
-        android:gravity="center"
-        android:hint="الف"
-        android:inputType="text"
-        android:maxLength="3"
         android:minWidth="@dimen/dp44"
         android:padding="@dimen/dp4"
-        android:singleLine="true"
-        android:textColor="@color/black"
-        android:textSize="@dimen/largeTextSize"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintLeft_toRightOf="@id/pv_et_p1"
         app:layout_constraintRight_toLeftOf="@id/pv_et_p2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/pv_et_pAlphabet"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/main_font"
+            android:gravity="center"
+            android:hint="الف"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dp18"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/pv_sp_alphabet"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
 
     <android.support.v7.widget.AppCompatEditText
         android:id="@+id/pv_et_p2"
@@ -78,7 +89,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintLeft_toRightOf="@id/pv_et_pAlphabet"
+        app:layout_constraintLeft_toRightOf="@id/pv_layout_alphabet"
         app:layout_constraintRight_toLeftOf="@id/pv_splitter"
         app:layout_constraintTop_toTopOf="parent" />
 

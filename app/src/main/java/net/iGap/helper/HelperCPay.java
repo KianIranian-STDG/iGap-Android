@@ -14,7 +14,7 @@ public class HelperCPay {
     }
 
     public static String getPlaqueCode(String s){
-        int index = getArrayIndexByValue(PLAQUE_ALPHABETS , s);
+        int index = getPlaqueIndexByValue(PLAQUE_ALPHABETS , s) + 1;
         return String.valueOf(index).length() == 1 ? "0"+index : String.valueOf(index);
     }
 
@@ -29,15 +29,19 @@ public class HelperCPay {
         return result;
     }
 
-    private static int getArrayIndexByValue(String[] arr ,String s){
+    public static int getPlaqueIndexByValue(String[] arr ,String s){
 
         for (int i= 0 ; i<arr.length ; i++){
             if (arr[i].equals(s)){
-                return i + 1 ;
+                return i ;
             }
         }
 
-        return -1 ;
+        return 0 ;
 
+    }
+
+    public static String[] getPlaqueAlphabets() {
+        return PLAQUE_ALPHABETS;
     }
 }
