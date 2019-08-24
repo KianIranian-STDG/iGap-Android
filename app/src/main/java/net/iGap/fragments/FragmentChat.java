@@ -4145,7 +4145,6 @@ public class FragmentChat extends BaseFragment
 
         final long messageId = AppUtils.makeRandomId();
         final long updateTime = TimeUtils.currentLocalTime();
-        final long senderID = G.userId;
         final long duration = AndroidUtils.getAudioDuration(G.fragmentActivity, savedPath) / 1000;
 
         RealmRoomMessage roomMessage = new RealmRoomMessage();
@@ -4154,16 +4153,18 @@ public class FragmentChat extends BaseFragment
         roomMessage.setMessage(getWrittenMessage());
         roomMessage.setRoomId(mRoomId);
         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-        roomMessage.setAttachment(messageId, savedPath, 0, 0, 0, null, duration, LocalFileType.FILE);
+        RealmAttachment realmAttachment = new RealmAttachment();
+        realmAttachment.setId(messageId);
+        realmAttachment.setLocalFilePath(savedPath);
+        realmAttachment.setWidth(0);
+        realmAttachment.setSize(0);
+        realmAttachment.setHeight(0);
+        realmAttachment.setName(null);
+        realmAttachment.setDuration(duration);
+
+        roomMessage.setAttachment(realmAttachment);
         roomMessage.setUserId(G.userId);
         roomMessage.setCreateTime(updateTime);
-        new Thread(() -> {
-            try (Realm realm = Realm.getDefaultInstance()) {
-                realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(roomMessage));
-            }
-        }).start();
-
-        StructMessageInfo messageInfo = new StructMessageInfo(roomMessage);
 
         HelperUploadFile.startUploadTaskChat(mRoomId, chatType, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, getWrittenMessage(), StructMessageInfo.getReplyMessageId(messageInfo), new HelperUploadFile.UpdateListener() {
             @Override
@@ -4178,24 +4179,31 @@ public class FragmentChat extends BaseFragment
 
             }
         });
-        // Bagi : may crash
-        messageInfo.getAttachment().setDuration(duration);
 
-        StructChannelExtra structChannelExtra = new StructChannelExtra();
-        structChannelExtra.messageId = messageId;
-        structChannelExtra.thumbsUp = "0";
-        structChannelExtra.thumbsDown = "0";
-        structChannelExtra.viewsLabel = "1";
-
-        RealmRoom.setLastMessageWithRoomMessage(mRoomId, voiceLastMessage);
+        RealmChannelExtra channelExtra = new RealmChannelExtra();
+        channelExtra.setMessageId(messageId);
+        channelExtra.setThumbsUp("0");
+        channelExtra.setThumbsDown("0");
+        channelExtra.setViewsLabel("1");
 
         if (RealmRoom.showSignature(mRoomId)) {
-            structChannelExtra.signature = G.displayName;
+            channelExtra.setSignature(G.displayName);
         } else {
-            structChannelExtra.signature = "";
+            channelExtra.setSignature("");
         }
 
-        mAdapter.add(new VoiceItem(mAdapter, chatType, this).setMessage(messageInfo));
+        roomMessage.setChannelExtra(channelExtra);
+        new Thread(() -> {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realm1 -> {
+                    realm1.copyToRealmOrUpdate(roomMessage);
+                    RealmRoom.setLastMessageWithRoomMessage(realm1, mRoomId, voiceLastMessage);
+                });
+            }
+        }).start();
+
+
+        mAdapter.add(new VoiceItem(mAdapter, chatType, this).setMessage(new StructMessageInfo(roomMessage)));
         scrollToEnd();
         clearReplyView();
     }
