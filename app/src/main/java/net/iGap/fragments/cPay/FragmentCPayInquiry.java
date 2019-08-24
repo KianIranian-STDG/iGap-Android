@@ -67,7 +67,7 @@ public class FragmentCPayInquiry extends BaseFragment implements ToolbarListener
         String[] plaqueValue = HelperCPay.getPlaque(plaqueText);
 
         binding.fciPlaqueView.setPlaque1(plaqueValue[0]);
-        binding.fciPlaqueView.setPlaqueAlphabet(HelperCPay.getPlaqueAlphabet(plaqueValue[1]));
+        binding.fciPlaqueView.setPlaqueAlphabet(HelperCPay.getPlaqueAlphabet(Integer.valueOf(plaqueValue[1])));
         binding.fciPlaqueView.setPlaque2(plaqueValue[2]);
         binding.fciPlaqueView.setPlaqueCity(plaqueValue[3]);
 

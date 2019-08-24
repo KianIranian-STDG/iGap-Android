@@ -16,6 +16,7 @@ import net.iGap.R;
 import net.iGap.adapter.cPay.AdapterPlaqueList;
 import net.iGap.databinding.FragmentCpayBinding;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperCPay;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -57,6 +58,10 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
         initRecyclerView();
         initCallBacks();
 
+        HelperCPay.getPlaqueCode("الف");
+        HelperCPay.getPlaqueCode("ب");
+        HelperCPay.getPlaqueCode("ی");
+
     }
 
     private void initCallBacks() {
@@ -81,8 +86,8 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
 
     private void initRecyclerView() {
 
-        plaqueList.add("110214566");
-        plaqueList.add("184426588");
+        plaqueList.add("110114566");
+        plaqueList.add("183226588");
 
         adapter = new AdapterPlaqueList(getActivity());
         adapter.setPlaqueList(plaqueList);

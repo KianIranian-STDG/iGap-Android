@@ -81,7 +81,7 @@ public class AdapterPlaqueList extends RecyclerView.Adapter<AdapterPlaqueList.Pl
             String[] plaqueValue = HelperCPay.getPlaque(plaque);
 
             plaqueView.setPlaque1(plaqueValue[0]);
-            plaqueView.setPlaqueAlphabet(HelperCPay.getPlaqueAlphabet(plaqueValue[1]));
+            plaqueView.setPlaqueAlphabet(HelperCPay.getPlaqueAlphabet(Integer.valueOf(plaqueValue[1])));
             plaqueView.setPlaque2(plaqueValue[2]);
             plaqueView.setPlaqueCity(plaqueValue[3]);
 

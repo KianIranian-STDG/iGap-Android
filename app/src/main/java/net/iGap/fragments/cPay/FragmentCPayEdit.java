@@ -66,7 +66,7 @@ public class FragmentCPayEdit extends BaseFragment implements ToolbarListener {
         String[] plaqueValue = HelperCPay.getPlaque(plaqueText);
 
         binding.fcePlaqueView.setPlaque1(plaqueValue[0]);
-        binding.fcePlaqueView.setPlaqueAlphabet(HelperCPay.getPlaqueAlphabet(plaqueValue[1]));
+        binding.fcePlaqueView.setPlaqueAlphabet(HelperCPay.getPlaqueAlphabet(Integer.valueOf(plaqueValue[1])));
         binding.fcePlaqueView.setPlaque2(plaqueValue[2]);
         binding.fcePlaqueView.setPlaqueCity(plaqueValue[3]);
 
