@@ -14,14 +14,14 @@ import java.util.List;
 
 public class PlaceHistoryAdapter extends RecyclerView.Adapter<PlaceHistoryAdapter.ViewHolder> {
 
-    private List<String> items;
+    private List<IGashtTicketDetail> items;
     private BottomSheetItemClickCallback clickCallback;
 
     public PlaceHistoryAdapter(BottomSheetItemClickCallback clickCallback) {
         this.clickCallback = clickCallback;
     }
 
-    public void setItems(List<String> items) {
+    public void setItems(List<IGashtTicketDetail> items) {
         this.items = items;
         notifyDataSetChanged();
     }

@@ -8,9 +8,11 @@ import net.iGap.igasht.IGashtRepository;
 
 import java.util.List;
 
-public class IGashtHistoryPlaceViewModel extends BaseIGashtViewModel<List<String>> {
+public class IGashtHistoryPlaceViewModel extends BaseIGashtViewModel<TicketHistoryListResponse<IGashtTicketDetail>> {
 
-    private MutableLiveData<List<String>> historyList= new MutableLiveData<>();
+    private MutableLiveData<List<IGashtTicketDetail>> historyList = new MutableLiveData<>();
+
+    private TicketHistoryListResponse<IGashtTicketDetail> response;
     private IGashtRepository repository;
 
     public IGashtHistoryPlaceViewModel() {
@@ -18,23 +20,28 @@ public class IGashtHistoryPlaceViewModel extends BaseIGashtViewModel<List<String
         getHistoryData();
     }
 
-    public MutableLiveData<List<String>> getHistoryList() {
+    public MutableLiveData<List<IGashtTicketDetail>> getHistoryList() {
         return historyList;
     }
 
     @Override
-    public void onSuccess(List<String> data) {
+    public void onSuccess(TicketHistoryListResponse<IGashtTicketDetail> data) {
         showLoadingView.set(View.GONE);
         showMainView.set(View.VISIBLE);
         showViewRefresh.set(View.GONE);
-        historyList.setValue(data);
+        response = data;
+        historyList.setValue(response.getData());
     }
 
     private void getHistoryData() {
         showLoadingView.set(View.VISIBLE);
         showMainView.set(View.GONE);
         showViewRefresh.set(View.GONE);
-        repository.getHistoryList(this);
+        if (response == null) {
+            repository.getHistoryList(0, 10, this);
+        } else {
+            repository.getHistoryList(response.getOffset(), response.getLimit(), this);
+        }
     }
 
     public void onRetryClick() {

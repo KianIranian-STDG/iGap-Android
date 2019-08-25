@@ -16,67 +16,89 @@ import net.iGap.R;
 
 import java.util.List;
 
-public class IGashtLocationListAdapter extends RecyclerView.Adapter<IGashtLocationListAdapter.ViewHolder> {
+public class IGashtLocationListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<IGashtLocationItem> items;
     private onLocationItemClickListener locationItemClickListener;
+    private String provinceSelectedName;
 
-    public void setItems(List<IGashtLocationItem> items, onLocationItemClickListener locationItemClickListener) {
-        this.items = items;
+    public IGashtLocationListAdapter(String provinceSelectedName, onLocationItemClickListener locationItemClickListener){
+        this.provinceSelectedName = provinceSelectedName;
         this.locationItemClickListener = locationItemClickListener;
+    }
+
+    public void setItems(List<IGashtLocationItem> items) {
+        this.items = items;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custome_row_igasht_location, viewGroup, false));
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        if (i == -1) {
+            return new ViewHolderProvinceInfo(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custome_row_igasht_province_info, viewGroup, false));
+        } else {
+            return new ViewHolderLocationItem(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custome_row_igasht_location, viewGroup, false));
+        }
     }
+
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.itemTitleTextView.setText(items.get(i).getNameWithLanguage());
-        viewHolder.itemAddressTextView.setText(items.get(i).getAddressWithLanguage());
-      /*  viewHolder.itemLikeCountTextView.setText("126");*/
-        viewHolder.itemLocationTextView.setText(items.get(i).getLocation());
-        Picasso.get().load("test").placeholder(R.drawable.logo).error(R.drawable.ic_error_igap).fit().centerCrop().into(viewHolder.itemImageView);
-//        viewHolder.addToFavoriteButton.setOnClickListener(v -> locationItemClickListener.addToFavorite(viewHolder.getAdapterPosition()));
-        viewHolder.buyTicketButton.setOnClickListener(v -> locationItemClickListener.buyTicket(viewHolder.getAdapterPosition()));
-        viewHolder.itemView.setOnClickListener(v -> locationItemClickListener.onItem(viewHolder.getAdapterPosition()));
+    public int getItemViewType(int position) {
+        return position == 0 ? -1 : -2;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+        if (viewHolder instanceof ViewHolderProvinceInfo) {
+            ((ViewHolderProvinceInfo) viewHolder).locationItemCount.setText((getItemCount() - 1) + "");
+            ((ViewHolderProvinceInfo) viewHolder).provinceName.setText(provinceSelectedName);
+        } else if (viewHolder instanceof ViewHolderLocationItem) {
+            ((ViewHolderLocationItem) viewHolder).itemTitleTextView.setText(items.get(i-1).getNameWithLanguage());
+            ((ViewHolderLocationItem) viewHolder).itemAddressTextView.setText(items.get(i-1).getAddressWithLanguage());
+            ((ViewHolderLocationItem) viewHolder).itemLocationTextView.setText(items.get(i-1).getLocation());
+            Picasso.get().load("test").placeholder(R.drawable.logo).error(R.drawable.ic_error_igap).fit().centerCrop().into(((ViewHolderLocationItem) viewHolder).itemImageView);
+            ((ViewHolderLocationItem) viewHolder).buyTicketButton.setOnClickListener(v -> locationItemClickListener.buyTicket(viewHolder.getAdapterPosition()-1));
+            viewHolder.itemView.setOnClickListener(v -> locationItemClickListener.onItem(viewHolder.getAdapterPosition()-1));
+        }
     }
 
     @Override
     public int getItemCount() {
-        return items != null ? items.size() : 0;
+        return items != null ? items.size() + 1 : 1;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolderLocationItem extends RecyclerView.ViewHolder {
 
         private AppCompatImageView itemImageView;
         private AppCompatTextView itemTitleTextView;
         private AppCompatTextView itemAddressTextView;
-        /*  private AppCompatTextView itemLikeCountTextView;
-         private AppCompatTextView itemVisitTimeTextView;
-          private AppCompatTextView itemPriceTextView;
-          private AppCompatTextView itemPriceForeignTextView;
-        private MaterialButton addToFavoriteButton;*/
         private AppCompatTextView itemLocationTextView;
         private Button buyTicketButton;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolderLocationItem(@NonNull View itemView) {
             super(itemView);
 
             itemImageView = itemView.findViewById(R.id.itemImage);
             itemTitleTextView = itemView.findViewById(R.id.itemTitle);
             itemAddressTextView = itemView.findViewById(R.id.itemAddress);
-/*            itemLikeCountTextView = itemView.findViewById(R.id.itemLikeCount);
-            addToFavoriteButton = itemView.findViewById(R.id.addToFavoriteButton);*/
             itemLocationTextView = itemView.findViewById(R.id.itemLocation);
             buyTicketButton = itemView.findViewById(R.id.buyTicketButton);
         }
     }
 
+    class ViewHolderProvinceInfo extends RecyclerView.ViewHolder {
+
+        private AppCompatTextView provinceName;
+        private AppCompatTextView locationItemCount;
+
+        public ViewHolderProvinceInfo(@NonNull View itemView) {
+            super(itemView);
+            provinceName = itemView.findViewById(R.id.provinceName);
+            locationItemCount = itemView.findViewById(R.id.locationCount);
+        }
+    }
+
     public interface onLocationItemClickListener {
-//        void addToFavorite(int position);
 
         void buyTicket(int position);
 

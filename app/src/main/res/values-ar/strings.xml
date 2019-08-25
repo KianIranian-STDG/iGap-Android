@@ -2936,4 +2936,5 @@
     <string name="Your_purchase_code">کد خرید شما</string>
     <string name="igasht_count_title">تعداد</string>
     <string name="igasht_service_title">سرویس</string>
+    <string name="igasht_select_location_button_title">انتخاب محل</string>
 </resources>

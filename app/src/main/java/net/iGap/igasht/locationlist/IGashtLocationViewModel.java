@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableInt;
 import android.view.View;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.igasht.BaseIGashtViewModel;
@@ -47,6 +48,17 @@ public class IGashtLocationViewModel extends BaseIGashtViewModel<BaseIGashtRespo
 
     public void onRetryClick() {
         getLocationListOfProvince();
+    }
+
+    public String getSelectedProvinceName() {
+        switch (G.selectedLanguage){
+            case "en":
+                return repository.getSelectedProvince().getEnglishName();
+            case "fa":
+                return repository.getSelectedProvince().getProvinceName();
+            default:
+                return repository.getSelectedProvince().getProvinceName();
+        }
     }
 
     private void getLocationListOfProvince() {

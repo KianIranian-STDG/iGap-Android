@@ -74,26 +74,21 @@ public class IGashtLocationListFragment extends IGashtBaseView {
                 }).getView());
 
         binding.locationListView.addItemDecoration(new DividerItemDecoration(binding.locationListView.getContext(), DividerItemDecoration.VERTICAL));
-        binding.locationListView.setAdapter(new IGashtLocationListAdapter());
+        binding.locationListView.setAdapter(new IGashtLocationListAdapter(((IGashtLocationViewModel) viewModel).getSelectedProvinceName(), new IGashtLocationListAdapter.onLocationItemClickListener() {
+            @Override
+            public void buyTicket(int position) {
+                ((IGashtLocationViewModel) viewModel).buyTicket(position);
+            }
+
+            @Override
+            public void onItem(int position) {
+                ((IGashtLocationViewModel) viewModel).buyTicket(position);
+            }
+        }));
 
         ((IGashtLocationViewModel) viewModel).getLocationList().observe(getViewLifecycleOwner(), data -> {
             if (binding.locationListView.getAdapter() instanceof IGashtLocationListAdapter && data != null) {
-                ((IGashtLocationListAdapter) binding.locationListView.getAdapter()).setItems(data, new IGashtLocationListAdapter.onLocationItemClickListener() {
-//                    @Override
-//                    public void addToFavorite(int position) {
-//                        ((IGashtLocationViewModel) viewModel).addToFavorite(position);
-//                    }
-
-                    @Override
-                    public void buyTicket(int position) {
-                        ((IGashtLocationViewModel) viewModel).buyTicket(position);
-                    }
-
-                    @Override
-                    public void onItem(int position) {
-                        ((IGashtLocationViewModel) viewModel).buyTicket(position);
-                    }
-                });
+                ((IGashtLocationListAdapter) binding.locationListView.getAdapter()).setItems(data);
             }
         });
 

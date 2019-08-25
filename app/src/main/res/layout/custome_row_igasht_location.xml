@@ -5,17 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <Button
+    <android.support.design.button.MaterialButton
         android:id="@+id/buyTicketButton"
         style="?iGapButton"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp8"
-        android:fontFamily="@font/main_font"
-        android:text="انتخاب محل"
-        android:textColor="@color/white"
-        android:textSize="@dimen/xlargeTextSize"
-        android:textStyle="bold"
+        android:text="@string/igasht_select_location_button_title"
         app:layout_constraintCircleRadius="@dimen/dp12"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

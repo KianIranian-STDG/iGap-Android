@@ -7,6 +7,8 @@ import net.iGap.api.IgashtApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.errorhandler.ResponseCallback;
+import net.iGap.igasht.historylocation.IGashtTicketDetail;
+import net.iGap.igasht.historylocation.TicketHistoryListResponse;
 import net.iGap.igasht.locationdetail.RegisterTicketResponse;
 import net.iGap.igasht.locationdetail.buyticket.IGashtLocationService;
 import net.iGap.igasht.locationdetail.buyticket.IGashtOrder;
@@ -146,15 +148,15 @@ public class IGashtRepository {
         });
     }
 
-    public void getFavoriteList(ResponseCallback<List<String>> callback) {
-        /*igashtApi.requestGetServiceList(locationId).enqueue(new Callback<BaseIGashtResponse<IGashtLocationService>>() {
+    public void getHistoryList(int offset, int limit, ResponseCallback<TicketHistoryListResponse<IGashtTicketDetail>> callback) {
+        igashtApi.requestGetTicketList(offset, limit).enqueue(new Callback<TicketHistoryListResponse<IGashtTicketDetail>>() {
             @Override
-            public void onResponse(@NotNull Call<BaseIGashtResponse<IGashtLocationService>> call, @NotNull Response<BaseIGashtResponse<IGashtLocationService>> response) {
+            public void onResponse(@NotNull Call<TicketHistoryListResponse<IGashtTicketDetail>> call, @NotNull Response<TicketHistoryListResponse<IGashtTicketDetail>> response) {
                 if (response.code() == 200) {
                     callback.onSuccess(response.body());
                 } else {
                     try {
-                        callback.onError(getError(response.errorBody().string()));
+                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -162,48 +164,10 @@ public class IGashtRepository {
             }
 
             @Override
-            public void onFailure(@NotNull Call<BaseIGashtResponse<IGashtLocationService>> call, @NotNull Throwable t) {
-                t.printStackTrace();
-                callback.onFailed();
+            public void onFailure(@NotNull Call<TicketHistoryListResponse<IGashtTicketDetail>> call, @NotNull Throwable t) {
+                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
             }
-        });*/
-        new Handler().postDelayed(() -> {
-            List<String> tmp = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
-                tmp.add("item:" + i);
-            }
-            callback.onSuccess(tmp);
-        }, 2000);
-    }
-
-    public void getHistoryList(ResponseCallback<List<String>> callback) {
-        /*igashtApi.requestGetServiceList(locationId).enqueue(new Callback<BaseIGashtResponse<IGashtLocationService>>() {
-            @Override
-            public void onResponse(@NotNull Call<BaseIGashtResponse<IGashtLocationService>> call, @NotNull Response<BaseIGashtResponse<IGashtLocationService>> response) {
-                if (response.code() == 200) {
-                    callback.onSuccess(response.body());
-                } else {
-                    try {
-                        callback.onError(getError(response.errorBody().string()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call<BaseIGashtResponse<IGashtLocationService>> call, @NotNull Throwable t) {
-                t.printStackTrace();
-                callback.onFailed();
-            }
-        });*/
-        new Handler().postDelayed(() -> {
-            List<String> tmp = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
-                tmp.add("item:" + i);
-            }
-            callback.onSuccess(tmp);
-        }, 2000);
+        });
     }
 
     public void registeredOrder(ResponseCallback<RegisterTicketResponse> callback) {
@@ -237,14 +201,14 @@ public class IGashtRepository {
     }
 
     public void createVoucherList(List<IGashtLocationService> data) {
-        for (int i = 0; i<data.size();i++){
-            if (data.get(i).getCount()>0){
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).getCount() > 0) {
                 selectedServiceList.add(new IGashtVouchers(data.get(i).getPersianTicket().getAmount(), data.get(i).getCount()));
             }
         }
     }
 
-    public void clearSelectedServiceList(){
+    public void clearSelectedServiceList() {
         selectedServiceList.clear();
     }
 
