@@ -5,6 +5,7 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.view.View;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.igasht.BaseIGashtViewModel;
@@ -14,8 +15,9 @@ import java.util.List;
 
 public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtResponse<IGashtProvince>> {
 
-    private ObservableField<String> backgroundImageUrl = new ObservableField<>();
+    private ObservableField<String> backgroundImageUrl = new ObservableField<>("");
     private ObservableInt selectIcon = new ObservableInt(R.string.down_arrow_icon);
+    private ObservableInt backgroundShap = new ObservableInt(R.drawable.shape_igasht_yellow);
     private MutableLiveData<List<IGashtProvince>> provinceList = new MutableLiveData<>();
     private MutableLiveData<Boolean> goToShowLocationListPage = new MutableLiveData<>();
     private MutableLiveData<Boolean> clearEditText = new MutableLiveData<>();
@@ -23,12 +25,19 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
     private IGashtRepository repository;
 
     public IGashtProvinceViewModel() {
+        if(G.isDarkTheme){
+            backgroundShap.set(R.drawable.shape_igasht_gradient_gray);
+        }
         repository = IGashtRepository.getInstance();
         getProvinceList();
     }
 
     public ObservableField<String> getBackgroundImageUrl() {
         return backgroundImageUrl;
+    }
+
+    public ObservableInt getBackgroundShap() {
+        return backgroundShap;
     }
 
     public MutableLiveData<Boolean> getGoToShowLocationListPage() {
