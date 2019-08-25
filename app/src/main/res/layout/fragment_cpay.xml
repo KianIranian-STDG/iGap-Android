@@ -87,11 +87,12 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_plaques"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp240"
             android:layout_marginLeft="@dimen/dp20"
             android:layout_marginTop="@dimen/dp10"
             android:layout_marginRight="@dimen/dp20"
-            android:minHeight="@dimen/dp300"
+            android:scrollbars="vertical"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lbl_plaques" />
