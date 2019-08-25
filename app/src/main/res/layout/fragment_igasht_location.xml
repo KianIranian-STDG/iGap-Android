@@ -23,22 +23,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <ImageView
+        <net.iGap.module.RadiusImageView
             android:id="@+id/imageView4"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_margin="@dimen/dp16"
-            app:layout_constraintStart_toStartOf="@id/toolbar"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
-            app:srcCompat="@drawable/ic_city" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/dp4"
+            app:layout_constraintDimensionRatio="116:83"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".3"
+            android:src="@drawable/ic_city"
+            android:padding="@dimen/dp8"/>
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp16"
-            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginTop="20dp"
             android:maxLines="1"
             android:text="TextView"
             app:layout_constraintStart_toEndOf="@+id/imageView4"
@@ -122,8 +123,9 @@
             android:padding="@dimen/dp8"
             android:visibility="@{viewModel.showMainView}"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/v"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.621"
             app:layout_constraintStart_toStartOf="@+id/v"
             app:layout_constraintTop_toBottomOf="@+id/v" />
 
