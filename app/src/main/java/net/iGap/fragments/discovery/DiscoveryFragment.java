@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,6 +46,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     private HelperToolbar mHelperToolbar;
     private boolean needToCrawl = false;
     private boolean listLoaded = false;
+    private boolean needToReload = false;
 
     private ArrayList<DiscoveryItem> discoveryArrayList;
 
@@ -61,6 +63,10 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
 
     public void setNeedToCrawl(boolean needToCrawl){
         this.needToCrawl = needToCrawl;
+    }
+
+    public void setNeedToReload(boolean needToRelaod) {
+        this.needToReload = needToRelaod;
     }
 
     @Nullable
@@ -180,6 +186,10 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         if (discoveryArrayList == null) {
             tryToUpdateOrFetchRecycleViewData(0);
         }
+
+        if (needToReload){
+            updateOrFetchRecycleViewData();
+        }
     }
 
     @Override
@@ -239,32 +249,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                     setRefreshing(false);
 
                     if (needToCrawl && getActivity() != null) {
-                        BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getActivity().
-                                        getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
-
-                        if (bottomNavigationFragment != null) {
-                            for (int i = 0; i < discoveryArrayList.size(); i++) {
-                                ArrayList<DiscoveryItemField> discoveryFields = discoveryArrayList.get(i).discoveryFields;
-                                for (int j = 0; j < discoveryFields.size(); j++) {
-                                    if (discoveryFields.get(j).id == bottomNavigationFragment.getCrawlerStruct().getPages().get(bottomNavigationFragment.getCrawlerStruct().getCurrentPage())) {
-                                        if (bottomNavigationFragment.getCrawlerStruct().getPageSum() > 0) {
-
-                                            int currentPage = bottomNavigationFragment.getCrawlerStruct().getCurrentPage();
-                                                currentPage++;
-
-                                            bottomNavigationFragment.getCrawlerStruct().setCurrentPage(currentPage);
-                                            BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryFields.get(j), getActivity(),
-                                                    bottomNavigationFragment.getCrawlerStruct().getPageSum() > 1);
-
-                                        } else
-                                            BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryFields.get(j), getActivity(), false);
-
-                                        needToCrawl = false;
-                                        return;
-                                    }
-                                }
-                            }
-                        }
+                        discoveryCrawler(getActivity());
                     }
                 });
             }
@@ -286,6 +271,38 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                 });
             }
         });
+    }
+
+    public void discoveryCrawler(FragmentActivity activity) {
+        BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) activity.
+                getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+
+        if (bottomNavigationFragment != null) {
+            for (int i = 0; i < discoveryArrayList.size(); i++) {
+                ArrayList<DiscoveryItemField> discoveryFields = discoveryArrayList.get(i).discoveryFields;
+                for (int j = 0; j < discoveryFields.size(); j++) {
+                    if (discoveryFields.get(j).id == bottomNavigationFragment.getCrawlerStruct().getPages()
+                            .get(bottomNavigationFragment.getCrawlerStruct().getCurrentPage())) {
+                        if (bottomNavigationFragment.getCrawlerStruct().getPageSum() > 0) {
+
+                            int currentPage = bottomNavigationFragment.getCrawlerStruct().getCurrentPage();
+                            currentPage++;
+
+                            bottomNavigationFragment.getCrawlerStruct().setCurrentPage(currentPage);
+                            bottomNavigationFragment.getCrawlerStruct().setCurrentPageId(discoveryFields.get(j).id);
+                            BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryFields.get(j), getActivity(),
+                                    bottomNavigationFragment.getCrawlerStruct().getPageSum() > 1);
+
+                        } else
+                            BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryFields.get(j), getActivity(), false);
+
+                        needToCrawl = false;
+                        return;
+                    }
+                }
+            }
+        }
+
     }
 
     private void setAdapterData(ArrayList<DiscoveryItem> discoveryArrayList, String title) {
@@ -334,10 +351,12 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     public void onDestroyView() {
         super.onDestroyView();
         needToCrawl = false;
+        needToReload = false;
     }
 
     public static class CrawlerStruct {
         private int currentPage;
+        private int currentPageId;
         private List<Integer> pages;
 
         public CrawlerStruct(int currentPage, List<Integer> pages) {
@@ -359,6 +378,14 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
 
         public List<Integer> getPages() {
             return pages;
+        }
+
+        public int getCurrentPageId() {
+            return currentPageId;
+        }
+
+        public void setCurrentPageId(int currentPageId) {
+            this.currentPageId = currentPageId;
         }
     }
 }

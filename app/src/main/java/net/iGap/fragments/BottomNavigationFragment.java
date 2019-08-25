@@ -97,9 +97,12 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 if (fragment == null) {
                     fragment = DiscoveryFragment.newInstance(0);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    if (crawlerStruct != null)
-                        ((DiscoveryFragment) fragment).setNeedToCrawl(true);
                 }
+
+                if (crawlerStruct != null) {
+                    ((DiscoveryFragment) fragment).setNeedToCrawl(true);
+                }
+
                 if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
                     fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
                 }
@@ -201,7 +204,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }
     }
 
-    public void getSelectedFragment(int position, String[] uri) {
+    public void setCrawlerMap(int position, String[] uri) {
 
         if (uri != null && uri.length > 0)
             if (!uri[0].equals("") && position == DISCOVERY_FRAGMENT) {
@@ -212,22 +215,39 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 this.crawlerStruct = new DiscoveryFragment.CrawlerStruct(0, pages);
             }
 
-        switch (position) {
-            case CONTACT_FRAGMENT:
-                bottomNavigation.setCurrentItem(CONTACT_FRAGMENT);
-                break;
-            case CALL_FRAGMENT:
-                bottomNavigation.setCurrentItem(CALL_FRAGMENT);
-                break;
-            case CHAT_FRAGMENT:
-                bottomNavigation.setCurrentItem(CHAT_FRAGMENT);
-                break;
-            case DISCOVERY_FRAGMENT:
-                bottomNavigation.setCurrentItem(DISCOVERY_FRAGMENT);
-                break;
-            case PROFILE_FRAGMENT:
-                bottomNavigation.setCurrentItem(PROFILE_FRAGMENT);
-                break;
+        if (position == bottomNavigation.getCurrentTab()) {
+            if (bottomNavigation.getSelectedItemPosition() == DISCOVERY_FRAGMENT) {
+                if (getActivity() != null) {
+                    DiscoveryFragment discoveryFragment = (DiscoveryFragment) getChildFragmentManager().findFragmentByTag(DiscoveryFragment.class.getName());
+                    if (discoveryFragment != null) {
+                        discoveryFragment.setNeedToCrawl(true);
+                        discoveryFragment.discoveryCrawler(getActivity());
+                    }
+                }
+            }
+        } else {
+            switch (position) {
+                case CONTACT_FRAGMENT:
+                    bottomNavigation.setCurrentItem(CONTACT_FRAGMENT);
+                    break;
+                case CALL_FRAGMENT:
+                    bottomNavigation.setCurrentItem(CALL_FRAGMENT);
+                    break;
+                case CHAT_FRAGMENT:
+                    bottomNavigation.setCurrentItem(CHAT_FRAGMENT);
+                    break;
+                case DISCOVERY_FRAGMENT:
+
+                    DiscoveryFragment discoveryFragment = (DiscoveryFragment) getChildFragmentManager().findFragmentByTag(DiscoveryFragment.class.getName());
+                    if (discoveryFragment != null)
+                        discoveryFragment.setNeedToReload(true);
+
+                    bottomNavigation.setCurrentItem(DISCOVERY_FRAGMENT);
+                    break;
+                case PROFILE_FRAGMENT:
+                    bottomNavigation.setCurrentItem(PROFILE_FRAGMENT);
+                    break;
+            }
         }
     }
 

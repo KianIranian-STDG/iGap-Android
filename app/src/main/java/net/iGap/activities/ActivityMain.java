@@ -344,9 +344,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (extras != null) {
 
             if (extras.getString(DEEP_LINK) != null) {
-                autoLinkHelper(extras.getString(DEEP_LINK, DEEP_LINK_CHAT));
+                autoLinkCrawler(extras.getString(DEEP_LINK, DEEP_LINK_CHAT));
             } else if (intent.getAction() != null && intent.getAction().equals(OPEN_DEEP_LINK)) {
-                autoLinkHelper(extras.getString(DEEP_LINK, DEEP_LINK_CHAT));
+                autoLinkCrawler(extras.getString(DEEP_LINK, DEEP_LINK_CHAT));
                 return;
             }
 
@@ -371,7 +371,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    private void autoLinkHelper(String uri) {
+    private void autoLinkCrawler(String uri) {
         String[] address = uri.toLowerCase().trim().split("/");
         if (address.length == 0)
             return;
@@ -386,7 +386,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         discoveryUri = uri.toLowerCase().trim().replace("discovery/", "").split("/");
                     } else
                         discoveryUri = uri.toLowerCase().trim().replace("discovery", "").split("/");
-                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.DISCOVERY_FRAGMENT, discoveryUri);
+                    ((BottomNavigationFragment) fragment).setCrawlerMap(BottomNavigationFragment.DISCOVERY_FRAGMENT, discoveryUri);
                     break;
                 case DEEP_LINK_CHAT:
                     String chatUri = uri.toLowerCase().trim().replace("chat/", "").replace("chat", "").trim();
@@ -396,16 +396,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         intent.setData(Uri.parse("igap://resolve?domain=" + chatUri));
                         startActivity(intent);
                     }
-                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CHAT_FRAGMENT,null);
+                    ((BottomNavigationFragment) fragment).setCrawlerMap(BottomNavigationFragment.CHAT_FRAGMENT,null);
                     break;
                 case DEEP_LINK_PROFILE:
-                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.PROFILE_FRAGMENT,null);
+                    ((BottomNavigationFragment) fragment).setCrawlerMap(BottomNavigationFragment.PROFILE_FRAGMENT,null);
                     break;
                 case DEEP_LINK_CALL:
-                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CALL_FRAGMENT,null);
+                    ((BottomNavigationFragment) fragment).setCrawlerMap(BottomNavigationFragment.CALL_FRAGMENT,null);
                     break;
                 case DEEP_LINK_CONTACT:
-                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CONTACT_FRAGMENT,null);
+                    ((BottomNavigationFragment) fragment).setCrawlerMap(BottomNavigationFragment.CONTACT_FRAGMENT,null);
                     break;
 
             }
