@@ -11,12 +11,9 @@ import net.iGap.api.repository.CPayRepository;
 import net.iGap.model.cPay.RegisterPlaqueBodyModel;
 import net.iGap.model.cPay.RegisterPlaqueModel;
 
-public class FragmentCPayEditViewModel extends ViewModel implements ResponseCallback<RegisterPlaqueModel> {
+public class FragmentCPayEditViewModel extends BaseCPayViewModel<RegisterPlaqueModel> {
 
-    private MutableLiveData<Integer> msgToUser = new MutableLiveData<>();
-    private MutableLiveData<String> msgToUserString = new MutableLiveData<>();
-    private MutableLiveData<Boolean> loaderListener = new MutableLiveData<>();
-    private MutableLiveData<Boolean> addCarListener = new MutableLiveData<>();
+   private MutableLiveData<Boolean> addCarListener = new MutableLiveData<>();
 
     private String nameTxt = "", familyTxt = "", nationalIDTxt = "";
 
@@ -30,11 +27,11 @@ public class FragmentCPayEditViewModel extends ViewModel implements ResponseCall
             if (nameTxt.length() != 0 && familyTxt.length() != 0 && nationalIDTxt.length() == 10) {
                 registerPlaque(plaque);
             } else {
-                msgToUser.setValue(R.string.complete_correct);
+                getMessageToUser().setValue(R.string.complete_correct);
             }
 
         } else {
-            msgToUser.setValue(R.string.plaque_is_not_valid);
+            getMessageToUser().setValue(R.string.plaque_is_not_valid);
         }
     }
 
@@ -54,7 +51,7 @@ public class FragmentCPayEditViewModel extends ViewModel implements ResponseCall
         body.setPlaque(plaque + "4");
         body.setMobile(phone);
 
-        loaderListener.setValue(true);
+        getLoaderListener().setValue(true);
         CPayRepository.getInstance().registerNewPlaque(body, this);
     }
 
@@ -70,38 +67,15 @@ public class FragmentCPayEditViewModel extends ViewModel implements ResponseCall
         nationalIDTxt = text.trim();
     }
 
-    public MutableLiveData<Integer> getMessageToUser() {
-        return msgToUser;
-    }
-
-    public MutableLiveData<String> getMessageToUserText() {
-        return msgToUserString;
-    }
-
-    public MutableLiveData<Boolean> getLoaderListener() {
-        return loaderListener;
-    }
-
     public MutableLiveData<Boolean> getAddCarListener() {
         return addCarListener;
     }
 
     @Override
     public void onSuccess(RegisterPlaqueModel data) {
-        msgToUser.setValue(R.string.plaque_added);
-        loaderListener.setValue(false);
+        getMessageToUser().setValue(R.string.plaque_added);
+        getLoaderListener().setValue(false);
         addCarListener.postValue(true);
     }
 
-    @Override
-    public void onError(ErrorModel error) {
-        msgToUserString.setValue(error.getMessage());
-        loaderListener.setValue(false);
-    }
-
-    @Override
-    public void onFailed(boolean handShakeError) {
-        msgToUser.setValue(R.string.server_do_not_response);
-        loaderListener.setValue(false);
-    }
 }
