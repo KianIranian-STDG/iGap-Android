@@ -85,14 +85,12 @@ import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatSendMessageResponse;
-import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGetWallpaper;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.interfaces.OnMapRegisterStateMain;
 import net.iGap.interfaces.OnPayment;
-import net.iGap.interfaces.OnRefreshActivity;
 import net.iGap.interfaces.OnUpdating;
 import net.iGap.interfaces.OnUserInfoMyClient;
 import net.iGap.interfaces.OnVerifyNewDevice;
@@ -100,7 +98,6 @@ import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
@@ -151,7 +148,17 @@ import static net.iGap.G.userId;
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
 
     public static final String openChat = "openChat";
+    public static final String OPEN_DEEP_LINK = "openDeepLink";
+
+    public static final String DEEP_LINK_DISCOVERY = "discovery";
+    public static final String DEEP_LINK_CONTACT = "contact";
+    public static final String DEEP_LINK_CHAT = "chat";
+    public static final String DEEP_LINK_CALL = "call";
+    public static final String DEEP_LINK_PROFILE = "profile";
+    public static final String DEEP_LINK = "deepLink";
+
     public static final String openMediaPlyer = "openMediaPlyer";
+
     public static final int requestCodePaymentCharge = 198;
     public static final int requestCodePaymentBill = 199;
     public static final int requestCodeQrCode = 200;
@@ -315,13 +322,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         if (intent.getAction() != null && intent.getAction().equals("net.iGap.payment")) {
-            Log.wtf(this.getClass().getName(), "status: " + intent.getStringExtra("status"));
-            Log.wtf(this.getClass().getName(), "message: " + intent.getStringExtra("message"));
-            Log.wtf(this.getClass().getName(), "orderId: " + intent.getStringExtra("order_id"));
             FragmentManager fragmentManager = getSupportFragmentManager();
             Fragment fragment = fragmentManager.findFragmentById(R.id.mainFrame);
             if (fragment instanceof PaymentFragment) {
-                Log.wtf(this.getClass().getName(), "jnjgndgg");
                 ((PaymentFragment) fragment).setPaymentResult(new Payment(
                         intent.getStringExtra("status"),
                         intent.getStringExtra("message"),
@@ -337,7 +340,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         Bundle extras = intent.getExtras();
+
         if (extras != null) {
+
+            if (extras.getString(DEEP_LINK) != null) {
+                autoLinkHelper(extras.getString(DEEP_LINK, DEEP_LINK_CHAT));
+            } else if (intent.getAction() != null && intent.getAction().equals(OPEN_DEEP_LINK)) {
+                autoLinkHelper(extras.getString(DEEP_LINK, DEEP_LINK_CHAT));
+                return;
+            }
 
             long roomId = extras.getLong(ActivityMain.openChat);
             if (!FragmentLanguage.languageChanged && roomId > 0) { // if language changed not need check enter to chat
@@ -360,9 +371,52 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
+    private void autoLinkHelper(String uri) {
+        String[] address = uri.toLowerCase().trim().split("/");
+        if (address.length == 0)
+            return;
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+
+        if (fragment instanceof BottomNavigationFragment) {
+            switch (address[0]) {
+                case DEEP_LINK_DISCOVERY:
+                    String[] discoveryUri;
+                    if (address.length > 1) {
+                        discoveryUri = uri.toLowerCase().trim().replace("discovery/", "").split("/");
+                    } else
+                        discoveryUri = uri.toLowerCase().trim().replace("discovery", "").split("/");
+                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.DISCOVERY_FRAGMENT, discoveryUri);
+                    break;
+                case DEEP_LINK_CHAT:
+                    String chatUri = uri.toLowerCase().trim().replace("chat/", "").replace("chat", "").trim();
+                    if (chatUri.length() > 1) {
+                        Intent intent = new Intent(this, ActivityMain.class);
+                        intent.setAction("android.intent.action.VIEW");
+                        intent.setData(Uri.parse("igap://resolve?domain=" + chatUri));
+                        startActivity(intent);
+                    }
+                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CHAT_FRAGMENT,null);
+                    break;
+                case DEEP_LINK_PROFILE:
+                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.PROFILE_FRAGMENT,null);
+                    break;
+                case DEEP_LINK_CALL:
+                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CALL_FRAGMENT,null);
+                    break;
+                case DEEP_LINK_CONTACT:
+                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CONTACT_FRAGMENT,null);
+                    break;
+
+            }
+        }
+//            new HelperFragment(getSupportFragmentManager(),DiscoveryFragment.newAutoLinkInstance(0,address[1])).setReplace(false).load(true);
+
+
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.wtf(this.getClass().getName(), "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -525,7 +579,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
             isOpenChatBeforeSheare = false;
-            checkIntent(getIntent());
 
             initComponent();
 
@@ -1126,7 +1179,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     //******************************************************************************************************************************
 
     private void initTabStrip() {
-        new HelperFragment(getSupportFragmentManager(), new BottomNavigationFragment()).load(true);
+        Fragment fragment = new BottomNavigationFragment();
+        getSupportFragmentManager().beginTransaction().addToBackStack(fragment.getClass().getName()).replace(R.id.mainFrame,fragment,fragment.getClass().getName()).commit();
     }
 
 
@@ -1142,7 +1196,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 openActivityPassCode();
             }
             G.isFirstPassCode = false;
+
+            checkIntent(getIntent());
         }
+
+//        String uri = "discovery";
+//        autoLinkHelper(uri);
     }
 
     @SuppressLint("MissingSuperCall")

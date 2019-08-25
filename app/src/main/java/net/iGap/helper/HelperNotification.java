@@ -38,18 +38,18 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmNotificationSetting;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.realm.Realm;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
 import static net.iGap.G.context;
 import static net.iGap.proto.ProtoGlobal.RoomMessageLog.Type.PINNED_MESSAGE;
 
@@ -166,7 +166,7 @@ public class HelperNotification {
         Realm realm;
 
         ShowNotification() {
-            notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 CharSequence name = G.context.getString(R.string.channel_name_notification);// The user-visible name of the channel.
                 @SuppressLint("WrongConstant") NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH);
@@ -899,4 +899,44 @@ public class HelperNotification {
         }
     }
 
+
+    @SuppressLint("WrongConstant")
+    public static void sendDeepLink(Map<String, String> data, String title, String body) {
+
+        String CHANNEL_ID = "1032";
+        String deepLink = data.get(ActivityMain.DEEP_LINK);
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+
+        Intent intent = new Intent(context, ActivityMain.class);
+        intent.setAction(ActivityMain.OPEN_DEEP_LINK);
+        intent.putExtra(ActivityMain.DEEP_LINK, deepLink);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, 0);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, title, NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(mChannel);
+        }
+
+        Notification notification;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            notification = new Notification.Builder(context, CHANNEL_ID)
+                    .setContentTitle(title)
+                    .setContentText(body)
+                    .setSmallIcon(R.mipmap.icon)
+                    .setContentIntent(pendingIntent)
+                    .build();
+        } else {
+            notification = new Notification.Builder(context)
+                    .setContentTitle(title)
+                    .setContentText(body)
+                    .setSmallIcon(R.mipmap.icon)
+                    .setContentIntent(pendingIntent)
+                    .build();
+        }
+
+        notificationManager.notify(1032,notification);
+    }
 }

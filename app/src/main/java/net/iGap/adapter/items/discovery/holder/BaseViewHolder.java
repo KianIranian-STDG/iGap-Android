@@ -23,8 +23,6 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
-import net.iGap.fragments.mplTranaction.MplTransactionFragment;
-import net.iGap.internetpackage.BuyInternetPackageFragment;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
@@ -38,8 +36,9 @@ import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
-import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
+import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.fragments.poll.PollFragment;
+import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperFragment;
@@ -47,6 +46,7 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.internetpackage.BuyInternetPackageFragment;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
@@ -75,7 +75,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         this.activity = activity;
     }
 
-    public static void handleDiscoveryFieldsClickStatic(DiscoveryItemField discoveryField, FragmentActivity activity) {
+    public static void handleDiscoveryFieldsClickStatic(DiscoveryItemField discoveryField, FragmentActivity activity , boolean haveNext) {
         if (activity == null || activity.isFinishing()) {
             return;
         }
@@ -91,7 +91,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
         switch (discoveryField.actionType) {
             case PAGE:/** tested **/
-                actionPage(discoveryField.value, activity);
+                actionPage(discoveryField.value, activity , haveNext);
                 break;
             case JOIN_LINK:
                 int index = discoveryField.value.lastIndexOf("/");
@@ -319,8 +319,10 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private static void actionPage(String value, FragmentActivity activity) {
-        new HelperFragment(activity.getSupportFragmentManager(), DiscoveryFragment.newInstance(Integer.valueOf(value))).setReplace(false).load(false);
+    private static void actionPage(String value, FragmentActivity activity, boolean haveNext) {
+        DiscoveryFragment discoveryFragment = DiscoveryFragment.newInstance(Integer.valueOf(value));
+        discoveryFragment.setNeedToCrawl(haveNext);
+        new HelperFragment(activity.getSupportFragmentManager(), discoveryFragment).setReplace(false).load(false);
     }
 
     public static void dialPhoneNumber(Context context, String phoneNumber, FragmentActivity activity) {
@@ -354,7 +356,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
-        handleDiscoveryFieldsClickStatic(discoveryField, activity);
+        handleDiscoveryFieldsClickStatic(discoveryField, activity,false);
     }
 
 }
