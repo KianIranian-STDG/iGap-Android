@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/tv_itemMplTransActionInfo_data"
-        style="?textTitleColorSettingTheme"
+        style="@style/myIconTextViewStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/tv_itemMplTransActionInfo_title"
-        style="?textTitleColorSettingTheme"
+        style="@style/myIconTextViewStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

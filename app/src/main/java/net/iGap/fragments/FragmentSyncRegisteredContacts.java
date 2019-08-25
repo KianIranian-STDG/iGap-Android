@@ -278,16 +278,11 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
 
         G.onUserContactdelete = null;
         G.onContactsGetList = null;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
 
         realm.close();
     }

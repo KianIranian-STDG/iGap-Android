@@ -9,22 +9,12 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 import android.databinding.ObservableField;
-import android.support.v4.app.Fragment;
+import android.view.View;
 
-import net.iGap.G;
-import net.iGap.fragments.FragmentCall;
-import net.iGap.fragments.FragmentChatSettings;
-import net.iGap.fragments.FragmentLanguage;
-import net.iGap.fragments.FragmentMain;
-import net.iGap.fragments.FragmentNotificationAndSound;
-import net.iGap.fragments.FragmentPrivacyAndSecurity;
-import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperLogout;
 import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.module.SHP_SETTING;
@@ -34,8 +24,8 @@ import java.util.Locale;
 
 public class FragmentSettingViewModel extends ViewModel {
 
-    public MutableLiveData<Boolean> showLoading = new MutableLiveData<>();
-    private MutableLiveData<String> currentLanguage = new MutableLiveData<>();
+    private MutableLiveData<Integer> showLoading = new MutableLiveData<>();
+    private ObservableField<String> currentLanguage = new ObservableField<>();
 
     //ui
     public MutableLiveData<Boolean> showDialogDeleteAccount = new MutableLiveData<>();
@@ -52,12 +42,16 @@ public class FragmentSettingViewModel extends ViewModel {
     public String phoneNumber;
     public long userId;
 
-    public LiveData<String> getCurrentLanguage() {
+    public FragmentSettingViewModel(SharedPreferences sharedPreferences) {
+        currentLanguage.set(sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage()));
+    }
+
+    public ObservableField<String> getCurrentLanguage() {
         return currentLanguage;
     }
 
-    public FragmentSettingViewModel(SharedPreferences sharedPreferences) {
-        currentLanguage.setValue(sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage()));
+    public MutableLiveData<Integer> getShowLoading() {
+        return showLoading;
     }
 
     public void onLanguageClick(){
@@ -85,27 +79,24 @@ public class FragmentSettingViewModel extends ViewModel {
     }
 
     public void logout() {
-        showLoading.setValue(true);
+        showLoading.setValue(View.VISIBLE);
         new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
             @Override
             public void onUserSessionLogout() {
-                G.handler.post(() -> {
-                    HelperLogout.logout();
-                    showLoading.setValue(false);
-                });
+                HelperLogout.logout();
+                showLoading.postValue(View.GONE);
             }
 
             @Override
             public void onError() {
-
+                showLoading.postValue(View.GONE);
+                showError.postValue(true);
             }
 
             @Override
             public void onTimeOut() {
-                G.handler.post(() -> {
-                    showLoading.setValue(false);
-                    showError.setValue(true);
-                });
+                showLoading.postValue(View.GONE);
+                showError.postValue(true);
             }
         });
     }

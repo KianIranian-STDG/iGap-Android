@@ -312,7 +312,9 @@ public class FragmentShowAvatars extends BaseFragment {
                     avatarListSize = element.size();
 
                     if (avatarListSize > 0) {
-                        mAdapter.dataChanged();
+                        mAdapter.clearBitmaps();
+                        mAdapter = new AdapterViewPager();
+                        viewPager.setAdapter(mAdapter);
                         txtImageNumber.setText(viewPager.getCurrentItem() + 1 + " " + G.fragmentActivity.getResources().getString(R.string.of) + " " + avatarListSize);
                         if (HelperCalander.isPersianUnicode) {
                             txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
@@ -548,9 +550,11 @@ public class FragmentShowAvatars extends BaseFragment {
 
     private class AdapterViewPager extends PagerAdapter {
         Bitmap[] bitmaps;
+        final Object mutex;
 
         public AdapterViewPager() {
             bitmaps = new Bitmap[avatarList.size()];
+            mutex = new Object();
         }
 
         @Override
@@ -558,14 +562,14 @@ public class FragmentShowAvatars extends BaseFragment {
             return avatarList.size();
         }
 
-        public void dataChanged() {
-            for (Bitmap bitmap: bitmaps) {
-                if (bitmap != null) {
-                    bitmap.recycle();
+        public void clearBitmaps() {
+            synchronized (mutex) {
+                for (Bitmap bitmap: bitmaps) {
+                    if (bitmap != null && !bitmap.isRecycled()) {
+                        bitmap.recycle();
+                    }
                 }
             }
-            bitmaps = new Bitmap[avatarList.size()];
-            this.notifyDataSetChanged();
         }
 
         @Override
@@ -690,21 +694,24 @@ public class FragmentShowAvatars extends BaseFragment {
         }
 
         private void loadFileToImageView(ImageView imageView, File file, int pos) {
-            if (imageView == null)
-                return;
+            synchronized (mutex) {
+                if (imageView == null)
+                    return;
 
-            if (bitmaps[pos] != null) {
-                bitmaps[pos].recycle();
+                if (bitmaps[pos] != null && !bitmaps[pos].isRecycled()) {
+                    bitmaps[pos].recycle();
+                    bitmaps[pos] = null;
+                }
+
+                Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                if (myBitmap == null) {
+                    return;
+                }
+
+                bitmaps[pos] = myBitmap;
+
+                imageView.setImageBitmap(myBitmap);
             }
-
-            Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-            if (myBitmap == null) {
-                return;
-            }
-
-            bitmaps[pos] = myBitmap;
-
-            imageView.setImageBitmap(myBitmap);
         }
 
         private void startDownload(int position, final MessageProgress progress, final TouchImageView touchImageView) {
@@ -756,10 +763,13 @@ public class FragmentShowAvatars extends BaseFragment {
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            if (bitmaps[position] != null) {
-                bitmaps[position].recycle();
+            synchronized (mutex) {
+                if (bitmaps[position] != null && !bitmaps[position].isRecycled()) {
+                    bitmaps[position].recycle();
+                    bitmaps[position] = null;
+                }
+                container.removeView((View) object);
             }
-            container.removeView((View) object);
         }
     }
 }

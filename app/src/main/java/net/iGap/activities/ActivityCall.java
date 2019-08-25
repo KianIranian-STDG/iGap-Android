@@ -57,6 +57,7 @@ import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperTracker;
+import net.iGap.helper.PermissionHelper;
 import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnVideoCallFrame;
 import net.iGap.module.AndroidUtils;
@@ -239,12 +240,13 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         G.callStripLayoutVisiblityListener.setValue(true);
         ActivityCall.allowOpenCall = true;
 
+        PermissionHelper permissionHelper = new PermissionHelper(this);
         if (viewModel.isVideoCall()) {
-            if (grantCameraAndVoicePermission()) {
+            if (permissionHelper.grantCameraAndVoicePermission()) {
                 init();
             }
         } else {
-            if (grantVoicePermission()) {
+            if (permissionHelper.grantVoicePermission()) {
                 init();
             }
         }
@@ -349,7 +351,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (hasPermissions(permissions)) {
+        boolean tmp = true;
+        for (int grantResult : grantResults) {
+            tmp = tmp && grantResult == PackageManager.PERMISSION_GRANTED;
+        }
+        if (tmp) {
             init();
         } else {
             viewModel.leaveCall();
@@ -527,7 +533,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         int field = 0x00000020;
         wakeLock = ((PowerManager) getSystemService(POWER_SERVICE)).newWakeLock(field, getLocalClassName());
 
-        if(wakeLock.isHeld()) {
+        if (wakeLock.isHeld()) {
             wakeLock.release();
         }
         /*LayoutParams params = this.getWindow().getAttributes();
@@ -542,7 +548,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             int field = 0x00000020;
             wakeLock = ((PowerManager) getSystemService(POWER_SERVICE)).newWakeLock(field, getLocalClassName());
 
-            if(!wakeLock.isHeld()) {
+            if (!wakeLock.isHeld()) {
                 wakeLock.acquire();
             }
 
@@ -790,37 +796,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     }
 
     //***************************************************************************************
-
-    private boolean grantCameraAndVoicePermission() {
-        String[] Permissions = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
-        if (hasPermissions(Permissions)) {
-            return true;
-        } else {
-            ActivityCompat.requestPermissions(this, Permissions, 100);
-            return false;
-        }
-    }
-
-    private boolean grantVoicePermission() {
-        String[] Permissions = {Manifest.permission.RECORD_AUDIO};
-        if (hasPermissions(Permissions)) {
-            return true;
-        } else {
-            ActivityCompat.requestPermissions(this, Permissions, 110);
-            return false;
-        }
-    }
-
-    private boolean hasPermissions(String... permissions) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
 
     public interface OnFinishActivity {
         void finishActivity();

@@ -2924,6 +2924,7 @@
     <string name="mpl_terminal_no">رقم المحطة</string>
     <string name="mpl_do_you_want_save_receipt">هل تريد حفظ الإيصال؟</string>
     <string name="mpl_transaction_nul">ليس لديك أي معاملات في آخر 5 أيام!</string>
+    <string name="mpl_transaction_merchent_name">اسم التاجر</string>
 
 
     <string name="of_from_total">فی %s</string>
