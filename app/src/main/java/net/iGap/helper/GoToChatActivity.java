@@ -153,8 +153,12 @@ public class GoToChatActivity {
         FragmentChat fragmentChat = new FragmentChat();
         fragmentChat.setArguments(getBundle());
         if (G.twoPaneMode){
+            Log.wtf(this.getClass().getName(),"loadChatFragment");
             if (activity instanceof ActivityMain){
                 ((ActivityMain) activity).goToChatPage(fragmentChat);
+            }
+            else{
+                Log.wtf(this.getClass().getName(),"loadChatFragment");
             }
         }else{
             new HelperFragment(activity.getSupportFragmentManager(),fragmentChat).setReplace(false).load();

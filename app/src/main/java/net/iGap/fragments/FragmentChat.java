@@ -622,7 +622,6 @@ public class FragmentChat extends BaseFragment
     private int visibleItemCount; // visible item in recycler view
     private int totalItemCount; // all item in recycler view
     private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
-    private boolean isCardToCardMessage = false;
 
     private HelperToolbar mHelperToolbar;
     private ViewGroup layoutToolbar;
@@ -1562,7 +1561,7 @@ public class FragmentChat extends BaseFragment
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(G.twoPaneMode ? R.string.close_icon : R.string.back_icon)
                 .setRightIcons(R.string.more_icon, R.string.voice_call_icon, R.string.video_call_icon)
                 .setLogoShown(false)
                 .setChatRoom(true)
@@ -2621,7 +2620,6 @@ public class FragmentChat extends BaseFragment
         btnCancelSendingFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isCardToCardMessage = false;
                 ll_attach_text.setVisibility(View.GONE);
                 edtChat.setFilters(new InputFilter[]{});
                 edtChat.setText(edtChat.getText());
@@ -2876,22 +2874,18 @@ public class FragmentChat extends BaseFragment
                     txtNewUnreadMessage.setVisibility(View.GONE);
                     txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
                 } else {
-                    setDownBtnGone();
                     /**
                      * if addToView is true this means that all new message is in adapter
                      * and just need go to end position in list otherwise we should clear all
                      * items and reload again from bottom
                      */
 
-//                    if (!addToView) {
-//                        resetMessagingValue();
-//                        getMessages();
-//                    } else {
-//                        scrollToEnd();
-//                    }
-                    // Todo : Temporally fix bug please use above code with better performance.
-                    resetMessagingValue();
-                    getMessages();
+                    if (!addToView) {
+                        resetMessagingValue();
+                        getMessages();
+                    } else {
+                        scrollToEnd();
+                    }
                 }
             }
         });
@@ -3037,28 +3031,17 @@ public class FragmentChat extends BaseFragment
                     }
                 }
                 if (ll_attach_text.getVisibility() == View.VISIBLE) {
-                    if (isCardToCardMessage) {
-                        sendNewMessageForRequestCardToCard();
-                        ll_attach_text.setVisibility(View.GONE);
-                        edtChat.setFilters(new InputFilter[]{});
-                        edtChat.setText("");
-
-                        clearReplyView();
-                        isCardToCardMessage = false;
-                        return;
-                    } else {
-                        if (listPathString.size() == 0) {
-                            return;
-                        }
-                        sendMessage(latestRequestCode, listPathString.get(0));
-                        listPathString.clear();
-                        ll_attach_text.setVisibility(View.GONE);
-                        edtChat.setFilters(new InputFilter[]{});
-                        edtChat.setText("");
-
-                        clearReplyView();
+                    if (listPathString.size() == 0) {
                         return;
                     }
+                    sendMessage(latestRequestCode, listPathString.get(0));
+                    listPathString.clear();
+                    ll_attach_text.setVisibility(View.GONE);
+                    edtChat.setFilters(new InputFilter[]{});
+                    edtChat.setText("");
+
+                    clearReplyView();
+                    return;
                 }
 
                 /**
@@ -3309,66 +3292,6 @@ public class FragmentChat extends BaseFragment
         }
 
 
-    }
-
-
-    private void sendNewMessageForRequestCardToCard() {
-        String[] messages = HelperString.splitStringEvery(getWrittenMessage(), Config.MAX_TEXT_LENGTH);
-        if (messages.length == 0) {
-            edtChat.setText("");
-            Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
-        } else {
-            for (int i = 0; i < messages.length; i++) {
-                final String message = messages[i];
-
-                final RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, message, replyMessageId());
-
-                if (roomMessage != null) {
-                    JsonArray jsonArray = new JsonArray();
-                    JsonArray jsonArray2 = new JsonArray();
-                    JsonObject jsonObject=new JsonObject();
-                    jsonArray.add(jsonArray2);
-                    JsonObject json = new JsonObject();
-                    json.addProperty("label", "Card to Card");
-                    json.addProperty("imageUrl", "");
-                    json.addProperty("actionType", "27");
-                    json.addProperty("value", G.userId);
-                    jsonArray2.add(json);
-
-
-                    getRealmChat().executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            roomMessage.setRealmAdditional(RealmAdditional.put(realm, jsonArray.toString(), AdditionalType.UNDER_MESSAGE_BUTTON));
-                        }
-                    });
-
-                    edtChat.setText("");
-                    lastMessageId = roomMessage.getMessageId();
-                    mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
-                    clearReplyView();
-                    scrollToEnd();
-
-                    /**
-                     * send splitted message in every one second
-                     */
-                    if (messages.length > 1) {
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (roomMessage.isValid() && !roomMessage.isDeleted()) {
-                                    new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
-                                }
-                            }
-                        }, 1000 * i);
-                    } else {
-                        new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
-                    }
-                } else {
-                    Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
-                }
-            }
-        }
     }
 
     private void sendNewMessageCardToCard(String amount, String cardNumber, String description) {
@@ -6069,11 +5992,10 @@ public class FragmentChat extends BaseFragment
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!isCardToCardMessage) {
-                    if (listPathString == null) return;
-                    if (listPathString.size() < 1) return;
-                    if (listPathString.get(0) == null) return;
-                }
+
+                if (listPathString == null) return;
+                if (listPathString.size() < 1) return;
+                if (listPathString.get(0) == null) return;
 
                 if (ll_attach_text == null) { // have null error , so reInitialize for avoid that
 
@@ -6083,9 +6005,6 @@ public class FragmentChat extends BaseFragment
                 }
 
                 txtFileNameForSend = rootView.findViewById(R.id.ac_txt_file_neme_for_sending);
-                if (isCardToCardMessage) {
-                    txtFileNameForSend.setText(R.string.cardToCardRequest);
-                }
 
                 Utils.darkModeHandler(txtFileNameForSend);
 
@@ -7124,12 +7043,10 @@ public class FragmentChat extends BaseFragment
 
     private void cardToCardClick(View v) {
         if (v == null) {
-            isCardToCardMessage = true;
             showDraftLayout();
         } else {
             if ((Boolean) v.getTag()) {
                 bottomSheetDialog.dismiss();
-                isCardToCardMessage = true;
                 showDraftLayout();
             } else {
                 bottomSheetDialog.dismiss();
@@ -8495,7 +8412,6 @@ public class FragmentChat extends BaseFragment
                 countNewMessage = unreadCount;
                 txtNewUnreadMessage.setVisibility(View.VISIBLE);
                 txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
-                setDownBtnVisible();
                 firstUnreadMessageInChat = firstUnreadMessage;
             }
 
@@ -9293,7 +9209,13 @@ public class FragmentChat extends BaseFragment
             return;
         }
         closeKeyboard(view);
-        popBackStackFragment();
+        if (G.twoPaneMode){
+            if (getActivity() instanceof ActivityMain){
+                ((ActivityMain) getActivity()).goToTabletEmptyPage();
+            }
+        }else {
+            popBackStackFragment();
+        }
     }
 
     @Override

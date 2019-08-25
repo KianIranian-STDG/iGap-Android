@@ -19,6 +19,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import com.pchmn.materialchips.model.ChipInterface;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
@@ -118,10 +120,10 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
          * library does not support change text color or background color at run time until 1.0.8
          */
         ViewGroup layoutChips = view.findViewById(R.id.fcg_layout_search);
-        if (G.isDarkTheme){
-            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout_dark , null));
-        }else {
-            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout , null));
+        if (G.isDarkTheme) {
+            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout_dark, null));
+        } else {
+            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout, null));
         }
 
         if (typeCreate.equals("CHANNEL")) {
@@ -193,7 +195,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                     if (chip != null) {
                         ContactItemGroup contactInfo = ((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId())));
                         selectedContacts.add(contactInfo.mContact);
-                        notifyAdapter(contactInfo , fastAdapter.getPosition((Long) chip.getId()));
+                        notifyAdapter(contactInfo, fastAdapter.getPosition((Long) chip.getId()));
                         isRemove = false;
                     }
 
@@ -206,7 +208,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
             public void onChipRemoved(ChipInterface chip, int newSize) {
 
                 ContactItemGroup contactInfo = ((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId())));
-                notifyAdapter(contactInfo , fastAdapter.getPosition((Long) chip.getId()));
+                notifyAdapter(contactInfo, fastAdapter.getPosition((Long) chip.getId()));
                 isRemove = false;
 
                 selectedContacts.remove(contactInfo.mContact);
@@ -381,14 +383,18 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                 }
             } else {
                 if (isAdded()) {
-                    removeFromBaseFragment(ContactGroupFragment.this);
-                    new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity(getActivity());
+                    if (getActivity() instanceof ActivityMain) {
+                        ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+                        new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity(getActivity());
+                    }
                 }
             }
         } else if (typeCreate.equals("GROUP")) { // addMemberGroup
+            Log.wtf(this.getClass().getName(), "Group");
 
             if (roomId == -127) {
                 if (getActivity() != null) {
+                    Log.wtf(this.getClass().getName(), "roomId == -127");
                     FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                     Bundle bundle_ = new Bundle();
                     bundle_.putString("TYPE", "NewGroup");
@@ -430,6 +436,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
             } else {
 
                 if (getActivity() != null && isAdded()) {
+                    Log.wtf(this.getClass().getName(), " group else");
                     removeFromBaseFragment(ContactGroupFragment.this);
                     new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity(getActivity());
                 }

@@ -4,19 +4,9 @@
 
     <data>
 
-        <import type="android.graphics.Color" />
-
-        <import type="android.view.View" />
-
-        <import type="net.iGap.G" />
-
         <variable
-            name="fragmentPaymentBillViewModel"
+            name="viewModel"
             type="net.iGap.viewmodel.FragmentPaymentBillViewModel" />
-
-        <variable
-            name="backHandler"
-            type="net.iGap.interfaces.IBackHandler" />
     </data>
 
     <LinearLayout
@@ -35,184 +25,170 @@
             android:minHeight="@dimen/toolbar_height"
             android:orientation="vertical" />
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <LinearLayout
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp16"
-                android:layoutDirection="locale"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/dp16">
 
-                <ImageView
-                    android:layout_width="@dimen/dp68"
-                    android:layout_height="@dimen/dp68"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/dp20"
-                    android:visibility="@{fragmentPaymentBillViewModel.observePolice? View.VISIBLE : View.GONE}"
-                    app:srcCompat="@mipmap/trafic_police" />
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/billTypeImage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:src="@{context.getResources().getDrawable(viewModel.billTypeImage)}"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent=".24" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp60"
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/billIdIcon"
+                    style="@style/greenIconTextViewStyle"
+                    android:layout_width="@dimen/dp48"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp20"
+                    android:text="@string/md_format_list_bulleted"
+                    android:textSize="@dimen/dp22"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/billTypeImage" />
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/billId"
+                    style="?hintColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp44"
+                    android:afterTextChanged="@{(s)->viewModel.onTextChangedBillId(s.toString())}"
+                    android:background="@drawable/background_cancel_money_action"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:hint="@string/billing_id"
+                    android:inputType="number"
+                    android:maxLength="13"
+                    android:maxLines="1"
+                    android:minHeight="@dimen/dp44"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:text="@{viewModel.billId}"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintBottom_toBottomOf="@id/billIdIcon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/billIdIcon"
+                    app:layout_constraintTop_toTopOf="@id/billIdIcon">
 
-                    <net.iGap.module.MaterialDesignTextView
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="@dimen/dp48"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="@string/md_format_list_bulleted"
-                        android:textAppearance="@style/TextIconAppearance.menu"
-                        android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-                        android:textSize="@dimen/dp22"
-                        android:textStyle="bold" />
+                    <requestFocus />
+                </android.support.v7.widget.AppCompatEditText>
 
-                    <EditText
-                        android:id="@+id/fpb_edt_bill_id"
-                        style="?hintColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/dp44"
-                        android:layout_weight="1"
-                        android:background="@drawable/background_cancel_money_action"
-                        android:hint="@string/billing_id"
-                        android:inputType="number"
-                        android:gravity="center"
-                        android:maxLength="13"
-                        android:maxLines="1"
-                        android:minHeight="@dimen/dp44"
-                        android:onTextChanged="@{fragmentPaymentBillViewModel::onTextChangedBillId}"
-                        android:paddingLeft="@dimen/dp10"
-                        android:paddingRight="@dimen/dp10"
-                        android:text="@{fragmentPaymentBillViewModel.BID}"
-                        android:textSize="@dimen/dp16">
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/payIdIcon"
+                    style="@style/greenIconTextViewStyle"
+                    android:layout_width="@dimen/dp48"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:text="@string/md_format_list_bulleted"
+                    android:textSize="@dimen/dp22"
+                    app:layout_constraintEnd_toEndOf="@id/billIdIcon"
+                    app:layout_constraintStart_toStartOf="@id/billIdIcon"
+                    app:layout_constraintTop_toBottomOf="@id/billIdIcon" />
 
-                        <requestFocus />
-                    </EditText>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp60"
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/payId"
+                    style="?hintColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp44"
+                    android:background="@drawable/background_cancel_money_action"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:hint="@string/payment_code"
+                    android:inputType="number"
+                    android:maxLength="13"
+                    android:maxLines="1"
+                    android:minHeight="@dimen/dp44"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:text="@{viewModel.payId}"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintBottom_toBottomOf="@id/payIdIcon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/payIdIcon"
+                    app:layout_constraintTop_toTopOf="@id/payIdIcon" />
 
-                    <net.iGap.module.MaterialDesignTextView
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="@dimen/dp48"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="@string/md_format_list_bulleted"
-                        android:textAppearance="@style/TextIconAppearance.menu"
-                        android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-                        android:textSize="@dimen/dp22"
-                        android:textStyle="bold" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/amountIcon"
+                    style="@style/greenIconTextViewStyle"
+                    android:layout_width="@dimen/dp48"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:text="@string/coin_icon"
+                    android:textSize="@dimen/dp22"
+                    android:visibility="@{viewModel.haveAmount}"
+                    app:layout_constraintEnd_toEndOf="@id/billIdIcon"
+                    app:layout_constraintStart_toStartOf="@id/billIdIcon"
+                    app:layout_constraintTop_toBottomOf="@id/payIdIcon" />
 
-                    <EditText
-                        android:id="@+id/fpb_edt_pay_id"
-                        style="?hintColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/dp44"
-                        android:layout_weight="1"
-                        android:background="@drawable/background_cancel_money_action"
-                        android:hint="@string/payment_code"
-                        android:inputType="number"
-                        android:maxLength="13"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:minHeight="@dimen/dp44"
-                        android:paddingLeft="@dimen/dp10"
-                        android:paddingRight="@dimen/dp10"
-                        android:text="@{fragmentPaymentBillViewModel.PID}"
-                        android:textSize="@dimen/dp16" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp60"
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/fpb_edt_price"
+                    style="?hintColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp44"
+                    android:background="@drawable/background_cancel_money_action"
+                    android:enabled="false"
                     android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="@{fragmentPaymentBillViewModel.observeAmount? View.VISIBLE : View.GONE }">
-
-                    <net.iGap.module.MaterialDesignTextView
-                        style="@style/myIconTextViewStyle"
-                        android:layout_width="@dimen/dp48"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="@string/coin_icon"
-                        android:textAppearance="@style/TextIconAppearance.menu"
-                        android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-                        android:textSize="@dimen/dp22"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/fpb_edt_price"
-                        style="?hintColorSettingTheme"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/dp44"
-                        android:layout_weight="1"
-                        android:background="@drawable/background_cancel_money_action"
-                        android:enabled="false"
-                        android:hint="@string/amount"
-                        android:inputType="number"
-                        android:maxLines="1"
-                        android:gravity="center"
-                        android:minHeight="@dimen/dp44"
-                        android:paddingLeft="@dimen/dp10"
-                        android:paddingRight="@dimen/dp10"
-                        android:textSize="@dimen/dp16" />
-
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/fpb_imv_company"
-                    android:layout_width="@dimen/dp60"
-                    android:layout_height="@dimen/dp60"
-                    android:layout_gravity="center"
-                    android:visibility="@{fragmentPaymentBillViewModel.observeCompany , default = gone}" />
+                    android:hint="@string/amount"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:minHeight="@dimen/dp44"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:text="@{viewModel.billAmount}"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.haveAmount}"
+                    app:layout_constraintBottom_toBottomOf="@id/amountIcon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/amountIcon"
+                    app:layout_constraintTop_toTopOf="@id/amountIcon" />
 
                 <ProgressBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center"
                     android:indeterminate="true"
-                    android:visibility="@{fragmentPaymentBillViewModel.observeEnabledPayment ? View.GONE :View.VISIBLE}" />
-
+                    android:visibility="@{viewModel.showLoadingView}"
+                    app:layout_constraintBottom_toTopOf="@id/paymentButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/amountIcon" />
 
                 <android.support.design.button.MaterialButton
+                    android:id="@+id/paymentButton"
                     style="?iGapButton"
-                    android:layout_width="@dimen/dp180"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_marginTop="@dimen/dp20"
-                    android:enabled="@{fragmentPaymentBillViewModel.observeEnabledPayment}"
-                    android:minHeight="@dimen/dp40"
-                    android:onClick="@{fragmentPaymentBillViewModel::onPayBillClick}"
-                    android:text="@string/payment" />
-
+                    android:layout_marginBottom="@dimen/dp8"
+                    android:enabled="@{viewModel.enabledPaymentButton}"
+                    android:onClick="@{()->viewModel.onPayBillClick(billId.getEditableText().toString(),payId.getEditableText().toString())}"
+                    android:text="@string/payment"
+                    app:layout_constraintBottom_toTopOf="@id/scanBarcodeButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintWidth_percent=".6" />
 
                 <android.support.design.button.MaterialButton
+                    android:id="@+id/scanBarcodeButton"
                     style="?iGapButton"
-                    android:layout_width="@dimen/dp180"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:layout_marginBottom="@dimen/dp40"
-                    android:enabled="@{fragmentPaymentBillViewModel.observeEnabledPayment}"
-                    android:minHeight="@dimen/dp40"
-                    android:onClick="@{fragmentPaymentBillViewModel::onClickBarCode}"
+                    android:enabled="@{viewModel.enabledPaymentButton}"
+                    android:onClick="@{()->viewModel.onClickBarCode()}"
                     android:text="@string/barcode_reader"
-                    android:visibility="@{fragmentPaymentBillViewModel.observePolice? View.GONE: View.VISIBLE }" />
+                    android:visibility="@{viewModel.showScannerButton}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/paymentButton"
+                    app:layout_constraintStart_toStartOf="@id/paymentButton" />
 
-            </LinearLayout>
-
-        </ScrollView>
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v4.widget.NestedScrollView>
     </LinearLayout>
 </layout>

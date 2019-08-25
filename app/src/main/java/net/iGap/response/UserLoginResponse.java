@@ -88,6 +88,7 @@ public class UserLoginResponse extends MessageHandler {
         }
 
 
+        G.isNeedToCheckProfileWallpaper = true ;
         G.currentServerTime = builder.getResponse().getTimestamp();
         G.bothChatDeleteTime = builder.getChatDeleteMessageForBothPeriod() * 1000;
         G.userLogin = true;

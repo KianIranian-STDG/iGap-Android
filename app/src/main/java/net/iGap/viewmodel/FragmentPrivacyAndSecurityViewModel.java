@@ -59,7 +59,7 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
     public MutableLiveData<Boolean> goToPassCodePage = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToSecurityPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToActiveSessionsPage = new MutableLiveData<>();
-    int poSelfRemove;
+    private int poSelfRemove;
     private Realm realm;
     private RealmUserInfo realmUserInfo;
     private RealmPrivacy realmPrivacy;
@@ -78,10 +78,8 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
     private ArrayList<StructSessions> itemSessionsgetActivelist = new ArrayList<StructSessions>();
 
     public FragmentPrivacyAndSecurityViewModel() {
-
         realm = Realm.getDefaultInstance();
         getInfo();
-
     }
 
     public void onClickBlocked(View view) {
@@ -337,10 +335,9 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
         updatePrivacyUI(realmPrivacy);
     }
 
-
-    public void onDetach() {
+    @Override
+    protected void onCleared() {
+        super.onCleared();
         realm.close();
     }
-
-
 }

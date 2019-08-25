@@ -16,10 +16,11 @@ import net.iGap.proto.ProtoInfoWallpaper;
 
 public class RequestInfoWallpaper {
 
-    public void infoWallpaper() {
+    public void infoWallpaper(net.iGap.proto.ProtoInfoWallpaper.InfoWallpaper.Type type) {
         ProtoInfoWallpaper.InfoWallpaper.Builder builder = ProtoInfoWallpaper.InfoWallpaper.newBuilder();
         builder.setFit(getFit());
-        RequestWrapper requestWrapper = new RequestWrapper(504, builder);
+        builder.setType(type);
+        RequestWrapper requestWrapper = new RequestWrapper(504, builder, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

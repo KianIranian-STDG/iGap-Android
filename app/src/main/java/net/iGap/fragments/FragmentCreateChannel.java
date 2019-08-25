@@ -74,10 +74,10 @@ public class FragmentCreateChannel extends BaseFragment implements ToolbarListen
                 bundle.putBoolean("NewRoom", true);
                 fragment.setArguments(bundle);
 
-                if (FragmentCreateChannel.onRemoveFragment != null) {
+                /*if (FragmentCreateChannel.onRemoveFragment != null) {
                     FragmentCreateChannel.onRemoveFragment.remove();
-                }
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
+                }*/
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
     }

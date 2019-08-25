@@ -12,13 +12,16 @@ package net.iGap.adapter.items.chat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.CountDownTimer;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -50,7 +53,6 @@ import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.helper.CardToCardHelper;
-import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDownloadFile;
@@ -133,6 +135,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private RealmChannelExtra realmChannelExtra;
     private RealmRoom realmRoomForwardedFrom;
     private MessagesAdapter<AbstractMessage> mAdapter;
+    private final Drawable SEND_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_sent_bg_light) ;
+    private final Drawable RECEIVED_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_receive_bg_light);
 
 
     /**
@@ -539,11 +543,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * display 'edited' indicator beside message time if message was edited
          */
-        if (mMessage.isEdited) {
-            mHolder.getEditedIndicatorTv().setVisibility(View.VISIBLE);
-        } else {
-            mHolder.getEditedIndicatorTv().setVisibility(View.GONE);
-        }
+
+        if (mMessage.isEdited)
+            if (mMessage.channelExtra.signature.length() > 0)
+                mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited) + " " + mMessage.channelExtra.signature);
+            else
+                mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited));
+        else
+            mHolder.getSignatureTv().setText("");
+
         /**
          * display user avatar only if chat type is GROUP
          */
@@ -630,6 +638,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             }
         }
+
+
+        if (mMessage.channelExtra.signature.length() > 0) {
+            mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(200));
+        } else if (mMessage.isEdited) {
+            mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(100));
+        }
     }
 
     /**
@@ -712,7 +727,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (showThump) {
             mHolder.getVoteContainer().setVisibility(View.VISIBLE);
         } else {
-            mHolder.getVoteContainer().setVisibility(View.INVISIBLE);
+            mHolder.getVoteContainer().setVisibility(View.GONE);
         }
 
         /**
@@ -725,7 +740,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         Utils.darkModeHandlerGray(mHolder.getViewsLabelTv());
         Utils.darkModeHandlerGray(mHolder.getSignatureTv());
         Utils.darkModeHandlerGray(mHolder.getEyeIconTv());
-        Utils.darkModeHandlerGray(mHolder.getEditedIndicatorTv());
         Utils.darkModeHandlerGray(mHolder.getMessageStatusTv());
         Utils.darkModeHandlerGray(mHolder.getVoteUpIv());
         Utils.darkModeHandlerGray(mHolder.getVoteDownTv());
@@ -737,19 +751,28 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     mHolder.getVoteUpTv().setText(realmChannelExtra.getThumbsUp());
                     mHolder.getVoteDownTv().setText(realmChannelExtra.getThumbsDown());
                     mHolder.getViewsLabelTv().setText(realmChannelExtra.getViewsLabel());
-                    mHolder.getSignatureTv().setText(realmChannelExtra.getSignature());
+                    if (mMessage.isEdited)
+                        mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + realmChannelExtra.getSignature());
+                    else
+                        mHolder.getSignatureTv().setText(realmChannelExtra.getSignature());
                 }
             } else {
                 mHolder.getVoteUpTv().setText(mMessage.channelExtra.thumbsUp);
                 mHolder.getVoteDownTv().setText(mMessage.channelExtra.thumbsDown);
                 mHolder.getViewsLabelTv().setText(mMessage.channelExtra.viewsLabel);
-                mHolder.getSignatureTv().setText(mMessage.channelExtra.signature);
+                if (mMessage.isEdited)
+                    mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + mMessage.channelExtra.signature);
+                else
+                    mHolder.getSignatureTv().setText(mMessage.channelExtra.signature);
             }
         } else {
             mHolder.getVoteUpTv().setText(mMessage.channelExtra.thumbsUp);
             mHolder.getVoteDownTv().setText(mMessage.channelExtra.thumbsDown);
             mHolder.getViewsLabelTv().setText(mMessage.channelExtra.viewsLabel);
-            mHolder.getSignatureTv().setText(mMessage.channelExtra.signature);
+            if (mMessage.isEdited)
+                mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + mMessage.channelExtra.signature);
+            else
+                mHolder.getSignatureTv().setText(mMessage.channelExtra.signature);
         }
 
         if (mHolder.getSignatureTv().getText().length() > 0) {
@@ -852,25 +875,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         if (G.isDarkTheme) {
-            viewHolder.getChatBloke().setBackgroundResource(R.drawable.shape_message_receive_dark);
+            viewHolder.getChatBloke().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_dark))));
             setThemeColor(viewHolder.getViewsLabelTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getEyeIconTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getVoteUpTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getVoteUpIv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getVoteDownTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getVoteDownIv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
-            setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getSignatureTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
         } else {
-            viewHolder.getChatBloke().setBackgroundResource(R.drawable.shape_message_receive_light);
+            viewHolder.getChatBloke().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_light))));
             setThemeColor(viewHolder.getViewsLabelTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getEyeIconTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getVoteUpTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getVoteUpIv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getVoteDownTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getVoteDownIv(), G.context.getResources().getColor(R.color.receive_message_time_light));
-            setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getSignatureTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
         }
@@ -929,13 +950,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         if (G.isDarkTheme) {
-            viewHolder.getChatBloke().setBackgroundResource(R.drawable.rectangle_send_round_color_dark);
+            viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_dark))));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.send_message_time_dark));
-            setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.send_message_time_dark));
         } else {
-            viewHolder.getChatBloke().setBackgroundResource(R.drawable.rectangle_send_round_color);
+            viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_light))));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.send_message_time_light));
-            setThemeColor(viewHolder.getEditedIndicatorTv(), G.context.getResources().getColor(R.color.send_message_time_light));
         }
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp36);
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);
@@ -943,6 +962,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     private void setThemeColor(TextView textView, int themeColor) {
         textView.setTextColor(themeColor);
+    }
+
+
+    public Drawable tintDrawable(Drawable drawable, ColorStateList colors) {
+        final Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTintList(wrappedDrawable, colors);
+        return wrappedDrawable;
     }
 
     @CallSuper

@@ -111,8 +111,13 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             lineView.setBackgroundColor(getColor(R.color.gray_9d));
 
             innerLayout.setOrientation(LinearLayout.VERTICAL);
-            innerLayout.setPadding(LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4));
             innerLayout.setId(R.id.cardToCard_innerLayout);
+
+            if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.LOLLIPOP){
+                innerLayout.setPadding(LayoutCreator.dp(4), LayoutCreator.dp(25), LayoutCreator.dp(4), LayoutCreator.dp(4));
+            } else{
+                innerLayout.setPadding(LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4));
+            }
 
             if (G.isDarkTheme) {
                 innerLayout.setBackground(getDrawable(R.drawable.background_item_card_to_card_dark));
@@ -138,7 +143,8 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             innerLayout.addView(cardToCardAmountTv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,
                     Gravity.CENTER, 8, 24, 8, 4));
 
-            innerLayout.addView(lineView, LayoutCreator.createFrame(200, 1, Gravity.CENTER, 8, 0, 8, 0));
+            innerLayout.addView(lineView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 1, Gravity.CENTER,
+                    16, 0, 16, 0));
 
             innerLayout.addView(messageTv, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,
                     Gravity.CENTER, 8, 4, 8, 8));

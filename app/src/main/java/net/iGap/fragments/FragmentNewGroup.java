@@ -28,6 +28,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -221,10 +222,10 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                 bdle.putString("TOKEN", data.getToken());
                 fragmentCreateChannel.setArguments(bdle);
 
-                if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
-                    FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
+                /*if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
+                    FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();*/
 
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragmentCreateChannel).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragmentCreateChannel).setReplace(false).load();
             }
         });
     }
@@ -664,13 +665,15 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             }
         } else {
 
-            if (getActivity() != null && isAdded()) {
+            if (getActivity() instanceof ActivityMain && isAdded()) {
+                Log.wtf(this.getClass().getName(),"addMembersToGroup is done");
                /* if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
                     FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();*/
                 G.refreshRealmUi();
+                /*popBackStackFragment();
                 popBackStackFragment();
-                popBackStackFragment();
-                removeFromBaseFragment(FragmentNewGroup.this);
+                removeFromBaseFragment(FragmentNewGroup.this);*/
+                ((ActivityMain) getActivity()).removeAllFragmentFromMain();
                 new GoToChatActivity(createdRoomId).startActivity(getActivity());
             }
 

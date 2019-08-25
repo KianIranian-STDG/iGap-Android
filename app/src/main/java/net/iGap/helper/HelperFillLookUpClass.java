@@ -12,6 +12,8 @@ package net.iGap.helper;
 
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
+import net.iGap.proto.ProtoMplTransactionInfo;
+import net.iGap.proto.ProtoMplTransactionList;
 
 import static net.iGap.G.forcePriorityActionId;
 import static net.iGap.G.generalImmovableClasses;
@@ -185,6 +187,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30502, "ProtoInfoTime.InfoTimeResponse");
         lookupMap.put(30503, "ProtoInfoPage.InfoPageResponse");
         lookupMap.put(30504, "ProtoInfoWallpaper.InfoWallpaperResponse");
+        lookupMap.put(30505, "ProtoInfoUpdate.InfoUpdateResponse");
 
         // Client 6xx , 306xx
         lookupMap.put(30600, "ProtoClientCondition.ClientConditionResponse");
@@ -263,6 +266,8 @@ public class HelperFillLookUpClass {
         lookupMap.put(39103, "ProtoMplSetSalesResult.MplSetSalesResultResponse");
         lookupMap.put(39106, "ProtoMplGetCardToCardToken.MplGetCardToCardTokenResponse");
         lookupMap.put(39108, "ProtoMplSetCardToCardResult.MplSetCardToCardResultResponse");
+        lookupMap.put(39109, "ProtoMplTransactionList.MplTransactionListResponse");
+        lookupMap.put(39110, "ProtoMplTransactionInfo.MplTransactionInfoResponse");
         lookupMap.put(39200, "ProtoBillInquiryMci.BillInquiryMciResponse");
         lookupMap.put(39201, "ProtoBillInquiryTelecom.BillInquiryTelecomResponse");
 

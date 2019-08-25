@@ -1,5 +1,6 @@
 package net.iGap.viewmodel;
 
+import android.app.ActivityManager;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
@@ -8,13 +9,17 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.databinding.ObservableLong;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.text.HtmlCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -30,12 +35,13 @@ import net.iGap.eventbus.socketMessages;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnGeoGetConfiguration;
+import net.iGap.interfaces.OnGetWallpaper;
 import net.iGap.interfaces.OnUserAvatarResponse;
 import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.interfaces.OnUserInfoMyClient;
@@ -49,17 +55,24 @@ import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
 import net.iGap.module.SingleLiveEvent;
+import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoInfoWallpaper;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.proto.ProtoUserProfileCheckUsername;
+import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.realm.RealmWallpaper;
+import net.iGap.realm.RealmWallpaperFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestGeoGetConfiguration;
+import net.iGap.request.RequestInfoUpdate;
+import net.iGap.request.RequestInfoWallpaper;
 import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserIVandGetScore;
 import net.iGap.request.RequestUserProfileCheckUsername;
@@ -79,6 +92,7 @@ import org.paygear.web.Web;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import io.realm.Realm;
@@ -88,6 +102,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.ACTIVITY_SERVICE;
 import static android.os.Looper.getMainLooper;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
@@ -125,6 +140,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public SingleLiveEvent<Boolean> goToSettingPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goToUserScorePage = new SingleLiveEvent<>();
     public SingleLiveEvent<Long> goToShowAvatarPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> showDialogBeLastVersion = new SingleLiveEvent<>();
+    public SingleLiveEvent<String> showDialogUpdate = new SingleLiveEvent<>();
     public MutableLiveData<Long> setUserAvatar = new MutableLiveData<>();
     public SingleLiveEvent<DeleteAvatarModel> deleteAvatar = new SingleLiveEvent<>();
     public SingleLiveEvent<ChangeImageModel> setUserAvatarPath = new SingleLiveEvent<>();
@@ -133,6 +150,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public SingleLiveEvent<Boolean> showDialogChooseImage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> resetApp = new SingleLiveEvent<>();
     public SingleLiveEvent<Integer> showError = new SingleLiveEvent<>();
+    public MutableLiveData<Drawable> changeUserProfileWallpaper = new MutableLiveData<>();
 
     private Realm mRealm;
     private RealmUserInfo userInfo;
@@ -155,9 +173,12 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     //Todo: fixed it
     private int getIvanScoreTime = 0;
 
-    public UserProfileViewModel() {
+    public UserProfileViewModel(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
+        this.sharedPreferences = sharedPreferences;
+        this.avatarHandler = avatarHandler;
         mRealm = Realm.getDefaultInstance();
         userInfo = getRealm().where(RealmUserInfo.class).findFirst();
+        checkProfileWallpaper(mRealm);
         updateUserInfoUI();
         if (checkValidationForRealm(userInfo)) {
             userInfo.addChangeListener(realmModel -> {
@@ -167,12 +188,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 updateUserInfoUI();
             });
         }
-    }
 
-    public void init(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
 
-        this.sharedPreferences = sharedPreferences;
-        this.avatarHandler = avatarHandler;
+        appVersion.set(BuildConfig.VERSION_NAME);
+        isDarkMode.set(G.isDarkTheme);
 
         //set user info text gravity
         if (G.selectedLanguage.equals("en")) {
@@ -180,9 +199,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         } else {
             textsGravity.set(Gravity.RIGHT);
         }
+    }
 
-        appVersion.set(BuildConfig.VERSION_NAME);
-        isDarkMode.set(G.isDarkTheme);
+    public void init() {
 
         //set credit amount
         if (G.selectedCard != null) {
@@ -225,6 +244,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         new RequestUserProfileGetGender().userProfileGetGender();
         new RequestUserProfileGetEmail().userProfileGetEmail();
         new RequestUserProfileGetBio().getBio();
+
+        if (G.isNeedToCheckProfileWallpaper)
+            getProfileWallpaperFromServer();
 
     }
 
@@ -355,24 +377,19 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             goToChatPage.setValue(new GoToChatModel(realmRoom.getId(), userInfo.getUserId()));
         } else {
             if (retryRequestTime < 3) {
-                G.onChatGetRoom = new OnChatGetRoom() {
+                new RequestChatGetRoom().chatGetRoom(userInfo.getUserId(), new RequestChatGetRoom.OnChatRoomReady() {
                     @Override
-                    public void onChatGetRoom(ProtoGlobal.Room room) {
+                    public void onReady(ProtoGlobal.Room room) {
                         RealmRoom.putOrUpdate(room);
-                        G.onChatGetRoom = null;
                         G.handler.post(() -> {
+                            G.refreshRealmUi();
                             showLoading.set(View.GONE);
                             goToChatPage.postValue(new GoToChatModel(room.getId(), userInfo.getUserId()));
                         });
                     }
 
                     @Override
-                    public void onChatGetRoomTimeOut() {
-
-                    }
-
-                    @Override
-                    public void onChatGetRoomError(int majorCode, int minorCode) {
+                    public void onError(int majorCode, int minorCode) {
                         if (majorCode == 5 && minorCode == 1) {
                             G.handler.postDelayed(() -> onCloudMessageClick(), 2000);
                         } else {
@@ -380,8 +397,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                             showError.postValue(R.string.error);
                         }
                     }
-                };
-                new RequestChatGetRoom().chatGetRoom(userInfo.getUserId());
+                });
             } else {
                 showLoading.set(View.GONE);
                 showError.setValue(R.string.error);
@@ -571,6 +587,31 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 }
             }
         }
+    }
+
+    public void onChangeLogClick() {
+        showLoading.set(View.VISIBLE);
+        new RequestInfoUpdate().infoUpdate(BuildConfig.VERSION_CODE, new RequestInfoUpdate.updateInfoCallback() {
+            @Override
+            public void onSuccess(int lastVersion, String Body) {
+                showLoading.set(View.GONE);
+                if (lastVersion <= BuildConfig.VERSION_CODE) {
+                    showDialogBeLastVersion.postValue(true);
+                } else {
+                    showDialogUpdate.postValue(HtmlCompat.fromHtml(Body, HtmlCompat.FROM_HTML_MODE_LEGACY).toString());
+                }
+            }
+
+            @Override
+            public void onError(int major, int minor) {
+                showLoading.set(View.GONE);
+                if (major == 5 && minor == 1) {
+                    showError.setValue(R.string.connection_error);
+                } else {
+                    showError.setValue(R.string.error);
+                }
+            }
+        });
     }
 
     private void getUserCredit() {
@@ -825,6 +866,120 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         } else {
             return true;
         }
+    }
+
+    private void getProfileWallpaperFromServer() {
+        G.onGetProfileWallpaper = list -> {
+
+            G.isNeedToCheckProfileWallpaper = false;
+
+            Realm realm = Realm.getDefaultInstance();
+            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
+
+            if (realmWallpaper != null) {
+
+                if (realmWallpaper.getWallPaperList().get(0).getFile().getToken().equals(list.get(0).getFile().getToken())) {
+                    getProfileWallpaper(realm);
+                } else {
+                    RealmWallpaper.updateWallpaper(list);
+                    getProfileWallpaper(realm);
+                }
+            } else {
+                RealmWallpaper.updateField(list, "", ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE);
+                getProfileWallpaper(realm);
+            }
+            realm.close();
+        };
+
+        new RequestInfoWallpaper().infoWallpaper(ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER);
+    }
+
+    /**
+     * just when user profile downloaded and available in realm load it
+     * else send null to mutable live data to set default at fragment
+     * @param realm
+     */
+    private void checkProfileWallpaper(Realm realm) {
+        try {
+            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
+
+            if (realmWallpaper != null) {
+                RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
+                String bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
+                if (!new File(bigImagePath).exists()) {
+                    changeUserProfileWallpaper.postValue(null);
+                } else {
+                    setProfileWallpaperOrDefault(bigImagePath);
+                }
+            }else {
+                changeUserProfileWallpaper.postValue(null);
+            }
+        }catch (Exception e){
+            changeUserProfileWallpaper.postValue(null);
+        }
+    }
+
+    private void getProfileWallpaper(Realm realm) {
+        try {
+            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
+
+            if (realmWallpaper != null) {
+
+                if (realmWallpaper.getWallPaperList() != null && realmWallpaper.getWallPaperList().size() > 0) {
+                    RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
+                    String bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
+                    if (!new File(bigImagePath).exists()) {
+                        HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", pf.getToken(), pf.getUrl(), pf.getCacheId(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, bigImagePath, 2, new HelperDownloadFile.UpdateListener() {
+                            @Override
+                            public void OnProgress(String mPath, final int progress) {
+                                if (progress == 100) {
+                                    setProfileWallpaperOrDefault(bigImagePath);
+                                }
+                            }
+                            @Override
+                            public void OnError(String token) {
+                            }
+                        });
+                    } else {
+                        setProfileWallpaperOrDefault(bigImagePath);
+                    }
+                } else {
+                    getProfileWallpaperFromServer();
+                }
+            } else {
+                getProfileWallpaperFromServer();
+            }
+
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e2) {
+            e2.printStackTrace();
+        } catch (Exception e3) {
+            e3.printStackTrace();
+        }
+
+    }
+
+    private void setProfileWallpaperOrDefault(String backGroundPath) {
+
+        if (backGroundPath.length() > 0) {
+            File f = new File(backGroundPath);
+            if (f.exists()) {
+                try {
+                    Drawable d = Drawable.createFromPath(f.getAbsolutePath());
+                    changeUserProfileWallpaper.postValue(d);
+                    return;
+                } catch (OutOfMemoryError e) {
+                    changeUserProfileWallpaper.postValue(null);
+                    ActivityManager activityManager = (ActivityManager) G.context.getSystemService(ACTIVITY_SERVICE);
+                    ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+                    activityManager.getMemoryInfo(memoryInfo);
+                    Crashlytics.logException(new Exception("FragmentChat -> Device Name : " + Build.BRAND + " || memoryInfo.availMem : " + memoryInfo.availMem + " || memoryInfo.totalMem : " + memoryInfo.totalMem + " || memoryInfo.lowMemory : " + memoryInfo.lowMemory));
+                }
+            }
+        }
+
+        changeUserProfileWallpaper.postValue(null);
     }
 
     @Override

@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -40,16 +41,18 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
 
     private FragmentPrivacyAndSecurityViewModel fragmentPrivacyAndSecurityViewModel;
     private FragmentPrivacyAndSecurityBinding fragmentPrivacyAndSecurityBinding;
-    private HelperToolbar mHelperToolbar;
 
-
-    public FragmentPrivacyAndSecurity() {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fragmentPrivacyAndSecurityViewModel = ViewModelProviders.of(this).get(FragmentPrivacyAndSecurityViewModel.class);
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         fragmentPrivacyAndSecurityBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_privacy_and_security, container, false);
+        fragmentPrivacyAndSecurityBinding.setFragmentPrivacyAndSecurityViewModel(fragmentPrivacyAndSecurityViewModel);
+        fragmentPrivacyAndSecurityBinding.setLifecycleOwner(this);
         return attachToSwipeBack(fragmentPrivacyAndSecurityBinding.getRoot());
     }
 
@@ -64,60 +67,9 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initDataBinding();
-        setupToolbar();
-
-        new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
-
-        RealmPrivacy.getUpdatePrivacyFromServer();
-
-        fragmentPrivacyAndSecurityBinding.parentPrivacySecurity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        fragmentPrivacyAndSecurityBinding.stpsRippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                popBackStackFragment();
-            }
-        });
-
-        new RequestUserProfileGetSelfRemove().userProfileGetSelfRemove();
-
-        fragmentPrivacyAndSecurityViewModel.goToBlockedUserPage.observe(this, go -> {
-            if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentBlockedUser()).setReplace(false).load();
-            }
-        });
-
-        fragmentPrivacyAndSecurityViewModel.goToPassCodePage.observe(this, go -> {
-            if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentPassCode()).setReplace(false).load();
-            }
-        });
-
-        fragmentPrivacyAndSecurityViewModel.goToSecurityPage.observe(this, go -> {
-            if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSecurity()).setReplace(false).load();
-            }
-        });
-
-        fragmentPrivacyAndSecurityViewModel.goToActiveSessionsPage.observe(this, go -> {
-            if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentActiveSessions()).setReplace(false).load();
-            }
-        });
-
-    }
-
-    private void setupToolbar() {
-
-        mHelperToolbar = HelperToolbar.create()
+        fragmentPrivacyAndSecurityBinding.fpsLayoutToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
-                .setDefaultTitle(G.context.getResources().getString(R.string.st_title_Privacy_Security))
+                .setDefaultTitle(getString(R.string.st_title_Privacy_Security))
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {
@@ -125,22 +77,44 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
                     public void onLeftIconClickListener(View view) {
                         popBackStackFragment();
                     }
-                });
+                }).getView());
 
-        fragmentPrivacyAndSecurityBinding.fpsLayoutToolbar.addView(mHelperToolbar.getView());
-    }
+        new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
 
-    private void initDataBinding() {
+        RealmPrivacy.getUpdatePrivacyFromServer();
 
-        fragmentPrivacyAndSecurityViewModel = new FragmentPrivacyAndSecurityViewModel();
-        fragmentPrivacyAndSecurityBinding.setFragmentPrivacyAndSecurityViewModel(fragmentPrivacyAndSecurityViewModel);
+        fragmentPrivacyAndSecurityBinding.parentPrivacySecurity.setOnClickListener(view1 -> {
 
-    }
+        });
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        fragmentPrivacyAndSecurityViewModel.onDetach();
+        fragmentPrivacyAndSecurityBinding.stpsRippleBack.setOnRippleCompleteListener(rippleView -> popBackStackFragment());
+
+        new RequestUserProfileGetSelfRemove().userProfileGetSelfRemove();
+
+        fragmentPrivacyAndSecurityViewModel.goToBlockedUserPage.observe(getViewLifecycleOwner(), go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentBlockedUser()).setReplace(false).load();
+            }
+        });
+
+        fragmentPrivacyAndSecurityViewModel.goToPassCodePage.observe(getViewLifecycleOwner(), go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentPassCode()).setReplace(false).load();
+            }
+        });
+
+        fragmentPrivacyAndSecurityViewModel.goToSecurityPage.observe(getViewLifecycleOwner(), go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSecurity()).setReplace(false).load();
+            }
+        });
+
+        fragmentPrivacyAndSecurityViewModel.goToActiveSessionsPage.observe(getViewLifecycleOwner(), go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentActiveSessions()).setReplace(false).load();
+            }
+        });
+
     }
 
     @Override

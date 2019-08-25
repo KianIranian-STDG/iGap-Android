@@ -582,7 +582,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 36
+        if (oldVersion == 36) {
 
             RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
             if (realmUserInfo != null) {
@@ -600,6 +600,16 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("isFavorite", boolean.class, FieldAttribute.REQUIRED);
 
             realmDownloadSong.addPrimaryKey("id");
+
+            oldVersion++;
+        }
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 37
+
+            RealmObjectSchema realmWallpaper = schema.get(RealmWallpaper.class.getSimpleName());
+            if (realmWallpaper != null) {
+                realmWallpaper.addField("type", int.class, FieldAttribute.REQUIRED);
+            }
 
             oldVersion++;
         }
