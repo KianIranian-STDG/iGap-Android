@@ -377,7 +377,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (fragment instanceof BottomNavigationFragment) {
             switch (address[0]) {
                 case DEEP_LINK_DISCOVERY:
-                    String[] discoveryUri = uri.toLowerCase().trim().replace("discovery/", "").split("/");
+                    String[] discoveryUri;
+                    if (address.length>1) {
+                        discoveryUri = uri.toLowerCase().trim().replace("discovery/", "").split("/");
+                    }else
+                        discoveryUri = uri.toLowerCase().trim().replace("discovery", "").split("/");
                     ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.DISCOVERY_FRAGMENT, discoveryUri);
                     break;
                 case DEEP_LINK_CHAT:
@@ -1185,7 +1189,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             checkIntent(getIntent());
         }
 
-//        String uri = "discovery/2/301";
+//        String uri = "discovery";
 //        autoLinkHelper(uri);
     }
 
