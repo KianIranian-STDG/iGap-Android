@@ -1983,6 +1983,8 @@
     <string name="mpl_transaction_nul">شما هیچ تراکنشی در ۵ روز گذشته ندارید!</string>
     <string name="scan_barcode_to_enter_visit">جهت ورود و بازدید بارکد فوق را اسکن کنید</string>
     <string name="Your_purchase_code">کد خرید شما</string>
+    <string name="igasht_count_title">تعداد</string>
+    <string name="igasht_service_title">سرویس</string>
 
     <string name="of_from_total">از %s</string>
     <string name="app_version_change_log">لیست تغییرات</string>

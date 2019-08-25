@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,22 +43,25 @@ public class IGhashtBuyTicketFragment extends IGashtBaseView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.addedPlaceList.setAdapter(new OrderedTicketListAdapter(new ArrayList<>(), position -> {
-            //call when remove item click
-            ((IGashtBuyTicketViewModel) viewModel).removeOrderedTicket(position);
-            ((OrderedTicketListAdapter)binding.addedPlaceList.getAdapter()).removeItem(position);
-        }));
+        binding.addedPlaceList.addItemDecoration(new DividerItemDecoration(binding.addedPlaceList.getContext(), DividerItemDecoration.VERTICAL));
+        binding.addedPlaceList.setAdapter(new OrderedTicketListAdapter(new ArrayList<>(), totalPrice -> ((IGashtBuyTicketViewModel) viewModel).setTotalPrice(totalPrice)));
 
-        ((IGashtBuyTicketViewModel) viewModel).getShowDialogSelectService().observe(getViewLifecycleOwner(), serviceList -> {
+        ((IGashtBuyTicketViewModel) viewModel).getServiceList().observe(getViewLifecycleOwner(), ticketList -> {
+            if (binding.addedPlaceList.getAdapter() instanceof OrderedTicketListAdapter && ticketList != null) {
+                ((OrderedTicketListAdapter) binding.addedPlaceList.getAdapter()).addNewItem(ticketList);
+            }
+        });
+
+        /*((IGashtBuyTicketViewModel) viewModel).getShowDialogSelectService().observe(getViewLifecycleOwner(), serviceList -> {
             if (getFragmentManager() != null && serviceList != null) {
                 new BottomSheetFragment().setData(serviceList, -1, position -> ((IGashtBuyTicketViewModel) viewModel).selectedService(position)).setTitle(getString(R.string.igasht_place_of_visit_title))
                         .show(getFragmentManager(), "selectService");
             }
-        });
+        });*/
 
-        ((IGashtBuyTicketViewModel) viewModel).getShowDialogSelectTicketType().observe(getViewLifecycleOwner(), amountType -> {
+        /*((IGashtBuyTicketViewModel) viewModel).getShowDialogSelectTicketType().observe(getViewLifecycleOwner(), amountType -> {
             if (getFragmentManager() != null && amountType != null) {
-                new SelectTicketTypeBottomSheetFragment().setData(amountType, new AddBottomSheetListener<IGashtServiceAmount>() {
+                new SelectTicketTypeBottomSheetFragment().setData(amountType, new TicketListCountChangeListener<IGashtServiceAmount>() {
                     @Override
                     public void setTicketCount(IGashtServiceAmount data) {
                         ((IGashtBuyTicketViewModel) viewModel).selectedTicketType(data);
@@ -69,11 +73,11 @@ public class IGhashtBuyTicketFragment extends IGashtBaseView {
                     }
                 }).show(getFragmentManager(), "selectTicketType");
             }
-        });
+        });*/
 
-        ((IGashtBuyTicketViewModel) viewModel).getShowDialogEnterCount().observe(getViewLifecycleOwner(), isShow -> {
+        /*((IGashtBuyTicketViewModel) viewModel).getShowDialogEnterCount().observe(getViewLifecycleOwner(), isShow -> {
             if (getFragmentManager() != null && isShow != null) {
-                new IGashtEnterTicketCountBottomSheetFragment().setCallBack(new AddBottomSheetListener<Integer>() {
+                new IGashtEnterTicketCountBottomSheetFragment().setCallBack(new TicketListCountChangeListener<Integer>() {
                     @Override
                     public void setTicketCount(Integer ticketCount) {
                         ((IGashtBuyTicketViewModel) viewModel).setTicketCount(ticketCount);
@@ -86,21 +90,19 @@ public class IGhashtBuyTicketFragment extends IGashtBaseView {
                     }
                 }).show(getFragmentManager(), "setTicketCount");
             }
-        });
+        });*/
 
-        ((IGashtBuyTicketViewModel) viewModel).getAddToTicketList().observe(getViewLifecycleOwner(),data->{
-            if (binding.addedPlaceList.getAdapter() instanceof OrderedTicketListAdapter && data != null) {
-                ((OrderedTicketListAdapter) binding.addedPlaceList.getAdapter()).addNewItem(data);
-            }
-        });
+        /*((IGashtBuyTicketViewModel) viewModel).getAddToTicketList().observe(getViewLifecycleOwner(), data -> {
 
-        ((IGashtBuyTicketViewModel) viewModel).getRegisterVoucher().observe(getViewLifecycleOwner(),registerVoucher->{
-            if (registerVoucher != null){
-                if (registerVoucher){
-                    if (getParentFragment() instanceof IGashtLocationDetailFragment){
+        });*/
+
+        ((IGashtBuyTicketViewModel) viewModel).getRegisterVoucher().observe(getViewLifecycleOwner(), registerVoucher -> {
+            if (registerVoucher != null) {
+                if (registerVoucher) {
+                    if (getParentFragment() instanceof IGashtLocationDetailFragment) {
                         ((IGashtLocationDetailFragment) getParentFragment()).registerVouchers();
                     }
-                }else{
+                } else {
                     Toast.makeText(getContext(), R.string.igasht_add_ticket_error, Toast.LENGTH_SHORT).show();
                 }
             }

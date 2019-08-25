@@ -8,28 +8,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.iGap.R;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 
 import java.util.List;
 
 public class OrderedTicketListAdapter extends RecyclerView.Adapter<OrderedTicketListAdapter.ViewHolder> {
 
-    private List<IGashtServiceAmount> items;
-    private BottomSheetItemClickCallback removeItemCallback;
+    private List<IGashtLocationService> items;
+    private int entrancePosition = -1;
+    private TicketListCountChangeListener listCountChangeListener;
 
-    public OrderedTicketListAdapter(List<IGashtServiceAmount> items, BottomSheetItemClickCallback removeItemCallback) {
+    public OrderedTicketListAdapter(List<IGashtLocationService> items, TicketListCountChangeListener ticketListCountChangeListener) {
         this.items = items;
-        this.removeItemCallback = removeItemCallback;
+        this.listCountChangeListener = ticketListCountChangeListener;
     }
 
-    public void addNewItem(IGashtServiceAmount newItem) {
-        items.add(newItem);
+    public void addNewItem(List<IGashtLocationService> newItem) {
+        items.addAll(newItem);
         notifyItemInserted(items.size() - 1);
-    }
-
-    public void removeItem(int position) {
-        items.remove(position);
-        notifyItemRemoved(position);
     }
 
     @NonNull
@@ -39,9 +34,33 @@ public class OrderedTicketListAdapter extends RecyclerView.Adapter<OrderedTicket
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.title.setText(String.format(viewHolder.itemView.getContext().getString(R.string.igasht_order_ticket_title), items.get(i).getTitle(), items.get(i).getCount()));
-        viewHolder.remove.setOnClickListener(v -> removeItemCallback.onClick(viewHolder.getAdapterPosition()));
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+        if (items.get(position).getModelId().equals("1")) {
+            viewHolder.plusButton.setVisibility(View.GONE);
+            viewHolder.minusButton.setVisibility(View.GONE);
+            entrancePosition = viewHolder.getAdapterPosition();
+        } else {
+            viewHolder.plusButton.setVisibility(View.VISIBLE);
+            viewHolder.minusButton.setVisibility(View.VISIBLE);
+        }
+
+        viewHolder.ticketTitle.setText(items.get(position).getServiceNameWithLanguage());
+        viewHolder.ticketCount.setText(items.get(position).getCount() + "");
+        viewHolder.ticketPrice.setText(items.get(position).getCount() * items.get(position).getPersianTicket().getAmount() + "");
+
+        viewHolder.plusButton.setOnClickListener(v -> {
+            items.get(viewHolder.getAdapterPosition()).setCount(items.get(viewHolder.getAdapterPosition()).getCount() + 1);
+            notifyItemChanged(viewHolder.getAdapterPosition());
+            updateEntranceItemCount();
+        });
+
+        viewHolder.minusButton.setOnClickListener(v -> {
+            if (items.get(viewHolder.getAdapterPosition()).getCount() > 0) {
+                items.get(viewHolder.getAdapterPosition()).setCount(items.get(viewHolder.getAdapterPosition()).getCount() - 1);
+                notifyItemChanged(viewHolder.getAdapterPosition());
+                updateEntranceItemCount();
+            }
+        });
     }
 
     @Override
@@ -49,15 +68,46 @@ public class OrderedTicketListAdapter extends RecyclerView.Adapter<OrderedTicket
         return items == null ? 0 : items.size();
     }
 
+    private void updateEntranceItemCount() {
+        if (entrancePosition > -1) {
+            int maxTicketCount = findMaxTicketCount();
+            if (maxTicketCount != -1 && items.get(entrancePosition).getCount() != maxTicketCount) {
+                items.get(entrancePosition).setCount(maxTicketCount);
+                notifyItemChanged(entrancePosition);
+            }
+        }
+    }
+
+    private int findMaxTicketCount() {
+        int t = -1;
+        int totalPrice = 0;
+        for (int i = 0; i < getItemCount(); i++) {
+            if (i != entrancePosition) {
+                if (items.get(i).getCount() > t) {
+                    t = items.get(i).getCount();
+                }
+            }
+            totalPrice += (items.get(i).getCount() * items.get(i).getPersianTicket().getAmount());
+        }
+        listCountChangeListener.setTicketTotalPrice(totalPrice);
+        return t;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
-        private AppCompatTextView title;
-        private AppCompatTextView remove;
+        private AppCompatTextView ticketTitle;
+        private AppCompatTextView ticketCount;
+        private AppCompatTextView ticketPrice;
+        private View plusButton;
+        private View minusButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            title = itemView.findViewById(R.id.title);
-            remove = itemView.findViewById(R.id.remove);
+            ticketTitle = itemView.findViewById(R.id.ticketTitle);
+            ticketCount = itemView.findViewById(R.id.ticketCount);
+            ticketPrice = itemView.findViewById(R.id.itemPrice);
+            minusButton = itemView.findViewById(R.id.minusButton);
+            plusButton = itemView.findViewById(R.id.plusButton);
         }
     }
 }

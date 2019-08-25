@@ -1987,5 +1987,6 @@ Want to get it?</string>
     <string name="view_profile">View Profile</string>
     <string name="scan_barcode_to_enter_visit">جهت ورود و بازدید بارکد فوق را اسکن کنید</string>
     <string name="Your_purchase_code">کد خرید شما</string>
-
+    <string name="igasht_count_title">count</string>
+    <string name="igasht_service_title">Service</string>
 </resources>

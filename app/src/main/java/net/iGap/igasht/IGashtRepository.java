@@ -236,14 +236,12 @@ public class IGashtRepository {
         }
     }
 
-    public void addToVoucherList(IGashtServiceAmount amount) {
-        selectedServiceList.add(new IGashtVouchers(amount.getVoucherTypeId(), amount.getCount()));
-    }
-
-    public void removeFromVoucherList(IGashtServiceAmount amount) {
-        Log.wtf(this.getClass().getName(),"selectedServiceList count: "+selectedServiceList.size());
-        selectedServiceList.remove(new IGashtVouchers(amount.getVoucherTypeId(), amount.getCount()));
-        Log.wtf(this.getClass().getName(),"selectedServiceList count: "+selectedServiceList.size());
+    public void createVoucherList(List<IGashtLocationService> data) {
+        for (int i = 0; i<data.size();i++){
+            if (data.get(i).getCount()>0){
+                selectedServiceList.add(new IGashtVouchers(data.get(i).getPersianTicket().getAmount(), data.get(i).getCount()));
+            }
+        }
     }
 
     public void clearSelectedServiceList(){
