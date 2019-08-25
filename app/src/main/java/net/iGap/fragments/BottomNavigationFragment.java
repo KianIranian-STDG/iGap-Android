@@ -203,13 +203,14 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
     public void getSelectedFragment(int position, String[] uri) {
 
-        if (position == DISCOVERY_FRAGMENT && uri.length > 1) {
-            List<Integer> pages = new ArrayList<>();
-            for (String s : uri) {
-                pages.add(Integer.valueOf(s));
+        if (uri != null && uri.length > 0)
+            if (!uri[0].equals("") && position == DISCOVERY_FRAGMENT) {
+                List<Integer> pages = new ArrayList<>();
+                for (String s : uri) {
+                    pages.add(Integer.valueOf(s));
+                }
+                this.crawlerStruct = new DiscoveryFragment.CrawlerStruct(0, pages);
             }
-            this.crawlerStruct = new DiscoveryFragment.CrawlerStruct(0, pages);
-        }
 
         switch (position) {
             case CONTACT_FRAGMENT:
