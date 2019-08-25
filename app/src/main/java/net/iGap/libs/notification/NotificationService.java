@@ -41,7 +41,6 @@ public class NotificationService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         WebSocketClient.reconnect(false);
-        Log.d("bagi", "FCM" + remoteMessage.getData() + "");
         if (remoteMessage.getData().containsKey(MESSAGE_ID)) {
             try (Realm realm = Realm.getDefaultInstance()) {
                 realm.executeTransaction(new Realm.Transaction() {
@@ -74,7 +73,6 @@ public class NotificationService extends FirebaseMessagingService {
                                         .setUpdateTime((int) (remoteMessage.getSentTime() / 1000))
                                         .build();
 
-                                Log.d("bagi", "FcmSHOWNOTIF" + remoteMessage.getData() + "");
                                 HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType);
 
                             }

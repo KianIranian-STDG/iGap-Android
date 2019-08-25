@@ -784,8 +784,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                                     switch (showMemberMode) {
                                         case NONE:
                                             if (mContact.peerId == userID) {
-                                                // bagi:// dont uncomment below line it has some bug
-                                                //new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();
                                             } else {
                                                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString())).setReplace(false).load();
                                             }

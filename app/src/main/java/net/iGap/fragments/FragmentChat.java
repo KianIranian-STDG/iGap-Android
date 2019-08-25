@@ -945,8 +945,6 @@ public class FragmentChat extends BaseFragment
     public void onResume() {
         isPaused = false;
         super.onResume();
-        Log.d("bagi", Realm.getGlobalInstanceCount(Realm.getDefaultConfiguration())+ "global");
-        Log.d("bagi", Realm.getLocalInstanceCount(Realm.getDefaultConfiguration())+ "local");
 
         if (FragmentShearedMedia.list != null && FragmentShearedMedia.list.size() > 0) {
             deleteSelectedMessageFromAdapter(FragmentShearedMedia.list);
@@ -4359,7 +4357,6 @@ public class FragmentChat extends BaseFragment
              * set message status SEEN for avoid from run this block in each bindView
              */
 
-            //Bagi may crash here
             messageInfo.realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
 
             if (!isPaused)
