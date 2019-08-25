@@ -47,21 +47,6 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-
-            <android.support.v7.widget.AppCompatTextView
-                style="@style/myIconTextViewStyle"
-                android:layout_width="@dimen/dp48"
-                android:layout_height="@dimen/dp48"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:onClick="@{()->viewModel.onRetryClick()}"
-                android:text="@string/retry_icon"
-                android:visibility="@{viewModel.showViewRefresh}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <LinearLayout
                 android:id="@+id/frameLayout"
                 android:layout_width="match_parent"
@@ -70,6 +55,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
+                android:visibility="@{viewModel.showMainView}"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/shape_igasht_yellow"
                 android:gravity="center_horizontal"
@@ -110,14 +96,13 @@
                     android:layout_marginRight="@dimen/dp8"
                     android:layout_marginBottom="8dp"
                     android:visibility="@{viewModel.showMainView}"
-                    app:cardCornerRadius="@dimen/dp8"
+                    app:cardCornerRadius="@dimen/dp12"
                     app:cardUseCompatPadding="true"
                     app:contentPadding="@dimen/dp8"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/chooseProvinceTitle"
                     app:layout_constraintStart_toStartOf="@+id/chooseProvinceTitle"
-                    app:layout_constraintTop_toBottomOf="@+id/chooseProvinceTitle"
-                    app:layout_constraintWidth_percent=".8">
+                    app:layout_constraintTop_toBottomOf="@+id/chooseProvinceTitle">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -182,6 +167,20 @@
                 app:layout_constraintTop_toBottomOf="@+id/frameLayout"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:layout_editor_absoluteX="175dp" />
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/myIconTextViewStyle"
+                android:layout_width="@dimen/dp48"
+                android:layout_height="@dimen/dp48"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{()->viewModel.onRetryClick()}"
+                android:text="@string/retry_icon"
+                android:visibility="@{viewModel.showViewRefresh}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout"/>
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>
 </layout>
