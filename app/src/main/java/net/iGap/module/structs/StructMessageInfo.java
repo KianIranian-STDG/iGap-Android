@@ -109,7 +109,7 @@ public class StructMessageInfo implements Parcelable {
     public void setAttachment(RealmAttachment attachment) {
         RealmAttachment unManagedAttachment;
         try (Realm realm = Realm.getDefaultInstance()) {
-            if (realmRoomMessage.isManaged()) {
+            if (attachment.isManaged()) {
                 unManagedAttachment = realm.copyFromRealm(attachment);
             } else {
                 unManagedAttachment = attachment;
@@ -118,8 +118,9 @@ public class StructMessageInfo implements Parcelable {
 
         if (realmRoomMessage.getForwardMessage() != null) {
             realmRoomMessage.getForwardMessage().setAttachment(unManagedAttachment);
+        } else {
+            realmRoomMessage.setAttachment(unManagedAttachment);
         }
-        realmRoomMessage.setAttachment(unManagedAttachment);
     }
 
     public int getUploadProgress() {
