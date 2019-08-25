@@ -5823,7 +5823,10 @@ public class FragmentChat extends BaseFragment
                         roomMessage.setCreateTime(TimeUtils.currentLocalTime());
 
                         if (isReply()) {
-                            roomMessage.setReplyTo(getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, getReplyMessageId()).findFirst());
+                            RealmRoomMessage copyReplyMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, getReplyMessageId()).findFirst();
+                            if (copyReplyMessage != null) {
+                                roomMessage.setReplyTo(getRealmChat().copyFromRealm(copyReplyMessage));
+                            }
                         }
 
                         new Thread(() -> {
