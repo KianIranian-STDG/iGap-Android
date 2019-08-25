@@ -1235,6 +1235,7 @@ Want to get it?</string>
     <string name="lbl_contrast">Contrast</string>
     <string name="lbl_saturation">Saturation</string>
     <string name="tab_filters">Filters</string>
+    <string name="filter">Filter</string>
     <string name="tab_edit">Edit</string>
     <string name="can_not_open_file">This file can not be opened</string>
     <string name="pin_messages_content" formatted="false">"Do you want to %s this message?"</string>
