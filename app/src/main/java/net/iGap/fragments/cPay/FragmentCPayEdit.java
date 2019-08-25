@@ -18,6 +18,7 @@ import android.widget.Toast;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.api.repository.CPayRepository;
 import net.iGap.databinding.FragmentCpayEditBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCPay;
@@ -97,6 +98,7 @@ public class FragmentCPayEdit extends BaseFragment implements ToolbarListener {
         viewModel.getAddCarListener().observe(getViewLifecycleOwner() , isOk -> {
             if (isOk == null) return;
             //update list in main
+            CPayRepository.getInstance().getPlaquesChangeListener().setValue(true);
             popBackStackFragment();
         });
     }

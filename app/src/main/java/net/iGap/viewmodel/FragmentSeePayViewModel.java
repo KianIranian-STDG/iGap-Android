@@ -2,23 +2,59 @@ package net.iGap.viewmodel;
 
 
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
 
-public class FragmentSeePayViewModel extends ViewModel {
+import net.iGap.api.repository.CPayRepository;
+import net.iGap.model.cPay.UserPlaquesModel;
 
-    public MutableLiveData<Boolean> onAddClickListener = new MutableLiveData<>();
-    public MutableLiveData<Boolean> onInquiryClickListener = new MutableLiveData<>();
+public class FragmentSeePayViewModel extends BaseCPayViewModel<UserPlaquesModel> {
+
+    private MutableLiveData<Boolean> onAddClickListener = new MutableLiveData<>();
+    private MutableLiveData<Boolean> onInquiryClickListener = new MutableLiveData<>();
+    private MutableLiveData<UserPlaquesModel> plaquesReceiverListener = new MutableLiveData<>();
 
     public FragmentSeePayViewModel() {
+        getPlaqueListByApi();
     }
 
-    public void onAddCarClick(){
+    public void getPlaqueListByApi() {
+        getLoaderListener().setValue(true);
+        CPayRepository.getInstance().getAllUserPlaques(this);
+    }
+
+    public MutableLiveData<Boolean> getPlaqueChangeListener() {
+        return CPayRepository.getInstance().getPlaquesChangeListener();
+    }
+
+    public MutableLiveData<Boolean> getOnAddClickListener() {
+        return onAddClickListener;
+    }
+
+    public MutableLiveData<Boolean> getOnInquiryClickListener() {
+        return onInquiryClickListener;
+    }
+
+    public MutableLiveData<UserPlaquesModel> getPlaquesReceiverListener() {
+        return plaquesReceiverListener;
+    }
+
+    public void onAddCarClick() {
         onAddClickListener.postValue(true);
     }
 
-    public void onInquiryClick(){
+    public void onInquiryClick() {
         onInquiryClickListener.postValue(true);
     }
 
+    public void onRetryClicked() {
+        getPlaqueListByApi();
+    }
 
+    @Override
+    public void onSuccess(UserPlaquesModel data) {
+        if (data == null || data.getData().size() == 0) {
+            plaquesReceiverListener.setValue(null);
+        } else {
+            plaquesReceiverListener.setValue(data);
+        }
+    }
 }

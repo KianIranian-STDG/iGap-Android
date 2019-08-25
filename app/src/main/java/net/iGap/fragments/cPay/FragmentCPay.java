@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +17,13 @@ import net.iGap.R;
 import net.iGap.adapter.cPay.AdapterPlaqueList;
 import net.iGap.databinding.FragmentCpayBinding;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.helper.HelperCPay;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentSeePayViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class FragmentCPay extends BaseFragment implements ToolbarListener {
@@ -30,7 +31,7 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
     private FragmentSeePayViewModel viewModel ;
     private FragmentCpayBinding binding ;
     private AdapterPlaqueList adapter ;
-    private ArrayList<String> plaqueList = new ArrayList<>();
+    private List<String> plaqueList = new ArrayList<>();
 
     public FragmentCPay() {
 
@@ -55,22 +56,17 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
         super.onViewCreated(view, savedInstanceState);
 
         initToolbar();
-        initRecyclerView();
         initCallBacks();
-
-        HelperCPay.getPlaqueCode("الف");
-        HelperCPay.getPlaqueCode("ب");
-        HelperCPay.getPlaqueCode("ی");
 
     }
 
     private void initCallBacks() {
 
-        viewModel.onAddClickListener.observe(getViewLifecycleOwner() , isOpen -> {
+        viewModel.getOnAddClickListener().observe(getViewLifecycleOwner() , isOpen -> {
             openEditOrAddFragment(null);
         });
 
-        viewModel.onInquiryClickListener.observe(getViewLifecycleOwner() , isOpen -> {
+        viewModel.getOnInquiryClickListener().observe(getViewLifecycleOwner() , isOpen -> {
             if (getActivity() == null) return;
 
             if (adapter.getSelectedPlaqueList().size() == 0){
@@ -82,17 +78,81 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
                     .setReplace(false)
                     .load();
         });
+
+        viewModel.getPlaqueChangeListener().observe(getViewLifecycleOwner() , isUpdate ->{
+            if (isUpdate != null && isUpdate) viewModel.getPlaqueListByApi();
+        });
+
+        viewModel.getLoaderListener().observe(getViewLifecycleOwner() , isLoading -> {
+            if (isLoading == null) return;
+            handleView(isLoading ? PageState.LOADING : PageState.ERROR);
+        });
+
+        viewModel.getPlaquesReceiverListener().observe(getViewLifecycleOwner() , userPlaques -> {
+            if (userPlaques == null){
+                handleView(PageState.NO_CAR);
+            }else {
+                plaqueList = userPlaques.getData();
+                updateRecyclerView();
+                handleView(PageState.HAS_CAR);
+            }
+        });
+
+        viewModel.getMessageToUser().observe(getViewLifecycleOwner() , resID -> {
+            if (resID == null) return;
+            Toast.makeText(getActivity(), getString(resID), Toast.LENGTH_LONG).show();
+        });
+
+        viewModel.getMessageToUserText().observe(getViewLifecycleOwner() , s -> {
+            if (s == null) return;
+            Toast.makeText(getActivity(), s , Toast.LENGTH_LONG).show();
+        });
+
     }
 
-    private void initRecyclerView() {
+    private void handleView(PageState state) {
+        switch (state){
+            case NO_CAR:
+                binding.retry.setVisibility(View.GONE);
+                binding.loader.setVisibility(View.GONE);
+                binding.stateHasCar.setVisibility(View.GONE);
+                binding.stateNoCar.setVisibility(View.VISIBLE);
+                break;
 
-        plaqueList.add("110114566");
-        plaqueList.add("183226588");
+            case HAS_CAR:
+                binding.retry.setVisibility(View.GONE);
+                binding.loader.setVisibility(View.GONE);
+                binding.stateHasCar.setVisibility(View.VISIBLE);
+                binding.stateNoCar.setVisibility(View.GONE);
+                break;
 
-        adapter = new AdapterPlaqueList(getActivity());
-        adapter.setPlaqueList(plaqueList);
-        binding.rvPlaques.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.rvPlaques.setAdapter(adapter);
+            case LOADING:
+                binding.retry.setVisibility(View.GONE);
+                binding.loader.setVisibility(View.VISIBLE);
+                binding.stateHasCar.setVisibility(View.GONE);
+                binding.stateNoCar.setVisibility(View.GONE);
+                break;
+
+            case ERROR:
+                binding.retry.setVisibility(View.VISIBLE);
+                binding.loader.setVisibility(View.GONE);
+                binding.stateHasCar.setVisibility(View.GONE);
+                binding.stateNoCar.setVisibility(View.GONE);
+                break;
+        }
+
+    }
+
+    private void updateRecyclerView() {
+
+        if (adapter == null){
+            adapter = new AdapterPlaqueList(getActivity());
+            adapter.setPlaqueList(plaqueList);
+            binding.rvPlaques.setLayoutManager(new LinearLayoutManager(getActivity()));
+            binding.rvPlaques.setAdapter(adapter);
+        }else {
+            adapter.notifyDataSetChanged();
+        }
 
         adapter.onEditClickListener.observe(getViewLifecycleOwner() , plaque -> {
             if (plaque != null){
@@ -137,5 +197,9 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
                 .setReplace(false)
                 .load();
 
+    }
+
+    enum PageState {
+        LOADING , HAS_CAR , NO_CAR , ERROR
     }
 }

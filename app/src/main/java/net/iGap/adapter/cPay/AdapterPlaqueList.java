@@ -22,11 +22,9 @@ public class AdapterPlaqueList extends RecyclerView.Adapter<AdapterPlaqueList.Pl
     public MutableLiveData<String> onEditClickListener = new MutableLiveData<>();
     private List<String> plaqueList = new ArrayList<>();
     private List<String> selectedPlaqueList = new ArrayList<>();
-    private Context mContext;
     private LayoutInflater mInflater;
 
     public AdapterPlaqueList(Context context) {
-        this.mContext = context;
         mInflater = LayoutInflater.from(context);
     }
 

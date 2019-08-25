@@ -1,5 +1,7 @@
 package net.iGap.api.repository;
 
+import android.arch.lifecycle.MutableLiveData;
+
 import net.iGap.api.CPayApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
@@ -22,6 +24,7 @@ public class CPayRepository {
 
     private static CPayRepository instance;
     private CPayApi api;
+    private MutableLiveData<Boolean> plaquesChangeListener = new MutableLiveData<>();
 
     private CPayRepository() {
         api = new RetrofitFactory().getCPayApi();
@@ -34,16 +37,16 @@ public class CPayRepository {
         return instance;
     }
 
-    public void getPlaqueInfo(PlaqueInfoBodyModel body , ResponseCallback<PlaqueInfoModel> callback){
+    public void getPlaqueInfo(PlaqueInfoBodyModel body, ResponseCallback<PlaqueInfoModel> callback) {
 
         api.getPlaqueInfo(body).enqueue(new Callback<PlaqueInfoModel>() {
             @Override
             public void onResponse(Call<PlaqueInfoModel> call, Response<PlaqueInfoModel> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     callback.onSuccess(response.body());
-                }else {
+                } else {
                     try {
-                        callback.onError(new ErrorHandler().getError(response.code() , response.errorBody().string()));
+                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -107,5 +110,7 @@ public class CPayRepository {
 
     }
 
-
+    public MutableLiveData<Boolean> getPlaquesChangeListener() {
+        return plaquesChangeListener;
+    }
 }
