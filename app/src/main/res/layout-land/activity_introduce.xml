@@ -6,7 +6,6 @@
     android:background="@drawable/introduction_background"
     android:clickable="true">
 
-
     <net.iGap.module.CustomCircleImage
         android:id="@+id/int_circleButton_introduce"
         android:layout_width="wrap_content"

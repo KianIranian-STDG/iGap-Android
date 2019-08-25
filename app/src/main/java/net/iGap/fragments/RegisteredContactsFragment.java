@@ -348,8 +348,10 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 bundle1.putString("TYPE", ProtoGlobal.Room.Type.GROUP.name());
                 bundle1.putBoolean("NewRoom", true);
                 fragment.setArguments(bundle1);
-                if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
+                if (FragmentNewGroup.onRemoveFragmentNewGroup != null) {
+                    Log.wtf(this.getClass().getName(),"onRemoveFragmentNewGroup");
                     FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
+                }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });

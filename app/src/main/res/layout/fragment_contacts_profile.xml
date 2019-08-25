@@ -683,6 +683,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="left"
+                    android:onClick="@{() -> viewModel.onUserNameClicked()}"
                     android:layout_marginTop="@dimen/dp10"
                     android:fontFamily="@font/main_font"
                     android:singleLine="true"

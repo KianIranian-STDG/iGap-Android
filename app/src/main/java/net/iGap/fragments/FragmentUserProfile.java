@@ -1,10 +1,13 @@
 package net.iGap.fragments;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.zxing.integration.android.IntentIntegrator;
 
@@ -62,13 +66,19 @@ public class FragmentUserProfile extends BaseMainFragments {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new UserProfileViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), avatarHandler);
+            }
+        }).get(UserProfileViewModel.class);
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_profile, container, false);
-        viewModel.init(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), avatarHandler);
+        viewModel.init();
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
@@ -78,6 +88,14 @@ public class FragmentUserProfile extends BaseMainFragments {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.wtf(this.getClass().getName(), "onViewCreated");
+
+        viewModel.changeUserProfileWallpaper.observe(getViewLifecycleOwner() , drawable -> {
+            if (drawable != null){
+                binding.fupBgAvatar.setImageDrawable(drawable);
+            }else {
+                binding.fupBgAvatar.setImageResource(R.drawable.test_bg);
+            }
+        });
 
         viewModel.goToAddMemberPage.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
@@ -263,6 +281,35 @@ public class FragmentUserProfile extends BaseMainFragments {
         viewModel.showError.observe(getViewLifecycleOwner(), message -> {
             if (message != null) {
                 Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        viewModel.showDialogBeLastVersion.observe(getViewLifecycleOwner(), isShow -> {
+            if (getActivity() != null && isShow != null && isShow) {
+                new MaterialDialog.Builder(getActivity())
+                        .cancelable(false)
+                        .title(R.string.app_version_change_log).titleGravity(GravityEnum.CENTER)
+                        .titleColor(getResources().getColor(R.color.green))
+                        .content(R.string.updated_version_title)
+                        .contentGravity(GravityEnum.CENTER)
+                        .positiveText(R.string.ok).itemsGravity(GravityEnum.START).show();
+            }
+        });
+
+        viewModel.showDialogUpdate.observe(getViewLifecycleOwner(), body -> {
+            if (getActivity() != null && body != null) {
+                new MaterialDialog.Builder(getActivity())
+                        .cancelable(false)
+                        .title(R.string.app_version_change_log).titleGravity(GravityEnum.CENTER)
+                        .titleColor(Color.parseColor("#f44336"))
+                        .content(body)
+                        .contentGravity(GravityEnum.CENTER)
+                        .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive((dialog, which) -> {
+                    String url = "http://d.igap.net/update";
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }).negativeText(R.string.cancel).show();
             }
         });
 

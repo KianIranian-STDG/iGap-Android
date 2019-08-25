@@ -1,5 +1,6 @@
 package net.iGap.viewmodel;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 public class BaseViewModel extends ViewModel implements BaseViewHolder {

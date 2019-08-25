@@ -1,34 +1,50 @@
 package net.iGap.fragments;
 
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentWalletAgrementBinding;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.IBackHandler;
 import net.iGap.interfaces.OnReceivePageInfoWalletAgreement;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.model.GoToWalletPage;
 import net.iGap.request.RequestInfoPage;
+import net.iGap.request.RequestWalletRegister;
 import net.iGap.viewmodel.FragmentWalletAgreementViewModel;
+
+import org.jetbrains.annotations.NotNull;
+import org.paygear.WalletActivity;
+
+import ir.radsense.raadcore.model.Auth;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FragmentWalletAgrement extends BaseFragment {
 
-    private FragmentWalletAgrementBinding fragmentWalletAgrementBinding;
+    private FragmentWalletAgrementBinding binding;
+    private FragmentWalletAgreementViewModel viewModel;
     private final static String PHONE = "PATH";
-    private static String mPhone;
-    private boolean isScan;
 
     public static FragmentWalletAgrement newInstance(String phone, boolean isScan) {
         Bundle args = new Bundle();
@@ -40,28 +56,39 @@ public class FragmentWalletAgrement extends BaseFragment {
     }
 
     public static FragmentWalletAgrement newInstance(String phone) {
-        return newInstance(phone , false);
-    }
-
-    public FragmentWalletAgrement() {
-        // Required empty public constructor
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        fragmentWalletAgrementBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_wallet_agrement, container, false);
-        return attachToSwipeBack(fragmentWalletAgrementBinding.getRoot());
+        return newInstance(phone, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                String mPhone = null;
+                boolean isScan = false;
+                if (getArguments() != null) {
+                    mPhone = getArguments().getString(PHONE);
+                    isScan = getArguments().getBoolean("isScan", false);
+                }
+                return (T) new FragmentWalletAgreementViewModel(mPhone, isScan);
+            }
+        }).get(FragmentWalletAgreementViewModel.class);
+
+    }
+
+    @Override
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_wallet_agrement, container, false);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+        return attachToSwipeBack(binding.getRoot());
+    }
+
+    @Override
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initDataBinding(getArguments());
-        initToolbar();
-    }
-
-    private void initToolbar() {
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -74,38 +101,43 @@ public class FragmentWalletAgrement extends BaseFragment {
                         popBackStackFragment();
                     }
                 });
-        fragmentWalletAgrementBinding.fwaLayoutToolbar.addView(toolbar.getView());
-    }
+        binding.fwaLayoutToolbar.addView(toolbar.getView());
 
-    private void initDataBinding(Bundle arguments) {
-        IBackHandler iBackHandler = new IBackHandler() {
-            @Override
-            public void onBack() {
-                popBackStackFragment();
+        viewModel.getShowDialogAcceptTerms().observe(getViewLifecycleOwner(), isShow -> {
+            if (getActivity() != null && isShow != null && isShow) {
+                new MaterialDialog.Builder(getActivity()).title(R.string.accept_the_terms).
+                        content(R.string.are_you_sure)
+                        .positiveText(R.string.ok)
+                        .negativeText(R.string.cancel)
+                        .onPositive((dialog, which) -> viewModel.acceptTerms()).show();
             }
-        };
+        });
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-//            path = bundle.getString(PATH);
-            mPhone = bundle.getString(PHONE);
-            isScan = bundle.getBoolean("isScan", false);
-        }
-
-        fragmentWalletAgrementBinding.setBackHandler(iBackHandler);
-
-        FragmentWalletAgreementViewModel fragmentWalletAgreementViewModel = new FragmentWalletAgreementViewModel(fragmentWalletAgrementBinding, mPhone, isScan);
-        fragmentWalletAgrementBinding.setFragmentWalletAgreementViewModel(fragmentWalletAgreementViewModel);
-
-
-        G.onReceivePageInfoWalletAgreement = new OnReceivePageInfoWalletAgreement() {
-            @Override
-            public void onReceivePageInfo(String body) {
-                fragmentWalletAgrementBinding.getFragmentWalletAgreementViewModel().callbackTxtAgreement.set(Html.fromHtml(body).toString());
+        viewModel.getShowErrorMessage().observe(getViewLifecycleOwner(), messageRes -> {
+            if (messageRes != null) {
+                HelperError.showSnackMessage(getString(messageRes), false);
             }
-        };
+        });
 
-        new RequestInfoPage().infoPage("WALLET_AGREEMENT");
-
+        viewModel.getGoToWalletPage().observe(getViewLifecycleOwner(), data -> {
+            if (getActivity() != null && data != null) {
+                Intent intent = new Intent(getActivity(), WalletActivity.class);
+                intent.putExtra("Language", "fa");
+                intent.putExtra("Mobile", "0" + data.getPhone());
+                intent.putExtra("PrimaryColor", G.appBarColor);
+                intent.putExtra("DarkPrimaryColor", G.appBarColor);
+                intent.putExtra("AccentColor", G.appBarColor);
+                intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
+                intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
+                intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
+                intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
+                intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
+                intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
+                intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                intent.putExtra("isScan", data.isScan());
+                getActivity().startActivity(intent);
+                getActivity().onBackPressed();
+            }
+        });
     }
 }

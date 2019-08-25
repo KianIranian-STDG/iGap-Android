@@ -113,6 +113,7 @@ import net.iGap.payment.Payment;
 import net.iGap.payment.PaymentFragment;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoInfoWallpaper;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoom;
@@ -122,6 +123,7 @@ import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmStickers;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.realm.RealmWallpaper;
+import net.iGap.realm.RealmWallpaperFields;
 import net.iGap.request.RequestInfoWallpaper;
 import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserVerifyNewDevice;
@@ -658,11 +660,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
-                Log.wtf(this.getClass().getName(),"------------------------------------------------");
-                for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount() ; i++){
-                    Log.wtf(this.getClass().getName(),"fragment: "+ getSupportFragmentManager().getBackStackEntryAt(i).getName());
+                Log.wtf(this.getClass().getName(), "------------------------------------------------");
+                for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
+                    Log.wtf(this.getClass().getName(), "fragment: " + getSupportFragmentManager().getBackStackEntryAt(i).getName());
                 }
-                Log.wtf(this.getClass().getName(),"------------------------------------------------");
+                Log.wtf(this.getClass().getName(), "------------------------------------------------");
             }
         });
         Log.wtf(this.getClass().getName(), "onCreate");
@@ -730,7 +732,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void getWallpaperAsDefault() {
         try {
-            RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).findFirst();
+            RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE , ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
             if (realmWallpaper != null) {
                 if (realmWallpaper.getWallPaperList() != null && realmWallpaper.getWallPaperList().size() > 0) {
                     RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
@@ -785,10 +787,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void getImageListFromServer() {
+        Log.e("wallpaper" , "request in main ");
         G.onGetWallpaper = new OnGetWallpaper() {
             @Override
             public void onGetWallpaperList(final List<ProtoGlobal.Wallpaper> list) {
-                RealmWallpaper.updateField(list, "");
+                Log.e("wallpaper" , "resp in main");
+                RealmWallpaper.updateField(list, "" , ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE);
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -798,7 +802,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
 
-        new RequestInfoWallpaper().infoWallpaper();
+        new RequestInfoWallpaper().infoWallpaper(ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND);
     }
 
     @Override
@@ -1090,11 +1094,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 G.isLandscape = false;
             }
 
-            if (beforeState != G.isLandscape) {
-                /*designLayout(chatLayoutMode.none);*/
+            /*if (beforeState != G.isLandscape) {
+             *//*designLayout(chatLayoutMode.none);*//*
                 Log.wtf(this.getClass().getName(), "onConfigurationChanged");
                 setViewConfigurationChanged();
-            }
+            }*/
             setDialogFragmentSize();
         }
         super.onConfigurationChanged(newConfig);
@@ -1509,7 +1513,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public void designLayout(final chatLayoutMode mode) {
         if (G.twoPaneMode) {
-            findViewById(R.id.mainFrame).setVisibility(G.isLandscape ? View.VISIBLE : View.GONE);
+            /*findViewById(R.id.mainFrame).setVisibility(G.isLandscape ? View.VISIBLE : View.GONE);*/
             /*if (G.isLandscape) {
                 new HelperFragment(getSupportFragmentManager(), new TabletEmptyChatFragment()).load(true);
             } else {
@@ -1807,11 +1811,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public void goToChatPage(FragmentChat fragmentChat) {
         Log.wtf(this.getClass().getName(), "goToChatPage");
-        if (findViewById(R.id.mainFrame).getVisibility() != View.VISIBLE) {
-            findViewById(R.id.mainFrame).setVisibility(View.VISIBLE);
-            findViewById(R.id.roomListFrame).setVisibility(View.GONE);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+        if (fragment instanceof FragmentChat) {
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
         }
-        new HelperFragment(getSupportFragmentManager(), fragmentChat).setReplace(false).load();
+        getSupportFragmentManager().beginTransaction().add(R.id.mainFrame, fragmentChat).commit();
+        /*new HelperFragment(getSupportFragmentManager(), fragmentChat).setReplace(false).load();*/
     }
 
     //removeAllFragmentLoadedLikeDialogInTabletMode
@@ -1821,7 +1826,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void removeAllFragmentFromMain() {
-        getSupportFragmentManager().popBackStack(BottomNavigationFragment.class.getName(), 0);
+        if (G.twoPaneMode) {
+            findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+            if (fragment instanceof FragmentChat) {
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+            getSupportFragmentManager().popBackStack(TabletEmptyChatFragment.class.getName(), 0);
+        } else {
+            getSupportFragmentManager().popBackStack(BottomNavigationFragment.class.getName(), 0);
+        }
     }
 
     /**
@@ -1841,5 +1855,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).setForwardMessage(enable);
         }
+    }
+
+    public void goToTabletEmptyPage() {
+        Log.wtf(this.getClass().getName(), "goToTabletEmptyPage");
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+        if (fragment instanceof FragmentChat) {
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        }
+
     }
 }

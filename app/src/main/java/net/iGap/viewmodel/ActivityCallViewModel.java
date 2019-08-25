@@ -10,13 +10,13 @@ package net.iGap.viewmodel;
  */
 
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothProfile;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.annotation.StringRes;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -50,7 +50,7 @@ import java.util.TimerTask;
 
 import io.realm.Realm;
 
-public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
+public class ActivityCallViewModel extends ViewModel implements BluetoothProfile.ServiceListener {
 
     public ObservableInt showPeerSurface = new ObservableInt(View.GONE);
     public ObservableInt showRendererSurface = new ObservableInt(View.GONE);

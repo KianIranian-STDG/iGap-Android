@@ -1,5 +1,6 @@
 package net.iGap.fragments.populaChannel;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,11 +31,16 @@ public class PopularChannelHomeFragment extends BaseFragment implements ToolbarL
     private SwipeRefreshLayout swipeRefreshLayout;
     private View rootView;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(PopularChannelHomeViewModel.class);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_popular_channel, container, false);
-        viewModel = new PopularChannelHomeViewModel();
         adapter = new PopularChannelHomeAdapter();
         return rootView;
     }

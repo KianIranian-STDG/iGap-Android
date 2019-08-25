@@ -15,7 +15,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Random;
 
 /**
@@ -122,5 +125,12 @@ public class HelperNumerical {
 
     public static Long getNanoTimeStamp() {
         return System.nanoTime();
+    }
+
+    public String getCommaSeparatedPrice(long price) {
+        DecimalFormat anotherDFormat = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+        anotherDFormat.setGroupingUsed(true);
+        anotherDFormat.setGroupingSize(3);
+        return anotherDFormat.format(price);
     }
 }

@@ -27,16 +27,14 @@
             android:layout_marginBottom="@dimen/dp6">
 
 
-
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/itemImage"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_margin="@dimen/dp8"
-                app:imageUrl="@{viewModel.locationDetail.getTopText}"
-                app:layout_constraintDimensionRatio="332:83"
+                android:adjustViewBounds="true"
+                app:imageUrl="@{viewModel.locationDetail.getMainPicture()}"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,12 +47,35 @@
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginEnd="@dimen/dp8"
                 android:layout_marginBottom="@dimen/dp4"
-                android:text="@{viewModel.locationDetail.getTopTextWithLanguage}"
+                android:text="@{viewModel.locationDetail.locationName}"
                 android:textSize="@dimen/largeTextSize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/itemImage" />
 
+            <View
+                android:id="@+id/view4"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_margin="@dimen/dp8"
+                android:background="@color/gray"
+                app:layout_constraintEnd_toEndOf="@+id/subTitle"
+                app:layout_constraintStart_toStartOf="@+id/subTitle"
+                app:layout_constraintTop_toBottomOf="@+id/subTitle" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/subDetai"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp8"
+                android:layout_marginTop="@dimen/dp16"
+                android:layout_marginEnd="@dimen/dp8"
+                android:layout_marginBottom="@dimen/dp4"
+                android:text="ساعات کاری :"
+                app:layout_constraintEnd_toEndOf="@+id/subTitle"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/subTitle"
+                app:layout_constraintTop_toBottomOf="@+id/subTitle" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/subDetail"
@@ -65,21 +86,12 @@
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginEnd="@dimen/dp8"
                 android:layout_marginBottom="@dimen/dp4"
-                android:text="@{viewModel.locationDetail.getBottomTextWithLanguage}"
-                app:layout_constraintEnd_toEndOf="@+id/subTitle"
+                android:text="@{viewModel.locationDetail.workingTime}"
+                app:layout_constraintEnd_toEndOf="@+id/subDetai"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/subTitle"
-                app:layout_constraintTop_toBottomOf="@+id/subTitle" />
+                app:layout_constraintStart_toStartOf="@+id/subDetai"
+                app:layout_constraintTop_toBottomOf="@+id/subDetai" />
 
-            <View
-                android:id="@+id/view1"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_margin="@dimen/dp8"
-                android:background="@color/gray"
-                app:layout_constraintEnd_toEndOf="@+id/subDetail"
-                app:layout_constraintStart_toStartOf="@+id/subDetail"
-                app:layout_constraintTop_toBottomOf="@+id/subDetail" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/subTitle2"
@@ -90,12 +102,22 @@
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginEnd="@dimen/dp8"
                 android:layout_marginBottom="@dimen/dp4"
-                android:text="@{viewModel.locationDetail.getTopTextWithLanguage}"
+                android:text="@{viewModel.locationDetail.closingTimes}"
                 android:textSize="@dimen/largeTextSize"
-                app:layout_constraintEnd_toEndOf="@+id/view1"
+                app:layout_constraintEnd_toEndOf="@+id/subDetail"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/view1"
-                app:layout_constraintTop_toBottomOf="@+id/view1" />
+                app:layout_constraintStart_toStartOf="@+id/subDetail"
+                app:layout_constraintTop_toBottomOf="@+id/subDetail" />
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_margin="@dimen/dp8"
+                android:background="@color/gray"
+                app:layout_constraintEnd_toEndOf="@+id/subTitle2"
+                app:layout_constraintStart_toStartOf="@+id/subTitle2"
+                app:layout_constraintTop_toBottomOf="@+id/subTitle2" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/subDetail2"
@@ -106,7 +128,7 @@
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginEnd="@dimen/dp8"
                 android:layout_marginBottom="@dimen/dp4"
-                android:text="@{viewModel.locationDetail.getBottomTextWithLanguage}"
+                android:text="@{viewModel.locationDetail.attentions}"
                 app:layout_constraintEnd_toEndOf="@id/subTitle2"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@id/subTitle2"
@@ -131,41 +153,12 @@
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginEnd="@dimen/dp8"
                 android:layout_marginBottom="@dimen/dp4"
-                android:text="@{viewModel.locationDetail.getTopTextWithLanguage}"
+                android:text="@{viewModel.locationDetail.content}"
                 android:textSize="@dimen/largeTextSize"
                 app:layout_constraintEnd_toEndOf="@+id/view2"
                 app:layout_constraintStart_toStartOf="@+id/view2"
                 app:layout_constraintTop_toBottomOf="@+id/view2" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/subDetail3"
-                style="?textTitleColorSettingTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp8"
-                android:layout_marginTop="@dimen/dp4"
-                android:layout_marginEnd="@dimen/dp8"
-                android:layout_marginBottom="@dimen/dp4"
-                android:text="@{viewModel.locationDetail.getBottomTextWithLanguage}"
-                app:layout_constraintEnd_toEndOf="@+id/subTitle3"
-                app:layout_constraintStart_toStartOf="@+id/subTitle3"
-                app:layout_constraintTop_toBottomOf="@+id/subTitle3" />
-
-
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/subDetail4"
-                style="?textTitleColorSettingTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp8"
-                android:layout_marginTop="@dimen/dp4"
-                android:layout_marginEnd="@dimen/dp8"
-                android:layout_marginBottom="@dimen/dp4"
-                android:text="@{viewModel.locationDetail.getBottomTextWithLanguage}"
-                app:layout_constraintEnd_toEndOf="@+id/subDetail3"
-                app:layout_constraintStart_toStartOf="@+id/subDetail3"
-                app:layout_constraintTop_toBottomOf="@+id/subDetail3" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

@@ -6,53 +6,52 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/introImage"
-        android:layout_width="@dimen/dp200"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginLeft="@dimen/dp10"
+        android:layout_margin="@dimen/dp10"
         android:scaleType="fitCenter"
-        android:padding="@dimen/dp10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias=".1"
         app:layout_constraintWidth_percent=".4" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/introTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp10"
+        android:layout_marginTop="@dimen/dp16"
         android:fontFamily="@font/main_font"
         android:gravity="center_horizontal"
         android:padding="8dp"
-        android:layout_marginTop="@dimen/dp16"
         android:paddingLeft="@dimen/dp22"
         android:paddingRight="@dimen/dp22"
-        android:layout_marginLeft="@dimen/dp10"
         android:textColor="@color/text_line1_igap_dark"
-        android:textSize="@dimen/dp16"
+        android:textSize="@dimen/largeTextSize"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/introDescription"
         app:layout_constraintLeft_toRightOf="@id/introImage"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/introDescription"/>
+        app:layout_constraintTop_toTopOf="@id/introImage" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/introDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp16"
         android:fontFamily="@font/main_font"
         android:gravity="center"
         android:lineSpacingExtra="0dp"
         android:lines="5"
-        android:layout_marginTop="@dimen/dp16"
         android:paddingLeft="@dimen/dp10"
         android:paddingRight="@dimen/dp10"
         android:textColor="@color/text_line2_lc__dark"
-        android:textSize="@dimen/dp13"
+        android:textSize="@dimen/standardTextSize"
         app:layout_constraintLeft_toLeftOf="@id/introTitle"
         app:layout_constraintRight_toRightOf="@id/introTitle"
-        app:layout_constraintTop_toBottomOf="@id/introTitle"/>
+        app:layout_constraintBottom_toBottomOf="@id/introImage"
+        app:layout_constraintTop_toBottomOf="@id/introTitle" />
 
 
 </android.support.constraint.ConstraintLayout>

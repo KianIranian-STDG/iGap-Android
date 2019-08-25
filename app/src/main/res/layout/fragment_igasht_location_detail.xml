@@ -63,6 +63,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
+                    android:text="@{viewModel.locationItem.locationName}"
                     android:layout_marginRight="8dp"
                     android:maxLines="1"
                     android:padding="@dimen/dp2"
@@ -80,13 +81,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginBottom="16dp"
                     android:maxLines="1"
                     android:padding="@dimen/dp2"
+                    android:text="@{viewModel.locationItem.locationAddress}"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintBottom_toBottomOf="@id/itemImage"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/itemTitle"
-                    app:layout_constraintTop_toBottomOf="@id/itemTitle" />
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@id/itemTitle" />
 
                 <View
                     android:id="@+id/view2"
@@ -120,9 +123,10 @@
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:text="@{viewModel.locationItem.location}"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
-                    android:maxLines="1"
+                    android:maxLines="2"
                     android:padding="@dimen/dp2"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_location"

@@ -18,7 +18,6 @@ import net.iGap.databinding.FragmentIgashtLocationDetailBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.igasht.IGashtBaseView;
-import net.iGap.igasht.favoritelocation.IGashtFavoritePlaceListFragment;
 import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.locationdetail.buyticket.IGhashtBuyTicketFragment;
 import net.iGap.igasht.locationdetail.subdetail.IGashtLocationSubDetailFragment;
@@ -60,7 +59,7 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
                         }
                     }
 
-                   @Override
+                    @Override
                     public void onRightIconClickListener(View view) {
                         if (getActivity() != null) {
                             new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);

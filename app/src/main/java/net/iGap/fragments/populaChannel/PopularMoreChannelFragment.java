@@ -1,5 +1,6 @@
 package net.iGap.fragments.populaChannel;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -46,11 +47,16 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
     private PopularMoreChannelViewModel viewModel;
     private PopularMoreChannelAdapter adapter;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(PopularMoreChannelViewModel.class);
+    }
+
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
         rootView = LayoutInflater.from(G.fragmentActivity).inflate(R.layout.fragment_popular_channel_more, container, false);
-        viewModel = new PopularMoreChannelViewModel();
         adapter = new PopularMoreChannelAdapter();
         return rootView;
     }

@@ -39,6 +39,7 @@ import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.beepTunes.main.BeepTunesFragment;
+import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
@@ -885,6 +886,17 @@ public class HelperToolbar {
     }
 
     private void connectionStateChecker(LifecycleOwner owner) {
+
+        //check first time state then for every changes observer will change title
+        if (G.connectionState != null) {
+            if (G.connectionState == ConnectionState.CONNECTING) {
+                mTxtLogo.setText(R.string.connecting);
+                checkIGapFont();
+            }else if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK){
+                mTxtLogo.setText(R.string.waiting_for_network);
+                checkIGapFont();
+            }
+        }
 
         G.connectionStateMutableLiveData.observe(owner, new android.arch.lifecycle.Observer<ConnectionState>() {
             @Override

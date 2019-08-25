@@ -2464,6 +2464,7 @@
     <string name="province">مقاطعة</string>
     <string name="edit_profile_hint">يتم تخزين هذه المعلومات مشفرة على خوادم محفظة آمنة ولن يتم إرسالها إلا إلى برامج طرف ثالث إذا لزم الأمر. يتم استخدام هذه المعلومات لتسهيل عمليات الشراء.</string>
     <string name="username">معرف المستخدم</string>
+    <string name="username_copied">اسم المستخدم نسخ</string>
     <string name="select_city">اختر مدينة</string>
     <string name="select_province">اختر المقاطعة</string>
     <string name="mobile_number">رقم الجوال</string>
@@ -2911,6 +2912,26 @@
     <string name="message_decline_call_later">أنا ، أنا أتصل بك مرة أخرى.</string>
     <string name="message_decline_Please_call_later">يمكنك الاتصال مرة أخرى في وقت لاحق؟</string>
     <string name="message_decline_please_text_me">يرجى نص لي.</string>
+    <string name="mpl_transaction_rrn">إعادة الرقم</string>
+    <string name="mpl_transaction_trace">تتبع عدد</string>
+    <string name="mpl_transaction_order_id">رقم التعريف الخاص بالطلب</string>
+    <string name="pay_id">معرف الدفع</string>
+    <string name="mpl_transaction_sales">مبيعات</string>
+    <string name="mpl_transaction_topup">ائتمان</string>
+    <string name="mpl_transaction_card">بطاقة إلى بطاقة</string>
+    <string name="mpl_transaction_empty">لا توجد معلومات متاحة</string>
+    <string name="mpl_terminal_no">رقم المحطة</string>
+    <string name="mpl_do_you_want_save_receipt">هل تريد حفظ الإيصال؟</string>
+    <string name="mpl_transaction_nul">ليس لديك أي معاملات في آخر 5 أيام!</string>
+    <string name="mpl_transaction_merchent_name">اسم التاجر</string>
+
+
+    <string name="of_from_total">فی %s</string>
+    <string name="app_version_change_log">قائمة التغييرات</string>
+    <string name="updated_version_title">الإصدار الخاص بك هو التحديث</string>
+    <string name="check_update_title">اختر التحديث</string>
+    <string name="unblock">رفع الحظر</string>
+    <string name="view_profile">عرض المستخدم</string>
     <string name="scan_barcode_to_enter_visit">جهت ورود و بازدید بارکد فوق را اسکن کنید</string>
     <string name="Your_purchase_code">کد خرید شما</string>
     <string name="igasht_count_title">تعداد</string>

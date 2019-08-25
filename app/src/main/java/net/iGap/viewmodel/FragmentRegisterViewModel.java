@@ -46,7 +46,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     public MutableLiveData<Boolean> showEnteredPhoneNumberStartWithZeroError = new MutableLiveData<>();
     public MutableLiveData<Boolean> showEnteredPhoneNumberError = new MutableLiveData<>();
     public MutableLiveData<Boolean> showChooseCountryDialog = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showConfirmPhoneNumberDialog = new MutableLiveData<>();
+    public MutableLiveData<String> showConfirmPhoneNumberDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> showConnectionErrorDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogUserBlock = new MutableLiveData<>();
     public MutableLiveData<Long> goToTwoStepVerificationPage = new MutableLiveData<>();
@@ -55,7 +55,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     public MutableLiveData<Integer> showDialogQrCode = new MutableLiveData<>();
     public MutableLiveData<Uri> shareQrCodeIntent = new MutableLiveData<>();
     public MutableLiveData<Boolean> hideDialogQRCode = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showError = new MutableLiveData<>();
+    public MutableLiveData<Integer> showError = new MutableLiveData<>();
 
     public ObservableField<String> callbackBtnChoseCountry = new ObservableField<>("Iran");
     public ObservableField<String> callbackEdtCodeNumber = new ObservableField<>("+98");
@@ -63,6 +63,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     public ObservableField<String> edtPhoneNumberMask = new ObservableField<>("###-###-####");
     public ObservableInt edtPhoneNumberMaskMaxCount = new ObservableInt(11);
     public ObservableInt isShowLoading = new ObservableInt(View.VISIBLE);
+    public ObservableInt showRetryView = new ObservableInt(View.GONE);
     public ObservableBoolean btnChoseCountryEnable = new ObservableBoolean(true);
     public ObservableBoolean edtPhoneNumberEnable = new ObservableBoolean(true);
     public ObservableBoolean btnStartEnable = new ObservableBoolean(true);
@@ -71,7 +72,6 @@ public class FragmentRegisterViewModel extends ViewModel {
     public ArrayList<StructCountry> structCountryArrayList = new ArrayList<>();
     private boolean termsAndConditionIsChecked = false;
     private String agreementDescription;
-    private int sendRequestRegister = 0;
 
     public String _resultQrCode;
     private Uri image_uriQrCode;
@@ -79,7 +79,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     private RegisterRepository repository;
 
     public FragmentRegisterViewModel(StringBuilder stringBuilder) {
-        this.repository = RegisterRepository.getInstance();
+        repository = RegisterRepository.getInstance();
 
         String list = stringBuilder.toString();
         // Split line by line Into array
@@ -103,41 +103,7 @@ public class FragmentRegisterViewModel extends ViewModel {
         }
 
         Collections.sort(structCountryArrayList, new CountryListComparator());
-        this.repository.getTermsOfServiceBody(new RegisterRepository.RepositoryCallback<String>() {
-            @Override
-            public void onSuccess(String data) {
-                if (data != null) {
-                    agreementDescription = HtmlCompat.fromHtml(data, HtmlCompat.FROM_HTML_MODE_LEGACY).toString();
-                }
-                FragmentRegisterViewModel.this.repository.getInfoLocation(new RegisterRepository.RepositoryCallback<LocationModel>() {
-                    @Override
-                    public void onSuccess(LocationModel data) {
-                        FragmentRegisterViewModel.this.repository.inRegisterMode(hideDialogQRCode, goToTwoStepVerificationPage);
-                        isShowLoading.set(View.GONE);
-                        viewVisibility.set(View.VISIBLE);
-                        callbackEdtCodeNumber.set("+" + data.getCountryCode());
-                        callbackBtnChoseCountry.set(data.getCountryName());
-                        if (data.getPhoneMask() != null && !data.getPhoneMask().equals("")) {
-                            edtPhoneNumberMask.set(data.getPhoneMask().replace("X", "#").replace(" ", "-"));
-                        } else {
-                            edtPhoneNumberMask.set("##################");
-                        }
-                    }
-
-                    @Override
-                    public void onError() {
-                        isShowLoading.set(View.GONE);
-                        //Todo: show Reload View
-                    }
-                });
-            }
-
-            @Override
-            public void onError() {
-                isShowLoading.set(View.GONE);
-                //Todo:show Reload View
-            }
-        });
+        getTermsAndConditionData();
     }
 
     public String getAgreementDescription() {
@@ -191,7 +157,7 @@ public class FragmentRegisterViewModel extends ViewModel {
         }
         if (phoneNumber.length() > 0 && regex.equals("") || (!regex.equals("") && phoneNumber.replace("-", "").matches(regex))) {
             if (termsAndConditionIsChecked) {
-                showConfirmPhoneNumberDialog.setValue(true);
+                showConfirmPhoneNumberDialog.setValue(callbackEdtCodeNumber.get() + "" + callBackEdtPhoneNumber.get());
             } else {
                 showConditionErrorDialog.setValue(true);
             }
@@ -204,6 +170,48 @@ public class FragmentRegisterViewModel extends ViewModel {
         }
     }
 
+    public void onRetryClick() {
+        getTermsAndConditionData();
+    }
+
+    private void getTermsAndConditionData() {
+        repository.getTermsOfServiceBody(new RegisterRepository.RepositoryCallback<String>() {
+            @Override
+            public void onSuccess(String data) {
+                if (data != null) {
+                    agreementDescription = HtmlCompat.fromHtml(data, HtmlCompat.FROM_HTML_MODE_LEGACY).toString();
+                }
+                repository.getInfoLocation(new RegisterRepository.RepositoryCallback<LocationModel>() {
+                    @Override
+                    public void onSuccess(LocationModel data) {
+                        repository.inRegisterMode(hideDialogQRCode, goToTwoStepVerificationPage);
+                        isShowLoading.set(View.INVISIBLE);
+                        viewVisibility.set(View.VISIBLE);
+                        callbackEdtCodeNumber.set("+" + data.getCountryCode());
+                        callbackBtnChoseCountry.set(data.getCountryName());
+                        if (data.getPhoneMask() != null && !data.getPhoneMask().equals("")) {
+                            edtPhoneNumberMask.set(data.getPhoneMask().replace("X", "#").replace(" ", "-"));
+                        } else {
+                            edtPhoneNumberMask.set("##################");
+                        }
+                    }
+
+                    @Override
+                    public void onError() {
+                        isShowLoading.set(View.INVISIBLE);
+                        showRetryView.set(View.VISIBLE);
+                    }
+                });
+            }
+
+            @Override
+            public void onError() {
+                isShowLoading.set(View.INVISIBLE);
+                showRetryView.set(View.VISIBLE);
+            }
+        });
+    }
+
     public void confirmPhoneNumber() {
         if (G.socketConnection) { //connection ok
             btnStartEnable.set(false);
@@ -211,7 +219,8 @@ public class FragmentRegisterViewModel extends ViewModel {
             if (G.socketConnection) {
                 registerUser();
             } else {
-                new Handler().postDelayed(this::registerUser, 1000);
+                showError.setValue(R.string.connection_error);
+                /*new Handler().postDelayed(this::registerUser, 1000);*/
             }
         } else { // connection error
             edtPhoneNumberEnable.set(true);
@@ -223,8 +232,8 @@ public class FragmentRegisterViewModel extends ViewModel {
         repository.registration(callBackEdtPhoneNumber.get(), new RegisterRepository.RepositoryCallbackWithError<ErrorWithWaitTime>() {
             @Override
             public void onSuccess() {
-                goNextStep.postValue(true);
                 G.handler.post(() -> isShowLoading.set(View.GONE));
+                goNextStep.postValue(true);
             }
 
             @Override
@@ -233,13 +242,16 @@ public class FragmentRegisterViewModel extends ViewModel {
                 if (error.getMajorCode() == 100) {
                     if (error.getMinorCode() == 1) {
                         //Invalid countryCode
+                        showError.postValue(R.string.country_code_not_valid);
                     } else if (error.getMinorCode() == 2) {
                         //Invalid phoneNumber
+                        showError.postValue(R.string.please_enter_correct_phone_number);
                     }
                 } else if (error.getMajorCode() == 10) {
                     showDialogWaitTime.postValue(new WaitTimeModel(R.string.IP_blocked, error.getWaitTime(), error.getMajorCode()));
                 } else if (error.getMajorCode() == 101) {
                     //Invalid phoneNumber
+                    showError.postValue(R.string.please_enter_correct_phone_number);
                 } else if (error.getMajorCode() == 135) {
                     showDialogUserBlock.postValue(true);
                 } else if (error.getMajorCode() == 136) {
@@ -247,10 +259,7 @@ public class FragmentRegisterViewModel extends ViewModel {
                 } else if (error.getMajorCode() == 137) {
                     showDialogWaitTime.postValue(new WaitTimeModel(R.string.USER_VERIFY_MANY_TRIES_SEND, error.getWaitTime(), error.getMajorCode()));
                 } else if (error.getMajorCode() == 5 && error.getMinorCode() == 1) { // timeout
-                    if (sendRequestRegister <= 2) {
-                        registerUser();
-                        sendRequestRegister++;
-                    }
+                    showError.postValue(R.string.connection_error);
                 }
             }
         });
@@ -304,9 +313,9 @@ public class FragmentRegisterViewModel extends ViewModel {
                     public void onError(int major, int minor) {
                         isShowLoading.set(View.GONE);
                         if (major == 5 && minor == 1) {
-                            onClickQrCode();
+                            showError.postValue(R.string.connection_error);
                         } else {
-                            showError.setValue(true);
+                            showError.postValue(R.string.error);
                         }
                     }
                 });

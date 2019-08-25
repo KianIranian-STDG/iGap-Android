@@ -46,6 +46,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
+                    android:button="@drawable/check_box_background"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
                     android:layout_marginBottom="@dimen/dp32"
                     android:text="@string/i_agree_with_the_terms"
                     android:textSize="@dimen/dp14" />

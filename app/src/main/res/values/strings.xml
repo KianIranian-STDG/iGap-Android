@@ -1527,6 +1527,7 @@ Want to get it?</string>
     <string name="province">Province</string>
     <string name="edit_profile_hint"> </string>
     <string name="username">Username</string>
+    <string name="username_copied">Username Copied</string>
     <string name="select_city">Select City</string>
     <string name="select_province">Select Province</string>
     <string name="mobile_number">Mobile Number</string>
@@ -1915,7 +1916,7 @@ Want to get it?</string>
     <string name="str_frag_sync_contactWelcome">Welcome to iGap</string>
     <string name="str_frag_sync_skipBtn">Get Started</string>
     <string name="str_frag_sync_error">Something went wrong. Please try again.</string>
-    <string name="download_icon">ï</string>
+    <string name="download_icon">\ue933</string>
     <string name="igasht_title">آیگشت</string>
     <string name="igasht_choose_province_title">شهر مورد نظر خود را انتخاب کنید</string>
     <string name="igasht_search_by_location">جستجو بر اساس موقعیت</string>
@@ -1965,6 +1966,25 @@ Want to get it?</string>
     <string name="message_decline_call_later">I,II call you back.</string>
     <string name="message_decline_Please_call_later">Can you call back later?</string>
     <string name="message_decline_please_text_me">Please text me.</string>
+    <string name="mpl_transaction_rrn">RRN</string>
+    <string name="mpl_transaction_trace">Trace Number</string>
+    <string name="mpl_transaction_order_id">Order Id</string>
+    <string name="pay_id">Pay Id</string>
+    <string name="mpl_transaction_merchent_name">Merchant Name</string>
+    <string name="mpl_transaction_sales">Sales</string>
+    <string name="mpl_transaction_topup">TopUp</string>
+    <string name="mpl_transaction_empty">No information available!</string>
+    <string name="mpl_transaction_card">Card To Card</string>
+    <string name="mpl_terminal_no">Terminal No</string>
+    <string name="mpl_do_you_want_save_receipt">Do you want save receipt?</string>
+    <string name="mpl_transaction_nul">You have no transactions in the last 5 days!</string>
+
+    <string name="of_from_total">of %s</string>
+    <string name="app_version_change_log">Change Log</string>
+    <string name="updated_version_title">Your Version Is Update</string>
+    <string name="check_update_title">Check Update</string>
+    <string name="unblock">Unblock</string>
+    <string name="view_profile">View Profile</string>
     <string name="scan_barcode_to_enter_visit">جهت ورود و بازدید بارکد فوق را اسکن کنید</string>
     <string name="Your_purchase_code">کد خرید شما</string>
     <string name="igasht_count_title">count</string>

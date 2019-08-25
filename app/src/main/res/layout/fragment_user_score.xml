@@ -67,7 +67,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@{viewModel.totalRank}"
+                    android:text="@{@string/of_from_total(viewModel.totalRank)}"
                     app:layout_constraintBottom_toBottomOf="@id/rankView"
                     app:layout_constraintLeft_toLeftOf="@id/userRank"
                     app:layout_constraintRight_toRightOf="@id/userRank"
