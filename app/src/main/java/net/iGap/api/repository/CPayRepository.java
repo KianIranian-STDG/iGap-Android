@@ -4,6 +4,8 @@ import net.iGap.api.CPayApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.errorhandler.ResponseCallback;
+import net.iGap.model.cPay.PlaqueInfoBodyModel;
+import net.iGap.model.cPay.PlaqueInfoModel;
 import net.iGap.model.cPay.RegisterPlaqueBodyModel;
 import net.iGap.model.cPay.RegisterPlaqueModel;
 import net.iGap.model.cPay.UserPlaquesModel;
@@ -30,6 +32,30 @@ public class CPayRepository {
             instance = new CPayRepository();
         }
         return instance;
+    }
+
+    public void getPlaqueInfo(PlaqueInfoBodyModel body , ResponseCallback<PlaqueInfoModel> callback){
+
+        api.getPlaqueInfo(body).enqueue(new Callback<PlaqueInfoModel>() {
+            @Override
+            public void onResponse(Call<PlaqueInfoModel> call, Response<PlaqueInfoModel> response) {
+                if (response.isSuccessful()){
+                    callback.onSuccess(response.body());
+                }else {
+                    try {
+                        callback.onError(new ErrorHandler().getError(response.code() , response.errorBody().string()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PlaqueInfoModel> call, Throwable t) {
+                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
+            }
+        });
+
     }
 
     public void getAllUserPlaques(ResponseCallback<UserPlaquesModel> callback) {
