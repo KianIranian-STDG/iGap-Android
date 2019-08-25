@@ -66,63 +66,6 @@
                 app:layout_constraintStart_toStartOf="@+id/textView4"
                 app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-            <android.support.design.card.MaterialCardView
-                android:id="@+id/v"
-                android:layout_width="0dp"
-                android:layout_height="59dp"
-                android:layout_marginTop="8dp"
-                android:visibility="@{viewModel.showMainView}"
-                app:cardCornerRadius="@dimen/dp12"
-                app:cardUseCompatPadding="true"
-                app:contentPadding="@dimen/dp8"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView4"
-                app:layout_constraintWidth_percent=".8">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/baseFontIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:onClick="@{()->viewModel.onSearchClick()}"
-                        android:text="@string/search_icon" />
-                    <View
-                        android:layout_width="@dimen/dp1"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/dp8"
-                        android:layout_marginTop="@dimen/dp4"
-                        android:layout_marginRight="@dimen/dp8"
-                        android:layout_marginBottom="@dimen/dp4"
-                        android:background="@color/gray" />
-
-                    <android.support.v7.widget.AppCompatAutoCompleteTextView
-                        android:id="@+id/provinceSearchText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp8"
-                        android:layout_marginLeft="@dimen/dp8"
-                        android:layout_weight="1"
-                        android:afterTextChanged="@{(s)->viewModel.onProvinceTextChange(s.toString())}"
-                        android:background="@color/transparent"
-                        android:completionThreshold="0" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/clearProvinceSearch"
-                        style="@style/baseFontIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:onClick="@{()->viewModel.onClearProVinceClick()}"
-                        android:text="@string/close_icon" />
-
-
-                </LinearLayout>
-            </android.support.design.card.MaterialCardView>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/locationListView"
@@ -133,10 +76,9 @@
                 android:visibility="@{viewModel.showMainView}"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/v"
-                app:layout_constraintHorizontal_bias="0.621"
-                app:layout_constraintStart_toStartOf="@+id/v"
-                app:layout_constraintTop_toBottomOf="@+id/v" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageView4" />
         </android.support.constraint.ConstraintLayout>
 
         <android.support.v7.widget.AppCompatTextView
