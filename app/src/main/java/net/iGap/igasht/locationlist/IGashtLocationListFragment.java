@@ -75,12 +75,6 @@ public class IGashtLocationListFragment extends IGashtBaseView {
 
         binding.locationListView.addItemDecoration(new DividerItemDecoration(binding.locationListView.getContext(), DividerItemDecoration.VERTICAL));
         binding.locationListView.setAdapter(new IGashtLocationListAdapter());
-        binding.provinceSearchText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((IGashtLocationViewModel) viewModel).setSelectedProvince(position);
-            }
-        });
 
         ((IGashtLocationViewModel) viewModel).getLocationList().observe(getViewLifecycleOwner(), data -> {
             if (binding.locationListView.getAdapter() instanceof IGashtLocationListAdapter && data != null) {
@@ -116,11 +110,6 @@ public class IGashtLocationListFragment extends IGashtBaseView {
 
         ((IGashtLocationViewModel) viewModel).getAddToFavorite().observe(getViewLifecycleOwner(), aBoolean -> Toast.makeText(getContext(), "add to favorite", Toast.LENGTH_SHORT).show());
 
-        ((IGashtLocationViewModel) viewModel).getProvinceList().observe(getViewLifecycleOwner(), data -> {
-            if (data != null) {
-                binding.provinceSearchText.setAdapter(new ProvinceSuggestionListAdapter(getContext(), data));
-            }
-        });
     }
 
 }
