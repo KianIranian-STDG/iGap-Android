@@ -2913,4 +2913,6 @@
     <string name="message_decline_please_text_me">يرجى نص لي.</string>
     <string name="scan_barcode_to_enter_visit">جهت ورود و بازدید بارکد فوق را اسکن کنید</string>
     <string name="Your_purchase_code">کد خرید شما</string>
+    <string name="igasht_count_title">تعداد</string>
+    <string name="igasht_service_title">سرویس</string>
 </resources>
