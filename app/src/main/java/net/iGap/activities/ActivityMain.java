@@ -155,6 +155,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static final String DEEP_LINK_CHAT = "chat";
     public static final String DEEP_LINK_CALL = "call";
     public static final String DEEP_LINK_PROFILE = "profile";
+    public static final String DEEP_LINK = "deepLink";
 
     public static final String openMediaPlyer = "openMediaPlyer";
 
@@ -341,8 +342,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Bundle extras = intent.getExtras();
 
         if (extras != null) {
-            if (intent.getAction() != null && intent.getAction().equals(OPEN_DEEP_LINK)) {
-                autoLinkHelper(extras.getString(OPEN_DEEP_LINK, DEEP_LINK_PROFILE));
+
+            if (extras.getString(DEEP_LINK) != null) {
+                autoLinkHelper(extras.getString(DEEP_LINK, DEEP_LINK_CHAT));
+            } else if (intent.getAction() != null && intent.getAction().equals(OPEN_DEEP_LINK)) {
+                autoLinkHelper(extras.getString(DEEP_LINK, DEEP_LINK_CHAT));
                 return;
             }
 
@@ -378,13 +382,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             switch (address[0]) {
                 case DEEP_LINK_DISCOVERY:
                     String[] discoveryUri;
-                    if (address.length>1) {
+                    if (address.length > 1) {
                         discoveryUri = uri.toLowerCase().trim().replace("discovery/", "").split("/");
-                    }else
+                    } else
                         discoveryUri = uri.toLowerCase().trim().replace("discovery", "").split("/");
                     ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.DISCOVERY_FRAGMENT, discoveryUri);
                     break;
                 case DEEP_LINK_CHAT:
+                    String chatUri = uri.toLowerCase().trim().replace("chat/", "").replace("chat", "").trim();
+                    if (chatUri.length() > 1) {
+                        Intent intent = new Intent(this, ActivityMain.class);
+                        intent.setAction("android.intent.action.VIEW");
+                        intent.setData(Uri.parse("igap://resolve?domain=" + chatUri));
+                        startActivity(intent);
+                    }
                     ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CHAT_FRAGMENT,null);
                     break;
                 case DEEP_LINK_PROFILE:

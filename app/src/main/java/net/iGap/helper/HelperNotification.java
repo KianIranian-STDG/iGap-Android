@@ -901,19 +901,16 @@ public class HelperNotification {
 
 
     @SuppressLint("WrongConstant")
-    public static void sendDeepLink(Map<String, String> data) {
+    public static void sendDeepLink(Map<String, String> data, String title, String body) {
 
         String CHANNEL_ID = "1032";
-
-        String title = data.get("title");
-        String message = data.get("message");
-        String deepLink = data.get("deep");
+        String deepLink = data.get(ActivityMain.DEEP_LINK);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 
         Intent intent = new Intent(context, ActivityMain.class);
         intent.setAction(ActivityMain.OPEN_DEEP_LINK);
-        intent.putExtra(ActivityMain.OPEN_DEEP_LINK, deepLink);
+        intent.putExtra(ActivityMain.DEEP_LINK, deepLink);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, 0);
 
@@ -922,22 +919,19 @@ public class HelperNotification {
             notificationManager.createNotificationChannel(mChannel);
         }
 
-
-
-
         Notification notification;
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             notification = new Notification.Builder(context, CHANNEL_ID)
                     .setContentTitle(title)
-                    .setContentText(message)
+                    .setContentText(body)
                     .setSmallIcon(R.mipmap.icon)
                     .setContentIntent(pendingIntent)
                     .build();
         } else {
             notification = new Notification.Builder(context)
                     .setContentTitle(title)
-                    .setContentText(message)
+                    .setContentText(body)
                     .setSmallIcon(R.mipmap.icon)
                     .setContentIntent(pendingIntent)
                     .build();
