@@ -2,17 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-        <import type="net.iGap.G" />
-
-        <import type="net.iGap.igasht.locationlist.IGashtLocationItem" />
-
-        <variable
-            name="viewModel"
-            type="net.iGap.igasht.locationdetail.IGashtLocationDetailViewModel" />
-    </data>
-
     <android.support.constraint.ConstraintLayout
         android:id="@+id/root"
         style="?backgroundColorSettingTheme"
@@ -26,6 +15,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/loadingView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.showLoadingView}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -47,128 +46,20 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp8"
                 android:orientation="vertical">
-                <LinearLayout
-                    android:id="@+id/ll_igasht_detail"
-                    android:layout_width="0dp"
+
+                <FrameLayout
+                    android:id="@+id/detailFrame"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp4"
-                    android:layout_marginLeft="@dimen/dp4"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="@dimen/dp4"
-                    android:layout_marginRight="@dimen/dp4"
-                    android:background="@drawable/shape_igasht_strokegray"
-                    android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/ll_igasht_detailBtn">
+                    app:layout_constraintTop_toBottomOf="@id/ll_igasht_detailBtn" />
 
-                    <android.support.constraint.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/dp2"
-                        app:layout_constraintBottom_toTopOf="@id/view2"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/itemTitle"
-                            style="?textTitleColorSettingTheme"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
-                            android:maxLines="1"
-                            android:padding="@dimen/dp4"
-                            android:textSize="@dimen/standardTextSize"
-                            app:layout_constraintBottom_toTopOf="@id/itemAddress"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/itemImage"
-                            app:layout_constraintTop_toTopOf="@id/itemImage"
-                            app:layout_constraintVertical_chainStyle="packed" />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/itemAddress"
-                            style="?textTitleColorSettingTheme"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
-                            android:maxLines="1"
-                            android:padding="@dimen/dp4"
-                            android:textSize="@dimen/smallTextSize"
-                            app:layout_constraintBottom_toBottomOf="@id/itemImage"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@id/itemTitle"
-                            app:layout_constraintTop_toBottomOf="@id/itemTitle" />
-
-                        <net.iGap.module.RadiusImageView
-                            android:id="@+id/itemImage"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/dp4"
-                            app:layout_constraintDimensionRatio="116:83"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintWidth_percent=".3" />
-                    </android.support.constraint.ConstraintLayout>
-
-                    <View
-                        android:id="@+id/view2"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
-                        android:background="@color/gray"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <android.support.constraint.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp2"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/view2">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/itemLocation"
-                            style="?textTitleColorSettingTheme"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
-                            android:maxLines="2"
-                            android:textSize="@dimen/smallTextSize"
-                            app:layout_constraintBottom_toBottomOf="@+id/iv_location"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toEndOf="@+id/iv_location"
-                            app:layout_constraintTop_toBottomOf="@+id/iv_location"
-                            app:layout_constraintTop_toTopOf="@+id/iv_location" />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/iv_location"
-                            style="@style/baseFontIcon"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/dp4"
-                            android:text="@string/location_pin_icon"
-                            android:textColor="@color/md_yellow_700"
-                            android:textSize="@dimen/dp32"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintDimensionRatio="116:83"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintWidth_percent=".3" />
-
-                    </android.support.constraint.ConstraintLayout>
-                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/ll_igasht_detailBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp8"
+                    android:layout_margin="@dimen/dp4"
                     android:background="@{G.isDarkTheme ? @drawable/igasht_tabbar_background_dark : @drawable/igasht_tabbar_background_light}"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="@+id/ll_igasht_detail"
@@ -208,25 +99,141 @@
                         app:layout_constraintTop_toTopOf="@id/buyTicket" />
                 </LinearLayout>
 
-                <FrameLayout
-                    android:id="@+id/detailFrame"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/ll_igasht_detail"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp4"
+                    android:layout_marginLeft="@dimen/dp4"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="@dimen/dp4"
+                    android:layout_marginRight="@dimen/dp4"
+                    android:background="@drawable/shape_igasht_strokegray"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toTopOf="@+id/ll_igasht_detailBtn"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ll_igasht_detailBtn"/>
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp2"
+                        app:layout_constraintBottom_toTopOf="@id/view2"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/itemTitle"
+                            style="?textTitleColorSettingTheme"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginBottom="@dimen/dp8"
+                            android:maxLines="1"
+                            android:padding="@dimen/dp4"
+                            android:text="@{viewModel.locationItem.locationName}"
+                            android:textSize="@dimen/standardTextSize"
+                            app:layout_constraintBottom_toTopOf="@id/itemAddress"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/itemImage"
+                            app:layout_constraintTop_toTopOf="@id/itemImage"
+                            app:layout_constraintVertical_chainStyle="packed" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/itemAddress"
+                            style="?textTitleColorSettingTheme"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:maxLines="1"
+                            android:padding="@dimen/dp4"
+                            android:text="@{viewModel.locationItem.location}"
+                            android:textSize="@dimen/smallTextSize"
+                            app:layout_constraintBottom_toBottomOf="@id/itemImage"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@id/itemTitle"
+                            app:layout_constraintTop_toBottomOf="@id/itemTitle" />
+
+                        <net.iGap.module.RadiusImageView
+                            android:id="@+id/itemImage"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_margin="@dimen/dp4"
+                            app:layout_constraintDimensionRatio="116:83"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintWidth_percent=".3" />
+                    </android.support.constraint.ConstraintLayout>
+
+                    <View
+                        android:id="@+id/view2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:background="@color/gray"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/view2">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/itemLocation"
+                            style="?textTitleColorSettingTheme"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:maxLines="2"
+                            android:text="@{viewModel.locationItem.locationAddress}"
+                            android:textSize="@dimen/smallTextSize"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_location"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toEndOf="@+id/iv_location"
+                            app:layout_constraintTop_toBottomOf="@+id/iv_location"
+                            app:layout_constraintTop_toTopOf="@+id/iv_location" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/iv_location"
+                            style="@style/baseFontIcon"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_margin="@dimen/dp4"
+                            android:text="@string/location_pin_icon"
+                            android:textColor="@color/md_yellow_700"
+                            android:textSize="@dimen/dp32"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintDimensionRatio="116:83"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintWidth_percent=".3" />
+
+                    </android.support.constraint.ConstraintLayout>
+                </LinearLayout>
             </android.support.constraint.ConstraintLayout>
         </android.support.v4.widget.NestedScrollView>
 
-        <ProgressBar
-            android:id="@+id/loadingView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="@{viewModel.showLoadingView}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
     </android.support.constraint.ConstraintLayout>
+
+    <data>
+
+        <import type="net.iGap.G" />
+
+        <import type="net.iGap.igasht.locationlist.IGashtLocationItem" />
+
+        <variable
+            name="viewModel"
+            type="net.iGap.igasht.locationdetail.IGashtLocationDetailViewModel" />
+    </data>
 </layout>
