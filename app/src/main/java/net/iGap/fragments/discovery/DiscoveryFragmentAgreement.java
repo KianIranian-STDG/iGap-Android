@@ -76,7 +76,7 @@ public class DiscoveryFragmentAgreement extends FragmentToolBarBack {
                                     G.handler.post(() -> {
                                         discoveryField.agreement = true;
                                         onBackButtonClicked(buttonView);
-                                        BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryField, getActivity());
+                                        BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryField, getActivity(),false);
                                     });
                                 }
 

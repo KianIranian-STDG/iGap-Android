@@ -7,6 +7,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import net.iGap.G;
 import net.iGap.WebSocketClient;
+import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperNotification;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmNotificationRoomMessage;
@@ -41,7 +42,11 @@ public class NotificationService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         WebSocketClient.reconnect(false);
-        Log.d("bagi", "FCM" + remoteMessage.getData() + "");
+
+        if (remoteMessage.getNotification()!=null && remoteMessage.getData().containsKey(ActivityMain.DEEP_LINK)){
+            HelperNotification.sendDeepLink(remoteMessage.getData(),remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
+        }
+
         if (remoteMessage.getData().containsKey(MESSAGE_ID)) {
             try (Realm realm = Realm.getDefaultInstance()) {
                 realm.executeTransaction(new Realm.Transaction() {

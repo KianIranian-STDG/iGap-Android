@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +23,17 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.discovery.DiscoveryAdapter;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
-import net.iGap.fragments.BaseFragment;
+import net.iGap.adapter.items.discovery.DiscoveryItemField;
+import net.iGap.adapter.items.discovery.holder.BaseViewHolder;
 import net.iGap.fragments.BaseMainFragments;
+import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DiscoveryFragment extends BaseMainFragments implements ToolbarListener {
 
@@ -41,6 +43,8 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     private int page;
     private boolean isSwipeBackEnable = true;
     private HelperToolbar mHelperToolbar;
+    private boolean needToCrawl = false;
+    private boolean listLoaded = false;
 
     private ArrayList<DiscoveryItem> discoveryArrayList;
 
@@ -53,6 +57,10 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         }
         discoveryFragment.setArguments(bundle);
         return discoveryFragment;
+    }
+
+    public void setNeedToCrawl(boolean needToCrawl){
+        this.needToCrawl = needToCrawl;
     }
 
     @Nullable
@@ -223,15 +231,53 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                     edit.putString("page0", cache).apply();
                     edit.putString("title", title).apply();
                 }
+
+                listLoaded = true;
+
                 G.handler.post(() -> {
                     setAdapterData(discoveryArrayList, title);
                     setRefreshing(false);
+
+                    if (needToCrawl && getActivity() != null) {
+                        BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getActivity().
+                                        getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+
+                        if (bottomNavigationFragment != null) {
+                            for (int i = 0; i < discoveryArrayList.size(); i++) {
+                                ArrayList<DiscoveryItemField> discoveryFields = discoveryArrayList.get(i).discoveryFields;
+                                for (int j = 0; j < discoveryFields.size(); j++) {
+                                    if (discoveryFields.get(j).id == bottomNavigationFragment.getCrawlerStruct().getPages().get(bottomNavigationFragment.getCrawlerStruct().getCurrentPage())) {
+                                        if (bottomNavigationFragment.getCrawlerStruct().getPageSum() > 0) {
+
+                                            int currentPage = bottomNavigationFragment.getCrawlerStruct().getCurrentPage();
+                                                currentPage++;
+
+                                            bottomNavigationFragment.getCrawlerStruct().setCurrentPage(currentPage);
+                                            BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryFields.get(j), getActivity(),
+                                                    bottomNavigationFragment.getCrawlerStruct().getPageSum() > 1);
+
+                                        } else
+                                            BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryFields.get(j), getActivity(), false);
+
+                                        needToCrawl = false;
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 });
             }
 
             @Override
             public void onError() {
                 G.handler.post(() -> {
+                    if (!listLoaded){
+                        updateOrFetchRecycleViewData();
+                        listLoaded = true;
+                        return;
+                    }
+
                     if (page == 0) {
                         loadOfflinePageZero();
                     }
@@ -282,5 +328,37 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     @Override
     public boolean isAllowToBackPressed() {
         return true;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        needToCrawl = false;
+    }
+
+    public static class CrawlerStruct {
+        private int currentPage;
+        private List<Integer> pages;
+
+        public CrawlerStruct(int currentPage, List<Integer> pages) {
+            this.currentPage = currentPage;
+            this.pages = pages;
+        }
+
+        public void setCurrentPage(int currentPage) {
+            this.currentPage = currentPage;
+        }
+
+        public int getCurrentPage() {
+            return currentPage;
+        }
+
+        public int getPageSum() {
+            return pages.size();
+        }
+
+        public List<Integer> getPages() {
+            return pages;
+        }
     }
 }
