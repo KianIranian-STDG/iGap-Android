@@ -1480,18 +1480,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             return;
                         }
                         _Progress.setVisibility(View.GONE);
-//                        View thumbnailView = ((IThumbNailItem) holder).getThumbNailImageView();
-//                        thumbnailView.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//                                if (FragmentChat.isInSelectionMode) {
-//                                    holder.itemView.performLongClick();
-//                                }
-//                            }
-//                        });
-//
-//                        thumbnailView.setOnLongClickListener(getLongClickPerform(holder));
-//
+                        View thumbnailView = ((IThumbNailItem) holder).getThumbNailImageView();
+                        thumbnailView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (FragmentChat.isInSelectionMode) {
+                                    holder.itemView.performLongClick();
+                                }
+                            }
+                        });
+
+                        thumbnailView.setOnLongClickListener(getLongClickPerform(holder));
+
                         _Progress.withDrawable(null, true);
 
                         switch (messageType) {
@@ -1501,29 +1501,28 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 _Progress.withDrawable(R.drawable.ic_play, true);
                                 break;
                             case AUDIO:
+                            case VOICE:
                             case AUDIO_TEXT:
                                 break;
                             case FILE:
                             case FILE_TEXT:
                             case IMAGE:
                             case IMAGE_TEXT:
-//                                thumbnailView.setOnClickListener(new View.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(View v) {
-//                                        forOnCLick(holder, attachment);
-//                                    }
-//                                });
-                                break;
-                            case VOICE:
+                                thumbnailView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        forOnCLick(holder, attachment);
+                                    }
+                                });
                                 break;
                             case GIF:
                             case GIF_TEXT:
-//                                thumbnailView.setOnClickListener(new View.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(View v) {
-//                                        forOnCLick(holder, attachment);
-//                                    }
-//                                });
+                                thumbnailView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        forOnCLick(holder, attachment);
+                                    }
+                                });
 
                                 SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                                 if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 0) {
