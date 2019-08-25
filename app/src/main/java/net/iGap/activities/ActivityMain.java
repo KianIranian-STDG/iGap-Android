@@ -341,7 +341,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Bundle extras = intent.getExtras();
 
         if (extras != null) {
-            if (intent.getAction().equals(OPEN_DEEP_LINK)) {
+            if (intent.getAction() != null && intent.getAction().equals(OPEN_DEEP_LINK)) {
                 autoLinkHelper(extras.getString(OPEN_DEEP_LINK, DEEP_LINK_PROFILE));
                 return;
             }

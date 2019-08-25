@@ -26,12 +26,14 @@ import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.adapter.items.discovery.holder.BaseViewHolder;
 import net.iGap.fragments.BaseMainFragments;
+import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DiscoveryFragment extends BaseMainFragments implements ToolbarListener {
 
@@ -41,9 +43,8 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     private int page;
     private boolean isSwipeBackEnable = true;
     private HelperToolbar mHelperToolbar;
-    private String[] uri;
-    private static boolean fromAutoLink = false;
-    private static int uriPage =0;
+    private boolean needToCrawl = false;
+    private boolean listLoaded = false;
 
     private ArrayList<DiscoveryItem> discoveryArrayList;
 
@@ -58,11 +59,8 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         return discoveryFragment;
     }
 
-    public void getAutoLinkUri(String[] uri, boolean isAutoLink,boolean fromDiscovery){
-        fromAutoLink = isAutoLink;
-        this.uri = uri;
-        if (fromDiscovery)
-            uriPage++;
+    public void setNeedToCrawl(boolean needToCrawl){
+        this.needToCrawl = needToCrawl;
     }
 
     @Nullable
@@ -233,28 +231,53 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                     edit.putString("page0", cache).apply();
                     edit.putString("title", title).apply();
                 }
+
+                listLoaded = true;
+
                 G.handler.post(() -> {
                     setAdapterData(discoveryArrayList, title);
                     setRefreshing(false);
 
-                    if (fromAutoLink)
-                        for (int i = 0; i < discoveryArrayList.size(); i++) {
-                            ArrayList<DiscoveryItemField> discoveryFields = discoveryArrayList.get(i).discoveryFields;
-                            for (int j = 0; j < discoveryFields.size(); j++) {
-                                if (discoveryFields.get(j).id == Integer.valueOf(uri[uriPage])) {
-                                    BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryArrayList.get(i).discoveryFields.get(j), getActivity(), uri);
-                                    return;
-                                }
+                    if (needToCrawl && getActivity() != null) {
+                        BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getActivity().
+                                        getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
 
+                        if (bottomNavigationFragment != null) {
+                            for (int i = 0; i < discoveryArrayList.size(); i++) {
+                                ArrayList<DiscoveryItemField> discoveryFields = discoveryArrayList.get(i).discoveryFields;
+                                for (int j = 0; j < discoveryFields.size(); j++) {
+                                    if (discoveryFields.get(j).id == bottomNavigationFragment.getCrawlerStruct().getPages().get(bottomNavigationFragment.getCrawlerStruct().getCurrentPage())) {
+                                        if (bottomNavigationFragment.getCrawlerStruct().getPageSum() > 0) {
+
+                                            int currentPage = bottomNavigationFragment.getCrawlerStruct().getCurrentPage();
+                                                currentPage++;
+
+                                            bottomNavigationFragment.getCrawlerStruct().setCurrentPage(currentPage);
+                                            BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryFields.get(j), getActivity(),
+                                                    bottomNavigationFragment.getCrawlerStruct().getPageSum() > 1);
+
+                                        } else
+                                            BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryFields.get(j), getActivity(), false);
+
+                                        needToCrawl = false;
+                                        return;
+                                    }
+                                }
                             }
                         }
-
+                    }
                 });
             }
 
             @Override
             public void onError() {
                 G.handler.post(() -> {
+                    if (!listLoaded){
+                        updateOrFetchRecycleViewData();
+                        listLoaded = true;
+                        return;
+                    }
+
                     if (page == 0) {
                         loadOfflinePageZero();
                     }
@@ -310,7 +333,32 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        fromAutoLink = false;
-        uriPage = 0;
+        needToCrawl = false;
+    }
+
+    public static class CrawlerStruct {
+        private int currentPage;
+        private List<Integer> pages;
+
+        public CrawlerStruct(int currentPage, List<Integer> pages) {
+            this.currentPage = currentPage;
+            this.pages = pages;
+        }
+
+        public void setCurrentPage(int currentPage) {
+            this.currentPage = currentPage;
+        }
+
+        public int getCurrentPage() {
+            return currentPage;
+        }
+
+        public int getPageSum() {
+            return pages.size();
+        }
+
+        public List<Integer> getPages() {
+            return pages;
+        }
     }
 }

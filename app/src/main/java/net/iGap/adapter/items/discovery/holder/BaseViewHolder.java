@@ -75,7 +75,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         this.activity = activity;
     }
 
-    public static void handleDiscoveryFieldsClickStatic(DiscoveryItemField discoveryField, FragmentActivity activity,String[] uri) {
+    public static void handleDiscoveryFieldsClickStatic(DiscoveryItemField discoveryField, FragmentActivity activity , boolean haveNext) {
         if (activity == null || activity.isFinishing()) {
             return;
         }
@@ -91,7 +91,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
         switch (discoveryField.actionType) {
             case PAGE:/** tested **/
-                actionPage(discoveryField.value, activity,uri);
+                actionPage(discoveryField.value, activity , haveNext);
                 break;
             case JOIN_LINK:
                 int index = discoveryField.value.lastIndexOf("/");
@@ -319,14 +319,10 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private static void actionPage(String value, FragmentActivity activity, String[] uri) {
-        if (uri != null && uri.length > 0) {
-            DiscoveryFragment discoveryFragment = DiscoveryFragment.newInstance(1);
-            discoveryFragment.getAutoLinkUri(uri, true, true);
-            new HelperFragment(activity.getSupportFragmentManager(), discoveryFragment).setReplace(false).load(false);
-        }
-        else
-            new HelperFragment(activity.getSupportFragmentManager(), DiscoveryFragment.newInstance(Integer.valueOf(value))).setReplace(false).load(false);
+    private static void actionPage(String value, FragmentActivity activity, boolean haveNext) {
+        DiscoveryFragment discoveryFragment = DiscoveryFragment.newInstance(Integer.valueOf(value));
+        discoveryFragment.setNeedToCrawl(haveNext);
+        new HelperFragment(activity.getSupportFragmentManager(), discoveryFragment).setReplace(false).load(false);
     }
 
     public static void dialPhoneNumber(Context context, String phoneNumber, FragmentActivity activity) {
@@ -360,7 +356,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
-        handleDiscoveryFieldsClickStatic(discoveryField, activity,null);
+        handleDiscoveryFieldsClickStatic(discoveryField, activity,false);
     }
 
 }

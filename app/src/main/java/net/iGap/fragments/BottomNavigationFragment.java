@@ -19,6 +19,9 @@ import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
 import net.iGap.realm.RealmRoom;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BottomNavigationFragment extends Fragment implements OnUnreadChange {
 
     public static final int CONTACT_FRAGMENT = 0;
@@ -29,7 +32,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
     //Todo: create viewModel for this it was test class and become main class :D
     private BottomNavigation bottomNavigation;
-    private String[] uri;
+    private DiscoveryFragment.CrawlerStruct crawlerStruct;
 
     @Nullable
     @Override
@@ -94,7 +97,8 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 if (fragment == null) {
                     fragment = DiscoveryFragment.newInstance(0);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    ((DiscoveryFragment) fragment).getAutoLinkUri(uri,true,false);
+                    if (crawlerStruct != null)
+                        ((DiscoveryFragment) fragment).setNeedToCrawl(true);
                 }
                 if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
                     fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
@@ -159,9 +163,6 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }
     }
 
-    public Fragment getViewPagerCurrentFragment() {
-        return getChildFragmentManager().findFragmentById(R.id.viewpager);
-    }
 
     public boolean isFirstTabItem() {
         if (bottomNavigation.getSelectedItemPosition() == 2) {
@@ -200,12 +201,16 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }
     }
 
-    public BottomNavigation getBottomNavigation() {
-        return bottomNavigation;
-    }
-
     public void getSelectedFragment(int position, String[] uri) {
-        this.uri = uri;
+
+        if (position == DISCOVERY_FRAGMENT && uri.length > 1) {
+            List<Integer> pages = new ArrayList<>();
+            for (String s : uri) {
+                pages.add(Integer.valueOf(s));
+            }
+            this.crawlerStruct = new DiscoveryFragment.CrawlerStruct(0, pages);
+        }
+
         switch (position) {
             case CONTACT_FRAGMENT:
                 bottomNavigation.setCurrentItem(CONTACT_FRAGMENT);
@@ -223,5 +228,9 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 bottomNavigation.setCurrentItem(PROFILE_FRAGMENT);
                 break;
         }
+    }
+
+    public DiscoveryFragment.CrawlerStruct getCrawlerStruct() {
+        return crawlerStruct;
     }
 }

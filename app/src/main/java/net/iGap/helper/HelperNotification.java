@@ -912,8 +912,8 @@ public class HelperNotification {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 
         Intent intent = new Intent(context, ActivityMain.class);
-        intent.putExtra(ActivityMain.OPEN_DEEP_LINK, deepLink);
         intent.setAction(ActivityMain.OPEN_DEEP_LINK);
+        intent.putExtra(ActivityMain.OPEN_DEEP_LINK, deepLink);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, 0);
 
