@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/dp8">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/constraintLayout4"
@@ -134,13 +133,16 @@
         android:layout_marginLeft="@dimen/dp4"
         android:layout_marginEnd="@dimen/dp4"
         android:layout_marginRight="@dimen/dp4"
+        android:layout_marginBottom="@dimen/dp8"
         android:background="@drawable/shape_igasht_yellow"
         android:text="انتخاب محل"
         android:textColor="@color/white"
         android:textSize="@dimen/dp22"
+        android:fontFamily="@font/main_font"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/constraintLayout4"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>
