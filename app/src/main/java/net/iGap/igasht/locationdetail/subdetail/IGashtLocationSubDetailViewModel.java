@@ -8,8 +8,7 @@ import net.iGap.igasht.IGashtRepository;
 import net.iGap.igasht.locationlist.ExtraDetail;
 
 public class IGashtLocationSubDetailViewModel extends BaseIGashtViewModel {
-    protected ObservableInt showText= new ObservableInt(View.GONE);
-
+    private ObservableInt showText= new ObservableInt(View.GONE);
     private IGashtRepository repository;
 
     public IGashtLocationSubDetailViewModel() {
