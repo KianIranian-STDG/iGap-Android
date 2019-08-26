@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.discovery.DiscoveryFragment;
+import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnUnreadChange;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
@@ -21,6 +23,12 @@ import net.iGap.realm.RealmRoom;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.iGap.activities.ActivityMain.DEEP_LINK_CALL;
+import static net.iGap.activities.ActivityMain.DEEP_LINK_CHAT;
+import static net.iGap.activities.ActivityMain.DEEP_LINK_CONTACT;
+import static net.iGap.activities.ActivityMain.DEEP_LINK_DISCOVERY;
+import static net.iGap.activities.ActivityMain.DEEP_LINK_PROFILE;
 
 public class BottomNavigationFragment extends Fragment implements OnUnreadChange {
 
@@ -32,6 +40,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
     //Todo: create viewModel for this it was test class and become main class :D
     private BottomNavigation bottomNavigation;
+    private String crawlerMap;
     private DiscoveryFragment.CrawlerStruct crawlerStruct;
 
     @Nullable
@@ -42,6 +51,14 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (crawlerMap != null) {
+            autoLinkCrawler(crawlerMap);
+        }
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -49,6 +66,10 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         bottomNavigation.setDefaultItem(2);
         bottomNavigation.setOnItemChangeListener(this::loadFragment);
         bottomNavigation.setCurrentItem(2);
+    }
+
+    public void setCrawlerMap(String crawlerMap) {
+        this.crawlerMap = crawlerMap;
     }
 
     private void loadFragment(int position) {
@@ -97,9 +118,12 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 if (fragment == null) {
                     fragment = DiscoveryFragment.newInstance(0);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    if (crawlerStruct != null)
-                        ((DiscoveryFragment) fragment).setNeedToCrawl(true);
                 }
+
+                if (crawlerStruct != null) {
+                    ((DiscoveryFragment) fragment).setNeedToCrawl(true);
+                }
+
                 if (!(fragmentManager.findFragmentById(R.id.viewpager) instanceof FragmentMain)) {
                     fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.viewpager));
                 }
@@ -201,9 +225,45 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }
     }
 
-    public void getSelectedFragment(int position, String[] uri) {
 
-        if (uri != null && uri.length > 0)
+    public void autoLinkCrawler(String uri) {
+        String[] address = uri.toLowerCase().trim().split("/");
+
+        if (address.length == 0)
+            return;
+        switch (address[0]) {
+            case DEEP_LINK_DISCOVERY:
+                String[] discoveryUri;
+                if (address.length > 1) {
+                    discoveryUri = uri.toLowerCase().trim().replace("discovery/", "").split("/");
+                } else
+                    discoveryUri = uri.toLowerCase().trim().replace("discovery", "").split("/");
+                setCrawlerMap(BottomNavigationFragment.DISCOVERY_FRAGMENT, discoveryUri);
+                break;
+            case DEEP_LINK_CHAT:
+                String chatUri = uri.toLowerCase().trim().replace("chat/", "").replace("chat", "").trim();
+                if (chatUri.length() > 1) {
+                    HelperUrl.checkUsernameAndGoToRoom(getActivity(), chatUri, HelperUrl.ChatEntry.chat);
+                }
+                setCrawlerMap(BottomNavigationFragment.CHAT_FRAGMENT, null);
+                break;
+            case DEEP_LINK_PROFILE:
+                setCrawlerMap(BottomNavigationFragment.PROFILE_FRAGMENT, null);
+                break;
+            case DEEP_LINK_CALL:
+                setCrawlerMap(BottomNavigationFragment.CALL_FRAGMENT, null);
+                break;
+            case DEEP_LINK_CONTACT:
+                setCrawlerMap(BottomNavigationFragment.CONTACT_FRAGMENT, null);
+                break;
+
+        }
+    }
+
+
+    private void setCrawlerMap(int position, String[] uri) {
+
+        if (uri != null && uri.length > 0) {
             if (!uri[0].equals("") && position == DISCOVERY_FRAGMENT) {
                 List<Integer> pages = new ArrayList<>();
                 for (String s : uri) {
@@ -211,23 +271,44 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 }
                 this.crawlerStruct = new DiscoveryFragment.CrawlerStruct(0, pages);
             }
+        }
 
-        switch (position) {
-            case CONTACT_FRAGMENT:
-                bottomNavigation.setCurrentItem(CONTACT_FRAGMENT);
-                break;
-            case CALL_FRAGMENT:
-                bottomNavigation.setCurrentItem(CALL_FRAGMENT);
-                break;
-            case CHAT_FRAGMENT:
-                bottomNavigation.setCurrentItem(CHAT_FRAGMENT);
-                break;
-            case DISCOVERY_FRAGMENT:
-                bottomNavigation.setCurrentItem(DISCOVERY_FRAGMENT);
-                break;
-            case PROFILE_FRAGMENT:
-                bottomNavigation.setCurrentItem(PROFILE_FRAGMENT);
-                break;
+        if (position == bottomNavigation.getCurrentTab()) {
+            if (bottomNavigation.getSelectedItemPosition() == DISCOVERY_FRAGMENT) {
+                if (getActivity() != null && getActivity() instanceof ActivityMain)
+                    ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+
+                if (getActivity() != null) {
+                    DiscoveryFragment discoveryFragment = (DiscoveryFragment) getChildFragmentManager().findFragmentByTag(DiscoveryFragment.class.getName());
+                    if (discoveryFragment != null) {
+                        discoveryFragment.setNeedToCrawl(true);
+                        discoveryFragment.discoveryCrawler(getActivity());
+                    }
+                }
+            }
+        } else {
+            switch (position) {
+                case CONTACT_FRAGMENT:
+                    bottomNavigation.setCurrentItem(CONTACT_FRAGMENT);
+                    break;
+                case CALL_FRAGMENT:
+                    bottomNavigation.setCurrentItem(CALL_FRAGMENT);
+                    break;
+                case CHAT_FRAGMENT:
+                    bottomNavigation.setCurrentItem(CHAT_FRAGMENT);
+                    break;
+                case DISCOVERY_FRAGMENT:
+
+                    DiscoveryFragment discoveryFragment = (DiscoveryFragment) getChildFragmentManager().findFragmentByTag(DiscoveryFragment.class.getName());
+                    if (discoveryFragment != null)
+                        discoveryFragment.setNeedToReload(true);
+
+                    bottomNavigation.setCurrentItem(DISCOVERY_FRAGMENT);
+                    break;
+                case PROFILE_FRAGMENT:
+                    bottomNavigation.setCurrentItem(PROFILE_FRAGMENT);
+                    break;
+            }
         }
     }
 

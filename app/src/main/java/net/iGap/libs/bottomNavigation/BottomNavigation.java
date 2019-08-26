@@ -222,4 +222,8 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
             }
         }
     }
+
+    public int getCurrentTab(){
+        return selectedItemPosition;
+    }
 }

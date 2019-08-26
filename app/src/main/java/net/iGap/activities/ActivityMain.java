@@ -312,6 +312,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setIntent(intent);
         isOpenChatBeforeSheare = true;
         checkIntent(intent);
+
+        if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
+            BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+            if (bottomNavigationFragment != null)
+                bottomNavigationFragment.autoLinkCrawler(intent.getExtras().getString(DEEP_LINK, DEEP_LINK_CHAT));
+        }
     }
 
 
@@ -343,13 +349,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (extras != null) {
 
-            if (extras.getString(DEEP_LINK) != null) {
-                autoLinkHelper(extras.getString(DEEP_LINK, DEEP_LINK_CHAT));
-            } else if (intent.getAction() != null && intent.getAction().equals(OPEN_DEEP_LINK)) {
-                autoLinkHelper(extras.getString(DEEP_LINK, DEEP_LINK_CHAT));
-                return;
-            }
-
             long roomId = extras.getLong(ActivityMain.openChat);
             if (!FragmentLanguage.languageChanged && roomId > 0) { // if language changed not need check enter to chat
                 GoToChatActivity goToChatActivity = new GoToChatActivity(roomId);
@@ -371,51 +370,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    private void autoLinkHelper(String uri) {
-        String[] address = uri.toLowerCase().trim().split("/");
-        if (address.length == 0)
-            return;
-
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
-
-        if (fragment instanceof BottomNavigationFragment) {
-            switch (address[0]) {
-                case DEEP_LINK_DISCOVERY:
-                    String[] discoveryUri;
-                    if (address.length > 1) {
-                        discoveryUri = uri.toLowerCase().trim().replace("discovery/", "").split("/");
-                    } else
-                        discoveryUri = uri.toLowerCase().trim().replace("discovery", "").split("/");
-                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.DISCOVERY_FRAGMENT, discoveryUri);
-                    break;
-                case DEEP_LINK_CHAT:
-                    String chatUri = uri.toLowerCase().trim().replace("chat/", "").replace("chat", "").trim();
-                    if (chatUri.length() > 1) {
-                        Intent intent = new Intent(this, ActivityMain.class);
-                        intent.setAction("android.intent.action.VIEW");
-                        intent.setData(Uri.parse("igap://resolve?domain=" + chatUri));
-                        startActivity(intent);
-                    }
-                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CHAT_FRAGMENT,null);
-                    break;
-                case DEEP_LINK_PROFILE:
-                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.PROFILE_FRAGMENT,null);
-                    break;
-                case DEEP_LINK_CALL:
-                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CALL_FRAGMENT,null);
-                    break;
-                case DEEP_LINK_CONTACT:
-                    ((BottomNavigationFragment) fragment).getSelectedFragment(BottomNavigationFragment.CONTACT_FRAGMENT,null);
-                    break;
-
-            }
-        }
-//            new HelperFragment(getSupportFragmentManager(),DiscoveryFragment.newAutoLinkInstance(0,address[1])).setReplace(false).load(true);
-
-
-    }
-
-    @Override
+     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -435,7 +390,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
 
-            initTabStrip();
+            initTabStrip(getIntent());
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PHONE_STATE");
             MyPhonStateService myPhonStateService = new MyPhonStateService();
@@ -579,6 +534,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
             isOpenChatBeforeSheare = false;
+            checkIntent(getIntent());
 
             initComponent();
 
@@ -1178,9 +1134,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     //******************************************************************************************************************************
 
-    private void initTabStrip() {
-        Fragment fragment = new BottomNavigationFragment();
-        getSupportFragmentManager().beginTransaction().addToBackStack(fragment.getClass().getName()).replace(R.id.mainFrame,fragment,fragment.getClass().getName()).commit();
+    private void initTabStrip(Intent intent) {
+        BottomNavigationFragment bottomNavigationFragment = new BottomNavigationFragment();
+
+        if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
+            bottomNavigationFragment.setCrawlerMap(intent.getExtras().getString(DEEP_LINK, DEEP_LINK_CALL));
+        }
+
+        new HelperFragment(getSupportFragmentManager(), bottomNavigationFragment).load();
     }
 
 
@@ -1197,11 +1158,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
             G.isFirstPassCode = false;
 
-            checkIntent(getIntent());
         }
-
-//        String uri = "discovery";
-//        autoLinkHelper(uri);
     }
 
     @SuppressLint("MissingSuperCall")
