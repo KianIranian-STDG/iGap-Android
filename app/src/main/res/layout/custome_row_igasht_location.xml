@@ -62,7 +62,7 @@
                 app:layout_constraintStart_toStartOf="@id/itemTitle"
                 app:layout_constraintTop_toBottomOf="@id/itemTitle" />
 
-            <net.iGap.module.RadiusImageView
+            <net.iGap.module.CircleImageView
                 android:id="@+id/itemImage"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
