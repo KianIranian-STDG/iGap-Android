@@ -28,10 +28,12 @@ public class BindingAdapter {
 
     @android.databinding.BindingAdapter(value = {"imageUrl"})
     public static void setAddedAvatarImage(ImageView imageView, String url) {
-        if (url != null) {
+        if (url != null && url.length() > 0) {
             Picasso.get().load(url)
                     .error(R.drawable.ic_error)
                     .into(imageView);
+        } else {
+            Picasso.get().load(R.mipmap.logo).into(imageView);
         }
     }
 
