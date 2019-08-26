@@ -2923,7 +2923,7 @@ public class FragmentChat extends BaseFragment
                 gongingHandler.removeCallbacks(gongingRunnable);
                 gongingHandler.postDelayed(gongingRunnable, 1000);
 
-                if (totalItemCount - pastVisibleItems <= 1 && !isAnimateStart) {
+                if (totalItemCount - pastVisibleItems <= 2 && !isAnimateStart) {
                     isAnimateStart = true;
                     isAnimateStart = false;
                     setDownBtnGone();
