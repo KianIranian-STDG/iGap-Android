@@ -337,9 +337,9 @@ public class Contacts {
                 int count = pCur.getCount();
 
                 if (count > PHONE_CONTACT_MAX_COUNT_LIMIT) {
-                    pCur.close();
+                    //pCur.close();
                     showLimitDialog();
-                    return;
+                    //return;
                 }
 
                 if (count > 0){

@@ -543,6 +543,7 @@
     <string name="E_114">Bad payload: Invalid email address</string>
     <string name="E_115">Internal Server Error</string>
     <string name="E_116">Bad payload: Invalid gender</string>
+    <string name="E_118">Warning: Number of Contacts has exceeded the server restrictions.</string>
     <string name="E_117">Internal Server Error</string>
     <string name="E_154_1">Bad payload: get token</string>
     <string name="E_154_2">Bad payload: get reason</string>
@@ -1227,8 +1228,8 @@ Want to get it?</string>
     <string name="are_you_sure">Are you sure</string>
     <string name="change_storage_place">Change storage place</string>
     <string name="other_files">Other Files</string>
-    <string name="title_import_contact_limit">Import contact list</string>
-    <string name="content_import_contact_limit">Your contact list is very large and can not import to server</string>
+    <string name="title_import_contact_limit">Warning: Import contact list</string>
+    <string name="content_import_contact_limit">Number of your contact list has exceeded the server restrictions and only the approved part will be uploaded.</string>
 
     <string name="filter_cancel_content">Are you discarding changes?</string>
     <string name="lbl_brightness">Brightness</string>

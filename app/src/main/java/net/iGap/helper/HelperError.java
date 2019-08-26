@@ -85,6 +85,10 @@ public class HelperError {
             case 116:
                 error = G.fragmentActivity.getResources().getString(R.string.E_116);
                 break;
+            case 118:
+                if (minorCode == 7)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_118);
+                break;
             case 122:
                 error = G.fragmentActivity.getResources().getString(R.string.E_122);
                 break;
