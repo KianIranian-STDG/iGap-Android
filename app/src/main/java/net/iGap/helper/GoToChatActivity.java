@@ -161,7 +161,8 @@ public class GoToChatActivity {
                 Log.wtf(this.getClass().getName(),"loadChatFragment");
             }
         }else{
-            new HelperFragment(activity.getSupportFragmentManager(),fragmentChat).setReplace(false).load();
+            if (activity.getSupportFragmentManager() != null)
+                new HelperFragment(activity.getSupportFragmentManager(),fragmentChat).setReplace(false).load();
         }
     }
 
