@@ -22,7 +22,7 @@ public class IGashtLocationListAdapter extends RecyclerView.Adapter<RecyclerView
     private onLocationItemClickListener locationItemClickListener;
     private String provinceSelectedName;
 
-    public IGashtLocationListAdapter(String provinceSelectedName, onLocationItemClickListener locationItemClickListener){
+    public IGashtLocationListAdapter(String provinceSelectedName, onLocationItemClickListener locationItemClickListener) {
         this.provinceSelectedName = provinceSelectedName;
         this.locationItemClickListener = locationItemClickListener;
     }
@@ -50,15 +50,15 @@ public class IGashtLocationListAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         if (viewHolder instanceof ViewHolderProvinceInfo) {
-            ((ViewHolderProvinceInfo) viewHolder).locationItemCount.setText((getItemCount() - 1) + "");
-            ((ViewHolderProvinceInfo) viewHolder).provinceName.setText(provinceSelectedName);
+            ((ViewHolderProvinceInfo) viewHolder).locationItemCount.setText(String.format(((ViewHolderProvinceInfo) viewHolder).locationItemCount.getContext().getString(R.string.igasht_location_found_count),(getItemCount() - 1)));
+            ((ViewHolderProvinceInfo) viewHolder).provinceName.setText(String.format(((ViewHolderProvinceInfo) viewHolder).provinceName.getContext().getString(R.string.igasht_selected_location_title), provinceSelectedName));
         } else if (viewHolder instanceof ViewHolderLocationItem) {
-            ((ViewHolderLocationItem) viewHolder).itemTitleTextView.setText(items.get(i-1).getNameWithLanguage());
-            ((ViewHolderLocationItem) viewHolder).itemAddressTextView.setText(items.get(i-1).getAddressWithLanguage());
-            ((ViewHolderLocationItem) viewHolder).itemLocationTextView.setText(items.get(i-1).getLocation());
+            ((ViewHolderLocationItem) viewHolder).itemTitleTextView.setText(items.get(i - 1).getNameWithLanguage());
+            ((ViewHolderLocationItem) viewHolder).itemAddressTextView.setText(items.get(i - 1).getAddressWithLanguage());
+            ((ViewHolderLocationItem) viewHolder).itemLocationTextView.setText(items.get(i - 1).getLocation());
             Picasso.get().load("test").placeholder(R.drawable.logo).error(R.drawable.ic_error_igap).fit().centerCrop().into(((ViewHolderLocationItem) viewHolder).itemImageView);
-            ((ViewHolderLocationItem) viewHolder).buyTicketButton.setOnClickListener(v -> locationItemClickListener.buyTicket(viewHolder.getAdapterPosition()-1));
-            viewHolder.itemView.setOnClickListener(v -> locationItemClickListener.onItem(viewHolder.getAdapterPosition()-1));
+            ((ViewHolderLocationItem) viewHolder).buyTicketButton.setOnClickListener(v -> locationItemClickListener.buyTicket(viewHolder.getAdapterPosition() - 1));
+            viewHolder.itemView.setOnClickListener(v -> locationItemClickListener.onItem(viewHolder.getAdapterPosition() - 1));
         }
     }
 

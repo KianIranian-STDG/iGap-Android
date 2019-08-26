@@ -94,6 +94,7 @@ public class IGashtProvinceFragment extends IGashtBaseView {
 
         ((IGashtProvinceViewModel) viewModel).getClearEditText().observe(getViewLifecycleOwner(), isClear -> {
             if (isClear != null && isClear) {
+                binding.provinceSearchText.requestFocus();
                 binding.provinceSearchText.setText("");
             }
         });
