@@ -7,6 +7,8 @@ import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.errorhandler.ResponseCallback;
 import net.iGap.model.cPay.CPayWalletAmountModel;
+import net.iGap.model.cPay.ChargeWalletBodyModel;
+import net.iGap.model.cPay.ChargeWalletModel;
 import net.iGap.model.cPay.PlaqueBodyModel;
 import net.iGap.model.cPay.PlaqueInfoModel;
 import net.iGap.model.cPay.RegisterPlaqueBodyModel;
@@ -129,6 +131,29 @@ public class CPayRepository {
 
             @Override
             public void onFailure(Call<CPayWalletAmountModel> call, Throwable t) {
+                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
+            }
+        });
+    }
+
+    public void getChargeWallet(ChargeWalletBodyModel body , ResponseCallback<ChargeWalletModel> callback){
+
+        api.getChargeWallet(body).enqueue(new Callback<ChargeWalletModel>() {
+            @Override
+            public void onResponse(Call<ChargeWalletModel> call, Response<ChargeWalletModel> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess(response.body());
+                } else {
+                    try {
+                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ChargeWalletModel> call, Throwable t) {
                 callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
             }
         });
