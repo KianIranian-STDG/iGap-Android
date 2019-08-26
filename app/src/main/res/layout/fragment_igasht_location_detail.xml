@@ -29,7 +29,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v4.widget.NestedScrollView
+        <ScrollView
             android:id="@+id/scroll"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -222,7 +222,7 @@
                     </android.support.constraint.ConstraintLayout>
                 </LinearLayout>
             </android.support.constraint.ConstraintLayout>
-        </android.support.v4.widget.NestedScrollView>
+        </ScrollView>
 
     </android.support.constraint.ConstraintLayout>
 
