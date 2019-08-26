@@ -43,6 +43,7 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.kuknos.view.KuknosLoginFrag;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
@@ -172,7 +173,8 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.telecome, null)).setReplace(false).load();
                 break;
             case MOBILE_BILL_MENU:/** tested **/
-                new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.mci, null)).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), KuknosLoginFrag.newInstance()).setReplace(false).load();
+                //new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.mci, null)).setReplace(false).load();
                 break;
             case FINANCIAL_MENU:/** tested **/
                 new HelperFragment(activity.getSupportFragmentManager(), FragmentPayment.newInstance()).setReplace(false).load();
