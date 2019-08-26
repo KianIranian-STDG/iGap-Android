@@ -5,19 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.design.button.MaterialButton
-        android:id="@+id/buyTicketButton"
-        style="?iGapButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp8"
-        android:text="@string/igasht_select_location_button_title"
-        app:layout_constraintCircleRadius="@dimen/dp12"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
-
     <LinearLayout
         android:id="@+id/constraintLayout4"
         android:layout_width="0dp"
@@ -35,6 +22,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
+
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,8 +37,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:maxLines="1"
                 android:layout_marginBottom="@dimen/dp8"
+                android:maxLines="1"
                 android:padding="@dimen/dp4"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintBottom_toTopOf="@id/itemAddress"
@@ -84,6 +72,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent=".3" />
         </android.support.constraint.ConstraintLayout>
+
         <View
             android:id="@+id/view2"
             android:layout_width="match_parent"
@@ -97,7 +86,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -138,5 +126,21 @@
 
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/buyTicketButton"
+        style="?iGapButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp4"
+        android:layout_marginLeft="@dimen/dp4"
+        android:layout_marginRight="@dimen/dp4"
+        android:layout_marginStart="@dimen/dp4"
+        android:text="@string/igasht_select_location_button_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintCircleRadius="@dimen/dp8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
 
 </android.support.constraint.ConstraintLayout>
