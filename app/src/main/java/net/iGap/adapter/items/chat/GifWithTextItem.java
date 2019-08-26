@@ -139,13 +139,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
                                     e.printStackTrace();
                                 }
                             } else {
-                                if (mMessage.getForwardMessage() != null) {
-                                    downLoadFile(holder, mMessage.getForwardMessage().getAttachment(), 0);
-                                } else {
-                                    RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).
-                                            equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.getMessageId()).findFirst());
-                                    downLoadFile(holder, roomMessage.getAttachment(), 0);
-                                }
+                                downLoadFile(holder, 0);
                             }
                         }
                     }

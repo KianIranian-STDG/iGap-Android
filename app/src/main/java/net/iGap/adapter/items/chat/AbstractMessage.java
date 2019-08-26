@@ -1229,7 +1229,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * if type was gif auto file start auto download
          */
         if (sharedPreferences.getInt(key, ((key.equals(SHP_SETTING.KEY_AD_DATA_GIF) || key.equals(SHP_SETTING.KEY_AD_WIFI_GIF)) ? 5 : -1)) != -1) {
-            autoDownload(holder, structMessage.getAttachment());
+            autoDownload(holder);
         } else {
 
             MessageProgress _Progress = ((IProgress) holder).getProgress();
@@ -1238,7 +1238,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                 @Override
                 public void onMessageProgressClick(MessageProgress progress) {
-                    forOnCLick(holder, structMessage.getAttachment());
+                    forOnCLick(holder);
                 }
             });
         }
@@ -1331,7 +1331,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                     @Override
                     public void onMessageProgressClick(MessageProgress progress) {
-                        forOnCLick(holder, structMessage.getAttachment());
+                        forOnCLick(holder);
                     }
                 });
                 break;
@@ -1347,32 +1347,31 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder = (NewChatItemHolder) holder;
         else
             return;
-        RealmAttachment attachment = structMessage.getAttachment();
 
-        if (attachment != null) {
+        if (structMessage.getAttachment() != null) {
 
             if (mHolder instanceof VideoWithTextItem.ViewHolder || mHolder instanceof ImageWithTextItem.ViewHolder || mHolder instanceof StickerItem.ViewHolder) {
                 ReserveSpaceRoundedImageView imageViewReservedSpace = (ReserveSpaceRoundedImageView) ((IThumbNailItem) holder).getThumbNailImageView();
-                int _with = attachment.getWidth();
-                int _hight = attachment.getHeight();
+                int _with = structMessage.getAttachment().getWidth();
+                int _hight = structMessage.getAttachment().getHeight();
 
                 if (_with == 0) {
-                    if (attachment.getSmallThumbnail() != null) {
-                        _with = attachment.getSmallThumbnail().getWidth();
-                        _hight = attachment.getSmallThumbnail().getHeight();
+                    if (structMessage.getAttachment().getSmallThumbnail() != null) {
+                        _with = structMessage.getAttachment().getSmallThumbnail().getWidth();
+                        _hight = structMessage.getAttachment().getSmallThumbnail().getHeight();
                     }
                 }
 
                 boolean setDefualtImage = false;
 
                 if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
-                    if (attachment.getLocalFilePath() == null && attachment.getLocalThumbnailPath() == null && _with == 0) {
+                    if (structMessage.getAttachment().getLocalFilePath() == null && structMessage.getAttachment().getLocalThumbnailPath() == null && _with == 0) {
                         _with = (int) G.context.getResources().getDimension(R.dimen.dp120);
                         _hight = (int) G.context.getResources().getDimension(R.dimen.dp120);
                         setDefualtImage = true;
                     }
                 } else {
-                    if (attachment.getLocalThumbnailPath() == null && _with == 0) {
+                    if (structMessage.getAttachment().getLocalThumbnailPath() == null && _with == 0) {
                         _with = (int) G.context.getResources().getDimension(R.dimen.dp120);
                         _hight = (int) G.context.getResources().getDimension(R.dimen.dp120);
                         setDefualtImage = true;
@@ -1403,8 +1402,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             } else if (messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                 ReserveSpaceGifImageView imageViewReservedSpace = (ReserveSpaceGifImageView) ((IThumbNailItem) holder).getThumbNailImageView();
-                int _with = attachment.getWidth();
-                int _hight = attachment.getHeight();
+                int _with = structMessage.getAttachment().getWidth();
+                int _hight = structMessage.getAttachment().getHeight();
 
                 if (_with == 0) {
                     _with = (int) G.context.getResources().getDimension(R.dimen.dp200);
@@ -1418,29 +1417,29 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             /**
              * if file already exists, simply show the local one
              */
-            if (attachment.isFileExistsOnLocalAndIsThumbnail()) {
+            if (structMessage.getAttachment().isFileExistsOnLocalAndIsThumbnail()) {
                 /**
                  * load file from local
                  */
-                onLoadThumbnailFromLocal(holder, getCacheId(structMessage), attachment.getLocalFilePath(), LocalFileType.FILE);
+                onLoadThumbnailFromLocal(holder, getCacheId(structMessage), structMessage.getAttachment().getLocalFilePath(), LocalFileType.FILE);
             } else if (messageType == ProtoGlobal.RoomMessageType.VOICE || messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
-                onLoadThumbnailFromLocal(holder, getCacheId(structMessage), attachment.getLocalFilePath(), LocalFileType.FILE);
+                onLoadThumbnailFromLocal(holder, getCacheId(structMessage), structMessage.getAttachment().getLocalFilePath(), LocalFileType.FILE);
             } else {
                 /**
                  * file doesn't exist on local, I check for a thumbnail
                  * if thumbnail exists, I load it into the view
                  */
-                if (attachment.isThumbnailExistsOnLocal()) {
+                if (structMessage.getAttachment().isThumbnailExistsOnLocal()) {
                     /**
                      * load thumbnail from local
                      */
-                    onLoadThumbnailFromLocal(holder, getCacheId(structMessage), attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
+                    onLoadThumbnailFromLocal(holder, getCacheId(structMessage), structMessage.getAttachment().getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                 } else {
                     if (messageType != ProtoGlobal.RoomMessageType.CONTACT) {
                         if (mHolder instanceof StickerItem.ViewHolder) {
-                            downLoadFile(holder, attachment, 0);
+                            downLoadFile(holder, 0);
                         } else {
-                            downLoadThumbnail(holder, attachment);
+                            downLoadThumbnail(holder);
                         }
                     }
                 }
@@ -1459,11 +1458,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                     @Override
                     public void onMessageProgressClick(MessageProgress progress) {
-                        forOnCLick(holder, structMessage.getAttachment());
+                        forOnCLick(holder);
                     }
                 });
 
-                if (!attachment.isFileExistsOnLocal()) {
+                if (!structMessage.getAttachment().isFileExistsOnLocal()) {
                     if (HelperCheckInternetConnection.currentConnectivityType == null) {
                         checkAutoDownload(holder, holder.itemView.getContext(), HelperCheckInternetConnection.ConnectivityType.WIFI);
                         checkAutoDownload(holder, holder.itemView.getContext(), HelperCheckInternetConnection.ConnectivityType.MOBILE);
@@ -1511,7 +1510,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 thumbnailView.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        forOnCLick(holder, attachment);
+                                        forOnCLick(holder);
                                     }
                                 });
                                 break;
@@ -1520,7 +1519,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 thumbnailView.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        forOnCLick(holder, attachment);
+                                        forOnCLick(holder);
                                     }
                                 });
 
@@ -1536,19 +1535,19 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 });
 
-                prepareProgress(holder, attachment);
+                prepareProgress(holder);
             }
 
         }
     }
 
 
-    private void autoDownload(VH holder, RealmAttachment attachment) {
+    private void autoDownload(VH holder) {
         if (mMessage.getMessageType() == ProtoGlobal.RoomMessageType.FILE || mMessage.getMessageType() == ProtoGlobal.RoomMessageType.FILE_TEXT) {
             ((IThumbNailItem) holder).getThumbNailImageView().setVisibility(View.INVISIBLE);
         }
 
-        downLoadFile(holder, attachment, 0);
+        downLoadFile(holder, 0);
     }
 
     public boolean hasFileSize(String filPath) {
@@ -1561,7 +1560,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return false;
     }
 
-    private void forOnCLick(VH holder, RealmAttachment attachment) {
+    private void forOnCLick(VH holder) {
 
         if (FragmentChat.isInSelectionMode) {
             holder.itemView.performLongClick();
@@ -1575,7 +1574,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         if (HelperUploadFile.isUploading(mMessage.getMessageId() + "")) {
-            if (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()) && hasFileSize(attachment.getLocalFilePath())) {
+            if (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()) && hasFileSize(structMessage.getAttachment().getLocalFilePath())) {
                 if (G.userLogin) {
                     messageClickListener.onFailedMessageClick(progress, structMessage, holder.getAdapterPosition());
 
@@ -1585,13 +1584,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } else {
                 messageClickListener.onUploadOrCompressCancel(progress, structMessage, holder.getAdapterPosition(), SendingStep.UPLOADING);
             }
-        } else if (HelperDownloadFile.getInstance().isDownLoading(attachment.getCacheId())) {
-            HelperDownloadFile.getInstance().stopDownLoad(attachment.getCacheId());
+        } else if (HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
+            HelperDownloadFile.getInstance().stopDownLoad(structMessage.getAttachment().getCacheId());
         } else {
             thumbnail.setVisibility(View.VISIBLE);
 
 
-            if (attachment.isFileExistsOnLocal()) {
+            if (structMessage.getAttachment().isFileExistsOnLocal()) {
                 String _status = mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getStatus() : mMessage.getStatus();
                 ProtoGlobal.RoomMessageType _type = mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType();
 
@@ -1607,7 +1606,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                      */
                     if (_type == ProtoGlobal.RoomMessageType.GIF || _type == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                         try {
-                            onPlayPauseGIF(holder, attachment.getLocalFilePath());
+                            onPlayPauseGIF(holder, structMessage.getAttachment().getLocalFilePath());
                         } catch (ClassCastException e) {
                             e.printStackTrace();
                         }
@@ -1617,7 +1616,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }
             } else {
-                downLoadFile(holder, attachment, 2);
+                downLoadFile(holder, 2);
             }
         }
     }
@@ -1628,28 +1627,28 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     }
 
-    private void downLoadThumbnail(final VH holder, final RealmAttachment attachment) {
+    private void downLoadThumbnail(final VH holder) {
 
-        if (attachment == null) return;
+        if (structMessage.getAttachment() == null) return;
 
-        String token = attachment.getToken();
-        String url = attachment.getUrl();
-        String name = attachment.getName();
+        String token = structMessage.getAttachment().getToken();
+        String url = structMessage.getAttachment().getUrl();
+        String name = structMessage.getAttachment().getName();
 
         long size = 0;
 
-        if (attachment.getSmallThumbnail() != null) size = attachment.getSmallThumbnail().getSize();
+        if (structMessage.getAttachment().getSmallThumbnail() != null) size = structMessage.getAttachment().getSmallThumbnail().getSize();
 
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
 
-        if (attachment.getCacheId() == null || attachment.getCacheId().length() == 0) {
+        if (structMessage.getAttachment().getCacheId() == null || structMessage.getAttachment().getCacheId().length() == 0) {
             return;
         }
 
 
         if (token != null && token.length() > 0 && size > 0) {
 
-            HelperDownloadFile.getInstance().startDownload(mMessage.getMessageType(), mMessage.getMessageId() + "", token, url, attachment.getCacheId(), name, size, selector, "", 4, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.getInstance().startDownload(mMessage.getMessageType(), mMessage.getMessageId() + "", token, url, structMessage.getAttachment().getCacheId(), name, size, selector, "", 4, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, int progress) {
 
@@ -1665,7 +1664,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                         type = mMessage.getMessageType().toString().toLowerCase();
                                     }
 //                                    if (type.contains("image") || type.contains("video") || type.contains("gif")) {
-//                                        onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.THUMBNAIL);
+//                                        onLoadThumbnailFromLocal(holder, structMessage.getAttachment().getCacheId(), path, LocalFileType.THUMBNAIL);
 //                                    }
                                 }
                             });
@@ -1680,27 +1679,27 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    void downLoadFile(final VH holder, final RealmAttachment attachment, int priority) {
+    void downLoadFile(final VH holder, int priority) {
 
-        if (attachment == null || attachment.getCacheId() == null) {
+        if (structMessage.getAttachment() == null || structMessage.getAttachment().getCacheId() == null) {
             return;
         }
 
-        boolean _isDownloading = HelperDownloadFile.getInstance().isDownLoading(attachment.getCacheId());
+        boolean _isDownloading = HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId());
 
         final MessageProgress progressBar = ((IProgress) holder).getProgress();
         AppUtils.setProgresColor(progressBar.progressBar);
 
 
-        final String token = attachment.getToken();
-        final String url = attachment.getUrl();
-        String name = attachment.getName();
-        Long size = attachment.getSize();
+        final String token = structMessage.getAttachment().getToken();
+        final String url = structMessage.getAttachment().getUrl();
+        String name = structMessage.getAttachment().getName();
+        Long size = structMessage.getAttachment().getSize();
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
         final ProtoGlobal.RoomMessageType messageType = mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType();
 
-        final String _path = AndroidUtils.getFilePathWithCashId(attachment.getCacheId(), name, messageType);
+        final String _path = AndroidUtils.getFilePathWithCashId(structMessage.getAttachment().getCacheId(), name, messageType);
 
         if (token != null && token.length() > 0 && size > 0) {
 
@@ -1708,7 +1707,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
 
-            HelperDownloadFile.getInstance().startDownload(messageType, mMessage.getMessageId() + "", token, url, attachment.getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.getInstance().startDownload(messageType, mMessage.getMessageId() + "", token, url, structMessage.getAttachment().getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, final int progress) {
 
@@ -1756,7 +1755,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             });
 
             if (!_isDownloading) {
-                messageClickListener.onDownloadAllEqualCashId(attachment.getCacheId(), mMessage.getMessageId() + "");
+                messageClickListener.onDownloadAllEqualCashId(structMessage.getAttachment().getCacheId(), mMessage.getMessageId() + "");
             }
         }
     }
@@ -1770,7 +1769,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      *
      * @param holder VH
      */
-    private void prepareProgress(final VH holder, RealmAttachment attachment) {
+    private void prepareProgress(final VH holder) {
         if (structMessage.getSendType() == MyType.SendType.send) {
 
             final MessageProgress progressBar = ((IProgress) holder).getProgress();
@@ -1834,7 +1833,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 ((IProgress) holder).getProgress().setVisibility(View.VISIBLE);
                 progressBar.withProgress(HelperUploadFile.getUploadProgress(mMessage.getMessageId() + ""));
             } else {
-                checkForDownloading(holder, attachment);
+                checkForDownloading(holder);
             }
 
             String _status = mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getStatus() : mMessage.getStatus();
@@ -1842,7 +1841,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 onFaildUpload(holder);
             }
         } else {
-            checkForDownloading(holder, attachment);
+            checkForDownloading(holder);
         }
     }
 
@@ -1862,17 +1861,17 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    private void checkForDownloading(VH holder, RealmAttachment attachment) {
+    private void checkForDownloading(VH holder) {
 
         MessageProgress progress = ((IProgress) holder).getProgress();
         AppUtils.setProgresColor(progress.progressBar);
 
-        if (HelperDownloadFile.getInstance().isDownLoading(attachment.getCacheId())) {
+        if (HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
             hideThumbnailIf(holder);
 
-            downLoadFile(holder, attachment, 0);
+            downLoadFile(holder, 0);
         } else {
-            if (attachment.isFileExistsOnLocal()) {
+            if (structMessage.getAttachment().isFileExistsOnLocal()) {
                 if (!(mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) && !(mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())))) {
                     progress.performProgress();
                 }
