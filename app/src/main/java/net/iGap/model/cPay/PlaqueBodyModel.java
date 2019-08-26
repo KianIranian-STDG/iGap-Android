@@ -2,15 +2,15 @@ package net.iGap.model.cPay;
 
 import com.google.gson.annotations.SerializedName;
 
-public class PlaqueInfoBodyModel {
+public class PlaqueBodyModel {
 
     @SerializedName("plate")
     private String plaque ;
 
-    public PlaqueInfoBodyModel() {
+    public PlaqueBodyModel() {
     }
 
-    public PlaqueInfoBodyModel(String plaque) {
+    public PlaqueBodyModel(String plaque) {
         this.plaque = plaque;
     }
 

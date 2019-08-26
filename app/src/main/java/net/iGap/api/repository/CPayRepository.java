@@ -6,7 +6,8 @@ import net.iGap.api.CPayApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.errorhandler.ResponseCallback;
-import net.iGap.model.cPay.PlaqueInfoBodyModel;
+import net.iGap.model.cPay.CPayWalletAmountModel;
+import net.iGap.model.cPay.PlaqueBodyModel;
 import net.iGap.model.cPay.PlaqueInfoModel;
 import net.iGap.model.cPay.RegisterPlaqueBodyModel;
 import net.iGap.model.cPay.RegisterPlaqueModel;
@@ -37,7 +38,7 @@ public class CPayRepository {
         return instance;
     }
 
-    public void getPlaqueInfo(PlaqueInfoBodyModel body, ResponseCallback<PlaqueInfoModel> callback) {
+    public void getPlaqueInfo(PlaqueBodyModel body, ResponseCallback<PlaqueInfoModel> callback) {
 
         api.getPlaqueInfo(body).enqueue(new Callback<PlaqueInfoModel>() {
             @Override
@@ -110,7 +111,31 @@ public class CPayRepository {
 
     }
 
+    public void getWalletAmount(PlaqueBodyModel body , ResponseCallback<CPayWalletAmountModel> callback){
+
+        api.getCPayWalletAmount(body).enqueue(new Callback<CPayWalletAmountModel>() {
+            @Override
+            public void onResponse(Call<CPayWalletAmountModel> call, Response<CPayWalletAmountModel> response) {
+                if (response.isSuccessful()){
+                    callback.onSuccess(response.body());
+                }else {
+                    try {
+                        callback.onError(new ErrorHandler().getError(response.code() , response.errorBody().string()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CPayWalletAmountModel> call, Throwable t) {
+                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
+            }
+        });
+    }
+
     public MutableLiveData<Boolean> getPlaquesChangeListener() {
         return plaquesChangeListener;
     }
+
 }

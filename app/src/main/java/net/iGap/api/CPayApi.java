@@ -1,6 +1,7 @@
 package net.iGap.api;
 
-import net.iGap.model.cPay.PlaqueInfoBodyModel;
+import net.iGap.model.cPay.CPayWalletAmountModel;
+import net.iGap.model.cPay.PlaqueBodyModel;
 import net.iGap.model.cPay.PlaqueInfoModel;
 import net.iGap.model.cPay.RegisterPlaqueBodyModel;
 import net.iGap.model.cPay.RegisterPlaqueModel;
@@ -20,5 +21,9 @@ public interface CPayApi {
     Call<UserPlaquesModel> getUserPlaques();
 
     @POST("plate-info")
-    Call<PlaqueInfoModel> getPlaqueInfo(@Body PlaqueInfoBodyModel body);
+    Call<PlaqueInfoModel> getPlaqueInfo(@Body PlaqueBodyModel body);
+
+    @POST("account-inventory")
+    Call<CPayWalletAmountModel> getCPayWalletAmount(@Body PlaqueBodyModel body);
+
 }
