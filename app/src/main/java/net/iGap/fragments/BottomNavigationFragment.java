@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.discovery.DiscoveryFragment;
+import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnUnreadChange;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
@@ -21,6 +22,12 @@ import net.iGap.realm.RealmRoom;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.iGap.activities.ActivityMain.DEEP_LINK_CALL;
+import static net.iGap.activities.ActivityMain.DEEP_LINK_CHAT;
+import static net.iGap.activities.ActivityMain.DEEP_LINK_CONTACT;
+import static net.iGap.activities.ActivityMain.DEEP_LINK_DISCOVERY;
+import static net.iGap.activities.ActivityMain.DEEP_LINK_PROFILE;
 
 public class BottomNavigationFragment extends Fragment implements OnUnreadChange {
 
@@ -32,6 +39,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
     //Todo: create viewModel for this it was test class and become main class :D
     private BottomNavigation bottomNavigation;
+    private String crawlerMap;
     private DiscoveryFragment.CrawlerStruct crawlerStruct;
 
     @Nullable
@@ -42,6 +50,14 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (crawlerMap != null) {
+            autoLinkCrawler(crawlerMap);
+        }
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -49,6 +65,10 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         bottomNavigation.setDefaultItem(2);
         bottomNavigation.setOnItemChangeListener(this::loadFragment);
         bottomNavigation.setCurrentItem(2);
+    }
+
+    public void setCrawlerMap(String crawlerMap) {
+        this.crawlerMap = crawlerMap;
     }
 
     private void loadFragment(int position) {
@@ -204,7 +224,43 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }
     }
 
-    public void setCrawlerMap(int position, String[] uri) {
+
+    public void autoLinkCrawler(String uri) {
+        String[] address = uri.toLowerCase().trim().split("/");
+
+        if (address.length == 0)
+            return;
+        switch (address[0]) {
+            case DEEP_LINK_DISCOVERY:
+                String[] discoveryUri;
+                if (address.length > 1) {
+                    discoveryUri = uri.toLowerCase().trim().replace("discovery/", "").split("/");
+                } else
+                    discoveryUri = uri.toLowerCase().trim().replace("discovery", "").split("/");
+                setCrawlerMap(BottomNavigationFragment.DISCOVERY_FRAGMENT, discoveryUri);
+                break;
+            case DEEP_LINK_CHAT:
+                String chatUri = uri.toLowerCase().trim().replace("chat/", "").replace("chat", "").trim();
+                if (chatUri.length() > 1) {
+                    HelperUrl.checkUsernameAndGoToRoom(getActivity(), chatUri, HelperUrl.ChatEntry.chat);
+                }
+                setCrawlerMap(BottomNavigationFragment.CHAT_FRAGMENT, null);
+                break;
+            case DEEP_LINK_PROFILE:
+                setCrawlerMap(BottomNavigationFragment.PROFILE_FRAGMENT, null);
+                break;
+            case DEEP_LINK_CALL:
+                setCrawlerMap(BottomNavigationFragment.CALL_FRAGMENT, null);
+                break;
+            case DEEP_LINK_CONTACT:
+                setCrawlerMap(BottomNavigationFragment.CONTACT_FRAGMENT, null);
+                break;
+
+        }
+    }
+
+
+    private void setCrawlerMap(int position, String[] uri) {
 
         if (uri != null && uri.length > 0)
             if (!uri[0].equals("") && position == DISCOVERY_FRAGMENT) {
