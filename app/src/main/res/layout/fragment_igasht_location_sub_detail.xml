@@ -16,7 +16,9 @@
         android:layout_marginStart="@dimen/dp6"
         android:layout_marginTop="@dimen/dp2"
         android:layout_marginEnd="@dimen/dp6"
-        android:layout_marginBottom="@dimen/dp6">
+        android:layout_marginBottom="@dimen/dp6"
+        android:paddingBottom="@dimen/dp16"
+        android:clipToPadding="false">
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/itemImage"
             android:layout_width="match_parent"
@@ -38,7 +40,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/itemImage" />
-
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/null_txt"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp8"
+            android:text="جزئیات موجود نمی باشد"
+            android:visibility="@{viewModel.showText}"
+            android:textSize="@dimen/largeTextSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/itemImage"
+      />
         <View
             android:id="@+id/view4"
             android:layout_width="0dp"
