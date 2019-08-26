@@ -1995,4 +1995,5 @@
     <string name="igasht_select_location_button_title">انتخاب محل</string>
     <string name="igasht_selected_location_title">نقاط تفریحی استان %s</string>
     <string name="igasht_location_found_count">%d مورد یافت شد</string>
+    <string name="noDetail">فاقد توضیحات</string>
 </resources>
