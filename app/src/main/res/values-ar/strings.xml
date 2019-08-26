@@ -1297,7 +1297,7 @@
     <string name="total_balance">النسبة الاجمالية </string>
 
     <string name="rials">ریال</string>
-    <string name="amount_rials">%d ریال</string>
+    <string name="amount_rials">%s ریال</string>
 
     <string name="unverified">لم يُحدّد /</string>
 

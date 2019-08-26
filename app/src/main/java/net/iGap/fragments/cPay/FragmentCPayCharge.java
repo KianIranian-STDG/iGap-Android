@@ -66,6 +66,7 @@ public class FragmentCPayCharge extends BaseFragment implements ToolbarListener 
             popBackStackFragment();
         }
 
+        viewModel.getRequestAmountFromServer(plaqueText);
         initPlaque();
         setupSpinner();
         initCallback();
@@ -77,6 +78,22 @@ public class FragmentCPayCharge extends BaseFragment implements ToolbarListener 
         viewModel.getEditTextVisibilityListener().observe(getViewLifecycleOwner() , isVisible -> {
             if (isVisible == null) return;
             binding.edtAmount.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+        });
+
+        viewModel.getLoaderListener().observe(getViewLifecycleOwner() , isVisible -> {
+            if (isVisible == null) return;
+            binding.loaderAmount.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+            binding.txtCredit.setVisibility(isVisible ? View.INVISIBLE : View.VISIBLE);
+        });
+
+        viewModel.getMessageToUser().observe(getViewLifecycleOwner() , resID -> {
+            if (resID == null) return;
+            Toast.makeText(getActivity(), getString(resID), Toast.LENGTH_LONG).show();
+        });
+
+        viewModel.getMessageToUserText().observe(getViewLifecycleOwner() , s -> {
+            if (s == null) return;
+            Toast.makeText(getActivity(), s , Toast.LENGTH_LONG).show();
         });
 
     }

@@ -60,6 +60,15 @@
             android:layout_marginTop="@dimen/dp20"
             android:textSize="@dimen/largeTextSize"/>
 
+        <ProgressBar
+            android:id="@+id/loaderAmount"
+            android:layout_width="@dimen/dp32"
+            android:layout_height="@dimen/dp32"
+            app:layout_constraintTop_toBottomOf="@id/lblCredit"
+            app:layout_constraintStart_toStartOf="@id/plaqueView"
+            app:layout_constraintEnd_toEndOf="@id/plaqueView"
+            android:layout_marginTop="@dimen/dp20"/>
+
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/txtCredit"
             android:layout_width="0dp"
@@ -70,6 +79,7 @@
             android:gravity="center|top"
             style="?textTitleColorSettingTheme"
             app:fontFamily="@font/main_font"
+            android:visibility="invisible"
             android:text="@{@string/amount_rials(viewModel.userCurrentAmount)}"
             android:paddingBottom="@dimen/dp20"
             android:layout_marginTop="@dimen/dp20"

@@ -4,22 +4,30 @@ import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableField;
 
 import net.iGap.G;
-import net.iGap.model.cPay.CPayUserWalletModel;
+import net.iGap.api.repository.CPayRepository;
+import net.iGap.model.cPay.CPayWalletAmountModel;
+import net.iGap.model.cPay.PlaqueBodyModel;
 
-public class FragmentCPayChargeViewModel extends BaseCPayViewModel<CPayUserWalletModel> {
+public class FragmentCPayChargeViewModel extends BaseCPayViewModel<CPayWalletAmountModel> {
 
     private MutableLiveData<Boolean> editTextVisibilityListener = new MutableLiveData<>();
     public ObservableField<Boolean> isDark = new ObservableField<>(false);
-    public ObservableField<Long> userCurrentAmount = new ObservableField<>(0L);
+    public ObservableField<String> userCurrentAmount = new ObservableField<>("-");
     private int mChargeAmount = 0;
 
     public FragmentCPayChargeViewModel() {
         isDark.set(G.isDarkTheme);
     }
 
-    @Override
-    public void onSuccess(CPayUserWalletModel data) {
+    public void getRequestAmountFromServer(String plaque){
+        getLoaderListener().setValue(true);
+        CPayRepository.getInstance().getWalletAmount(new PlaqueBodyModel(plaque) , this);
+    }
 
+    @Override
+    public void onSuccess(CPayWalletAmountModel data) {
+        userCurrentAmount.set(data.getAmount());
+        getLoaderListener().setValue(false);
     }
 
     public void onPaymentClicked(){

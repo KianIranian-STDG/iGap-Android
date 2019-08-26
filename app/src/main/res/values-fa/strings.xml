@@ -703,7 +703,7 @@
     <string name="charge_balance">میزان شارژ</string>
     <string name="total_balance">میزان کل</string>
     <string name="rials">ریال</string>
-    <string name="amount_rials">%d ریال</string>
+    <string name="amount_rials">%s ریال</string>
     <string name="unverified">تشخیص داده نشده/</string>
     <string name="send_documents">ارسال اسناد و مدراک</string>
     <string name="charge">شارژ</string>

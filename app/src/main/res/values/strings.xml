@@ -720,7 +720,7 @@
     <string name="charge_balance">Charge balance</string>
     <string name="total_balance">Total balance</string>
     <string name="rials">Rial</string>
-    <string name="amount_rials">%d Rials</string>
+    <string name="amount_rials">%s Rials</string>
     <string name="unverified">Unverified/</string>
     <string name="send_documents">Sending documents</string>
     <string name="charge">Charge</string>
