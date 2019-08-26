@@ -402,9 +402,10 @@
         app:layout_constraintEnd_toEndOf="@id/recycler_view"/>
 
     <net.iGap.module.FastScroller
-        android:id="@+id/fast_scroller"
+        android:id="@+id/fs_contact_fastScroller"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/recycler_view"
         app:layout_constraintEnd_toEndOf="@id/recycler_view"
         app:layout_constraintTop_toTopOf="@id/recycler_view" />

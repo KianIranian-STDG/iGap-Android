@@ -137,10 +137,12 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        String[] scales = scale.split(":");
-        float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
-        slider.getLayoutParams().height = Math.round(height);
-        sliderAdapter.setScale(scale);
+        if (scale != null) {
+            String[] scales = scale.split(":");
+            float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+            slider.getLayoutParams().height = Math.round(height);
+            sliderAdapter.setScale(scale);
+        }
     }
 
     public void setupViews() {
