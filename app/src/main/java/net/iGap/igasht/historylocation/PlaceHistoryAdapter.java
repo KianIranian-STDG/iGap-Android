@@ -35,9 +35,8 @@ public class PlaceHistoryAdapter extends RecyclerView.Adapter<PlaceHistoryAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.barCode.setOnClickListener(v -> clickCallback.onClick(viewHolder.getAdapterPosition()));
-
-        viewHolder.date.setText("تاریخ خرید");
-        viewHolder.detail.setText("مشخصات خرید");
+        viewHolder.date.setText(items.get(i).getLocationName());/**تاریخ خرید*/
+        viewHolder.detail.setText(items.get(i).getLocationName());/**مشخصات خرید*/
     }
 
     @Override
