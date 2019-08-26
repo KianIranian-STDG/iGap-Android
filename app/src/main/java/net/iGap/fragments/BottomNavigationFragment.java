@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnUnreadChange;
@@ -262,7 +263,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
     private void setCrawlerMap(int position, String[] uri) {
 
-        if (uri != null && uri.length > 0)
+        if (uri != null && uri.length > 0) {
             if (!uri[0].equals("") && position == DISCOVERY_FRAGMENT) {
                 List<Integer> pages = new ArrayList<>();
                 for (String s : uri) {
@@ -270,9 +271,13 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 }
                 this.crawlerStruct = new DiscoveryFragment.CrawlerStruct(0, pages);
             }
+        }
 
         if (position == bottomNavigation.getCurrentTab()) {
             if (bottomNavigation.getSelectedItemPosition() == DISCOVERY_FRAGMENT) {
+                if (getActivity() != null && getActivity() instanceof ActivityMain)
+                    ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+
                 if (getActivity() != null) {
                     DiscoveryFragment discoveryFragment = (DiscoveryFragment) getChildFragmentManager().findFragmentByTag(DiscoveryFragment.class.getName());
                     if (discoveryFragment != null) {

@@ -38,6 +38,7 @@ import java.util.List;
 
 public class DiscoveryFragment extends BaseMainFragments implements ToolbarListener {
 
+    private static final String TAG = "abbasiDeepLink";
     private RecyclerView rcDiscovery;
     private TextView emptyRecycle;
     private SwipeRefreshLayout pullToRefresh;
