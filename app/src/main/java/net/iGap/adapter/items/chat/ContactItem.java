@@ -99,7 +99,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         } else {
             if (mMessage.getRoomMessageContact() != null) {
                 holder.contactName.setText(mMessage.getRoomMessageContact().getFirstName() + " " + mMessage.getRoomMessageContact().getLastName());
-                holder.contactNumberTv.setText(mMessage.getRoomMessageContact().getPhones().first().toString());
+                holder.contactNumberTv.setText(mMessage.getRoomMessageContact().getLastPhoneNumber());
             }
         }
     }
