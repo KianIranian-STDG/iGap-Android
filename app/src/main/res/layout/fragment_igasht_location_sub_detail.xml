@@ -2,6 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <import type="net.iGap.igasht.locationlist.LocationDetail" />
+
+        <variable
+            name="viewModel"
+            type="net.iGap.igasht.locationdetail.subdetail.IGashtLocationSubDetailViewModel" />
+    </data>
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,6 +45,7 @@
             android:layout_height="1dp"
             android:layout_margin="@dimen/dp8"
             android:background="@color/gray"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintEnd_toEndOf="@+id/subTitle"
             app:layout_constraintStart_toStartOf="@+id/subTitle"
             app:layout_constraintTop_toBottomOf="@+id/subTitle" />
@@ -71,6 +80,7 @@
             android:layout_height="1dp"
             android:layout_margin="@dimen/dp8"
             android:background="@color/gray"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintEnd_toEndOf="@+id/subTitle2"
             app:layout_constraintStart_toStartOf="@+id/subTitle2"
             app:layout_constraintTop_toBottomOf="@+id/subTitle2" />
@@ -90,6 +100,7 @@
             android:layout_height="1dp"
             android:layout_margin="@dimen/dp8"
             android:background="@color/gray"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintEnd_toEndOf="@+id/subDetail2"
             app:layout_constraintStart_toStartOf="@+id/subDetail2"
             app:layout_constraintTop_toBottomOf="@+id/subDetail2" />
@@ -108,12 +119,4 @@
     </android.support.constraint.ConstraintLayout>
 
 
-    <data>
-
-        <import type="net.iGap.igasht.locationlist.LocationDetail" />
-
-        <variable
-            name="viewModel"
-            type="net.iGap.igasht.locationdetail.subdetail.IGashtLocationSubDetailViewModel" />
-    </data>
 </layout>

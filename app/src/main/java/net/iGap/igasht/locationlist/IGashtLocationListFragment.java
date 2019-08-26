@@ -9,7 +9,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import net.iGap.R;
@@ -19,7 +18,6 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.igasht.IGashtBaseView;
 import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.locationdetail.IGashtLocationDetailFragment;
-import net.iGap.igasht.provinceselect.ProvinceSuggestionListAdapter;
 import net.iGap.interfaces.ToolbarListener;
 
 public class IGashtLocationListFragment extends IGashtBaseView {
@@ -103,7 +101,7 @@ public class IGashtLocationListFragment extends IGashtBaseView {
             }
         });
 
-        ((IGashtLocationViewModel) viewModel).getAddToFavorite().observe(getViewLifecycleOwner(), aBoolean -> Toast.makeText(getContext(), "add to favorite", Toast.LENGTH_SHORT).show());
+//        ((IGashtLocationViewModel) viewModel).getAddToFavorite().observe(getViewLifecycleOwner(), aBoolean -> Toast.makeText(getContext(), "add to favorite", Toast.LENGTH_SHORT).show());
 
     }
 

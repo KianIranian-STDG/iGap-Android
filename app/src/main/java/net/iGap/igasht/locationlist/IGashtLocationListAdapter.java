@@ -56,7 +56,7 @@ public class IGashtLocationListAdapter extends RecyclerView.Adapter<RecyclerView
             ((ViewHolderLocationItem) viewHolder).itemTitleTextView.setText(items.get(i-1).getNameWithLanguage());
             ((ViewHolderLocationItem) viewHolder).itemAddressTextView.setText(items.get(i-1).getAddressWithLanguage());
             ((ViewHolderLocationItem) viewHolder).itemLocationTextView.setText(items.get(i-1).getLocation());
-            Picasso.get().load("test").placeholder(R.drawable.logo).error(R.drawable.ic_error_igap).fit().centerCrop().into(((ViewHolderLocationItem) viewHolder).itemImageView);
+            Picasso.get().load(items.get(i-1).getmExtraDetail().getMainPicture()).placeholder(R.drawable.logo).error(R.drawable.ic_error_igap).fit().centerCrop().into(((ViewHolderLocationItem) viewHolder).itemImageView);
             ((ViewHolderLocationItem) viewHolder).buyTicketButton.setOnClickListener(v -> locationItemClickListener.buyTicket(viewHolder.getAdapterPosition()-1));
             viewHolder.itemView.setOnClickListener(v -> locationItemClickListener.onItem(viewHolder.getAdapterPosition()-1));
         }

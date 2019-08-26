@@ -18,7 +18,7 @@ public class IGashtLocationViewModel extends BaseIGashtViewModel<BaseIGashtRespo
     private MutableLiveData<List<IGashtLocationItem>> locationList = new MutableLiveData<>();
     private MutableLiveData<Boolean> goToLocationDetail = new MutableLiveData<>();
     private MutableLiveData<List<IGashtProvince>> provinceList = new MutableLiveData<>();
-    private MutableLiveData<Boolean> addToFavorite = new MutableLiveData<>();
+//    private MutableLiveData<Boolean> addToFavorite = new MutableLiveData<>();
     private ObservableInt selectIcon = new ObservableInt(R.string.down_arrow_icon);
     private MutableLiveData<Boolean> clearEditText = new MutableLiveData<>();
 
@@ -36,9 +36,9 @@ public class IGashtLocationViewModel extends BaseIGashtViewModel<BaseIGashtRespo
         return goToLocationDetail;
     }
 
-    public MutableLiveData<Boolean> getAddToFavorite() {
-        return addToFavorite;
-    }
+//    public MutableLiveData<Boolean> getAddToFavorite() {
+//        return addToFavorite;
+//    }
 
     public IGashtLocationViewModel() {
         repository = IGashtRepository.getInstance();
