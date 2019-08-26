@@ -1990,4 +1990,6 @@ Want to get it?</string>
     <string name="igasht_count_title">count</string>
     <string name="igasht_service_title">Service</string>
     <string name="igasht_select_location_button_title">انتخاب محل</string>
+    <string name="igasht_selected_location_title">Recreational areas of %s province</string>
+    <string name="igasht_location_found_count">%d items found</string>
 </resources>

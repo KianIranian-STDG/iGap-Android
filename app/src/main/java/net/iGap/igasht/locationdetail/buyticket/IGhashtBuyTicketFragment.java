@@ -44,6 +44,8 @@ public class IGhashtBuyTicketFragment extends IGashtBaseView {
         super.onViewCreated(view, savedInstanceState);
 
         binding.addedPlaceList.addItemDecoration(new DividerItemDecoration(binding.addedPlaceList.getContext(), DividerItemDecoration.VERTICAL));
+        binding.addedPlaceList.setNestedScrollingEnabled(false);
+        binding.addedPlaceList.setHasFixedSize(true);
         binding.addedPlaceList.setAdapter(new OrderedTicketListAdapter(new ArrayList<>(), totalPrice -> ((IGashtBuyTicketViewModel) viewModel).setTotalPrice(totalPrice)));
 
         ((IGashtBuyTicketViewModel) viewModel).getServiceList().observe(getViewLifecycleOwner(), ticketList -> {
