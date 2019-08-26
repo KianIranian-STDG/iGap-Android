@@ -2,6 +2,8 @@ package net.iGap.kuknos.view;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -85,23 +87,37 @@ public class KuknosRestorePassFrag extends BaseFragment {
 
         onNext();
         onError();
+        onProgress();
         textInputManager();
+        getCachedData();
+    }
+
+    private void getCachedData () {
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
+        kuknosSetPassVM.setToken(sharedpreferences.getString("Token", ""));
     }
 
     private void onNext() {
-        kuknosSetPassVM.getNextPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean nextPage) {
-                if (nextPage == true) {
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosPanelFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        kuknosSetPassVM.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
+            if (nextPage == 1) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosPanelFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
+            else if (nextPage == 2) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(KuknosRestoreSignupFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosRestoreSignupFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
     }
@@ -123,6 +139,19 @@ public class KuknosRestorePassFrag extends BaseFragment {
                         snackbar.show();
                     }
                 }
+            }
+        });
+    }
+
+    private void onProgress() {
+        kuknosSetPassVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean == true) {
+                binding.fragKuknosSPSubmit.setText(getString(R.string.kuknos_SignupInfo_submitConnecting));
+                binding.fragKuknosSPProgressV.setEnabled(false);
+            }
+            else {
+                binding.fragKuknosSPSubmit.setText(getString(R.string.kuknos_RestorePass_btn));
+                binding.fragKuknosSPProgressV.setEnabled(true);
             }
         });
     }

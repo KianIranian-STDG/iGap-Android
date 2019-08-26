@@ -2,6 +2,8 @@ package net.iGap.kuknos.view;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -86,6 +88,13 @@ public class KuknosSetPassConfirmFrag extends BaseFragment {
         onError();
         textInputManager();
         progressState();
+        getCachedData();
+    }
+
+    private void getCachedData () {
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
+        kuknosSetPassConfirmVM.setToken(sharedpreferences.getString("Token", ""));
+        kuknosSetPassConfirmVM.setUsername(sharedpreferences.getString("Username", ""));
     }
 
     private void onNext() {

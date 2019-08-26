@@ -10,6 +10,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface KuknosApi {
 
@@ -18,8 +19,8 @@ public interface KuknosApi {
     Call<KuknosLoginM> getUserVerfication(@Field("phone_number") String phoneNum,
                                           @Field("national_id") String nID);
 
-    @GET("info")
-    Call<KuknosInfoM> getUserInfo();
+    @GET("info/{public_key}")
+    Call<KuknosInfoM> getUserInfo(@Path("public_key") String publicID);
 
     @FormUrlEncoded
     @POST("check-account")

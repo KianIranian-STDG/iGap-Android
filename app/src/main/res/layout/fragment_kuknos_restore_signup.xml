@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="net.iGap.kuknos.viewmodel.KuknosSignupInfoVM" />
+            type="net.iGap.kuknos.viewmodel.KuknosRestoreSignupVM" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -95,8 +95,8 @@
                     android:hint="@string/kuknos_SignupInfo_username"
                     android:text="@={viewmodel.username}"
                     android:textSize="@dimen/dp18"
-                    android:inputType="text"
                     android:gravity="center"
+                    android:inputType="text"
                     android:imeOptions="actionDone"/>
             </android.support.design.widget.TextInputLayout>
 

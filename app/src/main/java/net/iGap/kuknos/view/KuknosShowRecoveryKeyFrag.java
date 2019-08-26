@@ -2,6 +2,8 @@ package net.iGap.kuknos.view;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -80,10 +82,15 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
         onErrorObserver();
         onNextObserver();
-        onAdvSecurity();
         progressState();
+        getCachedData();
     }
 
+    private void getCachedData () {
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
+        kuknosShowRecoveryKeyVM.setToken(sharedpreferences.getString("Token", ""));
+        kuknosShowRecoveryKeyVM.setUsername(sharedpreferences.getString("Username", ""));
+    }
 
     private void onErrorObserver() {
         kuknosShowRecoveryKeyVM.getError().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
@@ -99,7 +106,6 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
                     });
                     snackbar.show();
                     binding.fragKuknosIdSubmit.setEnabled(false);
-                    binding.fragKuknosSIAdvSetting.setEnabled(false);
                 }
             }
         });
@@ -112,10 +118,20 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
                 if (nextPage == true) {
                     FragmentManager fragmentManager = getChildFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosSetPassFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosSetPassFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    Fragment fragment;
+                    if (kuknosShowRecoveryKeyVM.getPinCheck().get()) {
+                        fragment = fragmentManager.findFragmentByTag(KuknosSetPassFrag.class.getName());
+                        if (fragment == null) {
+                            fragment = KuknosSetPassFrag.newInstance();
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }
+                    }
+                    else {
+                        fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
+                        if (fragment == null) {
+                            fragment = KuknosPanelFrag.newInstance();
+                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                        }
                     }
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
                 }
@@ -141,23 +157,4 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
         });
     }
 
-    private void onAdvSecurity() {
-
-        kuknosShowRecoveryKeyVM.getAdvancedPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean nextPage) {
-                if (nextPage == true) {
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(KuknosSetPassFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosSetPassFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-                }
-            }
-        });
-
-    }
 }

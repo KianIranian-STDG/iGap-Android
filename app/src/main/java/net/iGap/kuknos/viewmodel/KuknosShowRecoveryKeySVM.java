@@ -1,9 +1,12 @@
 package net.iGap.kuknos.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
+import android.databinding.ObservableField;
 import android.os.Handler;
 
+import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosRestoreM;
 
@@ -12,7 +15,8 @@ public class KuknosShowRecoveryKeySVM extends ViewModel {
     private MutableLiveData<KuknosRestoreM> kuknosRestoreM;
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
-    private String keys;
+    private ObservableField<String> keys = new ObservableField<>();
+    private UserRepo userRepo = new UserRepo();
 
     public KuknosShowRecoveryKeySVM() {
         if (nextPage == null) {
@@ -25,6 +29,7 @@ public class KuknosShowRecoveryKeySVM extends ViewModel {
         if (kuknosRestoreM == null) {
             kuknosRestoreM = new MutableLiveData<KuknosRestoreM>();
         }
+        keys.set(userRepo.getMnemonic());
     }
 
     public void onNext() {
@@ -61,14 +66,6 @@ public class KuknosShowRecoveryKeySVM extends ViewModel {
         this.nextPage = nextPage;
     }
 
-    public String getKeys() {
-        return keys;
-    }
-
-    public void setKeys(String keys) {
-        this.keys = keys;
-    }
-
     public MutableLiveData<KuknosRestoreM> getKuknosRestoreM() {
         return kuknosRestoreM;
     }
@@ -77,4 +74,11 @@ public class KuknosShowRecoveryKeySVM extends ViewModel {
         this.kuknosRestoreM = kuknosRestoreM;
     }
 
+    public ObservableField<String> getKeys() {
+        return keys;
+    }
+
+    public void setKeys(ObservableField<String> keys) {
+        this.keys = keys;
+    }
 }

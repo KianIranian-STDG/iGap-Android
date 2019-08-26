@@ -32,12 +32,13 @@
         <android.support.v7.widget.AppCompatTextView
             style="@style/myIconTextViewStyleGray"
             android:id="@+id/kuknos_wHistoryCell_icon"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/dp20"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/download_ic"
             android:textSize="@dimen/dp28"
             android:gravity="center"
+            android:padding="@dimen/dp4"
             android:textColor="@color/buttonColor"
             android:layout_gravity="center_vertical"/>
 

@@ -34,8 +34,8 @@ public class UserRepo {
         kuknosAPIRepository.checkUser(phoneNum, nID, apiResponse);
     }
 
-    public void getUserInfo(ApiResponse<KuknosInfoM> apiResponse) {
-        kuknosAPIRepository.getUserInfo(apiResponse);
+    public void getUserInfo(String publicKey, ApiResponse<KuknosInfoM> apiResponse) {
+        kuknosAPIRepository.getUserInfo(publicKey, apiResponse);
     }
 
     public void registerUser(String token, String publicKey, String friendlyID, ApiResponse<KuknosSubmitM> apiResponse) {

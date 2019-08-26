@@ -2,6 +2,8 @@ package net.iGap.kuknos.view;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.os.Bundle;
@@ -79,14 +81,21 @@ public class KuknosRestoreFrag extends BaseFragment {
         onErrorObserver();
         onNextObserver();
         progressState();
+        onPINCheck();
+        getCachedData();
+    }
+
+    private void getCachedData () {
+        SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
+        kuknosRestoreVM.setToken(sharedpreferences.getString("Token", ""));
     }
 
     private void onPINCheck() {
         kuknosRestoreVM.getPinCheck().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean)
-                binding.fragKuknosIdPINCheck.setText(getResources().getString(R.string.kuknos_Restore_checkBtn));
+                binding.fragKuknosIdSubmit.setText(getResources().getString(R.string.kuknos_Restore_checkBtn));
             else
-                binding.fragKuknosIdPINCheck.setText(getResources().getString(R.string.kuknos_Restore_Btn));
+                binding.fragKuknosIdSubmit.setText(getResources().getString(R.string.kuknos_Restore_Btn));
         });
     }
 
@@ -115,33 +124,35 @@ public class KuknosRestoreFrag extends BaseFragment {
     }
 
     private void onNextObserver() {
-        kuknosRestoreVM.getNextPage().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean nextPage) {
-                if (nextPage == true) {
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment;
-                    if (binding.fragKuknosIdPINCheck.isChecked()) {
-                        fragment = fragmentManager.findFragmentByTag(KuknosRestorePassFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = KuknosRestorePassFrag.newInstance();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
-                        Bundle bundle = new Bundle();
-                        bundle.putString("key_phrase", kuknosRestoreVM.getKeys().get());
-                        fragment.setArguments(bundle);
+        kuknosRestoreVM.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = null;
+                if (nextPage == 1) {
+                    fragment = fragmentManager.findFragmentByTag(KuknosRestorePassFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosRestorePassFrag.newInstance();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
-                    else {
-                        fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = KuknosPanelFrag.newInstance();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
-                    }
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("key_phrase", kuknosRestoreVM.getKeys().get());
+                    fragment.setArguments(bundle);
                 }
-            }
+                else if (nextPage == 2){
+                    fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosPanelFrag.newInstance();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                }
+                else if (nextPage == 3) {
+                    fragment = fragmentManager.findFragmentByTag(KuknosRestoreSignupFrag.class.getName());
+                    if (fragment == null) {
+                        fragment = KuknosRestoreSignupFrag.newInstance();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         });
     }
 

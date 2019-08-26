@@ -2,19 +2,21 @@ package net.iGap.kuknos.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.os.Handler;
 
 import net.iGap.R;
+import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.kuknos.service.model.KuknosInfoM;
 import net.iGap.kuknos.service.model.KuknosPassM;
+import net.iGap.kuknos.service.model.KuknosSubmitM;
 
 public class KuknosRestorePassVM extends ViewModel {
 
     private MutableLiveData<KuknosPassM> kuknosPassM;
     private MutableLiveData<ErrorM> error;
-    private MutableLiveData<Boolean> nextPage;
+    private MutableLiveData<Integer> nextPage;
     private MutableLiveData<Boolean> progressState;
     private UserRepo userRepo = new UserRepo();
     private String PIN;
@@ -24,24 +26,20 @@ public class KuknosRestorePassVM extends ViewModel {
     private String PIN4;
     private boolean completePin = false;
     private String keyPhrase;
+    private String token;
 
     public KuknosRestorePassVM() {
-        if (kuknosPassM == null) {
-            kuknosPassM = new MutableLiveData<KuknosPassM>();
-        }
-        if (error == null) {
-            error = new MutableLiveData<ErrorM>();
-        }
-        if (nextPage == null) {
-            nextPage = new MutableLiveData<Boolean>();
-            nextPage.setValue(false);
-        }
+        kuknosPassM = new MutableLiveData<>();
+        error = new MutableLiveData<>();
+        nextPage = new MutableLiveData<>();
+        nextPage.setValue(0);
+        progressState = new MutableLiveData<>();
     }
 
     public void onSubmitBtn() {
         if (completePin){
             PIN = PIN1 + PIN2 + PIN3 + PIN4;
-            nextPage.setValue(true);
+            generateKeypair();
         }
         else {
             error.setValue(new ErrorM(true, "Set Pin", "0", R.string.kuknos_SetPass_error));
@@ -50,26 +48,34 @@ public class KuknosRestorePassVM extends ViewModel {
 
     private void generateKeypair() {
         progressState.setValue(true);
-        // TODO call API
-        // Data is Correct & proceed
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        userRepo.setMnemonic(keyPhrase);
+        userRepo.setPIN(PIN);
+        try {
+            userRepo.generateKeyPairWithMnemonicAndPIN();
+        } catch (WalletException e) {
+            error.setValue(new ErrorM(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
+            e.printStackTrace();
+        }
+        checkUserInfo();
+    }
+
+    private void checkUserInfo() {
+        userRepo.getUserInfo(userRepo.getAccountID(), new ApiResponse<KuknosInfoM>() {
             @Override
-            public void run() {
-                userRepo.setMnemonic(keyPhrase);
-                userRepo.setPIN(PIN);
-                try {
-                    userRepo.generateKeyPairWithMnemonicAndPIN();
-                    //success
-                    nextPage.setValue(true);
-                } catch (WalletException e) {
-                    //error
-                    error.setValue(new ErrorM(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
-                    e.printStackTrace();
-                }
-                progressState.setValue(false);
+            public void onResponse(KuknosInfoM kuknosInfoM) {
+                nextPage.setValue(1);
             }
-        }, 1000);
+
+            @Override
+            public void onFailed(String error) {
+                nextPage.setValue(2);
+            }
+
+            @Override
+            public void setProgressIndicator(boolean visibility) {
+                progressState.setValue(visibility);
+            }
+        });
     }
 
     // setter and getter
@@ -122,14 +128,6 @@ public class KuknosRestorePassVM extends ViewModel {
         this.error = error;
     }
 
-    public MutableLiveData<Boolean> getNextPage() {
-        return nextPage;
-    }
-
-    public void setNextPage(MutableLiveData<Boolean> nextPage) {
-        this.nextPage = nextPage;
-    }
-
     public boolean isCompletePin() {
         return completePin;
     }
@@ -148,5 +146,25 @@ public class KuknosRestorePassVM extends ViewModel {
 
     public void setKeyPhrase(String keyPhrase) {
         this.keyPhrase = keyPhrase;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public MutableLiveData<Boolean> getProgressState() {
+        return progressState;
+    }
+
+    public void setProgressState(MutableLiveData<Boolean> progressState) {
+        this.progressState = progressState;
+    }
+
+    public MutableLiveData<Integer> getNextPage() {
+        return nextPage;
+    }
+
+    public void setNextPage(MutableLiveData<Integer> nextPage) {
+        this.nextPage = nextPage;
     }
 }

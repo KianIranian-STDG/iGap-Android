@@ -6,19 +6,22 @@ import android.databinding.ObservableField;
 import android.os.Handler;
 
 import net.iGap.R;
+import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosRestoreM;
+import net.iGap.kuknos.service.model.KuknosSubmitM;
 
 public class KuknosShowRecoveryKeyVM extends ViewModel {
 
     private UserRepo userRepo = new UserRepo();
     private MutableLiveData<ErrorM> error;
     private MutableLiveData<Boolean> nextPage;
-    private MutableLiveData<Boolean> advancedPage;
     private MutableLiveData<Boolean> progressState;
     private ObservableField<String> mnemonic = new ObservableField<>();
+    private ObservableField<Boolean> pinCheck = new ObservableField<>();
+    private String token, username;
 
     public KuknosShowRecoveryKeyVM() {
         if (nextPage == null) {
@@ -27,9 +30,6 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
         }
         if (error == null) {
             error = new MutableLiveData<ErrorM>();
-        }
-        if (advancedPage == null) {
-            advancedPage = new MutableLiveData<Boolean>();
         }
         if (progressState == null) {
             progressState = new MutableLiveData<Boolean>();
@@ -46,31 +46,40 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
         mnemonic.set(userRepo.getMnemonic());
     }
 
-    public void onAdvancedSecurity() {
-        advancedPage.setValue(true);
-    }
-
     public void onNext() {
 
         progressState.setValue(true);
-        // TODO call API
-        // Data is Correct & proceed
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    userRepo.generateKeyPairWithMnemonic();
-                    //success
-                    nextPage.setValue(true);
-                } catch (WalletException e) {
-                    //error
-                    error.setValue(new ErrorM(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
-                    e.printStackTrace();
-                }
-                progressState.setValue(false);
+        if (pinCheck.get()) {
+            nextPage.setValue(true);
+            progressState.setValue(false);
+        }
+        else {
+            userRepo.setPIN("-1");
+            try {
+                userRepo.generateKeyPairWithMnemonic();
+            } catch (WalletException e) {
+                error.setValue(new ErrorM(true, "Internal Error", "2", R.string.kuknos_RecoverySK_ErrorGenerateKey));
+                e.printStackTrace();
             }
-        }, 1000);
+            userRepo.registerUser(token, userRepo.getAccountID(), username, new ApiResponse<KuknosSubmitM>() {
+                @Override
+                public void onResponse(KuknosSubmitM kuknosSubmitM) {
+                    if (kuknosSubmitM.getOk() == 1) {
+                        nextPage.setValue(true);
+                    }
+                }
+
+                @Override
+                public void onFailed(String error) {
+
+                }
+
+                @Override
+                public void setProgressIndicator(boolean visibility) {
+                    progressState.setValue(visibility);
+                }
+            });
+        }
     }
 
     //Setter and Getter
@@ -99,19 +108,27 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
         this.progressState = progressState;
     }
 
-    public MutableLiveData<Boolean> getAdvancedPage() {
-        return advancedPage;
-    }
-
-    public void setAdvancedPage(MutableLiveData<Boolean> advancedPage) {
-        this.advancedPage = advancedPage;
-    }
-
     public ObservableField<String> getMnemonic() {
         return mnemonic;
     }
 
     public void setMnemonic(ObservableField<String> mnemonic) {
         this.mnemonic = mnemonic;
+    }
+
+    public ObservableField<Boolean> getPinCheck() {
+        return pinCheck;
+    }
+
+    public void setPinCheck(ObservableField<Boolean> pinCheck) {
+        this.pinCheck = pinCheck;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

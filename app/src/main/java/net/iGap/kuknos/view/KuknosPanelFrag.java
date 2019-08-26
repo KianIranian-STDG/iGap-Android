@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentKuknosPanelBinding;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.DefaultRoundDialog;
@@ -88,6 +89,7 @@ public class KuknosPanelFrag extends BaseFragment {
                     @Override
                     public void onLeftIconClickListener(View view) {
                         popBackStackFragment();
+                        ((ActivityMain) getActivity()).removeAllFragmentFromMain();
                     }
                 })
                 .setLogoShown(true);
@@ -207,6 +209,9 @@ public class KuknosPanelFrag extends BaseFragment {
                 if (errorM.getState() == true) {
                     if (errorM.getMessage().equals("0")){
                         binding.fragKuknosPError.setVisibility(View.VISIBLE);
+                        binding.fragKuknosPSend.setEnabled(false);
+                        binding.fragKuknosPHistory.setEnabled(false);
+                        binding.fragKuknosPTrading.setEnabled(false);
                     }
                     if (errorM.getMessage().equals("1")){
                         Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);

@@ -5,10 +5,12 @@ import android.arch.lifecycle.ViewModel;
 import android.os.Handler;
 
 import net.iGap.R;
+import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosPassM;
+import net.iGap.kuknos.service.model.KuknosSubmitM;
 
 public class KuknosSetPassConfirmVM extends ViewModel {
 
@@ -24,6 +26,7 @@ public class KuknosSetPassConfirmVM extends ViewModel {
     private String PIN4;
     private boolean completePin = false;
     private UserRepo userRepo = new UserRepo();
+    private String token, username;
 
     public KuknosSetPassConfirmVM() {
         if (kuknosPassM == null) {
@@ -61,25 +64,38 @@ public class KuknosSetPassConfirmVM extends ViewModel {
     }
 
     public void sendDataToServer() {
-        progressState.setValue(true);
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                userRepo.setPIN(PIN);
-                try {
-                    userRepo.generateKeyPairWithMnemonicAndPIN();
-                    //success
-                    nextPage.setValue(true);
-                } catch (WalletException e) {
-                    //error
-                    error.setValue(new ErrorM(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
-                    e.printStackTrace();
-                }
-                progressState.setValue(false);
+        registerUser();
+    }
 
+    public void registerUser() {
+        progressState.setValue(true);
+        userRepo.setPIN(PIN);
+        try {
+            userRepo.generateKeyPairWithMnemonicAndPIN();
+        } catch (WalletException e) {
+            error.setValue(new ErrorM(true, "Internal Error", "1", R.string.kuknos_RecoverySK_ErrorGenerateKey));
+            e.printStackTrace();
+        }
+
+        userRepo.registerUser(token, userRepo.getAccountID(), username, new ApiResponse<KuknosSubmitM>() {
+            @Override
+            public void onResponse(KuknosSubmitM kuknosSubmitM) {
+                if (kuknosSubmitM.getOk() == 1) {
+                    nextPage.setValue(true);
+                }
             }
-        }, 1000);
+
+            @Override
+            public void onFailed(String error) {
+                // TODO delete this
+                nextPage.setValue(true);
+            }
+
+            @Override
+            public void setProgressIndicator(boolean visibility) {
+                progressState.setValue(visibility);
+            }
+        });
     }
 
     // setter and getter
@@ -170,5 +186,13 @@ public class KuknosSetPassConfirmVM extends ViewModel {
 
     public void setProgressState(MutableLiveData<Boolean> progressState) {
         this.progressState = progressState;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

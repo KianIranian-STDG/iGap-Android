@@ -13,6 +13,7 @@ import org.stellar.sdk.AssetTypeCreditAlphaNum4;
 import org.stellar.sdk.AssetTypeNative;
 import org.stellar.sdk.ChangeTrustOperation;
 import org.stellar.sdk.KeyPair;
+import org.stellar.sdk.ManageSellOfferOperation;
 import org.stellar.sdk.Memo;
 import org.stellar.sdk.Network;
 import org.stellar.sdk.PaymentOperation;
@@ -25,6 +26,7 @@ import org.stellar.sdk.responses.OfferResponse;
 import org.stellar.sdk.responses.Page;
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 import org.stellar.sdk.responses.operations.OperationResponse;
+import org.stellar.sdk.xdr.ManageOfferOp;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -32,7 +34,7 @@ import java.util.Objects;
 public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
 
     enum API {
-        USER_ACCOUNT, PAYMENT_SEND, PAYMENTS_ACCOUNT, ASSETS, CHANGE_TRUST, OFFERS_LIST, TRADES_LIST, ADD_OFFER
+        USER_ACCOUNT, PAYMENT_SEND, PAYMENTS_ACCOUNT, ASSETS, CHANGE_TRUST, OFFERS_LIST, TRADES_LIST, MANAGE_OFFER
     }
 
     private ApiResponse<T> response;
@@ -90,6 +92,8 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
                 return getOffersList(ts[0]);
             case TRADES_LIST:
                 return getTrades(ts[0]);
+            case MANAGE_OFFER:
+                return manangeOffer(ts[0], ts[1], ts[2], ts[3], ts[4], ts[5], ts[6]);
         }
         return null;
     }
@@ -299,6 +303,55 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
             successStatus = false;
             e.printStackTrace();
             return (T) e.getMessage();
+        }
+    }
+
+    private T manangeOffer(String accountSeed, String sourceCode, String sourceIssuer,
+                           String counterCode, String counterIssuer, String amount, String price) {
+        Server server = new Server(KUKNOS_Horizan_Server);
+        Network network = new Network("Kuknos-NET");
+        KeyPair source = KeyPair.fromSecretSeed(accountSeed);
+        Asset sourceAsset = new AssetTypeCreditAlphaNum4(sourceCode, sourceIssuer);
+        Asset counterAsset = new AssetTypeCreditAlphaNum4(counterCode, counterIssuer);
+
+        // If there was no error, load up-to-date information on your account.
+        AccountResponse sourceAccount = null;
+        try {
+            sourceAccount = server.accounts().account(source.getAccountId());
+        } catch (IOException e) {
+            successStatus = false;
+            e.printStackTrace();
+            return (T) ("" + R.string.kuknos_send_errorServer);
+        }
+
+        Transaction transaction = new Transaction.Builder(Objects.requireNonNull(sourceAccount), network)
+                .addOperation(new ManageSellOfferOperation.Builder(sourceAsset, counterAsset, amount, price).build())
+                .addMemo(Memo.text(""))
+                .setTimeout(60)
+                .setOperationFee(1000)
+                .build();
+        // Sign the transaction to prove you are actually the person sending it.
+        transaction.sign(source);
+
+        try {
+            SubmitTransactionResponse response = server.submitTransaction(transaction);
+            //todo clean this hard code for monitoring
+            Gson gson =  new Gson();
+            Log.d("amini", "paymentToOther: " + gson.toJson(response) + "\n" + response.isSuccess());
+            if (response.isSuccess()) {
+                successStatus = true;
+                return (T) response;
+            }
+            else {
+                // todo change response code for this option
+                successStatus = false;
+                return (T) checkResponseCode(response);
+            }
+        } catch (Exception e) {
+            // todo change response code for this option
+            successStatus = false;
+            e.printStackTrace();
+            return (T) ("" + R.string.kuknos_send_errorServer);
         }
     }
 

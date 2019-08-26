@@ -30,4 +30,9 @@ public class TradeRepo {
     public void getTradesList(ApiResponse<Page<OfferResponse>> apiResponse) {
         kuknosAPIRepository.getTradesList(userRepo.getAccountID(), apiResponse);
     }
+
+    public void manangeOffer(String accountSeed, String sourceCode, String sourceIssuer,
+                             String counterCode, String counterIssuer, ApiResponse<SubmitTransactionResponse> apiResponse) {
+        kuknosAPIRepository.manageOffer(userRepo.getSeedKey(), sourceCode, sourceIssuer, counterCode, counterIssuer, apiResponse);
+    }
 }

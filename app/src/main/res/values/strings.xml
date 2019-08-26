@@ -2078,7 +2078,6 @@
     <string name="kuknos_setting_copySFailWriteFile">Something went wrong. Please try again later.</string>
     <string name="kuknos_setting_copySSuccessMessage">Your Seed key is ready and available in Download folder.</string>
     <string name="kuknos_setting_copySSuccessTitle">Success</string>
-
     <string name="kuknos_login_progress_load">Loading...</string>
     <string name="kuknos_login_progress_next">Next</string>
     <string name="kuknos_panel_addAsset">Add Asset</string>
@@ -2112,11 +2111,12 @@
     <string name="kuknos_AddAsset_title">Current Assets</string>
     <string name="kuknos_trade_noItem">There is no record.</string>
     <string name="kuknos_Restore_CheckPIN">I had set PIN code for my account before.</string>
-    <string name="kuknos_RestorePass_title">Enter a 4 digit PIN</string>
-    <string name="kuknos_RestorePass_message">This 4 numeric PIN will be used to restore your secret keys.</string>
+    <string name="kuknos_RestorePass_title">Enter your 4 digit PIN code</string>
+    <string name="kuknos_RestorePass_message">This 4 numeric PIN will be used to restore your secret key.</string>
     <string name="kuknos_RestorePass_btn">Retrieve</string>
     <string name="kuknos_Restore_checkBtn">Next</string>
     <string name="kuknos_Entry_RTSeedKey_str">Retrieve With Seed Key</string>
     <string name="kuknos_SignupInfo_friendlyTial">*igap.net</string>
+    <string name="kuknos_RecoverySK_CheckPIN">I want to set a PIN code for extra security.</string>
 
 </resources>

@@ -56,12 +56,15 @@ public class KuknosAPIRepository {
         });
     }
 
-    public void getUserInfo(ApiResponse<KuknosInfoM> apiResponse) {
+    public void getUserInfo(String publicKey, ApiResponse<KuknosInfoM> apiResponse) {
         apiResponse.setProgressIndicator(true);
-        apiService.getUserInfo().enqueue(new Callback<KuknosInfoM>() {
+        apiService.getUserInfo(publicKey).enqueue(new Callback<KuknosInfoM>() {
             @Override
             public void onResponse(Call<KuknosInfoM> call, Response<KuknosInfoM> response) {
-                apiResponse.onResponse(response.body());
+                if (response.isSuccessful())
+                    apiResponse.onResponse(response.body());
+                else if (response.code() == 400)
+                    apiResponse.onFailed("notRegisteredBefore");
                 apiResponse.setProgressIndicator(false);
             }
 
@@ -92,13 +95,13 @@ public class KuknosAPIRepository {
 
     public void registerUser(String token, String publicKey, String friendlyID, ApiResponse<KuknosSubmitM> apiResponse) {
         apiResponse.setProgressIndicator(true);
-        apiService.registerUser(token, publicKey, friendlyID).enqueue(new Callback<KuknosSubmitM>() {
+        apiService.registerUser(token, publicKey, friendlyID + "*igap.net").enqueue(new Callback<KuknosSubmitM>() {
             @Override
             public void onResponse(Call<KuknosSubmitM> call, Response<KuknosSubmitM> response) {
                 if (response.isSuccessful())
                     apiResponse.onResponse(response.body());
                 else if (response.code() == 400) {
-                    apiResponse.onFailed("registeredBefore");
+                    apiResponse.onFailed("Server Error");
                 }
                 apiResponse.setProgressIndicator(false);
             }
@@ -144,5 +147,11 @@ public class KuknosAPIRepository {
     public void getTradesList(String userID, ApiResponse<Page<OfferResponse>> apiResponse) {
         KuknosAPIAsync<Page<OfferResponse>> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.TRADES_LIST);
         temp.execute(userID);
+    }
+
+    public void manageOffer(String accountSeed, String sourceCode, String sourceIssuer,
+                            String counterCode, String counterIssuer, ApiResponse<SubmitTransactionResponse> apiResponse) {
+        KuknosAPIAsync<SubmitTransactionResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.MANAGE_OFFER);
+        temp.execute(accountSeed, sourceCode, sourceIssuer, counterCode, counterIssuer);
     }
 }

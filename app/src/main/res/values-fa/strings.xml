@@ -2077,4 +2077,44 @@
     <string name="kuknos_setting_copySFailWriteFile">خطایی رخ داده است. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="kuknos_setting_copySSuccessMessage">کلید مخفی شما آماده است. میتوانید در فولدر دانلود ها به کلید خود را مشاهده کنید.</string>
     <string name="kuknos_setting_copySSuccessTitle">موفقیت</string>
+    <string name="kuknos_login_progress_load">دریافت داده...</string>
+    <string name="kuknos_login_progress_next">بعدی</string>
+    <string name="kuknos_panel_addAsset">افزودن دارایی</string>
+    <string name="kuknos_login_error_server_ErrorStr">خطای سرور: عدم جواب. لطفا دوباره تلاش کنید.</string>
+    <string name="kuknos_RecoverySK_ErrorGenerateMn">عدم امکان تولید زنجیره کلمات. لطفا با پشتیبانی تماس بگیرید.</string>
+    <string name="kuknos_RecoverySK_ErrorGenerateKey">عدم امکان تولید کلید عمومی. لطفا با پشتیبانی تماس بگیرید.</string>
+    <string name="kuknos_recieve_walletCopy">آدرس کیف پول من: \n</string>
+    <string name="kuknos_recieve_error">امکان تولید رمزینه گرافیکی وجود ندارد.</string>
+    <string name="kuknos_panelStr_firstUser">حساب کاربری درخواستی یافت نشد یا موجودی آن خالی است. در این صورت از منوی دریافت استفاده کنید.</string>
+    <string name="Kuknos_transaction_error1">درخواست شما موفقیت آمیز نبود. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
+    <string name="Kuknos_transaction_error2">خطای سرور. لطفا دوباره تلاش کنید.</string>
+    <string name="Kuknos_transaction_error3">شماره تراکنش اشتباه است. لطفا دوباره تلاش کنید.</string>
+    <string name="Kuknos_transaction_error4">شناسایی کاربر موفقیت آمیز نبود. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
+    <string name="Kuknos_transaction_error5">اکانت مقصد وجود ندارد.</string>
+    <string name="Kuknos_transaction_error6">اعتبار برای کارمزد تراکنش کافی نیست.</string>
+    <string name="Kuknos_transaction_error7">اعتبار شما کافی نیست.</string>
+    <string name="Kuknos_transaction_error8">خطای داخلی: لطفا دقایقی دیگر دوباره تلاش کنید.</string>
+    <string name="kuknos_send_walletIDError2">آدرس کیف پول معتبر نیست.</string>
+    <string name="kuknos_wHistory_sent">ارسال</string>
+    <string name="kuknos_wHistory_receive">دریافت</string>
+    <string name="kuknos_wHistory_time">زمان</string>
+    <string name="kuknos_wHistory_creatAccount">ایجاد حساب کاربری</string>
+    <string name="kuknos_AddAsset_Title">آیگپی</string>
+    <string name="kuknos_AddAsset_SubTitle">آیگپ</string>
+    <string name="kuknos_AddAsset_Desc">Far far away, behind the word mountains, far from the
+        countries Vokalia and Consonantia, there live the blind texts. Separated they live in
+        Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river
+        named Duden flows by their place and supplies it with the necessary regelialia. It is a
+        paradisematic country, in which roasted parts of sentences fly into your mouth. </string>
+    <string name="kuknos_AddAsset_AddBTN">تمامی دارایی ها</string>
+    <string name="kuknos_AddAsset_title">دارایی های فعلی</string>
+    <string name="kuknos_trade_noItem">هیچ موردی یافت نشد.</string>
+    <string name="kuknos_Restore_CheckPIN">من در هنگام ساخت حساب رمز ورود ایجاد کرده ام.</string>
+    <string name="kuknos_RestorePass_title">رمز 4 رقمی خود را وارد کنید.</string>
+    <string name="kuknos_RestorePass_message">این رمز 4 رقمی برای تولید کلید عمومی و خصوصی شما مورد استفاده قرار میگیرد.</string>
+    <string name="kuknos_RestorePass_btn">بازیابی</string>
+    <string name="kuknos_Restore_checkBtn">بعدی</string>
+    <string name="kuknos_Entry_RTSeedKey_str">بازیابی از طریق کلید خصوصی</string>
+    <string name="kuknos_SignupInfo_friendlyTial">*igap.net</string>
+    <string name="kuknos_RecoverySK_CheckPIN">تمایل دارم برای ساخت حساب رمز 4 رقمی داشته باشم.</string>
 </resources>

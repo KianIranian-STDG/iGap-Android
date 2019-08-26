@@ -6,11 +6,13 @@ import android.databinding.ObservableField;
 import android.os.Handler;
 
 import net.iGap.R;
+import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSignupM;
+import net.iGap.kuknos.service.model.KuknosSubmitM;
 
-public class KuknosSignupInfoVM extends ViewModel {
+public class KuknosRestoreSignupVM extends ViewModel {
 
     private MutableLiveData<KuknosSignupM> kuknosSignupM;
     private MutableLiveData<ErrorM> error;
@@ -25,7 +27,7 @@ public class KuknosSignupInfoVM extends ViewModel {
     private String token;
     private UserRepo userRepo = new UserRepo();
 
-    public KuknosSignupInfoVM() {
+    public KuknosRestoreSignupVM() {
 
         name.set(userRepo.getUserFirstName());
         family.set(userRepo.getUserLastName());
@@ -46,7 +48,7 @@ public class KuknosSignupInfoVM extends ViewModel {
             return;
         }
         if (usernameIsValid) {
-            nextPage.setValue(true);
+            submitUser();
             return;
         }
         isUsernameValid(true);
@@ -97,12 +99,34 @@ public class KuknosSignupInfoVM extends ViewModel {
                 checkUsernameState.setValue(1);
                 usernameIsValid = true;
                 if (isCallFromBTN)
-                    nextPage.setValue(true);
+                    submitUser();
                 //error
 //                checkUsernameState.setValue(2);
 //                error.setValue(new ErrorM(true, "Server Error", "1", R.string.kuknos_login_error_server_str));
             }
         }, 1000);
+    }
+
+    private void submitUser() {
+        userRepo.registerUser(token, userRepo.getAccountID(), username.get(), new ApiResponse<KuknosSubmitM>() {
+            @Override
+            public void onResponse(KuknosSubmitM kuknosSubmitM) {
+                if (kuknosSubmitM.getOk() == 1) {
+                    nextPage.setValue(true);
+                }
+            }
+
+            @Override
+            public void onFailed(String error) {
+                // TODO delete this fucking shit
+                nextPage.setValue(true);
+            }
+
+            @Override
+            public void setProgressIndicator(boolean visibility) {
+                progressSendDServerState.setValue(visibility);
+            }
+        });
     }
 
     public void cancelUsernameServer() {
