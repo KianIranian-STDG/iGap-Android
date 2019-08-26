@@ -79,6 +79,19 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
                     .load();
         });
 
+        viewModel.getOnChargeClickListener().observe(getViewLifecycleOwner() , isOpen -> {
+            if (getActivity() == null) return;
+
+            if (adapter.getSelectedPlaqueList().size() == 0){
+                Toast.makeText(getContext(), getString(R.string.no_item_selected), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            new HelperFragment(getActivity().getSupportFragmentManager() , FragmentCPayCharge.getInstance(adapter.getSelectedPlaqueList().get(0)))
+                    .setReplace(false)
+                    .load();
+        });
+
         viewModel.getPlaqueChangeListener().observe(getViewLifecycleOwner() , isUpdate ->{
             if (isUpdate != null && isUpdate) viewModel.getPlaqueListByApi();
         });

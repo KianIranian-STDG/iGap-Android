@@ -10,6 +10,7 @@ public class FragmentSeePayViewModel extends BaseCPayViewModel<UserPlaquesModel>
 
     private MutableLiveData<Boolean> onAddClickListener = new MutableLiveData<>();
     private MutableLiveData<Boolean> onInquiryClickListener = new MutableLiveData<>();
+    private MutableLiveData<Boolean> onChargeClickListener = new MutableLiveData<>();
     private MutableLiveData<UserPlaquesModel> plaquesReceiverListener = new MutableLiveData<>();
 
     public FragmentSeePayViewModel() {
@@ -37,12 +38,20 @@ public class FragmentSeePayViewModel extends BaseCPayViewModel<UserPlaquesModel>
         return plaquesReceiverListener;
     }
 
+    public MutableLiveData<Boolean> getOnChargeClickListener() {
+        return onChargeClickListener;
+    }
+
     public void onAddCarClick() {
         onAddClickListener.postValue(true);
     }
 
     public void onInquiryClick() {
         onInquiryClickListener.postValue(true);
+    }
+
+    public void onChargeClicked(){
+        onChargeClickListener.setValue(true);
     }
 
     public void onRetryClicked() {

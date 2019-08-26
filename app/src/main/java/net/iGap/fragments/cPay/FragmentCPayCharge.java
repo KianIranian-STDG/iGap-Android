@@ -9,10 +9,12 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentCpayChargeBinding;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperCPay;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentCPayChargeViewModel;
@@ -22,8 +24,17 @@ public class FragmentCPayCharge extends BaseFragment implements ToolbarListener 
 
     private FragmentCPayChargeViewModel viewModel ;
     private FragmentCpayChargeBinding binding ;
+    private String plaqueText;
 
     public FragmentCPayCharge() {
+    }
+
+    public static FragmentCPayCharge getInstance(String plaque){
+        FragmentCPayCharge fragmentCPayCharge = new FragmentCPayCharge();
+        Bundle bundle = new Bundle();
+        bundle.putString(HelperCPay.PLAQUE, plaque );
+        fragmentCPayCharge.setArguments(bundle);
+        return fragmentCPayCharge ;
     }
 
     @Override
@@ -44,6 +55,27 @@ public class FragmentCPayCharge extends BaseFragment implements ToolbarListener 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initToolbar();
+
+        if (getArguments() != null)
+            plaqueText = getArguments().getString(HelperCPay.PLAQUE);
+
+        if (plaqueText == null){
+            Toast.makeText(getContext(), getString(R.string.plaque_is_not_valid), Toast.LENGTH_LONG).show();
+            popBackStackFragment();
+        }
+
+        initPlaque();
+    }
+
+    private void initPlaque() {
+
+        String[] plaqueValue = HelperCPay.getPlaque(plaqueText);
+
+        binding.plaqueView.setPlaque1(plaqueValue[0]);
+        binding.plaqueView.setPlaqueAlphabet(HelperCPay.getPlaqueAlphabet(Integer.valueOf(plaqueValue[1])));
+        binding.plaqueView.setPlaque2(plaqueValue[2]);
+        binding.plaqueView.setPlaqueCity(plaqueValue[3]);
+
     }
 
     private void initToolbar() {

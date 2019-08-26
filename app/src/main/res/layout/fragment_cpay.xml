@@ -36,12 +36,13 @@
         <android.support.design.button.MaterialButton
             android:id="@+id/btn_add_car_"
             style="?iGapButtonStroke"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp20"
-            android:minWidth="@dimen/dp200"
             android:onClick="@{()-> viewModel.onAddCarClick()}"
             android:text="@string/add_car"
+            android:layout_marginRight="@dimen/dp20"
+            android:layout_marginLeft="@dimen/dp20"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rv_plaques" />
@@ -49,15 +50,31 @@
         <android.support.design.button.MaterialButton
             android:id="@+id/btn_inquiry"
             style="?iGapButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp20"
-            android:minWidth="@dimen/dp200"
+            android:layout_marginTop="@dimen/dp16"
             android:onClick="@{()-> viewModel.onInquiryClick()}"
             android:text="@string/inquiry"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginEnd="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp10"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintEnd_toStartOf="@id/btn_charge"
+            app:layout_constraintStart_toStartOf="@id/btn_add_car_"
             app:layout_constraintTop_toBottomOf="@id/btn_add_car_" />
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/btn_charge"
+            style="?iGapButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{()-> viewModel.onChargeClicked()}"
+            android:text="@string/charge"
+            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginStart="@dimen/dp10"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintEnd_toEndOf="@id/btn_add_car_"
+            app:layout_constraintStart_toEndOf="@id/btn_inquiry"
+            app:layout_constraintTop_toTopOf="@id/btn_inquiry" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/txt_no_car"
@@ -125,14 +142,14 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="gone"
-            app:constraint_referenced_ids="btn_add_car , txt_no_car" />
+            app:constraint_referenced_ids="btn_add_car,txt_no_car" />
 
         <android.support.constraint.Group
             android:id="@+id/state_has_car"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="gone"
-            app:constraint_referenced_ids="btn_inquiry , btn_add_car_ , rv_plaques ,lbl_plaques " />
+            app:constraint_referenced_ids="btn_inquiry,btn_charge,btn_add_car_,rv_plaques,lbl_plaques" />
 
     </android.support.constraint.ConstraintLayout>
 
