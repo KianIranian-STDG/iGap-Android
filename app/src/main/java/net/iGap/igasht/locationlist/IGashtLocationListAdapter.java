@@ -50,8 +50,8 @@ public class IGashtLocationListAdapter extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         if (viewHolder instanceof ViewHolderProvinceInfo) {
-            ((ViewHolderProvinceInfo) viewHolder).locationItemCount.setText((getItemCount() - 1) + "");
-            ((ViewHolderProvinceInfo) viewHolder).provinceName.setText(provinceSelectedName);
+            ((ViewHolderProvinceInfo) viewHolder).locationItemCount.setText(String.format(((ViewHolderProvinceInfo) viewHolder).locationItemCount.getContext().getString(R.string.igasht_location_found_count),(getItemCount() - 1)));
+            ((ViewHolderProvinceInfo) viewHolder).provinceName.setText(String.format(((ViewHolderProvinceInfo) viewHolder).provinceName.getContext().getString(R.string.igasht_selected_location_title), provinceSelectedName));
         } else if (viewHolder instanceof ViewHolderLocationItem) {
             ((ViewHolderLocationItem) viewHolder).itemTitleTextView.setText(items.get(i-1).getNameWithLanguage());
             ((ViewHolderLocationItem) viewHolder).itemAddressTextView.setText(items.get(i-1).getAddressWithLanguage());
