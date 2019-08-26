@@ -12,7 +12,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -38,8 +37,6 @@ import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentWalletAgrement;
-import net.iGap.fragments.beepTunes.main.BeepTunesFragment;
-import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
@@ -47,9 +44,12 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.viewmodel.ActivityCallViewModel;
 
 import org.paygear.WalletActivity;
+
+import io.realm.Realm;
 
 import static android.support.constraint.ConstraintSet.BOTTOM;
 import static android.support.constraint.ConstraintSet.END;
@@ -1024,7 +1024,13 @@ public class HelperToolbar {
 
     private void onScannerClickListener() {
         if (!G.isWalletRegister) {
-            new HelperFragment(mFragmentActivity.getSupportFragmentManager() ,FragmentWalletAgrement.newInstance(ActivityMain.userPhoneNumber.substring(2))).load();
+            try (Realm realm = Realm.getDefaultInstance()) {
+                RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (userInfo != null) {
+                    String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
+                    new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
+                }
+            }
         } else {
             Intent intent = new Intent(mContext, WalletActivity.class);
             intent.putExtra("Language", "fa");
