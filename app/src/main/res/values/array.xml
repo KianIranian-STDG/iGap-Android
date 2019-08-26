@@ -355,6 +355,19 @@
     <item> @string/charge_20_ir</item>
   </string-array>
 
+  <string-array name="cpay_charge">
+    <item>@string/requested_amount</item>
+    <item>@string/charge_5</item>
+    <item>@string/charge_10</item>
+    <item>@string/charge_20</item>
+    <item>@string/charge_50</item>
+    <item>@string/charge_100</item>
+    <item>@string/insert_amount_in_rial</item>
+    <item></item>
+    <item></item>
+    <item></item>
+  </string-array>
+
   <string name="bluetooth">bluetooth</string>
   <string name="speacker">speacker</string>
 </resources>

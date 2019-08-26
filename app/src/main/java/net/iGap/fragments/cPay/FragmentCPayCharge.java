@@ -9,9 +9,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import net.iGap.R;
+import net.iGap.adapter.cPay.CPayChargeSpinnerAdapter;
 import net.iGap.databinding.FragmentCpayChargeBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCPay;
@@ -65,6 +67,25 @@ public class FragmentCPayCharge extends BaseFragment implements ToolbarListener 
         }
 
         initPlaque();
+        setupSpinner();
+        initCallback();
+
+    }
+
+    private void initCallback() {
+
+        viewModel.getEditTextVisibilityListener().observe(getViewLifecycleOwner() , isVisible -> {
+            if (isVisible == null) return;
+            binding.edtAmount.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+        });
+
+    }
+
+    private void setupSpinner() {
+
+        CPayChargeSpinnerAdapter adapter = new CPayChargeSpinnerAdapter(getResources().getStringArray(R.array.cpay_charge));
+        binding.spCharge.setAdapter(adapter);
+
     }
 
     private void initPlaque() {

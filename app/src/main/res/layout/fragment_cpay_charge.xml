@@ -70,7 +70,7 @@
             android:gravity="center|top"
             style="?textTitleColorSettingTheme"
             app:fontFamily="@font/main_font"
-            android:text="@string/rial"
+            android:text="@{@string/amount_rials(viewModel.userCurrentAmount)}"
             android:paddingBottom="@dimen/dp20"
             android:layout_marginTop="@dimen/dp20"
             android:textStyle="bold"
@@ -90,6 +90,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="@dimen/dp44"
+            android:paddingRight="@dimen/dp10"
+            android:paddingLeft="@dimen/dp10"
+            android:onItemSelected="@{(parent,view,position,id)->viewModel.onSpinnerItemSelected(position)}"
             app:layout_constraintTop_toBottomOf="@id/plaque_bg"
             app:layout_constraintStart_toStartOf="@id/plaqueView"
             app:layout_constraintEnd_toEndOf="@id/plaqueView"
@@ -107,6 +110,8 @@
             android:hint="@string/at_least_cpay_amout"
             android:paddingLeft="@dimen/dp10"
             android:gravity="center"
+            android:inputType="number"
+            android:afterTextChanged="@{(s)->viewModel.onEditTextChangeListener(s.toString())}"
             android:text=""
             android:background="@drawable/background_cancel_money_action"
             style="?hintColorSettingTheme"
@@ -121,6 +126,7 @@
             app:layout_constraintEnd_toEndOf="@id/plaqueView"
             app:layout_constraintTop_toBottomOf="@id/edtAmount"
             android:layout_marginTop="@dimen/dp32"
+            android:onClick="@{()-> viewModel.onPaymentClicked()}"
             android:text="@string/pay"/>
 
     </android.support.constraint.ConstraintLayout>
