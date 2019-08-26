@@ -177,7 +177,7 @@ public class PlaqueView extends ConstraintLayout {
 
         }
 
-        requestLayout();
+        //requestLayout();
     }
 
     public boolean isPlaqueCorrect() {
