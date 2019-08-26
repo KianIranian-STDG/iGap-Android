@@ -2000,4 +2000,5 @@
     <string name="plaque_is_not_valid">پلاک وارد شده صحیح نیست.</string>
     <string name="complete_correct">اطلاعات وارد شده صحیح نیست.</string>
     <string name="plaque_added">پلاک افزوده شد.</string>
+    <string name="at_least_cpay_amout">مبلغ (حداقل 20 هزار ریال)</string>
 </resources>
