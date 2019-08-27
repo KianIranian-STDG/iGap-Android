@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -154,14 +155,19 @@
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
                     android:layout_marginTop="@dimen/dp14"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
                     android:paddingTop="@dimen/dp2"
-                    android:textSize="@dimen/standardTextSize"
-                    app:emojiSize="@dimen/standardTextSize"
                     android:text="@{viewModel.bio}"
+                    tools:text="abolfazl"
+                    android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.bioVisibility}"
-                    app:layout_constraintEnd_toEndOf="@id/enableNotificationLyt"
-                    app:layout_constraintStart_toStartOf="@id/enableNotificationLyt"
+                    app:emojiSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <View

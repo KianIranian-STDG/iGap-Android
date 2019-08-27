@@ -344,15 +344,10 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         recyclerView.addOnScrollListener(onScrollListener);
 
-        MusicPlayer.playerStateChangeListener.observe(this, isVisible -> {
-            //checkMusicPlayerView();
-        });
-
         checkSelectedDefaultTab();
         initAppbarSelected(view);
         makeSharedTypesViews();
         checkSharedButtonsBackgrounds();
-        //checkMusicPlayerView();
     }
 
     private void checkSelectedDefaultTab() {
@@ -367,23 +362,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         } else {
             openLayout();
         }
-    }
-
-    private void openSelectedTab(int mCurrentSharedMediaType) {
-    }
-
-    private void checkMusicPlayerView() {
-
-        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) recyclerView.getLayoutParams();
-
-        if (MusicPlayer.shearedMediaLayout != null && MusicPlayer.mp != null) {
-            lp.setMargins(0, getDimen(R.dimen.margin_for_below_layouts_of_toolbar_with_shared_media_with_player), 0, 0);
-        } else {
-            lp.setMargins(0, getDimen(R.dimen.margin_for_below_layouts_of_toolbar_with_shared_media), 0, 0);
-        }
-
-        recyclerView.setLayoutParams(lp);
-
     }
 
     private void openLayout() {
