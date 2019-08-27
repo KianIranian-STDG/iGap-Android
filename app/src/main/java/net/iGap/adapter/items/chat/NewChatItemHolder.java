@@ -208,13 +208,14 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
         voteDownContainer.addView(voteDownIv,
                 LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
-                        Gravity.CENTER, 0, 0, dpToPx(1), 0));
+                        Gravity.CENTER, 0, 0, 2, 0));
         voteDownContainer.addView(voteDownTv);
 
         voteContainer.addView(voteUpContainer,
                 LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
-                        Gravity.CENTER, 0, 0, dpToPx(2), 0));
-        voteContainer.addView(voteDownContainer);
+                        Gravity.CENTER, 8, 0, 2, 0));
+        voteContainer.addView(voteDownContainer,LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
+                Gravity.CENTER, 0, 0, 8, 0));
 
         int[] views = {viewContainer.getId(), voteContainer.getId(), signatureTv.getId(), messageTimeTv.getId(), messageStatusTv.getId()};
         set.createHorizontalChain(chatBloke.getId(), ConstraintSet.LEFT, chatBloke.getId(), ConstraintSet.RIGHT, views,
