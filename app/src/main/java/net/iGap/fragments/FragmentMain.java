@@ -341,6 +341,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp60), 0, 0);
                 } else if (isChatMultiSelectEnable) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp1), 0, 0);
+                } else if ( MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
                 } else {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
                 }
