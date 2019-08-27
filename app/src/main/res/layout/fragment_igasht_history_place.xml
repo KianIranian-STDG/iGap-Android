@@ -12,7 +12,10 @@
     <android.support.constraint.ConstraintLayout
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:layoutDirection="locale">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -29,6 +32,19 @@
             android:layout_height="0dp"
             android:visibility="@{viewModel.showMainView}"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/emptyListMessage"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/igasht_empty_history_message"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="@{viewModel.showEmptyListMessage}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

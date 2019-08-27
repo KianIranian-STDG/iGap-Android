@@ -6,7 +6,7 @@ import java.util.List;
 
 public class BaseIGashtResponse<T> {
     @SerializedName("data")
-    private List<T> data;
+    protected List<T> data;
 
     public List<T> getData() {
         return data;

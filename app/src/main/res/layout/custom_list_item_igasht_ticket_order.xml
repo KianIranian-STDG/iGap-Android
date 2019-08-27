@@ -21,12 +21,10 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/plusButton"
-        style="@style/baseFontIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/shape_igasht_darkgray"
-        android:text="@string/add_icon"
-        android:textColor="@color/white"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:text="@string/add_icon_2"
         app:layout_constraintBottom_toBottomOf="@id/itemPrice"
         app:layout_constraintEnd_toStartOf="@id/ticketCount"
         app:layout_constraintStart_toEndOf="@id/ticketTitle"
@@ -46,10 +44,9 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/minusButton"
-        style="@style/baseFontIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/shape_igasht_darkgray"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
         android:text="@string/md_delete_acc"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/itemPrice"

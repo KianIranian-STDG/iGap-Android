@@ -1986,7 +1986,7 @@ Want to get it?</string>
     <string name="unblock">Unblock</string>
     <string name="view_profile">View Profile</string>
     <string name="scan_barcode_to_enter_visit">Scan the barcode above to enter and visit</string>
-    <string name="Your_purchase_code">Your purchase code %d</string>
+    <string name="Your_purchase_code">Your purchase code %s</string>
     <string name="igasht_count_title">count</string>
     <string name="igasht_service_title">Service</string>
     <string name="igasht_select_location_button_title">انتخاب محل</string>
@@ -1994,4 +1994,5 @@ Want to get it?</string>
     <string name="igasht_location_found_count">%d items found</string>
     <string name="igasht_success_payment">Your payment has been successful</string>
     <string name="noDetail">فاقد توضیحات</string>
+    <string name="igasht_empty_history_message">No tickets purchased yet.</string>
 </resources>

@@ -2,13 +2,25 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <import type="net.iGap.G" />
+
+        <import type="net.iGap.igasht.locationlist.IGashtLocationItem" />
+
+        <variable
+            name="viewModel"
+            type="net.iGap.igasht.locationdetail.IGashtLocationDetailViewModel" />
+    </data>
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/root"
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:layoutDirection="locale">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -227,14 +239,4 @@
 
     </android.support.constraint.ConstraintLayout>
 
-    <data>
-
-        <import type="net.iGap.G" />
-
-        <import type="net.iGap.igasht.locationlist.IGashtLocationItem" />
-
-        <variable
-            name="viewModel"
-            type="net.iGap.igasht.locationdetail.IGashtLocationDetailViewModel" />
-    </data>
 </layout>

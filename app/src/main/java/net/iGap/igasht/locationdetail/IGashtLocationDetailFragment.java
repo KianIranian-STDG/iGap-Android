@@ -18,7 +18,6 @@ import net.iGap.databinding.FragmentIgashtLocationDetailBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.igasht.IGashtBaseView;
-import net.iGap.igasht.barcodescaner.FragmentIgashtBarcodeScan;
 import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.locationdetail.buyticket.IGhashtBuyTicketFragment;
 import net.iGap.igasht.locationdetail.subdetail.IGashtLocationSubDetailFragment;
@@ -91,12 +90,8 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
         });
 
         ((IGashtLocationDetailViewModel) viewModel).getGoHistoryPage().observe(getViewLifecycleOwner(), voucherNumber -> {
-            if (getActivity() != null && voucherNumber != null) {
-                Fragment fragment = new IGashtHistoryPlaceListFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("voucherNumber", voucherNumber);
-                fragment.setArguments(bundle);
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load(true);
+            if (voucherNumber != null) {
+                goToHistoryListPage();
             }
         });
 
@@ -104,7 +99,7 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
             if (getActivity() != null && orderToken != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.igasht_title), orderToken, result -> {
                     if (result.isSuccess()) {
-                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentIgashtBarcodeScan.getInstance(result.getToken()));
+                        goToHistoryListPage();
                     }
                 });
             }
@@ -119,5 +114,11 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
 
     public void registerVouchers() {
         ((IGashtLocationDetailViewModel) viewModel).registerOrder();
+    }
+
+    private void goToHistoryListPage() {
+        if (getActivity() != null) {
+            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
+        }
     }
 }

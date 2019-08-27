@@ -108,7 +108,7 @@
     <string name="md_chat">\uf369</string>  <!-- igap_message-text  -->
 
     <string name="md_pin">\ue901</string>
-    <string name="md_unpin">\ue904</string>
+    <string name="add_icon_2">\ue904</string>
     <string name="md_circlePin">\ue902</string>
 
     <string name="icon_music">\ue963</string>  <!-- igap_music  -->

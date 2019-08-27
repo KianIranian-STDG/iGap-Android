@@ -23,7 +23,7 @@ public class IGashtTicketDetail {
     @SerializedName("voucher_info")
     private List<IGashtVoucherInfo> voucherInfo;
     @SerializedName("created")
-    private Timestamp timestamp;
+    private float created;
 
     public String getVoucherNumber() {
         return voucherNumber;
@@ -57,7 +57,7 @@ public class IGashtTicketDetail {
         return voucherInfo;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public float getCreated() {
+        return created;
     }
 }

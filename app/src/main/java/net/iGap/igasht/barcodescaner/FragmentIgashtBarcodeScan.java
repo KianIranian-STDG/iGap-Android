@@ -20,15 +20,6 @@ import net.iGap.interfaces.ToolbarListener;
 public class FragmentIgashtBarcodeScan extends IGashtBaseView {
 
     private FragmentIgashtBarcodeScanerBinding binding;
-    private IGashtBarcodeScannerViewModel viewModel;
-
-    public static FragmentIgashtBarcodeScan getInstance(String voucherNumber) {
-        FragmentIgashtBarcodeScan fragmentIgashtBarcodeScan = new FragmentIgashtBarcodeScan();
-        Bundle bundle = new Bundle();
-        bundle.putString("voucher_number", voucherNumber);
-        fragmentIgashtBarcodeScan.setArguments(bundle);
-        return fragmentIgashtBarcodeScan;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,7 +37,7 @@ public class FragmentIgashtBarcodeScan extends IGashtBaseView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_barcode_scaner, container, false);
-        binding.setViewModel(viewModel);
+        binding.setViewModel((IGashtBarcodeScannerViewModel) viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
     }
@@ -68,7 +59,7 @@ public class FragmentIgashtBarcodeScan extends IGashtBaseView {
                     }
                 }).getView());
 
-        viewModel.getShowQRCodeImage().observe(getViewLifecycleOwner(), imageBitmap -> {
+        ((IGashtBarcodeScannerViewModel)viewModel).getShowQRCodeImage().observe(getViewLifecycleOwner(), imageBitmap -> {
             if (imageBitmap != null) {
                 binding.barCodeImage.setImageBitmap(imageBitmap);
             }

@@ -10,8 +10,12 @@
     </data>
 
     <android.support.constraint.ConstraintLayout
+        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:layoutDirection="locale">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -28,6 +32,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="@string/check_icon"
+            android:textSize="@dimen/dp48"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/paymentStatus"
             app:layout_constraintDimensionRatio="1:1"
@@ -53,6 +58,7 @@
             android:id="@+id/barCodeImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@color/white"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/paymentCode"
             app:layout_constraintDimensionRatio="1:1"
@@ -67,8 +73,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_igasht_strokeyellow"
+            android:gravity="center"
             android:padding="@dimen/dp16"
-            android:text="@string/Your_purchase_code"
+            android:text="@{@string/Your_purchase_code(viewModel.voucherNumber)}"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/v"
@@ -102,7 +109,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/retryView"
-            style="?textTitleColorSettingTheme"
+            style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
             android:text="@string/retry_icon"

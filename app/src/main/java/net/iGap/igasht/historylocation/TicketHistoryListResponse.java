@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import net.iGap.igasht.BaseIGashtResponse;
 
+import java.util.ArrayList;
+
 public class TicketHistoryListResponse<T> extends BaseIGashtResponse<T> {
 
     @SerializedName("total")
@@ -12,6 +14,10 @@ public class TicketHistoryListResponse<T> extends BaseIGashtResponse<T> {
     private int offset;
     @SerializedName("limit")
     private int limit;
+
+    public TicketHistoryListResponse() {
+        this.data = new ArrayList<>();
+    }
 
     public int getTotal() {
         return total;
