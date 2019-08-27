@@ -96,6 +96,8 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         signatureTv.setId(R.id.tv_chatItem_signature);
         setTextSize(signatureTv, R.dimen.verySmallTextSize);
         signatureTv.setEllipsize(TextUtils.TruncateAt.END);
+        signatureTv.setPadding(0,0,LayoutCreator.dp(4),0);
+        setTypeFace(signatureTv);
         signatureTv.setSingleLine(true);
         signatureTv.setGravity(CENTER_VERTICAL);
 
