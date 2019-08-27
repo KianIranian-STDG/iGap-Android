@@ -5,6 +5,7 @@
     <data>
 
         <import type="net.iGap.igasht.locationlist.LocationDetail" />
+        <import type="net.iGap.R" />
 
         <variable
             name="viewModel"
@@ -154,8 +155,39 @@
             android:text="@{viewModel.locationDetail.content}"
             app:layout_constraintEnd_toEndOf="@+id/view2"
             app:layout_constraintStart_toStartOf="@+id/view2"
-            app:layout_constraintTop_toBottomOf="@+id/view2"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/view2" />
+        <TextView
+            android:id="@+id/text_parking"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/subTitle3"
+            android:layout_marginBottom="@dimen/dp4"
+            android:layout_marginTop="@dimen/dp4"
+            android:padding="@dimen/dp4"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp8"
+            android:layout_marginRight="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp8"
+            android:text="پارکینگ"
+            app:layout_constraintWidth_percent=".9"/>
+        <TextView
+            android:id="@+id/cheked_parking"
+            style="@style/baseFontIcon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/subTitle3"
+            android:layout_marginBottom="@dimen/dp4"
+            android:layout_marginTop="@dimen/dp4"
+            android:padding="@dimen/dp4"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp8"
+            android:layout_marginRight="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp8"
+            android:text="@{viewModel.haveParking}"
+            android:textColor="@{viewModel.haveParking==R.string.check_icon ? @color/green : @color/red}"
+            app:layout_constraintWidth_percent=".1"/>
     </android.support.constraint.ConstraintLayout>
 
 
