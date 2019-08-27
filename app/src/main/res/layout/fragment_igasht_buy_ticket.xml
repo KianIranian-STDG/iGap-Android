@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    <data>
+        <variable
+            name="viewModel"
+            type="net.iGap.igasht.locationdetail.buyticket.IGashtBuyTicketViewModel" />
+    </data>
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp4">
+        android:layout_margin="@dimen/dp4"
+        android:visibility="@{viewModel.showBuyTicketFragment}">
 
         <Button
             android:id="@+id/addNewPlaceButton"
@@ -169,10 +174,5 @@
 
     </android.support.constraint.ConstraintLayout>
 
-    <data>
 
-        <variable
-            name="viewModel"
-            type="net.iGap.igasht.locationdetail.buyticket.IGashtBuyTicketViewModel" />
-    </data>
 </layout>

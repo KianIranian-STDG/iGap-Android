@@ -9,12 +9,9 @@ import net.iGap.R;
 import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.igasht.BaseIGashtViewModel;
 import net.iGap.igasht.IGashtRepository;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.SingleLiveEvent;
 
 import java.util.List;
-
-import static net.iGap.G.context;
 
 public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResponse<IGashtLocationService>> {
 
@@ -23,12 +20,12 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
     private SingleLiveEvent<Boolean> registerVoucher = new SingleLiveEvent<>();
     private MutableLiveData<List<IGashtLocationService>> serviceList = new MutableLiveData<>();
     private SingleLiveEvent<Integer> showErrorMessage = new SingleLiveEvent<>();
-
+    private ObservableInt showBuyTicketFragment = new ObservableInt(View.GONE);
     private IGashtRepository repository;
 
     public IGashtBuyTicketViewModel() {
         repository = IGashtRepository.getInstance();
-        if(G.isDarkTheme){
+        if (G.isDarkTheme) {
             viewBackground.set(R.drawable.shape_igasht_buy_ticket);
         }
         getTicketData();
@@ -64,6 +61,8 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
         showLoadingView.set(View.GONE);
         showMainView.set(View.VISIBLE);
         showViewRefresh.set(View.GONE);
+        showBuyTicketFragment.set(View.VISIBLE);
+
     }
 
     public void onAddPlaceClick() {
@@ -92,7 +91,7 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
     private boolean checkEntranceTicketCount(List<IGashtLocationService> list) {
         int tmp = findEntranceLocation(list);
         if (tmp != -1) {
-            return findMaxTicketCount(list,tmp) <= list.get(tmp).getCount();
+            return findMaxTicketCount(list, tmp) <= list.get(tmp).getCount();
         } else {
             return false;
         }
@@ -124,5 +123,9 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
         showMainView.set(View.GONE);
         showViewRefresh.set(View.GONE);
         repository.getServiceList(this);
+    }
+
+    public ObservableInt getShowBuyTicketFragment() {
+        return showBuyTicketFragment;
     }
 }
