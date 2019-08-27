@@ -64,7 +64,7 @@ public class FragmentChatSettingViewModel extends ViewModel {
         isCompress.set(getBoolean(checkedEnableCompress));
 
 
-        String textSize = "" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 16);
+        String textSize = "" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14);
         callbackTextSize.setValue(textSize);
 
         if (HelperCalander.isPersianUnicode) {

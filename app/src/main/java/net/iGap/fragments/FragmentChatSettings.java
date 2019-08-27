@@ -94,7 +94,7 @@ public class FragmentChatSettings extends BaseFragment {
                 try {
                     sb.setProgress(Integer.valueOf(s) - MIN_TEXT_SIZE);
                 } catch (Exception e) {
-                    sb.setProgress(16 - MIN_TEXT_SIZE);//16 - min = 5 -> for skipping setMin that not support on Apis fewer than 26
+                    sb.setProgress(14 - MIN_TEXT_SIZE);//14 - min = 3 -> for skipping setMin that not support on Apis fewer than 26
                 }
             }
         });
