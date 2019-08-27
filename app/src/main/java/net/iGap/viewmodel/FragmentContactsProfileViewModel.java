@@ -93,6 +93,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public MutableLiveData<Integer> callVisibility = new MutableLiveData<>();
     public MutableLiveData<Integer> videoCallVisibility = new MutableLiveData<>();
     public MutableLiveData<Integer> menuVisibility = new MutableLiveData<>();
+    public MutableLiveData<Boolean> cloudVisibility = new MutableLiveData<>();
 
     public ObservableBoolean isMuteNotification = new ObservableBoolean(false);
     public MutableLiveData<Boolean> isMuteNotificationChangeListener = new MutableLiveData<>();
@@ -327,6 +328,11 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         } else {
             isShowReportView.set(false);
         }
+
+        if (userId == G.userId){
+            cloudVisibility.postValue(true);
+        }else
+            cloudVisibility.postValue(false);
 
         registeredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);
         if (registeredInfo != null) {
@@ -691,4 +697,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         }
     }
 
+    public MutableLiveData<Boolean> getCloudVisibility() {
+        return cloudVisibility;
+    }
 }
