@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.constraint.ConstraintLayout
@@ -55,8 +56,10 @@
             android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/priceTitle"
             app:layout_constraintEnd_toStartOf="@id/serviceTitle"
+            app:layout_constraintHorizontal_bias="0.407"
             app:layout_constraintStart_toEndOf="@id/countTitle"
-            app:layout_constraintTop_toTopOf="@id/priceTitle" />
+            app:layout_constraintTop_toTopOf="@id/priceTitle"
+            app:layout_constraintVertical_bias="0.0" />
 
         <android.support.design.button.MaterialButton
             android:id="@+id/payButton"
@@ -82,37 +85,36 @@
             android:text="@string/price"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/countTitle"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".3" />
+            app:layout_constraintStart_toEndOf="@id/view10"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/countTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="@dimen/dp4"
+            android:padding="@dimen/dp8"
             android:text="@string/igasht_count_title"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/priceTitle"
-            app:layout_constraintEnd_toStartOf="@id/priceTitle"
-            app:layout_constraintStart_toEndOf="@id/serviceTitle"
+            app:layout_constraintEnd_toStartOf="@id/view10"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/view11"
             app:layout_constraintTop_toTopOf="@id/priceTitle"
-            app:layout_constraintWidth_percent=".3" />
+            app:layout_constraintVertical_bias="1.0" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/serviceTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="@dimen/dp4"
+            android:padding="@dimen/dp8"
             android:text="@string/igasht_service_title"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/priceTitle"
-            app:layout_constraintEnd_toStartOf="@id/countTitle"
+            app:layout_constraintEnd_toStartOf="@id/view11"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/priceTitle"
-            app:layout_constraintWidth_percent=".4" />
+            app:layout_constraintTop_toTopOf="@id/priceTitle" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/totalPrice"
