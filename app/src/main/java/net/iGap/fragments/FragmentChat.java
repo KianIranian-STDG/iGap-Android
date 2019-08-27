@@ -9315,11 +9315,14 @@ public class FragmentChat extends BaseFragment
         items.add(getString(R.string.Search));
         items.add(getString(R.string.clear_history));
         items.add(getString(R.string.delete_chat));
-        if (isMuteNotification)
-            items.add(getString(R.string.unmute_notification));
-        else
-            items.add(getString(R.string.mute_notification));
-        items.add(getString(R.string.chat_to_group));
+        if (userId != G.userId){
+            if (isMuteNotification)
+                items.add(getString(R.string.unmute_notification));
+            else
+                items.add(getString(R.string.mute_notification));
+            items.add(getString(R.string.chat_to_group));
+        }
+
         items.add(getString(R.string.clean_up));
         items.add(getString(R.string.export_chat));
 
