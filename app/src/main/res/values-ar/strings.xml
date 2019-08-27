@@ -2948,4 +2948,5 @@
     <string name="complete_correct">المعلومات غير صالحة.</string>
     <string name="plaque_added">تمت إضافة البلاك.</string>
     <string name="at_least_cpay_amout">المبلغ (لا يقل عن 20 ألف ريال)</string>
+    <string name="cpay_title">سی پی</string>
 </resources>

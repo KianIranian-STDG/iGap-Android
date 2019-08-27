@@ -8,21 +8,21 @@ public class ChargeWalletBodyModel {
     private String plaque ;
 
     @SerializedName("amount")
-    private String amount ;
+    private long amount ;
 
     public ChargeWalletBodyModel() {
     }
 
-    public ChargeWalletBodyModel(String plaque, String amount) {
+    public ChargeWalletBodyModel(String plaque, long amount) {
         this.plaque = plaque;
         this.amount = amount;
     }
 
-    public String getAmount() {
+    public long getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 

@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import net.iGap.R;
@@ -17,6 +16,7 @@ import net.iGap.adapter.cPay.CPayChargeSpinnerAdapter;
 import net.iGap.databinding.FragmentCpayChargeBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCPay;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentCPayChargeViewModel;
@@ -66,7 +66,8 @@ public class FragmentCPayCharge extends BaseFragment implements ToolbarListener 
             popBackStackFragment();
         }
 
-        viewModel.getRequestAmountFromServer(plaqueText);
+        viewModel.setPlaque(plaqueText);
+        viewModel.getRequestAmountFromServer();
         initPlaque();
         setupSpinner();
         initCallback();
@@ -94,6 +95,22 @@ public class FragmentCPayCharge extends BaseFragment implements ToolbarListener 
         viewModel.getMessageToUserText().observe(getViewLifecycleOwner() , s -> {
             if (s == null) return;
             Toast.makeText(getActivity(), s , Toast.LENGTH_LONG).show();
+        });
+
+        viewModel.getChargePaymentStateListener().observe(getViewLifecycleOwner() , token -> {
+            if (getActivity() == null) return;
+            if (token == null){
+                Toast.makeText(getContext(), getString(R.string.wallet_error_server), Toast.LENGTH_LONG).show();
+                return;
+            }
+            new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.cpay_title),token, result -> {
+                if (result.isSuccess()){
+                    Toast.makeText(getActivity(),getString(R.string.successful_payment) , Toast.LENGTH_LONG).show();
+                    popBackStackFragment();
+                }else {
+                    Toast.makeText(getActivity(),getString(R.string.unsuccessful_payment) , Toast.LENGTH_LONG).show();
+                }
+            });
         });
 
     }

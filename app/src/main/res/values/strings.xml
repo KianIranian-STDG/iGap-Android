@@ -2001,4 +2001,5 @@ Want to get it?</string>
     <string name="complete_correct">Informations are invalid.</string>
     <string name="plaque_added">Plaque Added.</string>
     <string name="at_least_cpay_amout">Amount (Minimum 20,000 Rials)</string>
+    <string name="cpay_title">C-Pay</string>
 </resources>
