@@ -198,7 +198,6 @@ import net.iGap.interfaces.OnChatUpdateStatusResponse;
 import net.iGap.interfaces.OnClearChatHistory;
 import net.iGap.interfaces.OnClickCamera;
 import net.iGap.interfaces.OnClientGetRoomMessage;
-import net.iGap.interfaces.OnClientJoinByUsername;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnConnectionChangeStateChat;
 import net.iGap.interfaces.OnDeleteChatFinishActivity;
@@ -2062,9 +2061,14 @@ public class FragmentChat extends BaseFragment
                 @Override
                 public void onClick(View view) {
                     HelperUrl.showIndeterminateProgressDialog(getActivity());
-                    G.onClientJoinByUsername = new OnClientJoinByUsername() {
+
+                    new RequestClientJoinByUsername().clientJoinByUsername(userName, new RequestClientJoinByUsername.OnClientJoinByUsername() {
                         @Override
                         public void onClientJoinByUsernameResponse() {
+                            /**
+                             * if user joined to this room set lastMessage for that
+                             */
+                            RealmRoom.setLastMessage(mRoomId);
 
                             isNotJoin = false;
                             HelperUrl.closeDialogWaiting();
@@ -2094,13 +2098,7 @@ public class FragmentChat extends BaseFragment
                         public void onError(int majorCode, int minorCode) {
                             HelperUrl.dialogWaiting.dismiss();
                         }
-                    };
-
-                    /**
-                     * if user joined to this room set lastMessage for that
-                     */
-                    RealmRoom.setLastMessage(mRoomId);
-                    new RequestClientJoinByUsername().clientJoinByUsername(userName);
+                    });
                 }
             });
         }
@@ -3836,6 +3834,7 @@ public class FragmentChat extends BaseFragment
     public void onPreChatMessageRemove(final StructMessageInfo messageInfo, int position) {
         if (mAdapter.getAdapterItemCount() > 1 && position == mAdapter.getAdapterItemCount() - 1) {
             //RealmRoom.setLastMessageAfterLocalDelete(mRoomId, parseLong(messageInfo.messageID));
+
             RealmRoom.setLastMessage(mRoomId);
         }
     }

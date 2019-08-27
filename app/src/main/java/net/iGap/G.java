@@ -305,7 +305,6 @@ public class G extends Application {
     public static OnChannelUpdateReactionStatus onChannelUpdateReactionStatusChat;
     public static OnClientCheckInviteLink onClientCheckInviteLink;
     public static OnClientJoinByInviteLink onClientJoinByInviteLink;
-    public static OnClientJoinByUsername onClientJoinByUsername;
     public static OnClientResolveUsername onClientResolveUsername;
     public static OnClientSubscribeToRoom onClientSubscribeToRoom;
     public static OnClientUnsubscribeFromRoom onClientUnsubscribeFromRoom;

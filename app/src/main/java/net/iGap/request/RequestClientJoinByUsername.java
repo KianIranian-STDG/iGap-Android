@@ -14,12 +14,18 @@ import net.iGap.proto.ProtoClientJoinByUsername;
 
 public class RequestClientJoinByUsername {
 
-    public void clientJoinByUsername(String username) {
+    public interface OnClientJoinByUsername {
+        void onClientJoinByUsernameResponse();
+
+        void onError(int majorCode, int minorCode);
+    }
+
+    public void clientJoinByUsername(String username, OnClientJoinByUsername onClientJoinByUsername) {
 
         ProtoClientJoinByUsername.ClientJoinByUsername.Builder builder = ProtoClientJoinByUsername.ClientJoinByUsername.newBuilder();
         builder.setUsername(username);
 
-        RequestWrapper requestWrapper = new RequestWrapper(609, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(609, builder, onClientJoinByUsername);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
@@ -32,7 +38,7 @@ public class RequestClientJoinByUsername {
         ProtoClientJoinByUsername.ClientJoinByUsername.Builder builder = ProtoClientJoinByUsername.ClientJoinByUsername.newBuilder();
         builder.setUsername(username);
 
-        RequestWrapper requestWrapper = new RequestWrapper(609, builder, roomId+"");
+        RequestWrapper requestWrapper = new RequestWrapper(609, builder, roomId);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
