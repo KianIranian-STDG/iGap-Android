@@ -44,6 +44,7 @@ public class FragmentSettingViewModel extends ViewModel {
 
     public FragmentSettingViewModel(SharedPreferences sharedPreferences) {
         currentLanguage.set(sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage()));
+        showLoading.postValue(View.GONE);
     }
 
     public ObservableField<String> getCurrentLanguage() {
