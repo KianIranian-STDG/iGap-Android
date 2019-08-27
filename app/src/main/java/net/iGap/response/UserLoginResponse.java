@@ -55,7 +55,6 @@ public class UserLoginResponse extends MessageHandler {
       /*builder.getDeprecatedClient();
         builder.getSecondaryNodeName();
         builder.getUpdateAvailable();*/
-        RealmUserInfo.insertAccessToken(builder.getAccessToken());
 
         if (builder.getUpdateAvailable() && !isUpdateAvailable) {
             new android.os.Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -119,6 +118,7 @@ public class UserLoginResponse extends MessageHandler {
             new RequestWalletGetAccessToken().walletGetAccessToken();
         }
 
+        RealmUserInfo.insertAccessToken(builder.getAccessToken());
 
     }
 
