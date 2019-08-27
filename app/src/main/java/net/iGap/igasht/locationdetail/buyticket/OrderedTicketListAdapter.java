@@ -98,9 +98,9 @@ public class OrderedTicketListAdapter extends RecyclerView.Adapter<OrderedTicket
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            ticketTitle = itemView.findViewById(R.id.ticketTitle);
-            ticketCount = itemView.findViewById(R.id.ticketCount);
-            ticketPrice = itemView.findViewById(R.id.itemPrice);
+            ticketTitle = itemView.findViewById(R.id.service_ticket);
+            ticketCount = itemView.findViewById(R.id.count_ticket);
+            ticketPrice = itemView.findViewById(R.id.price_ticket);
             minusButton = itemView.findViewById(R.id.minusButton);
             plusButton = itemView.findViewById(R.id.plusButton);
         }
