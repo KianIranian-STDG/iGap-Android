@@ -383,6 +383,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             if (registeredInfo.getBio() == null || registeredInfo.getBio().length() == 0) {
                 bioVisibility.set(View.GONE);
             } else {
+                bioVisibility.set(View.VISIBLE);
                 bio.set(registeredInfo.getBio());
             }
             username.set(registeredInfo.getUsername());
@@ -414,6 +415,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             if (realmUser.getBio() == null || realmUser.getBio().length() == 0) {
                 bioVisibility.set(View.GONE);
             } else {
+                bioVisibility.set(View.VISIBLE);
                 bio.set(realmUser.getBio());
             }
         }

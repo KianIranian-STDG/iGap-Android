@@ -163,10 +163,12 @@ public class FragmentContactsProfile extends BaseFragment {
                     binding.report.setVisibility(View.GONE);
                     binding.block.setVisibility(View.GONE);
                     binding.enableNotificationLyt.setVisibility(View.GONE);
+                    binding.line1.setVisibility(View.GONE);
                     binding.customNotification.setVisibility(View.GONE);
                 }else {
                     binding.report.setVisibility(View.VISIBLE);
                     binding.block.setVisibility(View.VISIBLE);
+                    binding.line1.setVisibility(View.VISIBLE);
                     binding.enableNotificationLyt.setVisibility(View.VISIBLE);
                     binding.customNotification.setVisibility(View.VISIBLE);
                 }

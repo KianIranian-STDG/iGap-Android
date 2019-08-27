@@ -318,6 +318,8 @@ public class FragmentUserProfile extends BaseMainFragments {
             viewModel.onThemeClick(G.isDarkTheme);
         });
 
+        binding.fupUserBio.setSelected(true);
+
         Log.wtf(this.getClass().getName(), "onViewCreated");
     }
 
