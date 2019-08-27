@@ -20,7 +20,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.igasht.IGashtBaseView;
 import net.iGap.igasht.barcodescaner.FragmentIgashtBarcodeScan;
 import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
-import net.iGap.igasht.locationdetail.buyticket.IGhashtBuyTicketFragment;
+import net.iGap.igasht.locationdetail.buyticket.IGashtBuyTicketFragment;
 import net.iGap.igasht.locationdetail.subdetail.IGashtLocationSubDetailFragment;
 import net.iGap.interfaces.ToolbarListener;
 
@@ -74,9 +74,9 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment;
                 if (loadBuyTicketView) {
-                    fragment = fragmentManager.findFragmentByTag(IGhashtBuyTicketFragment.class.getName());
+                    fragment = fragmentManager.findFragmentByTag(IGashtBuyTicketFragment.class.getName());
                     if (fragment == null) {
-                        fragment = new IGhashtBuyTicketFragment();
+                        fragment = new IGashtBuyTicketFragment();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
                 } else {
