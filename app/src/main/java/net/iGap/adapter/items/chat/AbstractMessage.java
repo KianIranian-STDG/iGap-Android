@@ -547,8 +547,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (mMessage.isEdited)
             if (mMessage.channelExtra.signature.length() > 0)
                 mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited) + " " + mMessage.channelExtra.signature);
-            else
+            else{
                 mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited));
+                Utils.darkModeHandlerGray(mHolder.getSignatureTv());
+            }
         else
             mHolder.getSignatureTv().setText("");
 
