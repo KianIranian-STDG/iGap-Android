@@ -20,7 +20,7 @@ import net.iGap.igasht.locationdetail.IGashtLocationDetailFragment;
 
 import java.util.ArrayList;
 
-public class IGhashtBuyTicketFragment extends IGashtBaseView {
+public class IGashtBuyTicketFragment extends IGashtBaseView {
 
     private FragmentIgashtBuyTicketBinding binding;
 

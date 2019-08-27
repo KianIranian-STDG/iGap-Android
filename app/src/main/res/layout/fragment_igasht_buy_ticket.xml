@@ -28,7 +28,7 @@
             android:id="@+id/view_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/shape_igasht_darkgray"
+            android:background="@{context.getResources().getDrawable(viewModel.viewBackground)}"
             app:layout_constraintBottom_toBottomOf="@id/priceTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

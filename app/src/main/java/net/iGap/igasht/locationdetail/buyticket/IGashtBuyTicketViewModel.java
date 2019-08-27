@@ -4,17 +4,22 @@ import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableInt;
 import android.view.View;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.igasht.BaseIGashtViewModel;
 import net.iGap.igasht.IGashtRepository;
+import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.SingleLiveEvent;
 
 import java.util.List;
 
+import static net.iGap.G.context;
+
 public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResponse<IGashtLocationService>> {
 
     private ObservableInt totalPrice = new ObservableInt(0);
+    private ObservableInt viewBackground = new ObservableInt(R.drawable.shape_igasht_lightgray);
     private SingleLiveEvent<Boolean> registerVoucher = new SingleLiveEvent<>();
     private MutableLiveData<List<IGashtLocationService>> serviceList = new MutableLiveData<>();
     private SingleLiveEvent<Integer> showErrorMessage = new SingleLiveEvent<>();
@@ -23,11 +28,18 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
 
     public IGashtBuyTicketViewModel() {
         repository = IGashtRepository.getInstance();
+        if(G.isDarkTheme){
+            viewBackground.set(R.drawable.shape_igasht_buy_ticket);
+        }
         getTicketData();
     }
 
     public ObservableInt getTotalPrice() {
         return totalPrice;
+    }
+
+    public ObservableInt getViewBackground() {
+        return viewBackground;
     }
 
     public void setTotalPrice(int totalPrice) {
