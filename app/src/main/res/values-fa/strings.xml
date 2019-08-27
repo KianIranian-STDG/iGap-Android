@@ -531,6 +531,7 @@
     <string name="E_115">"خطای درونی سرور"</string>
     <string name="E_116">"خطایی از سمت کلاینت: نوع جنسیت اشتباه است."</string>
     <string name="E_117">"خطای درونی سرور"</string>
+    <string name="E_118">اخطار: تعداد مخاطبین از محدودیت تعداد سمت سرور فراتر است.</string>
     <string name="list_admin">فهرست مدیران</string>
     <string name="list_modereator">فهرست ناظران</string>
     <string name="desc">توضیحات</string>
@@ -1191,8 +1192,8 @@
     <string name="are_you_sure">شما مطمئن هستید ؟</string>
     <string name="change_storage_place">تغییر مکان ذخیره سازی</string>
     <string name="other_files">سایر فایل ها</string>
-    <string name="title_import_contact_limit">در حال وارد کردن لیست تماس</string>
-    <string name="content_import_contact_limit">متاسفانه تعداد مخاطبین شما بیش از حد مجاز میباشد. نمیتوانیم با سرور بررسی کنیم ، لطفا مخاطبین را در حد معقول ذخیره کنید</string>
+    <string name="title_import_contact_limit">اخطار: در حال بارگزاری لیست مخاطبین</string>
+    <string name="content_import_contact_limit">متاسفانه تعداد مخاطبین شما بیش از حد مجاز میباشد. تعداد مجاز بارگزاری شد.</string>
     <string name="another_room">اتاق دیگر</string>
 
     <string name="filter_cancel_content">آیا از تغییرات انجام داده منصرف شدید ؟</string>
@@ -1957,7 +1958,6 @@
     <string name="buy_internet_package_volume_filter_gb_title">%.0f گیگابایت</string>
     <string name="buy_internet_package_volume_filter_mb_title">%.0f مگابایت</string>
     <string name="buy_internet_package_choose_title">انتخاب کنید</string>
-    <string name="str_frag_sync_skip_btn">شروع برنامه</string>
     <string name="beeptunes_purchase_song">آهنگ های خریداری شده</string>
     <string name="beeptunes_sync_song">آهنگ های بارگیری شده</string>
     <string name="beeptunesـfavorite_song">آهنگ های مورد علاقه</string>
