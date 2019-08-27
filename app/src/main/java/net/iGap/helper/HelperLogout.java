@@ -23,6 +23,8 @@ import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 
+import io.realm.Realm;
+
 import static org.paygear.utils.Utils.signOutWallet;
 
 
@@ -39,30 +41,39 @@ public final class HelperLogout {
             @Override
             public void run() {
                 signOutWallet();
-                HelperRealm.realmTruncate();
-                clearPreferences();
-                resetStaticField();
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            realm.deleteAll();
+                        }
+                    }, () -> {
+                        clearPreferences();
+                        resetStaticField();
 
-                AppUtils.cleanBadge();
-                new LoginActions();
-                Intent intent = new Intent(G.context, ActivityRegisteration.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                G.context.startActivity(intent);
-                if (G.currentActivity != null) {
-                    G.currentActivity.finish();
+                        AppUtils.cleanBadge();
+                        new LoginActions();
+                        Intent intent = new Intent(G.context, ActivityRegisteration.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        G.context.startActivity(intent);
+                        if (G.currentActivity != null) {
+                            G.currentActivity.finish();
+                        }
+
+                        try {
+                            NotificationManager nMgr = (NotificationManager) G.context.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                            nMgr.cancelAll();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
+
+                        if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+                            MusicPlayer.stopSound();
+                            MusicPlayer.closeLayoutMediaPlayer();
+                        }
+                    });
                 }
 
-                try {
-                    NotificationManager nMgr = (NotificationManager) G.context.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    nMgr.cancelAll();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-
-                if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
-                    MusicPlayer.stopSound();
-                    MusicPlayer.closeLayoutMediaPlayer();
-                }
             }
         });
     }
