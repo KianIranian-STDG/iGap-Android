@@ -1993,4 +1993,5 @@ Want to get it?</string>
     <string name="igasht_selected_location_title">Recreational areas of %s province</string>
     <string name="igasht_location_found_count">%d items found</string>
     <string name="igasht_success_payment">Your payment has been successful</string>
+    <string name="noDetail">فاقد توضیحات</string>
 </resources>

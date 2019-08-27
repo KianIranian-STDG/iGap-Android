@@ -2940,4 +2940,5 @@
     <string name="igasht_selected_location_title">المناطق الترفيهية في محافظة %s</string>
     <string name="igasht_location_found_count">%d سلعة موجودة</string>
     <string name="igasht_success_payment">پرداخت شما با موفقیت انجام شد</string>
+    <string name="noDetail">فاقد توضیحات</string>
 </resources>

@@ -1,6 +1,6 @@
 package net.iGap.igasht.locationdetail.subdetail;
 
-import android.util.Log;
+import android.databinding.ObservableInt;
 import android.view.View;
 
 import net.iGap.igasht.BaseIGashtViewModel;
@@ -8,18 +8,22 @@ import net.iGap.igasht.IGashtRepository;
 import net.iGap.igasht.locationlist.ExtraDetail;
 
 public class IGashtLocationSubDetailViewModel extends BaseIGashtViewModel {
-
+    private ObservableInt showText= new ObservableInt(View.GONE);
     private IGashtRepository repository;
 
     public IGashtLocationSubDetailViewModel() {
         repository = IGashtRepository.getInstance();
         if (getLocationDetail() != null) {
-            Log.wtf(this.getClass().getName(),"not null");
             showMainView.set(View.VISIBLE);
+            showText.set(View.GONE);
         } else {
-            Log.wtf(this.getClass().getName(),"is null");
             showMainView.set(View.GONE);
+            showText.set(View.VISIBLE);
         }
+    }
+
+    public ObservableInt getShowText() {
+        return showText;
     }
 
     public ExtraDetail getLocationDetail() {
