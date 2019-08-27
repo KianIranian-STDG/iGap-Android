@@ -119,7 +119,7 @@ public class FragmentCPayEdit extends BaseFragment implements ToolbarListener {
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLogoShown(true)
-                .setDefaultTitle(getString(R.string.see_pay_title))
+                .setDefaultTitle(getString(R.string.c_pay_title))
                 .setLeftIcon(R.string.back_icon)
                 .setListener(this);
 

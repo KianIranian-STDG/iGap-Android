@@ -45,7 +45,7 @@
             android:layout_marginLeft="@dimen/dp20"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rv_plaques" />
+            app:layout_constraintBottom_toTopOf="@id/btn_inquiry"/>
 
         <android.support.design.button.MaterialButton
             android:id="@+id/btn_inquiry"
@@ -53,14 +53,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
+            android:layout_marginBottom="@dimen/dp32"
             android:onClick="@{()-> viewModel.onInquiryClick()}"
             android:text="@string/inquiry"
             android:layout_marginEnd="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
             app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_charge"
-            app:layout_constraintStart_toStartOf="@id/btn_add_car_"
-            app:layout_constraintTop_toBottomOf="@id/btn_add_car_" />
+            app:layout_constraintStart_toStartOf="@id/btn_add_car_"/>
 
         <android.support.design.button.MaterialButton
             android:id="@+id/btn_charge"
@@ -104,12 +105,14 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_plaques"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp240"
+            android:layout_height="0dp"
             android:layout_marginLeft="@dimen/dp20"
             android:layout_marginTop="@dimen/dp10"
+            android:layout_marginBottom="@dimen/dp16"
             android:layout_marginRight="@dimen/dp20"
             android:scrollbars="vertical"
             android:scrollbarAlwaysDrawVerticalTrack="true"
+            app:layout_constraintBottom_toTopOf="@id/btn_add_car_"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lbl_plaques" />
@@ -148,7 +151,7 @@
             android:id="@+id/state_has_car"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:constraint_referenced_ids="btn_inquiry,btn_charge,btn_add_car_,rv_plaques,lbl_plaques" />
 
     </android.support.constraint.ConstraintLayout>
