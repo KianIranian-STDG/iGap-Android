@@ -8000,12 +8000,6 @@ public class FragmentChat extends BaseFragment
                 uploadVideo.replyMessageId = replyMessageId;
 
                 structUploadVideos.add(uploadVideo);
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        switchAddItem(new ArrayList<>(Collections.singletonList(structMessageInfoNew)), false);
-                    }
-                });
             }
         }
 
@@ -8047,10 +8041,6 @@ public class FragmentChat extends BaseFragment
                     messageUtil.replyMessage(replyMessageId);
                 }
                 messageUtil.sendMessage(Long.toString(messageId));
-            }
-
-            if (finalMessageType == CONTACT) {
-                mAdapter.add(new ContactItem(getActivity(), mAdapter, chatType, this).setMessage(structMessageInfoNew));
             }
         }
 
