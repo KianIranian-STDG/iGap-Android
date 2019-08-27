@@ -1931,7 +1931,7 @@ Want to get it?</string>
     <string name="igasht_order_ticket_title">%s for %d person</string>
     <string name="igasht_favorites_title">Favorites</string>
     <string name="igasht_history_title">History</string>
-    <string name="igasht_total_ticket_price">Total Price: %d Toman</string>
+    <string name="igasht_total_ticket_price">Total Price: %d Rials</string>
     <string name="igasht_add_ticket_error">Please Add Ticket</string>
     <string name="igasht_buy_ticket_successful">Buy Ticket Successful</string>
     <string name="money_request">Card To Card Request to:</string>
@@ -1985,11 +1985,12 @@ Want to get it?</string>
     <string name="check_update_title">Check Update</string>
     <string name="unblock">Unblock</string>
     <string name="view_profile">View Profile</string>
-    <string name="scan_barcode_to_enter_visit">جهت ورود و بازدید بارکد فوق را اسکن کنید</string>
-    <string name="Your_purchase_code">کد خرید شما</string>
+    <string name="scan_barcode_to_enter_visit">Scan the barcode above to enter and visit</string>
+    <string name="Your_purchase_code">Your purchase code %d</string>
     <string name="igasht_count_title">count</string>
     <string name="igasht_service_title">Service</string>
     <string name="igasht_select_location_button_title">انتخاب محل</string>
     <string name="igasht_selected_location_title">Recreational areas of %s province</string>
     <string name="igasht_location_found_count">%d items found</string>
+    <string name="igasht_success_payment">Your payment has been successful</string>
 </resources>

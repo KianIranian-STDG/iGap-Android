@@ -11,13 +11,20 @@ import java.util.List;
 public class IGashtHistoryPlaceViewModel extends BaseIGashtViewModel<TicketHistoryListResponse<IGashtTicketDetail>> {
 
     private MutableLiveData<List<IGashtTicketDetail>> historyList = new MutableLiveData<>();
+    private MutableLiveData<String> goToTicketDetail = new MutableLiveData<>();
 
     private TicketHistoryListResponse<IGashtTicketDetail> response;
+    private String voucherId = null;
     private IGashtRepository repository;
 
-    public IGashtHistoryPlaceViewModel() {
+    public IGashtHistoryPlaceViewModel(String voucherNumber, String voucherId) {
         repository = IGashtRepository.getInstance();
+        response = new TicketHistoryListResponse<>();
         getHistoryData();
+        if (voucherNumber != null) {
+            goToTicketDetail.setValue(voucherNumber);
+        }
+        this.voucherId = voucherId;
     }
 
     public MutableLiveData<List<IGashtTicketDetail>> getHistoryList() {
@@ -29,8 +36,14 @@ public class IGashtHistoryPlaceViewModel extends BaseIGashtViewModel<TicketHisto
         showLoadingView.set(View.GONE);
         showMainView.set(View.VISIBLE);
         showViewRefresh.set(View.GONE);
-        response = data;
+        response.setLimit(data.getLimit());
+        response.setOffset(data.getOffset());
+        response.setTotal(data.getTotal());
+        response.getData().addAll(data.getData());
         historyList.setValue(response.getData());
+        if (voucherId != null){
+
+        }
     }
 
     private void getHistoryData() {

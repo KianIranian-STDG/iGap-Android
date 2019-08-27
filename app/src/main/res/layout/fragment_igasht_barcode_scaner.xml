@@ -1,101 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="@dimen/dp48"
-        android:layout_height="@dimen/dp48"
-        android:layout_marginTop="128dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_checked_green"
-        tools:layout_editor_absoluteX="189dp" />
+    <data>
 
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="@+id/imageView5"
-        app:layout_constraintHorizontal_bias="0.461"
-        app:layout_constraintStart_toStartOf="@+id/imageView5"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+        <variable
+            name="viewModel"
+            type="net.iGap.igasht.barcodescaner.IGashtBarcodeScannerViewModel" />
+    </data>
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="164dp"
-        android:layout_height="164dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="36dp"
-        app:layout_constraintEnd_toEndOf="@+id/textView11"
-        app:layout_constraintStart_toStartOf="@+id/textView11"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <View
-        android:id="@+id/view3"
-        android:layout_width="353dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/shape_igasht_strokeyellow"
-        app:layout_constraintEnd_toEndOf="@+id/imageView6"
-        app:layout_constraintHorizontal_bias="0.479"
-        app:layout_constraintStart_toStartOf="@+id/imageView6"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/dp32"
-        android:layout_marginLeft="@dimen/dp8"
-        android:layout_marginTop="@dimen/dp8"
-        android:layout_marginEnd="@dimen/dp8"
-        android:layout_marginRight="@dimen/dp32"
-        android:layout_marginBottom="@dimen/dp8"
-        android:gravity="center_vertical"
-        android:text="@string/Your_purchase_code"
-        android:textColor="#fdc42b"
-        android:textSize="@dimen/dp24"
-        app:layout_constraintBottom_toBottomOf="@+id/view3"
-        app:layout_constraintStart_toStartOf="@+id/view3"
-        app:layout_constraintTop_toTopOf="@+id/view3"
-        app:layout_constraintVertical_bias="0.555" />
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/checkIcon"
+            style="@style/greenIconTextViewStyle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/check_icon"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/paymentStatus"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintWidth_percent=".2" />
 
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/dp8"
-        android:layout_marginLeft="@dimen/dp32"
-        android:layout_marginEnd="@dimen/dp32"
-        android:layout_marginRight="@dimen/dp8"
-        android:gravity="center_vertical"
-        android:text="123456"
-        android:textColor="#fdc42b"
-        android:maxLines="1"
-        android:maxLength="10"
-        android:textSize="@dimen/dp32"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/view3"
-        app:layout_constraintEnd_toEndOf="@+id/view3"
-        app:layout_constraintTop_toTopOf="@+id/view3" />
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/paymentStatus"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/igasht_success_payment"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/barCodeImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkIcon" />
 
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="28dp"
-        android:text="@string/scan_barcode_to_enter_visit"
-        android:textSize="@dimen/dp16"
-        app:layout_constraintEnd_toEndOf="@+id/view3"
-        app:layout_constraintStart_toStartOf="@+id/view3"
-        app:layout_constraintTop_toBottomOf="@+id/view3" />
-</android.support.constraint.ConstraintLayout>
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/barCodeImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/paymentCode"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/paymentStatus"
+            app:layout_constraintWidth_percent=".5" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/paymentCode"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_igasht_strokeyellow"
+            android:padding="@dimen/dp16"
+            android:text="@string/Your_purchase_code"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toTopOf="@id/v"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barCodeImage"
+            app:layout_constraintWidth_percent=".8" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/v"
+            style="?textSubColorSettingTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/scan_barcode_to_enter_visit"
+            android:textSize="@dimen/standardTextSize"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/paymentCode" />
+
+        <ProgressBar
+            android:id="@+id/loadingView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.showLoadingView}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/retryView"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:text="@string/retry_icon"
+            android:visibility="@{viewModel.showViewRefresh}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+    </android.support.constraint.ConstraintLayout>
+</layout>
