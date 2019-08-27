@@ -2,15 +2,14 @@ package net.iGap.igasht.locationdetail.buyticket;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableInt;
-import android.util.Log;
 import android.view.View;
 
+import net.iGap.R;
 import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.igasht.BaseIGashtViewModel;
 import net.iGap.igasht.IGashtRepository;
 import net.iGap.module.SingleLiveEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResponse<IGashtLocationService>> {
@@ -18,15 +17,12 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
     private ObservableInt totalPrice = new ObservableInt(0);
     private SingleLiveEvent<Boolean> registerVoucher = new SingleLiveEvent<>();
     private MutableLiveData<List<IGashtLocationService>> serviceList = new MutableLiveData<>();
+    private SingleLiveEvent<Integer> showErrorMessage = new SingleLiveEvent<>();
 
     private IGashtRepository repository;
-    private List<IGashtServiceAmount> orderedTickets;
-    private int selectedServicePosition = -1;
-    private IGashtServiceAmount selectedAmount;
 
     public IGashtBuyTicketViewModel() {
         repository = IGashtRepository.getInstance();
-        orderedTickets = new ArrayList<>();
         getTicketData();
     }
 
@@ -44,6 +40,10 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
 
     public MutableLiveData<List<IGashtLocationService>> getServiceList() {
         return serviceList;
+    }
+
+    public SingleLiveEvent<Integer> getShowErrorMessage() {
+        return showErrorMessage;
     }
 
     @Override
@@ -66,46 +66,45 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
         getTicketData();
     }
 
-    public void selectedService(int position) {
-        /*Log.wtf(this.getClass().getName(), "selected service: " + serviceList.get(position).getSeviceNameWithLanguage());
-        selectedServicePosition = position;
-        showDialogSelectTicketType.setValue(serviceList.get(selectedServicePosition).getAmounts());*/
-    }
-
-    public void selectedService() {
-        /*if (selectedServicePosition != -1) {
-            showDialogSelectTicketType.setValue(serviceList.get(selectedServicePosition).getAmounts());
-        }*/
-    }
-
-    public void selectedTicketType(IGashtServiceAmount selectedAmount) {
-       /* Log.wtf(this.getClass().getName(), "selected service: " + selectedAmount.getVoucherType());
-        this.selectedAmount = selectedAmount;
-        showDialogEnterCount.setValue(true);*/
-    }
-
-    public void setTicketCount(int ticketCount) {
-        /*selectedAmount.setCount(ticketCount);
-        selectedAmount.setTitle(serviceList.get(selectedServicePosition).getSeviceNameWithLanguage());
-        totalPrice.set(totalPrice.get() + (selectedAmount.getAmount() * ticketCount));
-        orderedTickets.add(selectedAmount);
-        addToTicketList.setValue(selectedAmount);
-        repository.addToVoucherList(selectedAmount);
-        selectedServicePosition = -1;
-        selectedAmount = null;*/
-    }
-
-    public void removeOrderedTicket(int position) {
-        /*IGashtServiceAmount tmp = orderedTickets.remove(position);
-        repository.removeFromVoucherList(tmp);
-        totalPrice.set(totalPrice.get() - (tmp.getAmount() * tmp.getCount()));*/
-    }
-
     public void onPayClick() {
         if (serviceList.getValue() != null) {
-            repository.createVoucherList(serviceList.getValue());
-            registerVoucher.setValue(repository.hasVoucher());
+            if (checkEntranceTicketCount(serviceList.getValue())) {
+                repository.createVoucherList(serviceList.getValue());
+                registerVoucher.setValue(repository.hasVoucher());
+            } else {
+                showErrorMessage.setValue(R.string.error);
+            }
         }
+    }
+
+    private boolean checkEntranceTicketCount(List<IGashtLocationService> list) {
+        int tmp = findEntranceLocation(list);
+        if (tmp != -1) {
+            return findMaxTicketCount(list,tmp) <= list.get(tmp).getCount();
+        } else {
+            return false;
+        }
+    }
+
+    private int findEntranceLocation(List<IGashtLocationService> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getModelId().equals("1")) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int findMaxTicketCount(List<IGashtLocationService> list, int entrancePosition) {
+        int t = -1;
+        for (int i = 0; i < list.size(); i++) {
+            if (i != entrancePosition) {
+                if (list.get(i).getCount() > t) {
+                    t = list.get(i).getCount();
+                }
+            }
+        }
+        return t;
     }
 
     private void getTicketData() {

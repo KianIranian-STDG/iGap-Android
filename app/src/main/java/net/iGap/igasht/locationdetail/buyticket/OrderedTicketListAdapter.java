@@ -36,12 +36,7 @@ public class OrderedTicketListAdapter extends RecyclerView.Adapter<OrderedTicket
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         if (items.get(position).getModelId().equals("1")) {
-            viewHolder.plusButton.setVisibility(View.GONE);
-            viewHolder.minusButton.setVisibility(View.GONE);
             entrancePosition = viewHolder.getAdapterPosition();
-        } else {
-            viewHolder.plusButton.setVisibility(View.VISIBLE);
-            viewHolder.minusButton.setVisibility(View.VISIBLE);
         }
 
         viewHolder.ticketTitle.setText(items.get(position).getServiceNameWithLanguage());
@@ -71,7 +66,7 @@ public class OrderedTicketListAdapter extends RecyclerView.Adapter<OrderedTicket
     private void updateEntranceItemCount() {
         if (entrancePosition > -1) {
             int maxTicketCount = findMaxTicketCount();
-            if (maxTicketCount != -1 && items.get(entrancePosition).getCount() != maxTicketCount) {
+            if (maxTicketCount != -1 && items.get(entrancePosition).getCount() < maxTicketCount) {
                 items.get(entrancePosition).setCount(maxTicketCount);
                 notifyItemChanged(entrancePosition);
             }

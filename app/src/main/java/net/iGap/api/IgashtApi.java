@@ -1,6 +1,7 @@
 package net.iGap.api;
 
 import net.iGap.igasht.BaseIGashtResponse;
+import net.iGap.igasht.barcodescaner.TicketQRCodeResponse;
 import net.iGap.igasht.historylocation.IGashtTicketDetail;
 import net.iGap.igasht.historylocation.TicketHistoryListResponse;
 import net.iGap.igasht.locationdetail.RegisterTicketResponse;
@@ -38,4 +39,7 @@ public interface IgashtApi {
     @GET("ticket/list")
     Call<TicketHistoryListResponse<IGashtTicketDetail>> requestGetTicketList(@Query("offet") int offset,
                                                                             @Query("limit") int limit);
+
+    @GET("ticket/qr-code/{voucher_number}")
+    Call<TicketQRCodeResponse> requestGetTicketQRCode(@Path("voucher_number") String voucherNumber);
 }

@@ -2874,7 +2874,7 @@
     <string name="igasht_order_ticket_title">%s برای %d نفر</string>
     <string name="igasht_favorites_title">علاقه مندی ها</string>
     <string name="igasht_history_title">تاریخچه</string>
-    <string name="igasht_total_ticket_price">مبلغ نهایی: %d تومان</string>
+    <string name="igasht_total_ticket_price">مبلغ نهایی: %d ریال</string>
     <string name="igasht_add_ticket_error">لطفا بلیت خود را اضافه کنید.</string>
     <string name="str_frag_sync_contactTitle">قل مرحبا لأصدقائك</string>
     <string name="str_frag_sync_contactWelcome">مرحبا بك في آی کب</string>
@@ -2939,5 +2939,6 @@
     <string name="igasht_select_location_button_title">انتخاب محل</string>
     <string name="igasht_selected_location_title">المناطق الترفيهية في محافظة %s</string>
     <string name="igasht_location_found_count">%d سلعة موجودة</string>
+    <string name="igasht_success_payment">پرداخت شما با موفقیت انجام شد</string>
     <string name="noDetail">فاقد توضیحات</string>
 </resources>

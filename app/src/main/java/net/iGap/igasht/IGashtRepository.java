@@ -1,18 +1,15 @@
 package net.iGap.igasht;
 
-import android.os.Handler;
-import android.util.Log;
-
 import net.iGap.api.IgashtApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.errorhandler.ResponseCallback;
+import net.iGap.igasht.barcodescaner.TicketQRCodeResponse;
 import net.iGap.igasht.historylocation.IGashtTicketDetail;
 import net.iGap.igasht.historylocation.TicketHistoryListResponse;
 import net.iGap.igasht.locationdetail.RegisterTicketResponse;
 import net.iGap.igasht.locationdetail.buyticket.IGashtLocationService;
 import net.iGap.igasht.locationdetail.buyticket.IGashtOrder;
-import net.iGap.igasht.locationdetail.buyticket.IGashtServiceAmount;
 import net.iGap.igasht.locationdetail.buyticket.IGashtVouchers;
 import net.iGap.igasht.locationlist.IGashtLocationItem;
 import net.iGap.igasht.provinceselect.IGashtProvince;
@@ -42,14 +39,12 @@ public class IGashtRepository {
 
     public static IGashtRepository getInstance() {
         if (instance == null) {
-            Log.wtf(IGashtRepository.class.getName(), "getInstance create new instance");
             instance = new IGashtRepository();
         }
         return instance;
     }
 
     public void clearInstance() {
-        Log.wtf(IGashtRepository.class.getName(), "clearInstance");
         instance = null;
     }
 
@@ -200,10 +195,33 @@ public class IGashtRepository {
         }
     }
 
-    public void createVoucherList(List<IGashtLocationService> data) {
+    public void getTicketQRCode(String voucherNumber, ResponseCallback<String> callback) {
+        igashtApi.requestGetTicketQRCode(voucherNumber).enqueue(new Callback<TicketQRCodeResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<TicketQRCodeResponse> call, @NotNull Response<TicketQRCodeResponse> response) {
+                if (response.code() == 200) {
+                    callback.onSuccess(response.body().getQrCode());
+                } else {
+                    try {
+                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<TicketQRCodeResponse> call, @NotNull Throwable t) {
+                t.printStackTrace();
+                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
+            }
+        });
+    }
+
+    public void createVoucherList(@NotNull List<IGashtLocationService> data) {
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).getCount() > 0) {
-                selectedServiceList.add(new IGashtVouchers(data.get(i).getPersianTicket().getAmount(), data.get(i).getCount()));
+                selectedServiceList.add(new IGashtVouchers(data.get(i).getPersianTicket().getVoucherinfoId(), data.get(i).getCount()));
             }
         }
     }
