@@ -14,7 +14,7 @@ public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<RegisterT
     private ObservableBoolean showBuyTicketView = new ObservableBoolean(true);
 
     private MutableLiveData<Boolean> loadBuyTicketView = new MutableLiveData<>();
-    private MutableLiveData<String> goHistoryPage = new MutableLiveData<>();
+    private MutableLiveData<Boolean> goHistoryPage = new MutableLiveData<>();
     private MutableLiveData<String> goPayment = new MutableLiveData<>();
     private MutableLiveData<Boolean> paymentError = new MutableLiveData<>();
     private IGashtRepository repository;
@@ -39,7 +39,7 @@ public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<RegisterT
         return showBuyTicketView;
     }
 
-    public MutableLiveData<String> getGoHistoryPage() {
+    public MutableLiveData<Boolean> getGoHistoryPage() {
         return goHistoryPage;
     }
 
@@ -67,7 +67,7 @@ public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<RegisterT
         Log.wtf(this.getClass().getName(), "status: " + data.getStatus());
         switch (data.getStatus()) {
             case "SUCCESS":
-                goHistoryPage.setValue(data.getVoucher());
+                goHistoryPage.setValue(true);
                 break;
             case "PROGRESS":
                 goPayment.setValue(data.getToken());

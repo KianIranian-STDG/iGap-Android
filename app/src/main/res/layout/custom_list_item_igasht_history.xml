@@ -3,23 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
     android:padding="@dimen/dp8">
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/barCode"
-        style="@style/myIconTextViewStyle"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textColor="@color/white"
+        style="@style/baseFontIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="@drawable/shape_igasht_yellow"
-        android:gravity="center"
+        android:padding="@dimen/dp4"
         android:text="@string/scan_qr_code_icon"
-        android:textSize="40dp"
+        android:textColor="@color/white"
+        android:textSize="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent=".1" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/itemDate"

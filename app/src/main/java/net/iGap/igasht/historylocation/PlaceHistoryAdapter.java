@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.helper.HelperCalander;
 
 import java.util.List;
 
@@ -34,8 +35,8 @@ public class PlaceHistoryAdapter extends RecyclerView.Adapter<PlaceHistoryAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.barCode.setOnClickListener(v -> clickCallback.onClick(viewHolder.getAdapterPosition()));
-        viewHolder.date.setText(items.get(i).getLocationName());/**تاریخ خرید*/
+        viewHolder.itemView.setOnClickListener(v -> clickCallback.onClick(viewHolder.getAdapterPosition()));
+        viewHolder.date.setText(HelperCalander.getClocktime((long) items.get(i).getCreated(),false));
         viewHolder.detail.setText(items.get(i).getLocationName());/**مشخصات خرید*/
     }
 

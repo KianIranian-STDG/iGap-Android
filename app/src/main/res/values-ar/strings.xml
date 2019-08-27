@@ -2933,7 +2933,7 @@
     <string name="unblock">رفع الحظر</string>
     <string name="view_profile">عرض المستخدم</string>
     <string name="scan_barcode_to_enter_visit">جهت ورود و بازدید بارکد فوق را اسکن کنید</string>
-    <string name="Your_purchase_code">کد خرید شما</string>
+    <string name="Your_purchase_code">کد خرید شما %s</string>
     <string name="igasht_count_title">تعداد</string>
     <string name="igasht_service_title">سرویس</string>
     <string name="igasht_select_location_button_title">انتخاب محل</string>
@@ -2941,4 +2941,5 @@
     <string name="igasht_location_found_count">%d سلعة موجودة</string>
     <string name="igasht_success_payment">پرداخت شما با موفقیت انجام شد</string>
     <string name="noDetail">فاقد توضیحات</string>
+    <string name="igasht_empty_history_message">هنوز بلیطی خریداری نشده است.</string>
 </resources>

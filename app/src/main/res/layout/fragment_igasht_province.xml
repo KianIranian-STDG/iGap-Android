@@ -15,6 +15,7 @@
         android:layout_height="match_parent"
         android:clickable="true"
         android:focusable="true"
+        android:layoutDirection="locale"
         android:orientation="vertical">
 
         <LinearLayout
@@ -29,6 +30,7 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <net.iGap.module.RadiusImageView
                 android:id="@+id/backgroundImage"
                 android:layout_width="match_parent"
@@ -36,11 +38,11 @@
                 android:layout_margin="@dimen/dp16"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                app:riv_corner_radius="@dimen/dp8"
                 android:src="@drawable/image_igasht_province"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:riv_corner_radius="@dimen/dp8" />
 
             <LinearLayout
                 android:id="@+id/frameLayout"
@@ -50,12 +52,12 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:visibility="@{viewModel.showMainView}"
                 android:layout_marginRight="16dp"
                 android:background="@{context.getResources().getDrawable(viewModel.getBackgroundShap)}"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:padding="@dimen/dp8"
+                android:visibility="@{viewModel.showMainView}"
                 app:layout_constraintEnd_toEndOf="@+id/backgroundImage"
                 app:layout_constraintStart_toStartOf="@+id/backgroundImage"
                 app:layout_constraintTop_toBottomOf="@+id/backgroundImage">
@@ -119,8 +121,8 @@
                             android:id="@+id/provinceSearchText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_gravity="center"
+                            android:layout_weight="1"
                             android:afterTextChanged="@{(s)->viewModel.onProvinceSearchTextChange(s.toString())}"
                             android:background="@color/transparent"
                             android:completionThreshold="0"
@@ -164,8 +166,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/frameLayout"/>
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+                app:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>
 </layout>

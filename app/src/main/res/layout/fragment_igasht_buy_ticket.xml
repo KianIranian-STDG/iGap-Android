@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <data>
-        <variable
-            name="viewModel"
-            type="net.iGap.igasht.locationdetail.buyticket.IGashtBuyTicketViewModel" />
-    </data>
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
@@ -30,6 +25,16 @@
             app:layout_constraintTop_toBottomOf="@id/addedPlaceList"
             app:layout_constraintWidth_percent=".6" />
 
+        <ProgressBar
+            android:id="@+id/loadingView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.showLoadingView}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <View
             android:id="@+id/view_container"
             android:layout_width="0dp"
@@ -48,8 +53,8 @@
             android:layout_marginBottom="@dimen/dp4"
             android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/priceTitle"
-            app:layout_constraintEnd_toStartOf="@id/countTitle"
-            app:layout_constraintStart_toEndOf="@id/priceTitle"
+            app:layout_constraintEnd_toStartOf="@id/priceTitle"
+            app:layout_constraintStart_toEndOf="@id/countTitle"
             app:layout_constraintTop_toTopOf="@+id/priceTitle" />
 
         <View
@@ -60,9 +65,9 @@
             android:layout_marginBottom="@dimen/dp4"
             android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/priceTitle"
-            app:layout_constraintEnd_toStartOf="@id/serviceTitle"
+            app:layout_constraintEnd_toStartOf="@id/countTitle"
             app:layout_constraintHorizontal_bias="0.407"
-            app:layout_constraintStart_toEndOf="@id/countTitle"
+            app:layout_constraintStart_toEndOf="@id/serviceTitle"
             app:layout_constraintTop_toTopOf="@id/priceTitle"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -90,8 +95,9 @@
             android:text="@string/price"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/view10"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@id/countTitle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".3" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/countTitle"
@@ -102,11 +108,10 @@
             android:text="@string/igasht_count_title"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/priceTitle"
-            app:layout_constraintEnd_toStartOf="@id/view10"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@id/view11"
+            app:layout_constraintEnd_toStartOf="@id/priceTitle"
+            app:layout_constraintStart_toEndOf="@id/serviceTitle"
             app:layout_constraintTop_toTopOf="@id/priceTitle"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintWidth_percent=".3" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/serviceTitle"
@@ -117,9 +122,10 @@
             android:text="@string/igasht_service_title"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/priceTitle"
-            app:layout_constraintEnd_toStartOf="@id/view11"
+            app:layout_constraintEnd_toStartOf="@id/countTitle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/priceTitle" />
+            app:layout_constraintTop_toTopOf="@id/priceTitle"
+            app:layout_constraintWidth_percent=".4" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/totalPrice"
@@ -137,18 +143,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addNewPlaceButton" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/addedPlaceList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="@dimen/dp100"
-            android:visibility="@{viewModel.showMainView}"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/priceTitle"
-            app:layout_constraintVertical_weight="1" />
-
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/refreshView"
             style="@style/myIconTextViewStyle"
@@ -162,17 +156,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ProgressBar
-            android:id="@+id/loadingView"
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/addedPlaceList"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.showLoadingView}"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:minHeight="@dimen/dp100"
+            android:visibility="@{viewModel.showMainView}"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/priceTitle"
+            app:layout_constraintVertical_weight="1" />
 
     </android.support.constraint.ConstraintLayout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.igasht.locationdetail.buyticket.IGashtBuyTicketViewModel" />
+    </data>
 
 
 </layout>

@@ -80,6 +80,7 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
     public void onPayClick() {
         if (serviceList.getValue() != null) {
             if (checkEntranceTicketCount(serviceList.getValue())) {
+                repository.clearSelectedServiceList();
                 repository.createVoucherList(serviceList.getValue());
                 registerVoucher.setValue(repository.hasVoucher());
             } else {

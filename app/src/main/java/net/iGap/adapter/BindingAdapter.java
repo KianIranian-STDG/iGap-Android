@@ -41,6 +41,8 @@ public class BindingAdapter {
     public static void setImage(ImageView imageView, String imageUrl) {
         if (imageUrl != null) {
             ImageLoadingService.load(imageUrl, imageView);
+        } else {
+            Picasso.get().load(R.drawable.logo_igap).fit().centerInside().into(imageView);
         }
     }
 
