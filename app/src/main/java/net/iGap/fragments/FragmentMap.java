@@ -249,8 +249,11 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
             longitude = bundle.getDouble(FragmentMap.Longitude);
 
             mode = (Mode) bundle.getSerializable(PosoitionMode);
-            if (G.onHelperSetAction != null) {
-                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_LOCATION);
+
+            if (mode == Mode.sendPosition){
+                if (G.onHelperSetAction != null) {
+                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_LOCATION);
+                }
             }
 
             initComponent(view, bundle.getInt("type", 0), bundle.getLong("roomId", 00), bundle.getString("senderId", null));
