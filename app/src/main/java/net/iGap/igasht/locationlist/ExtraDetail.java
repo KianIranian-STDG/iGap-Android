@@ -11,7 +11,7 @@ public class ExtraDetail {
     @SerializedName("closing_times")
     private String mClosingTimes;
     @SerializedName("coffee_shop")
-    private String mCoffeeShop;
+    private Boolean mCoffeeShop;
     @SerializedName("content")
     private String mContent;
     @SerializedName("lat")
@@ -25,15 +25,15 @@ public class ExtraDetail {
     @SerializedName("parking")
     private Boolean mParking;
     @SerializedName("prayer_room")
-    private String mPrayerRoom;
+    private Boolean mPrayerRoom;
     @SerializedName("resturant")
-    private String mResturant;
+    private Boolean mResturant;
     @SerializedName("wc")
-    private String mWc;
+    private Boolean mWc;
     @SerializedName("weelchair_ramp")
-    private String mWeelchairRamp;
+    private Boolean mWeelchairRamp;
     @SerializedName("wifi")
-    private String mWifi;
+    private Boolean mWifi;
     @SerializedName("working_time")
     private String mWorkingTime;
 
@@ -53,11 +53,11 @@ public class ExtraDetail {
         mClosingTimes = closingTimes;
     }
 
-    public String getCoffeeShop() {
+    public Boolean getCoffeeShop() {
         return mCoffeeShop;
     }
 
-    public void setCoffeeShop(String coffeeShop) {
+    public void setCoffeeShop(Boolean coffeeShop) {
         mCoffeeShop = coffeeShop;
     }
 
@@ -109,43 +109,43 @@ public class ExtraDetail {
         mParking = parking;
     }
 
-    public String getPrayerRoom() {
+    public Boolean getPrayerRoom() {
         return mPrayerRoom;
     }
 
-    public void setPrayerRoom(String prayerRoom) {
+    public void setPrayerRoom(Boolean prayerRoom) {
         mPrayerRoom = prayerRoom;
     }
 
-    public String getResturant() {
+    public Boolean getResturant() {
         return mResturant;
     }
 
-    public void setResturant(String resturant) {
+    public void setResturant(Boolean resturant) {
         mResturant = resturant;
     }
 
-    public String getWc() {
+    public Boolean getWc() {
         return mWc;
     }
 
-    public void setWc(String wc) {
+    public void setWc(Boolean wc) {
         mWc = wc;
     }
 
-    public String getWeelchairRamp() {
+    public Boolean getWeelchairRamp() {
         return mWeelchairRamp;
     }
 
-    public void setWeelchairRamp(String weelchairRamp) {
+    public void setWeelchairRamp(Boolean weelchairRamp) {
         mWeelchairRamp = weelchairRamp;
     }
 
-    public boolean getWifi() {
-        return mWifi.equals("true");
+    public Boolean getmWifi() {
+        return mWifi;
     }
 
-    public void setWifi(String wifi) {
+    public void setWifi(Boolean wifi) {
         mWifi = wifi;
     }
 
