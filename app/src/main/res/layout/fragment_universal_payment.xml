@@ -116,7 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp8"
             android:gravity="center"
-            android:text="@{String.valueOf(viewModel.price)}"
+            android:text="@{@string/payment_rial(viewModel.price)}"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/divider1"
             app:layout_constraintEnd_toEndOf="@id/paymentType"
