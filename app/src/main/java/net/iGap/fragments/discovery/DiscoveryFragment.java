@@ -360,6 +360,12 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         private int currentPageId;
         private List<Integer> pages;
 
+        public interface OnDeepValidLink {
+            void linkValid(String link);
+
+            void linkInvalid(String link);
+        }
+
         public CrawlerStruct(int currentPage, List<Integer> pages) {
             this.currentPage = currentPage;
             this.pages = pages;
