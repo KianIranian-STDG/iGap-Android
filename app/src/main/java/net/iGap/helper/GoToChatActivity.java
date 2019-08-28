@@ -20,6 +20,7 @@ import io.realm.Realm;
 
 public class GoToChatActivity {
 
+    private final String TAG = this.getClass().getName();
     private long roomid = 0;
     private long peerID = 0;
 
@@ -86,6 +87,8 @@ public class GoToChatActivity {
                 }
             }
         }
+
+        Log.e(TAG, "startActivity: activity ->" + activity.getClass().getName());
 
         if (HelperGetDataFromOtherApp.hasSharedData) {
 
@@ -161,8 +164,11 @@ public class GoToChatActivity {
                 Log.wtf(this.getClass().getName(),"loadChatFragment");
             }
         }else{
-            if (activity.getSupportFragmentManager() != null)
+            if (activity.getSupportFragmentManager() != null){
                 new HelperFragment(activity.getSupportFragmentManager(),fragmentChat).setReplace(false).load();
+                Log.e(TAG, "loadChatFragment: activity.getSupportFragmentManager() != null" );
+            }else
+                Log.e(TAG, "loadChatFragment: activity.getSupportFragmentManager() == null");
         }
     }
 
