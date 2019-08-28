@@ -429,6 +429,12 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         });
 
         RippleView rippleDeleteSelected = (RippleView) view.findViewById(R.id.asm_riple_delete_selected);
+
+        if (roomType == ProtoGlobal.Room.Type.CHANNEL)
+            rippleDeleteSelected.setVisibility(View.GONE);
+        else
+            rippleCloseAppBarSelected.setVisibility(View.GONE);
+
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
