@@ -1993,6 +1993,12 @@ Want to get it?</string>
     <string name="igasht_selected_location_title">Recreational areas of %s province</string>
     <string name="igasht_location_found_count">%d items found</string>
     <string name="igasht_success_payment">Your payment has been successful</string>
-    <string name="noDetail">فاقد توضیحات</string>
+    <string name="noDetail_textView">Is no detail</string>
     <string name="igasht_empty_history_message">No tickets purchased yet.</string>
+    <string name="Restaurant_textView">Restaurant</string>
+    <string name="parking_textView">Parking</string>
+    <string name="wifi_textView">WiFi</string>
+    <string name="coffeeShop_textView">Coffee shop</string>
+    <string name="wheelchair_textView">wheelchair</string>
+    <string name="prayerRoom_textView">Prayer room</string>
 </resources>

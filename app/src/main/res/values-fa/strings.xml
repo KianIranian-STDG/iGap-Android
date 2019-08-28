@@ -1996,6 +1996,12 @@
     <string name="igasht_selected_location_title">نقاط تفریحی استان %s</string>
     <string name="igasht_location_found_count">%d مورد یافت شد</string>
     <string name="igasht_success_payment">پرداخت شما با موفقیت انجام شد</string>
-    <string name="noDetail">فاقد توضیحات</string>
+    <string name="noDetail_textView">فاقد توضیحات</string>
     <string name="igasht_empty_history_message">هنوز بلیطی خریداری نشده است.</string>
+    <string name="Restaurant_textView">رستوران</string>
+    <string name="parking_textView">پارکینگ</string>
+    <string name="wifi_textView">وای فای</string>
+    <string name="coffeeShop_textView">کافی شاپ</string>
+    <string name="wheelchair_textView">ویلچر</string>
+    <string name="prayerRoom_textView">نمازخانه</string>
 </resources>
