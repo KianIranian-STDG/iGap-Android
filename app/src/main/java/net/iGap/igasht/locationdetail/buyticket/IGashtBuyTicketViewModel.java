@@ -16,7 +16,6 @@ import java.util.List;
 public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResponse<IGashtLocationService>> {
 
     private ObservableInt totalPrice = new ObservableInt(0);
-    private ObservableInt viewBackground = new ObservableInt(R.drawable.igasht_tabbar_background_light);
     private SingleLiveEvent<Boolean> registerVoucher = new SingleLiveEvent<>();
     private MutableLiveData<List<IGashtLocationService>> serviceList = new MutableLiveData<>();
     private SingleLiveEvent<Integer> showErrorMessage = new SingleLiveEvent<>();
@@ -25,9 +24,6 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
 
     public IGashtBuyTicketViewModel() {
         repository = IGashtRepository.getInstance();
-        if (G.isDarkTheme) {
-            viewBackground.set(R.drawable.igasht_tabbar_background_dark);
-        }
         getTicketData();
     }
 
@@ -35,9 +31,6 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
         return totalPrice;
     }
 
-    public ObservableInt getViewBackground() {
-        return viewBackground;
-    }
 
     public void setTotalPrice(int totalPrice) {
         this.totalPrice.set(totalPrice);

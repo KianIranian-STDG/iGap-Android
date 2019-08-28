@@ -63,7 +63,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/dp8"
             android:layout_marginBottom="@dimen/dp8"
-            android:background="@color/gray"
+            android:background="@color/gray_300"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintEnd_toEndOf="@+id/subTitle"
             app:layout_constraintStart_toStartOf="@+id/subTitle"
@@ -107,7 +107,7 @@
             android:id="@+id/view1"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="@color/gray"
+            android:background="@color/gray_300"
             android:layout_marginTop="@dimen/dp8"
             android:layout_marginBottom="@dimen/dp8"
             android:visibility="@{viewModel.showMainView}"
@@ -135,7 +135,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/dp8"
             android:layout_marginBottom="@dimen/dp8"
-            android:background="@color/gray"
+            android:background="@color/gray_300"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintEnd_toEndOf="@+id/subDetail2"
             app:layout_constraintStart_toStartOf="@+id/subDetail2"
@@ -194,7 +194,7 @@
                     android:textColor="@{viewModel.haveParking==R.string.check_icon ? @color/green : @color/red}" />
                 <View
                     android:layout_width="0.5dp"
-                    android:background="@color/gray"
+                    android:background="@color/gray_300"
                     android:layout_height="@dimen/dp32"
                     android:layout_margin="@dimen/dp4"
                     android:layout_gravity="center_vertical" />
@@ -219,7 +219,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="@color/gray"
+                android:background="@color/gray_300"
                 android:layout_margin="@dimen/dp4"/>
             <TableRow
                 android:layout_width="match_parent"
@@ -248,7 +248,7 @@
                     android:textColor="@{viewModel.haveRestaurant==R.string.check_icon ? @color/green : @color/red}" />
                 <View
                     android:layout_width="0.5dp"
-                    android:background="@color/gray"
+                    android:background="@color/gray_300"
                     android:layout_height="@dimen/dp32"
                     android:layout_margin="@dimen/dp4"
                     android:layout_gravity="center_vertical" />
@@ -273,7 +273,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="@color/gray"
+                android:background="@color/gray_300"
                 android:layout_margin="@dimen/dp4"/>
             <TableRow
                 android:layout_width="match_parent"
@@ -302,7 +302,7 @@
                     android:textColor="@{viewModel.haveWheelchairRamp==R.string.check_icon ? @color/green : @color/red}" />
                 <View
                     android:layout_width="0.5dp"
-                    android:background="@color/gray"
+                    android:background="@color/gray_300"
                     android:layout_height="@dimen/dp32"
                     android:layout_margin="@dimen/dp4"
                     android:layout_gravity="center_vertical" />
@@ -327,7 +327,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="@color/gray"
+                android:background="@color/gray_300"
                 android:layout_margin="@dimen/dp4"/>
             <TableRow
                 android:layout_width="match_parent"
@@ -357,6 +357,7 @@
                 <View
                     android:layout_width="0.5dp"
                     android:layout_height="@dimen/dp32"
+                    android:background="@color/gray_300"
                     android:layout_margin="@dimen/dp4"
                     android:layout_gravity="center_vertical" />
                 <android.support.v7.widget.AppCompatTextView
