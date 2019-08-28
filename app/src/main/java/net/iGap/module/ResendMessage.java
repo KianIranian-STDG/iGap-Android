@@ -69,7 +69,7 @@ public class ResendMessage implements IResendMessage {
             return;
         }
         try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransaction(new Realm.Transaction() {
+            realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     for (StructMessageInfo message : mMessages) {
@@ -84,69 +84,68 @@ public class ResendMessage implements IResendMessage {
 
                     }
                 }
-            });
-
-            if (all) {
-                mListener.resendAllMessages();
-            } else {
-                mListener.resendMessage();
-            }
-
-            for (int i = 0; i < mMessages.size(); i++) {
-                final int j = i;
+            }, () -> {
                 if (all) {
-                    if (FragmentChat.allowResendMessage(mMessages.get(j).realmRoomMessage.getMessageId())) {
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                try (Realm realm = Realm.getDefaultInstance()) {
-                                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessages.get(j).realmRoomMessage.getMessageId()).findFirst();
-                                    if (roomMessage != null) {
-                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
-                                        if (realmRoom != null) {
-                                            if (roomMessage.getAttachment() == null) {
-                                                ProtoGlobal.Room.Type roomType = realmRoom.getType();
-                                                G.chatSendMessageUtil.build(roomType, roomMessage.getRoomId(), roomMessage);
-                                            } else {
-                                                if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
-                                                    new ChatSendMessageUtil().build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage).sendMessage(roomMessage.getMessageId() + "");
+                    mListener.resendAllMessages();
+                } else {
+                    mListener.resendMessage();
+                }
+
+                for (int i = 0; i < mMessages.size(); i++) {
+                    final int j = i;
+                    if (all) {
+                        if (FragmentChat.allowResendMessage(mMessages.get(j).realmRoomMessage.getMessageId())) {
+                            G.handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try (Realm realm1 = Realm.getDefaultInstance()) {
+                                        RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessages.get(j).realmRoomMessage.getMessageId()).findFirst();
+                                        if (roomMessage != null) {
+                                            RealmRoom realmRoom = realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+                                            if (realmRoom != null) {
+                                                if (roomMessage.getAttachment() == null) {
+                                                    ProtoGlobal.Room.Type roomType = realmRoom.getType();
+                                                    G.chatSendMessageUtil.build(roomType, roomMessage.getRoomId(), roomMessage);
                                                 } else {
-                                                    HelperUploadFile.startUploadTaskChat(roomMessage.getRoomId(), realmRoom.getType(), roomMessage.getAttachment().getLocalFilePath(), roomMessage.getMessageId(), roomMessage.getMessageType(), roomMessage.getMessage(), RealmRoomMessage.getReplyMessageId(roomMessage), null);
+                                                    if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
+                                                        new ChatSendMessageUtil().build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage).sendMessage(roomMessage.getMessageId() + "");
+                                                    } else {
+                                                        HelperUploadFile.startUploadTaskChat(roomMessage.getRoomId(), realmRoom.getType(), roomMessage.getAttachment().getLocalFilePath(), roomMessage.getMessageId(), roomMessage.getMessageType(), roomMessage.getMessage(), RealmRoomMessage.getReplyMessageId(roomMessage), null);
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
 
+                                    }
                                 }
-                            }
-                        }, 1000 * j);
-                    }
-                } else {
-                    if (mMessages.get(j).realmRoomMessage.getMessageId() == mSelectedMessageID) {
-                        if (FragmentChat.allowResendMessage(mSelectedMessageID)) {
-                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessages.get(j).realmRoomMessage.getMessageId()).findFirst();
-                            if (roomMessage != null) {
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
-                                if (realmRoom != null) {
-                                    ProtoGlobal.Room.Type roomType = realmRoom.getType();
-                                    if (roomMessage.getAttachment() == null) {
-                                        G.chatSendMessageUtil.build(roomType, roomMessage.getRoomId(), roomMessage);
-                                    } else {
-                                        if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
-                                            new ChatSendMessageUtil().build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage).sendMessage(roomMessage.getMessageId() + "");
+                            }, 1000 * j);
+                        }
+                    } else {
+                        if (mMessages.get(j).realmRoomMessage.getMessageId() == mSelectedMessageID) {
+                            if (FragmentChat.allowResendMessage(mSelectedMessageID)) {
+                                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessages.get(j).realmRoomMessage.getMessageId()).findFirst();
+                                if (roomMessage != null) {
+                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+                                    if (realmRoom != null) {
+                                        ProtoGlobal.Room.Type roomType = realmRoom.getType();
+                                        if (roomMessage.getAttachment() == null) {
+                                            G.chatSendMessageUtil.build(roomType, roomMessage.getRoomId(), roomMessage);
                                         } else {
-                                            HelperUploadFile.startUploadTaskChat(roomMessage.getRoomId(), roomType, roomMessage.getAttachment().getLocalFilePath(), roomMessage.getMessageId(), roomMessage.getMessageType(), roomMessage.getMessage(), RealmRoomMessage.getReplyMessageId(roomMessage), null);
+                                            if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
+                                                new ChatSendMessageUtil().build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage).sendMessage(roomMessage.getMessageId() + "");
+                                            } else {
+                                                HelperUploadFile.startUploadTaskChat(roomMessage.getRoomId(), roomType, roomMessage.getAttachment().getLocalFilePath(), roomMessage.getMessageId(), roomMessage.getMessageType(), roomMessage.getMessage(), RealmRoomMessage.getReplyMessageId(roomMessage), null);
+                                            }
                                         }
                                     }
                                 }
+                                break;
                             }
-                            break;
                         }
                     }
                 }
-            }
+            });
         }
-
     }
 
     @Override
