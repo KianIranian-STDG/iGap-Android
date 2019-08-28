@@ -102,7 +102,6 @@ public final class StartupActions {
 
         new Thread(this::manageSettingPreferences).start();
         EmojiManager.install(new IosEmojiProvider());
-        new Thread(this::detectDeviceType).start();
         new Thread(StartupActions::makeFolder).start();
         new Thread(this::initializeGlobalVariables).start();
         new Thread(ConnectionManager::manageConnection).start();
@@ -379,31 +378,6 @@ public final class StartupActions {
             e.printStackTrace();
         }
         return new File(G.DIR_APP);
-    }
-
-    /**
-     * if device is tablet twoPaneMode will be enabled
-     */
-    private void detectDeviceType() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-
-        float yInches = metrics.heightPixels / metrics.ydpi;
-        float xInches = metrics.widthPixels / metrics.xdpi;
-        double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
-        if (diagonalInches >= 7) {
-            G.twoPaneMode = true;
-        } else {
-            G.twoPaneMode = false;
-        }
-
-        if (G.context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && G.twoPaneMode) {
-            G.maxChatBox = metrics.widthPixels - (metrics.widthPixels / 3) - ViewMaker.i_Dp(R.dimen.dp80);
-        } else {
-            G.maxChatBox = metrics.widthPixels - ViewMaker.i_Dp(R.dimen.dp80);
-        }
-
     }
 
     /**

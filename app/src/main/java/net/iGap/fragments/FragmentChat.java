@@ -9373,7 +9373,7 @@ public class FragmentChat extends BaseFragment
         }
 
 
-        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
+        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot && !RealmRoom.isNotificationServices(mRoomId)) {
             items.add(getString(R.string.SendMoney));
         } else {
             items.remove(getString(R.string.SendMoney));

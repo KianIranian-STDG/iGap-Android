@@ -1603,7 +1603,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
                                 if (openChat) {
                                     new GoToChatActivity(mInfo.getId()).startActivity(getActivity());
-
                                 }
                             }
                         }
