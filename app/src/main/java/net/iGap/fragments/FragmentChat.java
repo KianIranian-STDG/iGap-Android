@@ -3050,7 +3050,6 @@ public class FragmentChat extends BaseFragment
                     if (!message.equals(messageInfo.realmRoomMessage.getMessage()) && edtChat.getText().length() > 0) {
 
                         RealmRoomMessage.editMessageClient(mRoomId, messageInfo.realmRoomMessage.getMessageId(), message);
-                        RealmClientCondition.addOfflineEdit(mRoomId, messageInfo.realmRoomMessage.getMessageId(), message);
 
                         /**
                          * update message text in adapter

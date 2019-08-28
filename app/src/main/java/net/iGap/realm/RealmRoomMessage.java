@@ -846,6 +846,12 @@ public class RealmRoomMessage extends RealmObject {
                                 break;
                         }
 
+                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+
+                        if (realmClientCondition != null) {
+                            realmClientCondition.getOfflineEdited().add(RealmOfflineEdited.put(realm, messageId, message));
+                        }
+
                     }
                 }
             });

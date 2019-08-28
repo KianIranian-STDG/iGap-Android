@@ -90,20 +90,6 @@ public class RealmClientCondition extends RealmObject {
         }
     }
 
-    public static void addOfflineEdit(long roomId, final long messageId, final String message) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    if (realmClientCondition != null) {
-                        realmClientCondition.getOfflineEdited().add(RealmOfflineEdited.put(realm, messageId, message));
-                    }
-                }
-            });
-        }
-    }
-
     public static void addOfflineDelete(Realm realm, RealmClientCondition realmClientCondition, long messageId, ProtoGlobal.Room.Type roomType, boolean bothDelete) {
         realmClientCondition.getOfflineDeleted().add(RealmOfflineDelete.setOfflineDeleted(realm, messageId, roomType, bothDelete));
     }
