@@ -1988,4 +1988,5 @@
     <string name="check_update_title">کنترل بروزرسانی</string>
     <string name="unblock">رفع انسداد</string>
     <string name="view_profile">مشاهده پروفایل</string>
+    <string name="link_not_valid">لینک نامعتبر</string>
 </resources>
