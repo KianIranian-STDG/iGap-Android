@@ -216,6 +216,11 @@
                     android:text="@{viewModel.haveWiFi}"
                     android:textColor="@{viewModel.haveWiFi==R.string.check_icon ? @color/green : @color/red}" />
             </TableRow>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/gray"
+                android:layout_margin="@dimen/dp4"/>
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -265,6 +270,11 @@
                     android:text="@{viewModel.haveCoffeeShop}"
                     android:textColor="@{viewModel.haveCoffeeShop==R.string.check_icon ? @color/green : @color/red}" />
             </TableRow>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/gray"
+                android:layout_margin="@dimen/dp4"/>
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -314,6 +324,11 @@
                     android:text="@{viewModel.havePrayerRoom}"
                     android:textColor="@{viewModel.havePrayerRoom==R.string.check_icon ? @color/green : @color/red}" />
             </TableRow>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/gray"
+                android:layout_margin="@dimen/dp4"/>
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -329,16 +344,33 @@
                     android:layout_height="wrap_content"
                     android:text="پارکینگ"
                     android:layout_margin="@dimen/dp4"
-                    android:layout_weight="0.35" />
+                    android:layout_weight="2" />
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/check_wc"
                     style="@style/baseFontIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp4"
-                    android:layout_weight="0.15"
+                    android:layout_weight="1"
                     android:text="@{viewModel.haveWc}"
                     android:textColor="@{viewModel.haveWc==R.string.check_icon ? @color/green : @color/red}" />
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="@dimen/dp32"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_gravity="center_vertical" />
+                <android.support.v7.widget.AppCompatTextView
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="2" />
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/baseFontIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="1"/>
             </TableRow>
 
         </TableLayout>
