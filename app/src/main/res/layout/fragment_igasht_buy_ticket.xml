@@ -38,6 +38,8 @@
             android:id="@+id/view_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp4"
+            android:layout_marginBottom="@dimen/dp4"
             android:background="@{context.getResources().getDrawable(viewModel.viewBackground)}"
             app:layout_constraintBottom_toBottomOf="@id/priceTitle"
             app:layout_constraintEnd_toEndOf="parent"
