@@ -23,7 +23,7 @@ public class ExtraDetail {
     @SerializedName("main_picture")
     private String mMainPicture;
     @SerializedName("parking")
-    private String mParking;
+    private Boolean mParking;
     @SerializedName("prayer_room")
     private String mPrayerRoom;
     @SerializedName("resturant")
@@ -101,11 +101,11 @@ public class ExtraDetail {
         mMainPicture = mainPicture;
     }
 
-    public String getParking() {
+    public Boolean getParking() {
         return mParking;
     }
 
-    public void setParking(String parking) {
+    public void setParking(Boolean parking) {
         mParking = parking;
     }
 
