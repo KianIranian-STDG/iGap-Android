@@ -15,31 +15,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/price_ticket" />
 
-    <!--<View
-        android:id="@+id/view_amount"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/dp4"
-        android:layout_marginBottom="@dimen/dp4"
-        app:layout_constraintBottom_toBottomOf="@+id/price_ticket"
-        app:layout_constraintEnd_toStartOf="@id/count_ticket"
-        app:layout_constraintStart_toEndOf="@id/price_ticket"
-        app:layout_constraintTop_toTopOf="@+id/price_ticket" />-->
-
-
-    <!--<View
-        android:id="@+id/view_count"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/dp4"
-        android:layout_marginBottom="@dimen/dp4"
-        app:layout_constraintBottom_toBottomOf="@id/price_ticket"
-        app:layout_constraintEnd_toStartOf="@id/service_ticket"
-        app:layout_constraintHorizontal_bias="0.407"
-        app:layout_constraintStart_toEndOf="@id/count_ticket"
-        app:layout_constraintTop_toTopOf="@id/price_ticket"
-        app:layout_constraintVertical_bias="0.0" />-->
-
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/minusButton"
         style="@style/myIconTextViewStyle"
@@ -66,12 +41,11 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/price_ticket"
+        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp8"
-        android:text="@string/price"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/minusButton"
         app:layout_constraintTop_toTopOf="parent"
@@ -79,12 +53,11 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/count_ticket"
+        style="?textTitleColorSettingTheme"
         android:layout_width="55dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp8"
-        android:text="@string/igasht_count_title"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/price_ticket"
         app:layout_constraintEnd_toStartOf="@id/minusButton"
         app:layout_constraintStart_toEndOf="@id/plusButton"
@@ -92,12 +65,11 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/service_ticket"
+        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp8"
-        android:text="@string/igasht_service_title"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/price_ticket"
         app:layout_constraintEnd_toStartOf="@id/plusButton"
         app:layout_constraintStart_toStartOf="parent"

@@ -56,6 +56,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ll_igasht_detailBtn" />
+
                 <ProgressBar
                     android:id="@+id/loadingView"
                     android:layout_width="wrap_content"
@@ -65,6 +66,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
                 <LinearLayout
                     android:id="@+id/ll_igasht_detailBtn"
                     android:layout_width="match_parent"
@@ -142,7 +144,7 @@
                             android:layout_marginBottom="@dimen/dp4"
                             android:maxLines="1"
                             android:padding="@dimen/dp4"
-                            android:text="@{viewModel.locationItem.locationName}"
+                            android:text="@{viewModel.locationItem.getNameWithLanguage()}"
                             android:textSize="@dimen/standardTextSize"
                             app:layout_constraintBottom_toTopOf="@id/itemAddress"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -159,7 +161,7 @@
                             android:layout_marginRight="8dp"
                             android:maxLines="1"
                             android:padding="@dimen/dp4"
-                            android:text="@{viewModel.locationItem.locationAddress}"
+                            android:text="@{viewModel.locationItem.getAddressWithLanguage()}"
                             android:textSize="@dimen/smallTextSize"
                             app:layout_constraintBottom_toBottomOf="@id/itemImage"
                             app:layout_constraintEnd_toEndOf="parent"

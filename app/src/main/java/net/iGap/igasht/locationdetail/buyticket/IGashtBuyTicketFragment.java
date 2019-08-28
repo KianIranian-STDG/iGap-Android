@@ -54,50 +54,6 @@ public class IGashtBuyTicketFragment extends IGashtBaseView {
             }
         });
 
-        /*((IGashtBuyTicketViewModel) viewModel).getShowDialogSelectService().observe(getViewLifecycleOwner(), serviceList -> {
-            if (getFragmentManager() != null && serviceList != null) {
-                new BottomSheetFragment().setData(serviceList, -1, position -> ((IGashtBuyTicketViewModel) viewModel).selectedService(position)).setTitle(getString(R.string.igasht_place_of_visit_title))
-                        .show(getFragmentManager(), "selectService");
-            }
-        });*/
-
-        /*((IGashtBuyTicketViewModel) viewModel).getShowDialogSelectTicketType().observe(getViewLifecycleOwner(), amountType -> {
-            if (getFragmentManager() != null && amountType != null) {
-                new SelectTicketTypeBottomSheetFragment().setData(amountType, new TicketListCountChangeListener<IGashtServiceAmount>() {
-                    @Override
-                    public void setTicketCount(IGashtServiceAmount data) {
-                        ((IGashtBuyTicketViewModel) viewModel).selectedTicketType(data);
-                    }
-
-                    @Override
-                    public void onBackPressed() {
-                        ((IGashtBuyTicketViewModel) viewModel).onAddPlaceClick();
-                    }
-                }).show(getFragmentManager(), "selectTicketType");
-            }
-        });*/
-
-        /*((IGashtBuyTicketViewModel) viewModel).getShowDialogEnterCount().observe(getViewLifecycleOwner(), isShow -> {
-            if (getFragmentManager() != null && isShow != null) {
-                new IGashtEnterTicketCountBottomSheetFragment().setCallBack(new TicketListCountChangeListener<Integer>() {
-                    @Override
-                    public void setTicketCount(Integer ticketCount) {
-                        ((IGashtBuyTicketViewModel) viewModel).setTicketCount(ticketCount);
-                    }
-
-                    @Override
-                    public void onBackPressed() {
-                        Log.wtf(this.getClass().getName(), "onBackPressed");
-                        ((IGashtBuyTicketViewModel) viewModel).selectedService();
-                    }
-                }).show(getFragmentManager(), "setTicketCount");
-            }
-        });*/
-
-        /*((IGashtBuyTicketViewModel) viewModel).getAddToTicketList().observe(getViewLifecycleOwner(), data -> {
-
-        });*/
-
         ((IGashtBuyTicketViewModel) viewModel).getRegisterVoucher().observe(getViewLifecycleOwner(), registerVoucher -> {
             if (registerVoucher != null) {
                 if (registerVoucher) {

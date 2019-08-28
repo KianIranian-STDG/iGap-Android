@@ -11,6 +11,7 @@ import net.iGap.igasht.BaseIGashtViewModel;
 import net.iGap.igasht.IGashtRepository;
 import net.iGap.module.SingleLiveEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResponse<IGashtLocationService>> {
@@ -20,7 +21,6 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
     private SingleLiveEvent<Boolean> registerVoucher = new SingleLiveEvent<>();
     private MutableLiveData<List<IGashtLocationService>> serviceList = new MutableLiveData<>();
     private SingleLiveEvent<Integer> showErrorMessage = new SingleLiveEvent<>();
-    private ObservableInt showBuyTicketFragment = new ObservableInt(View.GONE);
     private IGashtRepository repository;
 
     public IGashtBuyTicketViewModel() {
@@ -57,20 +57,14 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
 
     @Override
     public void onSuccess(BaseIGashtResponse<IGashtLocationService> data) {
-        serviceList.setValue(data.getData());
+        serviceList.setValue(getPersianTicket(data.getData()));
         showLoadingView.set(View.GONE);
         showMainView.set(View.VISIBLE);
         showViewRefresh.set(View.GONE);
-        showBuyTicketFragment.set(View.VISIBLE);
-
     }
 
     public void onAddPlaceClick() {
-        /*List<String> tmp = new ArrayList<>();
-        for (int i = 0; i < serviceList.size(); i++) {
-            tmp.add(serviceList.get(i).getSeviceNameWithLanguage());
-        }
-        showDialogSelectService.setValue(tmp);*/
+
     }
 
     public void onRetryClick() {
@@ -119,14 +113,22 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
         return t;
     }
 
+    private List<IGashtLocationService> getPersianTicket(List<IGashtLocationService> data) {
+        List<IGashtLocationService> tmp = new ArrayList<>();
+        for (int i = 0; i < data.size(); i++) {
+            for (int j = 0; j < data.get(i).getAmounts().size(); j++) {
+                if (data.get(i).getAmounts().get(j).getVoucherTypeId() == 3) {
+                    tmp.add(data.get(i));
+                }
+            }
+        }
+        return tmp;
+    }
+
     private void getTicketData() {
         showLoadingView.set(View.VISIBLE);
         showMainView.set(View.GONE);
         showViewRefresh.set(View.GONE);
         repository.getServiceList(this);
-    }
-
-    public ObservableInt getShowBuyTicketFragment() {
-        return showBuyTicketFragment;
     }
 }

@@ -25,7 +25,7 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
     private IGashtRepository repository;
 
     public IGashtProvinceViewModel() {
-        if(G.isDarkTheme){
+        if (G.isDarkTheme) {
             backgroundShap.set(R.drawable.shape_igasht_gradient_gray);
         }
         repository = IGashtRepository.getInstance();
@@ -70,7 +70,10 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
     }
 
     public void setSelectedLocation(int position) {
-        repository.setSelectedProvince(provinceList.getValue().get(position));
+        if (provinceList.getValue() != null) {
+            repository.setSelectedProvince(provinceList.getValue().get(position));
+            onSearchPlaceButtonClick();
+        }
     }
 
     public void onRetryClick() {
