@@ -64,6 +64,7 @@ import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.TabletEmptyChatFragment;
+import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
@@ -143,6 +144,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
 
@@ -317,7 +319,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
             BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
             if (bottomNavigationFragment != null)
-                bottomNavigationFragment.autoLinkCrawler(intent.getExtras().getString(DEEP_LINK, DEEP_LINK_CHAT));
+                bottomNavigationFragment.autoLinkCrawler(intent.getExtras().getString(DEEP_LINK, DEEP_LINK_CHAT), new DiscoveryFragment.CrawlerStruct.OnDeepValidLink() {
+                    @Override
+                    public void linkValid(String link) {
+
+                    }
+
+                    @Override
+                    public void linkInvalid(String link) {
+                        HelperError.showSnackMessage(link + " " + context.getResources().getString(R.string.link_not_valid), false);
+                    }
+                });
         }
     }
 

@@ -2932,4 +2932,5 @@
     <string name="check_update_title">اختر التحديث</string>
     <string name="unblock">رفع الحظر</string>
     <string name="view_profile">عرض المستخدم</string>
+    <string name="link_not_valid">رابط غير صالح</string>
 </resources>

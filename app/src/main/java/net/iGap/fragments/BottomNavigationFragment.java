@@ -15,6 +15,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.discovery.DiscoveryFragment;
+import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnUnreadChange;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
@@ -53,9 +55,22 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     @Override
     public void onStart() {
         super.onStart();
+
         if (crawlerMap != null) {
-            autoLinkCrawler(crawlerMap);
+            autoLinkCrawler(crawlerMap, new DiscoveryFragment.CrawlerStruct.OnDeepValidLink() {
+                @Override
+                public void linkValid(String link) {
+
+                }
+
+                @Override
+                public void linkInvalid(String link) {
+                    if (getContext() != null)
+                        HelperError.showSnackMessage(link + " " + getContext().getResources().getString(R.string.link_not_valid), false);
+                }
+            });
         }
+
     }
 
     @Override
@@ -226,11 +241,19 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     }
 
 
-    public void autoLinkCrawler(String uri) {
+    public void autoLinkCrawler(String uri , DiscoveryFragment.CrawlerStruct.OnDeepValidLink onDeepLinkValid) {
+        if (uri.equals("")){
+            onDeepLinkValid.linkInvalid(uri);
+            return;
+        }
+
         String[] address = uri.toLowerCase().trim().split("/");
 
-        if (address.length == 0)
+        if (address.length == 0){
+            onDeepLinkValid.linkInvalid(uri);
             return;
+        }
+
         switch (address[0]) {
             case DEEP_LINK_DISCOVERY:
                 String[] discoveryUri;
@@ -238,25 +261,42 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                     discoveryUri = uri.toLowerCase().trim().replace("discovery/", "").split("/");
                 } else
                     discoveryUri = uri.toLowerCase().trim().replace("discovery", "").split("/");
-                setCrawlerMap(BottomNavigationFragment.DISCOVERY_FRAGMENT, discoveryUri);
+
+                for (int i = 0; i < discoveryUri.length; i++) {
+                    if (HelperString.isInteger(discoveryUri[i])) {
+                        onDeepLinkValid.linkValid(address[i]);
+                        setCrawlerMap(BottomNavigationFragment.DISCOVERY_FRAGMENT, discoveryUri);
+                    } else {
+                        onDeepLinkValid.linkInvalid(discoveryUri[i]);
+                        return;
+                    }
+
+                }
+
                 break;
             case DEEP_LINK_CHAT:
                 String chatUri = uri.toLowerCase().trim().replace("chat/", "").replace("chat", "").trim();
                 if (chatUri.length() > 1) {
                     HelperUrl.checkUsernameAndGoToRoom(getActivity(), chatUri, HelperUrl.ChatEntry.chat);
                 }
+                onDeepLinkValid.linkValid(address[0]);
                 setCrawlerMap(BottomNavigationFragment.CHAT_FRAGMENT, null);
                 break;
             case DEEP_LINK_PROFILE:
+                onDeepLinkValid.linkValid(address[0]);
                 setCrawlerMap(BottomNavigationFragment.PROFILE_FRAGMENT, null);
                 break;
             case DEEP_LINK_CALL:
+                onDeepLinkValid.linkValid(address[0]);
                 setCrawlerMap(BottomNavigationFragment.CALL_FRAGMENT, null);
                 break;
             case DEEP_LINK_CONTACT:
+                onDeepLinkValid.linkValid(address[0]);
                 setCrawlerMap(BottomNavigationFragment.CONTACT_FRAGMENT, null);
                 break;
-
+            default:
+                onDeepLinkValid.linkInvalid(address[0]);
+                break;
         }
     }
 
