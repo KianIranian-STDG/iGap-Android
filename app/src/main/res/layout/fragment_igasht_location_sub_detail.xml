@@ -156,7 +156,7 @@
             app:layout_constraintEnd_toEndOf="@+id/view2"
             app:layout_constraintStart_toStartOf="@+id/view2"
             app:layout_constraintTop_toBottomOf="@+id/view2" />
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_parking"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -170,8 +170,9 @@
             android:layout_marginRight="@dimen/dp8"
             android:layout_marginLeft="@dimen/dp8"
             android:text="پارکینگ"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintWidth_percent=".9"/>
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/cheked_parking"
             style="@style/baseFontIcon"
             android:layout_width="0dp"
@@ -181,6 +182,7 @@
             android:layout_marginBottom="@dimen/dp4"
             android:layout_marginTop="@dimen/dp4"
             android:padding="@dimen/dp4"
+            android:visibility="@{viewModel.showMainView}"
             android:layout_marginStart="@dimen/dp8"
             android:layout_marginEnd="@dimen/dp8"
             android:layout_marginRight="@dimen/dp8"
