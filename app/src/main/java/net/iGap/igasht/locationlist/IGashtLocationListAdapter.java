@@ -1,7 +1,6 @@
 package net.iGap.igasht.locationlist;
 
 import android.support.annotation.NonNull;
-import android.support.design.button.MaterialButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;

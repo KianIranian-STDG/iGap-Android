@@ -3,6 +3,7 @@ package net.iGap.igasht.historylocation;
 import com.google.gson.annotations.SerializedName;
 
 public class IGashtVoucherInfo {
+
     @SerializedName("ticket_count")
     private int ticketCount;
     @SerializedName("amount")

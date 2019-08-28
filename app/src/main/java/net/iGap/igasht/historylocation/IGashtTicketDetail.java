@@ -6,58 +6,89 @@ import java.security.Timestamp;
 import java.util.List;
 
 public class IGashtTicketDetail {
-    @SerializedName("voucher_number")
-    private String voucherNumber;
-    @SerializedName("total_amount")
-    private int totalAmount;
-    @SerializedName("location_id")
-    private int locationId;
-    @SerializedName("location_name")
-    private String locationName;
-    @SerializedName("location_english_name")
-    private String locationEnglishName;
-    @SerializedName("sale_type_id")
-    private int saleTypeId;
-    @SerializedName("sale_type_name")
-    private String saleTypeName;
-    @SerializedName("voucher_info")
-    private List<IGashtVoucherInfo> voucherInfo;
-    @SerializedName("created")
-    private float created;
 
-    public String getVoucherNumber() {
-        return voucherNumber;
+    @SerializedName("status")
+    private String status;
+    @SerializedName("_id")
+    private String _id;
+    @SerializedName("userId")
+    private String userId;
+    @SerializedName("phoneNumber")
+    private String phoneNumber;
+    @SerializedName("issuingId")
+    private int issuingId;
+    @SerializedName("locationId")
+    private int locationId;
+    @SerializedName("amount")
+    private int amount;
+    @SerializedName("createdTime")
+    private int createdTime;
+    @SerializedName("voucher")
+    private String voucher;
+    @SerializedName("terminalId")
+    private String terminalId;
+    @SerializedName("ticketInfo")
+    private TicketInfo ticketInfo;
+    @SerializedName("createdAt")
+    private String createdAt;
+    @SerializedName("updatedAt")
+    private String updatedAt;
+    @SerializedName("__v")
+    private int v;
+
+    public String getStatus() {
+        return status;
     }
 
-    public int getTotalAmount() {
-        return totalAmount;
+    public String get_id() {
+        return _id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public int getIssuingId() {
+        return issuingId;
     }
 
     public int getLocationId() {
         return locationId;
     }
 
-    public String getLocationName() {
-        return locationName;
+    public int getAmount() {
+        return amount;
     }
 
-    public String getLocationEnglishName() {
-        return locationEnglishName;
+    public int getCreatedTime() {
+        return createdTime;
     }
 
-    public int getSaleTypeId() {
-        return saleTypeId;
+    public String getVoucher() {
+        return voucher;
     }
 
-    public String getSaleTypeName() {
-        return saleTypeName;
+    public String getTerminalId() {
+        return terminalId;
     }
 
-    public List<IGashtVoucherInfo> getVoucherInfo() {
-        return voucherInfo;
+    public TicketInfo getTicketInfo() {
+        return ticketInfo;
     }
 
-    public float getCreated() {
-        return created;
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public int getV() {
+        return v;
     }
 }

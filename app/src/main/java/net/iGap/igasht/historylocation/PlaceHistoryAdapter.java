@@ -36,8 +36,8 @@ public class PlaceHistoryAdapter extends RecyclerView.Adapter<PlaceHistoryAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.itemView.setOnClickListener(v -> clickCallback.onClick(viewHolder.getAdapterPosition()));
-        viewHolder.date.setText(HelperCalander.getClocktime((long) items.get(i).getCreated(),false));
-        viewHolder.detail.setText(items.get(i).getLocationName());/**مشخصات خرید*/
+        viewHolder.date.setText(HelperCalander.getClocktime((long) items.get(i).getTicketInfo().getCreated(),false));
+        viewHolder.detail.setText(items.get(i).getTicketInfo().getLocationNameWithLanguage());
     }
 
     @Override
@@ -49,12 +49,12 @@ public class PlaceHistoryAdapter extends RecyclerView.Adapter<PlaceHistoryAdapte
 
         private AppCompatTextView date;
         private AppCompatTextView detail;
-        private AppCompatTextView barCode;
+        /*private AppCompatTextView barCode;*/
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             detail = itemView.findViewById(R.id.itemDetail);
-            barCode = itemView.findViewById(R.id.barCode);
+            /*barCode = itemView.findViewById(R.id.barCode);*/
             date = itemView.findViewById(R.id.itemDate);
         }
     }

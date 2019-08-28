@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +60,15 @@ public class IGashtHistoryPlaceListFragment extends IGashtBaseView {
 
         binding.favoriteList.setAdapter(new PlaceHistoryAdapter(position -> ((IGashtHistoryPlaceViewModel) viewModel).onClickHistoryItem(position)));
         binding.favoriteList.addItemDecoration(new DividerItemDecoration(binding.favoriteList.getContext(), DividerItemDecoration.VERTICAL));
+        binding.favoriteList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (recyclerView.getLayoutManager() != null) {
+                    ((IGashtHistoryPlaceViewModel)viewModel).loadMoreItems(recyclerView.getLayoutManager().getItemCount(), ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition());
+                }
+            }
+        });
 
         ((IGashtHistoryPlaceViewModel) viewModel).getHistoryList().observe(getViewLifecycleOwner(), data -> {
             if (data != null && binding.favoriteList.getAdapter() instanceof PlaceHistoryAdapter) {

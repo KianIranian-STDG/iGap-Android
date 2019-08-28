@@ -20,6 +20,7 @@ public class IGashtHistoryPlaceViewModel extends BaseIGashtViewModel<TicketHisto
 
     private TicketHistoryListResponse<IGashtTicketDetail> response;
     private IGashtRepository repository;
+    private boolean isLoadMoreItem = false;
 
     public IGashtHistoryPlaceViewModel() {
         repository = IGashtRepository.getInstance();
@@ -60,18 +61,29 @@ public class IGashtHistoryPlaceViewModel extends BaseIGashtViewModel<TicketHisto
         showLoadingView.set(View.VISIBLE);
         showMainView.set(View.GONE);
         showViewRefresh.set(View.GONE);
-        if (response.getOffset() == 0) {
-            repository.getHistoryList(0, 10, this);
-        } else {
-            repository.getHistoryList(response.getOffset(), response.getLimit(), this);
-        }
+        repository.getHistoryList(0, 10, this);
     }
 
     public void onRetryClick() {
         getHistoryData();
     }
 
+    public void loadMoreItems(int totalCount, int lastVisibleItem) {
+        if (!isLoadMoreItem && totalCount <= (lastVisibleItem + 1) && totalCount != 0) {
+            //load more
+            isLoadMoreItem = true;
+            if (response.getTotal() < (response.getOffset() * response.getLimit())) {
+                showLoadingView.set(View.GONE);
+                isLoadMoreItem = false;
+                return;
+            }
+            showLoadingView.set(View.VISIBLE);
+            //Load more data for recyclerView
+            repository.getHistoryList(response.getOffset() + 1, response.getLimit(), this);
+        }
+    }
+
     public void onClickHistoryItem(int position) {
-        goToTicketDetail.setValue(response.getData().get(position).getVoucherNumber());
+        goToTicketDetail.setValue(response.getData().get(position).getTicketInfo().getVoucherNumber());
     }
 }
