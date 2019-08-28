@@ -49,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp8"
-            android:text="@string/noDetail"
+            android:text="@string/noDetail_textView"
             android:visibility="@{viewModel.showText}"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintEnd_toEndOf="parent"
@@ -156,40 +156,192 @@
             app:layout_constraintEnd_toEndOf="@+id/view2"
             app:layout_constraintStart_toStartOf="@+id/view2"
             app:layout_constraintTop_toBottomOf="@+id/view2" />
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/text_parking"
-            android:layout_width="0dp"
+
+        <TableLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/subTitle3"
-            android:layout_marginBottom="@dimen/dp4"
-            android:layout_marginTop="@dimen/dp4"
-            android:padding="@dimen/dp4"
-            android:layout_marginStart="@dimen/dp8"
-            android:layout_marginEnd="@dimen/dp8"
-            android:layout_marginRight="@dimen/dp8"
-            android:layout_marginLeft="@dimen/dp8"
-            android:text="پارکینگ"
-            android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintWidth_percent=".9"/>
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/cheked_parking"
-            style="@style/baseFontIcon"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:background="@drawable/shape_igasht_strokegray"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/subTitle3"
-            android:layout_marginBottom="@dimen/dp4"
-            android:layout_marginTop="@dimen/dp4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subTitle3"
+            android:layout_marginTop="@dimen/dp8"
             android:padding="@dimen/dp4"
-            android:visibility="@{viewModel.showMainView}"
-            android:layout_marginStart="@dimen/dp8"
-            android:layout_marginEnd="@dimen/dp8"
-            android:layout_marginRight="@dimen/dp8"
-            android:layout_marginLeft="@dimen/dp8"
-            android:text="@{viewModel.haveParking}"
-            android:textColor="@{viewModel.haveParking==R.string.check_icon ? @color/green : @color/red}"
-            app:layout_constraintWidth_percent=".1"/>
+            android:visibility="@{viewModel.showMainView}">
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="@dimen/dp8"
+                android:layout_marginLeft="@dimen/dp8"
+                android:layout_marginRight="@dimen/dp8"
+                android:layout_marginStart="@dimen/dp8">
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_parking"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/parking_textView"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="2" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/check_parking"
+                    style="@style/baseFontIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.haveParking}"
+                    android:textColor="@{viewModel.haveParking==R.string.check_icon ? @color/green : @color/red}" />
+                <View
+                    android:layout_width="0.5dp"
+                    android:background="@color/gray"
+                    android:layout_height="@dimen/dp32"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_gravity="center_vertical" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_wifi"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wifi_textView"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="2" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/check_wifi"
+                    style="@style/baseFontIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.haveWiFi}"
+                    android:textColor="@{viewModel.haveWiFi==R.string.check_icon ? @color/green : @color/red}" />
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="@dimen/dp8"
+                android:layout_marginLeft="@dimen/dp8"
+                android:layout_marginRight="@dimen/dp8"
+                android:layout_marginStart="@dimen/dp8">
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_resturant"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Restaurant_textView"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="2" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/cheked_resturant"
+                    style="@style/baseFontIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.haveRestaurant}"
+                    android:textColor="@{viewModel.haveRestaurant==R.string.check_icon ? @color/green : @color/red}" />
+                <View
+                    android:layout_width="0.5dp"
+                    android:background="@color/gray"
+                    android:layout_height="@dimen/dp32"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_gravity="center_vertical" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_coffeeShop"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/coffeeShop_textView"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="2" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/cheked_coffeeShop"
+                    style="@style/baseFontIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.haveCoffeeShop}"
+                    android:textColor="@{viewModel.haveCoffeeShop==R.string.check_icon ? @color/green : @color/red}" />
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="@dimen/dp8"
+                android:layout_marginLeft="@dimen/dp8"
+                android:layout_marginRight="@dimen/dp8"
+                android:layout_marginStart="@dimen/dp8">
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_wheelchair"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wheelchair_textView"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="2" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/check_wheelchair"
+                    style="@style/baseFontIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.haveWheelchairRamp}"
+                    android:textColor="@{viewModel.haveWheelchairRamp==R.string.check_icon ? @color/green : @color/red}" />
+                <View
+                    android:layout_width="0.5dp"
+                    android:background="@color/gray"
+                    android:layout_height="@dimen/dp32"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_gravity="center_vertical" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_PrayerRoom"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/prayerRoom_textView"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="2" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/check_PrayerRoom"
+                    style="@style/baseFontIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="1"
+                    android:text="@{viewModel.havePrayerRoom}"
+                    android:textColor="@{viewModel.havePrayerRoom==R.string.check_icon ? @color/green : @color/red}" />
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="@dimen/dp8"
+                android:layout_marginLeft="@dimen/dp8"
+                android:layout_marginRight="@dimen/dp8"
+                android:layout_marginStart="@dimen/dp8">
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_wc"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="پارکینگ"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="0.35" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/check_wc"
+                    style="@style/baseFontIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp4"
+                    android:layout_weight="0.15"
+                    android:text="@{viewModel.haveWc}"
+                    android:textColor="@{viewModel.haveWc==R.string.check_icon ? @color/green : @color/red}" />
+            </TableRow>
+
+        </TableLayout>
     </android.support.constraint.ConstraintLayout>
 
 
