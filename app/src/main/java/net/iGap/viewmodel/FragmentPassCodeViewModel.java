@@ -33,6 +33,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentPassCodeBinding;
+import net.iGap.fragments.FragmentPassCode;
+import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.module.AppUtils;
@@ -88,6 +90,7 @@ public class FragmentPassCodeViewModel {
     private boolean isFingerPrintCode;
     private String passCode;
     private String password;
+    private FragmentPassCode fragment;
     private int page = 0;
     private net.iGap.module.NumberPicker numberPickerMinutes;
     private boolean deviceHasFingerPrint;
@@ -171,8 +174,9 @@ public class FragmentPassCodeViewModel {
     }
 
 
-    public FragmentPassCodeViewModel(FragmentPassCodeBinding fragmentPassCodeBinding) {
+    public FragmentPassCodeViewModel(FragmentPassCode fragment, FragmentPassCodeBinding fragmentPassCodeBinding) {
         this.binding = fragmentPassCodeBinding;
+        this.fragment = fragment;
         realm = Realm.getDefaultInstance();
         getInfo();
     }
@@ -241,9 +245,10 @@ public class FragmentPassCodeViewModel {
         passCodeStateChangeListener.postValue(G.isPassCode);
         HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
         edtSetPasswordText.set("");
-        realm.executeTransaction(new Realm.Transaction() {
+        AsyncTransaction.executeTransactionWithLoading(fragment.getActivity(), realm, new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (realmUserInfo != null) {
                     realmUserInfo.setPassCode(false);
                     realmUserInfo.setPattern(false);
@@ -261,9 +266,10 @@ public class FragmentPassCodeViewModel {
             rootPatternPassword.set(View.VISIBLE);
             visibilityCreateNewPattern.set(View.VISIBLE);
         } else {
-            realm.executeTransaction(new Realm.Transaction() {
+            AsyncTransaction.executeTransactionWithLoading(fragment.getActivity(), realm, new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                     if (realmUserInfo != null) {
                         realmUserInfo.setPassCode(false);
                         realmUserInfo.setPattern(false);
@@ -328,11 +334,10 @@ public class FragmentPassCodeViewModel {
     }
 
     public void onClickChangeVgToggleFingerPrint(View v) {
-
-        realm.executeTransaction(new Realm.Transaction() {
+        AsyncTransaction.executeTransactionWithLoading(fragment.getActivity(), realm, new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (realmUserInfo != null) {
                     if (isFingerPrintCode) {
                         realmUserInfo.setFingerPrint(false);
@@ -397,10 +402,10 @@ public class FragmentPassCodeViewModel {
                 HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
 
                 AppUtils.closeKeyboard(v);
-
-                realm.executeTransaction(new Realm.Transaction() {
+                AsyncTransaction.executeTransactionWithLoading(fragment.getActivity(), realm, new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
+                        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                         if (realmUserInfo != null) {
                             realmUserInfo.setPassCode(true);
                             realmUserInfo.setPattern(false);
@@ -408,10 +413,11 @@ public class FragmentPassCodeViewModel {
                             realmUserInfo.setKindPassCode(kindPassword);
                         }
                     }
+                }, () -> {
+                    isTogglePassCode.set(true);
+                    edtSetPasswordText.set("");
                 });
 
-                isTogglePassCode.set(true);
-                edtSetPasswordText.set("");
             } else {
                 AppUtils.closeKeyboard(v);
                 AppUtils.error(G.fragmentActivity.getResources().getString(R.string.Password_dose_not_match));

@@ -135,7 +135,7 @@ public class FragmentPassCode extends BaseFragment {
     }
 
     private void initDataBinding() {
-        fragmentPassCodeViewModel = new FragmentPassCodeViewModel(fragmentPassCodeBinding);
+        fragmentPassCodeViewModel = new FragmentPassCodeViewModel(this, fragmentPassCodeBinding);
         isPattern = fragmentPassCodeViewModel.isPattern;
         fragmentPassCodeBinding.setFragmentPassCodeViewModel(fragmentPassCodeViewModel);
     }
