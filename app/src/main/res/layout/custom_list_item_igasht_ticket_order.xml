@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/dp4"
     android:paddingBottom="@dimen/dp4">
-
     <View
         android:id="@+id/view_frame"
         android:layout_width="0dp"
@@ -13,7 +12,9 @@
         app:layout_constraintBottom_toBottomOf="@id/price_ticket"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/price_ticket" />
+        app:layout_constraintTop_toTopOf="@id/price_ticket"
+        android:background="@drawable/igasht_tabbar_background_light"/>
+
 
     <!--<View
         android:id="@+id/view_amount"
@@ -70,7 +71,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp8"
-        android:text="@string/price"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/minusButton"
@@ -83,7 +83,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp8"
-        android:text="@string/igasht_count_title"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/price_ticket"
         app:layout_constraintEnd_toStartOf="@id/minusButton"
@@ -96,7 +95,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp8"
-        android:text="@string/igasht_service_title"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/price_ticket"
         app:layout_constraintEnd_toStartOf="@id/plusButton"
