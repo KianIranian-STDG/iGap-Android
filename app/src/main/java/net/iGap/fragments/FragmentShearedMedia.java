@@ -1306,14 +1306,14 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 return;
             }
 
-            Long messageId = mList.get(position).messageId;
+            long messageId = mList.get(position).messageId;
 
             int index = SelectedList.indexOf(new StructShearedMedia(messageId));
 
             if (index != -1) {
                 SelectedList.remove(mList.get(position));
                 numberOfSelected--;
-                if (bothDeleteMessageId.contains(messageId)) {
+                if (bothDeleteMessageId != null) {
                     bothDeleteMessageId.remove(messageId);
                 }
 
