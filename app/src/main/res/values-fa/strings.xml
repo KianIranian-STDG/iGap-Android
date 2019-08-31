@@ -1333,6 +1333,7 @@
     <string name="wallet_toman">تومان</string>
     <string name="wallet_Your_credit">اعتبار شما: </string>
     <string name="wallet_Reial">%d ریال </string>
+    <string name="payment_rial">%s ریال </string>
     <string name="wallet_error_server">خطا در برقراری ارتباط با سرور</string>
 
     <string name="USER_VERIFY_MAX_TRY_LOCK">USER VERIFY MAX TRY</string>

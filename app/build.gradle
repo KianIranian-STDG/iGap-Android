@@ -29,8 +29,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 130
-        versionName "2.0.1"
+        versionCode 131
+        versionName "2.0.1.beta12"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
@@ -123,13 +123,13 @@ android {
     }
 
     productFlavors {
-        Full { // 32 and 64 bit ndk compile
+        fullVersion { // 32 and 64 bit ndk compile
             ndk {
                 dimension "default"
                 abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
             }
         }
-        Min { // only 32 bit ndk compile
+        minVersion { // only 32 bit ndk compile
             ndk {
                 dimension "default"
                 abiFilters "armeabi-v7a", "x86"

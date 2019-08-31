@@ -7,7 +7,7 @@ public class PaymentInfo {
     @SerializedName("product")
     private BaseProduct product;
     @SerializedName("price")
-    private double price;
+    private int price;
     @SerializedName("vendor")
     private String vendor;
     @SerializedName("order_id")
@@ -24,7 +24,7 @@ public class PaymentInfo {
         return product;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 

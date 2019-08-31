@@ -264,8 +264,9 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
                 for (int i = 0; i < discoveryUri.length; i++) {
                     if (HelperString.isInteger(discoveryUri[i])) {
-                        onDeepLinkValid.linkValid(address[i]);
-                        setCrawlerMap(BottomNavigationFragment.DISCOVERY_FRAGMENT, discoveryUri);
+                        if (i == 0)
+                            onDeepLinkValid.linkValid(address[i]);
+                        setCrawlerMap(DISCOVERY_FRAGMENT, discoveryUri);
                     } else {
                         onDeepLinkValid.linkInvalid(discoveryUri[i]);
                         return;
@@ -280,19 +281,19 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                     HelperUrl.checkUsernameAndGoToRoom(getActivity(), chatUri, HelperUrl.ChatEntry.chat);
                 }
                 onDeepLinkValid.linkValid(address[0]);
-                setCrawlerMap(BottomNavigationFragment.CHAT_FRAGMENT, null);
+                setCrawlerMap(CHAT_FRAGMENT, null);
                 break;
             case DEEP_LINK_PROFILE:
                 onDeepLinkValid.linkValid(address[0]);
-                setCrawlerMap(BottomNavigationFragment.PROFILE_FRAGMENT, null);
+                setCrawlerMap(PROFILE_FRAGMENT, null);
                 break;
             case DEEP_LINK_CALL:
                 onDeepLinkValid.linkValid(address[0]);
-                setCrawlerMap(BottomNavigationFragment.CALL_FRAGMENT, null);
+                setCrawlerMap(CALL_FRAGMENT, null);
                 break;
             case DEEP_LINK_CONTACT:
                 onDeepLinkValid.linkValid(address[0]);
-                setCrawlerMap(BottomNavigationFragment.CONTACT_FRAGMENT, null);
+                setCrawlerMap(CONTACT_FRAGMENT, null);
                 break;
             default:
                 onDeepLinkValid.linkInvalid(address[0]);
