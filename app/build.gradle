@@ -123,13 +123,13 @@ android {
     }
 
     productFlavors {
-        Full { // 32 and 64 bit ndk compile
+        full { // 32 and 64 bit ndk compile
             ndk {
                 dimension "default"
                 abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
             }
         }
-        Min { // only 32 bit ndk compile
+        min { // only 32 bit ndk compile
             ndk {
                 dimension "default"
                 abiFilters "armeabi-v7a", "x86"
