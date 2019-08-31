@@ -83,6 +83,7 @@ import net.iGap.module.MyType;
 import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.TimeUtils;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
@@ -93,6 +94,7 @@ import net.iGap.payment.PaymentCallBack;
 import net.iGap.payment.PaymentResult;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelExtraFields;
@@ -1904,28 +1906,45 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         try (Realm realm = Realm.getDefaultInstance()) {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
                 //TODO: fixed this and do not use G.currentActivity
-                HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity,((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
+                HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity,((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
             } else if (v.getId() == ButtonActionType.BOT_ACTION) {
-                Long identity = System.currentTimeMillis();
 
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.getRoomId(), identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm ,ProtoGlobal.RoomMessageType.TEXT);
-                        G.chatSendMessageUtil.build(type, mMessage.getRoomId(), realmRoomMessage).sendMessage(identity + "");
-                        messageClickListener.sendFromBot(realmRoomMessage);
+                long messageId = System.currentTimeMillis();
+                RealmRoomMessage roomMessage = new RealmRoomMessage();
+                roomMessage.setMessageId(messageId);
+                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+                roomMessage.setRoomId(mMessage.getRoomId());
+                roomMessage.setMessage(((ArrayList<String>) v.getTag()).get(1));
+                roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                roomMessage.setUserId(G.userId);
+                roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+
+                if (((ArrayList<String>) v.getTag()).get(2) != null) {
+                    RealmAdditional additional = new RealmAdditional();
+                    additional.setId(AppUtils.makeRandomId());
+                    additional.setAdditionalData(((ArrayList<String>) v.getTag()).get(2));
+                    additional.setAdditionalType(3);
+                    roomMessage.setRealmAdditional(additional);
+                }
+
+                new Thread(() -> {
+                    try (Realm realm12 = Realm.getDefaultInstance()) {
+                        realm12.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(roomMessage));
                     }
-                });
+                }).start();
+
+                G.chatSendMessageUtil.build(type, mMessage.getRoomId(), roomMessage).sendMessage(messageId + "");
+                messageClickListener.sendFromBot(roomMessage);
 
             } else if (v.getId() == ButtonActionType.JOIN_LINK) {
                 //TODO: fixed this and do not use G.currentActivity
-                HelperUrl.checkAndJoinToRoom(G.currentActivity,((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
+                HelperUrl.checkAndJoinToRoom(G.currentActivity,((ArrayList<String>) v.getTag()).get(0).substring(14));
 
             } else if (v.getId() == ButtonActionType.WEB_LINK) {
-                HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
+                HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0));
 
             } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {
-                messageClickListener.sendFromBot(((ArrayList<String>) v.getTag()).get(0).toString());
+                messageClickListener.sendFromBot(((ArrayList<String>) v.getTag()).get(0));
             } else if (v.getId() == ButtonActionType.REQUEST_PHONE) {
                 try {
                     new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_number).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
