@@ -3737,6 +3737,7 @@ public class FragmentChat extends BaseFragment
             FragmentChat.isInSelectionMode = true;
             //toolbar.setVisibility(View.GONE);
             mBtnReplySelected.setVisibility(View.VISIBLE);
+            mBtnDeleteSelected.setVisibility(View.VISIBLE);
 
             mTxtSelectedCounter.setText(selectedCount + " " + context.getResources().getString(R.string.item_selected));
 
