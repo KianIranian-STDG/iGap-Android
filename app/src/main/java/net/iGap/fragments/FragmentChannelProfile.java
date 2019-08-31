@@ -351,7 +351,6 @@ public class FragmentChannelProfile extends BaseFragment {
 
     private void setAvatar() {
         avatarHandler.getAvatar(new ParamWithAvatarType(imvChannelAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
-        Log.i("abbasiChannel", "setAvatar: " + viewModel.roomId);
     }
 
     private void showPopUp() {

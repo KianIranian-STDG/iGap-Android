@@ -66,9 +66,7 @@ public class FragmentEditImage extends BaseFragment {
     private final static String ISCHAT = "ISCHAT";
     private final static String ISNICKNAMEPAGE = "ISNICKNAMEPAGE";
     private final static String SELECT_POSITION = "SLECT_POSITION";
-    //    private String path;
     private int selectPosition = 0;
-    //    private ImageView imgEditImage;
     private ViewPager viewPager;
     private AdapterViewPager mAdapter;
     private TextView txtEditImage;
@@ -76,7 +74,7 @@ public class FragmentEditImage extends BaseFragment {
     private EmojiEditTextE edtChat;
     private TextView iconOk;
     private ViewGroup layoutCaption;
-    private MaterialDesignTextView txtSet;
+    private MaterialDesignTextView channelOrGroupProfileSetTv;
     private MaterialDesignTextView imvSendButton;
     private ViewGroup rootSend;
     private MaterialDesignTextView imvSmileButton;
@@ -89,10 +87,14 @@ public class FragmentEditImage extends BaseFragment {
     public static CompleteEditImage completeEditImage;
     private int num = 0;
     private TextView txtCountImage;
-    private ArrayList<String> listPathString = new ArrayList<>();
     private AnimateCheckBox checkBox;
     public static HashMap<String, StructBottomSheet> textImageList = new HashMap<>();
     public static ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<StructBottomSheet>();
+    private OnImageEdited onProfileImageEdited;
+
+    public void setOnProfileImageEdited(OnImageEdited onProfileImageEdited) {
+        this.onProfileImageEdited = onProfileImageEdited;
+    }
 
     public FragmentEditImage() {
         // Required empty public constructor
@@ -135,7 +137,7 @@ public class FragmentEditImage extends BaseFragment {
 
             layoutCaption.setVisibility(View.VISIBLE);
             imvSendButton.setVisibility(View.VISIBLE);
-            txtSet.setVisibility(View.GONE);
+            channelOrGroupProfileSetTv.setVisibility(View.GONE);
             checkBox.setVisibility(View.VISIBLE);
             if (textImageList.size() > 0) {
                 txtCountImage.setVisibility(View.VISIBLE);
@@ -150,7 +152,7 @@ public class FragmentEditImage extends BaseFragment {
 
             }
         } else {
-            txtSet.setVisibility(View.VISIBLE);
+            channelOrGroupProfileSetTv.setVisibility(View.VISIBLE);
             layoutCaption.setVisibility(View.GONE);
             imvSendButton.setVisibility(View.GONE);
             checkBox.setVisibility(View.GONE);
@@ -208,18 +210,17 @@ public class FragmentEditImage extends BaseFragment {
         });
 
 
-        txtSet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        channelOrGroupProfileSetTv.setOnClickListener(v -> {
 
-                if (completeEditImage != null) {
-                    completeEditImage.result(itemGalleryList.get(0).getPath(), "", null);
-                }
-                if (getActivity() != null) {
-                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
-                }
-                AndroidUtils.closeKeyboard(v);
+            if (onProfileImageEdited !=null){
+                onProfileImageEdited.profileImageAdd(itemGalleryList.get(0).getPath());
             }
+
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
+            }
+
+            AndroidUtils.closeKeyboard(v);
         });
 
         imvSendButton.setOnClickListener(new View.OnClickListener() {
@@ -632,7 +633,7 @@ public class FragmentEditImage extends BaseFragment {
 
 
         layoutCaption = view.findViewById(R.id.layout_caption);
-        txtSet = view.findViewById(R.id.txtSet);
+        channelOrGroupProfileSetTv = view.findViewById(R.id.txtSet);
         imvSendButton = (MaterialDesignTextView) view.findViewById(R.id.pu_txt_sendImage);
 
         //imgEditImage = (ImageView) view.findViewById(R.id.imgEditImage);
@@ -758,6 +759,11 @@ public class FragmentEditImage extends BaseFragment {
         mAdapter.notifyDataSetChanged();
 
 
+    }
+
+    @FunctionalInterface
+    public interface OnImageEdited{
+        void profileImageAdd(String path);
     }
 
 }
