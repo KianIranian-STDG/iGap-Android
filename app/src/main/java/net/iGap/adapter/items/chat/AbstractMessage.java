@@ -545,7 +545,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         if (mMessage.isEdited())
-            if (structMessage.getChannelExtra() != null && structMessage.getChannelExtra().getSignature().length() > 0)
+            if (structMessage.getChannelExtra() != null && structMessage.getChannelExtra().getSignature() != null && structMessage.getChannelExtra().getSignature().length() > 0)
                 mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited) + " " + structMessage.getChannelExtra().getSignature());
             else{
                 mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited));
@@ -641,7 +641,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
 
-        if (structMessage.getChannelExtra() != null && structMessage.getChannelExtra().getSignature().length() > 0) {
+        if (structMessage.getChannelExtra() != null && structMessage.getChannelExtra().getSignature() != null && structMessage.getChannelExtra().getSignature().length() > 0) {
             mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(200));
         } else if (mMessage.isEdited()) {
             mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(100));
