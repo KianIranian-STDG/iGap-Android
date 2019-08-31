@@ -74,20 +74,20 @@ public class RealmUserInfo extends RealmObject {
     }
 
     public static void setPushNotification(final String pushToken) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        new Thread(() -> {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realm1 -> {
+                    RealmUserInfo realmUserInfo = realm1.where(RealmUserInfo.class).findFirst();
                     if (realmUserInfo != null) {
                         realmUserInfo.setPushNotificationToken(pushToken);
                     } else {
-                        realmUserInfo = realm.createObject(RealmUserInfo.class);
+                        realmUserInfo = realm1.createObject(RealmUserInfo.class);
                         realmUserInfo.setPushNotificationToken(pushToken);
                     }
-                }
-            });
-        }
+                });
+            }
+        }).start();
+
     }
 
     public static void insertAccessToken(final String accessToken) {
