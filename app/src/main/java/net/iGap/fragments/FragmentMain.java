@@ -1633,7 +1633,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
                                 if (!G.fragmentActivity.isFinishing()) {
                                     long peerId = mInfo.getChatRoom() != null ? mInfo.getChatRoom().getPeerId() : 0;
-                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId, mInfo, new OnComplete() {
+                                    boolean isCloud = peerId > 0 && peerId == G.userId;
+                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId , isCloud , mInfo, new OnComplete() {
                                         @Override
                                         public void complete(boolean result, String messageOne, String MessageTow) {
                                             onSelectRoomMenu(messageOne, mInfo);

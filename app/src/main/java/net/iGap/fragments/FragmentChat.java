@@ -3737,6 +3737,7 @@ public class FragmentChat extends BaseFragment
             FragmentChat.isInSelectionMode = true;
             //toolbar.setVisibility(View.GONE);
             mBtnReplySelected.setVisibility(View.VISIBLE);
+            mBtnDeleteSelected.setVisibility(View.VISIBLE);
 
             mTxtSelectedCounter.setText(selectedCount + " " + context.getResources().getString(R.string.item_selected));
 
@@ -9215,7 +9216,7 @@ public class FragmentChat extends BaseFragment
         items.add(getString(R.string.Search));
         items.add(getString(R.string.clear_history));
         items.add(getString(R.string.delete_chat));
-        if (userId != G.userId){
+        if (!isCloudRoom){
             if (isMuteNotification)
                 items.add(getString(R.string.unmute_notification));
             else

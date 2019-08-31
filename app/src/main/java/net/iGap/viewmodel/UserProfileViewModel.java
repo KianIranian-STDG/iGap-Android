@@ -35,6 +35,7 @@ import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
+import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -413,9 +414,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public void onCreditClick() {
         if (!G.isWalletRegister) {
-            goToWalletAgreementPage.setValue(phoneNumber.substring(2));
+            goToWalletAgreementPage.setValue(HelperNumerical.getPhoneNumberStartedWithZero(phoneNumber));
         } else {
-            goToWalletPage.setValue(phoneNumber.substring(2));
+            goToWalletPage.setValue(HelperNumerical.getPhoneNumberStartedWithZero(phoneNumber));
         }
     }
 

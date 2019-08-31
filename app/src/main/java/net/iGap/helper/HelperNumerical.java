@@ -133,4 +133,16 @@ public class HelperNumerical {
         anotherDFormat.setGroupingSize(3);
         return anotherDFormat.format(price);
     }
+
+    public static String getPhoneNumberStartedWithZero(String number){
+        if (number == null) return null ;
+
+        if (number.startsWith("+98")){
+            return "0" + number.substring(3);
+        }else if (number.startsWith("98")){
+            return "0" + number.substring(2);
+        }
+
+        return number ;
+    }
 }
