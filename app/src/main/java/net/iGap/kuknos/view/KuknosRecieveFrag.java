@@ -160,11 +160,20 @@ public class KuknosRecieveFrag extends BaseFragment {
 
         @Override
         protected Bitmap doInBackground(String... strings) {
-            return TextToImageEncode(kuknosRecieveVM.getClientKey().get());
+            Bitmap bitmap = null;
+            try {
+                bitmap = TextToImageEncode(kuknosRecieveVM.getClientKey().get());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            return bitmap;
         }
 
         @Override
         protected void onPostExecute(Bitmap s) {
+            if (s == null)
+                return;
             loadQrCode(s);
             onProgressUpdate(false);
             super.onPostExecute(s);
