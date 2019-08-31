@@ -459,24 +459,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             if (isNeedToRegister) {
 
-                Intent intent = new Intent(this, ActivityRegisteration.class);
+                Intent intent = new Intent(this, ActivityRegistration.class);
                 startActivity(intent);
 
                 finish();
                 return;
             }
 
-            try {
-                HelperPermission.getPhonePermision(this, null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
             RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
             if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
                 isNeedToRegister = true;
-                Intent intent = new Intent(this, ActivityRegisteration.class);
+                Intent intent = new Intent(this, ActivityRegistration.class);
                 startActivity(intent);
                 finish();
                 return;

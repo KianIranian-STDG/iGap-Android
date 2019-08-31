@@ -30,6 +30,7 @@ import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CountryListComparator;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.structs.StructCountry;
 import net.iGap.request.RequestQrCodeNewDevice;
 
@@ -42,7 +43,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     //view callback
     public MutableLiveData<Boolean> closeKeyword = new MutableLiveData<>();
     public MutableLiveData<Boolean> showConditionErrorDialog = new MutableLiveData<>();
-    public MutableLiveData<Boolean> goNextStep = new MutableLiveData<>();
+    public SingleLiveEvent<Boolean> goNextStep = new SingleLiveEvent<>();
     public MutableLiveData<Boolean> showEnteredPhoneNumberStartWithZeroError = new MutableLiveData<>();
     public MutableLiveData<Boolean> showEnteredPhoneNumberError = new MutableLiveData<>();
     public MutableLiveData<Boolean> showChooseCountryDialog = new MutableLiveData<>();

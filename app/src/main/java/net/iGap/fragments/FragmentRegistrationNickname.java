@@ -40,6 +40,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityRegistration;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.FragmentRegistrationNicknameBinding;
 import net.iGap.helper.HelperError;
@@ -47,6 +48,7 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.ImageHelper;
+import net.iGap.helper.PermissionHelper;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -171,13 +173,13 @@ public class FragmentRegistrationNickname extends BaseFragment {
                 getActivity().finish();
             }*/
 
-            if (getArguments() != null && getActivity() != null) {
+            if (getArguments() != null && getActivity() instanceof ActivityRegistration) {
                 FragmentSyncRegisteredContacts fragment = new FragmentSyncRegisteredContacts();
                 Bundle bundle = new Bundle();
                 bundle.putLong(FragmentSyncRegisteredContacts.ARG_USER_ID, userId);
                 fragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentRegistrationNickname.this).commitAllowingStateLoss();
+                getActivity().onBackPressed();
+                ((ActivityRegistration) getActivity()).loadFragment(fragment, true);
             }
         });
     }
@@ -203,8 +205,9 @@ public class FragmentRegistrationNickname extends BaseFragment {
                     ImageHelper.correctRotateImage(path, true); //rotate image
 
                     FragmentEditImage.insertItemList(path, false);
-                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, FragmentEditImage.newInstance(path, false, true, 0))
-                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                    if (getActivity() instanceof ActivityRegistration) {
+                        ((ActivityRegistration) getActivity()).loadFragment(FragmentEditImage.newInstance(path, false, true, 0), true);
+                    }
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
                     if (data != null) {
@@ -212,11 +215,25 @@ public class FragmentRegistrationNickname extends BaseFragment {
                             return;
                         }
                         FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
-                        getActivity().getSupportFragmentManager().beginTransaction().
-                                add(R.id.ar_layout_root, FragmentEditImage.newInstance(null, false, true, 0))
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                        if (getActivity() instanceof ActivityRegistration) {
+                            ((ActivityRegistration) getActivity()).loadFragment(FragmentEditImage.newInstance(null, false, true, 0), true);
+                        }
                     }
                     break;
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PermissionHelper.StoragePermissionRequestCode){
+            boolean t = true;
+            for (int grantResult : grantResults) {
+                t = t && grantResult == PackageManager.PERMISSION_GRANTED;
+            }
+            if (t){
+                openGallery();
             }
         }
     }
@@ -241,25 +258,17 @@ public class FragmentRegistrationNickname extends BaseFragment {
 
     public void useGallery() {
         if (getActivity() != null) {
-            try {
-                HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
-                    @Override
-                    public void Allow() {
-                        try {
-                            new AttachFile(getActivity()).requestOpenGalleryForImageSingleSelect(FragmentRegistrationNickname.this);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void deny() {
-
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (new PermissionHelper(getActivity()).grantReadAndRightStoragePermission()){
+                openGallery();
             }
+        }
+    }
+
+    private void openGallery(){
+        try {
+            new AttachFile(getActivity()).requestOpenGalleryForImageSingleSelect(FragmentRegistrationNickname.this);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
