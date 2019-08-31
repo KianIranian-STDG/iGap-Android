@@ -22,7 +22,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -201,6 +200,11 @@ public class EditChannelFragment extends BaseFragment {
 
         viewModel.onReactionMessageClickListener.observe(getViewLifecycleOwner(), isClicked -> {
             binding.rateMessage.setChecked(!binding.rateMessage.isChecked());
+        });
+
+        viewModel.getOnChannelAvatarUpdated().observe(getViewLifecycleOwner(), roomId -> {
+            if (roomId != null && roomId == viewModel.roomId)
+                avatarHandler.getAvatar(new ParamWithAvatarType(binding.channelAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
         });
 
         setUpEmojiPopup();

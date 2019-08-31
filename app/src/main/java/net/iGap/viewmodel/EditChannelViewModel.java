@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -37,8 +38,6 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 
-import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
-
 public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelUpdateReactionStatus, OnChannelDelete {
 
     public ObservableField<String> channelName = new ObservableField<>("");
@@ -66,6 +65,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
     public MutableLiveData<Boolean> goToChatRoom = new MutableLiveData<>();
     public MutableLiveData<Boolean> onSignClickListener = new MutableLiveData<>();
     public MutableLiveData<Boolean> onReactionMessageClickListener = new MutableLiveData<>();
+    public MutableLiveData<Long> onChannelAvatarUpdated = new MutableLiveData<>();
 
     public long roomId;
     public ChannelChatRole role;
@@ -338,6 +338,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
          * to download avatars . for do this action call HelperAvatar.getAvatar
          */
 
+        onChannelAvatarUpdated.postValue(roomId);
         isShowLoading.set(View.GONE);
         /*if (pathSaveImage == null) {
             setAvatar();
@@ -366,7 +367,7 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
 
     @Override
     public void onChannelAvatarDelete(long roomId, long avatarId) {
-
+        onChannelAvatarUpdated.postValue(roomId);
     }
 
     @Override
@@ -416,5 +417,9 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
             isShowLoading.set(View.GONE);
             goToChatRoom.setValue(true);
         });
+    }
+
+    public MutableLiveData<Long> getOnChannelAvatarUpdated() {
+        return onChannelAvatarUpdated;
     }
 }
