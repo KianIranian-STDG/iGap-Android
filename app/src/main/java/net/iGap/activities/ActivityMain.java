@@ -314,20 +314,24 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         checkIntent(intent);
 
         if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
-            BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
-            if (bottomNavigationFragment != null)
-                bottomNavigationFragment.autoLinkCrawler(intent.getExtras().getString(DEEP_LINK, DEEP_LINK_CHAT), new DiscoveryFragment.CrawlerStruct.OnDeepValidLink() {
-                    @Override
-                    public void linkValid(String link) {
-
-                    }
-
-                    @Override
-                    public void linkInvalid(String link) {
-                        HelperError.showSnackMessage(link + " " + context.getResources().getString(R.string.link_not_valid), false);
-                    }
-                });
+            handleDeepLink(intent);
         }
+    }
+
+    private void handleDeepLink(Intent intent) {
+        BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (bottomNavigationFragment != null)
+            bottomNavigationFragment.autoLinkCrawler(intent.getExtras().getString(DEEP_LINK, DEEP_LINK_CHAT), new DiscoveryFragment.CrawlerStruct.OnDeepValidLink() {
+                @Override
+                public void linkValid(String link) {
+
+                }
+
+                @Override
+                public void linkInvalid(String link) {
+                    HelperError.showSnackMessage(link + " " + context.getResources().getString(R.string.link_not_valid), false);
+                }
+            });
     }
 
 
@@ -1408,7 +1412,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
 
-        } else {
+        }
+        else if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_VIEW)) {
+            Uri data = intent.getData();
+            if (data != null && data.getHost().equals("deep_link")) {
+                Intent intentTemp = new Intent();
+                intentTemp.putExtra(DEEP_LINK, data.getQuery());
+                handleDeepLink(intentTemp);
+            }
+        }
+        else {
             HelperUrl.getLinkinfo(intent, ActivityMain.this);
         }
         getIntent().setData(null);
