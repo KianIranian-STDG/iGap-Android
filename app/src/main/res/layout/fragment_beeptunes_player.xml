@@ -22,7 +22,6 @@
         android:id="@+id/iv_btPlayer_songArt"
         android:layout_width="@dimen/dp200"
         android:layout_height="@dimen/dp200"
-        android:src="@drawable/beepslide"
         app:civ_border_color="@color/white"
         app:civ_border_width="1dp"
         app:layout_constraintBottom_toTopOf="@+id/tv_btPlayer_artistName"
