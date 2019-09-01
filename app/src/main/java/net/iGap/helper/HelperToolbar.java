@@ -85,6 +85,7 @@ public class HelperToolbar {
     private TextView mChatMuteIcon;
     private CircleImageView mCloudChatIcon;
     private TextView mBtnClearSearch;
+    private View callLayout ;
 
     private CircleImageView mTabletUserAvatar ;
     private TextView mTabletUserName ;
@@ -531,6 +532,10 @@ public class HelperToolbar {
         return mBtnClearSearch;
     }
 
+    public View getCallLayout() {
+        return callLayout;
+    }
+
     public TextView getTextViewLogo() {
         return mTxtLogo;
     }
@@ -695,75 +700,10 @@ public class HelperToolbar {
 
         MusicPlayer.setMusicPlayer(musicLayout);
         setMediaLayout();
-        //setStripLayoutCall();
-
-        try {
-            G.callStripLayoutVisiblityListener.observe(G.fragmentActivity, isVisible -> {
-
-                try {
-
-                    if (isVisible) {
-                        if (isChat) {
-                            ActivityCall.stripLayoutChat.setVisibility(View.VISIBLE);
-
-
-                        } else {
-                            ActivityCall.stripLayoutMain.setVisibility(View.VISIBLE);
-
-                        }
-
-
-                        if (MusicPlayer.mainLayout != null) {
-                            MusicPlayer.mainLayout.setVisibility(View.GONE);
-                        }
-
-                        if (MusicPlayer.chatLayout != null) {
-                            MusicPlayer.chatLayout.setVisibility(View.GONE);
-                        }
-                    } else {
-                        if (isChat) {
-                            ActivityCall.stripLayoutChat.setVisibility(View.GONE);
-                        } else {
-                            ActivityCall.stripLayoutMain.setVisibility(View.GONE);
-                        }
-                    }
-
-                } catch (Exception e) {
-                }
-
-            });
-        } catch (Exception e) {
-
-        }
-
     }
 
     public void checkIsAvailableOnGoingCall() {
-
-        /*if (G.isInCall) {
-            rootView.findViewById(R.id.view_toolbar_layout_strip_call).setVisibility(View.VISIBLE);
-
-
-            G.iCallFinishChat = () -> {
-                try {
-                    rootView.findViewById(R.id.view_toolbar_layout_strip_call).setVisibility(View.GONE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            };
-
-
-            G.iCallFinishMain = () -> {
-                try {
-                    rootView.findViewById(R.id.view_toolbar_layout_strip_call).setVisibility(View.GONE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            };
-
-        } else {
-            rootView.findViewById(R.id.view_toolbar_layout_strip_call).setVisibility(View.GONE);
-        }*/
+        callLayout.setVisibility(G.isInCall ? View.VISIBLE : View.GONE);
     }
 
     private void setMediaLayout() {
@@ -1077,6 +1017,7 @@ public class HelperToolbar {
         mTxtSearch = view.getTvSearch();
         mEdtSearch = view.getEdtSearch();
         mBtnClearSearch = view.getTvClearSearch();
+        callLayout = view.getCallLayout();
 
         groupAvatar = view.getCivProfileAvatar();
         groupName = view.getTvProfileName();

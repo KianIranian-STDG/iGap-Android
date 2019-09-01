@@ -23,6 +23,7 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
+import net.iGap.eventbus.EventManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperPublicMethod;
@@ -496,7 +497,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     public void endCall() {
         UserStatusController.getInstance().setOffline();
         G.isInCall = false;
-        G.callStripLayoutVisiblityListener.setValue(false);
+        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT , false);
         WebRTC.getInstance().leaveCall();
         isSendLeave = true;
         isConnected = false;
@@ -512,7 +513,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
 
     private void endVoiceAndFinish() {
         G.isInCall = false;
-        G.callStripLayoutVisiblityListener.setValue(false);
+        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT , false);
         playRingTone.setValue(false);
         if (ActivityCall.onFinishActivity != null) {
             ActivityCall.onFinishActivity.finishActivity();
@@ -642,7 +643,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
 
     public void leaveCall() {
         G.isInCall = false;
-        G.callStripLayoutVisiblityListener.setValue(false);
+        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT , false);
         if (isIncomingCall) {
             WebRTC.getInstance().leaveCall();
         }
@@ -652,7 +653,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
 
     public void onDestroy() {
         G.isInCall = false;
-        G.callStripLayoutVisiblityListener.setValue(false);
+        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT , false);
         G.iSignalingCallBack = null;
         G.onCallLeaveView = null;
         setSpeakerphoneOn(false);
