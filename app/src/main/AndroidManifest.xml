@@ -237,9 +237,7 @@
             <!-- this part add app logo to list of share -->
         </activity>
         <activity
-            android:name=".activities.ActivityRegisteration"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
-            android:windowSoftInputMode="adjustPan" />
+            android:name=".activities.ActivityRegistration" />
 
         <receiver
             android:name=".module.ReceiverBootPhone"

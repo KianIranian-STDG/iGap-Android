@@ -17,7 +17,7 @@ import android.content.SharedPreferences;
 
 import net.iGap.G;
 import net.iGap.Theme;
-import net.iGap.activities.ActivityRegisteration;
+import net.iGap.activities.ActivityRegistration;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
@@ -53,7 +53,7 @@ public final class HelperLogout {
 
                         AppUtils.cleanBadge();
                         new LoginActions();
-                        Intent intent = new Intent(G.context, ActivityRegisteration.class);
+                        Intent intent = new Intent(G.context, ActivityRegistration.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         G.context.startActivity(intent);
                         if (G.currentActivity != null) {

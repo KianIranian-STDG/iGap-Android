@@ -18,7 +18,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityEnterPassCode;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
-import net.iGap.activities.ActivityRegisteration;
+import net.iGap.activities.ActivityRegistration;
 import net.iGap.module.enums.ConnectionState;
 
 /**
@@ -59,7 +59,7 @@ public class HelperConnectionState {
             G.latestConnectionState = ConnectionState.UPDATING;
         }
 
-        if ((G.currentActivity instanceof ActivityMain || G.currentActivity instanceof ActivityEnterPassCode || G.currentActivity instanceof ActivityRegisteration || G.currentActivity instanceof ActivityManageSpace) && (!G.isFragmentMapActive
+        if ((G.currentActivity instanceof ActivityMain || G.currentActivity instanceof ActivityEnterPassCode || G.currentActivity instanceof ActivityRegistration || G.currentActivity instanceof ActivityManageSpace) && (!G.isFragmentMapActive
                 || connectionState == ConnectionState.IGAP
                 || connectionState == ConnectionState.UPDATING)) {
 

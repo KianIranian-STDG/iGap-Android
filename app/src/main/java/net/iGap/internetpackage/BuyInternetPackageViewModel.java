@@ -15,7 +15,6 @@ import net.iGap.model.OperatorType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class BuyInternetPackageViewModel extends ViewModel {
@@ -270,7 +269,7 @@ public class BuyInternetPackageViewModel extends ViewModel {
     private void getFilterListDuration(@NotNull List<MciInternetPackageFilter> data) {
         daysFilter = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).getCategory().getType().equals("duration")) {
+            if (data.get(i).getCategory().getType().toLowerCase().equals("duration")) {
                 daysFilter.add(data.get(i));
             }
         }
@@ -279,7 +278,7 @@ public class BuyInternetPackageViewModel extends ViewModel {
     private void getFilterListTraffic(@NotNull List<MciInternetPackageFilter> data) {
         trafficFilter = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).getCategory().getType().equals("traffic")) {
+            if (data.get(i).getCategory().getType().toLowerCase().equals("traffic")) {
                 trafficFilter.add(data.get(i));
             }
         }

@@ -35,87 +35,74 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/channelAvatar"
-                    android:layout_width="@dimen/dp68"
-                    android:layout_height="@dimen/dp68"
-                    android:layout_margin="@dimen/dp32"
-                    android:onClick="@{()->viewModel.chooseImage()}"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/channelNameEditText"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <net.iGap.module.EmojiEditTextE
-                    android:id="@+id/channelNameEditText"
-                    style="?emojiChat"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:enabled="@{viewModel.canChangeChannelName}"
-                    android:gravity="bottom"
-                    android:hint="@string/channel_name"
-                    android:imeOptions="flagNoExtractUi"
-                    android:maxLines="1"
-                    android:text="@={viewModel.channelName}"
-                    android:textSize="@dimen/standardTextSize"
-                    app:emojiSize="@dimen/standardTextSize"
-                    app:layout_constraintBottom_toTopOf="@id/line"
-                    app:layout_constraintLeft_toRightOf="@id/channelAvatar"
-                    app:layout_constraintRight_toLeftOf="@id/emojiButton" />
-
-                <net.iGap.module.MaterialDesignTextView
-                    android:id="@+id/emojiButton"
-                    style="@style/myIconTextViewStyle"
+                <ProgressBar
+                    android:id="@+id/loading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp16"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:gravity="bottom"
-                    android:onClick="@{()->viewModel.onEmojiClickListener()}"
-                    android:paddingLeft="@dimen/dp8"
-                    android:paddingRight="@dimen/dp8"
-                    android:paddingBottom="@dimen/dp8"
-                    android:text="@string/md_emoticon_with_happy_face"
-                    android:textSize="@dimen/standardIconSize"
-                    app:layout_constraintBottom_toBottomOf="@id/channelNameEditText"
-                    app:layout_constraintLeft_toRightOf="@id/channelNameEditText"
+                    android:background="?attr/selectableItemBackground"
+                    android:visibility="@{viewModel.isShowLoading}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/channelNameEditText" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <View
                     android:id="@+id/line"
                     style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    app:layout_constraintBottom_toBottomOf="@id/channelAvatar"
-                    app:layout_constraintLeft_toLeftOf="@id/channelNameEditText"
-                    app:layout_constraintRight_toRightOf="@id/emojiButton" />
-
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/groupDescriptionEditText"
-                    style="?hintColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:background="@null"
-                    android:textSize="@dimen/standardTextSize"
-                    android:enabled="@{viewModel.canChangeChannelName}"
-                    android:hint="@string/channel_description"
-                    android:text="@{viewModel.channelDescription}"
-                    app:layout_constraintLeft_toLeftOf="@id/line"
-                    app:layout_constraintRight_toRightOf="@id/line"
-                    app:layout_constraintTop_toBottomOf="@id/line" />
+                    app:layout_constraintEnd_toEndOf="@+id/channelNameEditText"
+                    app:layout_constraintStart_toStartOf="@+id/channelNameEditText"
+                    app:layout_constraintTop_toBottomOf="@+id/channelNameEditText" />
 
                 <View
                     android:id="@+id/line2"
                     style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginTop="32dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/groupDescriptionEditText"
                     app:layout_constraintWidth_percent=".95" />
+
+                <View
+                    android:id="@+id/line3"
+                    style="?lineColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rateMessageDescription"
+                    app:layout_constraintWidth_percent=".95" />
+
+                <View
+                    android:id="@+id/line4"
+                    style="?lineColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/membersCount"
+                    app:layout_constraintWidth_percent=".95" />
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/groupDescriptionEditText"
+                    style="?hintColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@null"
+                    android:enabled="@{viewModel.canChangeChannelName}"
+                    android:hint="@string/channel_description"
+                    android:maxLines="8"
+                    android:text="@{viewModel.channelDescription}"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toEndOf="@+id/emojiButton"
+                    app:layout_constraintStart_toStartOf="@+id/channelNameEditText"
+                    app:layout_constraintTop_toBottomOf="@+id/channelNameEditText" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/channelTypeTitle"
@@ -124,8 +111,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:padding="8dp"
-                    android:textSize="@dimen/standardTextSize"
                     android:text="@string/channel_type"
+                    android:textSize="@dimen/standardTextSize"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/line2"
@@ -136,10 +123,10 @@
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/smallTextSize"
                     android:onClick="@{()->viewModel.onChannelTypeClick()}"
                     android:padding="8dp"
                     android:text="@{viewModel.channelType}"
+                    android:textSize="@dimen/smallTextSize"
                     app:layout_constraintLeft_toLeftOf="@id/channelTypeTitle"
                     app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
                     app:layout_constraintTop_toBottomOf="@id/channelTypeTitle" />
@@ -152,23 +139,12 @@
                     android:fontFamily="@font/main_font"
                     android:onClick="@{()-> viewModel.onSignMessageClick()}"
                     android:padding="8dp"
-                    android:textSize="@dimen/standardTextSize"
                     android:text="@string/sign_message_title"
+                    android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showLayoutReactStatus}"
                     app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
                     app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
                     app:layout_constraintTop_toBottomOf="@id/channelType" />
-
-                <net.iGap.module.CustomToggleButton
-                    android:id="@+id/signedMessage"
-                    android:layout_width="@dimen/toggles_width"
-                    android:layout_height="@dimen/toggles_height"
-                    android:checked="@={viewModel.isSignedMessage}"
-                    android:visibility="@{viewModel.showLayoutReactStatus}"
-                    android:onCheckedChanged="@{()->viewModel.onSingedMessageCheckedChange(signedMessage.isChecked())}"
-                    app:layout_constraintBottom_toBottomOf="@id/signedMessageTxt"
-                    app:layout_constraintEnd_toEndOf="@id/signedMessageTxt"
-                    app:layout_constraintTop_toTopOf="@id/signedMessageTxt" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/signedMessageDescription"
@@ -176,8 +152,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:textSize="@dimen/smallTextSize"
                     android:text="@string/sign_channel_message_description"
+                    android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.showLayoutReactStatus}"
                     app:layout_constraintStart_toStartOf="@id/signedMessageTxt"
                     app:layout_constraintTop_toBottomOf="@id/signedMessageTxt"
@@ -193,22 +169,11 @@
                     android:onClick="@{()-> viewModel.onReactionMessageClick()}"
                     android:padding="8dp"
                     android:text="@string/show_channel_vote"
-                    android:visibility="@{viewModel.showLayoutReactStatus}"
                     android:textSize="@dimen/smallTextSize"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
                     app:layout_constraintLeft_toLeftOf="@id/channelTypeTitle"
                     app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
                     app:layout_constraintTop_toBottomOf="@id/signedMessageDescription" />
-
-                <net.iGap.module.CustomToggleButton
-                    android:id="@+id/rateMessage"
-                    android:layout_width="@dimen/toggles_width"
-                    android:layout_height="@dimen/toggles_height"
-                    android:checked="@={viewModel.isReactionMessage}"
-                    android:visibility="@{viewModel.showLayoutReactStatus}"
-                    android:onCheckedChanged="@{()->viewModel.onReactionMessageCheckedChange(rateMessage.isChecked())}"
-                    app:layout_constraintBottom_toBottomOf="@id/rateMessageTxt"
-                    app:layout_constraintEnd_toEndOf="@id/rateMessageTxt"
-                    app:layout_constraintTop_toTopOf="@id/rateMessageTxt" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/rateMessageDescription"
@@ -216,24 +181,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:textSize="@dimen/smallTextSize"
                     android:text="@string/reaction_message_detail"
+                    android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.showLayoutReactStatus}"
                     app:layout_constraintStart_toStartOf="@id/rateMessageTxt"
                     app:layout_constraintTop_toBottomOf="@id/rateMessageTxt"
                     app:layout_constraintVertical_bias="0"
                     app:layout_constraintWidth_percent=".6" />
-
-                <View
-                    android:id="@+id/line3"
-                    style="?lineColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/dp16"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rateMessageDescription"
-                    app:layout_constraintWidth_percent=".95" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/administrators"
@@ -253,17 +207,16 @@
                     android:id="@+id/administratorsCount"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
-                    android:textSize="@dimen/smallTextSize"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onAdministratorClick()}"
                     android:padding="8dp"
                     android:text="@{viewModel.administratorsCount}"
                     android:textColor="@color/green"
+                    android:textSize="@dimen/smallTextSize"
                     app:layout_constraintBottom_toBottomOf="@id/administrators"
                     app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
                     app:layout_constraintStart_toEndOf="@id/administrators"
                     app:layout_constraintTop_toTopOf="@id/administrators" />
-
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/moderator"
@@ -308,6 +261,7 @@
                     app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
                     app:layout_constraintTop_toBottomOf="@id/moderator" />
 
+
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/membersCount"
                     style="?textSubColorSettingTheme"
@@ -322,17 +276,6 @@
                     app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
                     app:layout_constraintStart_toEndOf="@id/members"
                     app:layout_constraintTop_toTopOf="@id/members" />
-
-                <View
-                    android:id="@+id/line4"
-                    style="?lineColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/dp16"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/membersCount"
-                    app:layout_constraintWidth_percent=".95" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/deleteChannel"
@@ -352,16 +295,86 @@
                     app:layout_constraintTop_toBottomOf="@id/line4"
                     app:layout_constraintVertical_bias="0" />
 
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/channelAvatar"
+                    android:layout_width="@dimen/dp70"
+                    android:layout_height="@dimen/dp70"
+                    android:layout_margin="@dimen/dp32"
+                    android:onClick="@{()->viewModel.chooseImage()}"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/channelNameEditText"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
                 <ProgressBar
-                    android:id="@+id/loading"
+                    android:id="@+id/avatarUpload"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:visibility="@{viewModel.showUploadProgressLiveData}"
+                    app:layout_constraintBottom_toBottomOf="@+id/channelAvatar"
+                    app:layout_constraintEnd_toEndOf="@+id/channelAvatar"
+                    app:layout_constraintStart_toStartOf="@+id/channelAvatar"
+                    app:layout_constraintTop_toTopOf="@+id/channelAvatar" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/signedMessage"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@={viewModel.isSignedMessage}"
+                    android:onCheckedChanged="@{()->viewModel.onSingedMessageCheckedChange(signedMessage.isChecked())}"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
+                    app:layout_constraintBottom_toBottomOf="@id/signedMessageTxt"
+                    app:layout_constraintEnd_toEndOf="@id/signedMessageTxt"
+                    app:layout_constraintTop_toTopOf="@id/signedMessageTxt" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/rateMessage"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@={viewModel.isReactionMessage}"
+                    android:onCheckedChanged="@{()->viewModel.onReactionMessageCheckedChange(rateMessage.isChecked())}"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
+                    app:layout_constraintBottom_toBottomOf="@id/rateMessageTxt"
+                    app:layout_constraintEnd_toEndOf="@id/rateMessageTxt"
+                    app:layout_constraintTop_toTopOf="@id/rateMessageTxt" />
+
+                <net.iGap.module.EmojiEditTextE
+                    android:id="@+id/channelNameEditText"
+                    style="?emojiChat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:enabled="@{viewModel.canChangeChannelName}"
+                    android:gravity="bottom"
+                    android:hint="@string/channel_name"
+                    android:imeOptions="flagNoExtractUi"
+                    android:maxLines="1"
+                    android:text="@={viewModel.channelName}"
+                    android:textSize="@dimen/largeTextSize"
+                    app:emojiSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@+id/emojiButton"
+                    app:layout_constraintStart_toEndOf="@id/channelAvatar"
+                    app:layout_constraintTop_toTopOf="@+id/channelAvatar" />
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/emojiButton"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:visibility="@{viewModel.isShowLoading}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="bottom"
+                    android:onClick="@{()->viewModel.onEmojiClickListener()}"
+                    android:paddingLeft="@dimen/dp8"
+                    android:paddingRight="@dimen/dp8"
+                    android:paddingBottom="@dimen/dp8"
+                    android:text="@string/md_emoticon_with_happy_face"
+                    android:textSize="@dimen/standardIconSize"
+                    app:layout_constraintBottom_toBottomOf="@+id/channelNameEditText"
+                    app:layout_constraintEnd_toEndOf="parent" />
             </android.support.constraint.ConstraintLayout>
         </android.support.v4.widget.NestedScrollView>
     </android.support.constraint.ConstraintLayout>

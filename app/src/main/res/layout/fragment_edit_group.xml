@@ -39,19 +39,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/groupAvatar"
-                    android:layout_width="@dimen/dp70"
-                    android:layout_height="@dimen/dp70"
-                    android:layout_margin="@dimen/dp32"
-                    android:layout_marginTop="32dp"
-                    android:onClick="@{()->viewModel.chooseImage()}"
-                    app:avatarImage="@{viewModel.avatarImage}"
-                    app:layout_constraintHorizontal_bias="0.531"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/groupNameEditText"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <ProgressBar
                     android:id="@+id/imageLoading"
                     android:layout_width="35dp"
@@ -77,7 +64,7 @@
                     style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    app:layout_constraintEnd_toEndOf="@+id/groupNameEditText"
+                    app:layout_constraintEnd_toEndOf="@+id/emojiButton"
                     app:layout_constraintStart_toStartOf="@+id/groupNameEditText"
                     app:layout_constraintTop_toBottomOf="@+id/groupNameEditText" />
 
@@ -117,19 +104,17 @@
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/groupDescriptionEditText"
                     style="?hintColorSettingTheme"
-                    android:layout_width="0dp"
+                    android:layout_width="261dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:maxLines="4"
+                    android:layout_marginTop="16dp"
                     android:background="@null"
                     android:hint="@string/group_description"
+                    android:maxLines="8"
                     android:text="@={viewModel.groupDescription}"
                     android:textSize="@dimen/standardTextSize"
-                    app:layout_constraintBottom_toBottomOf="@+id/groupAvatar"
-                    app:layout_constraintEnd_toEndOf="@+id/groupNameEditText"
+                    app:layout_constraintEnd_toEndOf="@+id/emojiButton"
                     app:layout_constraintStart_toStartOf="@+id/groupNameEditText"
-                    app:layout_constraintTop_toBottomOf="@+id/groupNameEditText" />
+                    app:layout_constraintTop_toBottomOf="@+id/line" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/chatHistoryTitle"
@@ -224,7 +209,6 @@
                     app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/administrators" />
 
-
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/moderatorsCount"
                     style="?textTitleColorSettingTheme"
@@ -238,6 +222,7 @@
                     app:layout_constraintEnd_toEndOf="@id/chatHistoryTitle"
                     app:layout_constraintStart_toEndOf="@id/moderator"
                     app:layout_constraintTop_toTopOf="@id/moderator" />
+
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/members"
@@ -280,24 +265,34 @@
                     app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/line4" />
 
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/groupAvatar"
+                    android:layout_width="@dimen/dp70"
+                    android:layout_height="@dimen/dp70"
+                    android:layout_margin="@dimen/dp32"
+                    android:layout_marginTop="32dp"
+                    android:onClick="@{()->viewModel.chooseImage()}"
+                    app:avatarImage="@{viewModel.avatarImage}"
+                    app:layout_constraintHorizontal_bias="0.531"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/groupNameEditText"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <net.iGap.module.EmojiEditTextE
                     android:id="@+id/groupNameEditText"
                     style="?emojiChat"
-                    android:layout_width="0dp"
+                    android:layout_width="235dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
                     android:background="@null"
                     android:gravity="bottom"
+                    app:layout_constraintStart_toEndOf="@id/groupAvatar"
                     android:hint="@string/group_name"
                     android:imeOptions="flagNoExtractUi"
                     android:maxLines="1"
                     android:text="@={viewModel.groupName}"
                     android:textSize="@dimen/largeTextSize"
                     app:emojiSize="@dimen/largeTextSize"
-                    app:layout_constraintBottom_toTopOf="@+id/groupDescriptionEditText"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/groupAvatar"
+                    app:layout_constraintEnd_toStartOf="@+id/emojiButton"
                     app:layout_constraintTop_toTopOf="@+id/groupAvatar" />
 
                 <net.iGap.module.MaterialDesignTextView
@@ -305,6 +300,8 @@
                     style="?emojiChat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="bottom"
                     android:onClick="@{()->viewModel.onEmojiClickListener()}"
@@ -315,7 +312,7 @@
                     android:textAppearance="@style/TextIconAppearance.all"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/groupNameEditText"
-                    app:layout_constraintEnd_toEndOf="@+id/groupNameEditText" />
+                    app:layout_constraintEnd_toEndOf="parent" />
 
             </android.support.constraint.ConstraintLayout>
         </android.support.v4.widget.NestedScrollView>

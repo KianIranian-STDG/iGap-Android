@@ -31,7 +31,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
-import net.iGap.activities.ActivityRegisteration;
+import net.iGap.activities.ActivityRegistration;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.adapter.items.chat.ChatCell;
@@ -697,8 +697,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             if (G.currentActivity != null) {
                 G.currentActivity.finish();
             }
-            Intent intent = new Intent(context, ActivityRegisteration.class);
-            intent.putExtra(ActivityRegisteration.showProfile, true);
+            Intent intent = new Intent(context, ActivityRegistration.class);
+            intent.putExtra(ActivityRegistration.showProfile, true);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }

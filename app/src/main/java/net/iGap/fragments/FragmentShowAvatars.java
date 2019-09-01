@@ -452,7 +452,10 @@ public class FragmentShowAvatars extends BaseFragment {
         G.onChannelAvatarDelete = new OnChannelAvatarDelete() {
             @Override
             public void onChannelAvatarDelete(long roomId, long avatarId) {
-                if (onComplete != null) onComplete.complete(true, "" + avatarId, "");
+                G.handler.post(() -> {
+                    if (onComplete != null)
+                        onComplete.complete(true, "" + avatarId, "");
+                });
             }
 
             @Override
