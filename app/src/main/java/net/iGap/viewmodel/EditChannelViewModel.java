@@ -1,17 +1,15 @@
 package net.iGap.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentEditImage;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.interfaces.OnChannelAvatarAdd;
@@ -38,7 +36,7 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 
-public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelUpdateReactionStatus, OnChannelDelete {
+public class EditChannelViewModel extends BaseViewModel implements OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelUpdateReactionStatus, OnChannelDelete {
 
     public ObservableField<String> channelName = new ObservableField<>("");
     public ObservableField<String> channelDescription = new ObservableField<>("");
@@ -65,7 +63,9 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
     public MutableLiveData<Boolean> goToChatRoom = new MutableLiveData<>();
     public MutableLiveData<Boolean> onSignClickListener = new MutableLiveData<>();
     public MutableLiveData<Boolean> onReactionMessageClickListener = new MutableLiveData<>();
-    public MutableLiveData<Long> onChannelAvatarUpdated = new MutableLiveData<>();
+
+    public MutableLiveData<Long> channelAvatarUpdatedLiveData = new MutableLiveData<>();
+    private MutableLiveData<Integer> showUploadProgressLiveData = new MutableLiveData<>();
 
     public long roomId;
     public ChannelChatRole role;
@@ -111,30 +111,6 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
                 }
             });
         };
-        FragmentEditImage.completeEditImage = (path, message, textImageList) -> {
-            pathSaveImage = null;
-            pathSaveImage = path;
-            long avatarId = SUID.id().get();
-            long lastUploadedAvatarId = avatarId + 1L;
-
-            isShowLoading.set(View.VISIBLE);
-            HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
-                @Override
-                public void OnProgress(int progress, FileUploadStructure struct) {
-                    if (progress < 100) {
-                        /*prgWait.setProgress(progress);*/
-                    } else {
-                        new RequestChannelAvatarAdd().channelAvatarAdd(roomId, struct.token);
-                    }
-                }
-
-                @Override
-                public void OnError() {
-                    isShowLoading.set(View.GONE);
-                }
-            });
-        };
-
 
         RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         //todo:fixed it
@@ -332,42 +308,24 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
     }
 
     @Override
+    public void onCreateFragment(BaseFragment fragment) {
+        showUploadProgressLiveData.postValue(View.GONE);
+    }
+
+    @Override
     public void onAvatarAdd(long roomId, ProtoGlobal.Avatar avatar) {
-        /**
-         * if another account do this action we haven't avatar source and have
-         * to download avatars . for do this action call HelperAvatar.getAvatar
-         */
-
-        onChannelAvatarUpdated.postValue(roomId);
-        isShowLoading.set(View.GONE);
-        /*if (pathSaveImage == null) {
-            setAvatar();
-        } else {
-            avatarHandler.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
-                @Override
-                public void onAvatarAdd(final String avatarPath) {
-
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            hideProgressBar();
-                            setImage(avatarPath);
-                        }
-                    });
-                }
-            });
-            pathSaveImage = null;
-        }*/
+        channelAvatarUpdatedLiveData.postValue(roomId);
+        showUploadProgressLiveData.postValue(View.GONE);
     }
 
     @Override
     public void onAvatarAddError() {
-        isShowLoading.set(View.GONE);
+        showUploadProgressLiveData.postValue(View.GONE);
     }
 
     @Override
     public void onChannelAvatarDelete(long roomId, long avatarId) {
-        onChannelAvatarUpdated.postValue(roomId);
+        channelAvatarUpdatedLiveData.postValue(roomId);
     }
 
     @Override
@@ -419,7 +377,32 @@ public class EditChannelViewModel extends ViewModel implements OnChannelAvatarAd
         });
     }
 
-    public MutableLiveData<Long> getOnChannelAvatarUpdated() {
-        return onChannelAvatarUpdated;
+    public void uploadAvatar(String path) {
+        long avatarId = SUID.id().get();
+        long lastUploadedAvatarId = avatarId + 1L;
+
+        HelperUploadFile.startUploadTaskAvatar(path, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+            @Override
+            public void OnProgress(int progress, FileUploadStructure struct) {
+                if (progress < 100) {
+                    showUploadProgressLiveData.postValue(View.VISIBLE);
+                } else {
+                    new RequestChannelAvatarAdd().channelAvatarAdd(roomId, struct.token);
+                }
+            }
+
+            @Override
+            public void OnError() {
+                showUploadProgressLiveData.postValue(View.GONE);
+            }
+        });
+    }
+
+    public MutableLiveData<Long> getChannelAvatarUpdatedLiveData() {
+        return channelAvatarUpdatedLiveData;
+    }
+
+    public MutableLiveData<Integer> getShowUploadProgressLiveData() {
+        return showUploadProgressLiveData;
     }
 }
