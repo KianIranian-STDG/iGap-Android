@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,16 +41,14 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.GroupChatRole;
-import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.viewmodel.EditGroupViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.HashMap;
 
-public class EditGroupFragment extends BaseFragment implements FragmentEditImage.CompleteEditImage {
+public class EditGroupFragment extends BaseFragment implements FragmentEditImage.OnImageEdited {
 
     private static final String ROOM_ID = "RoomId";
 
@@ -94,7 +91,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        avatarHandler.getAvatar(new ParamWithAvatarType(binding.groupAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
+        viewModel.onCreateFragment(this);
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -168,13 +165,18 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
         viewModel.goToRoomListPage.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() instanceof ActivityMain && go != null && go) {
-                Log.wtf(this.getClass().getName(), "goToRoomListPage observe");
                 ((ActivityMain) getActivity()).removeAllFragmentFromMain();
-                /*new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);*/
+            }
+        });
+
+        viewModel.getOnGroupAvatarUpdated().observe(getViewLifecycleOwner(), roomId -> {
+            if (roomId != null && roomId == viewModel.roomId) {
+                setAvatar();
             }
         });
 
         setUpEmojiPopup();
+        setAvatar();
     }
 
     @Override
@@ -195,14 +197,17 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                     if (getActivity() != null) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
-                            FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false, this);
-                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                            FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false, null);
+                            FragmentEditImage fragmentEditImage =  FragmentEditImage.newInstance(null, false, false, 0);
+                            fragmentEditImage.setOnProfileImageEdited(this);
+                            new HelperFragment(getActivity().getSupportFragmentManager(),fragmentEditImage).setReplace(false).load();
 
                         } else {
                             ImageHelper.correctRotateImage(AttachFile.imagePath, true);
-
-                            FragmentEditImage.insertItemList(AttachFile.imagePath, false, this);
-                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0)).setReplace(false).load();
+                            FragmentEditImage.insertItemList(AttachFile.imagePath, false, null);
+                            FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0);
+                            fragmentEditImage.setOnProfileImageEdited(this);
+                            new HelperFragment(getActivity().getSupportFragmentManager(),fragmentEditImage).setReplace(false).load();
                         }
                     }
                     break;
@@ -213,11 +218,17 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                     if (getActivity() != null) {
                         ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true);
                         FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
-                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
+                        fragmentEditImage.setOnProfileImageEdited(this);
+                        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                     }
                     break;
             }
         }
+    }
+
+    private void setAvatar(){
+        avatarHandler.getAvatar(new ParamWithAvatarType(binding.groupAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
     }
 
     private void startDialogSelectPicture() {
@@ -377,7 +388,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     }
 
     @Override
-    public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
-        viewModel.setEditedImage(path);
+    public void profileImageAdd(String path) {
+        viewModel.uploadAvatar(path);
     }
 }

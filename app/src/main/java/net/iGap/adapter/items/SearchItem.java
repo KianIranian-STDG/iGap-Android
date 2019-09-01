@@ -10,7 +10,6 @@
 
 package net.iGap.adapter.items;
 
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -34,7 +33,6 @@ import static net.iGap.fragments.SearchFragment.SearchType.contact;
 
 public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> {
     public SearchFragment.StructSearch item;
-    private Typeface typeFaceIcon;
     private AvatarHandler avatarHandler;
 
     public SearchItem(AvatarHandler avatarHandler) {
@@ -84,15 +82,11 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
             //holder.txtIcon.setVisibility(View.VISIBLE);
             //holder.txtIcon.setText(G.context.getString(R.string.md_user_shape));
         } else if (item.roomType == ProtoGlobal.Room.Type.GROUP) {
-            typeFaceIcon = G.typeface_Fontico;
-            holder.txtIcon.setTypeface(typeFaceIcon);
             holder.txtIcon.setVisibility(View.VISIBLE);
-            holder.txtIcon.setText(G.context.getString(R.string.md_users_social_symbol));
+            holder.txtIcon.setText(G.context.getString(R.string.group_icon));
         } else if (item.roomType == ProtoGlobal.Room.Type.CHANNEL) {
-            typeFaceIcon = G.typeface_Fontico;
-            holder.txtIcon.setTypeface(typeFaceIcon);
             holder.txtIcon.setVisibility(View.VISIBLE);
-            holder.txtIcon.setText(G.context.getString(R.string.md_channel_icon));
+            holder.txtIcon.setText(G.context.getString(R.string.channel_main_icon));
         }
     }
 

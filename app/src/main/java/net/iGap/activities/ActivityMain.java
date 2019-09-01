@@ -1269,7 +1269,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
-        Log.wtf(this.getClass().getName(), "onBackPressed");
         if (G.ISOK) {
             if (G.onBackPressedWebView != null) {
                 if (G.onBackPressedWebView.onBack()) {
@@ -1281,12 +1280,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (G.onBackPressedExplorer.onBack()) {
                     return;
                 }
-            }/* else if (G.onBackPressedChat != null) {
-                Log.wtf(this.getClass().getName(),"onBackPressedChat");
+            } else if (G.onBackPressedChat != null) {
                 if (G.onBackPressedChat.onBack()) {
                     return;
                 }
-            }*/
+            }
 
             if (onBackPressedListener != null) {
                 Log.wtf(this.getClass().getName(), "onBackPressedChat");

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -40,94 +41,95 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/groupAvatar"
-                    android:layout_width="@dimen/dp68"
-                    android:layout_height="@dimen/dp68"
+                    android:layout_width="@dimen/dp70"
+                    android:layout_height="@dimen/dp70"
                     android:layout_margin="@dimen/dp32"
+                    android:layout_marginTop="32dp"
                     android:onClick="@{()->viewModel.chooseImage()}"
                     app:avatarImage="@{viewModel.avatarImage}"
+                    app:layout_constraintHorizontal_bias="0.531"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@id/groupNameEditText"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ProgressBar
                     android:id="@+id/imageLoading"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:visibility="@{viewModel.showUploadProgressLiveData}"
                     app:layout_constraintBottom_toBottomOf="@id/groupAvatar"
                     app:layout_constraintLeft_toLeftOf="@id/groupAvatar"
                     app:layout_constraintRight_toRightOf="@id/groupAvatar"
                     app:layout_constraintTop_toTopOf="@id/groupAvatar" />
 
-                <net.iGap.module.EmojiEditTextE
-                    android:id="@+id/groupNameEditText"
-                    style="?emojiChat"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:gravity="bottom"
-                    android:hint="@string/group_name"
-                    android:imeOptions="flagNoExtractUi"
-                    android:maxLines="1"
-                    android:text="@={viewModel.groupName}"
-                    android:textSize="24sp"
-                    app:emojiSize="@dimen/dp22"
-                    app:layout_constraintBottom_toTopOf="@id/line"
-                    app:layout_constraintLeft_toRightOf="@id/groupAvatar"
-                    app:layout_constraintRight_toLeftOf="@id/emojiButton" />
-
-                <net.iGap.module.MaterialDesignTextView
-                    android:id="@+id/emojiButton"
-                    style="?emojiChat"
+                <ProgressBar
+                    android:id="@+id/loading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp16"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:gravity="bottom"
-                    android:onClick="@{()->viewModel.onEmojiClickListener()}"
-                    android:paddingLeft="@dimen/dp8"
-                    android:paddingRight="@dimen/dp8"
-                    android:paddingBottom="@dimen/dp8"
-                    android:text="@string/md_emoticon_with_happy_face"
-                    android:textAppearance="@style/TextIconAppearance.all"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="@id/groupNameEditText"
-                    app:layout_constraintLeft_toRightOf="@id/groupNameEditText"
+                    android:visibility="@{ viewModel.showLoading ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/groupNameEditText" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <View
                     android:id="@+id/line"
                     style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    app:layout_constraintBottom_toBottomOf="@id/groupAvatar"
-                    app:layout_constraintLeft_toLeftOf="@id/groupNameEditText"
-                    app:layout_constraintRight_toRightOf="@id/emojiButton" />
-
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/groupDescriptionEditText"
-                    style="?hintColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:background="@null"
-                    android:hint="@string/group_description"
-                    android:text="@={viewModel.groupDescription}"
-                    app:layout_constraintLeft_toLeftOf="@id/line"
-                    app:layout_constraintRight_toRightOf="@id/line"
-                    app:layout_constraintTop_toBottomOf="@id/line" />
+                    app:layout_constraintEnd_toEndOf="@+id/groupNameEditText"
+                    app:layout_constraintStart_toStartOf="@+id/groupNameEditText"
+                    app:layout_constraintTop_toBottomOf="@+id/groupNameEditText" />
 
                 <View
                     android:id="@+id/line2"
                     style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/groupDescriptionEditText"
+                    app:layout_constraintWidth_percent=".95" />
+
+                <View
+                    android:id="@+id/line3"
+                    style="?lineColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/groupDescriptionEditText"
+                    app:layout_constraintTop_toBottomOf="@id/chatHistoryStatus"
                     app:layout_constraintWidth_percent=".95" />
+
+                <View
+                    android:id="@+id/line4"
+                    style="?lineColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/members"
+                    app:layout_constraintWidth_percent=".95" />
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/groupDescriptionEditText"
+                    style="?hintColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:maxLines="4"
+                    android:background="@null"
+                    android:hint="@string/group_description"
+                    android:text="@={viewModel.groupDescription}"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintBottom_toBottomOf="@+id/groupAvatar"
+                    app:layout_constraintEnd_toEndOf="@+id/groupNameEditText"
+                    app:layout_constraintStart_toStartOf="@+id/groupNameEditText"
+                    app:layout_constraintTop_toBottomOf="@+id/groupNameEditText" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/chatHistoryTitle"
@@ -147,23 +149,13 @@
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
                     android:onClick="@{()->viewModel.onChatHistoryStatusClick()}"
                     android:padding="8dp"
                     android:text="@{viewModel.chatHistoryForNewMemberStatus}"
                     app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
                     app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/chatHistoryTitle" />
-
-                <View
-                    android:id="@+id/line3"
-                    style="?lineColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/dp16"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/chatHistoryStatus"
-                    app:layout_constraintWidth_percent=".95" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/permission"
@@ -219,7 +211,6 @@
                     app:layout_constraintStart_toEndOf="@id/administrators"
                     app:layout_constraintTop_toTopOf="@id/administrators" />
 
-
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/moderator"
                     style="?textTitleColorSettingTheme"
@@ -232,6 +223,7 @@
                     app:layout_constraintEnd_toStartOf="@id/moderatorsCount"
                     app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/administrators" />
+
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/moderatorsCount"
@@ -274,17 +266,6 @@
                     app:layout_constraintStart_toEndOf="@id/members"
                     app:layout_constraintTop_toTopOf="@id/members" />
 
-                <View
-                    android:id="@+id/line4"
-                    style="?lineColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/dp16"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/members"
-                    app:layout_constraintWidth_percent=".95" />
-
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/leaveGroup"
                     style="?textTitleColorSettingTheme"
@@ -299,15 +280,42 @@
                     app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/line4" />
 
-                <ProgressBar
-                    android:id="@+id/loading"
+                <net.iGap.module.EmojiEditTextE
+                    android:id="@+id/groupNameEditText"
+                    style="?emojiChat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@null"
+                    android:gravity="bottom"
+                    android:hint="@string/group_name"
+                    android:imeOptions="flagNoExtractUi"
+                    android:maxLines="1"
+                    android:text="@={viewModel.groupName}"
+                    android:textSize="@dimen/largeTextSize"
+                    app:emojiSize="@dimen/largeTextSize"
+                    app:layout_constraintBottom_toTopOf="@+id/groupDescriptionEditText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/groupAvatar"
+                    app:layout_constraintTop_toTopOf="@+id/groupAvatar" />
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/emojiButton"
+                    style="?emojiChat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="@{ viewModel.showLoading ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="bottom"
+                    android:onClick="@{()->viewModel.onEmojiClickListener()}"
+                    android:paddingLeft="@dimen/dp8"
+                    android:paddingRight="@dimen/dp8"
+                    android:paddingBottom="@dimen/dp8"
+                    android:text="@string/md_emoticon_with_happy_face"
+                    android:textAppearance="@style/TextIconAppearance.all"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/groupNameEditText"
+                    app:layout_constraintEnd_toEndOf="@+id/groupNameEditText" />
 
             </android.support.constraint.ConstraintLayout>
         </android.support.v4.widget.NestedScrollView>

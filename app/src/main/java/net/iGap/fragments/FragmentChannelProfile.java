@@ -14,7 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.method.LinkMovementMethod;
-import android.text.method.MovementMethod;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -33,11 +32,9 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityProfileChannelBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
@@ -52,8 +49,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.internal.Util;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
@@ -86,6 +81,7 @@ public class FragmentChannelProfile extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isNeedResume = true;
 
         viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
             @NonNull
@@ -328,6 +324,7 @@ public class FragmentChannelProfile extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        setAvatar();
         viewModel.onResume();
     }
 
