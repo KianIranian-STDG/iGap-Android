@@ -309,7 +309,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case UNRECOGNIZED:
                 break;
             case FAVORITE_CHANNEL:
-                if (discoveryField.value == null)
+                if (discoveryField.value.equals(""))
                     new HelperFragment(activity.getSupportFragmentManager(), new PopularChannelHomeFragment()).setReplace(false).load();
                 else {
                     PopularMoreChannelFragment popularMoreChannelFragment = new PopularMoreChannelFragment();

@@ -74,6 +74,10 @@ public class PopularChannelHomeViewModel extends BaseViewModel {
             }
         } else if (slide.getActionType() == 5) {
             new HelperFragment(fragment.getActivity().getSupportFragmentManager(), FragmentWebView.newInstance(slide.getmActionLink(), false, null)).setReplace(false).load();
+        } else if (slide.getActionType() == 12) {
+            PopularMoreChannelFragment popularMoreChannelFragment = new PopularMoreChannelFragment();
+            popularMoreChannelFragment.setId(slide.getmActionLink());
+            new HelperFragment(fragment.getFragmentManager(), popularMoreChannelFragment).setResourceContainer(R.id.popularChannel_container).setReplace(false).load();
         }
     }
 
