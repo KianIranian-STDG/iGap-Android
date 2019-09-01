@@ -518,23 +518,17 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     }
 
     private void setMemberCount(final long roomId) {
-        getRealm().executeTransaction(new Realm.Transaction() {
+        memberCount = RealmRoom.getMemberCount(getRealm(), roomId);
+        G.handler.post(new Runnable() {
             @Override
-            public void execute(@NotNull Realm realm) {
-                memberCount = RealmRoom.getMemberCount(realm, roomId);
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (HelperCalander.isPersianUnicode) {
-                            groupName.setValue(HelperCalander.convertToUnicodeFarsiNumber(memberCount));
-                        } else {
-                            groupNumber.setValue(memberCount);
-                        }
-                    }
-                });
+            public void run() {
+                if (HelperCalander.isPersianUnicode) {
+                    groupName.setValue(HelperCalander.convertToUnicodeFarsiNumber(memberCount));
+                } else {
+                    groupNumber.setValue(memberCount);
+                }
             }
         });
-
     }
 
     private void initRecycleView() {
