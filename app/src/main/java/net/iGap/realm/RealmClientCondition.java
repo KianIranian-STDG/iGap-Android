@@ -114,17 +114,23 @@ public class RealmClientCondition extends RealmObject {
     }
 
     public static void addOfflineListen(final long roomId, final long messageId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
-                    if (realmClientCondition != null) {
-                        realmClientCondition.getOfflineListen().add(RealmOfflineListen.put(realm, messageId));
-                    }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+                            if (realmClientCondition != null) {
+                                realmClientCondition.getOfflineListen().add(RealmOfflineListen.put(realm, messageId));
+                            }
+                        }
+                    });
                 }
-            });
-        }
+            }
+        }).start();
+
     }
 
     public static void deleteOfflineAction(final long messageId, ProtoGlobal.RoomMessageStatus messageStatus) {
