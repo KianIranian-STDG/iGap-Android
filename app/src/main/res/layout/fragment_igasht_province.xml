@@ -42,7 +42,6 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/dp8"
                 android:scaleType="fitXY"
-                android:src="@drawable/igasht_bg"
                 app:imageUrl="@{viewModel.backgroundImageUrl}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
