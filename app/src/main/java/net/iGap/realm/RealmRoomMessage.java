@@ -591,6 +591,11 @@ public class RealmRoomMessage extends RealmObject {
      * make messages failed
      */
     public static void makeFailed(final long messageId) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            new Thread(() -> makeFailed(messageId)).start();
+            return;
+        }
+
         FragmentChat.removeResendList(messageId);
 
         try (Realm realm = Realm.getDefaultInstance()) {
