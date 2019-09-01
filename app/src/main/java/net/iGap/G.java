@@ -391,7 +391,6 @@ public class G extends Application {
     public static Typeface typeface_neuropolitical;
     public static Typeface typeface_iGap;
     public static boolean isPassCode;
-    public static FingerPrint fingerPrint;
     public static OneFragmentIsOpen oneFragmentIsOpen;
     public static boolean isFragmentMapActive = false; // for check network
     public static boolean isRestartActivity = false; // for check passCode

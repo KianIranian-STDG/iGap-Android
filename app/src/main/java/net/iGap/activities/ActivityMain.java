@@ -173,7 +173,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static boolean isOpenChatBeforeSheare = false;
     public static boolean isLock = false;
     public static boolean isActivityEnterPassCode = false;
-    public static FinishActivity finishActivity;
     public static boolean disableSwipe = false;
     public static OnBackPressedListener onBackPressedListener;
     private static long oldTime;
@@ -922,6 +921,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 // onPostResume.
                 retryProviderInstall = true;
                 break;
+            case 24:
+
         }
     }
 
@@ -1426,7 +1427,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void enterPassword() {
         Intent intent = new Intent(ActivityMain.this, ActivityEnterPassCode.class);
-        startActivity(intent);
+        startActivityForResult(intent,24);
     }
 
     @Override
