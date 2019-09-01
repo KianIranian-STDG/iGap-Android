@@ -110,6 +110,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
+import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterDrBot;
@@ -141,6 +142,8 @@ import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.databinding.PaymentDialogBinding;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.eventbus.EventListener;
+import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.PaymentFragment;
 import net.iGap.fragments.chatMoneyTransfer.ChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
@@ -387,7 +390,7 @@ import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 public class FragmentChat extends BaseFragment
         implements IMessageItem, OnChatClearMessageResponse, OnPinedMessage, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged, LocationListener,
-        OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick, ToolbarListener {
+        OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick, EventListener, ToolbarListener {
 
     public static OnComplete onMusicListener;
     public static IUpdateLogItem iUpdateLogItem;
@@ -747,6 +750,8 @@ public class FragmentChat extends BaseFragment
             edtChat.setBackground(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext));
             edtChat.setHintTextColor(ContextCompat.getColor(inflater.getContext(),R.color.gray_4c));
         }
+
+        EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT , this);
 
         return attachToSwipeBack(rootView);
     }
@@ -1184,6 +1189,8 @@ public class FragmentChat extends BaseFragment
     public void onDestroyView() {
         super.onDestroyView();
         realmChat.close();
+        EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT , this);
+        mHelperToolbar.unRegisterTimerBroadcast();
     }
 
     @Override
@@ -1570,6 +1577,7 @@ public class FragmentChat extends BaseFragment
 
         layoutToolbar = rootView.findViewById(R.id.ac_layout_toolbar);
         layoutToolbar.addView(mHelperToolbar.getView());
+        mHelperToolbar.registerTimerBroadcast();
 
 
         attachFile = new AttachFile(G.fragmentActivity);
@@ -9426,6 +9434,23 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onFourthRightIconClickListener(View view) {
 
+    }
+
+    /**
+     * receive call state from event bus
+     * and change visibility of toolbar layout
+     */
+    @Override
+    public void receivedMessage(int id, Object... message) {
+        if (id == ActivityCall.CALL_EVENT){
+            if (message == null || message.length == 0) return;
+            boolean state = (boolean) message[0] ;
+            G.handler.post(()-> {
+                mHelperToolbar.getCallLayout().setVisibility(state ? View.VISIBLE : View.GONE);
+                if (MusicPlayer.chatLayout != null) MusicPlayer.chatLayout.setVisibility(View.GONE);
+                if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
+            });
+        }
     }
 
     /**

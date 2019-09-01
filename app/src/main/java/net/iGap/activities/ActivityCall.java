@@ -11,6 +11,7 @@
 package net.iGap.activities;
 
 import android.Manifest;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -37,10 +38,13 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintSet;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +58,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityCallBinding;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.eventbus.EventManager;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperTracker;
@@ -76,6 +81,9 @@ import static android.bluetooth.BluetoothProfile.HEADSET;
 
 public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, OnVideoCallFrame, BluetoothProfile.ServiceListener {
 
+    public static final int CALL_EVENT = 77;
+    public static final String CALL_TIMER_BROADCAST = "CALL_TIMER_BROADCAST";
+    public static final String TIMER_TEXT = "timer";
     public static final String USER_ID_STR = "USER_ID";
     public static final String INCOMING_CALL_STR = "INCOMING_CALL_STR";
     public static final String CALL_TYPE = "CALL_TYPE";
@@ -109,7 +117,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     private boolean isFrameChange = true;
     private boolean isVerticalOrient = true;
     private boolean isFirst = true;
-
+    private LocalBroadcastManager localBroadcastManager;
+    private Observer<String> timerObserver ;
     private int musicVolume = 0;
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -186,6 +195,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         HelperTracker.sendTracker(HelperTracker.TRACKER_CALL_PAGE);
+        localBroadcastManager = LocalBroadcastManager.getInstance(this);
 
         canSetUserStatus = false;
 
@@ -228,7 +238,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         if (isGoingfromApp) {
             isGoingfromApp = false;
         } else {
-            G.callStripLayoutVisiblityListener.setValue(false);
+            EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT , false);
             G.isInCall = false;
             Intent intent = new Intent(this, ActivityMain.class);
             startActivity(intent);
@@ -237,7 +247,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         }
 
         G.isInCall = true;
-        G.callStripLayoutVisiblityListener.setValue(true);
+        viewModel.callTimerListener.postValue("");
+        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT , true);
         ActivityCall.allowOpenCall = true;
 
         PermissionHelper permissionHelper = new PermissionHelper(this);
@@ -331,6 +342,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         super.onDestroy();
 
         if (viewModel != null) {
+            viewModel.callTimerListener.removeObserver(timerObserver);
             viewModel.onDestroy();
         }
         if (G.onHoldBackgroundChanegeListener != null) {
@@ -482,6 +494,15 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                 }
             }
         });
+
+        timerObserver =  time -> {
+            if (time == null) return;
+            Intent intent = new Intent(CALL_TIMER_BROADCAST);
+            intent.putExtra(TIMER_TEXT, time);
+            localBroadcastManager.sendBroadcast(intent);
+        };
+
+        viewModel.callTimerListener.observeForever(timerObserver);
     }
 
     //***************************************************************************************
