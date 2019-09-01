@@ -64,33 +64,31 @@ public class FileUploadInitResponse extends MessageHandler {
      */
     private void makeFailed() {
         // message failed
-        long roomId = -1L;
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            new Thread(this::makeFailed).start();
+            return;
+        }
+
         try (Realm realm = Realm.getDefaultInstance()) {
-            final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
+                    final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
                     if (message != null) {
                         message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
+                        long finalRoomId = message.getRoomId();
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                G.refreshRealmUi();
+                                G.chatSendMessageUtil.onMessageFailed(finalRoomId, Long.parseLong(identity));
+                            }
+                        });
                     }
                 }
             });
-
-            if (message != null) {
-                roomId = message.getRoomId();
-            }
         }
 
-        if (roomId != -1L) {
-            long finalRoomId = roomId;
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    G.refreshRealmUi();
-                    G.chatSendMessageUtil.onMessageFailed(finalRoomId, Long.parseLong(identity));
-                }
-            });
-        }
     }
 }
 

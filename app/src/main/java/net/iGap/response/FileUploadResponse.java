@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import android.os.Looper;
+
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDataUsage;
@@ -75,38 +77,6 @@ public class FileUploadResponse extends MessageHandler {
         super.timeOut();
     }
 
-    /**
-     * make messages failed
-     */
-    private void makeFailed() {
-        long roomId = -1L;
-        try (Realm realm = Realm.getDefaultInstance()) {
-            final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identityFileUpload.identify)).findFirst();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    if (message != null) {
-                        message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
-                    }
-                }
-            });
-
-            if (message != null) {
-                roomId = message.getRoomId();
-            }
-        }
-
-        if (roomId != -1L) {
-            long finalRoomId = roomId;
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    G.refreshRealmUi();
-                    G.chatSendMessageUtil.onMessageFailed(finalRoomId, Long.parseLong(identityFileUpload.identify));
-                }
-            });
-        }
-    }
 
     @Override
     public void error() {
@@ -114,6 +84,37 @@ public class FileUploadResponse extends MessageHandler {
         HelperUploadFile.onFileUpload.onFileUploadTimeOut(identityFileUpload.identify);
         HelperSetAction.sendCancel(Long.parseLong(identityFileUpload.identify));
         makeFailed();
+    }
+
+    /**
+     * make messages failed
+     */
+    private void makeFailed() {
+
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            new Thread(this::makeFailed).start();
+            return;
+        }
+
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identityFileUpload.identify)).findFirst();
+                    if (message != null) {
+                        message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
+                        long finalRoomId = message.getRoomId();
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                G.refreshRealmUi();
+                                G.chatSendMessageUtil.onMessageFailed(finalRoomId, Long.parseLong(identityFileUpload.identify));
+                            }
+                        });
+                    }
+                }
+            });
+        }
     }
 }
 
