@@ -10,37 +10,49 @@
 
 package net.iGap.fragments;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Configuration;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.PagerAdapter;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityRegistration;
+import net.iGap.adapter.IntroduceViewPagerAdapter;
+import net.iGap.databinding.FragmentIntroduceBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.ParallaxPageTransformer;
-import net.iGap.module.CustomCircleImage;
+import net.iGap.viewmodel.IntroductionViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
 public class FragmentIntroduce extends BaseFragment {
 
-    private CustomCircleImage circleButton;
-    private final int INTRODUCE_SLIDE_COUNT = 4 ;
+    private final int INTRODUCE_SLIDE_COUNT = 4;
+
+    private FragmentIntroduceBinding binding;
+    private IntroductionViewModel viewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(IntroductionViewModel.class);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_introduce, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_introduce, container, false);
+        binding.setLifecycleOwner(this);
+        binding.setViewModel(viewModel);
+        return binding.getRoot();
     }
 
     @Override
@@ -49,33 +61,37 @@ public class FragmentIntroduce extends BaseFragment {
 
         HelperTracker.sendTracker(HelperTracker.TRACKER_INSTALL_USER);
 
-        circleButton = view.findViewById(R.id.int_circleButton_introduce);
-        circleButton.circleButtonCount(INTRODUCE_SLIDE_COUNT);
-
-        Button btnStart = view.findViewById(R.id.int_btnStart);
-
-        btnStart.setOnClickListener(view1 -> startRegistration());
-
-        view.findViewById(R.id.changeLanguage).setOnClickListener(v -> {
-            if (getActivity()!=null) {
-                if (G.socketConnection) {
-                    FragmentLanguage fragment = new FragmentLanguage();
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("canSwipeBack", false);
-                    fragment.setArguments(bundle);
-                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-                } else {
-                    G.handler.post(() -> HelperError.showSnackMessage(getString(R.string.waiting_for_connection), false));
-                }
+        viewModel.getShowErrorMessage().observe(getViewLifecycleOwner(), errorMessageId -> {
+            if (errorMessageId != null) {
+                HelperError.showSnackMessage(getString(errorMessageId), false);
             }
         });
+
+        viewModel.getGoToRegistrationPage().observe(getViewLifecycleOwner(), isGo -> {
+            if (getActivity() instanceof ActivityRegistration && isGo != null && isGo) {
+                getActivity().getSupportFragmentManager().popBackStack();
+                ((ActivityRegistration) getActivity()).loadFragment(new FragmentRegister(), true);
+            }
+        });
+
+        viewModel.getGoToChangeLanguagePage().observe(getViewLifecycleOwner(), canSwipe -> {
+            if (getActivity() instanceof ActivityRegistration && canSwipe != null) {
+                FragmentLanguage fragment = new FragmentLanguage();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("canSwipeBack", canSwipe);
+                fragment.setArguments(bundle);
+                ((ActivityRegistration) getActivity()).loadFragment(fragment, true);
+            }
+        });
+
+        binding.viewPagerIndicator.circleButtonCount(INTRODUCE_SLIDE_COUNT);
 
         ViewPager viewPager = view.findViewById(R.id.int_viewPager_introduce);
         viewPager.setPageTransformer(true, new ParallaxPageTransformer());
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) { //set animation for all page
-                circleButton.percentScroll(positionOffset, position);
+                binding.viewPagerIndicator.percentScroll(positionOffset, position);
             }
 
             @Override
@@ -87,9 +103,10 @@ public class FragmentIntroduce extends BaseFragment {
             }
         });
 
-        AdapterViewPager adapterViewPager = new AdapterViewPager();
-        viewPager.setAdapter(adapterViewPager);
-        adapterViewPager.notifyDataSetChanged();
+        viewPager.setAdapter(new IntroduceViewPagerAdapter(INTRODUCE_SLIDE_COUNT));
+        if (viewPager.getAdapter() != null) {
+            viewPager.getAdapter().notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -103,117 +120,20 @@ public class FragmentIntroduce extends BaseFragment {
 
         G.firstEnter = true;
 
-        try {
+        /*try {
             if (beforeState != G.isLandscape) {
                 if (getActivity() != null) {
                     getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commitAllowingStateLoss();
                     FragmentIntroduce fragment = new FragmentIntroduce();
-                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .add(R.id.ar_layout_root, fragment)
+                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
+                            .commitAllowingStateLoss();
                 }
             }
         } catch (IllegalStateException e) {
             e.printStackTrace();
-        }
+        }*/
         super.onConfigurationChanged(newConfig);
-    }
-
-    private void startRegistration() {
-        Log.wtf(this.getClass().getName(),"startRegistration");
-        if (getActivity() != null) {
-            if (G.socketConnection) {
-                getActivity().getSupportFragmentManager().popBackStack();
-                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, new FragmentRegister()).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-            } else {
-                G.handler.post(() -> HelperError.showSnackMessage(getString(R.string.waiting_for_connection), false));
-            }
-        }
-    }
-
-    public class AdapterViewPager extends PagerAdapter {
-
-        AdapterViewPager() {
-        }
-
-        @Override
-        public int getCount() {
-            return INTRODUCE_SLIDE_COUNT;
-        }
-
-        @Override
-        public boolean isViewFromObject(@NotNull View view, @NotNull Object object) {
-            return view.equals(object);
-        }
-
-        @NotNull
-        @Override
-        public Object instantiateItem(@NotNull ViewGroup container, int position) {
-
-            int layout;
-            if (G.isLandscape)
-                layout = R.layout.view_pager_introduce_land;
-            else
-                layout = R.layout.view_pager_introduce_1;
-
-            View view = G.inflater.inflate(layout, container, false);
-            AppCompatImageView introImage = view.findViewById(R.id.introImage);
-            introImage.setImageResource(getIntroImage(position));
-            AppCompatTextView title = view.findViewById(R.id.introTitle);
-            title.setText(G.fragmentActivity.getResources().getString(getTitle(position)));
-            AppCompatTextView description = view.findViewById(R.id.introDescription);
-            description.setText(G.fragmentActivity.getResources().getString(getDescription(position)));
-            container.addView(view);
-            view.setTag(position);
-            return view;
-        }
-
-        @Override
-        public void destroyItem(@NotNull ViewGroup container, int position, @NotNull Object object) {
-            container.removeView((View) object);
-        }
-
-        private int getIntroImage(int position) {
-            switch (position) {
-                case 0:
-                    return R.drawable.ic_init_cominucation;
-                case 1:
-                    return R.drawable.ic_init_nearby;
-                case 2:
-                    return R.drawable.ic_init_iland;
-               case 3:
-                    return R.drawable.ic_init_security;
-                default:
-                    return R.drawable.ic_init_cominucation;
-            }
-        }
-
-        private int getTitle(int position) {
-            switch (position) {
-                case 0:
-                    return R.string.text_line_1_introduce_page3;
-                case 1:
-                    return R.string.text_line_1_introduce_page7;
-                case 2:
-                    return R.string.text_line_1_introduce_page4;
-                 case 3:
-                    return R.string.text_line_1_introduce_page2;
-                default:
-                    return R.string.text_line_1_introduce_page3;
-            }
-        }
-
-        private int getDescription(int position) {
-            switch (position) {
-                case 0:
-                    return R.string.text_line_2_introduce_page3;
-                case 1:
-                    return R.string.text_line_2_introduce_page7;
-                case 2:
-                    return R.string.text_line_2_introduce_page4;
-                case 3:
-                    return R.string.text_line_2_introduce_page2;
-                default:
-                    return R.string.text_line_2_introduce_page3;
-            }
-        }
     }
 }

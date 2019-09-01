@@ -275,7 +275,7 @@ public class FragmentEditImage extends BaseFragment {
                         new HelperFragment(getActivity().getSupportFragmentManager(),FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path)).setReplace(false).load();
                     } else {
                         FragmentFilterImage fragment = FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path);
-                        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.registrationFrame, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
                     }
                 }
             }

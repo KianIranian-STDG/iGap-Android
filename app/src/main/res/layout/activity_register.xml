@@ -208,6 +208,7 @@
                 android:visibility="@{fragmentRegisterViewModel.viewVisibility}"
                 app:layout_constraintBottom_toTopOf="@id/scanBarcodeButton"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.517"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/conditionCheckBox"
                 app:layout_constraintWidth_percent=".5" />

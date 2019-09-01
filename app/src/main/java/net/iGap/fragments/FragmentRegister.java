@@ -49,6 +49,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityRegistration;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.ActivityRegisterBinding;
 import net.iGap.dialog.DefaultRoundDialog;
@@ -124,14 +125,14 @@ public class FragmentRegister extends BaseFragment {
         });
 
         fragmentRegisterViewModel.goNextStep.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (getActivity() != null && aBoolean != null && aBoolean) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentActivation()).setResourceContainer(R.id.ar_layout_root).setReplace(true).load(false);
+            if (getActivity() instanceof ActivityRegistration && aBoolean != null && aBoolean) {
+                ((ActivityRegistration) getActivity()).loadFragment(new FragmentActivation(),true);
             }
         });
 
         fragmentRegisterViewModel.closeKeyword.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
-                closeKeyboard();
+                hideKeyboard();
             }
         });
 
@@ -208,11 +209,11 @@ public class FragmentRegister extends BaseFragment {
         });
 
         fragmentRegisterViewModel.goToTwoStepVerificationPage.observe(getViewLifecycleOwner(), userId -> {
-            if (getActivity() != null && userId != null) {
+            if (getActivity() instanceof ActivityRegistration && userId != null) {
                 if (dialogQrCode != null && dialogQrCode.isShowing()) {
                     dialogQrCode.dismiss();
                 }
-                new HelperFragment(getActivity().getSupportFragmentManager(), TwoStepVerificationFragment.newInstant(userId)).setResourceContainer(R.id.ar_layout_root).setReplace(true).load(false);
+                ((ActivityRegistration) getActivity()).loadFragment(TwoStepVerificationFragment.newInstant(userId),true);
             }
         });
 
@@ -330,15 +331,6 @@ public class FragmentRegister extends BaseFragment {
         }
     }
 
-    private void closeKeyboard() {
-        if (getContext() != null) {
-            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.hideSoftInputFromWindow(fragmentRegisterBinding.getRoot().getWindowToken(), 0);
-            }
-        }
-    }
-
     private void dialogWaitTime(WaitTimeModel data) {
 
         if (getActivity() != null && getActivity().isFinishing()) {
@@ -439,9 +431,8 @@ public class FragmentRegister extends BaseFragment {
         }
     }
 
-
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NotNull Configuration newConfig) {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             G.isLandscape = true;
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
