@@ -39,6 +39,7 @@ import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
 import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.fragments.poll.PollFragment;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
+import net.iGap.fragments.populaChannel.PopularMoreChannelFragment;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperFragment;
@@ -308,7 +309,14 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case UNRECOGNIZED:
                 break;
             case FAVORITE_CHANNEL:
-                new HelperFragment(activity.getSupportFragmentManager(), new PopularChannelHomeFragment()).setReplace(false).load();
+                if (discoveryField.value == null)
+                    new HelperFragment(activity.getSupportFragmentManager(), new PopularChannelHomeFragment()).setReplace(false).load();
+                else {
+                    PopularMoreChannelFragment popularMoreChannelFragment = new PopularMoreChannelFragment();
+                    popularMoreChannelFragment.setId(discoveryField.value);
+                    new HelperFragment(activity.getSupportFragmentManager(), popularMoreChannelFragment).setReplace(false).load();
+                }
+
                 break;
             case FINANCIAL_HISTORY:
                 new HelperFragment(activity.getSupportFragmentManager(), new MplTransactionFragment()).setReplace(false).load();
