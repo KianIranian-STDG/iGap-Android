@@ -140,7 +140,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
 
-                if (crawlerStruct != null) {
+                if (crawlerStruct != null && !crawlerStruct.isWorkDone()) {
                     ((DiscoveryFragment) fragment).setNeedToCrawl(true);
                 }
 
