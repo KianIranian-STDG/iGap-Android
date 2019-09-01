@@ -815,47 +815,52 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public static void editMessageClient(final long roomId, final long messageId, final String message) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                    if (roomMessage != null) {
-                        RealmRoom.updateTime(realm, roomId, TimeUtils.currentLocalTime());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                            if (roomMessage != null) {
+                                RealmRoom.updateTime(realm, roomId, TimeUtils.currentLocalTime());
 
-                        roomMessage.setMessage(message);
-                        roomMessage.setEdited(true);
-                        RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
-                        RealmRoomMessage.isEmojiInText(roomMessage, message);
+                                roomMessage.setMessage(message);
+                                roomMessage.setEdited(true);
+                                RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
+                                RealmRoomMessage.isEmojiInText(roomMessage, message);
 
-                        switch (roomMessage.getMessageType()) {
-                            case IMAGE:
-                                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.IMAGE_TEXT);
-                                break;
-                            case VIDEO:
-                                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VIDEO_TEXT);
-                                break;
-                            case AUDIO:
-                                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.AUDIO_TEXT);
-                                break;
-                            case GIF:
-                                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.GIF_TEXT);
-                                break;
-                            case FILE:
-                                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.FILE_TEXT);
-                                break;
+                                switch (roomMessage.getMessageType()) {
+                                    case IMAGE:
+                                        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.IMAGE_TEXT);
+                                        break;
+                                    case VIDEO:
+                                        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VIDEO_TEXT);
+                                        break;
+                                    case AUDIO:
+                                        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.AUDIO_TEXT);
+                                        break;
+                                    case GIF:
+                                        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.GIF_TEXT);
+                                        break;
+                                    case FILE:
+                                        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.FILE_TEXT);
+                                        break;
+                                }
+
+                                final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+
+                                if (realmClientCondition != null) {
+                                    realmClientCondition.getOfflineEdited().add(RealmOfflineEdited.put(realm, messageId, message));
+                                }
+
+                            }
                         }
-
-                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
-
-                        if (realmClientCondition != null) {
-                            realmClientCondition.getOfflineEdited().add(RealmOfflineEdited.put(realm, messageId, message));
-                        }
-
-                    }
+                    });
                 }
-            });
-        }
+            }
+        }).start();
     }
 
     public static void editMessageServerResponse(final long messageId, final long messageVersion, final String message, final ProtoGlobal.RoomMessageType messageType) {
