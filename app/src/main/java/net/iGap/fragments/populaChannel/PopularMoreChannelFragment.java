@@ -80,7 +80,11 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
             if (childChannel != null) {
 
                 if (title.equals("")){
-                    title = childChannel.getInfo().getTitle();
+                    if (G.isAppRtl)
+                        title = childChannel.getInfo().getTitle();
+                    else
+                        title = childChannel.getInfo().getTitleEn();
+
                     helperToolbar.setDefaultTitle(title);
                 }
 

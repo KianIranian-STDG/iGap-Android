@@ -147,17 +147,14 @@ import retrofit2.Response;
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
+import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
+import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
 
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
 
     public static final String openChat = "openChat";
     public static final String OPEN_DEEP_LINK = "openDeepLink";
 
-    public static final String DEEP_LINK_DISCOVERY = "discovery";
-    public static final String DEEP_LINK_CONTACT = "contact";
-    public static final String DEEP_LINK_CHAT = "chat";
-    public static final String DEEP_LINK_CALL = "call";
-    public static final String DEEP_LINK_PROFILE = "profile";
     public static final String DEEP_LINK = "deepLink";
 
     public static final String openMediaPlyer = "openMediaPlyer";
