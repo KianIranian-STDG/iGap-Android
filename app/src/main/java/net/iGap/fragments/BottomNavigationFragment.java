@@ -265,7 +265,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 if (address.length > 1) {
                     discoveryUri = uri.toLowerCase().trim().replace("discovery/", "").split("/");
                 } else
-                    discoveryUri = uri.toLowerCase().trim().replace("discovery", "").split("/");
+                    discoveryUri = address;
 
                 for (int i = 0; i < discoveryUri.length; i++) {
                     if (HelperString.isInteger(discoveryUri[i])) {
@@ -273,8 +273,13 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                             onDeepLinkValid.linkValid(address[i]);
                         setCrawlerMap(DISCOVERY_FRAGMENT, discoveryUri);
                     } else {
-                        onDeepLinkValid.linkInvalid(discoveryUri[i]);
-                        return;
+                        if (discoveryUri[0].equals(DEEP_LINK_DISCOVERY)){
+                            onDeepLinkValid.linkValid(address[i]);
+                            setCrawlerMap(DISCOVERY_FRAGMENT, discoveryUri);
+                        }else {
+                            onDeepLinkValid.linkInvalid(discoveryUri[i]);
+                            return;
+                        }
                     }
 
                 }
@@ -314,7 +319,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     private void setCrawlerMap(int position, String[] uri) {
 
         if (uri != null && uri.length > 0) {
-            if (!uri[0].equals("") && position == DISCOVERY_FRAGMENT) {
+            if (!uri[0].equals(DEEP_LINK_DISCOVERY) && position == DISCOVERY_FRAGMENT) {
                 List<Integer> pages = new ArrayList<>();
                 for (String s : uri) {
                     pages.add(Integer.valueOf(s));
