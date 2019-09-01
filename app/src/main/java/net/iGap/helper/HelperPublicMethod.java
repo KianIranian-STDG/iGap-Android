@@ -211,31 +211,31 @@ public class HelperPublicMethod {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 if (user.getId() == peerId) {
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmRegisteredInfo.putOrUpdate(realm, user);
-                            }
-                        });
-                    }
-
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            try {
+                            try (Realm realm = Realm.getDefaultInstance()) {
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        RealmRegisteredInfo.putOrUpdate(realm, user);
+                                    }
+                                }, () -> {
+                                    try {
 
-                                G.refreshRealmUi();
+                                        if (onComplete != null) {
+                                            onComplete.complete();
+                                        }
 
-                                if (onComplete != null) {
-                                    onComplete.complete();
-                                }
+                                        goToRoom(roomId, peerId);
 
-                                goToRoom(roomId, peerId);
+                                        G.onUserInfoResponse = null;
+                                    } catch (IllegalStateException e) {
+                                        e.printStackTrace();
+                                    }
 
-                                G.onUserInfoResponse = null;
-                            } catch (IllegalStateException e) {
-                                e.printStackTrace();
+
+                                });
                             }
                         }
                     });
