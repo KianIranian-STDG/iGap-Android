@@ -92,6 +92,14 @@ public class RetrofitFactory {
                 .build();
     }
 
+    public Retrofit getNewsRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.NEWS_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build();
+    }
+
     private OkHttpClient.Builder enableTls12OnPreLollipop(OkHttpClient.Builder client) {
         if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
             Log.wtf(this.getClass().getName(),"enableTls12OnPreLollipop");
