@@ -30,11 +30,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.adapter.items.chat.ChatCell;
+import net.iGap.eventbus.EventListener;
+import net.iGap.eventbus.EventManager;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
@@ -114,7 +117,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER;
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.PAYMENT;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
-public class FragmentMain extends BaseMainFragments implements ToolbarListener, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseMainFragments implements ToolbarListener, EventListener , OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     private static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
 
@@ -205,6 +208,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 .setSearchBoxShown(true, false)
                 .setListener(this);
         layoutToolbar.addView(mHelperToolbar.getView());
+        mHelperToolbar.registerTimerBroadcast();
         /*}*/
 
         mBtnRemoveSelected = view.findViewById(R.id.amr_btn_delete_selected);
@@ -293,14 +297,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             });
         }
 
-        G.callStripLayoutVisiblityListener.observe(this, isVisible -> {
-            notifyChatRoomsList();
-
-            if (!mHelperToolbar.getmSearchBox().isShown()) {
-                mHelperToolbar.animateSearchBox(false, 0, 0);
-            }
-
-        });
+        EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT , this);
 
         mRecyclerView = view.findViewById(R.id.cl_recycler_view_contact);
         mRecyclerView.setItemAnimator(null);
@@ -747,6 +744,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         super.onDestroyView();
 
         realmFragmentMain.close();
+        EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
+        mHelperToolbar.unRegisterTimerBroadcast();
+
     }
 
     @Override
@@ -1054,6 +1054,27 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         } else {
             return true;
         }
+    }
+
+    /**
+     * receive call state from event bus
+     * and change visibility of toolbar layout
+     */
+    @Override
+    public void receivedMessage(int id, Object... message) {
+
+        if (id == ActivityCall.CALL_EVENT){
+            if (message == null || message.length == 0) return;
+            boolean state = (boolean) message[0] ;
+            G.handler.post(()-> {
+                notifyChatRoomsList();
+                if (!mHelperToolbar.getmSearchBox().isShown()) mHelperToolbar.animateSearchBox(false, 0, 0);
+                mHelperToolbar.getCallLayout().setVisibility(state ? View.VISIBLE : View.GONE);
+                if (MusicPlayer.chatLayout != null) MusicPlayer.chatLayout.setVisibility(View.GONE);
+                if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
+            });
+        }
+
     }
 
     public enum MainType {

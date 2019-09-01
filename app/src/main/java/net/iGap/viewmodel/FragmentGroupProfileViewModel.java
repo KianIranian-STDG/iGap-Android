@@ -523,7 +523,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
             @Override
             public void run() {
                 if (HelperCalander.isPersianUnicode) {
-                    groupName.setValue(HelperCalander.convertToUnicodeFarsiNumber(memberCount));
+                    groupNumber.setValue(HelperCalander.convertToUnicodeFarsiNumber(memberCount));
                 } else {
                     groupNumber.setValue(memberCount);
                 }

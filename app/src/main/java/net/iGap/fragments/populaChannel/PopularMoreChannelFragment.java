@@ -35,10 +35,11 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
     private BannerSlider slider;
     private SwipeRefreshLayout swipeRefreshLayout;
     private NestedScrollView scrollView;
+    private  HelperToolbar helperToolbar;
 
     private String id;
     private int page = 1;
-    private String title;
+    private String title = "";
     private String scale;
     private int pageMax = 20;
     private int itemSize;
@@ -77,6 +78,16 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
 
         viewModel.getMoreChannelMutableLiveData().observe(getViewLifecycleOwner(), childChannel -> {
             if (childChannel != null) {
+
+                if (title.equals("")){
+                    if (G.isAppRtl)
+                        title = childChannel.getInfo().getTitle();
+                    else
+                        title = childChannel.getInfo().getTitleEn();
+
+                    helperToolbar.setDefaultTitle(title);
+                }
+
                 if (childChannel.getInfo().getAdvertisement() != null && childChannel.getInfo().getHasAd() && page == 1) {
                     sliderCv.setVisibility(View.VISIBLE);
                     scale = childChannel.getInfo().getAdvertisement().getmScale();
@@ -146,7 +157,7 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
     }
 
     public void setupViews() {
-        HelperToolbar helperToolbar = HelperToolbar.create()
+        helperToolbar = HelperToolbar.create()
                 .setContext(G.fragmentActivity)
                 .setListener(this)
                 .setLogoShown(true)
