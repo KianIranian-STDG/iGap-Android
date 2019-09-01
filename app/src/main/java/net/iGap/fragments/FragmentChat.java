@@ -1190,6 +1190,7 @@ public class FragmentChat extends BaseFragment
         super.onDestroyView();
         realmChat.close();
         EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT , this);
+        mHelperToolbar.unRegisterTimerBroadcast();
     }
 
     @Override
@@ -1576,6 +1577,7 @@ public class FragmentChat extends BaseFragment
 
         layoutToolbar = rootView.findViewById(R.id.ac_layout_toolbar);
         layoutToolbar.addView(mHelperToolbar.getView());
+        mHelperToolbar.registerTimerBroadcast();
 
 
         attachFile = new AttachFile(G.fragmentActivity);

@@ -83,6 +83,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     public MutableLiveData<Boolean> setAudioManagerSpeakerphoneOn = new MutableLiveData<>();
     public MutableLiveData<Boolean> setAudioManagerWithBluetooth = new MutableLiveData<>();
     private MutableLiveData<Long> quickDeclineMessageLiveData = new MutableLiveData<>();
+    public MutableLiveData<String> callTimerListener = new MutableLiveData<>();
 
 
     private boolean isIncomingCall;
@@ -94,7 +95,6 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
 
 
     public static boolean isConnected = false;
-    public static TextView txtTimeChat, txtTimerMain;
     public ObservableInt txtAviVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt layoutOptionVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt layoutChatCallVisibility = new ObservableInt(View.VISIBLE);
@@ -528,8 +528,6 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
             MusicPlayer.pauseSoundFromIGapCall = false;
            // MusicPlayer.playSound();
         }
-        //todo: fixed this static view
-        txtTimeChat = txtTimerMain = null;
     }
 
     private void startTimer() {
@@ -553,21 +551,12 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                     s = HelperCalander.convertToUnicodeFarsiNumber(s);
                 }
                 callBackTxtTimer.set(s);
-                String finalS = s;
-                G.handler.post(() -> {
-                    if (txtTimeChat != null) {
-                        txtTimeChat.setText(finalS);
-                    }
-                    if (txtTimerMain != null) {
-                        txtTimerMain.setText(finalS);
-                    }
-                });
+                callTimerListener.postValue(s);
             }
         }, 1000, 1000);
     }
 
     private void stopTimer() {
-        txtTimeChat = txtTimerMain = null;
         txtTimerVisibility.set(View.GONE);
         if (secendTimer != null) {
             secendTimer.cancel();

@@ -208,6 +208,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 .setSearchBoxShown(true, false)
                 .setListener(this);
         layoutToolbar.addView(mHelperToolbar.getView());
+        mHelperToolbar.registerTimerBroadcast();
         /*}*/
 
         mBtnRemoveSelected = view.findViewById(R.id.amr_btn_delete_selected);
@@ -744,6 +745,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         super.onDestroyView();
 
         realmFragmentMain.close();
+        EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
+        mHelperToolbar.unRegisterTimerBroadcast();
+
     }
 
     @Override

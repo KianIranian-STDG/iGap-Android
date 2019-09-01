@@ -1,8 +1,10 @@
 package net.iGap.helper;
 
 import android.arch.lifecycle.LifecycleOwner;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -12,11 +14,13 @@ import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -125,6 +129,8 @@ public class HelperToolbar {
     private int mScannerIcon;
     private int mAnimationOldPositionItem = 0;
     private boolean isRoundBackground = true;
+    private TextView mTxtCallTimer;
+    private BroadcastReceiver callTimerReceiver;
 
     private HelperToolbar() {
     }
@@ -442,6 +448,20 @@ public class HelperToolbar {
         mSearchBox.startAnimation(animation);
     }
 
+    public void unRegisterTimerBroadcast(){
+        if (mContext == null || callTimerReceiver == null) return;
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(callTimerReceiver);
+    }
+
+    public void registerTimerBroadcast(){
+        if (mContext == null || callTimerReceiver == null) {
+            Log.wtf(this.getClass().getName(),"registerTimerBroadcast");
+            return;
+        }
+        IntentFilter intentFilter = new IntentFilter(ActivityCall.CALL_TIMER_BROADCAST);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(callTimerReceiver , intentFilter);
+    }
+
     private void openKeyboard() {
         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(mEdtSearch, InputMethodManager.SHOW_IMPLICIT);
@@ -661,6 +681,17 @@ public class HelperToolbar {
 
         LinearLayout stripCallLayout = (LinearLayout) view.getCallLayout();
 
+        callTimerReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction() == null || intent.getExtras() == null) return;
+                if (intent.getAction().equals(ActivityCall.CALL_TIMER_BROADCAST)){
+                    String time = intent.getExtras().getString(ActivityCall.TIMER_TEXT , "");
+                    mTxtCallTimer.setText(time);
+                }
+            }
+        };
+
         if (!isSearchBoxShown) {
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) musicLayout.getLayoutParams();
             params.setMargins(0, (int) mContext.getResources().getDimension(R.dimen.dp14), 0, 0);
@@ -675,8 +706,6 @@ public class HelperToolbar {
             MusicPlayer.chatLayout = musicLayout;
             ActivityCall.stripLayoutChat = view.getCallLayout() ;
 
-            ActivityCallViewModel.txtTimeChat = rootView.findViewById(R.id.cslcs_txt_timer);
-
             TextView txtCallActivityBack = rootView.findViewById(R.id.cslcs_btn_call_strip);
             txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
 
@@ -689,9 +718,6 @@ public class HelperToolbar {
         } else {
             MusicPlayer.mainLayout = musicLayout;
             ActivityCall.stripLayoutMain = view.getCallLayout();
-
-
-            ActivityCallViewModel.txtTimerMain = rootView.findViewById(R.id.cslcs_txt_timer);
 
             TextView txtCallActivityBack = rootView.findViewById(R.id.cslcs_btn_call_strip);
             txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
@@ -1029,6 +1055,8 @@ public class HelperToolbar {
         mTabletUserAvatar = view.gettUserAvatar();
         mTabletUserName = view.gettUserName();
         mTabletUserPhone = view.gettUserPhone() ;
+
+        mTxtCallTimer = rootView.findViewById(R.id.cslcs_txt_timer);
 
         if (mTxtLogo != null)
             mTxtLogo.setText(defaultTitleText);
