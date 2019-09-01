@@ -9,5 +9,6 @@ public class ApiStatic {
     static final String PAYMENT_URL = BASE_URL + "payment/";
     static final String ATI_URL = BASE_URL + "ati/";
     static final String MCI_URL = BASE_URL + "mci/";
+    static final String CHARITY_URL = BASE_URL + "charity/";
 }
 
