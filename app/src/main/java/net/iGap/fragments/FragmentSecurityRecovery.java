@@ -73,6 +73,7 @@ public class FragmentSecurityRecovery extends BaseFragment {
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.check_icon)
                 .setLogoShown(true)
+                .setShowConnectionState(false)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
