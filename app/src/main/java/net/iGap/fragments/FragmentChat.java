@@ -308,6 +308,7 @@ import net.iGap.request.RequestChatEditMessage;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestChatUpdateDraft;
 import net.iGap.request.RequestClientGetFavoriteMenu;
+import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestClientJoinByUsername;
 import net.iGap.request.RequestClientMuteRoom;
@@ -2001,7 +2002,7 @@ public class FragmentChat extends BaseFragment
         initComponent();
         initAppbarSelected();
         getDraft();
-        getUserInfo();
+        getRoomInfo();
         insertShearedData();
 
         RealmRoomMessage rm = null;
@@ -5202,9 +5203,18 @@ public class FragmentChat extends BaseFragment
     /**
      * client should send request for get user info because need to update user online timing
      */
-    private void getUserInfo() {
+    private void getRoomInfo() {
         if (chatType == CHAT) {
             new RequestUserInfo().userInfo(chatPeerId);
+        }else if (chatType == CHANNEL || chatType == GROUP){
+            new RequestClientGetRoom().clientGetRoom(mRoomId, RequestClientGetRoom.CreateRoomMode.updateChannelOrGroupInfo);
+            G.onChannelOrGroupInfoUpdate = this::channelOrGroupRoomUpdate;
+        }
+    }
+
+    private void channelOrGroupRoomUpdate(long roomId){
+        if (mRoomId == roomId){
+            avatarHandler.getAvatar(new ParamWithAvatarType(imvUserPicture, roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
         }
     }
 

@@ -355,6 +355,7 @@ public class G extends Application {
     public static OnDateChanged onDateChanged;
     public static IOnBackPressed onBackPressedExplorer;
     public static OnLocationChanged onLocationChanged;
+    public static OnChannelOrGroupInfoUpdate onChannelOrGroupInfoUpdate;
     public static OnGetNearbyCoordinate onGetNearbyCoordinate;
     public static OnGeoGetComment onGeoGetComment;
     public static OnMapRegisterState onMapRegisterState;
