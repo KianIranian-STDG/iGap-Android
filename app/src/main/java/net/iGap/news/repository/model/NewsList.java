@@ -4,14 +4,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class NewsGroup {
+public class NewsList {
 
     @SerializedName("Ids")
     private String IDs;
     @SerializedName("content")
-    private List<Groups> groups;
+    private List<News> news;
 
-    public NewsGroup() {
+    public NewsList() {
     }
 
     public String getIDs() {
@@ -22,28 +22,23 @@ public class NewsGroup {
         this.IDs = IDs;
     }
 
-    public List<Groups> getGroups() {
-        return groups;
+    public List<News> getNews() {
+        return news;
     }
 
-    public void setGroups(List<Groups> groups) {
-        this.groups = groups;
+    public void setNews(List<News> news) {
+        this.news = news;
     }
 
-    private class Groups {
-
+    private class News {
         @SerializedName("id")
         private String id;
         @SerializedName("title")
         private String title;
-        @SerializedName("alias")
-        private String alias;
-        @SerializedName("description")
-        private String description;
         @SerializedName("image")
         private String image;
 
-        public Groups() {
+        public News() {
         }
 
         public String getId() {
@@ -60,22 +55,6 @@ public class NewsGroup {
 
         public void setTitle(String title) {
             this.title = title;
-        }
-
-        public String getAlias() {
-            return alias;
-        }
-
-        public void setAlias(String alias) {
-            this.alias = alias;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
         }
 
         public String getImage() {
