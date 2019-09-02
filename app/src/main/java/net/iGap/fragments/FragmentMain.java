@@ -123,7 +123,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     private boolean isThereAnyMoreItemToLoad = true;
     private ProgressBar progressBar;
-    private static int mOffset = 0;
+    public static int mOffset = 0;
     private View viewById;
     private RecyclerView mRecyclerView;
     private long tagId;

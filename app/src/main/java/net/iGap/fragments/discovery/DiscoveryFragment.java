@@ -358,6 +358,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     public static class CrawlerStruct {
         private int currentPage;
         private int currentPageId;
+        private boolean workDone = false;
         private List<Integer> pages;
 
         public interface OnDeepValidLink {
@@ -392,7 +393,19 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         }
 
         public void setCurrentPageId(int currentPageId) {
+            if (currentPageId == pages.get(pages.size() - 1))
+                workDone = true;
+            else
+                workDone = false;
             this.currentPageId = currentPageId;
+        }
+
+        public boolean isWorkDone() {
+            return workDone;
+        }
+
+        public void setWorkDone(boolean workDone) {
+            this.workDone = workDone;
         }
     }
 }

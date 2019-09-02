@@ -53,12 +53,10 @@ import org.paygear.WalletActivity;
 import java.io.File;
 import java.io.IOException;
 
-import io.realm.Realm;
-
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
-public class FragmentUserProfile extends BaseMainFragments {
+public class FragmentUserProfile extends BaseMainFragments implements FragmentEditImage.OnImageEdited {
 
     private FragmentUserProfileBinding binding;
     private UserProfileViewModel viewModel;
@@ -347,7 +345,9 @@ public class FragmentUserProfile extends BaseMainFragments {
                 FragmentEditImage.insertItemList(viewModel.pathSaveImage, false);
             }
             if (getActivity() != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
+                fragmentEditImage.setOnProfileImageEdited(this);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
             }
         } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
             if (data != null) {
@@ -357,7 +357,9 @@ public class FragmentUserProfile extends BaseMainFragments {
                 if (getActivity() != null) {
                     ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true);
                     FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
-                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                    FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
+                    fragmentEditImage.setOnProfileImageEdited(this);
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                 }
             }
         }
@@ -458,5 +460,11 @@ public class FragmentUserProfile extends BaseMainFragments {
     @Override
     public boolean isAllowToBackPressed() {
         return viewModel.checkEditModeForOnBackPressed();
+    }
+
+
+    @Override
+    public void profileImageAdd(String path) {
+        viewModel.uploadAvatar(path);
     }
 }

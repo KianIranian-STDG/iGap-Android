@@ -20,8 +20,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.SHP_SETTING;
 
-import ir.metrix.sdk.Metrix;
-
 public class HelperTracker {
 
     private static Tracker mTracker;
@@ -80,80 +78,6 @@ public class HelperTracker {
         }
 
         if (allowSendTracker) {
-            switch (trackerTag) {
-                case TRACKER_CHANGE_LANGUAGE:
-                    Metrix.getInstance().newEvent("rvwun");
-                    break;
-                case TRACKER_CALL_PAGE:
-                    Metrix.getInstance().newEvent("mlrxn");
-                    break;
-                case TRACKER_VOICE_CALL_CONNECTING:
-                    Metrix.getInstance().newEvent("qsjti");
-                    break;
-                case TRACKER_VOICE_CALL_CONNECTED:
-                    Metrix.getInstance().newEvent("znfwd");
-                    break;
-                case TRACKER_VIDEO_CALL_CONNECTING:
-                    Metrix.getInstance().newEvent("sxkav");
-                    break;
-                case TRACKER_VIDEO_CALL_CONNECTED:
-                    Metrix.getInstance().newEvent("dcsqk");
-                    break;
-                case TRACKER_CHAT_VIEW:
-                    Metrix.getInstance().newEvent("rszqm");
-                    break;
-                case TRACKER_GROUP_VIEW:
-                    Metrix.getInstance().newEvent("htwef");
-                    break;
-                case TRACKER_CHANNEL_VIEW:
-                    Metrix.getInstance().newEvent("smkkz");
-                    break;
-                case TRACKER_BOT_VIEW:
-                    Metrix.getInstance().newEvent("sgozq");
-                    break;
-                case TRACKER_ROOM_PAGE:
-                    Metrix.getInstance().newEvent("hnahq");
-                    break;
-                case TRACKER_CREATE_CHANNEL:
-                    Metrix.getInstance().newEvent("hzodo");
-                    break;
-                case TRACKER_CREATE_GROUP:
-                    Metrix.getInstance().newEvent("szlrq");
-                    break;
-                case TRACKER_INVITE_FRIEND:
-                    Metrix.getInstance().newEvent("kvjqi");
-                    break;
-                case TRACKER_INSTALL_USER:
-                    Metrix.getInstance().newEvent("zwhkn");
-                    break;
-                case TRACKER_SUBMIT_NUMBER:
-                    Metrix.getInstance().newEvent("hvxtt");
-                    break;
-                case TRACKER_ACTIVATION_CODE:
-                    Metrix.getInstance().newEvent("jjrro");
-                    break;
-                case TRACKER_QR_REGISTRATION:
-                    Metrix.getInstance().newEvent("uufge");
-                    break;
-                case TRACKER_REGISTRATION_USER:
-                    Metrix.getInstance().newEvent("ooarp");
-                    break;
-                case TRACKER_REGISTRATION_NEW_USER:
-                    Metrix.getInstance().newEvent("wthwa");
-                    break;
-                case TRACKER_DISCOVERY_PAGE:
-                    Metrix.getInstance().newEvent("qkslv");
-                    break;
-                case TRACKER_WALLET_PAGE:
-                    Metrix.getInstance().newEvent("yxhgb");
-                    break;
-                case TRACKER_NEARBY_PAGE:
-                    Metrix.getInstance().newEvent("vvcid");
-                    break;
-                case TRACKER_FINANCIAL_SERVICES:
-                    Metrix.getInstance().newEvent("dbbfk");
-                    break;
-            }
 
             String[] trackerType = trackerTag.split("@");
             String category = trackerType[0];

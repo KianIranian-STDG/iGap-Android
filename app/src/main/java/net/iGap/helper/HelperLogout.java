@@ -18,6 +18,7 @@ import android.content.SharedPreferences;
 import net.iGap.G;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityRegistration;
+import net.iGap.fragments.FragmentMain;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
@@ -25,6 +26,7 @@ import net.iGap.module.SHP_SETTING;
 
 import io.realm.Realm;
 
+import static net.iGap.request.RequestClientGetRoomList.pendingRequest;
 import static org.paygear.utils.Utils.signOutWallet;
 
 
@@ -40,6 +42,8 @@ public final class HelperLogout {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
+                pendingRequest.remove(0);
+                FragmentMain.mOffset = 0;
                 signOutWallet();
                 try (Realm realm = Realm.getDefaultInstance()) {
                     realm.executeTransactionAsync(new Realm.Transaction() {

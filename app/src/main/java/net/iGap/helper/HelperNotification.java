@@ -35,7 +35,6 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmNotificationSetting;
@@ -83,7 +82,7 @@ public class HelperNotification {
         public ProtoGlobal.Room.Type roomType;
         public String name = "";
         public String message = "";
-        public String time = "";
+        public long time ;
         public String initialize;
         public String color;
     }
@@ -158,6 +157,7 @@ public class HelperNotification {
         private int delayAlarm = 5000;
         private long currentAlarm;
         private int notificationIconSrc;
+        private long mTime = 0;
 
         int vibrator;
         int sound;
@@ -227,6 +227,11 @@ public class HelperNotification {
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                     .setStyle(getBigStyle())
                     .setContentIntent(pi);
+
+            //maybe time not set , this if not work and time of notify will set .
+            if (mTime != 0){
+                builder.setWhen(mTime * 1000);
+            }
 
             if (settingValue.separateNotification) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && messageList.get(0).roomType != ProtoGlobal.Room.Type.CHANNEL) {
@@ -323,9 +328,11 @@ public class HelperNotification {
 
                 mHeader = messageList.get(0).name;
                 mContent = messageList.get(0).message;
+                mTime = messageList.get(0).time;
             } else {
                 mHeader = context.getString(R.string.igap);
                 mContent = messageList.get(0).message;
+                mTime = messageList.get(0).time;
 
                 String s = "";
                 if (countUniqueChat == 1) {
@@ -713,7 +720,7 @@ public class HelperNotification {
         sn.roomId = roomId;
         sn.roomMessage = roomMessage;
         sn.roomType = roomType;
-        sn.time = TimeUtils.toLocal(roomMessage.getUpdateTime(), G.CHAT_MESSAGE_TIME);
+        sn.time = roomMessage.getUpdateTime() ;
         sn.message = parseMessage(roomMessage);
         sn.name = room.getTitle() + ":";
         sn.senderId = room.getType() == ProtoGlobal.Room.Type.CHAT ? room.getChatRoom().getPeerId() : room.getId();
