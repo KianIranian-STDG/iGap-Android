@@ -26,6 +26,8 @@ import net.iGap.request.RequestUserTwoStepVerificationRecoverPasswordByAnswers;
 import net.iGap.request.RequestUserTwoStepVerificationRecoverPasswordByToken;
 import net.iGap.request.RequestUserTwoStepVerificationRequestRecoveryToken;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -55,13 +57,13 @@ public class FragmentSecurityRecovery extends BaseFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return attachToSwipeBack(inflater.inflate(R.layout.fragment_security_recovery, container, false));
     }
 
     @Override
-    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
 

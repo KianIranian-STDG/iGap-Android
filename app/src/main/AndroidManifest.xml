@@ -78,7 +78,8 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
         <activity
             android:name=".activities.ActivityEnterPassCode"
-            android:configChanges="keyboard|orientation|screenSize|locale" />
+            android:configChanges="keyboard|orientation|screenSize|locale"
+            android:screenOrientation="portrait"/>
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
         <activity
             android:name=".activities.ActivityPopUpNotification"
