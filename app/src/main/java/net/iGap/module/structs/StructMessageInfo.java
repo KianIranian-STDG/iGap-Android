@@ -160,7 +160,7 @@ public class StructMessageInfo implements Parcelable {
         return 0;
     }
 
-    public <VH extends RecyclerView.ViewHolder> void addAttachmentChangeListener(Realm realm, MessagesAdapter<AbstractMessage> mAdapter, long identifier, IChatItemAttachment<VH> itemVHAbstractMessage, VH holder, ProtoGlobal.RoomMessageType messageType) {
+    public <VH extends RecyclerView.ViewHolder> void addAttachmentChangeListener(Realm realm, AbstractMessage abstractMessage, long identifier, IChatItemAttachment<VH> itemVHAbstractMessage, VH holder, ProtoGlobal.RoomMessageType messageType) {
         removeAttachmentChangeListener();
 
         if (getAttachment() == null) {
@@ -172,6 +172,7 @@ public class StructMessageInfo implements Parcelable {
             realmAttachmentRealmChangeListener = realmAttachment -> {
                 if (realmAttachment.isValid() && realmAttachment.isManaged()) {
                     setAttachment(realm.copyFromRealm(realmAttachment));
+                    abstractMessage.onProgressFinish(holder, messageType);
 
                     if (realmAttachment.isFileExistsOnLocalAndIsThumbnail()) {
                         itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);

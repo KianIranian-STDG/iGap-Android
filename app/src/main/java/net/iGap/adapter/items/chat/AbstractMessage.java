@@ -382,7 +382,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
-        structMessage.addAttachmentChangeListener(getRealmChat(), mAdapter, getIdentifier(), this, holder, mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType());
+        structMessage.addAttachmentChangeListener(getRealmChat(), this, getIdentifier(), this, holder, mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType());
         mHolder.getItemContainer().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1483,64 +1483,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.withOnProgress(new OnProgress() {
                     @Override
                     public void onProgressFinished() {
-
-                        if (_Progress.getTag() == null || !_Progress.getTag().equals(mMessage.getMessageId())) {
-                            return;
-                        }
-                        _Progress.setVisibility(View.GONE);
-                        View thumbnailView = ((IThumbNailItem) holder).getThumbNailImageView();
-                        thumbnailView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if (FragmentChat.isInSelectionMode) {
-                                    holder.itemView.performLongClick();
-                                }
-                            }
-                        });
-
-                        thumbnailView.setOnLongClickListener(getLongClickPerform(holder));
-
-                        _Progress.withDrawable(null, true);
-
-                        switch (messageType) {
-                            case VIDEO:
-                            case VIDEO_TEXT:
-                                ((IProgress) holder).getProgress().setVisibility(View.VISIBLE);
-                                _Progress.withDrawable(R.drawable.ic_play, true);
-                                break;
-                            case AUDIO:
-                            case VOICE:
-                            case AUDIO_TEXT:
-                                break;
-                            case FILE:
-                            case FILE_TEXT:
-                            case IMAGE:
-                            case IMAGE_TEXT:
-                                thumbnailView.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        forOnCLick(holder);
-                                    }
-                                });
-                                break;
-                            case GIF:
-                            case GIF_TEXT:
-                                thumbnailView.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        forOnCLick(holder);
-                                    }
-                                });
-
-                                SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                                if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 0) {
-                                    ((IProgress) holder).getProgress().setVisibility(View.VISIBLE);
-                                    _Progress.withDrawable(R.mipmap.photogif, true);
-                                } else {
-                                    ((IProgress) holder).getProgress().setVisibility(View.INVISIBLE);
-                                }
-                                break;
-                        }
+                        onProgressFinish(holder, messageType);
                     }
                 });
 
@@ -1548,6 +1491,80 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
         }
+    }
+
+    public void onProgressFinish(VH holder, ProtoGlobal.RoomMessageType messageType) {
+
+        final MessageProgress _Progress = ((IProgress) holder).getProgress();
+
+
+        if (_Progress.getTag() == null || !_Progress.getTag().equals(mMessage.getMessageId())) {
+            return;
+        }
+
+        if (HelperUploadFile.isUploading(mMessage.getMessageId() + "") || HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
+            return;
+        }
+
+        if (structMessage.getAttachment() == null || !structMessage.getAttachment().isFileExistsOnLocal()) {
+            return;
+        }
+
+        _Progress.setVisibility(View.GONE);
+        View thumbnailView = ((IThumbNailItem) holder).getThumbNailImageView();
+        thumbnailView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (FragmentChat.isInSelectionMode) {
+                    holder.itemView.performLongClick();
+                }
+            }
+        });
+
+        thumbnailView.setOnLongClickListener(getLongClickPerform(holder));
+
+        _Progress.withDrawable(null, true);
+
+        switch (messageType) {
+            case VIDEO:
+            case VIDEO_TEXT:
+                ((IProgress) holder).getProgress().setVisibility(View.VISIBLE);
+                _Progress.withDrawable(R.drawable.ic_play, true);
+                break;
+            case AUDIO:
+            case VOICE:
+            case AUDIO_TEXT:
+                break;
+            case FILE:
+            case FILE_TEXT:
+            case IMAGE:
+            case IMAGE_TEXT:
+                thumbnailView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        forOnCLick(holder);
+                    }
+                });
+                break;
+            case GIF:
+            case GIF_TEXT:
+                thumbnailView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        forOnCLick(holder);
+                    }
+                });
+
+                SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 0) {
+                    ((IProgress) holder).getProgress().setVisibility(View.VISIBLE);
+                    _Progress.withDrawable(R.mipmap.photogif, true);
+                } else {
+                    ((IProgress) holder).getProgress().setVisibility(View.INVISIBLE);
+                }
+                break;
+        }
+
     }
 
 
@@ -1725,7 +1742,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             @Override
                             public void run() {
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.getMessageId())) {
-                                    progressBar.withProgress(progress);
+                                    if (structMessage.getAttachment() == null || !structMessage.getAttachment().isFileExistsOnLocal()) {
+                                        if (progress != 100) {
+                                            progressBar.withProgress(progress);
+                                        } else {
+                                            progressBar.withProgress(99);
+                                        }
+                                    }
 
                                     if (progress == 100) {
 
