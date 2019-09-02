@@ -134,12 +134,11 @@
 
       <net.iGap.module.MaterialDesignTextView
         android:id="@+id/apn_btn_smile_button"
-        style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
+        style="@style/myIconTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp8"
         android:text="@string/md_emoticon_with_happy_face"
-        android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/black" />
 
       <net.iGap.module.EmojiEditTextE
@@ -158,24 +157,22 @@
 
       <net.iGap.module.MaterialDesignTextView
         android:id="@+id/apn_btn_send"
-        style="@style/ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn"
+        style="@style/myIconTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp8"
           android:textColor="@color/black"
         android:text="@string/md_send_button"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
         android:visibility="gone" />
 
 
       <net.iGap.module.MaterialDesignTextView
         android:id="@+id/apn_btn_mic"
-        style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
+        style="@style/myIconTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp8"
         android:text="@string/md_voice_message_microphone_button"
-        android:textAppearance="@style/TextIconAppearance.all"
         android:textColor="@color/black" />
 
 
