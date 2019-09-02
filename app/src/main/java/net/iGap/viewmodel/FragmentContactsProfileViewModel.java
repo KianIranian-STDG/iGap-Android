@@ -93,6 +93,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public MutableLiveData<Integer> callVisibility = new MutableLiveData<>();
     public MutableLiveData<Integer> videoCallVisibility = new MutableLiveData<>();
     public MutableLiveData<Integer> menuVisibility = new MutableLiveData<>();
+    public MutableLiveData<Boolean> cloudVisibility = new MutableLiveData<>();
 
     public ObservableBoolean isMuteNotification = new ObservableBoolean(false);
     public MutableLiveData<Boolean> isMuteNotificationChangeListener = new MutableLiveData<>();
@@ -328,6 +329,11 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             isShowReportView.set(false);
         }
 
+        if (userId == G.userId){
+            cloudVisibility.postValue(true);
+        }else
+            cloudVisibility.postValue(false);
+
         registeredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);
         if (registeredInfo != null) {
             registeredInfo.addChangeListener((RealmObjectChangeListener<RealmRegisteredInfo>) (realmModel, changeSet) -> {
@@ -377,6 +383,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             if (registeredInfo.getBio() == null || registeredInfo.getBio().length() == 0) {
                 bioVisibility.set(View.GONE);
             } else {
+                bioVisibility.set(View.VISIBLE);
                 bio.set(registeredInfo.getBio());
             }
             username.set(registeredInfo.getUsername());
@@ -408,6 +415,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             if (realmUser.getBio() == null || realmUser.getBio().length() == 0) {
                 bioVisibility.set(View.GONE);
             } else {
+                bioVisibility.set(View.VISIBLE);
                 bio.set(realmUser.getBio());
             }
         }
@@ -691,4 +699,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         }
     }
 
+    public MutableLiveData<Boolean> getCloudVisibility() {
+        return cloudVisibility;
+    }
 }

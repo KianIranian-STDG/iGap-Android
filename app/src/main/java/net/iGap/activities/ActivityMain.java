@@ -51,6 +51,7 @@ import com.vanniktech.emoji.sticker.struct.StructSticker;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.dialog.SubmitScoreDialog;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
@@ -63,6 +64,7 @@ import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.TabletEmptyChatFragment;
+import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
@@ -85,14 +87,12 @@ import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatSendMessageResponse;
-import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGetWallpaper;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.interfaces.OnMapRegisterStateMain;
 import net.iGap.interfaces.OnPayment;
-import net.iGap.interfaces.OnRefreshActivity;
 import net.iGap.interfaces.OnUpdating;
 import net.iGap.interfaces.OnUserInfoMyClient;
 import net.iGap.interfaces.OnVerifyNewDevice;
@@ -100,7 +100,6 @@ import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
@@ -145,13 +144,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
+import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
+import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
 
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
 
     public static final String openChat = "openChat";
+    public static final String OPEN_DEEP_LINK = "openDeepLink";
+
+    public static final String DEEP_LINK = "deepLink";
+
     public static final String openMediaPlyer = "openMediaPlyer";
+
     public static final int requestCodePaymentCharge = 198;
     public static final int requestCodePaymentBill = 199;
     public static final int requestCodeQrCode = 200;
@@ -305,6 +312,26 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setIntent(intent);
         isOpenChatBeforeSheare = true;
         checkIntent(intent);
+
+        if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
+            handleDeepLink(intent);
+        }
+    }
+
+    private void handleDeepLink(Intent intent) {
+        BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (bottomNavigationFragment != null)
+            bottomNavigationFragment.autoLinkCrawler(intent.getExtras().getString(DEEP_LINK, DEEP_LINK_CHAT), new DiscoveryFragment.CrawlerStruct.OnDeepValidLink() {
+                @Override
+                public void linkValid(String link) {
+
+                }
+
+                @Override
+                public void linkInvalid(String link) {
+                    HelperError.showSnackMessage(link + " " + context.getResources().getString(R.string.link_not_valid), false);
+                }
+            });
     }
 
 
@@ -315,13 +342,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         if (intent.getAction() != null && intent.getAction().equals("net.iGap.payment")) {
-            Log.wtf(this.getClass().getName(), "status: " + intent.getStringExtra("status"));
-            Log.wtf(this.getClass().getName(), "message: " + intent.getStringExtra("message"));
-            Log.wtf(this.getClass().getName(), "orderId: " + intent.getStringExtra("order_id"));
             FragmentManager fragmentManager = getSupportFragmentManager();
             Fragment fragment = fragmentManager.findFragmentById(R.id.mainFrame);
             if (fragment instanceof PaymentFragment) {
-                Log.wtf(this.getClass().getName(), "jnjgndgg");
                 ((PaymentFragment) fragment).setPaymentResult(new Payment(
                         intent.getStringExtra("status"),
                         intent.getStringExtra("message"),
@@ -337,6 +360,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         Bundle extras = intent.getExtras();
+
         if (extras != null) {
 
             long roomId = extras.getLong(ActivityMain.openChat);
@@ -362,9 +386,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.wtf(this.getClass().getName(), "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        detectDeviceType();
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         if (G.ISOK) {
             mRealm = Realm.getDefaultInstance();
@@ -381,7 +406,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
 
-            initTabStrip();
+            initTabStrip(getIntent());
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PHONE_STATE");
             MyPhonStateService myPhonStateService = new MyPhonStateService();
@@ -447,24 +472,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             if (isNeedToRegister) {
 
-                Intent intent = new Intent(this, ActivityRegisteration.class);
+                Intent intent = new Intent(this, ActivityRegistration.class);
                 startActivity(intent);
 
                 finish();
                 return;
             }
 
-            try {
-                HelperPermission.getPhonePermision(this, null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
             RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
             if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
                 isNeedToRegister = true;
-                Intent intent = new Intent(this, ActivityRegisteration.class);
+                Intent intent = new Intent(this, ActivityRegistration.class);
                 startActivity(intent);
                 finish();
                 return;
@@ -674,6 +693,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         return realmUserInfo != null && realmUserInfo.isManaged() && realmUserInfo.isValid() && realmUserInfo.isLoaded();
     }
 
+    /**
+     * if device is tablet twoPaneMode will be enabled
+     */
+    private void detectDeviceType() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+
+
+        G.twoPaneMode = findViewById(R.id.roomListFrame) != null;
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && G.twoPaneMode) {
+            G.maxChatBox = metrics.widthPixels - (metrics.widthPixels / 3) - ViewMaker.i_Dp(R.dimen.dp80);
+        } else {
+            G.maxChatBox = metrics.widthPixels - ViewMaker.i_Dp(R.dimen.dp80);
+        }
+
+    }
+
     private void setDialogFragmentSize() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -732,7 +770,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void getWallpaperAsDefault() {
         try {
-            RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE , ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
+            RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
             if (realmWallpaper != null) {
                 if (realmWallpaper.getWallPaperList() != null && realmWallpaper.getWallPaperList().size() > 0) {
                     RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
@@ -787,12 +825,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void getImageListFromServer() {
-        Log.e("wallpaper" , "request in main ");
+        Log.e("wallpaper", "request in main ");
         G.onGetWallpaper = new OnGetWallpaper() {
             @Override
             public void onGetWallpaperList(final List<ProtoGlobal.Wallpaper> list) {
-                Log.e("wallpaper" , "resp in main");
-                RealmWallpaper.updateField(list, "" , ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE);
+                Log.e("wallpaper", "resp in main");
+                RealmWallpaper.updateField(list, "", ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE);
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -1125,8 +1163,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     //******************************************************************************************************************************
 
-    private void initTabStrip() {
-        new HelperFragment(getSupportFragmentManager(), new BottomNavigationFragment()).load(true);
+    private void initTabStrip(Intent intent) {
+        BottomNavigationFragment bottomNavigationFragment = new BottomNavigationFragment();
+
+        if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
+            bottomNavigationFragment.setCrawlerMap(intent.getExtras().getString(DEEP_LINK, DEEP_LINK_CALL));
+        }
+
+        new HelperFragment(getSupportFragmentManager(), bottomNavigationFragment).load();
     }
 
 
@@ -1142,6 +1186,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 openActivityPassCode();
             }
             G.isFirstPassCode = false;
+
         }
     }
 
@@ -1219,7 +1264,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
-        Log.wtf(this.getClass().getName(), "onBackPressed");
         if (G.ISOK) {
             if (G.onBackPressedWebView != null) {
                 if (G.onBackPressedWebView.onBack()) {
@@ -1231,12 +1275,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (G.onBackPressedExplorer.onBack()) {
                     return;
                 }
-            }/* else if (G.onBackPressedChat != null) {
-                Log.wtf(this.getClass().getName(),"onBackPressedChat");
+            } else if (G.onBackPressedChat != null) {
                 if (G.onBackPressedChat.onBack()) {
                     return;
                 }
-            }*/
+            }
 
             if (onBackPressedListener != null) {
                 Log.wtf(this.getClass().getName(), "onBackPressedChat");
@@ -1369,7 +1412,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
 
-        } else {
+        }
+        else if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_VIEW)) {
+            Uri data = intent.getData();
+            if (data != null && data.getHost().equals("deep_link")) {
+                Intent intentTemp = new Intent();
+                intentTemp.putExtra(DEEP_LINK, data.getQuery());
+                handleDeepLink(intentTemp);
+            }
+        }
+        else {
             HelperUrl.getLinkinfo(intent, ActivityMain.this);
         }
         getIntent().setData(null);

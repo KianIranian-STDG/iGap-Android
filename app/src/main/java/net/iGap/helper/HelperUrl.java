@@ -25,6 +25,7 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -43,9 +44,11 @@ import net.iGap.activities.ActivityEnhanced;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.FragmentAddContact;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
+import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnChatGetRoom;
@@ -445,6 +448,48 @@ public class HelperUrl {
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
+    private static void insertIgapDeepLink(FragmentActivity activity, final SpannableStringBuilder strBuilder, final int start, final int end) {
+
+        ClickableSpan clickable = new ClickableSpan() {
+            public void onClick(View view) {
+                G.isLinkClicked = true;
+
+                if (activity == null)
+                    return;
+
+                String deepLink = strBuilder.toString().trim().substring(start, end).toLowerCase().replace("igap://", "");
+
+                if (!deepLink.equals("")) {
+                    FragmentManager fragmentManager = activity.getSupportFragmentManager();
+
+                    BottomNavigationFragment navigationFragment = (BottomNavigationFragment) fragmentManager.findFragmentByTag(BottomNavigationFragment.class.getName());
+                    if (navigationFragment != null)
+                        navigationFragment.autoLinkCrawler(deepLink, new DiscoveryFragment.CrawlerStruct.OnDeepValidLink() {
+                            @Override
+                            public void linkValid(String link) {
+                                activity.onBackPressed();
+                            }
+
+                            @Override
+                            public void linkInvalid(String link) {
+                                HelperError.showSnackMessage(link + " " + activity.getResources().getString(R.string.link_not_valid), false);
+                            }
+                        });
+                } else
+                    HelperError.showSnackMessage(activity.getResources().getString(R.string.link_not_valid), false);
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                ds.linkColor = Color.parseColor(G.linkColor);
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+            }
+        };
+
+        strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
     private static SpannableStringBuilder analaysHash(SpannableStringBuilder builder, String messageID) {
 
         if (builder == null) return builder;
@@ -640,6 +685,9 @@ public class HelperUrl {
                         case "digitLink":
                             insertDigitLink(activity, strBuilder, start, end);
                             break;
+                        case "igapDeepLink":
+                            insertIgapDeepLink(activity, strBuilder, start, end);
+                            break;
                     }
                 } catch (IndexOutOfBoundsException e) {
                     e.printStackTrace();
@@ -689,6 +737,8 @@ public class HelperUrl {
                 linkInfo += count + "_" + (count + str.length()) + "_" + linkType.webLink.toString() + "@";
             } else if (isDigitLink(str)) {
                 linkInfo += count + "_" + (count + str.length()) + "_" + linkType.digitLink.toString() + "@";
+            } else if (isIgapDeepLink(str)) {
+                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapDeepLink.toString() + "@";
             }
             count += str.length() + 1;
         }
@@ -699,6 +749,9 @@ public class HelperUrl {
     private static boolean isDigitLink(String text) {
         return text.matches("^\\s*(?:\\+?(\\d{1,3}))?([-. (]*(\\d{3})[-. )]*)?((\\d{3})[-. ]*(\\d{2,4})(?:[-.x ]*(\\d+))?)\\s*$");
     }
+
+    private static boolean isIgapDeepLink(String text) {
+        return text.matches("(igap?://)([^:^/]*)(:\\d*)?(.*)?");    }
 
     private static boolean isBotLink(String text) {
         return text.matches("^\\/\\w+");
@@ -1392,7 +1445,7 @@ public class HelperUrl {
     }
 
     enum linkType {
-        hash, atSighn, igapLink, igapResolve, webLink, bot, digitLink
+        hash, atSighn, igapLink, igapResolve, webLink, bot, digitLink , igapDeepLink
 
     }
 

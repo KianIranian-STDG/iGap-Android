@@ -28,7 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -104,7 +103,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     private View btnDialNumber;
     private RecyclerView realmRecyclerView;
     private Group vgInviteFriend;
-    private EditText edtSearch;
+    private FastScroller fastScroller;
     private HelperToolbar mHelperToolbar;
     private ProgressBar prgWaitingLoadList, prgMainLoader;
     private ViewGroup mLayoutMultiSelected;
@@ -210,7 +209,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         btnAddSecretChat = view.findViewById(R.id.menu_layout_btn_secret_chat);
         btnAddNewGroup = view.findViewById(R.id.menu_layout_add_new_group);
         btnAddNewChannel = view.findViewById(R.id.menu_layout_add_new_channel);
-        edtSearch = mHelperToolbar.getEditTextSearch();
+        fastScroller = view.findViewById(R.id.fs_contact_fastScroller);
 
         mLayoutMultiSelected = view.findViewById(R.id.fc_layout_selected_mode);
         mTxtSelectedCount = view.findViewById(R.id.fc_selected_mode_txt_counter);
@@ -265,12 +264,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         realmRecyclerView = view.findViewById(R.id.recycler_view);
         realmRecyclerView.setLayoutManager(new ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false, 1000));
         realmRecyclerView.setNestedScrollingEnabled(false);
-        if (realmRecyclerView.getAdapter().getItemCount() > 0) {
-            FastScroller fastScroller = view.findViewById(R.id.fast_scroller);
-            fastScroller.setRecyclerView(realmRecyclerView);
-        } else {
-            view.findViewById(R.id.fast_scroller).setVisibility(View.GONE);
-        }
+        fastScroller.setRecyclerView(realmRecyclerView);
 
 
         onClickRecyclerView = (v, position) -> {
@@ -511,7 +505,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         if (inSearchMode) {
             G.handler.postDelayed(() -> loadContact(searchText), 200);
         } else
-            G.handler.postDelayed(() -> loadContacts(), 200);
+            G.handler.postDelayed(this::loadContacts, 200);
     }
 
     @Override
@@ -663,12 +657,14 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
     private void loadContacts() {
         results = getRealm().copyFromRealm(getRealm().where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
-        ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
+        if (realmRecyclerView.getAdapter() != null)
+            ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
     }
 
     private void loadContact(String key) {
         results = getRealm().copyFromRealm(getRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, key, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME));
-        ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
+        if (realmRecyclerView.getAdapter() != null)
+            ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
     }
 
 
@@ -689,26 +685,22 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     public class ContactListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private List<RealmContacts> usersList = new ArrayList<>();
-        private int count;
 
         void adapterUpdate(List<RealmContacts> contacts) {
-            count = contacts.size();
             usersList = contacts;
             prgWaitingLoadList.setVisibility(View.INVISIBLE);
+
+            if (contacts.size() > 0) {
+                fastScroller.setVisibility(View.VISIBLE);
+            } else {
+                fastScroller.setVisibility(View.GONE);
+            }
+
             notifyDataSetChanged();
         }
 
         public String getBubbleText(int position) {
             return usersList.get(position).getDisplay_name().substring(0, 1).toUpperCase();
-        }
-
-        void insertContact(RealmContacts realmContacts, int i) {
-            usersList.add(i, realmContacts);
-            notifyItemInserted(i);
-            G.handler.postDelayed(() -> {
-                notifyDataSetChanged();
-                mTxtSelectedCount.setText(0 + " " + getString(R.string.item_selected));
-            }, 100);
         }
 
         @Override

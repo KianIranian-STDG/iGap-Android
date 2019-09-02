@@ -22,7 +22,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -71,7 +70,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditChannelFragment extends BaseFragment {
+public class EditChannelFragment extends BaseFragment implements FragmentEditImage.OnImageEdited {
 
     private static final String ROOM_ID = "RoomId";
 
@@ -114,6 +113,8 @@ public class EditChannelFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         avatarHandler.getAvatar(new ParamWithAvatarType(binding.channelAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
+
+        viewModel.onCreateFragment(this);
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -203,6 +204,11 @@ public class EditChannelFragment extends BaseFragment {
             binding.rateMessage.setChecked(!binding.rateMessage.isChecked());
         });
 
+        viewModel.getChannelAvatarUpdatedLiveData().observe(getViewLifecycleOwner(), roomId -> {
+            if (roomId != null && roomId == viewModel.roomId)
+                avatarHandler.getAvatar(new ParamWithAvatarType(binding.channelAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
+        });
+
         setUpEmojiPopup();
 
     }
@@ -227,12 +233,16 @@ public class EditChannelFragment extends BaseFragment {
                             ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
 
                             FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
-                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                            FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
+                            fragmentEditImage.setOnProfileImageEdited(this);
+                            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                         } else {
                             ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
 
                             FragmentEditImage.insertItemList(AttachFile.imagePath, false);
-                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0)).setReplace(false).load();
+                            FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0);
+                            fragmentEditImage.setOnProfileImageEdited(this);
+                            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                         }
                     }
                     break;
@@ -243,7 +253,9 @@ public class EditChannelFragment extends BaseFragment {
                     if (getActivity() != null) {
                         ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true); //rotate image
                         FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
-                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
+                        fragmentEditImage.setOnProfileImageEdited(this);
+                        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                     }
                     break;
             }
@@ -657,6 +669,11 @@ public class EditChannelFragment extends BaseFragment {
                 .setIconColor(Color.parseColor(iconColor))
                 .setDividerColor(Color.parseColor(dividerColor))
                 .build(binding.channelNameEditText);
+    }
+
+    @Override
+    public void profileImageAdd(String path) {
+        viewModel.uploadAvatar(path);
     }
 
     /*private void groupLeft() {

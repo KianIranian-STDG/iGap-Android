@@ -545,10 +545,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         if (mMessage.isEdited)
-            if (mMessage.channelExtra.signature.length() > 0)
+            if (mMessage.channelExtra != null && mMessage.channelExtra.signature.length() > 0)
                 mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited) + " " + mMessage.channelExtra.signature);
-            else
+            else{
                 mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited));
+                Utils.darkModeHandlerGray(mHolder.getSignatureTv());
+            }
         else
             mHolder.getSignatureTv().setText("");
 
@@ -640,7 +642,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
 
-        if (mMessage.channelExtra.signature.length() > 0) {
+        if (mMessage.channelExtra != null && mMessage.channelExtra.signature.length() > 0) {
             mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(200));
         } else if (mMessage.isEdited) {
             mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(100));
@@ -904,7 +906,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).gravity = Gravity.LEFT;
 
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);
-        ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp36);
+
+        if (type == ProtoGlobal.Room.Type.CHANNEL) {
+            ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp15);
+        } else {
+            ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp36);
+        }
 
     }
 

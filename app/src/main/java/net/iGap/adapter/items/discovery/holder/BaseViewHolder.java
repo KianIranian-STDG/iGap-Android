@@ -23,8 +23,8 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
-import net.iGap.fragments.mplTranaction.MplTransactionFragment;
-import net.iGap.internetpackage.BuyInternetPackageFragment;
+import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
@@ -38,20 +38,28 @@ import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
-import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
+import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.fragments.poll.PollFragment;
+import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
+import net.iGap.fragments.populaChannel.PopularMoreChannelFragment;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.internetpackage.BuyInternetPackageFragment;
+import net.iGap.model.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.payment.PaymentCallBack;
+import net.iGap.payment.PaymentResult;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
 import net.iGap.request.RequestGeoGetConfiguration;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.paygear.WalletActivity;
@@ -59,6 +67,9 @@ import org.paygear.WalletActivity;
 import java.io.IOException;
 
 import io.realm.Realm;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
@@ -75,7 +86,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         this.activity = activity;
     }
 
-    public static void handleDiscoveryFieldsClickStatic(DiscoveryItemField discoveryField, FragmentActivity activity) {
+    public static void handleDiscoveryFieldsClickStatic(DiscoveryItemField discoveryField, FragmentActivity activity , boolean haveNext) {
         if (activity == null || activity.isFinishing()) {
             return;
         }
@@ -91,7 +102,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
         switch (discoveryField.actionType) {
             case PAGE:/** tested **/
-                actionPage(discoveryField.value, activity);
+                actionPage(discoveryField.value, activity , haveNext);
                 break;
             case JOIN_LINK:
                 int index = discoveryField.value.lastIndexOf("/");
@@ -308,7 +319,14 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case UNRECOGNIZED:
                 break;
             case FAVORITE_CHANNEL:
-                new HelperFragment(activity.getSupportFragmentManager(), new PopularChannelHomeFragment()).setReplace(false).load();
+                if (discoveryField.value.equals(""))
+                    new HelperFragment(activity.getSupportFragmentManager(), new PopularChannelHomeFragment()).setReplace(false).load();
+                else {
+                    PopularMoreChannelFragment popularMoreChannelFragment = new PopularMoreChannelFragment();
+                    popularMoreChannelFragment.setId(discoveryField.value);
+                    new HelperFragment(activity.getSupportFragmentManager(), popularMoreChannelFragment).setReplace(false).load();
+                }
+
                 break;
             case FINANCIAL_HISTORY:
                 new HelperFragment(activity.getSupportFragmentManager(), new MplTransactionFragment()).setReplace(false).load();
@@ -316,11 +334,49 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case INTERNET_PACKAGE_MENU:
                 new HelperFragment(activity.getSupportFragmentManager(), new BuyInternetPackageFragment()).setReplace(false).load();
                 break;
+            case CHARITY:
+                try {
+                    JSONObject jsonObject = new JSONObject(discoveryField.value);
+                    sendRequestGetCharityPaymentToken(activity,jsonObject.getString("charityId"),jsonObject.getInt("price"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+
         }
     }
 
-    private static void actionPage(String value, FragmentActivity activity) {
-        new HelperFragment(activity.getSupportFragmentManager(), DiscoveryFragment.newInstance(Integer.valueOf(value))).setReplace(false).load(false);
+    private static void sendRequestGetCharityPaymentToken(FragmentActivity activity ,String charityId,int charityAmount){
+        new RetrofitFactory().getCharityRetrofit().sendRequestGetCharity(charityId,charityAmount).enqueue(new Callback<MciPurchaseResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<MciPurchaseResponse> call, @NotNull Response<MciPurchaseResponse> response) {
+                if (response.isSuccessful()){
+                    new HelperFragment(activity.getSupportFragmentManager()).loadPayment(activity.getString(R.string.charity_title), response.body().getToken(), new PaymentCallBack() {
+                        @Override
+                        public void onPaymentFinished(PaymentResult result) {
+
+                        }
+                    });
+                }else{
+                    try {
+                        HelperError.showSnackMessage(new ErrorHandler().getError(response.code(),response.errorBody().string()).getMessage(),false);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<MciPurchaseResponse> call, @NotNull Throwable t) {
+                t.printStackTrace();
+                HelperError.showSnackMessage(activity.getString(R.string.connection_error),false);
+            }
+        });
+    }
+    private static void actionPage(String value, FragmentActivity activity, boolean haveNext) {
+        DiscoveryFragment discoveryFragment = DiscoveryFragment.newInstance(Integer.valueOf(value));
+        discoveryFragment.setNeedToCrawl(haveNext);
+        new HelperFragment(activity.getSupportFragmentManager(), discoveryFragment).setReplace(false).load(false);
     }
 
     public static void dialPhoneNumber(Context context, String phoneNumber, FragmentActivity activity) {
@@ -354,7 +410,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
-        handleDiscoveryFieldsClickStatic(discoveryField, activity);
+        handleDiscoveryFieldsClickStatic(discoveryField, activity,false);
     }
 
 }

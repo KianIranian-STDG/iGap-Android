@@ -1,21 +1,18 @@
 package net.iGap.fragments;
 
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityRegisteration;
+import net.iGap.activities.ActivityRegistration;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnRecoveryEmailToken;
@@ -23,7 +20,6 @@ import net.iGap.interfaces.OnRecoverySecurityPassword;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.interfaces.TwoStepVerificationRecoverPasswordByAnswersCallback;
 import net.iGap.interfaces.TwoStepVerificationRecoverPasswordByToken;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.model.repository.RegisterRepository;
 import net.iGap.module.enums.Security;
 import net.iGap.request.RequestUserTwoStepVerificationRecoverPasswordByAnswers;
@@ -127,7 +123,7 @@ public class FragmentSecurityRecovery extends BaseFragment {
                                     @Override
                                     public void recoveryByQuestion(String tokenR) {
                                         //Todo:fixed it and move to repository
-                                        if (getActivity() instanceof ActivityRegisteration) {
+                                        if (getActivity() instanceof ActivityRegistration) {
                                             RegisterRepository repository = RegisterRepository.getInstance();
                                             repository.setForgetTwoStepVerification(true);
                                             repository.setToken(tokenR);

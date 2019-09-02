@@ -12,6 +12,7 @@ public class PermissionHelper {
     public final static int CameraAndVoicePermissionRequestCode = 100;
     public final static int VoicePermissionRequestCode = 110;
     public final static int CameraPermissionRequestCode = 120;
+    public final static int StoragePermissionRequestCode = 130;
 
     public PermissionHelper(Activity activity) {
         this.activity = activity;
@@ -43,6 +44,16 @@ public class PermissionHelper {
             return true;
         } else {
             ActivityCompat.requestPermissions(activity, Permissions, CameraPermissionRequestCode);
+            return false;
+        }
+    }
+
+    public boolean grantReadAndRightStoragePermission() {
+        String[] Permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (hasPermissions(Permissions)) {
+            return true;
+        } else {
+            ActivityCompat.requestPermissions(activity, Permissions, StoragePermissionRequestCode);
             return false;
         }
     }

@@ -9,18 +9,15 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.databinding.ObservableField;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -29,10 +26,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.ActivityManageSpaceBinding;
-import net.iGap.fragments.FragmentDataUsage;
 import net.iGap.fragments.FragmentiGapMap;
-import net.iGap.helper.HelperFragment;
 import net.iGap.module.FileUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
@@ -52,16 +46,23 @@ import static net.iGap.module.FileUtils.getFolderSize;
 
 public class ActivityManageSpaceViewModel {
 
+    public MutableLiveData<Integer[]> autoDownloadDataListener = new MutableLiveData<>();
+    public MutableLiveData<Integer[]> autoDownloadWifiListener = new MutableLiveData<>();
+    public MutableLiveData<Integer[]> autoDownloadRoamingListener = new MutableLiveData<>();
+
     public ObservableField<String> callbackKeepMedia = new ObservableField<>("1Week");
     public ObservableField<String> callbackClearCache = new ObservableField<>("0 KB");
     public ObservableField<String> callbackCleanUp = new ObservableField<>("0 KB");
     public ObservableField<Integer> showLayoutSdk = new ObservableField<>(View.GONE);
     public ObservableField<Boolean> isSdkEnable = new ObservableField<>();
     public ObservableField<Boolean> isAutoGif = new ObservableField<>();
+
+
     private Context context;
     private SharedPreferences sharedPreferences;
     private int isForever;
     private File fileMap;
+    private int selectedClearCacheCheckBoxes = 0 ;
 
     private int KEY_AD_ROAMING_PHOTO = -1;
     private int KEY_AD_ROAMING_VOICE_MESSAGE = -1;
@@ -81,6 +82,7 @@ public class ActivityManageSpaceViewModel {
     private int KEY_AD_WIFI_FILE = -1;
     private int KEY_AD_WIFI_MUSIC = -1;
     private int KEY_AD_WIFI_GIF = -1;
+    private CompoundButton.OnCheckedChangeListener onCacheCheckedChanged;
 
     public ActivityManageSpaceViewModel(Context context) {
 
@@ -148,43 +150,10 @@ public class ActivityManageSpaceViewModel {
         KEY_AD_DATA_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1);
         KEY_AD_DATA_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_GIF, 5);
 
-        new MaterialDialog.Builder(context).title(R.string.title_auto_download_data).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
+        Integer [] selected =new Integer[]{
                 KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
-        }, new MaterialDialog.ListCallbackMultiChoice() {
-            @Override
-            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, -1);
-                editor.putInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, -1);
-                editor.putInt(SHP_SETTING.KEY_AD_DATA_VIDEO, -1);
-                editor.putInt(SHP_SETTING.KEY_AD_DATA_FILE, -1);
-                editor.putInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1);
-                editor.putInt(SHP_SETTING.KEY_AD_DATA_GIF, -1);
-                editor.apply();
-
-                for (Integer aWhich : which) {
-
-                    if (aWhich == 0) {
-                        editor.putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, aWhich);
-                    } else if (aWhich == 1) {
-                        editor.putInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, aWhich);
-                    } else if (aWhich == 2) {
-                        editor.putInt(SHP_SETTING.KEY_AD_DATA_VIDEO, aWhich);
-                    } else if (aWhich == 3) {
-                        editor.putInt(SHP_SETTING.KEY_AD_DATA_FILE, aWhich);
-                    } else if (aWhich == 4) {
-                        editor.putInt(SHP_SETTING.KEY_AD_DATA_MUSIC, aWhich);
-                    } else if (aWhich == 5) {
-                        editor.putInt(SHP_SETTING.KEY_AD_DATA_GIF, aWhich);
-                    }
-                    editor.apply();
-                }
-
-                return true;
-            }
-        }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).show();
-
+        };
+        autoDownloadDataListener.setValue(selected);
     }
 
     public void onClickAutoDownloadWifi(View view) {
@@ -196,48 +165,11 @@ public class ActivityManageSpaceViewModel {
         KEY_AD_WIFI_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
         KEY_AD_WIFI_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, 5);
 
-        new MaterialDialog.Builder(context)
-                .title(R.string.title_auto_download_wifi)
-                .items(R.array.auto_download_data)
-                .itemsCallbackMultiChoice(new Integer[]{
+        Integer[] selected = new Integer[]{
                 KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
-        }, new MaterialDialog.ListCallbackMultiChoice() {
-            @Override
-            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+        };
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1);
-                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1);
-                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, -1);
-                editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, -1);
-                editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
-                editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, -1);
-                editor.apply();
-
-                for (Integer aWhich : which) {
-
-                    if (aWhich == 0) {
-                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, aWhich);
-                    } else if (aWhich == 1) {
-                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, aWhich);
-                    } else if (aWhich == 2) {
-                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, aWhich);
-                    } else if (aWhich == 3) {
-                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, aWhich);
-                    } else if (aWhich == 4) {
-
-                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, aWhich);
-                    } else if (aWhich == 5) {
-                        editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, aWhich);
-                    }
-                    editor.apply();
-                }
-
-                return true;
-            }
-        }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel)).show();
-
+        autoDownloadWifiListener.setValue(selected);
     }
 
     public void onClickAutoDownloadRoaming(View view) {
@@ -249,47 +181,11 @@ public class ActivityManageSpaceViewModel {
         KEY_AD_ROAMING_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, -1);
         KEY_AD_ROAMINGN_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
 
-        new MaterialDialog.Builder(context)
-                .title(R.string.title_auto_download_roaming)
-                .items(R.array.auto_download_data)
-                .itemsCallbackMultiChoice(new Integer[]{
+        Integer[] selected = new Integer[]{
                 KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
-        }, new MaterialDialog.ListCallbackMultiChoice() {
-            @Override
-            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+        };
 
-                //
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, -1);
-                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, -1);
-                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, -1);
-                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_FILE, -1);
-                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, -1);
-                editor.putInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
-                editor.apply();
-
-                for (Integer aWhich : which) {
-                    if (aWhich > -1) {
-                        if ((aWhich == 0)) {
-                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_PHOTO, aWhich);
-                        } else if ((aWhich == 1)) {
-                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VOICE_MESSAGE, aWhich);
-                        } else if ((aWhich == 2)) {
-                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_VIDEO, aWhich);
-                        } else if ((aWhich == 3)) {
-                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_FILE, aWhich);
-                        } else if ((aWhich == 4)) {
-                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, aWhich);
-                        } else if ((aWhich == 5)) {
-                            editor.putInt(SHP_SETTING.KEY_AD_ROAMING_GIF, aWhich);
-                        }
-                        editor.apply();
-                    }
-                }
-                return true;
-            }
-        }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).show();
+        autoDownloadRoamingListener.setValue(selected);
     }
 
     public void onClickKeepMedia(View view) {
@@ -355,6 +251,7 @@ public class ActivityManageSpaceViewModel {
         final long sizeFolderOtherFiles = getFolderSize(new File(G.DIR_TEMP));
         final long sizeFolderOtherFilesBackground = getFolderSize(new File(G.DIR_CHAT_BACKGROUND));
         final long sizeFolderOtherFilesImageUser = getFolderSize(new File(G.DIR_IMAGE_USER));
+        final long sizeFolderOther = sizeFolderOtherFiles + sizeFolderOtherFilesImageUser + sizeFolderOtherFilesBackground ;
 
         boolean wrapInScrollView = true;
         final MaterialDialog dialog = new MaterialDialog.Builder(context).title(G.context.getResources().getString(R.string.st_title_Clear_Cache)).customView(R.layout.st_dialog_clear_cach, wrapInScrollView).positiveText(G.context.getResources().getString(R.string.st_title_Clear_Cache)).show();
@@ -363,46 +260,71 @@ public class ActivityManageSpaceViewModel {
 
         final File filePhoto = new File(G.DIR_IMAGES);
         assert view != null;
-        TextView photo = (TextView) view.findViewById(R.id.st_txt_sizeFolder_photo);
+        TextView photo = view.findViewById(R.id.st_txt_sizeFolder_photo);
         photo.setText(FileUtils.formatFileSize(sizeFolderPhotoDialog));
 
-        final CheckBox checkBoxPhoto = (CheckBox) view.findViewById(R.id.st_checkBox_photo);
-        final File fileVideo = new File(G.DIR_VIDEOS);
-        TextView video = (TextView) view.findViewById(R.id.st_txt_sizeFolder_video);
-        video.setText(FileUtils.formatFileSize(sizeFolderVideoDialog));
-
-        final CheckBox checkBoxVideo = (CheckBox) view.findViewById(R.id.st_checkBox_video_dialogClearCash);
-
-        final File fileDocument = new File(G.DIR_DOCUMENT);
-        TextView document = (TextView) view.findViewById(R.id.st_txt_sizeFolder_document_dialogClearCash);
-        document.setText(FileUtils.formatFileSize(sizeFolderDocumentDialog));
-
-        final CheckBox checkBoxDocument = (CheckBox) view.findViewById(R.id.st_checkBox_document_dialogClearCash);
-
-        final File fileAudio = new File(G.DIR_AUDIOS);
-        TextView txtAudio = (TextView) view.findViewById(R.id.st_txt_audio_dialogClearCash);
-        txtAudio.setText(FileUtils.formatFileSize(sizeFolderAudio));
-        final CheckBox checkBoxAudio = (CheckBox) view.findViewById(R.id.st_checkBox_audio_dialogClearCash);
-
-        //final File fileMap = new File(G.DIR_AUDIOS);
-        TextView txtMap = (TextView) view.findViewById(R.id.st_txt_map_dialogClearCash);
-        txtMap.setText(FileUtils.formatFileSize(sizeFolderMap));
-        final CheckBox checkBoxMap = (CheckBox) view.findViewById(R.id.st_checkBox_map_dialogClearCash);
-
-        final File fileOtherFiles = new File(G.DIR_TEMP);
-        TextView txtOtherFiles = (TextView) view.findViewById(R.id.st_txt_otherFiles);
-        txtOtherFiles.setText(FileUtils.formatFileSize(sizeFolderOtherFiles + sizeFolderOtherFilesImageUser + sizeFolderOtherFilesBackground));
-        final CheckBox checkBoxOtherFiles = (CheckBox) view.findViewById(R.id.st_checkBox_otherFiles);
-
-        long rTotalSize = sizeFolderPhotoDialog + sizeFolderVideoDialog + sizeFolderDocumentDialog + sizeFolderAudio + sizeFolderMap + sizeFolderOtherFiles;
-        final TextView txtTotalSize = (TextView) view.findViewById(R.id.st_txt_totalSize_dialogClearCash);
+        long rTotalSize = sizeFolderPhotoDialog + sizeFolderVideoDialog + sizeFolderDocumentDialog + sizeFolderAudio + sizeFolderMap + sizeFolderOther;
+        final TextView txtTotalSize = view.findViewById(R.id.st_txt_sizeFolder_all);
         txtTotalSize.setText(FileUtils.formatFileSize(rTotalSize));
 
+        final CheckBox checkBoxAll = view.findViewById(R.id.st_checkBox_all);
+        final CheckBox checkBoxPhoto = view.findViewById(R.id.st_checkBox_photo);
+        final CheckBox checkBoxVideo = view.findViewById(R.id.st_checkBox_video_dialogClearCash);
+        final CheckBox checkBoxDocument = view.findViewById(R.id.st_checkBox_document_dialogClearCash);
+        final CheckBox checkBoxAudio = view.findViewById(R.id.st_checkBox_audio_dialogClearCash);
+        final CheckBox checkBoxMap = view.findViewById(R.id.st_checkBox_map_dialogClearCash);
+        final CheckBox checkBoxOtherFiles = view.findViewById(R.id.st_checkBox_otherFiles);
+
+        onCacheCheckedChanged = (buttonView, isChecked) -> {
+            boolean state = checkBoxAudio.isChecked() && checkBoxPhoto.isChecked() && checkBoxVideo.isChecked() && checkBoxDocument.isChecked() && checkBoxOtherFiles.isChecked() && checkBoxMap.isChecked();
+            checkBoxAll.setChecked(state);
+        };
+
+        final File fileVideo = new File(G.DIR_VIDEOS);
+        checkBoxPhoto.setOnCheckedChangeListener(onCacheCheckedChanged);
+
+        TextView video = view.findViewById(R.id.st_txt_sizeFolder_video);
+        video.setText(FileUtils.formatFileSize(sizeFolderVideoDialog));
+        checkBoxVideo.setOnCheckedChangeListener(onCacheCheckedChanged);
+
+        final File fileDocument = new File(G.DIR_DOCUMENT);
+        TextView document = view.findViewById(R.id.st_txt_sizeFolder_document_dialogClearCash);
+        document.setText(FileUtils.formatFileSize(sizeFolderDocumentDialog));
+        checkBoxDocument.setOnCheckedChangeListener(onCacheCheckedChanged);
+
+        final File fileAudio = new File(G.DIR_AUDIOS);
+        TextView txtAudio = view.findViewById(R.id.st_txt_audio_dialogClearCash);
+        txtAudio.setText(FileUtils.formatFileSize(sizeFolderAudio));
+        checkBoxAudio.setOnCheckedChangeListener(onCacheCheckedChanged);
+
+        //final File fileMap = new File(G.DIR_AUDIOS);
+        TextView txtMap = view.findViewById(R.id.st_txt_map_dialogClearCash);
+        txtMap.setText(FileUtils.formatFileSize(sizeFolderMap));
+        checkBoxMap.setOnCheckedChangeListener(onCacheCheckedChanged);
+
+        final File fileOtherFiles = new File(G.DIR_TEMP);
+        TextView txtOtherFiles = view.findViewById(R.id.st_txt_otherFiles);
+        txtOtherFiles.setText(FileUtils.formatFileSize(sizeFolderOther));
+        checkBoxOtherFiles.setOnCheckedChangeListener(onCacheCheckedChanged);
+
+        ViewGroup layoutCheckAll = view.findViewById(R.id.st_checkBox_all_layout);
+
+        layoutCheckAll.setOnClickListener(v1 -> {
+
+            boolean isChecked = !checkBoxAll.isChecked() ;
+            checkBoxPhoto.setChecked(isChecked);
+            checkBoxVideo.setChecked(isChecked);
+            checkBoxDocument.setChecked(isChecked);
+            checkBoxAudio.setChecked(isChecked);
+            checkBoxMap.setChecked(isChecked);
+            checkBoxOtherFiles.setChecked(isChecked);
+            checkBoxAll.setChecked(isChecked);
+
+        });
 
         dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (checkBoxPhoto.isChecked()) {
                     for (File file : filePhoto.listFiles()) {
                         if (!file.isDirectory()) file.delete();
@@ -460,6 +382,8 @@ public class ActivityManageSpaceViewModel {
                 dialog.dismiss();
             }
         });
+
+        dialog.setOnDismissListener(dialog1 -> onCacheCheckedChanged = null);
 
 
     }
@@ -599,5 +523,7 @@ public class ActivityManageSpaceViewModel {
 
     }
 
-
+    public SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
+    }
 }

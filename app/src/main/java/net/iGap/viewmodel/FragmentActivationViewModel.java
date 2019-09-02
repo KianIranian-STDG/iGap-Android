@@ -42,6 +42,12 @@ public class FragmentActivationViewModel extends ViewModel {
         counterTimer();
     }
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        cancelTimer();
+    }
+
     private void counterTimer() {
         countDownTimer = new CountDownTimer(60 * DateUtils.SECOND_IN_MILLIS, Config.COUNTER_TIMER_DELAY) {
             public void onTick(long millisUntilFinished) {
@@ -62,7 +68,7 @@ public class FragmentActivationViewModel extends ViewModel {
         countDownTimer.start();
     }
 
-    public void cancelTimer() {
+    private void cancelTimer() {
         if (countDownTimer != null) {
             countDownTimer.cancel();
             countDownTimer = null;

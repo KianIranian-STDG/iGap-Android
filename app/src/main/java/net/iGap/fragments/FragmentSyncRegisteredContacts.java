@@ -95,7 +95,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         realm = Realm.getDefaultInstance();
 
         fragmentSyncRegisteredContactsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_sync_registered_contacts, container, false);
@@ -103,7 +103,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
     }
 
     @Override
-    public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, final @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         G.onPhoneContact = this;

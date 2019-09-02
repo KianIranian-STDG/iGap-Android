@@ -2,6 +2,7 @@ package net.iGap.fragments;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,12 +29,15 @@ import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
 import com.google.android.gms.tasks.Task;
 
 import net.iGap.R;
+import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentActivationBinding;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.helper.HelperFragment;
 import net.iGap.module.SmsRetriver.SMSReceiver;
 import net.iGap.viewmodel.FragmentActivationViewModel;
 import net.iGap.viewmodel.WaitTimeModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
@@ -122,8 +126,8 @@ public class FragmentActivation extends BaseFragment {
         });
 
         viewModel.goToTwoStepVerificationPage.observe(getViewLifecycleOwner(), userId -> {
-            if (getActivity() != null && userId != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), TwoStepVerificationFragment.newInstant(userId)).setResourceContainer(R.id.ar_layout_root).load(false);
+            if (getActivity() instanceof ActivityRegistration && userId != null) {
+                ((ActivityRegistration) getActivity()).loadFragment( TwoStepVerificationFragment.newInstant(userId),true);
             }
         });
 
@@ -146,7 +150,6 @@ public class FragmentActivation extends BaseFragment {
     public void onStop() {
         super.onStop();
         unregisterReceiver();
-        viewModel.cancelTimer();
     }
 
     @Override
@@ -157,6 +160,12 @@ public class FragmentActivation extends BaseFragment {
             intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
             getActivity().registerReceiver(smsReceiver, intentFilter);
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        Log.wtf(this.getClass().getName(), "onConfigurationChanged");
+        super.onConfigurationChanged(newConfig);
     }
 
     private void startSMSListener() {
@@ -203,7 +212,7 @@ public class FragmentActivation extends BaseFragment {
         }
     }
 
-    private void setActivationCode(String code) {
+    private void setActivationCode(@NotNull String code) {
         if (code.length() == 5) {
             binding.activationCodeEditText1.setText(String.valueOf(code.charAt(0)));
             binding.activationCodeEditText2.setText(String.valueOf(code.charAt(1)));

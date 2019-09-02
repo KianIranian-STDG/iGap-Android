@@ -6,6 +6,7 @@ import android.util.Log;
 import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.api.CPayApi;
+import net.iGap.api.CharityApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +101,14 @@ public class RetrofitFactory {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build();
+    }
+
+    public CharityApi getCharityRetrofit(){
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.CHARITY_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build().create(CharityApi.class);
     }
 
     private OkHttpClient.Builder enableTls12OnPreLollipop(OkHttpClient.Builder client) {

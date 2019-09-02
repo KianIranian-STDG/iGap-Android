@@ -37,9 +37,8 @@
         android:layout_marginEnd="@dimen/dp8"
         android:layout_marginRight="@dimen/dp8"
         android:paddingTop="@dimen/dp2"
-        style="?textSubColorSettingTheme"
-        android:text="how"
-        android:textSize="@dimen/dp18" />
+        style="@style/myIconTextViewStyle"
+        android:textSize="@dimen/largeTextSize" />
 
 
       <net.iGap.module.CustomTextViewMedium
@@ -51,7 +50,7 @@
         android:text="Dominika Faniz"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
         style="?textTitleColorSettingTheme"
-        android:textSize="@dimen/dp16" />
+        android:textSize="@dimen/largeTextSize" />
 
     </LinearLayout>
 
@@ -77,7 +76,7 @@
           android:singleLine="true"
           android:text="@string/last_seen_recently"
           android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-          android:textSize="@dimen/dp14" />
+          android:textSize="@dimen/standardTextSize" />
 
       </LinearLayout>
 
@@ -99,7 +98,7 @@
     <View
       android:layout_width="match_parent"
       android:layout_height="1px"
-      android:background="@color/gray" />
+      style="?lineColorSettingTheme" />
 
   </LinearLayout>
 

@@ -36,7 +36,7 @@ public class MyDialog {
     /**
      * create custom dialog for main page
      */
-    public static void showDialogMenuItemRooms(FragmentActivity activity, final String itemName, final ProtoGlobal.Room.Type mType, boolean isMute, final String role, long peerId, RealmRoom mInfo, final OnComplete complete, boolean isPinned) {
+    public static void showDialogMenuItemRooms(FragmentActivity activity, final String itemName, final ProtoGlobal.Room.Type mType, boolean isMute, final String role, long peerId , boolean isMyCloud , RealmRoom mInfo, final OnComplete complete, boolean isPinned) {
         int pinCount;
         try (Realm realm = Realm.getDefaultInstance()) {
             RealmResults realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_PINNED, true).findAll();
@@ -51,10 +51,12 @@ public class MyDialog {
             items.add(activity.getString(R.string.pin_to_top));
         }
 
-        if (isMute) {
-            items.add(activity.getString(R.string.unmute));
-        } else {
-            items.add(activity.getString(R.string.mute));
+        if (!isMyCloud){
+            if (isMute) {
+                items.add(activity.getString(R.string.unmute));
+            } else {
+                items.add(activity.getString(R.string.mute));
+            }
         }
         items.add(activity.getString(R.string.clear_history));
         if (mType == ProtoGlobal.Room.Type.CHAT) {

@@ -15,7 +15,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
-import net.iGap.activities.ActivityRegisteration;
+import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentTwoStepVerificationBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -129,7 +129,7 @@ public class TwoStepVerificationFragment extends BaseFragment {
         });
 
         viewModel.goToSecurityRecoveryPage.observe(getViewLifecycleOwner(), data -> {
-            if (getActivity() != null && data != null) {
+            if (getActivity() instanceof ActivityRegistration && data != null) {
                 FragmentSecurityRecovery fragmentSecurityRecovery = new FragmentSecurityRecovery();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("PAGE", data.getSecurity());
@@ -139,8 +139,7 @@ public class TwoStepVerificationFragment extends BaseFragment {
                 bundle.putBoolean("IS_EMAIL", data.isEmail());
                 bundle.putBoolean("IS_CONFIRM_EMAIL", data.isConfirmEmail());
                 fragmentSecurityRecovery.setArguments(bundle);
-
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragmentSecurityRecovery).setResourceContainer(R.id.ar_layout_root).setAddToBackStack(true).load(false);
+                ((ActivityRegistration) getActivity()).loadFragment(fragmentSecurityRecovery,true);
             }
         });
     }

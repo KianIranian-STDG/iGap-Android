@@ -1,32 +1,29 @@
 package net.iGap.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.text.SpannableStringBuilder;
+import android.view.View;
 import android.view.WindowManager;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.BindingAdapter;
-import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperUploadFile;
-import net.iGap.helper.HelperUrl;
+import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnGroupDelete;
 import net.iGap.interfaces.OnGroupEdit;
 import net.iGap.interfaces.OnGroupLeft;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.GroupChatRole;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
-import net.iGap.realm.RealmChannelRoom;
-import net.iGap.realm.RealmChatRoom;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
-import net.iGap.realm.RealmNotificationSetting;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestGroupAvatarAdd;
@@ -41,9 +38,7 @@ import java.util.ArrayList;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
-
-public class EditGroupViewModel extends ViewModel {
+public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarResponse {
 
     //update ui data
     public MutableLiveData<BindingAdapter.AvatarImage> avatarImage = new MutableLiveData<>();
@@ -67,6 +62,9 @@ public class EditGroupViewModel extends ViewModel {
     public MutableLiveData<Boolean> initEmoji = new MutableLiveData<>();
     public MutableLiveData<Boolean> showLoading = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToRoomListPage = new MutableLiveData<>();
+
+    public MutableLiveData<Long> onGroupAvatarUpdated = new MutableLiveData<>();
+    private MutableLiveData<Integer> showUploadProgressLiveData = new MutableLiveData<>();
 
     public GroupChatRole role;
     public long roomId;
@@ -139,6 +137,12 @@ public class EditGroupViewModel extends ViewModel {
 
         }
         chatHistoryForNewMemberStatus.set(t);
+    }
+
+    @Override
+    public void onCreateFragment(BaseFragment fragment) {
+        showUploadProgressLiveData.postValue(View.GONE);
+        G.onGroupAvatarResponse = this;
     }
 
     //TODO: move this code to repository
@@ -290,28 +294,6 @@ public class EditGroupViewModel extends ViewModel {
         });
     }
 
-    public void setEditedImage(String path) {
-        long avatarId = SUID.id().get();
-        long lastUploadedAvatarId = avatarId + 1L;
-        showImageProgress.setValue(true);
-        //ToDo: add this code to repository
-        HelperUploadFile.startUploadTaskAvatar(path, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
-            @Override
-            public void OnProgress(int progress, FileUploadStructure struct) {
-                if (progress < 100) {
-                    /*binding.loading.setProgress(progress);*/
-                } else {
-                    new RequestGroupAvatarAdd().groupAvatarAdd(roomId, struct.token);
-                }
-            }
-
-            @Override
-            public void OnError() {
-                showImageProgress.setValue(false);
-            }
-        });
-    }
-
     public void setChatHistoryStatus(int status) {
         //ToDo: move this code to repository
         getRealm().executeTransactionAsync(new Realm.Transaction() {
@@ -340,4 +322,43 @@ public class EditGroupViewModel extends ViewModel {
         chatHistoryForNewMemberStatus.set(t);
     }
 
+    public void uploadAvatar(String path) {
+        long avatarId = SUID.id().get();
+        long lastUploadedAvatarId = avatarId + 1L;
+
+        HelperUploadFile.startUploadTaskAvatar(path, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+            @Override
+            public void OnProgress(int progress, FileUploadStructure struct) {
+                if (progress < 100) {
+                    showUploadProgressLiveData.postValue(View.VISIBLE);
+                } else {
+                    new RequestGroupAvatarAdd().groupAvatarAdd(roomId, struct.token);
+                }
+            }
+
+            @Override
+            public void OnError() {
+                showUploadProgressLiveData.postValue(View.GONE);
+            }
+        });
+    }
+
+    @Override
+    public void onAvatarAdd(long roomId, ProtoGlobal.Avatar avatar) {
+        onGroupAvatarUpdated.postValue(roomId);
+        showUploadProgressLiveData.postValue(View.GONE);
+    }
+
+    @Override
+    public void onAvatarAddError() {
+        showUploadProgressLiveData.postValue(View.GONE);
+    }
+
+    public MutableLiveData<Integer> getShowUploadProgressLiveData() {
+        return showUploadProgressLiveData;
+    }
+
+    public MutableLiveData<Long> getOnGroupAvatarUpdated() {
+        return onGroupAvatarUpdated;
+    }
 }

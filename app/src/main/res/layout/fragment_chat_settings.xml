@@ -103,7 +103,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@{chatSettingsVM.callbackTextSize , default=16}"
+                                android:text="@{chatSettingsVM.callbackTextSize , default=14}"
                                 android:textColor="@color/setting_items_value_color"
                                 android:textSize="@dimen/smallTextSize"
                                 android:textStyle="normal" />

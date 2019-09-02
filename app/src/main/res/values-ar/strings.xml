@@ -2283,6 +2283,7 @@
     <string name="wallet_toman">تومان</string>
     <string name="wallet_Your_credit">رصيدك: </string>
     <string name="wallet_Reial">%d ریال </string>
+    <string name="payment_rial">%s ریال </string>
     <string name="wallet_error_server">حدث خطأ في الاتصال بالخادم</string>
 
 
@@ -2949,4 +2950,5 @@
     <string name="plaque_added">تمت إضافة البلاك.</string>
     <string name="at_least_cpay_amout">المبلغ (لا يقل عن 20 ألف ريال)</string>
     <string name="cpay_title">سی پی</string>
+    <string name="link_not_valid">رابط غير صالح</string>
 </resources>

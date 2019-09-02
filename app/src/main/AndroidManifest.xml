@@ -165,6 +165,9 @@
                 <data
                     android:host="join"
                     android:scheme="igap" />
+                <data
+                    android:host="deep_link"
+                    android:scheme="igap" />
             </intent-filter>
 
             <intent-filter>
@@ -237,9 +240,7 @@
             <!-- this part add app logo to list of share -->
         </activity>
         <activity
-            android:name=".activities.ActivityRegisteration"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
-            android:windowSoftInputMode="adjustPan" />
+            android:name=".activities.ActivityRegistration" />
 
         <receiver
             android:name=".module.ReceiverBootPhone"

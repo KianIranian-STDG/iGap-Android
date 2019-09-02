@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -36,12 +35,11 @@ import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
+import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnGeoGetConfiguration;
-import net.iGap.interfaces.OnGetWallpaper;
 import net.iGap.interfaces.OnUserAvatarResponse;
 import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.interfaces.OnUserInfoMyClient;
@@ -92,7 +90,6 @@ import org.paygear.web.Web;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import io.realm.Realm;
@@ -391,7 +388,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                     @Override
                     public void onError(int majorCode, int minorCode) {
                         if (majorCode == 5 && minorCode == 1) {
-                            G.handler.postDelayed(() -> onCloudMessageClick(), 2000);
+                            showError.setValue(R.string.connection_error);
+                            G.handler.post(() -> showLoading.set(View.GONE));
                         } else {
                             G.handler.post(() -> showLoading.set(View.GONE));
                             showError.postValue(R.string.error);
@@ -416,9 +414,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public void onCreditClick() {
         if (!G.isWalletRegister) {
-            goToWalletAgreementPage.setValue(phoneNumber.substring(2));
+            goToWalletAgreementPage.setValue(HelperNumerical.getPhoneNumberStartedWithZero(phoneNumber));
         } else {
-            goToWalletPage.setValue(phoneNumber.substring(2));
+            goToWalletPage.setValue(HelperNumerical.getPhoneNumberStartedWithZero(phoneNumber));
         }
     }
 

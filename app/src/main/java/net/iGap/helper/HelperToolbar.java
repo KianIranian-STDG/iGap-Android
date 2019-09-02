@@ -1,8 +1,10 @@
 package net.iGap.helper;
 
 import android.arch.lifecycle.LifecycleOwner;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -12,12 +14,13 @@ import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -38,8 +41,6 @@ import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentWalletAgrement;
-import net.iGap.fragments.beepTunes.main.BeepTunesFragment;
-import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.CircleImageView;
@@ -47,9 +48,12 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.viewmodel.ActivityCallViewModel;
 
 import org.paygear.WalletActivity;
+
+import io.realm.Realm;
 
 import static android.support.constraint.ConstraintSet.BOTTOM;
 import static android.support.constraint.ConstraintSet.END;
@@ -85,6 +89,7 @@ public class HelperToolbar {
     private TextView mChatMuteIcon;
     private CircleImageView mCloudChatIcon;
     private TextView mBtnClearSearch;
+    private View callLayout ;
 
     private CircleImageView mTabletUserAvatar ;
     private TextView mTabletUserName ;
@@ -124,6 +129,8 @@ public class HelperToolbar {
     private int mScannerIcon;
     private int mAnimationOldPositionItem = 0;
     private boolean isRoundBackground = true;
+    private TextView mTxtCallTimer;
+    private BroadcastReceiver callTimerReceiver;
 
     private HelperToolbar() {
     }
@@ -441,6 +448,20 @@ public class HelperToolbar {
         mSearchBox.startAnimation(animation);
     }
 
+    public void unRegisterTimerBroadcast(){
+        if (mContext == null || callTimerReceiver == null) return;
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(callTimerReceiver);
+    }
+
+    public void registerTimerBroadcast(){
+        if (mContext == null || callTimerReceiver == null) {
+            Log.wtf(this.getClass().getName(),"registerTimerBroadcast");
+            return;
+        }
+        IntentFilter intentFilter = new IntentFilter(ActivityCall.CALL_TIMER_BROADCAST);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(callTimerReceiver , intentFilter);
+    }
+
     private void openKeyboard() {
         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(mEdtSearch, InputMethodManager.SHOW_IMPLICIT);
@@ -529,6 +550,10 @@ public class HelperToolbar {
 
     public TextView getButtonClearSearch() {
         return mBtnClearSearch;
+    }
+
+    public View getCallLayout() {
+        return callLayout;
     }
 
     public TextView getTextViewLogo() {
@@ -656,6 +681,17 @@ public class HelperToolbar {
 
         LinearLayout stripCallLayout = (LinearLayout) view.getCallLayout();
 
+        callTimerReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction() == null || intent.getExtras() == null) return;
+                if (intent.getAction().equals(ActivityCall.CALL_TIMER_BROADCAST)){
+                    String time = intent.getExtras().getString(ActivityCall.TIMER_TEXT , "");
+                    mTxtCallTimer.setText(time);
+                }
+            }
+        };
+
         if (!isSearchBoxShown) {
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) musicLayout.getLayoutParams();
             params.setMargins(0, (int) mContext.getResources().getDimension(R.dimen.dp14), 0, 0);
@@ -670,8 +706,6 @@ public class HelperToolbar {
             MusicPlayer.chatLayout = musicLayout;
             ActivityCall.stripLayoutChat = view.getCallLayout() ;
 
-            ActivityCallViewModel.txtTimeChat = rootView.findViewById(R.id.cslcs_txt_timer);
-
             TextView txtCallActivityBack = rootView.findViewById(R.id.cslcs_btn_call_strip);
             txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
 
@@ -685,9 +719,6 @@ public class HelperToolbar {
             MusicPlayer.mainLayout = musicLayout;
             ActivityCall.stripLayoutMain = view.getCallLayout();
 
-
-            ActivityCallViewModel.txtTimerMain = rootView.findViewById(R.id.cslcs_txt_timer);
-
             TextView txtCallActivityBack = rootView.findViewById(R.id.cslcs_btn_call_strip);
             txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
 
@@ -695,75 +726,10 @@ public class HelperToolbar {
 
         MusicPlayer.setMusicPlayer(musicLayout);
         setMediaLayout();
-        //setStripLayoutCall();
-
-        try {
-            G.callStripLayoutVisiblityListener.observe(G.fragmentActivity, isVisible -> {
-
-                try {
-
-                    if (isVisible) {
-                        if (isChat) {
-                            ActivityCall.stripLayoutChat.setVisibility(View.VISIBLE);
-
-
-                        } else {
-                            ActivityCall.stripLayoutMain.setVisibility(View.VISIBLE);
-
-                        }
-
-
-                        if (MusicPlayer.mainLayout != null) {
-                            MusicPlayer.mainLayout.setVisibility(View.GONE);
-                        }
-
-                        if (MusicPlayer.chatLayout != null) {
-                            MusicPlayer.chatLayout.setVisibility(View.GONE);
-                        }
-                    } else {
-                        if (isChat) {
-                            ActivityCall.stripLayoutChat.setVisibility(View.GONE);
-                        } else {
-                            ActivityCall.stripLayoutMain.setVisibility(View.GONE);
-                        }
-                    }
-
-                } catch (Exception e) {
-                }
-
-            });
-        } catch (Exception e) {
-
-        }
-
     }
 
     public void checkIsAvailableOnGoingCall() {
-
-        /*if (G.isInCall) {
-            rootView.findViewById(R.id.view_toolbar_layout_strip_call).setVisibility(View.VISIBLE);
-
-
-            G.iCallFinishChat = () -> {
-                try {
-                    rootView.findViewById(R.id.view_toolbar_layout_strip_call).setVisibility(View.GONE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            };
-
-
-            G.iCallFinishMain = () -> {
-                try {
-                    rootView.findViewById(R.id.view_toolbar_layout_strip_call).setVisibility(View.GONE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            };
-
-        } else {
-            rootView.findViewById(R.id.view_toolbar_layout_strip_call).setVisibility(View.GONE);
-        }*/
+        callLayout.setVisibility(G.isInCall ? View.VISIBLE : View.GONE);
     }
 
     private void setMediaLayout() {
@@ -1024,7 +990,13 @@ public class HelperToolbar {
 
     private void onScannerClickListener() {
         if (!G.isWalletRegister) {
-            new HelperFragment(mFragmentActivity.getSupportFragmentManager() ,FragmentWalletAgrement.newInstance(ActivityMain.userPhoneNumber.substring(2))).load();
+            try (Realm realm = Realm.getDefaultInstance()) {
+                RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (userInfo != null) {
+                    String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
+                    new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
+                }
+            }
         } else {
             Intent intent = new Intent(mContext, WalletActivity.class);
             intent.putExtra("Language", "fa");
@@ -1071,6 +1043,7 @@ public class HelperToolbar {
         mTxtSearch = view.getTvSearch();
         mEdtSearch = view.getEdtSearch();
         mBtnClearSearch = view.getTvClearSearch();
+        callLayout = view.getCallLayout();
 
         groupAvatar = view.getCivProfileAvatar();
         groupName = view.getTvProfileName();
@@ -1082,6 +1055,8 @@ public class HelperToolbar {
         mTabletUserAvatar = view.gettUserAvatar();
         mTabletUserName = view.gettUserName();
         mTabletUserPhone = view.gettUserPhone() ;
+
+        mTxtCallTimer = rootView.findViewById(R.id.cslcs_txt_timer);
 
         if (mTxtLogo != null)
             mTxtLogo.setText(defaultTitleText);

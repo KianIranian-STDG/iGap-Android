@@ -21,6 +21,7 @@ import net.iGap.model.GoToMainFromRegister;
 import net.iGap.model.LocationModel;
 import net.iGap.model.UserPasswordDetail;
 import net.iGap.module.BotInit;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoRequest;
 import net.iGap.proto.ProtoUserRegister;
@@ -58,8 +59,8 @@ public class RegisterRepository {
     private String regexFetchCodeVerification;
     private boolean forgetTwoStepVerification = false;
 
-    public MutableLiveData<GoToMainFromRegister> goToMainPage = new MutableLiveData<>();
-    public MutableLiveData<Long> goToWelcomePage = new MutableLiveData<>();
+    private SingleLiveEvent<GoToMainFromRegister> goToMainPage = new SingleLiveEvent<>();
+    private SingleLiveEvent<Long> goToWelcomePage = new SingleLiveEvent<>();
 
     //if need sharePreference pass it in constructor
     private RegisterRepository() {
@@ -76,6 +77,14 @@ public class RegisterRepository {
     public void clearInstance() {
         Log.wtf(this.getClass().getName(), "clearInstance");
         instance = null;
+    }
+
+    public SingleLiveEvent<GoToMainFromRegister> getGoToMainPage() {
+        return goToMainPage;
+    }
+
+    public SingleLiveEvent<Long> getGoToWelcomePage() {
+        return goToWelcomePage;
     }
 
     public int getCallingCode() {
@@ -170,14 +179,12 @@ public class RegisterRepository {
                 countryName = countryNameR;
                 pattern = patternR;
                 regex = regexR;
-                G.handler.post(() -> callback.onSuccess(new LocationModel(callingCode, countryName, pattern)));
+                callback.onSuccess(new LocationModel(callingCode, countryName, pattern));
             }
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                if (majorCode == 500 && minorCode == 1) {
-                    G.handler.post(callback::onError);
-                }
+                callback.onError();
             }
         });
     }

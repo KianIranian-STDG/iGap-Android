@@ -11,5 +11,6 @@ public class ApiStatic {
     static final String ATI_URL = BASE_URL + "ati/";
     static final String CPAY_URL = BASE_URL + "ati/c-pay/";
     static final String MCI_URL = BASE_URL + "mci/";
+    static final String CHARITY_URL = BASE_URL + "charity/";
 }
 

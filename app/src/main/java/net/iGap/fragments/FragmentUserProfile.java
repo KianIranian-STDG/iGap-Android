@@ -118,7 +118,7 @@ public class FragmentUserProfile extends BaseMainFragments {
             if (phoneNumber != null) {
                 Intent intent = new Intent(getActivity(), WalletActivity.class);
                 intent.putExtra("Language", "fa");
-                intent.putExtra("Mobile", "0" + phoneNumber);
+                intent.putExtra("Mobile",  phoneNumber);
                 intent.putExtra("PrimaryColor", G.appBarColor);
                 intent.putExtra("DarkPrimaryColor", G.appBarColor);
                 intent.putExtra("AccentColor", G.appBarColor);
@@ -317,6 +317,8 @@ public class FragmentUserProfile extends BaseMainFragments {
             binding.darkTheme.setChecked(!G.isDarkTheme);
             viewModel.onThemeClick(G.isDarkTheme);
         });
+
+        binding.fupUserBio.setSelected(true);
 
         Log.wtf(this.getClass().getName(), "onViewCreated");
     }
