@@ -14,14 +14,13 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -31,7 +30,6 @@ import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityEnterPassCodeBinding;
 import net.iGap.helper.HelperError;
@@ -95,7 +93,11 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         });
 
         viewModel.getGoBack().observe(this, isGoBack -> {
-            if (isGoBack != null && isGoBack) {
+            if (isGoBack != null) {
+                if (!isGoBack) {
+                    Log.wtf(this.getClass().getName(), "getGoBack");
+                    ActivityMain.finishActivity.finishActivity();
+                }
                 finish();
             }
         });
@@ -136,7 +138,7 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
                 helper = new FingerprintHandler(this, new FingerPrint() {
                     @Override
                     public void success() {
-                        viewModel.fingerPrintSuccess();
+                        viewModel.passwordCorrect();
                         dialog.dismiss();
                     }
 
@@ -152,6 +154,12 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
                     }
                 });
                 helper.startAuth(fingerprintManager, cryptoObject);
+            }
+        });
+
+        viewModel.getClearPassword().observe(this, isClear -> {
+            if (isClear != null && isClear) {
+                binding.passwordEditText.setText("");
             }
         });
 
@@ -185,25 +193,23 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
     @Override
     public void onResume() {
         super.onResume();
-
         viewModel.onResume();
-
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            if (helper != null) {
+                helper.stopListening();
+            }
+        }
+    }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-
-        if (ActivityMain.finishActivity != null) {
-            ActivityMain.finishActivity.finishActivity();
-        }
+        setResult(RESULT_CANCELED);
         finish();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            finishAffinity();
-        } else {
-            System.exit(0);
-        }
     }
 
     @Override

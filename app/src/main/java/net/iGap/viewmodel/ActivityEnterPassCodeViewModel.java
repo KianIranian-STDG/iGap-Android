@@ -19,6 +19,7 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.support.annotation.NonNull;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -66,6 +67,7 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     private MutableLiveData<Boolean> hideKeyword = new MutableLiveData<>();
     private MutableLiveData<Integer> showErrorMessage = new MutableLiveData<>();
     private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
+    private MutableLiveData<Boolean> clearPassword = new MutableLiveData<>();
 
     // Variable used for storing the key in the Android Keystore container
     private static final String KEY_NAME = "androidHive";
@@ -102,16 +104,6 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
                     } else {
                         passwordInputType.set(InputType.TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
                         passwordMaxLength.set(20);
-                    }
-                }
-            }
-
-            if (realmUserInfo.isFingerPrint()) {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    generateKey();
-                    if (cipherInit()) {
-                        FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
-                        showDialogFingerPrint.setValue(cryptoObject);
                     }
                 }
             }
@@ -164,6 +156,10 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
         return hideKeyword;
     }
 
+    public MutableLiveData<Boolean> getClearPassword() {
+        return clearPassword;
+    }
+
     public void afterTextChanged(String s) {
         if (realmUserInfo.getKindPassCode() == PIN) {
             if (s.length() == 4) {
@@ -175,19 +171,16 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     public void onCheckPasswordButtonClick(String password) {
         if (password != null && password.length() > 0) {
             if (password.equals(realmUserInfo.getPassCode())) {
-                ActivityMain.isLock = false;
-                HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
-                hideKeyword.setValue(true);
-                goBack.setValue(true);
+                passwordCorrect();
             } else {
                 hideKeyword.setValue(true);
                 showErrorMessage.setValue(R.string.invalid_password);
-                edtSetPassword.set("");
+                clearPassword.setValue(true);
             }
         } else {
             hideKeyword.setValue(true);
             showErrorMessage.setValue(R.string.enter_a_password);
-            edtSetPassword.set("");
+            clearPassword.setValue(true);
         }
 
     }
@@ -196,7 +189,7 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
         showDialogForgetPassword.setValue(true);
     }
 
-    public void fingerPrintSuccess() {
+    public void passwordCorrect() {
         ActivityMain.isLock = false;
         HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
         hideKeyword.setValue(true);
@@ -206,43 +199,25 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     public void forgetPassword(){
         G.isPassCode = false;
         hideKeyword.setValue(true);
-        if (ActivityMain.finishActivity != null) {
-            ActivityMain.finishActivity.finishActivity();
-        }
-        G.currentActivity.finish();
-        logout();
-    }
-
-    private void logout() {
         new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
             @Override
             public void onUserSessionLogout() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                    }
-                });
+                /*goBack.setValue(false);*/
+                Log.wtf(this.getClass().getName(),"onUserSessionLogout");
+                HelperLogout.logout();
+                Log.wtf(this.getClass().getName(),"onUserSessionLogout");
             }
 
             @Override
             public void onError() {
-
+                showErrorMessage.setValue(R.string.error);
             }
 
             @Override
             public void onTimeOut() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (v != null) {
-                            HelperError.showSnackMessage(G.context.getResources().getString(R.string.error), false);
-                        }
-                    }
-                });
+
             }
         });
-        HelperLogout.logout();
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -291,25 +266,19 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        if (isFingerPrint) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                if (helper != null) helper.stopListening();
-            }
-        }
+        hideKeyword.setValue(true);
         realm.close();
         ActivityMain.isActivityEnterPassCode = false;
-        hideKeyword.setValue(true);
+
     }
 
     public void onResume() {
-        if (isFingerPrint) {
+        if (realmUserInfo.isFingerPrint()) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 generateKey();
                 if (cipherInit()) {
-                    FingerprintManager.CryptoObject cryptoObject = null;
-                    cryptoObject = new FingerprintManager.CryptoObject(cipher);
-                    helper = new FingerprintHandler(context);
-                    helper.startAuth(fingerprintManager, cryptoObject);
+                    FingerprintManager.CryptoObject cryptoObject = new FingerprintManager.CryptoObject(cipher);
+                    showDialogFingerPrint.setValue(cryptoObject);
                 }
             }
         }

@@ -22,12 +22,12 @@
             android:id="@+id/icon"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/unlockTitle"
             app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintBottom_toTopOf="@id/unlockTitle"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="@dimen/dp16"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".3"
+            app:layout_constraintWidth_percent=".35"
             app:srcCompat="@drawable/ic_passcode" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -36,13 +36,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
             android:gravity="center"
+            android:layout_marginBottom="@dimen/dp32"
             android:text="@string/Unlock_with_your_passcode"
             android:textColor="@color/white"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintBottom_toTopOf="@id/line"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/icon" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <android.support.constraint.Barrier
             android:id="@+id/line"
@@ -50,7 +50,7 @@
             android:layout_height="0dp"
             android:orientation="horizontal"
             app:barrierDirection="top"
-            app:constraint_referenced_ids="pattern_lock_view,v" />
+            app:constraint_referenced_ids="checkIcon,patternLockView" />
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/checkIcon"
@@ -58,7 +58,7 @@
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:onClick="@{()->viewModel.onCheckPasswordButtonClick(passwordEditText.getEditable().toString())}"
+            android:onClick="@{()->viewModel.onCheckPasswordButtonClick(passwordEditText.getEditableText().toString())}"
             android:text="@string/check_icon"
             android:visibility="@{viewModel.showCheckPasswordButton}"
             app:layout_constraintBottom_toTopOf="@id/passwordEditText"
@@ -88,7 +88,8 @@
             app:layout_constraintBottom_toTopOf="@id/forgotPasswordButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/unlockTitle" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias=".8"/>
 
         <View
             android:id="@+id/v"
@@ -103,16 +104,17 @@
             app:layout_constraintTop_toBottomOf="@id/passwordEditText" />
 
         <com.andrognito.patternlockview.PatternLockView
-            android:id="@+id/pattern_lock_view"
+            android:id="@+id/patternLockView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/dp16"
             android:layout_marginBottom="@dimen/dp16"
             android:visibility="@{viewModel.isPattern}"
             app:layout_constraintBottom_toTopOf="@id/forgotPasswordButton"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/unlockTitle" />
+            app:layout_constraintWidth_percent=".9" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/forgotPasswordButton"
