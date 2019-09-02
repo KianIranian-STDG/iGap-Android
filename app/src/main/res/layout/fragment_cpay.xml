@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.FragmentSeePayViewModel" />
+    </data>
+
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -151,16 +157,9 @@
             android:id="@+id/state_has_car"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:constraint_referenced_ids="btn_inquiry,btn_charge,btn_add_car_,rv_plaques,lbl_plaques" />
 
     </android.support.constraint.ConstraintLayout>
-
-    <data>
-
-        <variable
-            name="viewModel"
-            type="net.iGap.viewmodel.FragmentSeePayViewModel" />
-    </data>
 
 </layout>
