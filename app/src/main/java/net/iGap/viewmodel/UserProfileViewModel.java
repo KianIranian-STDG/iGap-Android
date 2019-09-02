@@ -207,25 +207,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             getUserCredit();
         }
 
-        FragmentEditImage.completeEditImage = (path, message, textImageList) -> {
-            pathSaveImage = path;
-            long lastUploadedAvatarId = idAvatar + 1L;
-            showLoading.set(View.VISIBLE);
-            HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
-                @Override
-                public void OnProgress(int progress, FileUploadStructure struct) {
-                    if (progress >= 100) {
-                        new RequestUserAvatarAdd().userAddAvatar(struct.token);
-                    }
-                }
-
-                @Override
-                public void OnError() {
-                    G.handler.post(() -> showLoading.set(View.GONE));
-                }
-            });
-        };
-
         FragmentShowAvatars.onComplete = (result, messageOne, MessageTow) -> {
             long mAvatarId = 0;
             if (messageOne != null && !messageOne.equals("")) {
@@ -1052,6 +1033,25 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             }
             // backthread
         }
+    }
+
+    public void uploadAvatar(String path) {
+        pathSaveImage = path;
+        long lastUploadedAvatarId = idAvatar + 1L;
+        showLoading.set(View.VISIBLE);
+        HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+            @Override
+            public void OnProgress(int progress, FileUploadStructure struct) {
+                if (progress >= 100) {
+                    new RequestUserAvatarAdd().userAddAvatar(struct.token);
+                }
+            }
+
+            @Override
+            public void OnError() {
+                G.handler.post(() -> showLoading.set(View.GONE));
+            }
+        });
     }
 
     public class ChangeImageModel {
