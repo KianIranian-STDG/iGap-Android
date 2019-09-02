@@ -60,14 +60,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="allowBackup,supportsRtl">
-        <receiver
-            android:name="ir.metrix.sdk.MetrixReferrerReceiver"
-            android:permission="android.permission.INSTALL_PACKAGES"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
 
         <receiver
             android:name=".module.CustomButtonListener"

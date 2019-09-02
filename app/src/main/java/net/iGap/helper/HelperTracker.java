@@ -20,8 +20,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.SHP_SETTING;
 
-import ir.metrix.sdk.Metrix;
-
 public class HelperTracker {
 
     private static Tracker mTracker;
