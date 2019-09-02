@@ -95,11 +95,8 @@ public class PopularChannelHomeFragment extends BaseFragment implements ToolbarL
                 .setContext(G.fragmentActivity)
                 .setListener(this)
                 .setLogoShown(true)
-                .setDefaultTitle("کانال های پرمخاطب")
+                .setDefaultTitle(getString(R.string.popular_channel))
                 .setLeftIcon(R.string.back_icon);
-        if (!G.isAppRtl) {
-            toolbar.setDefaultTitle("Popular Channel");
-        }
 
         RecyclerView recyclerView = rootView.findViewById(R.id.rv_popularChannel_home);
         LinearLayout toolBall = rootView.findViewById(R.id.ll_popularChannel_toolBar);
