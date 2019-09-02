@@ -55,6 +55,7 @@ public class ActivityRegistration extends ActivityEnhanced {
         }).get(RegistrationViewModel.class);
 
         viewModel.goToMainPage().observe(this, data -> {
+            Log.wtf(this.getClass().getName(),"go main page observe");
             if (data != null) {
                 if (data.isShowDialogDisableTwoStepVerification()) {
                     new DefaultRoundDialog(this)
