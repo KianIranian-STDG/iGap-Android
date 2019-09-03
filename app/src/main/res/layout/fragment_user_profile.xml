@@ -804,7 +804,7 @@
                     android:layout_height="wrap_content"
                     android:afterTextChanged="@{(phone)->viewModel.referralTextChangeListener(phone.toString())}"
                     android:enabled="@{viewModel.referralEnableLiveData}"
-                    android:inputType="textEmailAddress"
+                    android:inputType="phone"
                     android:text="@={viewModel.referralNumberObservableField}"
                     android:textSize="@dimen/standardTextSize" />
 

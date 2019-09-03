@@ -142,6 +142,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public ObservableField<Integer> referralError = new ObservableField<>(R.string.already_registered);
     public ObservableField<Integer> countryCodeVisibility = new ObservableField<>(View.GONE);
     private int phoneMax = 10;
+    private boolean sendReferral = false;
 
     //ui
     public SingleLiveEvent<Boolean> goToAddMemberPage = new SingleLiveEvent<>();
@@ -581,7 +582,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
             referralNumberObservableField.set(phoneNumber);
 
-            if (phoneNumber.length() == phoneMax){
+            if (phoneNumber.length() == phoneMax && sendReferral){
                 setReferral(referralCountryCodeObservableField.get().replace("+","") + referralNumberObservableField.get().replace(" ",""));
             }
         }
@@ -1187,9 +1188,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                     referralEnableLiveData.postValue(true);
                     countryCodeVisibility.set(View.VISIBLE);
                     countryReader();
+                    sendReferral = true;
                 }else {
                     referralEnableLiveData.postValue(false);
                     countryCodeVisibility.set(View.GONE);
+                    sendReferral = false;
                 }
             }
 
