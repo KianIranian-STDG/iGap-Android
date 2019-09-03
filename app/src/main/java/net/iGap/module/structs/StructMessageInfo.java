@@ -167,29 +167,27 @@ public class StructMessageInfo implements Parcelable {
             return;
         }
 
-        liverRealmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, getAttachment().getId()).findFirst();
-        if (liverRealmAttachment != null) {
-            realmAttachmentRealmChangeListener = realmAttachment -> {
-                if (realmAttachment.isValid() && realmAttachment.isManaged()) {
-                    setAttachment(realm.copyFromRealm(realmAttachment));
-                    abstractMessage.onProgressFinish(holder, messageType);
+        liverRealmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, getAttachment().getId()).findFirstAsync();
+        realmAttachmentRealmChangeListener = realmAttachment -> {
+            if (realmAttachment.isValid() && realmAttachment.isManaged()) {
+                setAttachment(realm.copyFromRealm(realmAttachment));
+                abstractMessage.onProgressFinish(holder, messageType);
 
-                    if (realmAttachment.isFileExistsOnLocalAndIsThumbnail()) {
-                        itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
-                    } else if (messageType == ProtoGlobal.RoomMessageType.VOICE || messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
-                        itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
-                    } else if (messageType.toString().toLowerCase().contains("image") || messageType.toString().toLowerCase().contains("video") || messageType.toString().toLowerCase().contains("gif")) {
-                        if (realmAttachment.isThumbnailExistsOnLocal()) {
-                            itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
-                        }
+                if (realmAttachment.isFileExistsOnLocalAndIsThumbnail()) {
+                    itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
+                } else if (messageType == ProtoGlobal.RoomMessageType.VOICE || messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
+                    itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
+                } else if (messageType.toString().toLowerCase().contains("image") || messageType.toString().toLowerCase().contains("video") || messageType.toString().toLowerCase().contains("gif")) {
+                    if (realmAttachment.isThumbnailExistsOnLocal()) {
+                        itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                     }
-
-                    //mAdapter.notifyItemChanged(mAdapter.getPosition(identifier));
                 }
 
-            };
-            liverRealmAttachment.addChangeListener(realmAttachmentRealmChangeListener);
-        }
+                //mAdapter.notifyItemChanged(mAdapter.getPosition(identifier));
+            }
+
+        };
+        liverRealmAttachment.addChangeListener(realmAttachmentRealmChangeListener);
     }
 
     private void removeAttachmentChangeListener() {
