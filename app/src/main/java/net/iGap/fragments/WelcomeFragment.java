@@ -57,7 +57,6 @@ public class WelcomeFragment extends BaseFragment {
                 Bundle bundle = new Bundle();
                 bundle.putLong(FragmentRegistrationNickname.ARG_USER_ID, userId);
                 fragment.setArguments(bundle);
-                getActivity().onBackPressed();
                 ((ActivityRegistration) getActivity()).loadFragment(fragment, true);
             }
         });

@@ -170,6 +170,7 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
                     if (reagentPhoneNumber.get().isEmpty() || isValidReagentPhoneNumber()) {
                         showReagentPhoneNumberError.setValue(false);
                         hideKeyboard.setValue(true);
+                        prgVisibility.set(View.VISIBLE);
                         setNickName(name, lastName, reagentPhoneNumber.get().isEmpty());
                     } else {
                         showReagentPhoneNumberError.setValue(true);

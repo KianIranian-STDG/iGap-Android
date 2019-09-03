@@ -15,6 +15,7 @@ import android.util.Log;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.fragments.FragmentActivation;
 import net.iGap.fragments.FragmentIntroduce;
 import net.iGap.fragments.FragmentRegister;
 import net.iGap.fragments.FragmentRegistrationNickname;
@@ -71,6 +72,9 @@ public class ActivityRegistration extends ActivityEnhanced {
                 bundle.putBoolean("newUser", true);
                 bundle.putLong("userId", userId);
                 fragment.setArguments(bundle);
+                getSupportFragmentManager().popBackStack();
+                getSupportFragmentManager().popBackStack();
+                getSupportFragmentManager().popBackStack();
                 loadFragment(fragment, true);
             }
         });
@@ -119,13 +123,16 @@ public class ActivityRegistration extends ActivityEnhanced {
 
     @Override
     public void onBackPressed() {
+        Log.wtf(this.getClass().getName(), "onBackPressed 0");
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.registrationFrame);
-        if (fragment instanceof FragmentRegister || fragment instanceof FragmentIntroduce) {
-            Log.wtf(this.getClass().getName(), "finish");
-            finish();
-        } else {
-            Log.wtf(this.getClass().getName(), "onBackPressed");
-            super.onBackPressed();
+        if (!(fragment instanceof FragmentActivation) && !(fragment instanceof FragmentRegistrationNickname)) {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                Log.wtf(this.getClass().getName(), "onBackPressed");
+                super.onBackPressed();
+            } else {
+                Log.wtf(this.getClass().getName(), "finish");
+                finish();
+            }
         }
     }
 

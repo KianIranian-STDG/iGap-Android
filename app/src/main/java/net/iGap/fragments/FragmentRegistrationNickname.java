@@ -178,7 +178,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
                 Bundle bundle = new Bundle();
                 bundle.putLong(FragmentSyncRegisteredContacts.ARG_USER_ID, userId);
                 fragment.setArguments(bundle);
-                getActivity().onBackPressed();
+                /*getActivity().onBackPressed();*/
                 ((ActivityRegistration) getActivity()).loadFragment(fragment, true);
             }
         });
