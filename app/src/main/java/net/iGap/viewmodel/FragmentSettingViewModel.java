@@ -18,6 +18,7 @@ import android.view.View;
 import net.iGap.helper.HelperLogout;
 import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.request.RequestUserSessionLogout;
 
 import java.util.Locale;
@@ -28,15 +29,15 @@ public class FragmentSettingViewModel extends ViewModel {
     private ObservableField<String> currentLanguage = new ObservableField<>();
 
     //ui
-    public MutableLiveData<Boolean> showDialogDeleteAccount = new MutableLiveData<>();
-    public MutableLiveData<Boolean> goToManageSpacePage = new MutableLiveData<>();
-    public MutableLiveData<Boolean> goToLanguagePage = new MutableLiveData<>();
-    public MutableLiveData<Boolean> goToNotificationAndSoundPage = new MutableLiveData<>();
-    public MutableLiveData<Boolean> goToPrivacyAndSecurityPage = new MutableLiveData<>();
-    public MutableLiveData<Boolean> goToChatSettingsPage = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showDialogLogout = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showError = new MutableLiveData<>();
-    public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
+    public SingleLiveEvent<Boolean> showDialogDeleteAccount = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goToManageSpacePage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goToLanguagePage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goToNotificationAndSoundPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goToPrivacyAndSecurityPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goToChatSettingsPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> showDialogLogout = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> showError = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goBack = new SingleLiveEvent<>();
     public ObservableField<Boolean> isCameraButtonSheet = new ObservableField<>(true);
 
     public String phoneNumber;
@@ -55,7 +56,7 @@ public class FragmentSettingViewModel extends ViewModel {
         return showLoading;
     }
 
-    public void onLanguageClick(){
+    public void onLanguageClick() {
         goToLanguagePage.setValue(true);
     }
 

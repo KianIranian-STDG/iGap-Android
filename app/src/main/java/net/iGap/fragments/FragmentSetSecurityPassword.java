@@ -283,9 +283,6 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
 
                 closeKeyboard(v);
 
-                //mActivity.getSupportFragmentManager().popBackStack();
-                popBackStackFragment();
-
                 edtSetPassword.setText("");
                 edtSetRePassword.setText("");
                 edtSetHintPassword.setText("");
@@ -294,6 +291,8 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
                 edtSetAnswerPassOne.setText("");
                 edtSetAnswerPassTwo.setText("");
                 edtSetEmail.setText("");
+                popBackStackFragment();
+                popBackStackFragment();
             }
 
 

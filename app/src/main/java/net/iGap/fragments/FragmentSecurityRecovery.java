@@ -4,6 +4,7 @@ package net.iGap.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
@@ -89,8 +91,7 @@ public class FragmentSecurityRecovery extends BaseFragment {
 
                     @Override
                     public void onRightIconClickListener(View v) {
-
-
+                        Log.wtf(this.getClass().getName(), "onRightIconClickListener");
                         if (rootRecoveryEmail.getVisibility() == View.VISIBLE) {
                             if (edtSetRecoveryEmail.length() > 0) {
                                 new RequestUserTwoStepVerificationRecoverPasswordByToken().recoveryPasswordByToken(edtSetRecoveryEmail.getText().toString(), new TwoStepVerificationRecoverPasswordByToken() {
@@ -122,15 +123,23 @@ public class FragmentSecurityRecovery extends BaseFragment {
                             }
                         } else {
                             if (edtSetRecoveryAnswerPassOne.length() > 0 && edtSetRecoveryAnswerPassTwo.length() > 0) {
+                                Log.wtf(this.getClass().getName(), "send request");
                                 new RequestUserTwoStepVerificationRecoverPasswordByAnswers().RecoveryPasswordByAnswer(edtSetRecoveryAnswerPassOne.getText().toString(), edtSetRecoveryAnswerPassTwo.getText().toString(), new TwoStepVerificationRecoverPasswordByAnswersCallback() {
                                     @Override
                                     public void recoveryByQuestion(String tokenR) {
                                         //Todo:fixed it and move to repository
+                                        Log.wtf(this.getClass().getName(), "recoveryByQuestion");
                                         if (getActivity() instanceof ActivityRegistration) {
                                             RegisterRepository repository = RegisterRepository.getInstance();
                                             repository.setForgetTwoStepVerification(true);
                                             repository.setToken(tokenR);
                                             repository.userLogin(tokenR);
+                                        } else if (getActivity() instanceof ActivityMain) {
+                                            Log.wtf(this.getClass().getName(), "recoveryByQuestion main activity");
+                                            G.handler.post(() -> {
+                                                popBackStackFragment();
+                                                popBackStackFragment();
+                                            });
                                         }
                                     }
 
