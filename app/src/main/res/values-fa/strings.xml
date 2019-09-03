@@ -1991,4 +1991,6 @@
     <string name="view_profile">مشاهده پروفایل</string>
     <string name="link_not_valid">لینک نامعتبر</string>
     <string name="popular_channel">کانال های جذاب</string>
+    <string name="referral_code_invalid">کد معرف نامعتبر است</string>
+    <string name="already_registered">شما قبلا کد معرف ثبت کرده اید</string>
 </resources>
