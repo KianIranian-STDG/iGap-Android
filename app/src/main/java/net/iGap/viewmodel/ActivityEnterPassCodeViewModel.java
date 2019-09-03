@@ -72,7 +72,6 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     // Variable used for storing the key in the Android Keystore container
     private static final String KEY_NAME = "androidHive";
     private final int PIN = 0;
-    private final int PASSWORD = 1;
 
     private Realm realm;
     private KeyStore keyStore;

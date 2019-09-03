@@ -23,13 +23,19 @@ import net.iGap.viewmodel.ActivityManageSpaceViewModel;
 
 public class ActivityManageSpace extends ActivityEnhanced implements ToolbarListener {
 
-    ActivityManageSpaceBinding activityManageSpaceBinding;
-    ActivityManageSpaceViewModel viewModel;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityManageSpaceBinding = DataBindingUtil.setContentView(this, R.layout.activity_manage_space);
+
+        setContentView(R.layout.activity_manage_space);
+
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0){
+
+        }else{
+
+        }
+
+
         viewModel = new ActivityManageSpaceViewModel(this);
         activityManageSpaceBinding.setActivityManageSpaceViewModel(viewModel);
 
@@ -72,15 +78,25 @@ public class ActivityManageSpace extends ActivityEnhanced implements ToolbarList
         initViewModelCallBacks();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            super.onBackPressed();
+        } else {
+            finish();
+        }
+
+    }
+
     private void initViewModelCallBacks() {
 
-        viewModel.autoDownloadDataListener.observe(this , values -> {
+        viewModel.autoDownloadDataListener.observe(this, values -> {
             if (values == null) return;
 
             new MaterialDialog.Builder(ActivityManageSpace.this)
                     .title(R.string.title_auto_download_data)
                     .items(R.array.auto_download_data)
-                    .itemsCallbackMultiChoice( values , new MaterialDialog.ListCallbackMultiChoice() {
+                    .itemsCallbackMultiChoice(values, new MaterialDialog.ListCallbackMultiChoice() {
                         @Override
                         public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
@@ -119,7 +135,7 @@ public class ActivityManageSpace extends ActivityEnhanced implements ToolbarList
 
         });
 
-        viewModel.autoDownloadWifiListener.observe(this , values -> {
+        viewModel.autoDownloadWifiListener.observe(this, values -> {
 
             if (values == null) return;
 
@@ -165,13 +181,13 @@ public class ActivityManageSpace extends ActivityEnhanced implements ToolbarList
 
         });
 
-        viewModel.autoDownloadRoamingListener.observe(this , values ->{
+        viewModel.autoDownloadRoamingListener.observe(this, values -> {
             if (values == null) return;
 
             new MaterialDialog.Builder(ActivityManageSpace.this)
                     .title(R.string.title_auto_download_roaming)
                     .items(R.array.auto_download_data)
-                    .itemsCallbackMultiChoice( values, new MaterialDialog.ListCallbackMultiChoice() {
+                    .itemsCallbackMultiChoice(values, new MaterialDialog.ListCallbackMultiChoice() {
                         @Override
                         public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 
@@ -206,19 +222,6 @@ public class ActivityManageSpace extends ActivityEnhanced implements ToolbarList
                         }
                     }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
         });
-    }
-
-    private void setupToolbar() {
-
-        HelperToolbar mHelperToolbar = HelperToolbar.create()
-                .setContext(this)
-                .setLeftIcon(R.string.back_icon)
-                .setLogoShown(true)
-                .setDefaultTitle(G.context.getResources().getString(R.string.data_storage))
-                .setListener(this);
-
-        activityManageSpaceBinding.amsLayoutToolbar.addView(mHelperToolbar.getView());
-
     }
 
     @Override

@@ -1,39 +1,17 @@
 package net.iGap.viewmodel;
-/*
- * This is the source code of iGap for Android
- * It is licensed under GNU AGPL v3.0
- * You should have received a copy of the license in this archive (see LICENSE).
- * Copyright © 2017 , iGap - www.iGap.net
- * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the Kianiranian Company - www.kianiranian.com
- * All rights reserved.
-*/
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.content.Context;
 import android.content.SharedPreferences;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
-import android.support.annotation.NonNull;
+import android.databinding.ObservableInt;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.TextView;
-
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.GravityEnum;
-import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.module.FileUtils;
-import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.StartupActions;
-import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomMessage;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.config.IConfigurationProvider;
@@ -42,25 +20,26 @@ import java.io.File;
 
 import io.realm.Realm;
 
-import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.module.FileUtils.getFolderSize;
+public class DataStorageViewModel extends ViewModel {
 
-public class ActivityManageSpaceViewModel extends ViewModel {
+    private MutableLiveData<Boolean> goToWifiDataUsagePage = new MutableLiveData<>();
+    private MutableLiveData<Boolean> goToMobileDataUsagePage = new MutableLiveData<>();
+    private ObservableInt keepMediaTime = new ObservableInt(R.string.keep_media_forever);
+    private ObservableBoolean isSdkEnable = new ObservableBoolean(false);
+    private ObservableInt showLayoutSdk = new ObservableInt(View.GONE);
 
     public MutableLiveData<Integer[]> autoDownloadDataListener = new MutableLiveData<>();
     public MutableLiveData<Integer[]> autoDownloadWifiListener = new MutableLiveData<>();
     public MutableLiveData<Integer[]> autoDownloadRoamingListener = new MutableLiveData<>();
 
-    public ObservableField<String> callbackKeepMedia = new ObservableField<>("1Week");
     public ObservableField<String> callbackClearCache = new ObservableField<>("0 KB");
     public ObservableField<String> callbackCleanUp = new ObservableField<>("0 KB");
-    public ObservableField<Integer> showLayoutSdk = new ObservableField<>(View.GONE);
-    public ObservableField<Boolean> isSdkEnable = new ObservableField<>();
+
     public ObservableField<Boolean> isAutoGif = new ObservableField<>();
 
 
     private SharedPreferences sharedPreferences;
-    private int isForever;
+    private int keepMediaState;
     private File fileMap;
     private int selectedClearCacheCheckBoxes = 0 ;
 
@@ -84,8 +63,129 @@ public class ActivityManageSpaceViewModel extends ViewModel {
     private int KEY_AD_WIFI_GIF = -1;
     private CompoundButton.OnCheckedChangeListener onCacheCheckedChanged;
 
-    public ActivityManageSpaceViewModel() {
-        getInfo();
+    public DataStorageViewModel(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+
+        keepMediaState = sharedPreferences.getInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
+        if (keepMediaState == 30) {
+            keepMediaTime.set(R.string.keep_media_1month);
+        } else if (keepMediaState == 180) {
+            keepMediaTime.set(R.string.keep_media_6month);
+        } else {
+            keepMediaTime.set(R.string.keep_media_forever);
+        }
+
+
+        final long sizeFolderPhoto = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
+        final long sizeFolderVideo = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
+        final long sizeFolderDocument = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
+        final long sizeFolderAudio = FileUtils.getFolderSize(new File(G.DIR_AUDIOS));
+        final long sizeFolderOtherFiles = FileUtils.getFolderSize(new File(G.DIR_TEMP));
+        final long sizeFolderOtherFilesBackground = FileUtils.getFolderSize(new File(G.DIR_CHAT_BACKGROUND));
+        final long sizeFolderOtherFilesImageUser = FileUtils.getFolderSize(new File(G.DIR_IMAGE_USER));
+
+        final IConfigurationProvider configurationProvider = Configuration.getInstance();
+        fileMap = configurationProvider.getOsmdroidBasePath();
+        final long sizeFolderMap = FileUtils.getFolderSize(fileMap);
+        final long total = sizeFolderPhoto + sizeFolderVideo + sizeFolderDocument + sizeFolderAudio + sizeFolderMap + sizeFolderOtherFiles + sizeFolderOtherFilesBackground + sizeFolderOtherFilesImageUser;
+
+        callbackClearCache.set(new FileUtils().getFileTotalSize());
+        final long DbTotalSize;
+        try (Realm realm = Realm.getDefaultInstance()) {
+            DbTotalSize = new File(realm.getConfiguration().getPath()).length();
+        }
+
+        callbackCleanUp.set(FileUtils.formatFileSize(DbTotalSize));
+
+        isSdkEnable.set(sharedPreferences.getInt(SHP_SETTING.KEY_SDK_ENABLE, 0) != 0);
+
+        if (FileUtils.getSdCardPathList().size() > 0) {
+            showLayoutSdk.set(View.VISIBLE);
+        } else {
+            showLayoutSdk.set(View.GONE);
+        }
+
+        isAutoGif.set(sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) != 0);
+    }
+
+    public MutableLiveData<Boolean> getGoToWifiDataUsagePage() {
+        return goToWifiDataUsagePage;
+    }
+
+    public MutableLiveData<Boolean> getGoToMobileDataUsagePage() {
+        return goToMobileDataUsagePage;
+    }
+
+    public ObservableInt getKeepMediaTime() {
+        return keepMediaTime;
+    }
+
+    public ObservableBoolean getIsSdkEnable() {
+        return isSdkEnable;
+    }
+
+    public ObservableInt getShowLayoutSdk() {
+        return showLayoutSdk;
+    }
+
+    public void onWifiDataUsageClick(){
+        goToWifiDataUsagePage.setValue(true);
+    }
+
+    public void onMobileDataUsageClick(){
+        goToMobileDataUsagePage.setValue(true);
+    }
+
+    public void onClickKeepMedia() {
+
+        isForever = sharedPreferences.getInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
+        final int position;
+        if (isForever == 30) {
+            keepMediaTime.set(R.string.keep_media_1month);
+            position = 1;
+        } else if (isForever == 180) {
+            position = 2;
+        } else {
+            keepMediaTime.set(G.context.getResources().getString(R.string.keep_media_forever));
+            position = 0;
+        }
+
+        new MaterialDialog.Builder(context).title(G.context.getResources().getString(R.string.st_keepMedia)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.keepMedia).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
+            @Override
+            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                switch (which) {
+                    case 0: {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
+                        editor.apply();
+                        callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_forever));
+                        break;
+                    }
+                    case 1: {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 30);
+                        editor.apply();
+                        callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_1month));
+                        break;
+                    }
+                    case 2: {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 180);
+                        editor.apply();
+                        callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_6month));
+                        break;
+                    }
+                }
+                return false;
+            }
+        }).positiveText(G.context.getResources().getString(R.string.B_ok)).negativeText(G.context.getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            }
+        }).show();
+
+
     }
 
     //===============================================================================
@@ -183,59 +283,6 @@ public class ActivityManageSpaceViewModel extends ViewModel {
         };
 
         autoDownloadRoamingListener.setValue(selected);
-    }
-
-    public void onClickKeepMedia(View view) {
-
-
-        isForever = sharedPreferences.getInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
-        final int position;
-        if (isForever == 30) {
-            callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_1month));
-            position = 1;
-        } else if (isForever == 180) {
-            position = 2;
-        } else {
-            callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_forever));
-            position = 0;
-        }
-
-        new MaterialDialog.Builder(context).title(G.context.getResources().getString(R.string.st_keepMedia)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.keepMedia).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
-            @Override
-            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                switch (which) {
-                    case 0: {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
-                        editor.apply();
-                        callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_forever));
-                        break;
-                    }
-                    case 1: {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 30);
-                        editor.apply();
-                        callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_1month));
-                        break;
-                    }
-                    case 2: {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 180);
-                        editor.apply();
-                        callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_6month));
-                        break;
-                    }
-                }
-                return false;
-            }
-        }).positiveText(G.context.getResources().getString(R.string.B_ok)).negativeText(G.context.getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-            }
-        }).show();
-
-
     }
 
     public void onClickClearCache(View v) {
@@ -459,68 +506,5 @@ public class ActivityManageSpaceViewModel extends ViewModel {
         }
 
         StartupActions.makeFolder();
-    }
-
-    private boolean getBoolean(int num) {
-        if (num == 0) {
-            return false;
-        }
-        return true;
-    }
-
-    //===============================================================================
-    //====================================Methods====================================
-    //===============================================================================
-
-    private void getInfo() {
-
-        sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-
-        isForever = sharedPreferences.getInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
-        if (isForever == 30) {
-            callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_1month));
-        } else if (isForever == 180) {
-            callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_6month));
-        } else {
-            callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_forever));
-        }
-
-
-        final long sizeFolderPhoto = getFolderSize(new File(G.DIR_IMAGES));
-        final long sizeFolderVideo = getFolderSize(new File(G.DIR_VIDEOS));
-        final long sizeFolderDocument = getFolderSize(new File(G.DIR_DOCUMENT));
-        final long sizeFolderAudio = getFolderSize(new File(G.DIR_AUDIOS));
-        final long sizeFolderOtherFiles = getFolderSize(new File(G.DIR_TEMP));
-        final long sizeFolderOtherFilesBackground = getFolderSize(new File(G.DIR_CHAT_BACKGROUND));
-        final long sizeFolderOtherFilesImageUser = getFolderSize(new File(G.DIR_IMAGE_USER));
-
-        final IConfigurationProvider configurationProvider = Configuration.getInstance();
-        fileMap = configurationProvider.getOsmdroidBasePath();
-        final long sizeFolderMap = FileUtils.getFolderSize(fileMap);
-        final long total = sizeFolderPhoto + sizeFolderVideo + sizeFolderDocument + sizeFolderAudio + sizeFolderMap + sizeFolderOtherFiles + sizeFolderOtherFilesBackground + sizeFolderOtherFilesImageUser;
-
-        callbackClearCache.set(FileUtils.formatFileSize(total));
-        final long DbTotalSize;
-        try (Realm realm = Realm.getDefaultInstance()) {
-            DbTotalSize = new File(realm.getConfiguration().getPath()).length();
-        }
-
-        callbackCleanUp.set(FileUtils.formatFileSize(DbTotalSize));
-
-        isSdkEnable.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_SDK_ENABLE, 0)));
-
-        if (FileUtils.getSdCardPathList().size() > 0) {
-            showLayoutSdk.set(View.VISIBLE);
-        } else {
-            showLayoutSdk.set(View.GONE);
-        }
-
-        int checkedAutoGif = sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS);
-        isAutoGif.set(getBoolean(checkedAutoGif));
-
-    }
-
-    public SharedPreferences getSharedPreferences() {
-        return sharedPreferences;
     }
 }

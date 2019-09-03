@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.module;
 
@@ -30,6 +30,9 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLog;
+
+import org.osmdroid.config.Configuration;
+import org.osmdroid.config.IConfigurationProvider;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -94,7 +97,7 @@ public class FileUtils {
         }
     };
 
-    private FileUtils() {
+    public FileUtils() {
     } //private constructor to enforce Singleton pattern
 
     /**
@@ -612,5 +615,16 @@ public class FileUtils {
             }
         }
         return storageList;
+    }
+
+    public String getFileTotalSize() {
+        return FileUtils.formatFileSize(FileUtils.getFolderSize(new File(G.DIR_IMAGES)) +
+                FileUtils.getFolderSize(new File(G.DIR_VIDEOS)) +
+                FileUtils.getFolderSize(new File(G.DIR_DOCUMENT)) +
+                FileUtils.getFolderSize(new File(G.DIR_AUDIOS)) +
+                FileUtils.getFolderSize(new File(G.DIR_TEMP)) +
+                FileUtils.getFolderSize(new File(G.DIR_CHAT_BACKGROUND)) +
+                FileUtils.getFolderSize(new File(G.DIR_IMAGE_USER)) +
+                FileUtils.getFolderSize(Configuration.getInstance().getOsmdroidBasePath()));
     }
 }
