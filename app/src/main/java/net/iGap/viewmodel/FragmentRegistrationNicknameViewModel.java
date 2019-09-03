@@ -83,26 +83,6 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
             }
         }
 
-        FragmentEditImage.completeEditImage = (path, message, textImageList) -> {
-            pathImageUser = path;
-            int lastUploadedAvatarId = idAvatar + 1;
-            prgVisibility.set(View.VISIBLE);
-            HelperUploadFile.startUploadTaskAvatar(pathImageUser, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
-                @Override
-                public void OnProgress(int progress, FileUploadStructure struct) {
-                    if (progress < 100) {
-                        G.handler.post(() -> progressValue.setValue(progress));
-                    } else {
-                        new RequestUserAvatarAdd().userAddAvatar(struct.token);
-                    }
-                }
-
-                @Override
-                public void OnError() {
-                    prgVisibility.set(View.GONE);
-                }
-            });
-        };
         G.onUserAvatarResponse = this;
 
         CountryReader countryReade = new CountryReader();
@@ -296,4 +276,24 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
         prgVisibility.set(View.GONE);
     }
 
+    public void uploadAvatar(String path) {
+        pathImageUser = path;
+        int lastUploadedAvatarId = idAvatar + 1;
+        prgVisibility.set(View.VISIBLE);
+        HelperUploadFile.startUploadTaskAvatar(pathImageUser, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+            @Override
+            public void OnProgress(int progress, FileUploadStructure struct) {
+                if (progress < 100) {
+                    G.handler.post(() -> progressValue.setValue(progress));
+                } else {
+                    new RequestUserAvatarAdd().userAddAvatar(struct.token);
+                }
+            }
+
+            @Override
+            public void OnError() {
+                prgVisibility.set(View.GONE);
+            }
+        });
+    }
 }
