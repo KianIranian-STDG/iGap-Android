@@ -784,6 +784,44 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/referralView"
+                style="?hintColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp8"
+                android:hint="@string/referral_code"
+                app:errorEnabled="@{viewModel.showReferralErrorLiveData}"
+                app:errorText="@{viewModel.referralError}"
+                app:layout_constraintEnd_toEndOf="@id/name"
+                app:layout_constraintStart_toEndOf="@id/countryCode"
+                app:layout_constraintTop_toBottomOf="@id/birthDate">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/referralEditText"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:afterTextChanged="@{(phone)->viewModel.referralTextChangeListener(phone.toString())}"
+                    android:enabled="@{viewModel.referralEnableLiveData}"
+                    android:inputType="textEmailAddress"
+                    android:text="@={viewModel.referralNumberObservableField}"
+                    android:textSize="@dimen/standardTextSize" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/countryCode"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:visibility="@{viewModel.countryCodeVisibility}"
+                android:text="@{viewModel.referralCountryCodeObservableField}"
+                android:onClick="@{() -> viewModel.onCountryCodeClick()}"
+                app:layout_constraintBottom_toBottomOf="@id/referralView"
+                app:layout_constraintStart_toStartOf="@id/name"
+                app:layout_constraintTop_toTopOf="@id/referralView" />
+
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/gender"
                 style="?textTitleColorSettingTheme"
@@ -793,9 +831,8 @@
                 android:layout_marginBottom="@dimen/dp16"
                 android:padding="4dp"
                 android:text="@string/set_gender"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@id/name"
-                app:layout_constraintTop_toBottomOf="@id/birthDate" />
+                app:layout_constraintTop_toBottomOf="@id/referralView" />
 
             <RadioGroup
                 android:id="@+id/genderValue"
@@ -851,7 +888,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:visibility="gone"
-                app:constraint_referenced_ids="addAvatar,name,userName,bio,email,gender,genderValue" />
+                app:constraint_referenced_ids="referralView,addAvatar,name,userName,bio,email,gender,genderValue" />
 
         </android.support.constraint.ConstraintLayout>
 

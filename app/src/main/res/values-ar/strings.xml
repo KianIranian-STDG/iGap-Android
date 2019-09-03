@@ -2935,4 +2935,6 @@
     <string name="view_profile">عرض المستخدم</string>
     <string name="link_not_valid">رابط غير صالح</string>
     <string name="popular_channel">قنوات جذابة</string>
+    <string name="referral_code_invalid">رمز الإحالة غير صالح</string>
+    <string name="already_registered">لقد قمت بالفعل بتسجيل رمز الإحالة الخاص بك</string>
 </resources>
