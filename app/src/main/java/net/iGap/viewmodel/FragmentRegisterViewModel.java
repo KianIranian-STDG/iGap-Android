@@ -47,7 +47,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     public MutableLiveData<Boolean> showEnteredPhoneNumberStartWithZeroError = new MutableLiveData<>();
     public MutableLiveData<Boolean> showEnteredPhoneNumberError = new MutableLiveData<>();
     public MutableLiveData<Boolean> showChooseCountryDialog = new MutableLiveData<>();
-    public MutableLiveData<String> showConfirmPhoneNumberDialog = new MutableLiveData<>();
+    public SingleLiveEvent<String> showConfirmPhoneNumberDialog = new SingleLiveEvent<>();
     public MutableLiveData<Boolean> showConnectionErrorDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogUserBlock = new MutableLiveData<>();
     public MutableLiveData<Long> goToTwoStepVerificationPage = new MutableLiveData<>();
@@ -221,6 +221,8 @@ public class FragmentRegisterViewModel extends ViewModel {
                 registerUser();
             } else {
                 showError.setValue(R.string.connection_error);
+                edtPhoneNumberEnable.set(true);
+                btnStartEnable.set(true);
                 /*new Handler().postDelayed(this::registerUser, 1000);*/
             }
         } else { // connection error
@@ -233,13 +235,17 @@ public class FragmentRegisterViewModel extends ViewModel {
         repository.registration(callBackEdtPhoneNumber.get(), new RegisterRepository.RepositoryCallbackWithError<ErrorWithWaitTime>() {
             @Override
             public void onSuccess() {
-                G.handler.post(() -> isShowLoading.set(View.GONE));
+                isShowLoading.set(View.GONE);
+                btnStartEnable.set(true);
+                edtPhoneNumberEnable.set(true);
                 goNextStep.postValue(true);
             }
 
             @Override
             public void onError(ErrorWithWaitTime error) {
                 isShowLoading.set(View.GONE);
+                edtPhoneNumberEnable.set(true);
+                btnStartEnable.set(true);
                 if (error.getMajorCode() == 100) {
                     if (error.getMinorCode() == 1) {
                         //Invalid countryCode

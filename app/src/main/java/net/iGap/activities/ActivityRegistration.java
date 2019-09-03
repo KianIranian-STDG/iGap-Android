@@ -19,13 +19,8 @@ import net.iGap.fragments.FragmentIntroduce;
 import net.iGap.fragments.FragmentRegister;
 import net.iGap.fragments.FragmentRegistrationNickname;
 import net.iGap.fragments.WelcomeFragment;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.viewmodel.RegistrationViewModel;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
@@ -55,7 +50,7 @@ public class ActivityRegistration extends ActivityEnhanced {
         }).get(RegistrationViewModel.class);
 
         viewModel.goToMainPage().observe(this, data -> {
-            Log.wtf(this.getClass().getName(),"go main page observe");
+            Log.wtf(this.getClass().getName(), "go main page observe");
             if (data != null) {
                 if (data.isShowDialogDisableTwoStepVerification()) {
                     new DefaultRoundDialog(this)
@@ -125,9 +120,11 @@ public class ActivityRegistration extends ActivityEnhanced {
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.registrationFrame);
-        if (fragment instanceof FragmentRegister || fragment instanceof FragmentIntroduce){
+        if (fragment instanceof FragmentRegister || fragment instanceof FragmentIntroduce) {
+            Log.wtf(this.getClass().getName(), "finish");
             finish();
-        }else{
+        } else {
+            Log.wtf(this.getClass().getName(), "onBackPressed");
             super.onBackPressed();
         }
     }

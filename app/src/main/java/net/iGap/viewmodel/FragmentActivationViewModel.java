@@ -13,6 +13,7 @@ import net.iGap.R;
 import net.iGap.helper.HelperString;
 import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;
+import net.iGap.module.SingleLiveEvent;
 
 import java.util.Locale;
 
@@ -21,10 +22,10 @@ public class FragmentActivationViewModel extends ViewModel {
     public ObservableField<String> timerValue = new ObservableField<>();
     public MutableLiveData<String> verifyCode = new MutableLiveData<>();
     public ObservableBoolean enabledResendCodeButton = new ObservableBoolean(false);
-    public MutableLiveData<Boolean> showEnteredCodeError = new MutableLiveData<>();
+    public SingleLiveEvent<Boolean> showEnteredCodeError = new SingleLiveEvent<>();
     public MutableLiveData<Integer> currentTimePosition = new MutableLiveData<>();
     public MutableLiveData<WaitTimeModel> showWaitDialog = new MutableLiveData<>();
-    public MutableLiveData<Integer> showEnteredCodeErrorServer = new MutableLiveData<>();
+    public SingleLiveEvent<Integer> showEnteredCodeErrorServer = new SingleLiveEvent<>();
     public MutableLiveData<Boolean> showLoading = new MutableLiveData<>();
     public MutableLiveData<Boolean> closeKeyword = new MutableLiveData<>();
     public MutableLiveData<Boolean> clearActivationCode = new MutableLiveData<>();
