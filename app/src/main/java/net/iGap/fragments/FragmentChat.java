@@ -5417,19 +5417,6 @@ public class FragmentChat extends BaseFragment
                     addItemAfterStartUpload(struct);
                 }
             });
-        } else if (progress == 100) {
-            long messageId = struct.messageId;
-            for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-                AbstractMessage item = mAdapter.getAdapterItem(i);
-
-                if (item.mMessage != null && item.mMessage.getMessageId() == messageId) {
-                    if (item.structMessage.hasAttachment()) {
-                        // bagi may crash
-                        item.structMessage.getAttachment().setToken(struct.token);
-                    }
-                    break;
-                }
-            }
         }
     }
 

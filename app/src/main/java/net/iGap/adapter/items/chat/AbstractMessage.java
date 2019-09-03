@@ -1637,7 +1637,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             e.printStackTrace();
                         }
                     } else {
-                        progress.performProgress();
                         messageClickListener.onOpenClick(progress, structMessage, holder.getAdapterPosition());
                     }
                 }
@@ -1833,12 +1832,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 //    }
                                 //}
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.getMessageId()) && !(mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
-                                    if (progress >= 1) {
+                                    if (progress >= 1 && progress != 100) {
                                         progressBar.withProgress(progress);
-
-                                    }
-                                    if (progress == 100) {
-                                        progressBar.performProgress();
                                     }
                                 }
                             }

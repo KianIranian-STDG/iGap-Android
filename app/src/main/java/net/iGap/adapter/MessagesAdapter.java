@@ -348,7 +348,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                     messageInfo.mMessage.setMessageId(messageId);
                     if (roomMessage.hasAttachment()) {
                         // TODO : struct sticker must contains cash id!
-                        if (roomMessage.getMessageType() != ProtoGlobal.RoomMessageType.STICKER)
+                        if (roomMessage.getMessageType() != ProtoGlobal.RoomMessageType.STICKER && roomMessage.getMessageType() != ProtoGlobal.RoomMessageType.VIDEO &&  roomMessage.getMessageType() != ProtoGlobal.RoomMessageType.VIDEO_TEXT)
                             messageInfo.structMessage.getAttachment().setLocalFilePath(AndroidUtils.getFilePathWithCashId(roomMessage.getAttachment().getCacheId(), roomMessage.getAttachment().getName(), roomMessage.getMessageType()));
                         messageInfo.structMessage.getAttachment().setSize(roomMessage.getAttachment().getSize());
                     }

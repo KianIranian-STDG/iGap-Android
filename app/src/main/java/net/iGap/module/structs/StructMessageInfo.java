@@ -33,7 +33,7 @@ import net.iGap.realm.RealmRoomMessageFields;
 import org.parceler.Parcels;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
+import io.realm.RealmObjectChangeListener;
 
 import static net.iGap.G.userId;
 
@@ -53,7 +53,7 @@ public class StructMessageInfo implements Parcelable {
     public RealmRoomMessage realmRoomMessage;
 
     private RealmAttachment liverRealmAttachment;
-    private RealmChangeListener<RealmAttachment> realmAttachmentRealmChangeListener;
+    private RealmObjectChangeListener<RealmAttachment> realmAttachmentRealmChangeListener;
 
     public String songArtist;
     public long songLength;
@@ -168,7 +168,12 @@ public class StructMessageInfo implements Parcelable {
         }
 
         liverRealmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, getAttachment().getId()).findFirstAsync();
-        realmAttachmentRealmChangeListener = realmAttachment -> {
+
+        realmAttachmentRealmChangeListener = (realmAttachment, changeSet) -> {
+            if (changeSet == null) {
+                //init query
+                return;
+            }
             if (realmAttachment.isValid() && realmAttachment.isManaged()) {
                 setAttachment(realm.copyFromRealm(realmAttachment));
                 abstractMessage.onProgressFinish(holder, messageType);
