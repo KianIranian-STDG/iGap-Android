@@ -36,6 +36,8 @@ import net.iGap.interfaces.IOnBackPressed;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.libs.MyWebViewClient;
+import net.iGap.module.WebAppInterface;
+
 import java.io.IOException;
 
 public class FragmentWebView extends FragmentToolBarBack implements IOnBackPressed {
@@ -142,6 +144,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
         webView.getSettings().setGeolocationDatabasePath(getActivity().getFilesDir().getPath());
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.addJavascriptInterface(new WebAppInterface(getActivity()), "Android");
 
         webView.setWebChromeClient(new GeoWebChromeClient());
         customWebViewClient = new CustomWebViewClient();

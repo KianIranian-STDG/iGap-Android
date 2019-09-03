@@ -7,15 +7,15 @@ package net.iGap.viewmodel;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -35,6 +35,7 @@ import net.iGap.interfaces.TwoStepVerificationChangeRecoveryQuestionCallback;
 import net.iGap.interfaces.TwoStepVerificationGetPasswordDetail;
 import net.iGap.interfaces.UserTwoStepVerificationUnsetPasswordCallback;
 import net.iGap.model.SecurityRecoveryModel;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.enums.Security;
 import net.iGap.request.RequestUserTwoStepVerificationChangeHint;
 import net.iGap.request.RequestUserTwoStepVerificationChangeRecoveryEmail;
@@ -66,12 +67,12 @@ public class FragmentSecurityViewModel extends ViewModel {
     public ObservableInt rootChangePassword = new ObservableInt(View.GONE);
     public ObservableInt txtResendConfirmEmail = new ObservableInt(View.VISIBLE);
     public ObservableInt prgWaiting = new ObservableInt(View.VISIBLE);
-    public MutableLiveData<Integer> rippleOkVisibility = new MutableLiveData<>();
+    public SingleLiveEvent<Integer> rippleOkVisibility = new SingleLiveEvent<>();
     public ObservableInt setRecoveryEmail = new ObservableInt(View.VISIBLE);
     public ObservableInt lineConfirmView = new ObservableInt(View.VISIBLE);
     public ObservableInt setConfirmedEmail = new ObservableInt(View.VISIBLE);
     public ObservableInt viewRecoveryEmail = new ObservableInt(View.VISIBLE);
-    public MutableLiveData<String> titleToolbar = new MutableLiveData<>();
+    public SingleLiveEvent<String> titleToolbar = new SingleLiveEvent<>();
     public ObservableField<String> edtConfirmedEmailText = new ObservableField<>("");
     public ObservableField<String> edtChangeHintText = new ObservableField<>("");
     public ObservableField<String> edtSetEmailText = new ObservableField<>("");
@@ -81,9 +82,9 @@ public class FragmentSecurityViewModel extends ViewModel {
     public ObservableField<String> edtSetQuestionPassTwo = new ObservableField<>("");
     public ObservableField<String> edtCheckPassword = new ObservableField<>("");
     public ObservableField<String> edtCheckPasswordHint = new ObservableField<>("");
-    public MutableLiveData<String> goToSetSecurityPassword = new MutableLiveData<>();
-    public MutableLiveData<Integer> showForgetPasswordDialog = new MutableLiveData<>();
-    public MutableLiveData<SecurityRecoveryModel> goToSecurityRecoveryPage = new MutableLiveData<>();
+    public SingleLiveEvent<String> goToSetSecurityPassword = new SingleLiveEvent<>();
+    public SingleLiveEvent<Integer> showForgetPasswordDialog = new SingleLiveEvent<>();
+    public SingleLiveEvent<SecurityRecoveryModel> goToSecurityRecoveryPage = new SingleLiveEvent<>();
     private String txtQuestionOne = "";
     private String txtQuestionTwo = "";
     private String txtPatternEmail = "";
@@ -106,7 +107,7 @@ public class FragmentSecurityViewModel extends ViewModel {
     }
 
     public void onClickRippleOk(View v) {
-
+        Log.wtf(this.getClass().getName(), "onClickRippleOk");
         if (rootCheckPassword.get() == View.VISIBLE) {
             if (edtCheckPassword.get().length() > 1) {
                 password = edtCheckPassword.get();
@@ -478,9 +479,9 @@ public class FragmentSecurityViewModel extends ViewModel {
         rippleOkVisibility.setValue(View.GONE);
     }
 
-    public void forgetPassword(boolean isRecoveryByEmail){
+    public void forgetPassword(boolean isRecoveryByEmail) {
         this.isRecoveryByEmail = isRecoveryByEmail;
-        goToSecurityRecoveryPage.setValue(new SecurityRecoveryModel(Security.SETTING,txtQuestionOne,txtQuestionTwo,txtPatternEmail,isRecoveryByEmail,isConfirmedRecoveryEmail));
+        goToSecurityRecoveryPage.setValue(new SecurityRecoveryModel(Security.SETTING, txtQuestionOne, txtQuestionTwo, txtPatternEmail, isRecoveryByEmail, isConfirmedRecoveryEmail));
     }
 
 
