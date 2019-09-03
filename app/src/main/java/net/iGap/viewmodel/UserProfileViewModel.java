@@ -202,7 +202,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
         //set credit amount
         if (G.selectedCard != null) {
-            currentCredit.set(G.selectedCard.cashOutBalance);
+            currentCredit.set(G.cardamount);
         } else {
             getUserCredit();
         }
@@ -601,10 +601,17 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 public void onResponse(@NotNull Call<ArrayList<Card>> call, @NotNull Response<ArrayList<Card>> response) {
                     if (response.body() != null) {
                         retryConnectToWallet = 0;
-                        if (response.body().size() > 0)
+                        G.cardamount = 0;
+
+                        if (response.body().size() > 0) {
                             G.selectedCard = response.body().get(0);
-                        G.cardamount = G.selectedCard.cashOutBalance;
-                        currentCredit.set(G.selectedCard.cashOutBalance);
+                        }
+
+                        for (Card card: response.body()) {
+                            G.cardamount += card.cashOutBalance;
+                        }
+
+                        currentCredit.set(G.cardamount);
                     }
                 }
 

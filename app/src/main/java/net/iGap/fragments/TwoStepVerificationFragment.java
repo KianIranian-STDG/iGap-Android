@@ -64,6 +64,7 @@ public class TwoStepVerificationFragment extends BaseFragment {
                 .setLeftIcon(R.string.empty_error_message)
                 .setRightIcons(R.string.check_icon)
                 .setLogoShown(true)
+                .setShowConnectionState(false)
                 .setDefaultTitle(getString(R.string.two_step_verification_title))
                 .setListener(new ToolbarListener() {
                     @Override

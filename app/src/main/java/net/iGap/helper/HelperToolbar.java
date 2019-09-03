@@ -122,6 +122,7 @@ public class HelperToolbar {
     private boolean isContactProfile;
     private boolean isBigSearchBox;
     private boolean isTabletMode ;
+    private boolean isShowConnectionState = true ;
     public boolean isToolbarSearchAnimationInProccess;
     private boolean isScannerEnable;
     private boolean isPassCodeEnable;
@@ -197,6 +198,11 @@ public class HelperToolbar {
 
     public HelperToolbar setLogoShown(boolean logoShown) {
         this.isLogoShown = logoShown;
+        return this;
+    }
+
+    public HelperToolbar setShowConnectionState(boolean enable) {
+        this.isShowConnectionState = enable;
         return this;
     }
 
@@ -838,6 +844,8 @@ public class HelperToolbar {
     }
 
     private void toolBarTitleHandler() {
+
+        if (!isShowConnectionState) return;
 
         try {
             connectionStateChecker(G.fragmentActivity);

@@ -406,6 +406,28 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
 
+            RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
+            if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
+                isNeedToRegister = true;
+                Intent intent = new Intent(this, ActivityRegistration.class);
+                startActivity(intent);
+                finish();
+                return;
+            }
+
+            Log.wtf(this.getClass().getName(), "after check login");
+            finishActivity = new FinishActivity() {
+                @Override
+                public void finishActivity() {
+                    // ActivityChat.this.finish();
+                    finish();
+                }
+            };
+
+            if (G.isFirstPassCode) {
+                openActivityPassCode();
+            }
+
             initTabStrip(getIntent());
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PHONE_STATE");
@@ -447,10 +469,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     isChinesPhone();
             }
 
-            if (G.isFirstPassCode) {
-                openActivityPassCode();
-            }
-
             RaadApp.paygearHistoryOpenChat = new PaymentHistoryFragment.PaygearHistoryOpenChat() {
                 @Override
                 public void paygearId(String id) {
@@ -462,32 +480,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             EventManager.getInstance().addEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
 
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-            finishActivity = new FinishActivity() {
-                @Override
-                public void finishActivity() {
-                    // ActivityChat.this.finish();
-                    finish();
-                }
-            };
-
-            if (isNeedToRegister) {
-
-                Intent intent = new Intent(this, ActivityRegistration.class);
-                startActivity(intent);
-
-                finish();
-                return;
-            }
-
-            RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
-
-            if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
-                isNeedToRegister = true;
-                Intent intent = new Intent(this, ActivityRegistration.class);
-                startActivity(intent);
-                finish();
-                return;
-            }
 
             if (checkValidationForRealm(userInfo)) {
                 userPhoneNumber = userInfo.getUserInfo().getPhoneNumber();
