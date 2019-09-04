@@ -280,34 +280,32 @@ public class FragmentAddStickers extends BaseFragment {
                                                     public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
                                                         if (response.body() != null && response.body().isSuccess()) {
                                                             try (Realm realm = Realm.getDefaultInstance()) {
-                                                                RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
-                                                                if (realmStickers == null) {
-                                                                    realm.executeTransaction(new Realm.Transaction() {
-                                                                        @Override
-                                                                        public void execute(Realm realm) {
+                                                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                                                    @Override
+                                                                    public void execute(Realm realm) {
+                                                                        RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
+                                                                        if (realmStickers == null) {
                                                                             RealmStickers.put(realm, item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), true);
+                                                                        } else {
+                                                                            RealmStickers.updateFavorite(realm, item.getId(), true);
                                                                         }
-                                                                    });
-
-                                                                } else {
-                                                                    RealmStickers.updateFavorite(item.getId(), true);
-                                                                }
-
+                                                                    }
+                                                                }, () -> {
+                                                                    if (getAdapterPosition() == -1 || getActivity() == null || getActivity().isFinishing() || !isAdded()) {
+                                                                        return;
+                                                                    }
+                                                                    progressBar.setVisibility(View.GONE);
+                                                                    mData.get(getAdapterPosition()).setIsFavorite(true);
+                                                                    if (FragmentChat.onUpdateSticker != null) {
+                                                                        FragmentChat.onUpdateSticker.update();
+                                                                    }
+                                                                    notifyDataSetChanged();
+                                                                });
                                                             }
+                                                        } else {
+                                                            progressBar.setVisibility(View.GONE);
                                                         }
 
-                                                        if (getAdapterPosition() == -1 || getActivity() == null || getActivity().isFinishing() || !isAdded()) {
-                                                            return;
-                                                        }
-
-                                                        progressBar.setVisibility(View.GONE);
-                                                        if (response.body() != null && response.body().isSuccess()) {
-                                                            mData.get(getAdapterPosition()).setIsFavorite(true);
-                                                            if (FragmentChat.onUpdateSticker != null) {
-                                                                FragmentChat.onUpdateSticker.update();
-                                                            }
-                                                            notifyDataSetChanged();
-                                                        }
                                                     }
 
                                                     @Override

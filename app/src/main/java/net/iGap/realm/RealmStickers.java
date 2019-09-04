@@ -168,11 +168,7 @@ public class RealmStickers extends RealmObject {
     }
 
     public static RealmStickers checkStickerExist(String groupId, Realm realm) {
-        RealmStickers realmStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
-
-        if (realmStickers == null) return realmStickers;
-
-        return realmStickers;
+        return realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
     }
 
     public static RealmStickers updateFavorite(String groupId, boolean isFavorite) {
