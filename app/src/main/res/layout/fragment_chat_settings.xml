@@ -124,7 +124,7 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp12"
                         android:text="@string/st_chatBackground"
-                        android:textSize="@dimen/largeTextSize"
+                        android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal" />
 
 
