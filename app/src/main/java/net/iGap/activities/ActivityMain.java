@@ -413,9 +413,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 startActivity(intent);
                 finish();
                 return;
+            } else if (userInfo.getUserInfo() == null || userInfo.getUserInfo().getDisplayName() == null || userInfo.getUserInfo().getDisplayName().isEmpty()) {
+                Intent intent = new Intent(this, ActivityRegistration.class);
+                intent.putExtra(ActivityRegistration.showProfile, true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                return;
             }
 
-            Log.wtf(this.getClass().getName(), "after check login");
             finishActivity = new FinishActivity() {
                 @Override
                 public void finishActivity() {
@@ -1404,16 +1410,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
 
-        }
-        else if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_VIEW)) {
+        } else if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_VIEW)) {
             Uri data = intent.getData();
             if (data != null && data.getHost().equals("deep_link")) {
                 Intent intentTemp = new Intent();
                 intentTemp.putExtra(DEEP_LINK, data.getQuery());
                 handleDeepLink(intentTemp);
             }
-        }
-        else {
+        } else {
             HelperUrl.getLinkinfo(intent, ActivityMain.this);
         }
         getIntent().setData(null);
