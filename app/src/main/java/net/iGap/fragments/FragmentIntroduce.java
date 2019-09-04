@@ -69,7 +69,6 @@ public class FragmentIntroduce extends BaseFragment {
 
         viewModel.getGoToRegistrationPage().observe(getViewLifecycleOwner(), isGo -> {
             if (getActivity() instanceof ActivityRegistration && isGo != null && isGo) {
-                getActivity().getSupportFragmentManager().popBackStack();
                 ((ActivityRegistration) getActivity()).loadFragment(new FragmentRegister(), true);
             }
         });

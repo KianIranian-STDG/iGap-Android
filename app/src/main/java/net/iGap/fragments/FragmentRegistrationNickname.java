@@ -64,7 +64,7 @@ import java.io.IOException;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
-public class FragmentRegistrationNickname extends BaseFragment {
+public class FragmentRegistrationNickname extends BaseFragment implements FragmentEditImage.OnImageEdited {
 
     public final static String ARG_USER_ID = "arg_user_id";
     private FragmentRegistrationNicknameViewModel viewModel;
@@ -178,7 +178,9 @@ public class FragmentRegistrationNickname extends BaseFragment {
                 Bundle bundle = new Bundle();
                 bundle.putLong(FragmentSyncRegisteredContacts.ARG_USER_ID, userId);
                 fragment.setArguments(bundle);
-                getActivity().onBackPressed();
+                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager().popBackStack();
                 ((ActivityRegistration) getActivity()).loadFragment(fragment, true);
             }
         });
@@ -206,7 +208,9 @@ public class FragmentRegistrationNickname extends BaseFragment {
 
                     FragmentEditImage.insertItemList(path, false);
                     if (getActivity() instanceof ActivityRegistration) {
-                        ((ActivityRegistration) getActivity()).loadFragment(FragmentEditImage.newInstance(path, false, true, 0), true);
+                        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(path, false, true, 0);
+                        fragmentEditImage.setOnProfileImageEdited(this);
+                        ((ActivityRegistration) getActivity()).loadFragment(fragmentEditImage, true);
                     }
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
@@ -216,7 +220,9 @@ public class FragmentRegistrationNickname extends BaseFragment {
                         }
                         FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
                         if (getActivity() instanceof ActivityRegistration) {
-                            ((ActivityRegistration) getActivity()).loadFragment(FragmentEditImage.newInstance(null, false, true, 0), true);
+                            FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, true, 0);
+                            fragmentEditImage.setOnProfileImageEdited(this);
+                            ((ActivityRegistration) getActivity()).loadFragment(fragmentEditImage, true);
                         }
                     }
                     break;
@@ -407,5 +413,10 @@ public class FragmentRegistrationNickname extends BaseFragment {
             dialogChooseCountry.findViewById(R.id.rg_txt_okDialog).setOnClickListener(v -> dialogChooseCountry.dismiss());
             dialogChooseCountry.show();
         }
+    }
+
+    @Override
+    public void profileImageAdd(String path) {
+        viewModel.uploadAvatar(path);
     }
 }

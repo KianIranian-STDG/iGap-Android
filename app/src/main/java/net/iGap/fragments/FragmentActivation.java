@@ -87,7 +87,7 @@ public class FragmentActivation extends BaseFragment {
             }
         });
         viewModel.showEnteredCodeError.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean != null && getContext() != null) {
+            if (aBoolean != null && getContext() != null && aBoolean) {
                 new DefaultRoundDialog(getContext()).setTitle(R.string.Enter_Code).setMessage(R.string.Toast_Enter_Code).setPositiveButton(R.string.B_ok, null).show();
             }
         });

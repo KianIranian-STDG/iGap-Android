@@ -203,7 +203,7 @@ public interface WebService {
     @POST("users/v3/thirdparty/auth")
     Call<OTPVerifyResult> getIGapToken(@Body RequestBody requestBody, @Header("abcdef") String ip);
 
-    @PATCH("qrcode/v3/qr/club/{sequence_number}")
+    @POST("qrcode/v3/qr/club/{sequence_number}")
     Call<ConfirmVoucherQr_Result>confirmVoucherQr(@Path("sequence_number") String sequenceNumber);
 
 

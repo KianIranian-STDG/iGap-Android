@@ -31,7 +31,6 @@ import net.iGap.Theme;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
-import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
@@ -40,6 +39,7 @@ import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.interfaces.OnGeoGetConfiguration;
+import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnUserAvatarResponse;
 import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.interfaces.OnUserInfoMyClient;
@@ -47,12 +47,16 @@ import net.iGap.interfaces.OnUserProfileCheckUsername;
 import net.iGap.interfaces.OnUserProfileSetEmailResponse;
 import net.iGap.interfaces.OnUserProfileSetGenderResponse;
 import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
+import net.iGap.interfaces.OnUserProfileSetRepresentative;
 import net.iGap.interfaces.OnUserProfileUpdateUsername;
 import net.iGap.interfaces.RefreshWalletBalance;
+import net.iGap.module.CountryListComparator;
+import net.iGap.module.CountryReader;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
 import net.iGap.module.SingleLiveEvent;
+import net.iGap.module.structs.StructCountry;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoInfoWallpaper;
@@ -69,6 +73,7 @@ import net.iGap.realm.RealmWallpaper;
 import net.iGap.realm.RealmWallpaperFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestGeoGetConfiguration;
+import net.iGap.request.RequestInfoCountry;
 import net.iGap.request.RequestInfoUpdate;
 import net.iGap.request.RequestInfoWallpaper;
 import net.iGap.request.RequestUserAvatarAdd;
@@ -77,10 +82,12 @@ import net.iGap.request.RequestUserProfileCheckUsername;
 import net.iGap.request.RequestUserProfileGetBio;
 import net.iGap.request.RequestUserProfileGetEmail;
 import net.iGap.request.RequestUserProfileGetGender;
+import net.iGap.request.RequestUserProfileGetRepresentative;
 import net.iGap.request.RequestUserProfileSetBio;
 import net.iGap.request.RequestUserProfileSetEmail;
 import net.iGap.request.RequestUserProfileSetGender;
 import net.iGap.request.RequestUserProfileSetNickname;
+import net.iGap.request.RequestUserProfileSetRepresentative;
 import net.iGap.request.RequestUserProfileUpdateUsername;
 import net.iGap.request.RequestWalletGetAccessToken;
 
@@ -90,6 +97,7 @@ import org.paygear.web.Web;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 
 import io.realm.Realm;
@@ -105,6 +113,7 @@ import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
 public class UserProfileViewModel extends ViewModel implements RefreshWalletBalance, OnUserInfoMyClient, EventListener, OnUserAvatarResponse {
+    private ArrayList<StructCountry> structCountryArrayList = new ArrayList<>();
 
     private ObservableField<String> appVersion = new ObservableField<>("");
     private ObservableField<String> userPhoneNumber = new ObservableField<>();
@@ -124,6 +133,16 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private ObservableInt emailErrorMessage = new ObservableInt(R.string.empty_error_message);
     private ObservableInt showLoading = new ObservableInt(View.GONE);
     private ObservableInt textsGravity = new ObservableInt(Gravity.LEFT);
+
+    private MutableLiveData<Boolean> showDialogSelectCountry = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showReferralErrorLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> referralEnableLiveData = new MutableLiveData<>();
+    private ObservableField<String> referralNumberObservableField = new ObservableField<>("");
+    public ObservableField<String> referralCountryCodeObservableField = new ObservableField<>("+98");
+    public ObservableField<Integer> referralError = new ObservableField<>(R.string.already_registered);
+    public ObservableField<Integer> countryCodeVisibility = new ObservableField<>(View.GONE);
+    private int phoneMax = 10;
+    private boolean sendReferral = false;
 
     //ui
     public SingleLiveEvent<Boolean> goToAddMemberPage = new SingleLiveEvent<>();
@@ -222,7 +241,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         new RequestUserProfileGetGender().userProfileGetGender();
         new RequestUserProfileGetEmail().userProfileGetEmail();
         new RequestUserProfileGetBio().getBio();
-
+        getReferral();
         if (G.isNeedToCheckProfileWallpaper)
             getProfileWallpaperFromServer();
 
@@ -304,6 +323,14 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         return email;
     }
 
+    public ObservableField<String> getReferralNumberObservableField() {
+        return referralNumberObservableField;
+    }
+
+    public ArrayList<StructCountry> getStructCountryArrayList() {
+        return structCountryArrayList;
+    }
+
     public ObservableField<String> getBirthDate() {
         return birthDate;
     }
@@ -324,8 +351,16 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         return emailErrorEnable;
     }
 
+    public MutableLiveData<Boolean> getReferralEnableLiveData() {
+        return referralEnableLiveData;
+    }
+
     public ObservableInt getEmailErrorMessage() {
         return emailErrorMessage;
+    }
+
+    public MutableLiveData<Boolean> getShowDialogSelectCountry() {
+        return showDialogSelectCountry;
     }
 
     public ObservableInt getShowLoading() {
@@ -534,6 +569,21 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 if (currentName.equals(name.get()) && currentUserName.equals(userName.get()) && currentBio.equals(bio.get()) && currentGender == gender.get()) {
                     editProfileIcon.set(R.string.close_icon);
                 }
+            }
+        }
+    }
+
+    public void referralTextChangeListener(String phoneNumber) {
+        if (isEditMode()) {
+
+            if (phoneNumber.startsWith("0")) {
+                phoneNumber = "";
+            }
+
+            referralNumberObservableField.set(phoneNumber);
+
+            if (phoneNumber.length() == phoneMax && sendReferral){
+                setReferral(referralCountryCodeObservableField.get().replace("+","") + referralNumberObservableField.get().replace(" ",""));
             }
         }
     }
@@ -1059,6 +1109,117 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 G.handler.post(() -> showLoading.set(View.GONE));
             }
         });
+    }
+
+    public void onCountryCodeClick() {
+        showDialogSelectCountry.setValue(true);
+    }
+
+
+    public void setReferral(String phoneNumber) {
+             new RequestUserProfileSetRepresentative().userProfileSetRepresentative(phoneNumber, new OnUserProfileSetRepresentative() {
+                    @Override
+                    public void onSetRepresentative(String phone) {
+                        referralEnableLiveData.postValue(false);
+                        referralNumberObservableField.set(phone);
+                        countryCodeVisibility.set(View.GONE);
+                    }
+
+                    @Override
+                    public void onErrorSetRepresentative(int majorCode, int minorCode) {
+                        showReferralErrorLiveData.postValue(true);
+
+                        switch (majorCode) {
+                            case 10177:
+                                referralError.set(R.string.phone_number_is_not_valid);
+                                break;
+                            case 10178:
+                                if (minorCode == 2)
+                                    referralError.set(R.string.already_registered);
+                                else
+                                    referralError.set(R.string.server_error);
+                                break;
+                        }
+                    }
+                });
+                editProfileIcon.set(R.string.check_icon);
+            }
+
+    private void countryReader(){
+        structCountryArrayList = new ArrayList<>();
+        CountryReader countryReade = new CountryReader();
+        StringBuilder fileListBuilder = countryReade.readFromAssetsTextFile("country.txt", G.context);
+
+        String list = fileListBuilder.toString();
+        // Split line by line Into array
+        String[] listArray = list.split("\\r?\\n");
+        //Convert array
+        for (String s : listArray) {
+            StructCountry structCountry = new StructCountry();
+            String[] listItem = s.split(";");
+            structCountry.setCountryCode(listItem[0]);
+            structCountry.setAbbreviation(listItem[1]);
+            structCountry.setName(listItem[2]);
+            if (listItem.length > 3) {
+                structCountry.setPhonePattern(listItem[3]);
+            } else {
+                structCountry.setPhonePattern(" ");
+            }
+            structCountryArrayList.add(structCountry);
+        }
+
+        Collections.sort(structCountryArrayList, new CountryListComparator());
+//
+//        referralCountryCodeObservableField.set("+" + sharedPreferences.getInt("callingCode", 98));
+//        String pattern = sharedPreferences.getString("pattern", "");
+//        referralCountryCodeObservableField.set((pattern != null && !pattern.equals("")) ? pattern.replace("X", "#").replace(" ", "-") : "##################");
+
+    }
+
+    private void getReferral(){
+        showDialogSelectCountry.postValue(false);
+        showReferralErrorLiveData.postValue(false);
+        new RequestUserProfileGetRepresentative().userProfileGetRepresentative(new RequestUserProfileGetRepresentative.OnRepresentReady() {
+            @Override
+            public void onRepresent(String phoneNumber) {
+                referralNumberObservableField.set(phoneNumber);
+
+                if (phoneNumber.equals("")){
+                    referralEnableLiveData.postValue(true);
+                    countryCodeVisibility.set(View.VISIBLE);
+                    countryReader();
+                    sendReferral = true;
+                }else {
+                    referralEnableLiveData.postValue(false);
+                    countryCodeVisibility.set(View.GONE);
+                    sendReferral = false;
+                }
+            }
+
+            @Override
+            public void onFailed() {
+                referralEnableLiveData.postValue(false);
+            }
+        });
+    }
+
+
+    public void setCountry(StructCountry country) {
+        phoneMax = country.getPhonePattern().replace(" " , "").length();
+        new RequestInfoCountry().infoCountry(country.getAbbreviation(), new OnInfoCountryResponse() {
+            @Override
+            public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
+                G.handler.post(() -> {
+                    referralCountryCodeObservableField.set("+" + callingCode);
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+            }
+        });
+        referralNumberObservableField.set("");
     }
 
     public class ChangeImageModel {

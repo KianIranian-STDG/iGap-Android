@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.interfaces.OnReceiveInfoLocation;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoInfoLocation;
 
 public class InfoLocationResponse extends MessageHandler {
@@ -46,5 +47,9 @@ public class InfoLocationResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        if (identity instanceof OnReceiveInfoLocation) {
+            ((OnReceiveInfoLocation) identity).onError(errorResponse.getMajorCode(), errorResponse.getMinorCode());
+        }
     }
 }

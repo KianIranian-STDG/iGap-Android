@@ -59,11 +59,7 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
         viewModel.getMplTransactionLiveData().observe(getViewLifecycleOwner(), mplTransaction -> {
             if (mplTransaction != null) {
                 if (mplTransaction.size() > 0) {
-                    /*if (page == 1) {*/
-                        adapter.setTransAction(mplTransaction);
-                    /*} else {
-                        adapter.addTransAction(mplTransaction);
-                    }*/
+                    adapter.setTransAction(mplTransaction);
                     start = adapter.getItemCount();
                     end = start + MplTransactionViewModel.PAGINATION_LIMIT;
                     page++;
@@ -85,18 +81,9 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
             }
         });
 
-//
-//        RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(@NotNull RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                viewModel.getMorePageOffset(start, end);
-//            }
-//        };
-
-//        recyclerView.addOnScrollListener(onScrollListener);
-
-        swipeRefreshLayout.setOnRefreshListener(() -> viewModel.getFirstPageMplTransactionList(ProtoGlobal.MplTransaction.Type.NONE));
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            viewModel.getFirstPageMplTransactionList(viewModel.getType());
+        });
 
         adapter.setCallBack(token -> {
             if (token != null)

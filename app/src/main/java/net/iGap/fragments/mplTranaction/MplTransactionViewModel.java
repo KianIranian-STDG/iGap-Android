@@ -48,6 +48,10 @@ public class MplTransactionViewModel extends BaseViewModel implements OnMplTrans
         new RequestMplTransactionList().mplTransactionList(type, 0, PAGINATION_LIMIT);
     }
 
+    public ProtoGlobal.MplTransaction.Type getType() {
+        return type;
+    }
+
     public void getMorePageOffset(int start, int end) {
         progressMutableLiveData.postValue(true);
         new RequestMplTransactionList().mplTransactionList(type, start, end);
