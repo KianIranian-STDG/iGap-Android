@@ -78,7 +78,7 @@
             app:srcCompat="@drawable/ic_camera_holder"
             android:padding="@dimen/dp32"
             android:scaleType="fitCenter"
-            android:visibility="@{viewModel.prgVisibility}"
+            android:visibility="@{viewModel.showCameraImage}"
             app:layout_constraintStart_toStartOf="@id/pu_profile_circle_image"
             app:layout_constraintEnd_toEndOf="@id/pu_profile_circle_image"
             app:layout_constraintTop_toTopOf="@id/pu_profile_circle_image"

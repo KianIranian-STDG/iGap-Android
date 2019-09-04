@@ -17,6 +17,7 @@ import android.databinding.ObservableInt;
 import android.view.View;
 
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.adapter.BindingAdapter;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.helper.HelperUploadFile;
@@ -65,7 +66,9 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
     public MutableLiveData<Boolean> showDialogSelectCountry = new MutableLiveData<>();
     public MutableLiveData<Boolean> showReagentPhoneNumberStartWithZeroError = new MutableLiveData<>();
     public MutableLiveData<Long> goToMain = new MutableLiveData<>();
+    public MutableLiveData<Integer> showRequestError = new MutableLiveData<>();
     public ObservableInt prgVisibility = new ObservableInt(View.GONE);
+    public ObservableInt showCameraImage = new ObservableInt(View.VISIBLE);
     public ObservableField<String> reagentCountryCode = new ObservableField<>("+98");
     public ObservableInt reagentPhoneNumberMaskMaxCount = new ObservableInt(11);
     public ObservableField<String> reagentPhoneNumberMask = new ObservableField<>("###-###-####");
@@ -247,12 +250,14 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
 
             @Override
             public void onUserInfoTimeOut() {
-                G.handler.post(() -> prgVisibility.set(View.GONE));
+                prgVisibility.set(View.GONE);
+                showRequestError.postValue(R.string.error);
             }
 
             @Override
             public void onUserInfoError(int majorCode, int minorCode) {
-                G.handler.post(() -> prgVisibility.set(View.GONE));
+                prgVisibility.set(View.GONE);
+                showRequestError.setValue(R.string.error);
             }
         };
         new RequestUserInfo().userInfo(G.userId);
@@ -263,6 +268,7 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
         avatarHandler.avatarAdd(G.userId, pathImageUser, avatar, avatarPath -> G.handler.post(() -> {
             existAvatar = true;
             prgVisibility.set(View.GONE);
+            showCameraImage.set(View.GONE);
             avatarImagePath.setValue(new BindingAdapter.AvatarImage(avatarPath, false, null));
         }));
     }
