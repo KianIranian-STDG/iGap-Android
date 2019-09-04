@@ -827,17 +827,6 @@ public class RealmRoom extends RealmObject {
         }
     }
 
-    public static void setCount(final long roomId, final int count) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    setCount(realm, roomId, count);
-                }
-            });
-        }
-    }
-
     public static RealmRoom setCount(Realm realm, final long roomId, final int count) {
         RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (room != null) {

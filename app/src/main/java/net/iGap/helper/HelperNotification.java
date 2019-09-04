@@ -869,35 +869,37 @@ public class HelperNotification {
                         G.handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                Realm realm = Realm.getDefaultInstance();
-                                if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
-                                    RealmRoomMessage.fetchMessages(realm, roomId, new OnActivityChatStart() {
+                                try (Realm realm = Realm.getDefaultInstance()) {
+                                    realm.executeTransactionAsync(new Realm.Transaction() {
                                         @Override
-                                        public void sendSeenStatus(RealmRoomMessage message) {
-                                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                                        public void execute(Realm realm) {
+                                            RealmRoom.setCount(realm, roomId, 0);
+                                        }
+                                    }, () -> {
+                                        try (Realm realm2 = Realm.getDefaultInstance()) {
+                                            if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
+                                                RealmRoomMessage.fetchMessages(realm2, roomId, new OnActivityChatStart() {
+                                                    @Override
+                                                    public void sendSeenStatus(RealmRoomMessage message1) {
+                                                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message1.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                                                    }
+
+                                                    @Override
+                                                    public void resendMessage(RealmRoomMessage message1) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void resendMessageNeedsUpload(RealmRoomMessage message1, long messageId1) {
+
+                                                    }
+                                                });
+                                            }
+                                            AppUtils.updateBadgeOnly(realm2, roomId);
                                         }
 
-                                        @Override
-                                        public void resendMessage(RealmRoomMessage message) {
-
-                                        }
-
-                                        @Override
-                                        public void resendMessageNeedsUpload(RealmRoomMessage message, long messageId) {
-
-                                        }
                                     });
                                 }
-
-                                RealmRoom.setCount(roomId, 0);
-
-                                G.handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        AppUtils.updateBadgeOnly(realm, roomId);
-                                        realm.close();
-                                    }
-                                }, 250);
                             }
                         }, 5);
                     }
