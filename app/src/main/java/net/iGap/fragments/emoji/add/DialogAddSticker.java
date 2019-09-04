@@ -135,15 +135,28 @@ public class DialogAddSticker extends DialogFragment {
                         mAPIService.addSticker(groupId).enqueue(new Callback<StructStickerResult>() {
                             @Override
                             public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
-                                progressBar.setVisibility(View.GONE);
-                                if (response.body() != null && response.body().isSuccess()) {
-                                    RealmStickers.updateFavorite(groupId, true);
-                                    if (FragmentChat.onUpdateSticker != null) {
-                                        FragmentChat.onUpdateSticker.update();
-                                        getDialog().dismiss();
 
-                                        HelperError.showSnackMessage(getResources().getString(R.string.Sticker_added_successfully) ,false);
+                                if (response.body() != null && response.body().isSuccess()) {
+                                    try (Realm realm = Realm.getDefaultInstance()) {
+                                        realm.executeTransactionAsync(new Realm.Transaction() {
+                                            @Override
+                                            public void execute(Realm realm) {
+                                                RealmStickers.updateFavorite(realm, groupId, true);
+                                            }
+                                        }, () -> {
+                                            progressBar.setVisibility(View.GONE);
+                                            if (FragmentChat.onUpdateSticker != null) {
+                                                FragmentChat.onUpdateSticker.update();
+                                                getDialog().dismiss();
+
+                                                HelperError.showSnackMessage(getResources().getString(R.string.Sticker_added_successfully) ,false);
+                                            }
+                                        });
+
                                     }
+
+                                } else {
+                                    progressBar.setVisibility(View.GONE);
                                 }
                             }
 

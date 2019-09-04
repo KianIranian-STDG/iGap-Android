@@ -191,6 +191,15 @@ public class RealmStickers extends RealmObject {
         }
     }
 
+    public static RealmStickers updateFavorite(Realm realm, String groupId, boolean isFavorite) {
+        RealmStickers realmStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
+        if (realmStickers != null) {
+            realmStickers.setFavorite(isFavorite);
+        }
+
+        return realmStickers;
+    }
+
     public long getCreatedAt() {
         return createdAt;
     }
