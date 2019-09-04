@@ -12,9 +12,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.FileUtils;
 import net.iGap.module.SHP_SETTING;
-
-import org.osmdroid.config.Configuration;
-import org.osmdroid.config.IConfigurationProvider;
+import net.iGap.module.SingleLiveEvent;
 
 import java.io.File;
 
@@ -22,26 +20,25 @@ import io.realm.Realm;
 
 public class DataStorageViewModel extends ViewModel {
 
-    private MutableLiveData<Boolean> goToWifiDataUsagePage = new MutableLiveData<>();
-    private MutableLiveData<Boolean> goToMobileDataUsagePage = new MutableLiveData<>();
+    private SingleLiveEvent<Boolean> goToDataUsagePage = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> showDialogKeepMedia = new SingleLiveEvent<>();
+    private MutableLiveData<Integer[]> showAutoDownloadDataDialog = new MutableLiveData<>();
+    private MutableLiveData<Integer[]> showAutoDownloadWifiDialog = new MutableLiveData<>();
     private ObservableInt keepMediaTime = new ObservableInt(R.string.keep_media_forever);
     private ObservableBoolean isSdkEnable = new ObservableBoolean(false);
+    private ObservableBoolean isAutoGif = new ObservableBoolean(false);
     private ObservableInt showLayoutSdk = new ObservableInt(View.GONE);
+    private ObservableField<String> cleanUpSize = new ObservableField<>("0 KB");
 
-    public MutableLiveData<Integer[]> autoDownloadDataListener = new MutableLiveData<>();
-    public MutableLiveData<Integer[]> autoDownloadWifiListener = new MutableLiveData<>();
     public MutableLiveData<Integer[]> autoDownloadRoamingListener = new MutableLiveData<>();
 
     public ObservableField<String> callbackClearCache = new ObservableField<>("0 KB");
-    public ObservableField<String> callbackCleanUp = new ObservableField<>("0 KB");
-
-    public ObservableField<Boolean> isAutoGif = new ObservableField<>();
 
 
     private SharedPreferences sharedPreferences;
     private int keepMediaState;
     private File fileMap;
-    private int selectedClearCacheCheckBoxes = 0 ;
+    private int selectedClearCacheCheckBoxes = 0;
 
     private int KEY_AD_ROAMING_PHOTO = -1;
     private int KEY_AD_ROAMING_VOICE_MESSAGE = -1;
@@ -61,7 +58,6 @@ public class DataStorageViewModel extends ViewModel {
     private int KEY_AD_WIFI_FILE = -1;
     private int KEY_AD_WIFI_MUSIC = -1;
     private int KEY_AD_WIFI_GIF = -1;
-    private CompoundButton.OnCheckedChangeListener onCacheCheckedChanged;
 
     public DataStorageViewModel(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
@@ -75,45 +71,31 @@ public class DataStorageViewModel extends ViewModel {
             keepMediaTime.set(R.string.keep_media_forever);
         }
 
-
-        final long sizeFolderPhoto = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
-        final long sizeFolderVideo = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
-        final long sizeFolderDocument = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
-        final long sizeFolderAudio = FileUtils.getFolderSize(new File(G.DIR_AUDIOS));
-        final long sizeFolderOtherFiles = FileUtils.getFolderSize(new File(G.DIR_TEMP));
-        final long sizeFolderOtherFilesBackground = FileUtils.getFolderSize(new File(G.DIR_CHAT_BACKGROUND));
-        final long sizeFolderOtherFilesImageUser = FileUtils.getFolderSize(new File(G.DIR_IMAGE_USER));
-
-        final IConfigurationProvider configurationProvider = Configuration.getInstance();
-        fileMap = configurationProvider.getOsmdroidBasePath();
-        final long sizeFolderMap = FileUtils.getFolderSize(fileMap);
-        final long total = sizeFolderPhoto + sizeFolderVideo + sizeFolderDocument + sizeFolderAudio + sizeFolderMap + sizeFolderOtherFiles + sizeFolderOtherFilesBackground + sizeFolderOtherFilesImageUser;
-
         callbackClearCache.set(new FileUtils().getFileTotalSize());
-        final long DbTotalSize;
+
         try (Realm realm = Realm.getDefaultInstance()) {
-            DbTotalSize = new File(realm.getConfiguration().getPath()).length();
+            cleanUpSize.set(FileUtils.formatFileSize(new File(realm.getConfiguration().getPath()).length()));
         }
 
-        callbackCleanUp.set(FileUtils.formatFileSize(DbTotalSize));
-
+        showLayoutSdk.set(FileUtils.getSdCardPathList().size() > 0 ? View.VISIBLE : View.GONE);
         isSdkEnable.set(sharedPreferences.getInt(SHP_SETTING.KEY_SDK_ENABLE, 0) != 0);
-
-        if (FileUtils.getSdCardPathList().size() > 0) {
-            showLayoutSdk.set(View.VISIBLE);
-        } else {
-            showLayoutSdk.set(View.GONE);
-        }
-
         isAutoGif.set(sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) != 0);
     }
 
-    public MutableLiveData<Boolean> getGoToWifiDataUsagePage() {
-        return goToWifiDataUsagePage;
+    public SingleLiveEvent<Boolean> getGoToDataUsagePage() {
+        return goToDataUsagePage;
     }
 
-    public MutableLiveData<Boolean> getGoToMobileDataUsagePage() {
-        return goToMobileDataUsagePage;
+    public SingleLiveEvent<Integer> getShowDialogKeepMedia() {
+        return showDialogKeepMedia;
+    }
+
+    public MutableLiveData<Integer[]> getShowAutoDownloadDataDialog() {
+        return showAutoDownloadDataDialog;
+    }
+
+    public MutableLiveData<Integer[]> getShowAutoDownloadWifiDialog() {
+        return showAutoDownloadWifiDialog;
     }
 
     public ObservableInt getKeepMediaTime() {
@@ -124,99 +106,145 @@ public class DataStorageViewModel extends ViewModel {
         return isSdkEnable;
     }
 
+    public ObservableBoolean getIsAutoGif() {
+        return isAutoGif;
+    }
+
+    public ObservableField<String> getCleanUpSize() {
+        return cleanUpSize;
+    }
+
     public ObservableInt getShowLayoutSdk() {
         return showLayoutSdk;
     }
 
-    public void onWifiDataUsageClick(){
-        goToWifiDataUsagePage.setValue(true);
+    public void onWifiDataUsageClick() {
+        goToDataUsagePage.setValue(false);
     }
 
-    public void onMobileDataUsageClick(){
-        goToMobileDataUsagePage.setValue(true);
+    public void onMobileDataUsageClick() {
+        goToDataUsagePage.setValue(true);
     }
 
     public void onClickKeepMedia() {
-
-        isForever = sharedPreferences.getInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
-        final int position;
-        if (isForever == 30) {
-            keepMediaTime.set(R.string.keep_media_1month);
-            position = 1;
-        } else if (isForever == 180) {
-            position = 2;
-        } else {
-            keepMediaTime.set(G.context.getResources().getString(R.string.keep_media_forever));
-            position = 0;
+        int position;
+        switch (keepMediaState) {
+            case 30:
+                position = 1;
+                break;
+            case 180:
+                position = 2;
+                break;
+            default:
+                position = 0;
+                break;
         }
+        showDialogKeepMedia.setValue(position);
+    }
 
-        new MaterialDialog.Builder(context).title(G.context.getResources().getString(R.string.st_keepMedia)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.keepMedia).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
-            @Override
-            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                switch (which) {
-                    case 0: {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
-                        editor.apply();
-                        callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_forever));
-                        break;
-                    }
-                    case 1: {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 30);
-                        editor.apply();
-                        callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_1month));
-                        break;
-                    }
-                    case 2: {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 180);
-                        editor.apply();
-                        callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_6month));
-                        break;
-                    }
-                }
-                return false;
+    public void setKeepMediaTime(int position) {
+        switch (position) {
+            case 0:
+                sharedPreferences.edit().putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0).apply();
+                keepMediaTime.set(R.string.keep_media_forever);
+                break;
+            case 1:
+                sharedPreferences.edit().putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 30).apply();
+                keepMediaTime.set(R.string.keep_media_1month);
+                break;
+            case 2: {
+                sharedPreferences.edit().putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 180).apply();
+                keepMediaTime.set(R.string.keep_media_6month);
+                break;
             }
-        }).positiveText(G.context.getResources().getString(R.string.B_ok)).negativeText(G.context.getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        }
+    }
+
+    public void onClickAutoDownloadData() {
+        showAutoDownloadDataDialog.setValue(new Integer[]{
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_PHOTO, -1),
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, -1),
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_VIDEO, -1),
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_FILE, -1),
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1),
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_GIF, 1)
+        });
+    }
+
+    public void setAutoDownloadOverData(Integer[] items){
+        sharedPreferences.edit()
+                .putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, -1)
+                .putInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, -1)
+                .putInt(SHP_SETTING.KEY_AD_DATA_VIDEO, -1)
+                .putInt(SHP_SETTING.KEY_AD_DATA_FILE, -1)
+                .putInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1)
+                .putInt(SHP_SETTING.KEY_AD_DATA_GIF, -1)
+                .apply();
+
+        for (Integer aWhich : items) {
+            String tmp = "";
+            if (aWhich == 0) {
+                tmp = SHP_SETTING.KEY_AD_DATA_PHOTO;
+            } else if (aWhich == 1) {
+                tmp = SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE;
+            } else if (aWhich == 2) {
+                tmp = SHP_SETTING.KEY_AD_DATA_VIDEO;
+            } else if (aWhich == 3) {
+                tmp =SHP_SETTING.KEY_AD_DATA_FILE;
+            } else if (aWhich == 4) {
+                tmp = SHP_SETTING.KEY_AD_DATA_MUSIC;
+            } else if (aWhich == 5) {
+                tmp = SHP_SETTING.KEY_AD_DATA_GIF;
             }
-        }).show();
+            sharedPreferences.edit().putInt(tmp, 1).apply();
+        }
+    }
 
+    public void onClickAutoDownloadWifi() {
+        showAutoDownloadWifiDialog.setValue(new Integer[]{
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1),
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1),
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, -1),
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_FILE, -1),
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1),
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, 1)
+        });
+    }
 
+    public void setAutoDownloadOverWifi(Integer[] tmp){
+
+        sharedPreferences.edit()
+                .putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1)
+                .putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1)
+                .putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, -1)
+                .putInt(SHP_SETTING.KEY_AD_WIFI_FILE, -1)
+                .putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1)
+                .putInt(SHP_SETTING.KEY_AD_WIFI_GIF, -1)
+                .apply();
+
+        for (Integer aWhich : tmp) {
+            String tmp;
+            if (aWhich == 0) {
+                editor.putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, aWhich);
+            } else if (aWhich == 1) {
+                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, aWhich);
+            } else if (aWhich == 2) {
+                editor.putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, aWhich);
+            } else if (aWhich == 3) {
+                editor.putInt(SHP_SETTING.KEY_AD_WIFI_FILE, aWhich);
+            } else if (aWhich == 4) {
+
+                editor.putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, aWhich);
+            } else if (aWhich == 5) {
+                editor.putInt(SHP_SETTING.KEY_AD_WIFI_GIF, aWhich);
+            }
+            editor.apply();
+        }
     }
 
     //===============================================================================
     //================================Event Listeners================================
     //===============================================================================
-
-/*    public void onClickMobileDataUsage(View view){
-       // new HelperFragment(FragmentDataUsage.newInstance(false)).setReplace(false).load();
-
-        Bundle bundle=new Bundle();
-        bundle.putBoolean("TYPE",true);
-        FragmentDataUsage fragmentDataUsage=new FragmentDataUsage();
-        fragmentDataUsage.setArguments(bundle);
-        android.support.v4.app.FragmentManager fragmentManager=((FragmentActivity)context).getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.add(binding.dataUsageContainer.getId(),fragmentDataUsage);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-     //   new FragmentDataUsage().setArguments(new Bundle().putBoolean("TYPE",true));
-    }
-    public void onClickWifiDataUsage(View view){
-        Bundle bundle=new Bundle();
-        bundle.putBoolean("TYPE",false);
-        FragmentDataUsage fragmentDataUsage=new FragmentDataUsage();
-        fragmentDataUsage.setArguments(bundle);
-        android.support.v4.app.FragmentManager fragmentManager=((FragmentActivity)context).getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.add(binding.dataUsageContainer.getId(),fragmentDataUsage);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }*/
 
 
     public void onClickAutoGif(View view) {
@@ -235,38 +263,6 @@ public class DataStorageViewModel extends ViewModel {
             editor.apply();
         }
 
-    }
-
-    public void onClickAutoDownloadData(View view) {
-
-
-        KEY_AD_DATA_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_PHOTO, -1);
-        KEY_AD_DATA_VOICE_MESSAGE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, -1);
-        KEY_AD_DATA_VIDEO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_VIDEO, -1);
-        KEY_AD_DATA_FILE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_FILE, -1);
-        KEY_AD_DATA_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1);
-        KEY_AD_DATA_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_GIF, 5);
-
-        Integer [] selected =new Integer[]{
-                KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
-        };
-        autoDownloadDataListener.setValue(selected);
-    }
-
-    public void onClickAutoDownloadWifi(View view) {
-
-        KEY_AD_WIFI_PHOTO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, -1);
-        KEY_AD_WIFI_VOICE_MESSAGE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, -1);
-        KEY_AD_WIFI_VIDEO = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, -1);
-        KEY_AD_WIFI_FILE = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_FILE, -1);
-        KEY_AD_WIFI_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
-        KEY_AD_WIFI_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, 5);
-
-        Integer[] selected = new Integer[]{
-                KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
-        };
-
-        autoDownloadWifiListener.setValue(selected);
     }
 
     public void onClickAutoDownloadRoaming(View view) {
@@ -295,7 +291,7 @@ public class DataStorageViewModel extends ViewModel {
         final long sizeFolderOtherFiles = getFolderSize(new File(G.DIR_TEMP));
         final long sizeFolderOtherFilesBackground = getFolderSize(new File(G.DIR_CHAT_BACKGROUND));
         final long sizeFolderOtherFilesImageUser = getFolderSize(new File(G.DIR_IMAGE_USER));
-        final long sizeFolderOther = sizeFolderOtherFiles + sizeFolderOtherFilesImageUser + sizeFolderOtherFilesBackground ;
+        final long sizeFolderOther = sizeFolderOtherFiles + sizeFolderOtherFilesImageUser + sizeFolderOtherFilesBackground;
 
         boolean wrapInScrollView = true;
         final MaterialDialog dialog = new MaterialDialog.Builder(context).title(G.context.getResources().getString(R.string.st_title_Clear_Cache)).customView(R.layout.st_dialog_clear_cach, wrapInScrollView).positiveText(G.context.getResources().getString(R.string.st_title_Clear_Cache)).show();
@@ -355,7 +351,7 @@ public class DataStorageViewModel extends ViewModel {
 
         layoutCheckAll.setOnClickListener(v1 -> {
 
-            boolean isChecked = !checkBoxAll.isChecked() ;
+            boolean isChecked = !checkBoxAll.isChecked();
             checkBoxPhoto.setChecked(isChecked);
             checkBoxVideo.setChecked(isChecked);
             checkBoxDocument.setChecked(isChecked);
