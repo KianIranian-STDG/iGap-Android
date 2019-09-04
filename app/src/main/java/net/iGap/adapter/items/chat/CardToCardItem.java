@@ -113,7 +113,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             innerLayout.setOrientation(LinearLayout.VERTICAL);
             innerLayout.setId(R.id.cardToCard_innerLayout);
 
-            if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.LOLLIPOP){
+            if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.LOLLIPOP_MR1){
                 innerLayout.setPadding(LayoutCreator.dp(4), LayoutCreator.dp(25), LayoutCreator.dp(4), LayoutCreator.dp(4));
             } else{
                 innerLayout.setPadding(LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4));
