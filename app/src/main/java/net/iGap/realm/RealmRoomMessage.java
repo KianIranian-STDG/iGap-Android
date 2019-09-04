@@ -670,19 +670,6 @@ public class RealmRoomMessage extends RealmObject {
         }
     }
 
-    /**
-     * delete message from realm. don't need to transaction
-     */
-    public static void deleteMessage(final long messageId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    deleteMessage(realm, messageId);
-                }
-            });
-        }
-    }
 
     /**
      * delete message from realm. call in transaction

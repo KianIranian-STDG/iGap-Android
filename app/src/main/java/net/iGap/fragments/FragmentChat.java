@@ -5506,10 +5506,16 @@ public class FragmentChat extends BaseFragment
             }
         }
 
-        if (position >= 0) {
-            mAdapter.removeMessage(position);
-        }
-        RealmRoomMessage.deleteMessage(messageId);
+        getRealmChat().executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoomMessage.deleteMessage(realm, messageId);
+            }
+        }, () -> {
+            if (position >= 0) {
+                mAdapter.removeMessage(position);
+            }
+        });
     }
 
     private void onSelectRoomMenu(String message, long item) {
