@@ -41,6 +41,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -206,12 +207,24 @@ public class FragmentRemoveSticker extends BaseFragment {
                                             mAPIService.removeSticker(mData.get(getAdapterPosition()).getId()).enqueue(new Callback<StructStickerResult>() {
                                                 @Override
                                                 public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
-                                                    progressBar.setVisibility(View.GONE);
                                                     if (response.body() != null && response.body().isSuccess()) {
-                                                        RealmStickers.updateFavorite(mData.get(getAdapterPosition()).getId(), false);
-                                                        mData.remove(getAdapterPosition());
-                                                        updateAdapter();
-                                                        FragmentChat.onUpdateSticker.update();
+
+                                                        try (Realm realm = Realm.getDefaultInstance()) {
+                                                            realm.executeTransactionAsync(new Realm.Transaction() {
+                                                                @Override
+                                                                public void execute(Realm realm) {
+                                                                    RealmStickers.updateFavorite(realm, mData.get(getAdapterPosition()).getId(), false);
+                                                                }
+                                                            }, () -> {
+                                                                progressBar.setVisibility(View.GONE);
+                                                                mData.remove(getAdapterPosition());
+                                                                updateAdapter();
+                                                                FragmentChat.onUpdateSticker.update();
+                                                            });
+                                                        }
+                                                    } else {
+                                                        progressBar.setVisibility(View.GONE);
+
                                                     }
                                                 }
 

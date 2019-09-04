@@ -171,22 +171,6 @@ public class RealmStickers extends RealmObject {
         return realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
     }
 
-    public static RealmStickers updateFavorite(String groupId, boolean isFavorite) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            RealmStickers realmStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
-            if (realmStickers != null) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realmStickers.setFavorite(isFavorite);
-                    }
-                });
-            }
-
-            return realmStickers;
-        }
-    }
-
     public static RealmStickers updateFavorite(Realm realm, String groupId, boolean isFavorite) {
         RealmStickers realmStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.ST_ID, groupId).findFirst();
         if (realmStickers != null) {
