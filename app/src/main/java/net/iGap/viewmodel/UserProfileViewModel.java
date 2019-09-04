@@ -241,7 +241,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         new RequestUserProfileGetGender().userProfileGetGender();
         new RequestUserProfileGetEmail().userProfileGetEmail();
         new RequestUserProfileGetBio().getBio();
-        getReferral();
         if (G.isNeedToCheckProfileWallpaper)
             getProfileWallpaperFromServer();
 
@@ -378,6 +377,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         } else {
             editProfileIcon.set(R.string.close_icon);
             isEditProfile.setValue(true);
+            getReferral();
         }
     }
 
@@ -575,16 +575,15 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public void referralTextChangeListener(String phoneNumber) {
         if (isEditMode()) {
-
             if (phoneNumber.startsWith("0")) {
                 phoneNumber = "";
             }
-
-            referralNumberObservableField.set(phoneNumber);
-
-            if (phoneNumber.length() == phoneMax && sendReferral){
-                setReferral(referralCountryCodeObservableField.get().replace("+","") + referralNumberObservableField.get().replace(" ",""));
+            if (phoneNumber.length() == phoneMax && sendReferral) {
+                editProfileIcon.set(R.string.check_icon);
+            }else{
+                editProfileIcon.set(R.string.close_icon);
             }
+            referralNumberObservableField.set(phoneNumber);
         }
     }
 
@@ -708,6 +707,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             sendRequestSetEmail();
         } else if (currentGender != gender.get()) {
             sendRequestSetGender();
+        } else if (!referralNumberObservableField.get().equals("")) {
+            setReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replace(" ", ""));
         } else {
             showLoading.set(View.GONE);
             isEditProfile.setValue(false);
@@ -1121,8 +1122,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                     @Override
                     public void onSetRepresentative(String phone) {
                         referralEnableLiveData.postValue(false);
-                        referralNumberObservableField.set(phone);
+                        referralNumberObservableField.set("");
                         countryCodeVisibility.set(View.GONE);
+                        G.handler.post(() -> submitData());
                     }
 
                     @Override
