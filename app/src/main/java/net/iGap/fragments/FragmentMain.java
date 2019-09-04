@@ -679,7 +679,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     @Override
     public void onClientGetRoomListError(int majorCode, int minorCode) {
-        if (majorCode == 9) {
+        /*if (majorCode == 9) {
             if (G.currentActivity != null) {
                 G.currentActivity.finish();
             }
@@ -687,7 +687,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             intent.putExtra(ActivityRegistration.showProfile, true);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
-        }
+        }*/
 
     }
 

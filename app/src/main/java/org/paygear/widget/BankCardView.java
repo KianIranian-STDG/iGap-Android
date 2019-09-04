@@ -229,7 +229,12 @@ public class BankCardView extends CardView {
                 mTopCardNumberText.setText(RaadCommonUtils.formatPrice(card.balance, true));
                 mTitleText.setVisibility(GONE);
                 mTopCardNumberText.setVisibility(VISIBLE);
-                centerCardNumberLayout.setVisibility(VISIBLE);
+                if (mCard.cardNumber.equals("پیگیر کارت")) {
+                    centerCardNumberLayout.setText("");
+                    centerCardNumberLayout.setVisibility(GONE);
+                } else {
+                    centerCardNumberLayout.setVisibility(VISIBLE);
+                }
             } else {
                 mTopCardNumberText.setText(RaadCommonUtils.formatPrice(card.balance, true));
                 mTopCardNumberText.setVisibility(VISIBLE);
