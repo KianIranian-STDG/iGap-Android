@@ -284,9 +284,8 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
                         wList.add(_swp);
                         solidList.add(_swp.getProtoWallpaper().getColor());
                     }
-                }
 
-                if (getInfoFromServer) {
+                }else if (getInfoFromServer) {
 
                     long time = realmWallpaper.getLastTimeGetList();
                     if (time > 0) {
