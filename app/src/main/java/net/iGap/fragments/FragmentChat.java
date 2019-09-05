@@ -1176,14 +1176,6 @@ public class FragmentChat extends BaseFragment
         iUpdateLogItem = null;
 
         unRegisterListener();
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoom.setCount(realm, mRoomId, 0);
-                }
-            });
-        }
     }
 
     @Override
@@ -2878,10 +2870,7 @@ public class FragmentChat extends BaseFragment
                             linearLayout.scrollToPositionWithOffset(position1 - 1, 0);
                         }
                     }
-                    firstUnreadMessageInChat = null;
-                    countNewMessage = 0;
-                    txtNewUnreadMessage.setVisibility(View.GONE);
-                    txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
+                    setCountNewMessageZero();
                 } else {
                     /**
                      * if addToView is true this means that all new message is in adapter
@@ -4352,6 +4341,26 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+    public void setCountNewMessageZero() {
+
+        // Todo : notify FragmentMain List for update unread count.
+
+        countNewMessage = 0;
+        txtNewUnreadMessage.setVisibility(View.GONE);
+        txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
+
+        firstUnreadMessageInChat = null;
+
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom.setCount(realm, mRoomId, 0);
+                }
+            });
+        }
+    }
+
     @Override
     public void onItemShowingMessageId(final StructMessageInfo messageInfo) {
         /**
@@ -4359,11 +4368,7 @@ public class FragmentChat extends BaseFragment
          * after first new message come in the view change view for unread count
          */
         if (firstUnreadMessageInChat != null && firstUnreadMessageInChat.isValid() && !firstUnreadMessageInChat.isDeleted() && firstUnreadMessageInChat.getMessageId() == parseLong(messageInfo.messageID)) {
-            countNewMessage = 0;
-            txtNewUnreadMessage.setVisibility(View.GONE);
-            txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
-
-            firstUnreadMessageInChat = null;
+            setCountNewMessageZero();
         }
 
         if (chatType != CHANNEL && (!messageInfo.isSenderMe() && messageInfo.status != null && !messageInfo.status.equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) & !messageInfo.status.equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString()))) {
@@ -5244,11 +5249,8 @@ public class FragmentChat extends BaseFragment
 
     private void resetAndGetFromEnd() {
         setDownBtnGone();
-        firstUnreadMessageInChat = null;
         resetMessagingValue();
-        countNewMessage = 0;
-        txtNewUnreadMessage.setVisibility(View.GONE);
-        txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
+        setCountNewMessageZero();
         getMessages();
     }
 
