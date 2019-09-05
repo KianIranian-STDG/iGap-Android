@@ -31,6 +31,7 @@ import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLog;
 
+import org.jetbrains.annotations.NotNull;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.config.IConfigurationProvider;
 
@@ -618,13 +619,70 @@ public class FileUtils {
     }
 
     public String getFileTotalSize() {
-        return FileUtils.formatFileSize(FileUtils.getFolderSize(new File(G.DIR_IMAGES)) +
-                FileUtils.getFolderSize(new File(G.DIR_VIDEOS)) +
-                FileUtils.getFolderSize(new File(G.DIR_DOCUMENT)) +
-                FileUtils.getFolderSize(new File(G.DIR_AUDIOS)) +
-                FileUtils.getFolderSize(new File(G.DIR_TEMP)) +
-                FileUtils.getFolderSize(new File(G.DIR_CHAT_BACKGROUND)) +
-                FileUtils.getFolderSize(new File(G.DIR_IMAGE_USER)) +
-                FileUtils.getFolderSize(Configuration.getInstance().getOsmdroidBasePath()));
+        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_IMAGES)) +
+                getFolderSize(new File(G.DIR_VIDEOS)) +
+                getFolderSize(new File(G.DIR_DOCUMENT)) +
+                getFolderSize(new File(G.DIR_AUDIOS)) +
+                getFolderSize(new File(G.DIR_TEMP)) +
+                getFolderSize(new File(G.DIR_CHAT_BACKGROUND)) +
+                getFolderSize(new File(G.DIR_IMAGE_USER)) +
+                getFolderSize(Configuration.getInstance().getOsmdroidBasePath()));
+    }
+
+    public String getImageFileSize() {
+        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_IMAGES)));
+    }
+
+    public String getVideoFileSize() {
+        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_VIDEOS)));
+    }
+
+    public String getDocumentFileSize() {
+        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_DOCUMENT)));
+    }
+
+    public String getAudioFileSize() {
+        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_AUDIOS)));
+    }
+
+    public String getMapFileSize() {
+        return FileUtils.formatFileSize(getFolderSize(Configuration.getInstance().getOsmdroidBasePath()));
+    }
+
+    public String getOtherFileSize() {
+        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_TEMP)) + getFolderSize(new File(G.DIR_CHAT_BACKGROUND)) + getFolderSize(new File(G.DIR_IMAGE_USER)));
+    }
+
+    public void clearImageFile() {
+        clearFile(new File(G.DIR_IMAGE_USER));
+    }
+
+    public void clearVideoFile() {
+        clearFile(new File(G.DIR_VIDEOS));
+    }
+
+    public void clearDocumentFile() {
+        clearFile(new File(G.DIR_DOCUMENT));
+    }
+
+    public void clearAudioFile() {
+        clearFile(new File(G.DIR_AUDIOS));
+    }
+
+    public void clearMapFile() {
+        IConfigurationProvider configurationProvider = Configuration.getInstance();
+        deleteRecursive((configurationProvider.getOsmdroidBasePath()));
+    }
+
+    public void clearOtherFile() {
+        clearFile(new File(G.DIR_TEMP));
+        clearFile(new File(G.DIR_CHAT_BACKGROUND));
+        clearFile(new File(G.DIR_IMAGE_USER));
+    }
+
+    private void clearFile(@NotNull File fileTmp) {
+        for (File file : fileTmp.listFiles()) {
+            if (!file.isDirectory()) file.delete();
+        }
     }
 }

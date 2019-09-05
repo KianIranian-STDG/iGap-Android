@@ -31,7 +31,7 @@ public class ActivityManageSpace extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_manage_space);
-
+        
         if (getSupportFragmentManager().getBackStackEntryCount() == 0){
 
         }else{
