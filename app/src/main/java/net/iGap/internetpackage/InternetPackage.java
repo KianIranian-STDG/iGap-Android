@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class InternetPackage {
 
     @SerializedName("type")
-    private String type;
+    private int type;
     @SerializedName("cost")
     private int cost;
     @SerializedName("description")
@@ -23,7 +23,7 @@ public class InternetPackage {
         return durationId;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 

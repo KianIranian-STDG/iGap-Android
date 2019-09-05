@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -93,6 +95,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     }
 
     private void loadFragment(int position) {
+        hideKeyboard();
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment fragment;
@@ -373,6 +376,17 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 case PROFILE_FRAGMENT:
                     bottomNavigation.setCurrentItem(PROFILE_FRAGMENT);
                     break;
+            }
+        }
+    }
+
+
+    private void hideKeyboard() {
+        if (getActivity() != null) {
+            View view = getActivity().getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         }
     }

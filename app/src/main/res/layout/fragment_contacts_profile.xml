@@ -20,6 +20,8 @@
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
         android:layoutDirection="ltr">
 
         <android.support.design.widget.AppBarLayout
@@ -92,9 +94,9 @@
                         android:fontFamily="@font/main_font"
                         android:gravity="left|center_vertical"
                         android:singleLine="true"
-                        android:visibility="gone"
                         android:textColor="@color/white"
                         android:textSize="@dimen/standardTextSize"
+                        android:visibility="gone"
                         app:emojiSize="@dimen/standardTextSize" />
 
                     <TextView
@@ -162,13 +164,13 @@
                     android:layout_marginRight="16dp"
                     android:paddingTop="@dimen/dp2"
                     android:text="@{viewModel.bio}"
-                    tools:text="abolfazl"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.bioVisibility}"
                     app:emojiSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="abolfazl" />
 
                 <View
                     android:id="@+id/line1"
@@ -495,9 +497,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:visibility="gone"
                     android:text="@string/groups_in_common"
                     android:textSize="@dimen/standardTextSize"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toStartOf="@id/commonGroupCount"
                     app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/line3" />
@@ -508,8 +510,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    android:visibility="gone"
                     android:textColor="@color/setting_items_value_color"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/commonGroup"
                     app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
                     app:layout_constraintStart_toEndOf="@id/commonGroup"
@@ -566,11 +568,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:visibility="gone"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onSecretChatClick()}"
                     android:text="@string/secret_chat"
                     android:textSize="@dimen/standardTextSize"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="@id/sharedContentTitle"
                     app:layout_constraintRight_toRightOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/line5" />
@@ -633,8 +635,8 @@
             android:layout_marginStart="@dimen/dp14"
             android:layout_marginLeft="@dimen/dp14"
             android:layout_marginTop="@dimen/dp80"
-            android:scaleType="centerCrop"
             android:background="@drawable/shape_background_profile_sample"
+            android:scaleType="centerCrop"
             app:collapsedTarget="@id/toolbar_avatar_collapsed_target"
             app:layout_behavior="net.iGap.module.CollapsingImageBehavior" />
 
@@ -655,9 +657,9 @@
                 android:layout_gravity="bottom"
                 android:layout_marginStart="@dimen/dp140"
                 android:layout_marginLeft="@dimen/dp140"
+                android:layout_marginTop="@dimen/dp10"
                 android:layout_marginEnd="@dimen/dp70"
                 android:layout_marginRight="@dimen/dp70"
-                android:layout_marginTop="@dimen/dp10"
                 android:orientation="vertical"
                 android:paddingRight="@dimen/dp10">
 
@@ -665,8 +667,8 @@
                     android:id="@+id/toolbar_txt_name_expanded"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="left"
                     android:fontFamily="@font/main_font"
+                    android:gravity="left"
                     android:singleLine="true"
                     android:textColor="@color/white"
                     android:textSize="@dimen/standardTextSize"
@@ -676,9 +678,9 @@
                     android:id="@+id/toolbar_txt_status_expanded"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="left"
                     android:layout_marginTop="@dimen/dp1"
                     android:fontFamily="@font/main_font"
+                    android:gravity="left"
                     android:singleLine="true"
                     android:textColor="@color/white"
                     android:textSize="@dimen/smallTextSize" />
@@ -688,10 +690,10 @@
                     style="?textSubColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="left"
-                    android:onClick="@{() -> viewModel.onUserNameClicked()}"
                     android:layout_marginTop="@dimen/dp10"
                     android:fontFamily="@font/main_font"
+                    android:gravity="left"
+                    android:onClick="@{() -> viewModel.onUserNameClicked()}"
                     android:singleLine="true"
                     android:textSize="@dimen/smallTextSize" />
 
@@ -700,9 +702,9 @@
                     style="?textSubColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="left"
                     android:layout_marginTop="@dimen/dp2"
                     android:fontFamily="@font/main_font"
+                    android:gravity="left"
                     android:singleLine="true"
                     android:textSize="@dimen/smallTextSize" />
 
