@@ -55,7 +55,7 @@ public class MySpinnerAdapter extends BaseAdapter {
         if (position == 0) {
             tmp = holder.txtTitle.getContext().getString(R.string.buy_internet_package_choose_title);
         } else {
-            if (items.get(position - 1).getCategory().getType().equals("duration")) {
+            if (items.get(position - 1).getCategory().getType().toLowerCase().equals("duration")) {
                 tmp = String.format(holder.txtTitle.getContext().getString(getStringDurationResId(items.get(position - 1))), items.get(position - 1).getCategory().getValue());
             } else {
                 tmp = String.format(holder.txtTitle.getContext().getString(getStringTrafficResId(items.get(position - 1))), items.get(position - 1).getCategory().getValue());

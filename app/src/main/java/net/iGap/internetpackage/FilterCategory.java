@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class FilterCategory {
     @SerializedName("type")
     private String type;
-    @SerializedName("subType")
+    @SerializedName("sub_type")
     private String subType;
     @SerializedName("value")
     private float value;

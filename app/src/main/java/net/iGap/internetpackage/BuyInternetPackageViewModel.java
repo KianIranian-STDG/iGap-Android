@@ -40,7 +40,7 @@ public class BuyInternetPackageViewModel extends ViewModel {
     private List<InternetPackage> packageList;
     private List<InternetPackage> packageListFiltered;
     private boolean isDaily;
-    private String selectedPackageType;
+    private int selectedPackageType;
 
     public BuyInternetPackageViewModel() {
         repository = MciInternetPackageRepository.getInstance();
@@ -125,14 +125,13 @@ public class BuyInternetPackageViewModel extends ViewModel {
 
     public void onCheckedListener(int checkedId) {
         if (checkedId == R.id.timeType) {
-            showFilterType.set(View.VISIBLE);
             isDaily = true;
             typeList.setValue(daysFilter);
         } else if (checkedId == R.id.volumeType) {
-            showFilterType.set(View.VISIBLE);
             isDaily = false;
             typeList.setValue(trafficFilter);
         }
+        showFilterType.set(View.VISIBLE);
         showPackageList.set(View.GONE);
         showPayButton.set(View.GONE);
     }
@@ -158,10 +157,10 @@ public class BuyInternetPackageViewModel extends ViewModel {
     }
 
     public void onBuyClick(String phoneNumber) {
-        if (selectedPackageType != null && selectedPackageType.length() > 0) {
+        if (selectedPackageType > 0) {
             enabledPaymentButton.set(false);
             showLoadingView.set(View.VISIBLE);
-            repository.purchaseInternetPackage(phoneNumber.substring(1), selectedPackageType, new ResponseCallback<MciPurchaseResponse>() {
+            repository.purchaseInternetPackage(phoneNumber.substring(1), String.valueOf(selectedPackageType), new ResponseCallback<MciPurchaseResponse>() {
                 @Override
                 public void onSuccess(MciPurchaseResponse data) {
                     showLoadingView.set(View.INVISIBLE);
