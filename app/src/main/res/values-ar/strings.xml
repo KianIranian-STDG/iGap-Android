@@ -1901,7 +1901,7 @@
 
     <string name="Input_device_specification">الدخول الناجح إلى الجهاز </string>
 
-    <string name="QrCode_Scan">الماسح الضوئي للباركود </string>
+    <string name="QrCode_Scan"> الدخول مع مسح الباركود </string>
 
     <string name="Call_Quality">جودة الاتصال </string>
 

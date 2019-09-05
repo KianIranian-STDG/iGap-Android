@@ -310,7 +310,6 @@ import net.iGap.request.RequestChatEditMessage;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestChatUpdateDraft;
 import net.iGap.request.RequestClientGetFavoriteMenu;
-import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestClientJoinByUsername;
 import net.iGap.request.RequestClientMuteRoom;
@@ -1176,12 +1175,6 @@ public class FragmentChat extends BaseFragment
         iUpdateLogItem = null;
 
         unRegisterListener();
-        new Thread(() -> {
-            try (Realm realm = Realm.getDefaultInstance()) {
-                realm.executeTransaction(realm1 -> RealmRoom.setCount(realm1, mRoomId, 0));
-            }
-        }).start();
-
     }
 
     @Override
@@ -1996,7 +1989,7 @@ public class FragmentChat extends BaseFragment
         initComponent();
         initAppbarSelected();
         getDraft();
-        getRoomInfo();
+        getUserInfo();
         insertShearedData();
 
         RealmRoomMessage rm = null;
@@ -2872,10 +2865,7 @@ public class FragmentChat extends BaseFragment
                             linearLayout.scrollToPositionWithOffset(position1 - 1, 0);
                         }
                     }
-                    firstUnreadMessageInChat = null;
-                    countNewMessage = 0;
-                    txtNewUnreadMessage.setVisibility(View.GONE);
-                    txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
+                    setCountNewMessageZero();
                 } else {
                     /**
                      * if addToView is true this means that all new message is in adapter
@@ -4346,6 +4336,26 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+    public void setCountNewMessageZero() {
+
+        // Todo : notify FragmentMain List for update unread count.
+
+        countNewMessage = 0;
+        txtNewUnreadMessage.setVisibility(View.GONE);
+        txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
+
+        firstUnreadMessageInChat = null;
+
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom.setCount(realm, mRoomId, 0);
+                }
+            });
+        }
+    }
+
     @Override
     public void onItemShowingMessageId(final StructMessageInfo messageInfo) {
         /**
@@ -4353,11 +4363,7 @@ public class FragmentChat extends BaseFragment
          * after first new message come in the view change view for unread count
          */
         if (firstUnreadMessageInChat != null && firstUnreadMessageInChat.isValid() && !firstUnreadMessageInChat.isDeleted() && firstUnreadMessageInChat.getMessageId() == messageInfo.realmRoomMessage.getMessageId()) {
-            countNewMessage = 0;
-            txtNewUnreadMessage.setVisibility(View.GONE);
-            txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
-
-            firstUnreadMessageInChat = null;
+            setCountNewMessageZero();
         }
 
         if (chatType != CHANNEL && (!messageInfo.isSenderMe() && messageInfo.realmRoomMessage.getStatus() != null && !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) & !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString()))) {
@@ -5203,18 +5209,9 @@ public class FragmentChat extends BaseFragment
     /**
      * client should send request for get user info because need to update user online timing
      */
-    private void getRoomInfo() {
+    private void getUserInfo() {
         if (chatType == CHAT) {
             new RequestUserInfo().userInfo(chatPeerId);
-        }else if (chatType == CHANNEL || chatType == GROUP){
-            new RequestClientGetRoom().clientGetRoom(mRoomId, RequestClientGetRoom.CreateRoomMode.updateChannelOrGroupInfo);
-            G.onChannelOrGroupInfoUpdate = this::channelOrGroupRoomUpdate;
-        }
-    }
-
-    private void channelOrGroupRoomUpdate(long roomId){
-        if (mRoomId == roomId){
-            avatarHandler.getAvatar(new ParamWithAvatarType(imvUserPicture, roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
         }
     }
 
@@ -5244,11 +5241,8 @@ public class FragmentChat extends BaseFragment
 
     private void resetAndGetFromEnd() {
         setDownBtnGone();
-        firstUnreadMessageInChat = null;
         resetMessagingValue();
-        countNewMessage = 0;
-        txtNewUnreadMessage.setVisibility(View.GONE);
-        txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
+        setCountNewMessageZero();
         getMessages();
     }
 

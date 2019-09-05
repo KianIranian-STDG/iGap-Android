@@ -336,6 +336,8 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
+        viewModel.showReferralErrorLiveData.postValue(false);
+
         Log.wtf(this.getClass().getName(), "onViewCreated");
     }
 

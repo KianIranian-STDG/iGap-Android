@@ -209,55 +209,55 @@ public class FragmentActiveSessions extends BaseFragment {
 
                 if (item instanceof AdapterActiveSessions) {
                     if (((AdapterActiveSessions) item).getItem().isCurrent()) {
-                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.active_session_title).content(R.string.active_session_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                prgWaiting.setVisibility(View.VISIBLE);
-                                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                                new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
-                                    @Override
-                                    public void onUserSessionLogout() {
-
-                                        G.handler.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                prgWaiting.setVisibility(View.GONE);
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onError() {
-                                        G.handler.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                prgWaiting.setVisibility(View.GONE);
-
-                                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onTimeOut() {
-                                        G.handler.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                                prgWaiting.setVisibility(View.GONE);
-
-                                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
-
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        }).show();
+//                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.active_session_title).content(R.string.active_session_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
+//                            @Override
+//                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+//
+//                                prgWaiting.setVisibility(View.VISIBLE);
+//                                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+//
+//                                new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
+//                                    @Override
+//                                    public void onUserSessionLogout() {
+//
+//                                        G.handler.post(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+//                                                prgWaiting.setVisibility(View.GONE);
+//                                            }
+//                                        });
+//                                    }
+//
+//                                    @Override
+//                                    public void onError() {
+//                                        G.handler.post(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+//                                                prgWaiting.setVisibility(View.GONE);
+//
+//                                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
+//                                            }
+//                                        });
+//                                    }
+//
+//                                    @Override
+//                                    public void onTimeOut() {
+//                                        G.handler.post(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+//                                                prgWaiting.setVisibility(View.GONE);
+//
+//                                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
+//
+//                                            }
+//                                        });
+//                                    }
+//                                });
+//                            }
+//                        }).show();
                     } else {
                         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.active_session_title).content(R.string.active_session_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override

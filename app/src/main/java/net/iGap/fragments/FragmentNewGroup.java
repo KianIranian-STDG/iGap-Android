@@ -94,7 +94,7 @@ import static net.iGap.G.context;
 import static net.iGap.module.AttachFile.isInAttach;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
-public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarResponse, OnChannelAvatarAdd, ToolbarListener {
+public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarResponse, OnChannelAvatarAdd, ToolbarListener ,FragmentEditImage.OnImageEdited{
 
     public static RemoveSelectedContact removeSelectedContact;
     public static long avatarId = 0;
@@ -578,14 +578,18 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                 FragmentEditImage.insertItemList(AttachFile.imagePath, false);
             }
             if (getActivity() != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
+                fragmentEditImage.setOnProfileImageEdited(this);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
             }
         } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == Activity.RESULT_OK) {// result for gallery
             if (data != null) {
                 ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true);
                 FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
                 if (getActivity() != null) {
-                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
+                    FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
+                    fragmentEditImage.setOnProfileImageEdited(this);
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                 }
             }
         }
@@ -604,6 +608,32 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         //mCurrentPhotoPath = "file:" + image.getAbsolutePath();
         fragmentNewGroupViewModel.mCurrentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    @Override
+    public void profileImageAdd(String path) {
+        pathSaveImage = path;
+        avatarId = System.nanoTime();
+
+        fragmentNewGroupViewModel.showProgressBar();
+        HelperUploadFile.startUploadTaskAvatar(pathSaveImage, avatarId, new HelperUploadFile.UpdateListener() {
+            @Override
+            public void OnProgress(int progress, FileUploadStructure struct) {
+                if (progress < 100) {
+                    fragmentNewGroupBinding.ngPrgWaiting.setProgress(progress);
+                } else {
+                    fragmentNewGroupViewModel.hideProgressBar();
+                    fragmentNewGroupViewModel.existAvatar = true;
+                    fragmentNewGroupViewModel.token = struct.token;
+                    setImage(pathSaveImage);
+                }
+            }
+
+            @Override
+            public void OnError() {
+                fragmentNewGroupViewModel.hideProgressBar();
+            }
+        });
     }
 
     public interface OnRemoveFragmentNewGroup {

@@ -79,21 +79,6 @@ public class ClientGetRoomResponse extends MessageHandler {
                         return;
                     }
 
-                    if (roomMode == RequestClientGetRoom.CreateRoomMode.updateChannelOrGroupInfo) {
-
-                        putOrUpdate(clientGetRoom.getRoom(), realm);
-
-                        /**
-                         * because insert in realm not async , add delay for finish insert presses
-                         * */
-
-                        G.handler.postDelayed(() -> {
-                            if (G.onChannelOrGroupInfoUpdate != null)
-                                G.onChannelOrGroupInfoUpdate.update(clientGetRoom.getRoom().getId());
-                        }, 1000);
-
-                    }
-
                     if (roomMode != null && roomMode == RequestClientGetRoom.CreateRoomMode.getPromote) {
                         if (!RealmRoom.isMainRoom(clientGetRoom.getRoom().getId())) {
                             RealmRoom realmRoom = RealmRoom.putOrUpdate(clientGetRoom.getRoom(), realm);

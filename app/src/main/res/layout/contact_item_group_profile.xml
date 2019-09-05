@@ -1,121 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="@dimen/dp68"
-  android:clickable="true"
-  style="?backgroundColorSettingTheme"
-  android:orientation="vertical">
-
-
-  <View
-    android:id="@+id/cigp_view_topLine"
+    style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
-    android:layout_height="1px"
-    android:layout_marginLeft="@dimen/dp8"
-    android:layout_marginStart="@dimen/dp8"
-    style="?lineColorSettingTheme" />
+    android:layout_height="@dimen/dp68"
+    android:clickable="true"
+    android:layoutDirection="locale"
+    android:orientation="vertical">
 
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="@dimen/dp8">
-
-    <net.iGap.module.CircleImageView
-      android:id="@+id/cigp_imv_contact_avatar"
-      android:layout_width="@dimen/dp48"
-      android:layout_height="@dimen/dp48"
-      android:layout_marginLeft="@dimen/dp4" />
+    <View
+        android:id="@+id/cigp_view_topLine"
+        style="?lineColorSettingTheme"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="@dimen/dp8"
+        android:layout_marginLeft="@dimen/dp8" />
 
     <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp8">
 
-      <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/dp8"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
+        <net.iGap.module.CircleImageView
+            android:id="@+id/cigp_imv_contact_avatar"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:layout_marginLeft="@dimen/dp4" />
 
         <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content">
-
-          <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp8"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <net.iGap.module.MaterialDesignTextView
+                            android:id="@+id/cigp_txt_member_role"
+                            style="@style/myIconTextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/dp4"
+                            android:layout_marginRight="@dimen/dp4"
+                            android:text="@string/md_rate_star"
+                            android:textSize="@dimen/standardTextSize" />
+
+                        <net.iGap.module.CustomTextViewMedium
+                            android:id="@+id/cigp_txt_contact_name"
+                            style="?textTitleColorSettingTheme"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:gravity="start"
+                            android:singleLine="true"
+                            android:text="Dominika Faniz"
+                            android:textSize="@dimen/standardTextSize" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+                <net.iGap.module.CustomTextViewMedium
+                    android:id="@+id/cigp_txt_contact_lastseen"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="start"
+                    android:singleLine="true"
+                    android:tag="menu"
+                    android:text="@string/last_seen_recently"
+                    android:textSize="@dimen/smallTextSize" />
+            </RelativeLayout>
 
             <net.iGap.module.MaterialDesignTextView
-              android:id="@+id/cigp_txt_member_role"
-              style="@style/myIconTextViewStyle"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginRight="@dimen/dp4"
-              android:layout_marginEnd="@dimen/dp4"
-              android:text="@string/md_rate_star"
-              android:textSize="@dimen/standardTextSize" />
-
-            <net.iGap.module.CustomTextViewMedium
-              android:id="@+id/cigp_txt_contact_name"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_alignParentTop="true"
-              android:gravity="start"
-              android:singleLine="true"
-              android:text="Dominika Faniz"
-              style="?textTitleColorSettingTheme"
-              android:textSize="@dimen/standardTextSize" />
-          </LinearLayout>
-
+                android:id="@+id/cigp_moreButton"
+                style="@style/myIconTextViewStyle"
+                android:layout_width="@dimen/dp48"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/more_icon"
+                android:textSize="@dimen/dp18" />
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="@dimen/dp60"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-        <net.iGap.module.CustomTextViewMedium
-          android:id="@+id/cigp_txt_contact_lastseen"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_alignParentBottom="true"
-          android:gravity="start"
-          android:singleLine="true"
-          android:tag="menu"
-          android:text="@string/last_seen_recently"
-          style="?textSubColorSettingTheme"
-          android:textSize="@dimen/smallTextSize" />
-      </RelativeLayout>
+            <TextView
+                android:id="@+id/cigp_txt_nomber_of_shared_media"
+                style="?textSubColorSettingTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="@dimen/dp16" />
+        </LinearLayout>
 
-      <net.iGap.module.MaterialDesignTextView
-        android:id="@+id/cigp_moreButton"
-        android:layout_width="@dimen/dp48"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/more_icon"
-        style="@style/myIconTextViewStyle"
-        android:textSize="@dimen/dp18" />
 
     </LinearLayout>
-
-    <LinearLayout
-      android:layout_width="@dimen/dp60"
-      android:layout_height="match_parent"
-      android:gravity="center"
-      android:orientation="vertical"
-      android:visibility="gone">
-
-      <TextView
-        android:id="@+id/cigp_txt_nomber_of_shared_media"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-          style="?textSubColorSettingTheme"
-        android:textSize="@dimen/dp16" />
-    </LinearLayout>
-
-
-  </LinearLayout>
 
 </LinearLayout>

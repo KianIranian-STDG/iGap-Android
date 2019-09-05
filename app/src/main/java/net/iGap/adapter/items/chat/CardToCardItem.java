@@ -113,11 +113,11 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             innerLayout.setOrientation(LinearLayout.VERTICAL);
             innerLayout.setId(R.id.cardToCard_innerLayout);
 
-            if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.LOLLIPOP){
+//            if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.LOLLIPOP_MR1){
                 innerLayout.setPadding(LayoutCreator.dp(4), LayoutCreator.dp(25), LayoutCreator.dp(4), LayoutCreator.dp(4));
-            } else{
-                innerLayout.setPadding(LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4));
-            }
+//            } else{
+//                innerLayout.setPadding(LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4));
+//            }
 
             if (G.isDarkTheme) {
                 innerLayout.setBackground(getDrawable(R.drawable.background_item_card_to_card_dark));
@@ -152,7 +152,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             set.constrainHeight(cardIcon.getId(), LayoutCreator.dp(56));
             set.constrainWidth(cardIcon.getId(), LayoutCreator.dp(56));
 
-            set.connect(innerLayout.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, LayoutCreator.dp(30));
+            set.connect(innerLayout.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, LayoutCreator.dp(25));
 
             set.connect(cardIcon.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
             set.connect(cardIcon.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);

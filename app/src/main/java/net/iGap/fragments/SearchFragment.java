@@ -17,6 +17,7 @@ import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -633,7 +634,8 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             } else if (type == SearchType.room) {
                 if (userName != null && userName.length() > 1) {
                     HelperUrl.checkUsernameAndGoToRoom(getActivity(), userName, HelperUrl.ChatEntry.profile);
-                    popBackStackFragment();
+                    /*Log.wtf(this.getClass().getName(),"goTo chat");
+                    popBackStackFragment();*/
                 } else {
                     realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
                     goToRoomWithRealm(realmRoom, type, id);
@@ -647,7 +649,8 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
         if (realmRoom != null) {
             G.refreshRealmUi();
-            removeFromBaseFragment(SearchFragment.this);
+            /*Log.wtf(this.getClass().getName(),"goTo chat");
+            removeFromBaseFragment(SearchFragment.this);*/
             if (type == SearchType.message) {
                 new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity(getActivity());
             } else {
@@ -671,9 +674,10 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                         @Override
                         public void run() {
                             G.refreshRealmUi();
-                            if (G.fragmentActivity != null) {
+                            /*if (G.fragmentActivity != null) {
+                                Log.wtf(this.getClass().getName(),"goTo chat");
                                 removeFromBaseFragment(SearchFragment.this);
-                            }
+                            }*/
                             new GoToChatActivity(room.getId()).setPeerID(id).startActivity(getActivity());
                         }
                     });
