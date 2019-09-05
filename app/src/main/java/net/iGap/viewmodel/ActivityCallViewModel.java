@@ -17,6 +17,7 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.annotation.StringRes;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ import net.iGap.helper.UserStatusController;
 import net.iGap.interfaces.ISignalingCallBack;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.MusicPlayer;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.enums.CallState;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
@@ -79,7 +81,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     public MutableLiveData<String> imagePath = new MutableLiveData<>();
     public MutableLiveData<Boolean> initialVideoCallSurface = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogChangeConnectedDevice = new MutableLiveData<>();
-    public MutableLiveData<Integer> playSound = new MutableLiveData<>();
+    public SingleLiveEvent<Integer> playSound = new SingleLiveEvent<>();
     public MutableLiveData<Boolean> setAudioManagerSpeakerphoneOn = new MutableLiveData<>();
     public MutableLiveData<Boolean> setAudioManagerWithBluetooth = new MutableLiveData<>();
     private MutableLiveData<Long> quickDeclineMessageLiveData = new MutableLiveData<>();
@@ -165,11 +167,13 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     }
 
     public void setBluetoothConnected(boolean bluetoothConnected) {
+        Log.wtf(this.getClass().getName(), "setHandsFreeConnected");
         isBluetoothConnected = bluetoothConnected;
         setSpeakerIcon();
     }
 
     public void setHandsFreeConnected(boolean handsFreeConnected) {
+        Log.wtf(this.getClass().getName(), "setHandsFreeConnected");
         isHandsFreeConnected = handsFreeConnected;
         setSpeakerIcon();
     }
@@ -181,7 +185,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     public void onClickBtnChat() {
         if (!isConnected && isIncomingCall) {
             quickDeclineMessageLiveData.postValue(userId);
-        }else
+        } else
             HelperPublicMethod.goToChatRoom(userId, null, null);
     }
 
@@ -340,7 +344,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                                 HelperTracker.sendTracker(HelperTracker.TRACKER_VOICE_CALL_CONNECTED);
                             }
 
-                                isConnected = true;
+                            isConnected = true;
                             G.handler.postDelayed(() -> {
                                 changeViewState.setValue(false);
                                 playSound.setValue(R.raw.igap_connect);
@@ -495,9 +499,10 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     }
 
     public void endCall() {
+        Log.wtf(this.getClass().getName(), "endCall");
         UserStatusController.getInstance().setOffline();
         G.isInCall = false;
-        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT , false);
+        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT, false);
         WebRTC.getInstance().leaveCall();
         isSendLeave = true;
         isConnected = false;
@@ -512,8 +517,9 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     }
 
     private void endVoiceAndFinish() {
+        Log.wtf(this.getClass().getName(), "endVoiceAndFinish");
         G.isInCall = false;
-        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT , false);
+        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT, false);
         playRingTone.setValue(false);
         if (ActivityCall.onFinishActivity != null) {
             ActivityCall.onFinishActivity.finishActivity();
@@ -526,7 +532,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         }
         if (MusicPlayer.pauseSoundFromIGapCall) {
             MusicPlayer.pauseSoundFromIGapCall = false;
-           // MusicPlayer.playSound();
+            // MusicPlayer.playSound();
         }
     }
 
@@ -632,7 +638,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
 
     public void leaveCall() {
         G.isInCall = false;
-        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT , false);
+        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT, false);
         if (isIncomingCall) {
             WebRTC.getInstance().leaveCall();
         }
@@ -640,9 +646,13 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
 
     //*****************************  distance sensor  **********************************************************
 
-    public void onDestroy() {
+
+    @Override
+    protected void onCleared() {
+        Log.wtf(this.getClass().getName(), "onCleared");
+        super.onCleared();
         G.isInCall = false;
-        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT , false);
+        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT, false);
         G.iSignalingCallBack = null;
         G.onCallLeaveView = null;
         setSpeakerphoneOn(false);
@@ -652,9 +662,13 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         if (!isSendLeave) {
             WebRTC.getInstance().leaveCall();
         }
+        if (G.onHoldBackgroundChanegeListener != null) {
+            G.onHoldBackgroundChanegeListener = null;
+        }
     }
 
     public void onLeaveView(String type) {
+        Log.wtf(this.getClass().getName(), "onLeaveView");
         isConnected = false;
         if (type.equals("error")) {
             playRingTone.setValue(false);
