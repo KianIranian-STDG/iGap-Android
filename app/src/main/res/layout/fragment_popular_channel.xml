@@ -33,4 +33,21 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+
+    <net.iGap.module.MaterialDesignTextView
+        android:id="@+id/emptyRecycle"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/retry_icon"
+        android:visibility="gone"
+        android:textSize="@dimen/dp22"
+        android:textAppearance="@style/TextIconAppearance_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

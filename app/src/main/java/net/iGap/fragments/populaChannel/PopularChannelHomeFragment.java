@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -30,6 +31,7 @@ public class PopularChannelHomeFragment extends BaseFragment implements ToolbarL
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private View rootView;
+    private TextView epmtyView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,6 +90,15 @@ public class PopularChannelHomeFragment extends BaseFragment implements ToolbarL
         swipeRefreshLayout.setOnRefreshListener(() -> {
             viewModel.getFirstPage();
         });
+
+        viewModel.getEmptyViewMutableLiveData().observe(getViewLifecycleOwner(), visibility -> {
+            if (visibility != null)
+                epmtyView.setVisibility(visibility);
+        });
+
+        epmtyView.setOnClickListener(v -> {
+            viewModel.getFirstPage();
+        });
     }
 
     private void setupViews() {
@@ -101,6 +112,7 @@ public class PopularChannelHomeFragment extends BaseFragment implements ToolbarL
         RecyclerView recyclerView = rootView.findViewById(R.id.rv_popularChannel_home);
         LinearLayout toolBall = rootView.findViewById(R.id.ll_popularChannel_toolBar);
         swipeRefreshLayout = rootView.findViewById(R.id.sr_popularChannel_home);
+        epmtyView = rootView.findViewById(R.id.emptyRecycle);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(adapter);

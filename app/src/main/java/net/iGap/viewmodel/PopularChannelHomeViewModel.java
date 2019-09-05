@@ -4,7 +4,9 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.apiService.ApiServiceProvider;
@@ -14,6 +16,7 @@ import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
 import net.iGap.fragments.populaChannel.PopularMoreChannelFragment;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperUrl;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.model.popularChannel.Channel;
@@ -30,6 +33,7 @@ public class PopularChannelHomeViewModel extends BaseViewModel {
 
     private MutableLiveData<ParentChannel> firstPageMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> progressMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<Integer> emptyViewMutableLiveData = new MutableLiveData<>();
 
 
     @Override
@@ -45,18 +49,31 @@ public class PopularChannelHomeViewModel extends BaseViewModel {
 
     public void getFirstPage() {
         progressMutableLiveData.postValue(true);
+        emptyViewMutableLiveData.postValue(View.GONE);
         channelApi.getFirstPage().enqueue(new Callback<ParentChannel>() {
             @Override
             public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
                 progressMutableLiveData.postValue(false);
-                if (response.isSuccessful() && response.body() != null) {
-                    firstPageMutableLiveData.postValue(response.body());
+                if (response.body() != null) {
+                    if (response.isSuccessful()) {
+                        firstPageMutableLiveData.postValue(response.body());
+                        emptyViewMutableLiveData.postValue(View.GONE);
+                    } else {
+                        if (response.code() == 401) {
+                            HelperLog.setErrorLog(new Exception("401 error on popular channel " + G.getApiToken()));
+                        }
+                        emptyViewMutableLiveData.postValue(View.VISIBLE);
+                    }
+                }else {
+                    emptyViewMutableLiveData.postValue(View.VISIBLE);
                 }
+
             }
 
             @Override
             public void onFailure(Call<ParentChannel> call, Throwable t) {
                 progressMutableLiveData.postValue(false);
+                emptyViewMutableLiveData.postValue(View.VISIBLE);
             }
         });
     }
@@ -104,5 +121,9 @@ public class PopularChannelHomeViewModel extends BaseViewModel {
 
     public MutableLiveData<Boolean> getProgressMutableLiveData() {
         return progressMutableLiveData;
+    }
+
+    public MutableLiveData<Integer> getEmptyViewMutableLiveData() {
+        return emptyViewMutableLiveData;
     }
 }
