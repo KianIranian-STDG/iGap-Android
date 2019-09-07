@@ -1,46 +1,42 @@
 package net.iGap.activities;
 
-import android.content.SharedPreferences;
-import android.databinding.DataBindingUtil;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.ActivityManageSpaceBinding;
-import net.iGap.fragments.FragmentDataUsage;
-import net.iGap.helper.HelperCheckInternetConnection;
-import net.iGap.helper.HelperDataUsage;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.SHP_SETTING;
-import net.iGap.proto.ProtoGlobal;
+import net.iGap.fragments.DataStoreageFragment;
 import net.iGap.viewmodel.ActivityManageSpaceViewModel;
 
 public class ActivityManageSpace extends ActivityEnhanced {
 
+    private ActivityManageSpaceViewModel viewModel;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(ActivityManageSpaceViewModel.class);
 
         setContentView(R.layout.activity_manage_space);
-        
-        if (getSupportFragmentManager().getBackStackEntryCount() == 0){
 
-        }else{
+        viewModel.setFragment(getSupportFragmentManager().getBackStackEntryCount());
 
-        }
-
-
-        viewModel = new ActivityManageSpaceViewModel(this);
-        activityManageSpaceBinding.setActivityManageSpaceViewModel(viewModel);
+        viewModel.getLoadFirstPage().observe(this, isFirst -> {
+            if (isFirst != null) {
+                if (isFirst) {
+                    getSupportFragmentManager().beginTransaction()
+                            .addToBackStack(DataStoreageFragment.class.getName())
+                            .replace(R.id.dataUsageContainer, new DataStoreageFragment(), DataStoreageFragment.class.getName())
+                            .commit();
+                } else {
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.dataUsageContainer);
+                    getSupportFragmentManager().beginTransaction()
+                            .addToBackStack(fragment.getClass().getName())
+                            .replace(R.id.dataUsageContainer, fragment, fragment.getClass().getName())
+                            .commit();
+                }
+            }
+        });
     }
 
     @Override
@@ -52,7 +48,7 @@ public class ActivityManageSpace extends ActivityEnhanced {
         }
     }
 
-    public void loadFragment(Fragment fragment){
+    public void loadFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
                 .add(R.id.dataUsageContainer, fragment, fragment.getClass().getName())
