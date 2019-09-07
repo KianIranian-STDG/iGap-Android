@@ -204,7 +204,6 @@ public class DataStoreageFragment extends BaseFragment {
 
                 View dialogView = dialog.getCustomView();
                 assert dialogView != null;
-
                 AppCompatCheckBox checkBoxAll = dialogView.findViewById(R.id.all);
                 AppCompatCheckBox checkBoxPhoto = dialogView.findViewById(R.id.photo);
                 AppCompatCheckBox checkBoxVideo = dialogView.findViewById(R.id.video);
@@ -265,7 +264,7 @@ public class DataStoreageFragment extends BaseFragment {
                     }
                 });
 
-                dialog.setOnDismissListener(dialog1 -> onCacheCheckedChanged = null);
+                /*dialog.setOnDismissListener(dialog1 -> onCacheCheckedChanged = null);*/
             }
         });
 
