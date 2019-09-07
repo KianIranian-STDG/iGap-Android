@@ -13,7 +13,7 @@
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         style="?backgroundColorSettingTheme"
@@ -25,11 +25,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fwv_layout_toolbar">
 
-        <WebView
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <WebView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/webView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -41,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/webViewError"

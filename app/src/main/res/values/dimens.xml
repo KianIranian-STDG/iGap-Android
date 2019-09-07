@@ -11,7 +11,8 @@
     <dimen name="margin_for_below_layouts_of_toolbar_with_call_layout">@dimen/dp88</dimen>
     <dimen name="margin_for_below_layouts_of_toolbar_with_room_selected_mode">@dimen/dp88</dimen>
     <dimen name="margin_for_below_layouts_of_toolbar_with_shared_media">@dimen/dp95</dimen>
-    <dimen name="margin_for_below_layouts_of_toolbar_with_shared_media_with_player">@dimen/dp140</dimen>
+    <dimen name="margin_for_below_layouts_of_toolbar_with_shared_media_with_player">@dimen/dp140
+    </dimen>
     <dimen name="toolbar_height_call_state">60dp</dimen>
     <dimen name="toolbar_height_with_search">@dimen/dp60</dimen>
     <dimen name="toolbar_height_root_with_search">@dimen/dp80</dimen>

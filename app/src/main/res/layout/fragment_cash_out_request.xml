@@ -32,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:textColor="#757575"/>
+                    android:textColor="#757575" />
 
                 <TextView
                     android:id="@+id/limit2"
@@ -40,13 +40,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:textSize="16sp"
-                    android:textColor="#66ba41"/>
+                    android:textColor="#66ba41" />
 
             </LinearLayout>
 
 
             <LinearLayout
-              android:id="@+id/rootPrice"
+                android:id="@+id/rootPrice"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                     android:layout_marginTop="30dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:layout_marginBottom="-8dp"/>
+                    android:layout_marginBottom="-8dp" />
 
                 <EditText
                     android:id="@+id/price"
@@ -75,7 +75,7 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:layout_margin="16dp"
-                    android:layoutDirection="ltr"/>
+                    android:layoutDirection="ltr" />
 
 
                 <TextView
@@ -88,7 +88,7 @@
                     android:layout_marginTop="14dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:layout_marginBottom="-8dp"/>
+                    android:layout_marginBottom="-8dp" />
 
                 <AutoCompleteTextView
                     android:id="@+id/number"
@@ -101,7 +101,7 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:layout_margin="16dp"
-                    android:layoutDirection="ltr"/>
+                    android:layoutDirection="ltr" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -121,7 +121,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                 </FrameLayout>
 
@@ -141,7 +141,7 @@
                 android:paddingLeft="24dp"
                 android:paddingRight="24dp"
                 android:visibility="gone"
-                android:text="@string/edit_profile_hint"/>
+                android:text="@string/edit_profile_hint" />
 
             <TextView
                 android:id="@+id/get_sheba"
@@ -154,7 +154,7 @@
                 android:paddingLeft="24dp"
                 android:paddingRight="24dp"
                 android:paddingBottom="16dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -165,6 +165,6 @@
         android:id="@+id/progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"/>
+        android:background="@android:color/white" />
 
 </FrameLayout>

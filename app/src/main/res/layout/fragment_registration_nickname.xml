@@ -82,7 +82,7 @@
             app:layout_constraintStart_toStartOf="@id/pu_profile_circle_image"
             app:layout_constraintEnd_toEndOf="@id/pu_profile_circle_image"
             app:layout_constraintTop_toTopOf="@id/pu_profile_circle_image"
-            app:layout_constraintBottom_toBottomOf="@id/pu_profile_circle_image"/>
+            app:layout_constraintBottom_toBottomOf="@id/pu_profile_circle_image" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/name"

@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/primary_text"
-        android:textSize="12sp"/>
+        android:textSize="12sp" />
 
     <View
         android:layout_width="0dp"
@@ -29,6 +29,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/primary_text"
-        android:textSize="12sp"/>
+        android:textSize="12sp" />
 
 </LinearLayout>

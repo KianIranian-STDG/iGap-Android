@@ -61,7 +61,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="hasan"
-                android:textSize="@dimen/dp14"  />
+                android:textSize="@dimen/dp14" />
         </LinearLayout>
 
         <LinearLayout
@@ -99,7 +99,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="1000 Rial"
-                android:textSize="@dimen/dp14"  />
+                android:textSize="@dimen/dp14" />
         </LinearLayout>
 
         <LinearLayout
@@ -125,7 +125,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/card_number_source"
-                android:textSize="@dimen/dp14"  />
+                android:textSize="@dimen/dp14" />
 
 
             <net.iGap.module.CustomTextViewMedium
@@ -161,7 +161,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/source_bank"
-                android:textSize="@dimen/dp14"  />
+                android:textSize="@dimen/dp14" />
 
 
             <net.iGap.module.CustomTextViewMedium
@@ -172,7 +172,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="صادرات"
-                android:textSize="@dimen/dp14"  />
+                android:textSize="@dimen/dp14" />
         </LinearLayout>
 
         <LinearLayout
@@ -197,7 +197,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/card_number_dest"
-                android:textSize="@dimen/dp14"  />
+                android:textSize="@dimen/dp14" />
 
 
             <net.iGap.module.CustomTextViewMedium
@@ -208,7 +208,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="602666656565"
-                android:textSize="@dimen/dp14"  />
+                android:textSize="@dimen/dp14" />
         </LinearLayout>
 
         <LinearLayout
@@ -233,7 +233,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/destination_bank"
-                android:textSize="@dimen/dp14"  />
+                android:textSize="@dimen/dp14" />
 
 
             <net.iGap.module.CustomTextViewMedium
@@ -244,7 +244,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="پارسیان"
-                android:textSize="@dimen/dp14"  />
+                android:textSize="@dimen/dp14" />
         </LinearLayout>
 
         <LinearLayout
@@ -270,7 +270,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/crad_to_card_dest_name"
-                android:textSize="@dimen/dp14"  />
+                android:textSize="@dimen/dp14" />
 
 
             <net.iGap.module.CustomTextViewMedium
@@ -307,7 +307,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/cardToCardTrace"
-                android:textSize="@dimen/dp14"  />
+                android:textSize="@dimen/dp14" />
 
 
             <net.iGap.module.CustomTextViewMedium
@@ -318,7 +318,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="121214212"
-                android:textSize="@dimen/dp14"  />
+                android:textSize="@dimen/dp14" />
         </LinearLayout>
 
         <LinearLayout
@@ -344,7 +344,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/WalletRrnNumber"
-                android:textSize="@dimen/dp14"  />
+                android:textSize="@dimen/dp14" />
 
 
             <net.iGap.module.CustomTextViewMedium
@@ -355,7 +355,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="515155"
-                android:textSize="@dimen/dp14"  />
+                android:textSize="@dimen/dp14" />
         </LinearLayout>
 
         <net.iGap.module.CustomTextViewMedium

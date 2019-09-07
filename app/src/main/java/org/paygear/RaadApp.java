@@ -1,13 +1,13 @@
 package org.paygear;
 
+import android.content.Context;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
-import android.content.Context;
-import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.fragment.app.Fragment;
 
 import org.paygear.fragment.PaymentHistoryFragment;
 import org.paygear.model.Card;
@@ -56,7 +56,7 @@ public class RaadApp {
     public static boolean hasRefreshTokenRequest = false;
     public static boolean appIsInBackground = false;
 
-//    @Override
+    //    @Override
     public static void onCreate(Context applicationContext) {
 //        if (Auth.getCurrentAuth() != null) {
 //            Config config = new Config(Auth.getCurrentAuth().accessToken, "");
@@ -197,6 +197,7 @@ public class RaadApp {
 
     public static class AppLifecycleListener implements LifecycleObserver {
         Context context;
+
         AppLifecycleListener(Context context) {
             this.context = context;
         }

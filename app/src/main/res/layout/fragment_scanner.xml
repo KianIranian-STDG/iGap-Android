@@ -16,92 +16,93 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar">
-    <TextView
-        android:id="@+id/balance"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/green"
-        android:gravity="center_horizontal"
-        android:padding="@dimen/dp14"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/standardTextSize" />
-
-
-    <RelativeLayout
-        android:id="@+id/content_layout"
-        android:layout_below="@+id/balance"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.journeyapps.barcodescanner.BarcodeView
-            android:id="@+id/zxing_barcode_surface"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
         <TextView
-            android:id="@+id/scan"
-            android:layout_width="wrap_content"
+            android:id="@+id/balance"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/scan_frame"
-            android:layout_centerHorizontal="true"
-            android:text="@string/scan"
+            android:background="@color/green"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/dp14"
             android:textColor="@android:color/white"
-            android:textSize="35dp" />
-
-        <ImageView
-            android:id="@+id/scan_frame"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:layout_centerInParent="true"
-            android:layout_margin="16dp"
-            app:srcCompat="@drawable/scanner_frame" />
-
-        <!--  <ImageView
-              android:layout_width="56dp"
-              android:layout_height="56dp"
-              android:layout_centerInParent="true"
-              android:src="@drawable/ic_scanner_paygear_logo"/>-->
-
-        <FrameLayout
-            android:id="@+id/progress_layout"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_centerInParent="true"
-            android:visibility="gone">
-
-            <ProgressBar
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center" />
-
-        </FrameLayout>
+            android:textSize="@dimen/standardTextSize" />
 
 
-        <ImageView
-            android:id="@+id/flash"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="24dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:src="@drawable/ic_scanner_flash" />
+        <RelativeLayout
+            android:id="@+id/content_layout"
+            android:layout_below="@+id/balance"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/code"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="24dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:src="@drawable/ic_scanner_code" />
+            <com.journeyapps.barcodescanner.BarcodeView
+                android:id="@+id/zxing_barcode_surface"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/scan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/scan_frame"
+                android:layout_centerHorizontal="true"
+                android:text="@string/scan"
+                android:textColor="@android:color/white"
+                android:textSize="35dp" />
+
+            <ImageView
+                android:id="@+id/scan_frame"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_centerInParent="true"
+                android:layout_margin="16dp"
+                app:srcCompat="@drawable/scanner_frame" />
+
+            <!--  <ImageView
+                  android:layout_width="56dp"
+                  android:layout_height="56dp"
+                  android:layout_centerInParent="true"
+                  android:src="@drawable/ic_scanner_paygear_logo"/>-->
+
+            <FrameLayout
+                android:id="@+id/progress_layout"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerInParent="true"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center" />
+
+            </FrameLayout>
+
+
+            <ImageView
+                android:id="@+id/flash"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="24dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:src="@drawable/ic_scanner_flash" />
+
+            <ImageView
+                android:id="@+id/code"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="24dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:src="@drawable/ic_scanner_code" />
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

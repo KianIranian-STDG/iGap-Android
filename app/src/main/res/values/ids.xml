@@ -139,9 +139,9 @@
     <item name="tv_contactItem_contactNumber" type="id" />
     <item name="btn_contactItem_viewContact" type="id" />
 
-    <item name="status" type="id"/>
-    <item name="phoneNumber" type="id"/>
-    <item name="chi_fab_setPic" type="id"/>
+    <item name="status" type="id" />
+    <item name="phoneNumber" type="id" />
+    <item name="chi_fab_setPic" type="id" />
     <item name="toolbar_tablet_user_avatar" type="id" />
     <item name="toolbar_tablet_user_name" type="id" />
     <item name="toolbar_tablet_user_phone" type="id" />

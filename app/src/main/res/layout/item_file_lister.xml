@@ -19,7 +19,7 @@
             android:text="@string/folder_icon"
             android:textSize="@dimen/dp28"
             android:padding="@dimen/dp6"
-            android:textColor="@color/green"/>
+            android:textColor="@color/green" />
 
         <TextView
             android:id="@+id/name"

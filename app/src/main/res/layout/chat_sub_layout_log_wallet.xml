@@ -96,7 +96,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="hasan"
-                android:textSize="@dimen/dp15"  />
+                android:textSize="@dimen/dp15" />
         </LinearLayout>
 
         <LinearLayout
@@ -123,7 +123,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/wallet_to"
-                android:textSize="@dimen/dp15"  />
+                android:textSize="@dimen/dp15" />
 
 
             <net.iGap.module.CustomTextViewMedium
@@ -160,7 +160,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/cardToCardTrace"
-                android:textSize="@dimen/dp15"  />
+                android:textSize="@dimen/dp15" />
 
 
             <net.iGap.module.CustomTextViewMedium
@@ -171,7 +171,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="121214212"
-                android:textSize="@dimen/dp15"  />
+                android:textSize="@dimen/dp15" />
         </LinearLayout>
 
         <LinearLayout
@@ -197,7 +197,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/cardToCardInvoiceNumber"
-                android:textSize="@dimen/dp15"  />
+                android:textSize="@dimen/dp15" />
 
 
             <net.iGap.module.CustomTextViewMedium
@@ -208,7 +208,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="1515115151"
-                android:textSize="@dimen/dp15"  />
+                android:textSize="@dimen/dp15" />
         </LinearLayout>
 
         <LinearLayout
@@ -234,7 +234,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/card_number"
-                android:textSize="@dimen/dp15"  />
+                android:textSize="@dimen/dp15" />
 
 
             <net.iGap.module.CustomTextViewMedium
@@ -245,7 +245,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="51151511515"
-                android:textSize="@dimen/dp15"  />
+                android:textSize="@dimen/dp15" />
         </LinearLayout>
 
         <LinearLayout
@@ -271,7 +271,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/WalletRrnNumber"
-                android:textSize="@dimen/dp15"  />
+                android:textSize="@dimen/dp15" />
 
 
             <net.iGap.module.CustomTextViewMedium
@@ -282,7 +282,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="15511"
-                android:textSize="@dimen/dp15"  />
+                android:textSize="@dimen/dp15" />
         </LinearLayout>
 
         <LinearLayout
@@ -308,7 +308,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/desc"
-                android:textSize="@dimen/dp15"  />
+                android:textSize="@dimen/dp15" />
 
 
             <net.iGap.module.CustomTextViewMedium

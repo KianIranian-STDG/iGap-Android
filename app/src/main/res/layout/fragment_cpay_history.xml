@@ -91,7 +91,7 @@
             app:layout_constraintTop_toTopOf="@id/fch_rv_history"
             app:layout_constraintBottom_toBottomOf="@id/fch_rv_history"
             app:layout_constraintStart_toStartOf="@id/fch_rv_history"
-            app:layout_constraintEnd_toEndOf="@id/fch_rv_history"/>
+            app:layout_constraintEnd_toEndOf="@id/fch_rv_history" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

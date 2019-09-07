@@ -5,10 +5,8 @@
 
         <shape android:shape="rectangle">
 
-            <solid android:color="@color/players_dark_background"/>
-            <corners
-                android:topLeftRadius="@dimen/dp10"
-                android:topRightRadius="@dimen/dp10"/>
+            <solid android:color="@color/players_dark_background" />
+            <corners android:topLeftRadius="@dimen/dp10" android:topRightRadius="@dimen/dp10" />
 
         </shape>
 

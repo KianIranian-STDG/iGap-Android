@@ -55,6 +55,7 @@
             android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:src="@color/color_default_discovery_cards" />
+
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/type7_tick1"
             android:layout_width="match_parent"
@@ -86,6 +87,7 @@
             android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:src="@color/color_default_discovery_cards" />
+
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/type7_tick2"
             android:layout_width="match_parent"

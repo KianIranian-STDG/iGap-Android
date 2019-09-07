@@ -8,63 +8,63 @@
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
-  <net.iGap.module.FontIconTextView
-      android:id="@+id/lcr_imv_replay"
-      android:layout_width="40dp"
-      android:layout_height="40dp"
-      android:textSize="@dimen/dp18"
-      style="@style/myIconToolbarStyle"
-      android:text="@string/reply_icon" />
+    <net.iGap.module.FontIconTextView
+        android:id="@+id/lcr_imv_replay"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:textSize="@dimen/dp18"
+        style="@style/myIconToolbarStyle"
+        android:text="@string/reply_icon" />
 
-  <ImageView
-    android:id="@+id/thumbnail"
-    android:layout_width="35dp"
-    android:layout_height="35dp"
-    android:layout_marginRight="@dimen/dp4"
-    android:contentDescription="@null" />
+    <ImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginRight="@dimen/dp4"
+        android:contentDescription="@null" />
 
-  <LinearLayout
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:orientation="vertical"
-    android:paddingRight="@dimen/dp6">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingRight="@dimen/dp6">
 
-    <net.iGap.module.EmojiTextViewE
-      android:id="@+id/replyFrom"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:ellipsize="end"
-      android:maxLines="1"
-        android:layout_marginTop="@dimen/dp4"
-      android:singleLine="true"
-      android:text="SAMPLE TEXT"
-        android:gravity="left"
-      android:textColor="@color/green"
-      android:textSize="@dimen/dp12"
-      android:textStyle="bold" />
+        <net.iGap.module.EmojiTextViewE
+            android:id="@+id/replyFrom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_marginTop="@dimen/dp4"
+            android:singleLine="true"
+            android:text="SAMPLE TEXT"
+            android:gravity="left"
+            android:textColor="@color/green"
+            android:textSize="@dimen/dp12"
+            android:textStyle="bold" />
 
-    <net.iGap.module.EmojiTextViewE
-      android:id="@+id/replayTo"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:ellipsize="end"
-      android:maxLines="1"
-        android:gravity="left"
-        android:layout_marginBottom="@dimen/dp4"
-      android:singleLine="true"
-      android:text="SAMPLE TEXT"
-      android:textColor="@color/black90"
-      android:textSize="@dimen/dp10" />
-  </LinearLayout>
+        <net.iGap.module.EmojiTextViewE
+            android:id="@+id/replayTo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:gravity="left"
+            android:layout_marginBottom="@dimen/dp4"
+            android:singleLine="true"
+            android:text="SAMPLE TEXT"
+            android:textColor="@color/black90"
+            android:textSize="@dimen/dp10" />
+    </LinearLayout>
 
-  <net.iGap.module.MaterialDesignTextView
-      android:id="@+id/cancelIcon"
-      android:layout_width="@dimen/dp40"
-      android:layout_height="match_parent"
-      android:layout_marginLeft="@dimen/dp2"
-      android:layout_marginRight="@dimen/dp2"
-      android:text="@string/close_icon"
-      style="@style/myIconToolbarStyle"/>
+    <net.iGap.module.MaterialDesignTextView
+        android:id="@+id/cancelIcon"
+        android:layout_width="@dimen/dp40"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp2"
+        android:layout_marginRight="@dimen/dp2"
+        android:text="@string/close_icon"
+        style="@style/myIconToolbarStyle" />
 
 </LinearLayout>

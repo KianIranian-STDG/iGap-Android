@@ -12,161 +12,161 @@
 
     >
 
-  <LinearLayout
-      android:id="@+id/fsr_layout_toolbar"
-      android:orientation="horizontal"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/toolbar_height"/>
+    <LinearLayout
+        android:id="@+id/fsr_layout_toolbar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height" />
 
-  <!-- recovery QuestionPassword-->
-  <LinearLayout
-    android:id="@+id/rootRecoveryQuestionPassword"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:visibility="visible">
+    <!-- recovery QuestionPassword-->
+    <LinearLayout
+        android:id="@+id/rootRecoveryQuestionPassword"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible">
 
-    <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/dp24"
-      android:gravity="center"
-      android:text="@string/password_Question_title_one"
-      style="?textSecurityColor"
-      android:textSize="@dimen/dp18" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp24"
+            android:gravity="center"
+            android:text="@string/password_Question_title_one"
+            style="?textSecurityColor"
+            android:textSize="@dimen/dp18" />
 
-    <TextView
-      android:id="@+id/txtSetRecoveryQuestionPassOne"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="@dimen/dp32"
-      android:layout_marginRight="@dimen/dp32"
-      android:layout_marginTop="@dimen/dp12"
-      android:singleLine="true"
-      style="?textSubColorSettingTheme"
-      android:textSize="@dimen/dp13"
+        <TextView
+            android:id="@+id/txtSetRecoveryQuestionPassOne"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp12"
+            android:singleLine="true"
+            style="?textSubColorSettingTheme"
+            android:textSize="@dimen/dp13"
 
-      />
+            />
 
-    <net.iGap.module.MEditText
-      android:id="@+id/edtSetRecoveryAnswerPassOne"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="@dimen/dp32"
-      android:layout_marginRight="@dimen/dp32"
-      android:hint="@string/password_answer"
-      android:singleLine="true"
-      style="?hintColorSettingTheme"
-      android:textSize="@dimen/dp13" />
+        <net.iGap.module.MEditText
+            android:id="@+id/edtSetRecoveryAnswerPassOne"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
+            android:hint="@string/password_answer"
+            android:singleLine="true"
+            style="?hintColorSettingTheme"
+            android:textSize="@dimen/dp13" />
 
-    <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/dp24"
-      android:gravity="center"
-      android:text="@string/password_Question_title_two"
-      style="?textSecurityColor"
-      android:textSize="@dimen/dp18" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp24"
+            android:gravity="center"
+            android:text="@string/password_Question_title_two"
+            style="?textSecurityColor"
+            android:textSize="@dimen/dp18" />
 
-    <TextView
-      android:id="@+id/txtSetRecoveryQuestionPassTwo"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="@dimen/dp32"
-      android:layout_marginRight="@dimen/dp32"
-      android:layout_marginTop="@dimen/dp12"
-      android:singleLine="true"
-      style="?textSubColorSettingTheme"
-      android:text="@string/password_Question_two"
-      android:textSize="@dimen/dp13" />
+        <TextView
+            android:id="@+id/txtSetRecoveryQuestionPassTwo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp12"
+            android:singleLine="true"
+            style="?textSubColorSettingTheme"
+            android:text="@string/password_Question_two"
+            android:textSize="@dimen/dp13" />
 
-    <net.iGap.module.MEditText
-      android:id="@+id/edtSetRecoveryAnswerPassTwo"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="@dimen/dp32"
-      android:layout_marginRight="@dimen/dp32"
-      android:hint="@string/password_answer"
-      style="?textSubColorSettingTheme"
-      android:singleLine="true"
-      android:textSize="@dimen/dp13" />
+        <net.iGap.module.MEditText
+            android:id="@+id/edtSetRecoveryAnswerPassTwo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
+            android:hint="@string/password_answer"
+            style="?textSubColorSettingTheme"
+            android:singleLine="true"
+            android:textSize="@dimen/dp13" />
 
-    <TextView
-      android:id="@+id/txtSetRecoveryByEmail"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="@dimen/dp32"
-      android:layout_marginRight="@dimen/dp32"
-      android:layout_marginTop="@dimen/dp48"
-      android:singleLine="true"
-      android:text="@string/recovery_by_email"
-      android:textColor="@color/green"
-      android:textSize="@dimen/dp13" />
+        <TextView
+            android:id="@+id/txtSetRecoveryByEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp48"
+            android:singleLine="true"
+            android:text="@string/recovery_by_email"
+            android:textColor="@color/green"
+            android:textSize="@dimen/dp13" />
 
-  </LinearLayout>
+    </LinearLayout>
 
-  <!--email-->
-  <LinearLayout
-    android:id="@+id/rootRecoveryEmailPassword"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:visibility="visible">
+    <!--email-->
+    <LinearLayout
+        android:id="@+id/rootRecoveryEmailPassword"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible">
 
-    <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/dp32"
-      android:gravity="center"
-      android:text="@string/enter_code"
-      android:textColor="@color/gray_4c"
-      android:textSize="@dimen/dp20" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp32"
+            android:gravity="center"
+            android:text="@string/enter_code"
+            android:textColor="@color/gray_4c"
+            android:textSize="@dimen/dp20" />
 
 
-    <net.iGap.module.MEditText
-      android:id="@+id/edtSetRecoveryEmail"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="@dimen/dp32"
-      android:layout_marginLeft="@dimen/dp32"
-      android:layout_marginRight="@dimen/dp32"
-      android:layout_marginStart="@dimen/dp32"
-      android:layout_marginTop="@dimen/dp32"
-      android:gravity="center"
-      android:textSize="@dimen/dp13" />
+        <net.iGap.module.MEditText
+            android:id="@+id/edtSetRecoveryEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp32"
+            android:gravity="center"
+            android:textSize="@dimen/dp13" />
 
-    <TextView
-      android:id="@+id/txtResendConfirmEmail"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="@dimen/dp32"
-      android:layout_marginLeft="@dimen/dp32"
-      android:layout_marginRight="@dimen/dp32"
-      android:layout_marginStart="@dimen/dp32"
-      android:layout_marginTop="@dimen/dp32"
-      android:gravity="start"
-      android:padding="@dimen/dp16"
-      android:text="@string/your_resend_email_skip"
-      android:textColor="@color/setting_items_value_color"
-      android:textSize="@dimen/dp14"
-      android:visibility="visible" />
+        <TextView
+            android:id="@+id/txtResendConfirmEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp32"
+            android:gravity="start"
+            android:padding="@dimen/dp16"
+            android:text="@string/your_resend_email_skip"
+            android:textColor="@color/setting_items_value_color"
+            android:textSize="@dimen/dp14"
+            android:visibility="visible" />
 
-    <TextView
-      android:id="@+id/txtSetRecoveryByQuestion"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="@dimen/dp32"
-      android:layout_marginLeft="@dimen/dp32"
-      android:layout_marginRight="@dimen/dp32"
-      android:layout_marginStart="@dimen/dp32"
-      android:layout_marginTop="@dimen/dp4"
-      android:gravity="start"
-      android:padding="@dimen/dp16"
-      android:singleLine="true"
-      android:text="@string/recovery_by_question"
-      android:textColor="@color/green"
-      android:textSize="@dimen/dp13" />
+        <TextView
+            android:id="@+id/txtSetRecoveryByQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
+            android:layout_marginStart="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp4"
+            android:gravity="start"
+            android:padding="@dimen/dp16"
+            android:singleLine="true"
+            android:text="@string/recovery_by_question"
+            android:textColor="@color/green"
+            android:textSize="@dimen/dp13" />
 
-  </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

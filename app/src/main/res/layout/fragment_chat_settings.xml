@@ -155,7 +155,8 @@
                             android:layout_centerVertical="true"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:text="@{chatSettingsVM.callbackDataShams , default=Miladi}"                            android:textSize="@dimen/smallTextSize"
+                            android:text="@{chatSettingsVM.callbackDataShams , default=Miladi}"
+                            android:textSize="@dimen/smallTextSize"
                             android:textColor="@color/setting_items_value_color"
                             android:textStyle="normal" />
 
@@ -393,7 +394,7 @@
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/dp10"
                     android:layout_marginTop="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10"/>
+                    android:layout_marginRight="@dimen/dp10" />
 
                 <LinearLayout
                     style="?backgroundColorSettingTheme"

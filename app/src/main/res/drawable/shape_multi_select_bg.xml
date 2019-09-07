@@ -5,12 +5,9 @@
 
         <shape android:shape="rectangle">
 
-            <solid
-                android:color="@color/white"/>
-            
-            <corners
-                android:bottomLeftRadius="@dimen/toolbar_radius"
-                android:bottomRightRadius="@dimen/toolbar_radius"/>
+            <solid android:color="@color/white" />
+
+            <corners android:bottomLeftRadius="@dimen/toolbar_radius" android:bottomRightRadius="@dimen/toolbar_radius" />
 
         </shape>
 

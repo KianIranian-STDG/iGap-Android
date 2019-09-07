@@ -9,82 +9,82 @@
     android:orientation="vertical"
     tools:ignore="MissingPrefix">
 
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:orientation="vertical"
-      android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar">
-
-
     <LinearLayout
-        android:orientation="vertical"
-        android:paddingTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar">
 
 
-      <TextView
-          android:id="@+id/fcm_lbl_add"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="24dp"
-          android:layout_marginLeft="24dp"
-          android:layout_marginTop="34dp"
-          android:layout_marginEnd="24dp"
-          android:layout_marginRight="24dp"
-          android:text="@string/add_new_member"
-          style="?textTitleColorSettingTheme"
-          android:textSize="@dimen/standardTextSize" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-      <View
-          android:id="@+id/fcm_splitter_add"
-          android:layout_width="match_parent"
-          android:layout_height="0.5dp"
-          android:layout_marginStart="16dp"
-          android:layout_marginLeft="16dp"
-          android:layout_marginTop="8dp"
-          android:layout_marginEnd="16dp"
-          android:layout_marginRight="16dp"
-          style="?lineColorSettingTheme" />
+
+            <TextView
+                android:id="@+id/fcm_lbl_add"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="34dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:text="@string/add_new_member"
+                style="?textTitleColorSettingTheme"
+                android:textSize="@dimen/standardTextSize" />
+
+            <View
+                android:id="@+id/fcm_splitter_add"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                style="?lineColorSettingTheme" />
+
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/fcg_prgWaiting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center|bottom"
+                android:layout_margin="@dimen/dp20"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fcm_recycler_view_show_member"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fadeScrollbars="false"
+                android:overScrollMode="never"
+                android:paddingTop="@dimen/dp16"
+                android:clipToPadding="false"
+                android:scrollbarSize="5dp"
+                android:scrollbarThumbVertical="@color/toolbar_background"
+                android:scrollbars="vertical" />
+
+
+        </FrameLayout>
 
 
     </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/fcm_layout_toolbar"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-      <ProgressBar
-          android:id="@+id/fcg_prgWaiting"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
-          android:layout_gravity="center|bottom"
-          android:layout_margin="@dimen/dp20"
-          android:visibility="gone" />
-
-      <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/fcm_recycler_view_show_member"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:fadeScrollbars="false"
-          android:overScrollMode="never"
-          android:paddingTop="@dimen/dp16"
-          android:clipToPadding="false"
-          android:scrollbarSize="5dp"
-          android:scrollbarThumbVertical="@color/toolbar_background"
-          android:scrollbars="vertical" />
-
-
-    </FrameLayout>
-
-
-  </LinearLayout>
-
-  <LinearLayout
-      android:id="@+id/fcm_layout_toolbar"
-      android:orientation="horizontal"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/toolbar_height_root_with_search"/>
+        android:layout_height="@dimen/toolbar_height_root_with_search" />
 
 </RelativeLayout>

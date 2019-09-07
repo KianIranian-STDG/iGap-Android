@@ -277,7 +277,7 @@
         app:layout_constraintBottom_toBottomOf="@id/txtFile"
         app:layout_constraintLeft_toRightOf="@id/txtLocation"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/txtFile"/>
+        app:layout_constraintTop_toTopOf="@id/txtFile" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtNumberItem"
@@ -290,7 +290,7 @@
         app:layout_constraintBottom_toBottomOf="@id/txtFile2"
         app:layout_constraintLeft_toLeftOf="@id/txtSend"
         app:layout_constraintRight_toRightOf="@id/txtSend"
-        app:layout_constraintTop_toBottomOf="@id/txtSend"/>
+        app:layout_constraintTop_toBottomOf="@id/txtSend" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/close"

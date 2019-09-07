@@ -193,7 +193,7 @@
                 app:layout_constraintStart_toStartOf="@id/loading"
                 app:layout_constraintEnd_toEndOf="@id/loading"
                 app:layout_constraintTop_toTopOf="@id/loading"
-                app:layout_constraintBottom_toBottomOf="@id/loading"/>
+                app:layout_constraintBottom_toBottomOf="@id/loading" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/registerButton"
