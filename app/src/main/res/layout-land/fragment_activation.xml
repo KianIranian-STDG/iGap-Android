@@ -11,7 +11,7 @@
             type="net.iGap.viewmodel.FragmentActivationViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -37,7 +37,7 @@
             app:layout_constraintCircle="@id/timerView"
             app:layout_constraintCircleAngle="0" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/timerTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
             app:layout_constraintRight_toRightOf="@id/timerPosition" />
 
         <!--TODO: change this and create custom view-->
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/activationCodeEditText1"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
             app:layout_constraintRight_toLeftOf="@id/activationCodeEditText2"
             app:layout_constraintTop_toTopOf="@id/timerView" />
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/activationCodeEditText2"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
             app:layout_constraintRight_toLeftOf="@id/activationCodeEditText3"
             app:layout_constraintTop_toTopOf="@id/activationCodeEditText1" />
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/activationCodeEditText3"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
             app:layout_constraintRight_toLeftOf="@id/activationCodeEditText4"
             app:layout_constraintTop_toTopOf="@id/activationCodeEditText1" />
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/activationCodeEditText4"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
             app:layout_constraintRight_toLeftOf="@id/activationCodeEditText5"
             app:layout_constraintTop_toTopOf="@id/activationCodeEditText1" />
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/activationCodeEditText5"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
@@ -118,7 +118,7 @@
             app:layout_constraintRight_toRightOf="@id/timerView"
             app:layout_constraintTop_toTopOf="@id/activationCodeEditText1" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/logo"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -130,7 +130,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent=".3" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/resentActivationCode"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="wrap_content"
@@ -143,7 +143,7 @@
             app:layout_constraintStart_toEndOf="@id/timerView"
             app:layout_constraintTop_toBottomOf="@id/logo" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/loginButton"
             style="@style/BaseIGapButtonStyle"
             android:layout_width="0dp"
@@ -166,5 +166,5 @@
             app:layout_constraintLeft_toLeftOf="@id/loginButton"
             app:layout_constraintRight_toRightOf="@id/loginButton" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

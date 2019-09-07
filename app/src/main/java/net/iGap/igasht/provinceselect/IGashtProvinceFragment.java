@@ -1,11 +1,11 @@
 package net.iGap.igasht.provinceselect;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +17,11 @@ import net.iGap.databinding.FragmentIgashtProvinceBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.igasht.IGashtBaseView;
-import net.iGap.igasht.favoritelocation.IGashtFavoritePlaceListFragment;
 import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.locationlist.IGashtLocationListFragment;
 import net.iGap.interfaces.ToolbarListener;
 
 public class IGashtProvinceFragment extends IGashtBaseView {
-
     private FragmentIgashtProvinceBinding binding;
 
     @Override
@@ -49,7 +47,7 @@ public class IGashtProvinceFragment extends IGashtBaseView {
                 .setContext(getContext())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.score_star_icon, R.string.history_icon)
+                .setRightIcons(/*R.string.score_star_icon,*/R.string.history_icon)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -61,16 +59,16 @@ public class IGashtProvinceFragment extends IGashtBaseView {
                     @Override
                     public void onRightIconClickListener(View view) {
                         if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtFavoritePlaceListFragment()).setReplace(false).load(true);
+                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
                         }
                     }
 
-                    @Override
+                  /*  @Override
                     public void onSecondRightIconClickListener(View view) {
                         if (getActivity() != null) {
                             new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
                         }
-                    }
+                    }*/
                 }).getView());
 
         binding.provinceSearchText.setOnItemClickListener((parent, view1, position, id) -> ((IGashtProvinceViewModel) viewModel).setSelectedLocation(position));
@@ -94,8 +92,10 @@ public class IGashtProvinceFragment extends IGashtBaseView {
 
         ((IGashtProvinceViewModel) viewModel).getClearEditText().observe(getViewLifecycleOwner(), isClear -> {
             if (isClear != null && isClear) {
+                binding.provinceSearchText.requestFocus();
                 binding.provinceSearchText.setText("");
             }
         });
     }
+
 }

@@ -10,8 +10,8 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -23,8 +23,6 @@ import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.List;
-
-import io.realm.Realm;
 
 public class ProgressWaiting extends AbstractMessage<net.iGap.adapter.items.chat.ProgressWaiting, net.iGap.adapter.items.chat.ProgressWaiting.ViewHolder> {
 

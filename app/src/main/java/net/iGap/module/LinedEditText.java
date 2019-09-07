@@ -21,7 +21,7 @@ import android.util.AttributeSet;
 
 import net.iGap.G;
 
-public class LinedEditText extends android.support.v7.widget.AppCompatEditText {
+public class LinedEditText extends androidx.appcompat.widget.AppCompatEditText {
 
     // the vertical offset scaling factor (10% of the height of the text)
     private static final float VERTICAL_OFFSET_SCALING_FACTOR = 0.1f;

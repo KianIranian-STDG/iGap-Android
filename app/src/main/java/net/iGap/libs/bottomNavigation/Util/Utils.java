@@ -3,7 +3,7 @@ package net.iGap.libs.bottomNavigation.Util;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.support.v7.widget.CardView;
+import androidx.cardview.widget.CardView;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;

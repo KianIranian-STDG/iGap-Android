@@ -1,7 +1,7 @@
 package net.iGap.dialog.payment.bankaccount;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.dialog.payment.CompleteListener;

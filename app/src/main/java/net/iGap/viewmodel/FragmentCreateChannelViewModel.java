@@ -9,16 +9,16 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.PopupMenu;
+
+import androidx.appcompat.widget.PopupMenu;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
@@ -32,15 +32,12 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentCreateChannelBinding;
-import net.iGap.fragments.ContactGroupFragment;
 import net.iGap.fragments.FragmentCreateChannel;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnChannelCheckUsername;
 import net.iGap.interfaces.OnChannelUpdateUsername;
 import net.iGap.proto.ProtoChannelCheckUsername;
-import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestChannelCheckUsername;
 import net.iGap.request.RequestChannelUpdateUsername;

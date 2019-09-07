@@ -14,14 +14,14 @@
             type="net.iGap.viewmodel.UserProfileViewModel" />
     </data>
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:layoutDirection="locale">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/root"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -45,7 +45,7 @@
 
             </RelativeLayout>
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/editProfile"
                 style="@style/myIconToolbarStyle"
                 android:layout_width="@dimen/toolbar_icon_size"
@@ -68,7 +68,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fup_avatar_box" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/addAvatar"
                 style="@style/myIconToolbarStyle"
                 android:layout_width="35dp"
@@ -80,7 +80,7 @@
                 app:layout_constraintEnd_toEndOf="@id/fup_user_image"
                 app:layout_constraintStart_toEndOf="@id/fup_user_image" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/userFullName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                 app:layout_constraintStart_toEndOf="@id/fup_user_image"
                 app:layout_constraintTop_toTopOf="@id/fup_user_image" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/fup_user_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
                 app:layout_constraintStart_toStartOf="@id/userFullName"
                 app:layout_constraintTop_toBottomOf="@id/userFullName" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/fup_user_tel"
                 style="?textSubColorSettingTheme"
                 android:layout_width="0dp"
@@ -132,7 +132,7 @@
                 app:layout_constraintStart_toStartOf="@id/userFullName"
                 app:layout_constraintTop_toBottomOf="@id/fup_user_name" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/fup_user_bio"
                 style="?textSubColorSettingTheme"
                 android:layout_width="0dp"
@@ -153,7 +153,7 @@
                 app:layout_constraintStart_toStartOf="@id/userFullName"
                 app:layout_constraintTop_toBottomOf="@id/fup_user_tel" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/cloudIcon"
                 style="@style/myIconTextViewStyleGray"
                 android:layout_width="@dimen/dp40"
@@ -166,7 +166,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fup_user_image" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/cloudTitle"
                 style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
@@ -178,7 +178,7 @@
                 app:layout_constraintStart_toStartOf="@id/cloudIcon"
                 app:layout_constraintTop_toBottomOf="@id/cloudIcon" />
 
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/fup_btn_cloud"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -190,7 +190,7 @@
                 app:layout_constraintRight_toRightOf="@id/cloudIcon"
                 app:layout_constraintTop_toTopOf="@id/cloudIcon" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/settingIcon"
                 style="@style/myIconTextViewStyleGray"
                 android:layout_width="@dimen/dp40"
@@ -202,7 +202,7 @@
                 app:layout_constraintStart_toEndOf="@id/cloudIcon"
                 app:layout_constraintTop_toTopOf="@id/fup_btn_cloud" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/settingTitle"
                 style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
@@ -214,7 +214,7 @@
                 app:layout_constraintStart_toStartOf="@id/settingIcon"
                 app:layout_constraintTop_toBottomOf="@id/settingIcon" />
 
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/fup_btn_settings"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -226,7 +226,7 @@
                 app:layout_constraintStart_toStartOf="@id/settingTitle"
                 app:layout_constraintTop_toTopOf="@id/settingIcon" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/addIcon"
                 style="@style/myIconTextViewStyleGray"
                 android:layout_width="@dimen/dp40"
@@ -239,7 +239,7 @@
                 app:layout_constraintStart_toEndOf="@id/settingIcon"
                 app:layout_constraintTop_toTopOf="@id/cloudIcon" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/addTitle"
                 style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
@@ -251,7 +251,7 @@
                 app:layout_constraintStart_toStartOf="@id/addIcon"
                 app:layout_constraintTop_toBottomOf="@id/addIcon" />
 
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/fup_btn_add"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -275,7 +275,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fup_btn_cloud" />
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/fup_btn_credit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -287,7 +287,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fup_splitter_1">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fup_btn_credit_icon"
                     style="@style/myIconTextViewStyle"
                     android:layout_width="wrap_content"
@@ -299,7 +299,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fup_btn_credit_lbl"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -315,7 +315,7 @@
                     app:layout_constraintStart_toEndOf="@id/fup_btn_credit_icon"
                     app:layout_constraintTop_toTopOf="@id/fup_btn_credit_icon" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fup_txt_credit_amount"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -329,7 +329,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/fup_btn_credit_icon" />
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
                 android:id="@+id/fup_splitter_2"
@@ -342,7 +342,7 @@
                 app:layout_constraintStart_toEndOf="@id/fup_btn_credit"
                 app:layout_constraintTop_toTopOf="@id/fup_btn_credit" />
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/fup_btn_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -353,7 +353,7 @@
                 app:layout_constraintStart_toEndOf="@id/fup_splitter_2"
                 app:layout_constraintTop_toTopOf="@id/fup_btn_credit">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fup_btn_score_icon"
                     style="@style/myIconTextViewStyle"
                     android:layout_width="wrap_content"
@@ -365,7 +365,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fup_btn_score_lbl"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -381,7 +381,7 @@
                     app:layout_constraintStart_toEndOf="@id/fup_btn_score_icon"
                     app:layout_constraintTop_toTopOf="@id/fup_btn_score_icon" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fup_txt_score"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -394,7 +394,7 @@
                     app:layout_constraintStart_toStartOf="@id/fup_btn_score_icon"
                     app:layout_constraintTop_toBottomOf="@id/fup_btn_score_icon" />
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
                 android:id="@+id/fup_splitter_3"
@@ -408,7 +408,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fup_btn_credit" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/inviteIcon"
                 style="@style/myIconTextViewStyle"
                 android:layout_width="30dp"
@@ -417,7 +417,7 @@
                 app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
                 app:layout_constraintTop_toTopOf="@id/fup_btn_invite_friends" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/inviteTitle"
                 style="?textTitleColorSettingTheme"
                 android:layout_width="0dp"
@@ -433,7 +433,7 @@
                 app:layout_constraintStart_toEndOf="@id/inviteIcon"
                 app:layout_constraintTop_toTopOf="@id/inviteIcon" />
 
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/fup_btn_invite_friends"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -446,7 +446,7 @@
                 app:layout_constraintTop_toBottomOf="@id/fup_splitter_3"
                 app:layout_constraintWidth_percent=".85" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/scanQRIcon"
                 style="@style/myIconTextViewStyle"
                 android:layout_width="30dp"
@@ -455,7 +455,7 @@
                 app:layout_constraintStart_toStartOf="@id/fup_btn_qr_scanner"
                 app:layout_constraintTop_toTopOf="@id/fup_btn_qr_scanner" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/scanQRTitle"
                 style="?textTitleColorSettingTheme"
                 android:layout_width="wrap_content"
@@ -470,7 +470,7 @@
                 app:layout_constraintStart_toEndOf="@id/scanQRIcon"
                 app:layout_constraintTop_toTopOf="@id/fup_btn_qr_scanner" />
 
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/fup_btn_qr_scanner"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -482,7 +482,7 @@
                 app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
                 app:layout_constraintTop_toBottomOf="@id/fup_btn_invite_friends" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/nearByIcon"
                 style="@style/myIconTextViewStyle"
                 android:layout_width="30dp"
@@ -491,7 +491,7 @@
                 app:layout_constraintStart_toStartOf="@id/fup_btn_nearBy"
                 app:layout_constraintTop_toTopOf="@id/fup_btn_nearBy" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/nearByTitle"
                 style="?textTitleColorSettingTheme"
                 android:layout_width="wrap_content"
@@ -506,7 +506,7 @@
                 app:layout_constraintStart_toEndOf="@id/nearByIcon"
                 app:layout_constraintTop_toTopOf="@id/fup_btn_nearBy" />
 
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/fup_btn_nearBy"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -518,7 +518,7 @@
                 app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
                 app:layout_constraintTop_toBottomOf="@id/fup_btn_qr_scanner" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/fup_btn_dark_view_handler_view"
                 style="@style/myIconTextViewStyle"
                 android:layout_width="30dp"
@@ -527,7 +527,7 @@
                 app:layout_constraintStart_toStartOf="@id/fup_btn_dark_mode"
                 app:layout_constraintTop_toTopOf="@id/fup_btn_dark_mode" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/darkThemeTitle"
                 style="?textTitleColorSettingTheme"
                 android:layout_width="0dp"
@@ -556,7 +556,7 @@
                 app:layout_constraintEnd_toEndOf="@id/fup_btn_dark_mode"
                 app:layout_constraintTop_toTopOf="@id/fup_btn_dark_mode" />
 
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/fup_btn_dark_mode"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -567,7 +567,7 @@
                 app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
                 app:layout_constraintTop_toBottomOf="@id/fup_btn_nearBy" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/fup_btn_faq_view_handler_view"
                 style="@style/myIconTextViewStyle"
                 android:layout_width="30dp"
@@ -576,7 +576,7 @@
                 app:layout_constraintStart_toStartOf="@id/fup_btn_faq"
                 app:layout_constraintTop_toTopOf="@id/fup_btn_faq" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/faqTitle"
                 style="?textTitleColorSettingTheme"
                 android:layout_width="wrap_content"
@@ -592,7 +592,7 @@
                 app:layout_constraintStart_toEndOf="@id/fup_btn_faq_view_handler_view"
                 app:layout_constraintTop_toTopOf="@id/fup_btn_faq" />
 
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/fup_btn_faq"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -616,7 +616,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fup_btn_faq" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/versionTitle"
                 style="?textTitleColorSettingTheme"
                 android:layout_width="wrap_content"
@@ -628,7 +628,7 @@
                 app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
                 app:layout_constraintTop_toBottomOf="@id/fup_splitter_4" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/fup_txt_app_version"
                 style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
@@ -641,7 +641,7 @@
                 app:layout_constraintStart_toEndOf="@id/versionTitle"
                 app:layout_constraintTop_toTopOf="@id/versionTitle" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/versionChange"
                 style="?textTitleColorSettingTheme"
                 android:layout_width="0dp"
@@ -659,7 +659,7 @@
                 app:layout_constraintTop_toBottomOf="@id/versionTitle"
                 app:layout_constraintVertical_bias="0" />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name"
                 style="?hintColorSettingTheme"
                 android:layout_width="0dp"
@@ -671,7 +671,7 @@
                 app:layout_constraintTop_toBottomOf="@id/versionTitle"
                 app:layout_constraintWidth_percent=".9">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nameEditText"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -681,9 +681,9 @@
                     android:text="@={viewModel.name}"
                     android:textSize="@dimen/standardTextSize" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/userName"
                 style="?hintColorSettingTheme"
                 android:layout_width="0dp"
@@ -696,7 +696,7 @@
                 app:layout_constraintRight_toRightOf="@id/name"
                 app:layout_constraintTop_toBottomOf="@id/name">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/userNameEditText"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -706,9 +706,9 @@
                     android:text="@={viewModel.userName}"
                     android:textSize="@dimen/standardTextSize" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/bio"
                 style="?hintColorSettingTheme"
                 android:layout_width="0dp"
@@ -722,7 +722,7 @@
                 app:layout_constraintRight_toRightOf="@id/name"
                 app:layout_constraintTop_toBottomOf="@id/userName">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/bioEditText"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -734,9 +734,9 @@
                     android:text="@={viewModel.bio}"
                     android:textSize="@dimen/standardTextSize" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/email"
                 style="?hintColorSettingTheme"
                 android:layout_width="0dp"
@@ -749,7 +749,7 @@
                 app:layout_constraintRight_toRightOf="@id/name"
                 app:layout_constraintTop_toBottomOf="@id/bio">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailEditText"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -759,9 +759,9 @@
                     android:text="@={viewModel.email}"
                     android:textSize="@dimen/standardTextSize" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/birthDate"
                 style="?hintColorSettingTheme"
                 android:layout_width="0dp"
@@ -773,7 +773,7 @@
                 app:layout_constraintRight_toRightOf="@id/name"
                 app:layout_constraintTop_toBottomOf="@id/email">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/birthDateEditText"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -782,9 +782,9 @@
                     android:text="@={viewModel.birthDate}"
                     android:textSize="@dimen/standardTextSize" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/referralView"
                 style="?hintColorSettingTheme"
                 android:layout_width="0dp"
@@ -797,7 +797,7 @@
                 app:layout_constraintStart_toEndOf="@id/countryCode"
                 app:layout_constraintTop_toBottomOf="@id/birthDate">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/referralEditText"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -808,22 +808,22 @@
                     android:text="@={viewModel.referralNumberObservableField}"
                     android:textSize="@dimen/standardTextSize" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/countryCode"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:gravity="bottom"
-                android:paddingBottom="6dp"
-                android:visibility="@{viewModel.countryCodeVisibility}"
-                android:text="@{viewModel.referralCountryCodeObservableField}"
                 android:onClick="@{() -> viewModel.onCountryCodeClick()}"
+                android:paddingBottom="6dp"
+                android:text="@{viewModel.referralCountryCodeObservableField}"
+                android:visibility="@{viewModel.countryCodeVisibility}"
                 app:layout_constraintBottom_toBottomOf="@id/referralView"
                 app:layout_constraintStart_toStartOf="@id/name"
                 app:layout_constraintTop_toTopOf="@id/referralView" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/gender"
                 style="?textTitleColorSettingTheme"
                 android:layout_width="wrap_content"
@@ -847,7 +847,7 @@
                 app:layout_constraintStart_toEndOf="@id/gender"
                 app:layout_constraintTop_toTopOf="@id/gender">
 
-                <android.support.v7.widget.AppCompatRadioButton
+                <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/male"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -856,7 +856,7 @@
                     android:button="@drawable/check_box_background"
                     android:text="@string/male" />
 
-                <android.support.v7.widget.AppCompatRadioButton
+                <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/female"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -876,22 +876,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/profileViewGroup"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 app:constraint_referenced_ids="inviteTitle,inviteIcon,scanQRIcon,scanQRTitle,nearByIcon,nearByTitle,darkTheme,darkThemeTitle,fup_btn_dark_view_handler_view,fup_btn_faq_view_handler_view,faqTitle,fup_user_name,fup_user_tel,fup_user_bio,cloudIcon,cloudTitle,settingIcon,settingTitle,addIcon,addTitle,fup_splitter_1,fup_btn_credit,fup_splitter_2,fup_btn_score,fup_splitter_3,inviteIcon,inviteTitle,fup_btn_qr_scanner,fup_btn_nearBy,fup_btn_dark_mode,fup_btn_faq,fup_splitter_4,versionTitle,fup_txt_app_version,userFullName,versionChange"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />
 
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/editProfileView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:visibility="gone"
                 app:constraint_referenced_ids="referralView,addAvatar,name,userName,bio,email,gender,genderValue" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 </layout>

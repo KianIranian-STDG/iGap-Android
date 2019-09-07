@@ -1,7 +1,7 @@
 package net.iGap.adapter.items.poll.holder;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import android.view.View;
 import android.widget.TextView;
 

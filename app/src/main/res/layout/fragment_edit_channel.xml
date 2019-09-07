@@ -8,7 +8,7 @@
             type="net.iGap.viewmodel.EditChannelViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,7 +23,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/root"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -31,7 +31,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -88,7 +88,7 @@
                     app:layout_constraintTop_toBottomOf="@id/membersCount"
                     app:layout_constraintWidth_percent=".95" />
 
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/groupDescriptionEditText"
                     style="?hintColorSettingTheme"
                     android:layout_width="0dp"
@@ -104,7 +104,7 @@
                     app:layout_constraintStart_toStartOf="@+id/channelNameEditText"
                     app:layout_constraintTop_toBottomOf="@+id/channelNameEditText" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/channelTypeTitle"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -118,7 +118,7 @@
                     app:layout_constraintTop_toBottomOf="@id/line2"
                     app:layout_constraintWidth_percent=".9" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/channelType"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -131,7 +131,7 @@
                     app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
                     app:layout_constraintTop_toBottomOf="@id/channelTypeTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/signedMessageTxt"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -146,7 +146,7 @@
                     app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
                     app:layout_constraintTop_toBottomOf="@id/channelType" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/signedMessageDescription"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -160,7 +160,7 @@
                     app:layout_constraintVertical_bias="0"
                     app:layout_constraintWidth_percent=".6" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/rateMessageTxt"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -175,7 +175,7 @@
                     app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
                     app:layout_constraintTop_toBottomOf="@id/signedMessageDescription" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/rateMessageDescription"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -189,7 +189,7 @@
                     app:layout_constraintVertical_bias="0"
                     app:layout_constraintWidth_percent=".6" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/administrators"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -203,7 +203,7 @@
                     app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
                     app:layout_constraintTop_toBottomOf="@id/line3" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/administratorsCount"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -218,7 +218,7 @@
                     app:layout_constraintStart_toEndOf="@id/administrators"
                     app:layout_constraintTop_toTopOf="@id/administrators" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/moderator"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -232,7 +232,7 @@
                     app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
                     app:layout_constraintTop_toBottomOf="@id/administrators" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/moderatorsCount"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -247,7 +247,7 @@
                     app:layout_constraintStart_toEndOf="@id/moderator"
                     app:layout_constraintTop_toTopOf="@id/moderator" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/members"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -262,7 +262,7 @@
                     app:layout_constraintTop_toBottomOf="@id/moderator" />
 
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/membersCount"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -277,7 +277,7 @@
                     app:layout_constraintStart_toEndOf="@id/members"
                     app:layout_constraintTop_toTopOf="@id/members" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/deleteChannel"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -375,8 +375,8 @@
                     android:textSize="@dimen/standardIconSize"
                     app:layout_constraintBottom_toBottomOf="@+id/channelNameEditText"
                     app:layout_constraintEnd_toEndOf="parent" />
-            </android.support.constraint.ConstraintLayout>
-        </android.support.v4.widget.NestedScrollView>
-    </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

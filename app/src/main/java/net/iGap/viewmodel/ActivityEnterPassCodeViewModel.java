@@ -10,29 +10,24 @@ package net.iGap.viewmodel;
  */
 
 import android.annotation.TargetApi;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.databinding.ObservableInt;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
-import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.interfaces.OnUserSessionLogout;
-import net.iGap.module.FingerprintHandler;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
@@ -72,7 +67,6 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     // Variable used for storing the key in the Android Keystore container
     private static final String KEY_NAME = "androidHive";
     private final int PIN = 0;
-    private final int PASSWORD = 1;
 
     private Realm realm;
     private KeyStore keyStore;

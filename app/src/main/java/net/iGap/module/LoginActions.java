@@ -3,8 +3,7 @@ package net.iGap.module;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
+import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 
@@ -15,14 +14,10 @@ import net.iGap.helper.HelperLogout;
 import net.iGap.helper.UserStatusController;
 import net.iGap.interfaces.OnContactFetchForServer;
 import net.iGap.interfaces.OnSecuring;
-import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
 import net.iGap.module.structs.StructListOfContact;
-import net.iGap.proto.ProtoGlobal;
-import net.iGap.proto.ProtoUserUpdateStatus;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmPhoneContacts;
-import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestGeoGetRegisterStatus;
@@ -31,19 +26,15 @@ import net.iGap.request.RequestUserContactsGetBlockedList;
 import net.iGap.request.RequestUserContactsGetList;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
-import net.iGap.request.RequestUserUpdateStatus;
 import net.iGap.request.RequestWrapper;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import io.realm.Realm;
 
 import static net.iGap.G.firstEnter;
-import static net.iGap.G.isAppInFg;
 
 /**
  * all actions that need doing after login

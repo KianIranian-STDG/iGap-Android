@@ -1,8 +1,8 @@
 package net.iGap.dialog.payment.buycharge;
 
-import android.arch.lifecycle.ViewModel;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableInt;
+import androidx.lifecycle.ViewModel;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableInt;
 
 import net.iGap.R;
 import net.iGap.dialog.payment.CompleteListener;

@@ -11,8 +11,8 @@
 package net.iGap.adapter;
 
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,18 +23,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChatBackground;
-import net.iGap.helper.HelperDownloadFile;
 import net.iGap.messageprogress.MessageProgress;
-import net.iGap.messageprogress.OnProgress;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
-import net.iGap.proto.ProtoFileDownload;
-import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmWallpaperProto;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;

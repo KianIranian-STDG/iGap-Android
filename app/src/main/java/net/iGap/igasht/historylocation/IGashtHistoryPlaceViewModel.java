@@ -1,47 +1,89 @@
 package net.iGap.igasht.historylocation;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.databinding.ObservableInt;
+
 import android.view.View;
 
 import net.iGap.igasht.BaseIGashtViewModel;
 import net.iGap.igasht.IGashtRepository;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
-public class IGashtHistoryPlaceViewModel extends BaseIGashtViewModel<List<String>> {
+public class IGashtHistoryPlaceViewModel extends BaseIGashtViewModel<TicketHistoryListResponse<IGashtTicketDetail>> {
 
-    private MutableLiveData<List<String>> historyList= new MutableLiveData<>();
+    private MutableLiveData<List<IGashtTicketDetail>> historyList = new MutableLiveData<>();
+    private MutableLiveData<String> goToTicketDetail = new MutableLiveData<>();
+    private ObservableInt showEmptyListMessage = new ObservableInt(View.GONE);
+
+    private TicketHistoryListResponse<IGashtTicketDetail> response;
     private IGashtRepository repository;
+    private boolean isLoadMoreItem = false;
 
     public IGashtHistoryPlaceViewModel() {
         repository = IGashtRepository.getInstance();
+        response = new TicketHistoryListResponse<>();
         getHistoryData();
     }
 
-    public MutableLiveData<List<String>> getHistoryList() {
+    public MutableLiveData<List<IGashtTicketDetail>> getHistoryList() {
         return historyList;
     }
 
+    public MutableLiveData<String> getGoToTicketDetail() {
+        return goToTicketDetail;
+    }
+
+    public ObservableInt getShowEmptyListMessage() {
+        return showEmptyListMessage;
+    }
+
     @Override
-    public void onSuccess(List<String> data) {
+    public void onSuccess(@NotNull TicketHistoryListResponse<IGashtTicketDetail> data) {
         showLoadingView.set(View.GONE);
         showMainView.set(View.VISIBLE);
         showViewRefresh.set(View.GONE);
-        historyList.setValue(data);
+        response.setLimit(data.getLimit());
+        response.setOffset(data.getOffset());
+        response.setTotal(data.getTotal());
+        response.getData().addAll(data.getData());
+        historyList.setValue(response.getData());
+        if (response.getData().size() > 0) {
+            showEmptyListMessage.set(View.GONE);
+        } else {
+            showEmptyListMessage.set(View.VISIBLE);
+        }
     }
 
     private void getHistoryData() {
         showLoadingView.set(View.VISIBLE);
         showMainView.set(View.GONE);
         showViewRefresh.set(View.GONE);
-        repository.getHistoryList(this);
+        repository.getHistoryList(0, 10, this);
     }
 
     public void onRetryClick() {
         getHistoryData();
     }
 
-    public void onClickHistoryItem(int position) {
+    public void loadMoreItems(int totalCount, int lastVisibleItem) {
+        if (!isLoadMoreItem && totalCount <= (lastVisibleItem + 1) && totalCount != 0) {
+            //load more
+            isLoadMoreItem = true;
+            if (response.getTotal() < (response.getOffset() * response.getLimit())) {
+                showLoadingView.set(View.GONE);
+                isLoadMoreItem = false;
+                return;
+            }
+            showLoadingView.set(View.VISIBLE);
+            //Load more data for recyclerView
+            repository.getHistoryList(response.getOffset() + 1, response.getLimit(), this);
+        }
+    }
 
+    public void onClickHistoryItem(int position) {
+        goToTicketDetail.setValue(response.getData().get(position).getTicketInfo().getVoucherNumber());
     }
 }

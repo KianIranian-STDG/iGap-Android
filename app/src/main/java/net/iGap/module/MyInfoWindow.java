@@ -1,7 +1,7 @@
 package net.iGap.module;
 
 import android.graphics.Typeface;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -13,7 +13,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentiGapMap;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;

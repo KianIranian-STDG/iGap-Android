@@ -10,7 +10,7 @@
 
 package net.iGap.interfaces;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 public interface OnRemoveFragment {
     void onRemoveFragment(Fragment fragment);

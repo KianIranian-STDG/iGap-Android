@@ -9,7 +9,7 @@
             type="net.iGap.viewmodel.FragmentLanguageViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootFragmentLanguage"
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.constraint.Group
+        <androidx.constraintlayout.widget.Group
             android:id="@+id/persianLanguage"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -40,7 +40,7 @@
             app:layout_constraintTop_toBottomOf="@id/fl_layout_toolbar"
             app:layout_constraintWidth_percent=".9" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtLanguageFarsi"
             style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
@@ -52,7 +52,7 @@
             app:layout_constraintStart_toStartOf="@id/persianLanguage"
             app:layout_constraintTop_toTopOf="@id/persianLanguage" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_fatsi"
             style="@style/baseFontIcon"
             android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
             app:layout_constraintEnd_toEndOf="@id/persianLanguage"
             app:layout_constraintTop_toTopOf="@id/persianLanguage" />
 
-        <android.support.constraint.Group
+        <androidx.constraintlayout.widget.Group
             android:id="@+id/englishLanguage"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -77,7 +77,7 @@
             app:layout_constraintStart_toStartOf="@id/persianLanguage"
             app:layout_constraintTop_toBottomOf="@id/persianLanguage" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtLanguageEn"
             style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
@@ -89,7 +89,7 @@
             app:layout_constraintStart_toStartOf="@id/englishLanguage"
             app:layout_constraintTop_toTopOf="@id/englishLanguage" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_english"
             style="@style/baseFontIcon"
             android:layout_width="wrap_content"
@@ -102,7 +102,7 @@
             app:layout_constraintEnd_toEndOf="@id/englishLanguage"
             app:layout_constraintTop_toTopOf="@id/englishLanguage" />
 
-        <android.support.constraint.Group
+        <androidx.constraintlayout.widget.Group
             android:id="@+id/arabicLanguage"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -114,7 +114,7 @@
             app:layout_constraintStart_toStartOf="@id/persianLanguage"
             app:layout_constraintTop_toBottomOf="@id/englishLanguage" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtLanguageAr"
             style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
@@ -126,7 +126,7 @@
             app:layout_constraintStart_toStartOf="@id/arabicLanguage"
             app:layout_constraintTop_toTopOf="@id/arabicLanguage" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/st_icon_ar"
             style="@style/baseFontIcon"
             android:layout_width="wrap_content"
@@ -138,5 +138,5 @@
             app:layout_constraintBottom_toBottomOf="@id/arabicLanguage"
             app:layout_constraintEnd_toEndOf="@id/arabicLanguage"
             app:layout_constraintTop_toTopOf="@id/arabicLanguage" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

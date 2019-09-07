@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
@@ -175,13 +175,13 @@
 
     </RelativeLayout>
 
-    <android.support.constraint.Group
+    <androidx.constraintlayout.widget.Group
         android:id="@+id/empty_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:constraint_referenced_ids="textEmptyCal,img_icCall"/>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fc_recycler_view_call"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -203,7 +203,7 @@
         app:layout_constraintStart_toStartOf="@id/fc_recycler_view_call" />
 
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/img_icCall"
         android:layout_width="@dimen/igap_hint_images"
         android:layout_height="@dimen/igap_hint_images"
@@ -215,7 +215,7 @@
         app:layout_constraintTop_toBottomOf="@id/fc_top_buttons"
         app:srcCompat="@drawable/ic_call" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textEmptyCal"
         style="?textTitleColorSettingTheme"
         android:layout_width="wrap_content"
@@ -229,4 +229,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/img_icCall" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

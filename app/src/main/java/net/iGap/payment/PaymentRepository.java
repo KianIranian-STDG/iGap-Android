@@ -1,6 +1,6 @@
 package net.iGap.payment;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import net.iGap.api.PaymentApi;
 import net.iGap.api.apiService.RetrofitFactory;

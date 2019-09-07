@@ -1,13 +1,13 @@
 package net.iGap.igasht.locationdetail;
 
-import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +18,10 @@ import net.iGap.databinding.FragmentIgashtLocationDetailBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.igasht.IGashtBaseView;
-import net.iGap.igasht.favoritelocation.IGashtFavoritePlaceListFragment;
 import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
-import net.iGap.igasht.locationdetail.buyticket.IGhashtBuyTicketFragment;
+import net.iGap.igasht.locationdetail.buyticket.IGashtBuyTicketFragment;
 import net.iGap.igasht.locationdetail.subdetail.IGashtLocationSubDetailFragment;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.payment.PaymentCallBack;
-import net.iGap.payment.PaymentFragment;
-import net.iGap.payment.PaymentResult;
 
 public class IGashtLocationDetailFragment extends IGashtBaseView {
 
@@ -54,7 +50,7 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
                 .setContext(getContext())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.score_star_icon, R.string.history_icon)
+                .setRightIcons(R.string.history_icon)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -65,13 +61,6 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
 
                     @Override
                     public void onRightIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtFavoritePlaceListFragment()).setReplace(false).load(true);
-                        }
-                    }
-
-                    @Override
-                    public void onSecondRightIconClickListener(View view) {
                         if (getActivity() != null) {
                             new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
                         }
@@ -84,9 +73,9 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment;
                 if (loadBuyTicketView) {
-                    fragment = fragmentManager.findFragmentByTag(IGhashtBuyTicketFragment.class.getName());
+                    fragment = fragmentManager.findFragmentByTag(IGashtBuyTicketFragment.class.getName());
                     if (fragment == null) {
-                        fragment = new IGhashtBuyTicketFragment();
+                        fragment = new IGashtBuyTicketFragment();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
                 } else {
@@ -100,18 +89,17 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
             }
         });
 
-        ((IGashtLocationDetailViewModel) viewModel).getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
-            if (getActivity() != null && isGoBack != null && isGoBack) {
-                Toast.makeText(getActivity(), R.string.successful_payment, Toast.LENGTH_SHORT).show();
-                getActivity().onBackPressed();
+        ((IGashtLocationDetailViewModel) viewModel).getGoHistoryPage().observe(getViewLifecycleOwner(), voucherNumber -> {
+            if (voucherNumber != null) {
+                goToHistoryListPage();
             }
         });
 
         ((IGashtLocationDetailViewModel) viewModel).getGoPayment().observe(getViewLifecycleOwner(), orderToken -> {
             if (getActivity() != null && orderToken != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.igasht_title),orderToken, result -> {
-                    if (result.isSuccess()){
-                        Toast.makeText(getActivity(),"Successful" , Toast.LENGTH_SHORT).show();
+                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.igasht_title), orderToken, result -> {
+                    if (result.isSuccess()) {
+                        goToHistoryListPage();
                     }
                 });
             }
@@ -126,5 +114,11 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
 
     public void registerVouchers() {
         ((IGashtLocationDetailViewModel) viewModel).registerOrder();
+    }
+
+    private void goToHistoryListPage() {
+        if (getActivity() != null) {
+            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
+        }
     }
 }

@@ -1,0 +1,41 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp60">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cellAddAssetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp8"
+        android:layout_marginStart="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginLeft="@dimen/dp32"
+        app:cardCornerRadius="6dp"
+        app:cardBackgroundColor="@color/kuknos_WH_itembg">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="?textTitleColorSettingTheme"
+                android:id="@+id/cellAddAssetTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/kuknos_AddAsset_Title"
+                android:textStyle="bold"
+                android:textSize="@dimen/dp18"
+                android:singleLine="true"
+                android:layout_margin="@dimen/dp4"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

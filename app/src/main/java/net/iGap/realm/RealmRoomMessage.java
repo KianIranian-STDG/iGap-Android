@@ -12,7 +12,7 @@ package net.iGap.realm;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.format.DateUtils;
 
 import com.vanniktech.emoji.EmojiUtils;
@@ -28,7 +28,6 @@ import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnActivityChatStart;
-import net.iGap.interfaces.OnActivityMainStart;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
@@ -49,7 +48,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmObject;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;

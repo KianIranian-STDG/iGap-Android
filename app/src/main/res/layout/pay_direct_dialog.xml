@@ -59,7 +59,7 @@
         android:layout_marginBottom="@dimen/dp8"
         tools:text="" />
 
-    <android.support.design.button.MaterialButton
+    <com.google.android.material.button.MaterialButton
         style="?iGapButton"
         android:id="@+id/pay"
         android:layout_width="match_parent"

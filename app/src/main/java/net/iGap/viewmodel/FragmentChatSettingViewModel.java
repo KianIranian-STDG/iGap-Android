@@ -1,18 +1,16 @@
 package net.iGap.viewmodel;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import android.content.SharedPreferences;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
 import android.view.View;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentData;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperFragment;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
 

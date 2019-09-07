@@ -11,14 +11,14 @@ package net.iGap.viewmodel;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.databinding.ObservableField;
+import androidx.databinding.ObservableField;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 import android.text.InputType;
 import android.view.View;
 import android.view.WindowManager;

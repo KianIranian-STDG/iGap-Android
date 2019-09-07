@@ -39,7 +39,7 @@
       android:gravity="center">
 
 
-      <android.support.design.button.MaterialButton
+      <com.google.android.material.button.MaterialButton
           style="?iGapButton"
         android:id="@+id/txtSetPassword"
         android:layout_width="0dp"
@@ -61,7 +61,7 @@
       android:gravity="center"
       android:visibility="@{RaadApp.paygearCard.isProtected ? View.VISIBLE : View.GONE}">
 
-      <android.support.design.button.MaterialButton
+      <com.google.android.material.button.MaterialButton
           style="?iGapButton"
         android:id="@+id/txtForgotPassword"
         android:layout_width="0dp"

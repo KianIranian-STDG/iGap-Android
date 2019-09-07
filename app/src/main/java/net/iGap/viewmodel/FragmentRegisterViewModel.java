@@ -9,14 +9,14 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 import android.net.Uri;
-import android.os.Handler;
-import android.support.v4.text.HtmlCompat;
+
+import androidx.core.text.HtmlCompat;
 import android.view.View;
 
 import com.google.protobuf.ByteString;

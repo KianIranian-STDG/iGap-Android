@@ -15,18 +15,18 @@
             type="net.iGap.viewmodel.FragmentRegisterViewModel" />
     </data>
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:layoutDirection="locale">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/register_background">
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/logo"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -38,7 +38,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent=".6" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
                 app:layout_constraintTop_toBottomOf="@id/logo"
                 app:layout_constraintWidth_percent=".8" />
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/rg_btn_choseCountry"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -68,11 +68,11 @@
                 app:layout_constraintTop_toBottomOf="@id/description"
                 app:layout_constraintWidth_percent=".7">
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/countryFlag"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
@@ -81,7 +81,7 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/country"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
                         app:layout_constraintRight_toLeftOf="@id/countryFlag"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/t1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -103,8 +103,8 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-                </android.support.constraint.ConstraintLayout>
-            </android.support.v7.widget.CardView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
 
             <com.vicmikhailau.maskededittext.MaskedEditText
                 android:id="@+id/phoneNumber"
@@ -129,7 +129,7 @@
                 app:layout_constraintTop_toBottomOf="@id/rg_btn_choseCountry"
                 app:mask="@{fragmentRegisterViewModel.edtPhoneNumberMask}" />
 
-            <android.support.v7.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/countyCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                 app:layout_constraintRight_toLeftOf="@id/phoneNumber"
                 app:layout_constraintTop_toTopOf="@id/phoneNumber" />
 
-            <android.support.v7.widget.AppCompatCheckBox
+            <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/conditionCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -162,7 +162,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/phoneNumber" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/conditionText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -180,7 +180,7 @@
                 app:layout_constraintEnd_toEndOf="@id/registerButton"
                 app:layout_constraintStart_toStartOf="@id/registerButton" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/retryView"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp48"
@@ -195,7 +195,7 @@
                 app:layout_constraintTop_toTopOf="@id/loading"
                 app:layout_constraintBottom_toBottomOf="@id/loading"/>
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/registerButton"
                 style="?iGapButton"
                 android:layout_width="0dp"
@@ -213,7 +213,7 @@
                 app:layout_constraintTop_toBottomOf="@id/conditionCheckBox"
                 app:layout_constraintWidth_percent=".5" />
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/scanBarcodeButton"
                 style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:layout_width="wrap_content"
@@ -233,6 +233,6 @@
                 app:layout_constraintTop_toBottomOf="@id/registerButton"
                 app:layout_constraintWidth_percent=".5" />
 
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v4.widget.NestedScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

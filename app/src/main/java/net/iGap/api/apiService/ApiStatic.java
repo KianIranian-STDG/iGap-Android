@@ -9,6 +9,10 @@ public class ApiStatic {
     static final String PAYMENT_URL = BASE_URL + "payment/";
     static final String ATI_URL = BASE_URL + "ati/";
     static final String MCI_URL = BASE_URL + "mci/";
+    static final String CPAY_URL = BASE_URL + "ati/c-pay/";
     static final String CHARITY_URL = BASE_URL + "charity/";
+    static final String KUKNOS_Horizan_Server = "https://hz1-test.kuknos.org/";
+    static final String NEWS_URL = BASE_URL + "news/";
+
 }
 

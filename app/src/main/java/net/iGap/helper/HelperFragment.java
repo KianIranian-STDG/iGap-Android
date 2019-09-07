@@ -2,9 +2,9 @@ package net.iGap.helper;
 
 import android.content.res.Configuration;
 import android.os.SystemClock;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.util.Log;
 
 import net.iGap.G;
@@ -17,14 +17,12 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentGroupProfile;
-import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.ShowCustomList;
 import net.iGap.fragments.TabletEmptyChatFragment;
-import net.iGap.fragments.filterImage.EditImageFragment;
 import net.iGap.payment.PaymentCallBack;
 import net.iGap.payment.PaymentFragment;
 

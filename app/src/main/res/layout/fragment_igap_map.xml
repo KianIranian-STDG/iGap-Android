@@ -23,14 +23,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <android.support.design.widget.AppBarLayout
+                <com.google.android.material.appbar.AppBarLayout
                     android:id="@+id/backgroundToolbarMap"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:background="@color/iGapColorDarker">
 
-                    <android.support.v7.widget.Toolbar
+                    <androidx.appcompat.widget.Toolbar
 
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp60"
@@ -104,8 +104,8 @@
 
                             </net.iGap.libs.rippleeffect.RippleView>
                         </LinearLayout>
-                    </android.support.v7.widget.Toolbar>
-                </android.support.design.widget.AppBarLayout>
+                    </androidx.appcompat.widget.Toolbar>
+                </com.google.android.material.appbar.AppBarLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -257,7 +257,7 @@
                         </LinearLayout>
                     </ScrollView>
 
-                    <android.support.design.widget.FloatingActionButton
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/st_fab_gps"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -295,7 +295,7 @@
                         app:menu_angle="@integer/ANGLE_NEARBY_ARC_MENU"
                         app:menu_scr="@drawable/ic_gps_layer">
 
-                        <android.support.design.widget.FloatingActionButton
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
                             android:id="@+id/ac_fab_satellite"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -304,7 +304,7 @@
                             app:fabSize="mini"
                             app:srcCompat="@drawable/ic_google_map" />
 
-                        <android.support.design.widget.FloatingActionButton
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
                             android:id="@+id/ac_fab_orgin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

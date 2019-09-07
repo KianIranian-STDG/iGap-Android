@@ -1,6 +1,6 @@
 package net.iGap.module;
 
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 import android.webkit.JavascriptInterface;
 
 import net.iGap.helper.HelperFragment;

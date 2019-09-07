@@ -101,9 +101,11 @@
 
   <attr name="pageBackgroundTheme" format="reference" />
   <attr name="textColorTheme" format="reference" />
+  <attr name="iGapButtonStroke" format="reference" />
   <attr name="iGapButton" format="reference" />
   <attr name="iGapButtonGray" format="reference"/>
   <attr name="greenTextIconColor" format="reference"/>
+  <attr name="iGapKuknosLogout" format="reference" />
 
   <!--Menu-->
   <attr name="textColorMenuTheme" format="reference" />
@@ -143,6 +145,10 @@
       <attr name="dark_unselected_icon" format="reference" />
 
 
+  </declare-styleable>
+
+  <declare-styleable name="PlaqueView">
+    <attr name="pv_edit_mode" format="boolean"/>
   </declare-styleable>
 
   <!--circle-->

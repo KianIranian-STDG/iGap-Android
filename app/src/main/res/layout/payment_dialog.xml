@@ -16,7 +16,7 @@
     android:background="@color/background_payment"
     android:clickable="true">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
@@ -205,7 +205,7 @@
 
             </LinearLayout>
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 style="?iGapButton"
                 android:id="@+id/pay_button"
                 fontPath="fonts/IRANSansMobile.ttf"
@@ -225,7 +225,7 @@
 
 
       </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
   </RelativeLayout>
 </layout>

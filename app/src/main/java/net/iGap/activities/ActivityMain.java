@@ -25,9 +25,9 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -100,6 +100,7 @@ import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.kuknos.view.KuknosSendFrag;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
@@ -162,6 +163,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static final int requestCodePaymentCharge = 198;
     public static final int requestCodePaymentBill = 199;
     public static final int requestCodeQrCode = 200;
+    public static final int kuknosRequestCodeQrCode = 202;
     public static final int requestCodeBarcode = 201;
     public static final int WALLET_REQUEST_CODE = 1024;
     private static final int ERROR_DIALOG_REQUEST_CODE = 1;
@@ -909,6 +911,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
                 if (result.getContents() != null) {
                     new RequestUserVerifyNewDevice().verifyNewDevice(result.getContents());
+                }
+                break;
+            case kuknosRequestCodeQrCode:
+                IntentResult kuknosWID = IntentIntegrator.parseActivityResult(resultCode, data);
+                if (kuknosWID.getContents() != null) {
+                    KuknosSendFrag myFragment = (KuknosSendFrag)getSupportFragmentManager().findFragmentByTag(KuknosSendFrag.class.getName());
+                    if (myFragment != null && myFragment.isVisible()) {
+                        myFragment.setWalletIDQrCode(kuknosWID.getContents());
+                    }
                 }
                 break;
             case WALLET_REQUEST_CODE:

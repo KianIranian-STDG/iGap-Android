@@ -1,6 +1,6 @@
 package net.iGap.dialog.topsheet;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 public class TopSheetViewModel extends ViewModel {
 

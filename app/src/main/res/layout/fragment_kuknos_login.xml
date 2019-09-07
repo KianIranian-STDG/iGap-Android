@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="net.iGap.kuknos.viewmodel.KuknosLoginVM" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fragKuknosLoginContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="?backgroundColorSettingTheme">
+
+        <!-- TODO clean min height-->
+
+        <LinearLayout
+            android:id="@+id/fragKuknosIdToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:minHeight="48dp"
+            android:background="@color/sky_blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragKuknosIdToolbar"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dp20">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosIdMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:text="@string/kuknos_login_messge_str"
+                    android:textSize="16dp"
+                    android:justificationMode="inter_word"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.7" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosIdUserNumHolder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:minHeight="48dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosIdMessage"
+                    app:layout_constraintWidth_percent="0.7">
+                    <androidx.appcompat.widget.AppCompatEditText
+                        style="?textTitleColorSettingTheme"
+                        android:id="@+id/fragKuknosIdUserNum"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:hint="@string/kuknos_login_tel_str"
+                        android:text="@={viewmodel.userNum}"
+                        android:textSize="@dimen/dp18"
+                        android:gravity="center"
+                        android:inputType="numberDecimal" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosIdUserIDHolder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:minHeight="48dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosIdUserNumHolder"
+                    app:layout_constraintWidth_percent="0.7">
+                    <androidx.appcompat.widget.AppCompatEditText
+                        style="?textTitleColorSettingTheme"
+                        android:id="@+id/fragKuknosIdUserID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:maxLength="10"
+                        android:minHeight="48dp"
+                        android:ems="10"
+                        android:hint="@string/kuknos_login_id_str"
+                        android:text="@={viewmodel.ID}"
+                        android:textSize="@dimen/dp18"
+                        android:gravity="center"
+                        android:digits="0123456789"
+                        android:inputType="numberDecimal"
+                        android:imeOptions="actionDone"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    style="?iGapButton"
+                    android:id="@+id/fragKuknosIdSubmit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:minHeight="58dp"
+                    android:text="@string/kuknos_login_progress_next"
+                    android:textSize="@dimen/dp16"
+                    android:onClick="@{()->viewmodel.onSubmit()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosIdUserIDHolder"
+                    app:layout_constraintWidth_percent="0.6"/>
+
+                <ProgressBar
+                    android:id="@+id/fragKuknosLProgressV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:elevation="2dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosIdSubmit"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosIdSubmit"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosIdSubmit"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosIdSubmit"
+                    app:layout_constraintHorizontal_bias="0.05"
+                    app:layout_constraintHeight_percent="0.08"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

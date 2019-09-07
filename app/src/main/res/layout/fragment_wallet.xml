@@ -31,11 +31,11 @@
     android:orientation="vertical"
     tools:ignore="MissingPrefix">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
 
-      <android.support.v7.widget.Toolbar
+      <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
@@ -79,9 +79,9 @@
             android:textStyle="normal"
             android:visibility="visible" />
         </LinearLayout>
-      </android.support.v7.widget.Toolbar>
+      </androidx.appcompat.widget.Toolbar>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
   </LinearLayout>

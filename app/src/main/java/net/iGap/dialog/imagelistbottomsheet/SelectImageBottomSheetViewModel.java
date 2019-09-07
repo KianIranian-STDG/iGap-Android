@@ -1,6 +1,6 @@
 package net.iGap.dialog.imagelistbottomsheet;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 public class SelectImageBottomSheetViewModel extends ViewModel {
 

@@ -1,7 +1,7 @@
 package org.paygear.web;
 
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.paygear.model.AvailableClubs_Result;
 import org.paygear.model.Card;
@@ -33,7 +33,6 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
-import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;

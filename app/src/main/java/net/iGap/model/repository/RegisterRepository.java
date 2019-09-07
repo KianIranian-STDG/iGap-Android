@@ -1,6 +1,6 @@
 package net.iGap.model.repository;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.os.Handler;
 import android.util.Log;
 

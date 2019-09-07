@@ -10,14 +10,12 @@
 
 package net.iGap.adapter.items;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mikepenz.fastadapter.items.AbstractItem;
-import com.nostra13.universalimageloader.utils.L;
 
 import net.iGap.G;
 import net.iGap.R;

@@ -17,7 +17,7 @@
     </data>
 
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         style="?backgroundSubChatTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,12 +35,12 @@
             app:umanoScrollableView="@+id/rcvListMusicPlayer"
             app:umanoShadowHeight="4dp">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 style="?backgroundColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ml_img_music_icon_default"
                     android:layout_width="@dimen/dp100"
                     android:layout_height="@dimen/dp100"
@@ -53,7 +53,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ml_img_music_picture"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -70,7 +70,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/ml_txt_music_place"/>
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/ml_txt_music_name"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -86,7 +86,7 @@
                     app:layout_constraintVertical_bias=".10"
                     app:layout_constraintWidth_percent=".9" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/ml_txt_music_place"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -100,7 +100,7 @@
                     app:layout_constraintStart_toStartOf="@id/ml_txt_music_name"
                     app:layout_constraintTop_toBottomOf="@id/ml_txt_music_name" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/ml_txt_music_info"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -153,7 +153,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/ml_btn_back" />
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:id="@+id/dragView"
@@ -165,12 +165,12 @@
                 android:layoutDirection="ltr"
                 android:background="@{G.isDarkTheme ? @drawable/shape_top_round_gray_background : @drawable/shape_top_round_gray_background_light}">
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp16">
 
-                    <android.support.v7.widget.AppCompatSeekBar
+                    <androidx.appcompat.widget.AppCompatSeekBar
                         android:id="@+id/ml_seekBar1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -182,7 +182,7 @@
                         app:layout_constraintRight_toLeftOf="@id/ml_txt_timer"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/ml_txt_timer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -206,7 +206,7 @@
                         app:layout_constraintEnd_toStartOf="@id/ml_txt_music_time"
                         android:background="@color/toolbar_player_base_color"/>
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/ml_txt_music_time"
                         style="?textSubColorSettingTheme"
                         android:layout_width="wrap_content"
@@ -287,7 +287,7 @@
                         app:layout_constraintRight_toLeftOf="@id/ml_btn_shuffel_music"
                         app:layout_constraintTop_toTopOf="@id/ml_btn_Previous_music" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ml_img_repead_one"
                         android:layout_width="@dimen/dp16"
                         android:layout_height="@dimen/dp16"
@@ -319,9 +319,9 @@
                         app:layout_constraintLeft_toRightOf="@id/ml_btn_replay_music"
                         app:layout_constraintTop_toTopOf="@id/ml_btn_Previous_music" />
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvListMusicPlayer"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -331,5 +331,5 @@
 
         </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

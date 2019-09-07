@@ -6,8 +6,6 @@ import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
@@ -20,9 +18,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
+import androidx.core.app.NotificationCompat;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -33,16 +31,13 @@ import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.RaadApp;
-import org.paygear.WalletActivity;
 import org.paygear.model.Contact;
 import org.paygear.web.Web;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Random;
 
-import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.model.Auth;
 
 import static ir.radsense.raadcore.utils.RaadCommonUtils.RTL_CHAR;

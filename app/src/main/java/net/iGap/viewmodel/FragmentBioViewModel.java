@@ -10,7 +10,7 @@ package net.iGap.viewmodel;
 */
 
 import android.content.Context;
-import android.databinding.ObservableField;
+import androidx.databinding.ObservableField;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;

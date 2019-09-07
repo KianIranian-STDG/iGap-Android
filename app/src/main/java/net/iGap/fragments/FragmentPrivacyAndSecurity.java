@@ -10,22 +10,20 @@
 
 package net.iGap.fragments;
 
-import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPrivacyAndSecurityBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.realm.RealmPrivacy;
 import net.iGap.request.RequestUserContactsGetBlockedList;
 import net.iGap.request.RequestUserProfileGetSelfRemove;

@@ -8,12 +8,12 @@
     android:clickable="true"
     android:layoutDirection="ltr">
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPagerEditText"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:layout_alignParentTop="true"
@@ -106,7 +106,7 @@
 
 
         </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -9,27 +9,17 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.content.Intent;
-import android.databinding.ObservableField;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.databinding.ObservableField;
+import androidx.annotation.NonNull;
 import android.text.Html;
-import android.view.View;
-
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.FragmentWalletAgrementBinding;
-import net.iGap.helper.HelperError;
-import net.iGap.interfaces.OnReceivePageInfoWalletAgreement;
 import net.iGap.model.GoToWalletPage;
 import net.iGap.request.RequestInfoPage;
 import net.iGap.request.RequestWalletRegister;
-
-import org.paygear.WalletActivity;
 
 import ir.radsense.raadcore.model.Auth;
 

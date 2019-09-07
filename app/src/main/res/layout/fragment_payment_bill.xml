@@ -25,17 +25,17 @@
             android:minHeight="@dimen/toolbar_height"
             android:orientation="vertical" />
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/dp16">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/billTypeImage"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -46,7 +46,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent=".24" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/billIdIcon"
                     style="@style/greenIconTextViewStyle"
                     android:layout_width="@dimen/dp48"
@@ -57,7 +57,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/billTypeImage" />
 
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/billId"
                     style="?hintColorSettingTheme"
                     android:layout_width="0dp"
@@ -80,9 +80,9 @@
                     app:layout_constraintTop_toTopOf="@id/billIdIcon">
 
                     <requestFocus />
-                </android.support.v7.widget.AppCompatEditText>
+                </androidx.appcompat.widget.AppCompatEditText>
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/payIdIcon"
                     style="@style/greenIconTextViewStyle"
                     android:layout_width="@dimen/dp48"
@@ -94,7 +94,7 @@
                     app:layout_constraintStart_toStartOf="@id/billIdIcon"
                     app:layout_constraintTop_toBottomOf="@id/billIdIcon" />
 
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/payId"
                     style="?hintColorSettingTheme"
                     android:layout_width="0dp"
@@ -115,7 +115,7 @@
                     app:layout_constraintStart_toEndOf="@id/payIdIcon"
                     app:layout_constraintTop_toTopOf="@id/payIdIcon" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/amountIcon"
                     style="@style/greenIconTextViewStyle"
                     android:layout_width="@dimen/dp48"
@@ -128,7 +128,7 @@
                     app:layout_constraintStart_toStartOf="@id/billIdIcon"
                     app:layout_constraintTop_toBottomOf="@id/payIdIcon" />
 
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/fpb_edt_price"
                     style="?hintColorSettingTheme"
                     android:layout_width="0dp"
@@ -160,7 +160,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/amountIcon" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/paymentButton"
                     style="?iGapButton"
                     android:layout_width="0dp"
@@ -175,7 +175,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintWidth_percent=".6" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/scanBarcodeButton"
                     style="?iGapButton"
                     android:layout_width="0dp"
@@ -188,7 +188,7 @@
                     app:layout_constraintEnd_toEndOf="@id/paymentButton"
                     app:layout_constraintStart_toStartOf="@id/paymentButton" />
 
-            </android.support.constraint.ConstraintLayout>
-        </android.support.v4.widget.NestedScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 </layout>

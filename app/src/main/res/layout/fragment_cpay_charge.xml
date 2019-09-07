@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.FragmentCPayChargeViewModel" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="?backgroundColorSettingTheme"
+        tools:context=".fragments.cPay.FragmentCPayCharge">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/toolbar_height"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <View
+            android:id="@+id/plaque_bg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/dp10"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintBottom_toBottomOf="@id/txtCredit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@{viewModel.isDark ? @drawable/round_button_enabled_bg : @drawable/round_button_disabled_bg , default = @drawable/round_button_disabled_bg}"/>
+
+        <net.iGap.libs.PlaqueView
+            android:id="@+id/plaqueView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:pv_edit_mode="false"
+            android:layout_margin="@dimen/dp26"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/lblCredit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/plaqueView"
+            app:layout_constraintStart_toStartOf="@id/plaqueView"
+            app:layout_constraintEnd_toEndOf="@id/plaqueView"
+            android:gravity="center"
+            app:fontFamily="@font/main_font"
+            style="?textSubColorSettingTheme"
+            android:text="@string/wallet_Your_credit"
+            android:layout_marginTop="@dimen/dp20"
+            android:textSize="@dimen/largeTextSize"/>
+
+        <ProgressBar
+            android:id="@+id/loaderAmount"
+            android:layout_width="@dimen/dp32"
+            android:layout_height="@dimen/dp32"
+            app:layout_constraintTop_toBottomOf="@id/lblCredit"
+            app:layout_constraintStart_toStartOf="@id/plaqueView"
+            app:layout_constraintEnd_toEndOf="@id/plaqueView"
+            android:layout_marginTop="@dimen/dp20"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtCredit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/lblCredit"
+            app:layout_constraintStart_toStartOf="@id/plaqueView"
+            app:layout_constraintEnd_toEndOf="@id/plaqueView"
+            android:gravity="center|top"
+            style="?textTitleColorSettingTheme"
+            app:fontFamily="@font/main_font"
+            android:visibility="invisible"
+            android:text="@{@string/amount_rials(viewModel.userCurrentAmount)}"
+            android:paddingBottom="@dimen/dp20"
+            android:layout_marginTop="@dimen/dp20"
+            android:textStyle="bold"
+            android:textSize="@dimen/xlargeTextSize"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/background_cancel_money_action"
+            app:layout_constraintTop_toTopOf="@id/spCharge"
+            app:layout_constraintBottom_toBottomOf="@id/spCharge"
+            app:layout_constraintStart_toStartOf="@id/spCharge"
+            app:layout_constraintEnd_toEndOf="@id/spCharge"/>
+
+        <Spinner
+            android:id="@+id/spCharge"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp44"
+            android:paddingRight="@dimen/dp10"
+            android:paddingLeft="@dimen/dp10"
+            android:onItemSelected="@{(parent,view,position,id)->viewModel.onSpinnerItemSelected(position)}"
+            app:layout_constraintTop_toBottomOf="@id/plaque_bg"
+            app:layout_constraintStart_toStartOf="@id/plaqueView"
+            app:layout_constraintEnd_toEndOf="@id/plaqueView"
+            android:layout_marginTop="@dimen/dp32"/>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edtAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp44"
+            app:layout_constraintTop_toBottomOf="@id/spCharge"
+            app:layout_constraintStart_toStartOf="@id/plaqueView"
+            app:layout_constraintEnd_toEndOf="@id/plaqueView"
+            android:layout_marginTop="@dimen/dp20"
+            android:hint="@string/at_least_cpay_amout"
+            android:paddingLeft="@dimen/dp10"
+            android:gravity="center"
+            android:inputType="number"
+            android:afterTextChanged="@{(s)->viewModel.onEditTextChangeListener(s.toString())}"
+            android:text=""
+            android:background="@drawable/background_cancel_money_action"
+            style="?hintColorSettingTheme"
+            android:textSize="@dimen/standardTextSize"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="?iGapButton"
+            app:layout_constraintStart_toStartOf="@id/plaqueView"
+            app:layout_constraintEnd_toEndOf="@id/plaqueView"
+            app:layout_constraintTop_toBottomOf="@id/edtAmount"
+            android:layout_marginTop="@dimen/dp32"
+            android:onClick="@{()-> viewModel.onPaymentClicked()}"
+            android:enabled="@{viewModel.payButtonEnableState , default = true}"
+            android:text="@string/pay"/>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.secondaryLoaderVisiblity , default = gone}"
+            app:layout_constraintTop_toBottomOf="@id/btnPay"
+            app:layout_constraintStart_toStartOf="@id/plaqueView"
+            app:layout_constraintEnd_toEndOf="@id/plaqueView"
+            android:layout_marginTop="@dimen/dp10"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

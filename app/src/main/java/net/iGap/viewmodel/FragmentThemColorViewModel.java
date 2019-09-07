@@ -9,24 +9,17 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-
 import net.iGap.G;
-import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.databinding.FragmentThemColorBinding;
-import net.iGap.fragments.FragmentDarkTheme;
 import net.iGap.fragments.FragmentThemColor;
-import net.iGap.fragments.FragmentThemColorCustom;
-import net.iGap.helper.HelperFragment;
 import net.iGap.model.ChangeTheme;
 import net.iGap.module.SHP_SETTING;
 

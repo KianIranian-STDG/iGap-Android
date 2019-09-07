@@ -9,13 +9,13 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
-import android.support.v7.widget.PopupMenu;
-import android.text.SpannableStringBuilder;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.appcompat.widget.PopupMenu;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -24,32 +24,24 @@ import android.view.View;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChannelProfile;
-import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentShearedMedia;
-import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnChannelLeft;
 import net.iGap.interfaces.OnMenuClick;
 import net.iGap.model.GoToSharedMediaModel;
 import net.iGap.model.GoToShowMemberModel;
-import net.iGap.module.AttachFile;
-import net.iGap.module.MEditText;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
-import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChannelAddAdmin;
 import net.iGap.request.RequestChannelAddModerator;
 import net.iGap.request.RequestChannelLeft;
-import net.iGap.request.RequestClientMuteRoom;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -57,10 +49,7 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
-import io.realm.RealmList;
 import io.realm.RealmModel;
-
-import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 
 public class FragmentChannelProfileViewModel extends ViewModel
         /*implements OnChannelAddMember, OnChannelAddModerator, OnChannelUpdateReactionStatus, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelDelete,

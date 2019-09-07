@@ -19,11 +19,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.CountDownTimer;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.util.ArrayMap;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.collection.ArrayMap;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -96,6 +96,7 @@ import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
+import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelExtraFields;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -434,6 +435,24 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 CardToCardHelper.NewCallCardToCard(G.currentActivity, cardToCard.getUserId(), cardToCard.getAmount(), cardToCard.getCardNumber());
             });
         }
+
+//        if (holder instanceof BotInlineItem.ViewHolder) {
+//            BotInlineItem.ViewHolder viewHolder = (BotInlineItem.ViewHolder) holder;
+//            viewHolder.getRootView().setMinimumWidth(G.maxChatBox);
+//            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
+//            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
+//            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
+//            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
+//            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
+//
+//
+//            if (G.isDarkTheme) {
+//                viewHolder.getMessageTv().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_dark))));
+//            } else {
+//                viewHolder.getMessageTv().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_light))));
+//            }
+//
+//        }
 
 
         if (holder instanceof ChatItemWithTextHolder) {

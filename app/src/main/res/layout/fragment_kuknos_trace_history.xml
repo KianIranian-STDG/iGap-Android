@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="net.iGap.kuknos.viewmodel.KuknosTradeHistoryVM" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="?backgroundColorSettingTheme">
+
+        <LinearLayout
+            android:id="@+id/kuknos_tradeHistory_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="@dimen/dp10"
+            android:background="@drawable/kuknos_list_header_style"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/kuknos_tradeHistory_recycler"
+            app:layout_constraintWidth_percent="0.9">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="38dp"
+                android:layout_weight="2"
+                android:text="@string/kuknos_trade_sell"
+                android:textSize="@dimen/dp14"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/buttonTextColor"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="38dp"
+                android:layout_weight="2"
+                android:text="@string/kuknos_trade_recieve"
+                android:textSize="@dimen/dp14"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/buttonTextColor"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="?textTitleColorSettingTheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="38dp"
+                android:layout_weight="2"
+                android:text="@string/kuknos_trade_amount"
+                android:textSize="@dimen/dp14"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/buttonTextColor"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="?textTitleColorSettingTheme"
+                android:id="@+id/kuknos_tradeHistory_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="38dp"
+                android:layout_weight="3"
+                android:text="@string/kuknos_trade_date"
+                android:textSize="@dimen/dp14"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/buttonTextColor"/>
+
+        </LinearLayout>
+
+        <TextView
+            style="?textTitleColorSettingTheme"
+            android:id="@+id/kuknos_tradeHistory_NOitem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp36"
+            android:gravity="center"
+            android:text="@string/kuknos_trade_noItem"
+            android:textStyle="bold"
+            android:textSize="@dimen/dp16"
+            android:singleLine="true"
+            android:layout_margin="@dimen/dp4"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_tradeHistory_header"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/kuknos_tradeHistory_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scrollbars="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_tradeHistory_NOitem"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ProgressBar
+            android:id="@+id/kuknos_tradeHistory_ProgressV"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:elevation="2dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHeight_percent="0.08"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

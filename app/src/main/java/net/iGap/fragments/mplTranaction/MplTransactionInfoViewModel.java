@@ -1,6 +1,6 @@
 package net.iGap.fragments.mplTranaction;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
 import net.iGap.interfaces.OnMplTransactionInfo;

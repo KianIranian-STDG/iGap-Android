@@ -18,7 +18,7 @@
       android:gravity="center"
       android:orientation="vertical">
 
-      <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="@dimen/igap_hint_images"
         android:layout_height="@dimen/igap_hint_images"
         android:contentDescription="@null"
@@ -57,7 +57,7 @@
       <!--android:layout_marginTop="6dp"-->
       <!--android:text="@string/E_2" />-->
 
-      <android.support.design.button.MaterialButton
+      <com.google.android.material.button.MaterialButton
           style="?iGapButton"
         android:id="@+id/restart_button"
         android:layout_width="wrap_content"

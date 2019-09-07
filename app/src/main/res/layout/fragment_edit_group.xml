@@ -12,7 +12,7 @@
             type="net.iGap.viewmodel.EditGroupViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,7 +27,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/root"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -35,7 +35,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -101,7 +101,7 @@
                     app:layout_constraintTop_toBottomOf="@id/members"
                     app:layout_constraintWidth_percent=".95" />
 
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/groupDescriptionEditText"
                     style="?hintColorSettingTheme"
                     android:layout_width="261dp"
@@ -116,7 +116,7 @@
                     app:layout_constraintStart_toStartOf="@+id/groupNameEditText"
                     app:layout_constraintTop_toBottomOf="@+id/line" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/chatHistoryTitle"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -129,7 +129,7 @@
                     app:layout_constraintTop_toBottomOf="@id/line2"
                     app:layout_constraintWidth_percent=".9" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/chatHistoryStatus"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -142,7 +142,7 @@
                     app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/chatHistoryTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/permission"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -155,7 +155,7 @@
                     app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/line3" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/permissionItems"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -169,7 +169,7 @@
                     app:layout_constraintStart_toEndOf="@id/permission"
                     app:layout_constraintTop_toTopOf="@id/permission" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/administrators"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -182,7 +182,7 @@
                     app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/permission" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/administratorsCount"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -196,7 +196,7 @@
                     app:layout_constraintStart_toEndOf="@id/administrators"
                     app:layout_constraintTop_toTopOf="@id/administrators" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/moderator"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -209,7 +209,7 @@
                     app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/administrators" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/moderatorsCount"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -224,7 +224,7 @@
                     app:layout_constraintTop_toTopOf="@id/moderator" />
 
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/members"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -237,7 +237,7 @@
                     app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/moderator" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/membersCount"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -251,7 +251,7 @@
                     app:layout_constraintStart_toEndOf="@id/members"
                     app:layout_constraintTop_toTopOf="@id/members" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/leaveGroup"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -314,8 +314,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/groupNameEditText"
                     app:layout_constraintEnd_toEndOf="parent" />
 
-            </android.support.constraint.ConstraintLayout>
-        </android.support.v4.widget.NestedScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

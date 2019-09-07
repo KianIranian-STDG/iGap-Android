@@ -1,7 +1,7 @@
 package net.iGap.adapter;
 
-import android.support.annotation.StringRes;
-import android.support.design.widget.TextInputLayout;
+import androidx.annotation.StringRes;
+import com.google.android.material.textfield.TextInputLayout;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -15,7 +15,7 @@ import static net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture;
 
 public class BindingAdapter {
 
-    @android.databinding.BindingAdapter(value = {"avatarImage"})
+    @androidx.databinding.BindingAdapter(value = {"avatarImage"})
     public static void setAddedAvatarImage(ImageView imageView, AvatarImage avatarImage) {
         if (avatarImage != null && avatarImage.imagePath != null) {
             if (avatarImage.showCharacterImage) {
@@ -26,19 +26,23 @@ public class BindingAdapter {
         }
     }
 
-    @android.databinding.BindingAdapter(value = {"imageUrl"})
+    @androidx.databinding.BindingAdapter(value = {"imageUrl"})
     public static void setAddedAvatarImage(ImageView imageView, String url) {
-        if (url != null) {
+        if (url != null && url.length() > 0) {
             Picasso.get().load(url)
                     .error(R.drawable.ic_error)
                     .into(imageView);
+        } else {
+            Picasso.get().load(R.mipmap.logo).into(imageView);
         }
     }
 
-    @android.databinding.BindingAdapter(value = {"imageUrl"})
+    @androidx.databinding.BindingAdapter(value = {"imageUrl"})
     public static void setImage(ImageView imageView, String imageUrl) {
         if (imageUrl != null) {
             ImageLoadingService.load(imageUrl, imageView);
+        } else {
+            Picasso.get().load(R.drawable.logo_igap).fit().centerInside().into(imageView);
         }
     }
 
@@ -55,12 +59,12 @@ public class BindingAdapter {
         String backgroundColor;
     }
 
-    @android.databinding.BindingAdapter("errorText")
+    @androidx.databinding.BindingAdapter("errorText")
     public static void setErrorMessage(TextInputLayout view, @StringRes int errorMessage) {
         view.setError(view.getContext().getString(errorMessage));
     }
 
-    @android.databinding.BindingAdapter("setSelected")
+    @androidx.databinding.BindingAdapter("setSelected")
     public static void setErrorMessage(View view, boolean isSelected) {
         view.setSelected(isSelected);
     }

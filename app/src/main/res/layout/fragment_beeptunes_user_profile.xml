@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent=".34" />
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -70,9 +70,9 @@
             tools:layout_editor_absoluteX="8dp" />
 
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_beepTunesProfile_perchesSong"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -106,9 +106,9 @@
             app:layout_constraintStart_toEndOf="@+id/fontIconTextView2"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_beepTunesProfile_syncSong"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -143,9 +143,9 @@
             app:layout_constraintStart_toEndOf="@+id/fontIconTextView3"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_beepTunesProfile_favoriteSong"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -180,5 +180,5 @@
             app:layout_constraintStart_toEndOf="@+id/fontIconTextView4"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

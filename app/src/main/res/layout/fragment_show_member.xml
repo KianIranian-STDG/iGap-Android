@@ -63,7 +63,7 @@
           android:layout_margin="@dimen/dp20"
           android:visibility="gone" />
 
-      <android.support.v7.widget.RecyclerView
+      <androidx.recyclerview.widget.RecyclerView
           android:id="@+id/fcm_recycler_view_show_member"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"

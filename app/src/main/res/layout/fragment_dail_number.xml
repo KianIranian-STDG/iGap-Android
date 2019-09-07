@@ -9,7 +9,7 @@
             type="net.iGap.viewmodel.DailNumberViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -23,7 +23,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/one"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -40,7 +40,7 @@
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintWidth_percent=".2" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/two"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -57,7 +57,7 @@
             app:layout_constraintTop_toTopOf="@id/one"
             app:layout_constraintWidth_percent=".2" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/three"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -74,7 +74,7 @@
             app:layout_constraintTop_toTopOf="@id/one"
             app:layout_constraintWidth_percent=".2" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/four"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -90,7 +90,7 @@
             app:layout_constraintRight_toRightOf="@id/one"
             app:layout_constraintTop_toBottomOf="@id/one" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/five"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -106,7 +106,7 @@
             app:layout_constraintRight_toRightOf="@id/two"
             app:layout_constraintTop_toTopOf="@id/four" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/six"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -122,7 +122,7 @@
             app:layout_constraintRight_toRightOf="@id/three"
             app:layout_constraintTop_toTopOf="@id/four" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/seven"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -138,7 +138,7 @@
             app:layout_constraintRight_toRightOf="@id/one"
             app:layout_constraintTop_toBottomOf="@id/four" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/eight"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -154,7 +154,7 @@
             app:layout_constraintRight_toRightOf="@id/two"
             app:layout_constraintTop_toTopOf="@id/seven" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/nine"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -170,7 +170,7 @@
             app:layout_constraintRight_toRightOf="@id/three"
             app:layout_constraintTop_toTopOf="@id/seven" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/star"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -186,7 +186,7 @@
             app:layout_constraintRight_toRightOf="@id/one"
             app:layout_constraintTop_toBottomOf="@id/seven" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/zero"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -202,7 +202,7 @@
             app:layout_constraintRight_toRightOf="@id/two"
             app:layout_constraintTop_toTopOf="@id/star" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/eraseNumber"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -218,7 +218,7 @@
             app:layout_constraintRight_toRightOf="@id/three"
             app:layout_constraintTop_toTopOf="@id/star" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/inputNumber"
             style="@style/TextAppearance.AppCompat.Display1"
             android:layout_width="0dp"
@@ -245,7 +245,7 @@
             app:layout_constraintTop_toTopOf="@id/inputNumber"
             app:srcCompat="@drawable/ic_add_24dp" />-->
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVoiceCall"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             fontPath="fonts/font_icon.ttf"
@@ -264,7 +264,7 @@
             app:layout_constraintTop_toBottomOf="@id/inputNumber"
             app:layout_constraintWidth_percent=".3" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVideoCall"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             fontPath="fonts/font_icon.ttf"
@@ -282,5 +282,5 @@
             app:layout_constraintTop_toTopOf="@id/btnVoiceCall"
             app:layout_constraintWidth_percent=".3" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

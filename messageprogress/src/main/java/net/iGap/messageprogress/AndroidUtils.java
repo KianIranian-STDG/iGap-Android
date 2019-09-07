@@ -3,8 +3,8 @@ package net.iGap.messageprogress;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.DrawableRes;
-import android.support.v7.widget.AppCompatDrawableManager;
+import androidx.annotation.DrawableRes;
+import androidx.appcompat.widget.AppCompatDrawableManager;
 
 /* * This is the source code of iGap for Android
  * It is licensed under GNU AGPL v3.0

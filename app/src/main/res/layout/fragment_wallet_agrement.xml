@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/txtAgreement_register"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                     android:text="@{viewModel.callbackTxtAgreement}"
                     android:textSize="@dimen/dp14" />
 
-                <android.support.v7.widget.AppCompatCheckBox
+                <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/fpc_checkBox_trabord"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"

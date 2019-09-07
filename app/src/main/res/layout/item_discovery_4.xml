@@ -5,7 +5,7 @@
     android:layout_height="50dp"
     android:orientation="horizontal">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/type4_card0"
         android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="0dp"
@@ -22,10 +22,10 @@
             android:scaleType="fitXY"
             android:src="@color/color_default_discovery_cards" />
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/type4_card1"
         android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="0dp"
@@ -43,6 +43,6 @@
             android:src="@color/color_default_discovery_cards"
 
             />
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

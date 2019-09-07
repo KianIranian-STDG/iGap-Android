@@ -1,7 +1,7 @@
 package net.iGap.eventbus;
 
-import android.support.annotation.Nullable;
-import android.util.Log;
+import androidx.annotation.Nullable;
+
 import android.util.SparseArray;
 
 import java.util.ArrayList;

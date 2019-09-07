@@ -2,8 +2,8 @@ package net.iGap.adapter.beepTunes;
 
 import android.graphics.PorterDuff;
 import android.media.MediaPlayer;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +18,12 @@ import net.iGap.interfaces.OnTrackAdapter;
 import net.iGap.module.BeepTunesPlayerService;
 import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.PlayingSong;
-import net.iGap.module.api.beepTunes.ProgressDuration;
 import net.iGap.module.api.beepTunes.Track;
 import net.iGap.realm.RealmDownloadSong;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import io.realm.Realm;
 

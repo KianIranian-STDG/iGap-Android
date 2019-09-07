@@ -9,10 +9,10 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import android.content.SharedPreferences;
-import android.databinding.ObservableField;
+import androidx.databinding.ObservableField;
 import android.view.View;
 
 import com.afollestad.materialdialogs.GravityEnum;
@@ -20,11 +20,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentActiveSessions;
-import net.iGap.fragments.FragmentBlockedUser;
-import net.iGap.fragments.FragmentPassCode;
-import net.iGap.fragments.FragmentSecurity;
-import net.iGap.helper.HelperFragment;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.structs.StructSessions;

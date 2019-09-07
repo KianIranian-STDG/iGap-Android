@@ -9,7 +9,7 @@
             type="net.iGap.viewmodel.FinancialServicesViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -22,7 +22,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
@@ -31,12 +31,12 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/root"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/scanQRCodeButton"
                     style="@style/Widget.MaterialComponents.Button"
                     android:layout_width="0dp"
@@ -93,7 +93,7 @@
                     app:layout_constraintCircleAngle="0"
                     app:layout_constraintCircleRadius="83dp" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/walletPriceValue"
                     style="@style/TextAppearance.AppCompat.Display1"
                     android:layout_width="0dp"
@@ -107,7 +107,7 @@
                     app:layout_constraintRight_toRightOf="@id/walletPriceView"
                     app:layout_constraintTop_toTopOf="@id/walletPriceView" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="@style/TextAppearance.AppCompat.Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
                     app:layout_constraintRight_toRightOf="@id/walletPriceValue"
                     app:layout_constraintTop_toBottomOf="@id/walletPriceValue" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/walletTitle"
                     style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="wrap_content"
@@ -129,7 +129,7 @@
                     app:layout_constraintRight_toRightOf="@id/walletPriceView"
                     app:layout_constraintTop_toBottomOf="@id/walletPriceView" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/charge"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintWidth_percent=".4" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/cashOut"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -176,7 +176,7 @@
                     app:layout_constraintTop_toBottomOf="@id/line2"
                     app:layout_constraintWidth_percent=".7" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/v"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -192,7 +192,7 @@
                     app:layout_constraintTop_toTopOf="@id/addBankCard"
                     app:layout_constraintWidth_percent=".16" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/v1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -201,7 +201,7 @@
                     app:layout_constraintLeft_toLeftOf="@id/v"
                     app:layout_constraintRight_toRightOf="@id/v"
                     app:layout_constraintTop_toBottomOf="@id/v" />
-            </android.support.constraint.ConstraintLayout>
-        </android.support.v4.widget.NestedScrollView>
-    </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

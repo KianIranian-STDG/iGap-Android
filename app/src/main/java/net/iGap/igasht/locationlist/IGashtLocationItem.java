@@ -36,6 +36,9 @@ public class IGashtLocationItem implements Parcelable {
     private String location;
     @SerializedName("text")
     private LocationDetail detail;
+    @SerializedName("extra")
+    private ExtraDetail mExtraDetail;
+
 
     private IGashtLocationItem(@NotNull Parcel in) {
         id = in.readInt();
@@ -157,5 +160,13 @@ public class IGashtLocationItem implements Parcelable {
         dest.writeString(locationEnglishAddress);
         dest.writeString(location);
         dest.writeParcelable(detail, flags);
+    }
+
+    public ExtraDetail getmExtraDetail() {
+        return mExtraDetail;
+    }
+
+    public void setmExtraDetail(ExtraDetail mExtraDetail) {
+        this.mExtraDetail = mExtraDetail;
     }
 }

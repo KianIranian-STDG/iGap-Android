@@ -10,7 +10,7 @@
 
 package net.iGap.module.structs;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class StructListOfContact implements Comparable<StructListOfContact> {
 

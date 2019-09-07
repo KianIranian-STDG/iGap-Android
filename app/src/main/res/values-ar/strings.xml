@@ -1297,6 +1297,7 @@
     <string name="total_balance">النسبة الاجمالية </string>
 
     <string name="rials">ریال</string>
+    <string name="amount_rials">%s ریال</string>
 
     <string name="unverified">لم يُحدّد /</string>
 
@@ -2147,6 +2148,7 @@
     <string name="lbl_contrast">تباين</string>
     <string name="lbl_saturation">التشبع</string>
     <string name="tab_filters">مرشح اللون</string>
+    <string name="filter">مرشح</string>
     <string name="tab_edit">تحرير</string>
     <string name="can_not_open_file">لا يمكن فتح هذا الملف</string>
     <string name="st_24_Clock">24 ساعة</string>
@@ -2200,6 +2202,8 @@
     <string name="charge_5"> 50.000 ریالی</string>
     <string name="charge_10"> 100.000 ریالی</string>
     <string name="charge_20"> 200.000 ریالی</string>
+    <string name="charge_50"> 500.000 ریالی</string>
+    <string name="charge_100"> 1.000.000 ریالی</string>
 
     <string name="charge_1_ir">10.000 ریالی +  9%  القيمة المضافة = 10.900 ریال</string>
     <string name="charge_2_ir">20.000 ریالی +  9%  القيمة المضافة = 21.180 ریال</string>
@@ -2868,14 +2872,14 @@
     <string name="igasht_buy_ticket_title">خرید بلیط</string>
     <string name="detail_title">جزئیات</string>
     <string name="igasht_place_of_visit_title">محل بازدید</string>
-    <string name="igasht_add_new_place_title">اضافه کردن بازدید جدید</string>
+    <string name="igasht_addـexternal_visits">اضافه کردن بازدید خارجی </string>
     <string name="igasht_ticket_type_title">نوع بلیط را مشخص کنید</string>
     <string name="igasht_enter_ticket_count_title">تعداد بازدید کننده را وارد کنید.</string>
     <string name="igasht_add_ticket_count_button_title">ثبت</string>
     <string name="igasht_order_ticket_title">%s برای %d نفر</string>
     <string name="igasht_favorites_title">علاقه مندی ها</string>
     <string name="igasht_history_title">تاریخچه</string>
-    <string name="igasht_total_ticket_price">مبلغ نهایی: %d تومان</string>
+    <string name="igasht_total_ticket_price">مبلغ نهایی: %d ریال</string>
     <string name="igasht_add_ticket_error">لطفا بلیت خود را اضافه کنید.</string>
     <string name="str_frag_sync_contactTitle">قل مرحبا لأصدقائك</string>
     <string name="str_frag_sync_contactWelcome">مرحبا بك في آی کب</string>
@@ -2926,15 +2930,43 @@
     <string name="mpl_transaction_nul">ليس لديك أي معاملات في آخر 5 أيام!</string>
     <string name="mpl_transaction_merchent_name">اسم التاجر</string>
 
-
     <string name="of_from_total">فی %s</string>
     <string name="app_version_change_log">قائمة التغييرات</string>
     <string name="updated_version_title">الإصدار الخاص بك هو التحديث</string>
     <string name="check_update_title">اختر التحديث</string>
     <string name="unblock">رفع الحظر</string>
     <string name="view_profile">عرض المستخدم</string>
+    <string name="there_is_no_car_available">لا يوجد سيارة متاحة.</string>
+    <string name="add_car">أضف سيارة</string>
+    <string name="cars_plaque">لوحة سيارات</string>
+    <string name="car_plaque">لوحة سياره</string>
+    <string name="c_pay_title">خدمة السيارات</string>
+    <string name="add_plaque">تقديم البلاك</string>
+    <string name="from_first">من الاول</string>
+    <string name="national_code">المدونة الوطنية</string>
+    <string name="plaque_is_not_valid">البلاك غير صالح.</string>
+    <string name="complete_correct">المعلومات غير صالحة.</string>
+    <string name="plaque_added">تمت إضافة البلاك.</string>
+    <string name="at_least_cpay_amout">المبلغ (لا يقل عن 20 ألف ريال)</string>
+    <string name="cpay_title">سی پی</string>
     <string name="link_not_valid">رابط غير صالح</string>
     <string name="popular_channel">قنوات جذابة</string>
     <string name="referral_code_invalid">رمز الإحالة غير صالح</string>
     <string name="already_registered">لقد قمت بالفعل بتسجيل رمز الإحالة الخاص بك</string>
+    <string name="scan_barcode_to_enter_visit">جهت ورود و بازدید بارکد فوق را اسکن کنید</string>
+    <string name="Your_purchase_code">کد خرید شما %s</string>
+    <string name="igasht_count_title">تعداد</string>
+    <string name="igasht_service_title">سرویس</string>
+    <string name="igasht_select_location_button_title">انتخاب محل</string>
+    <string name="igasht_selected_location_title">المناطق الترفيهية في محافظة %s</string>
+    <string name="igasht_location_found_count">%d سلعة موجودة</string>
+    <string name="igasht_success_payment">پرداخت شما با موفقیت انجام شد</string>
+    <string name="noDetail_textView">فاقد توضیحات</string>
+    <string name="igasht_empty_history_message">هنوز بلیطی خریداری نشده است.</string>
+    <string name="Restaurant_textView">رستوران</string>
+    <string name="parking_textView">پارکینگ</string>
+    <string name="wifi_textView">وای فای</string>
+    <string name="coffeeShop_textView">کافی شاپ</string>
+    <string name="wheelchair_textView">ویلچر</string>
+    <string name="prayerRoom_textView">نمازخانه</string>
 </resources>

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import net.iGap.BuildConfig;
 import net.iGap.G;
+import net.iGap.api.CPayApi;
 import net.iGap.api.CharityApi;
 
 import java.util.ArrayList;
@@ -85,6 +86,15 @@ public class RetrofitFactory {
                 .build();
     }
 
+    public CPayApi getCPayApi() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.CPAY_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build()
+                .create(CPayApi.class);
+    }
+
     public Retrofit getMciRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.MCI_URL)
@@ -99,6 +109,14 @@ public class RetrofitFactory {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build().create(CharityApi.class);
+    }
+
+    public Retrofit getNewsRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.NEWS_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build();
     }
 
     private OkHttpClient.Builder enableTls12OnPreLollipop(OkHttpClient.Builder client) {
@@ -128,4 +146,33 @@ public class RetrofitFactory {
 
         return client;
     }
+
+
+    // TODO clean this comment
+/*
+    Retrofit getKuknosHorizanRetrofit() {
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        builder.addInterceptor(interceptor);
+
+        builder.addInterceptor(chain -> {
+            Request original = chain.request();
+            Request request = original.newBuilder()
+                    .header("Content-Type", "application/json")
+                    .method(original.method(), original.body())
+                    .build();
+            return chain.proceed(request);
+        });
+        OkHttpClient httpClient = builder.build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApiStatic.KUKNOS_Horizan_Server)
+                .addConverterFactory(GsonConverterFactory.create(*//*GsonSingleton.getInstance()*//*))
+                .client(httpClient)
+                .build();
+        return retrofit;
+    }*/
 }

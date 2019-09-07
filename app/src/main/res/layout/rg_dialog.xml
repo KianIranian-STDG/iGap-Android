@@ -17,7 +17,7 @@
         android:layout_marginTop="@dimen/dp12"
         android:layoutDirection="ltr">
 
-        <android.support.v7.widget.SearchView
+        <androidx.appcompat.widget.SearchView
             android:id="@+id/rg_edtSearch_toolbar"
             style="?textSubColorSettingTheme"
             android:layout_width="match_parent"

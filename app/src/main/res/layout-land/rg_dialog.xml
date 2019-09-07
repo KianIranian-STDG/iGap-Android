@@ -16,7 +16,7 @@
         android:layoutDirection="ltr"
         android:orientation="horizontal">
 
-        <android.support.v7.widget.SearchView
+        <androidx.appcompat.widget.SearchView
             android:id="@+id/rg_edtSearch_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

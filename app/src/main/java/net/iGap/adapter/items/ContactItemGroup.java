@@ -11,13 +11,12 @@
 package net.iGap.adapter.items;
 
 import android.net.Uri;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
 
-import com.hanks.library.AnimateCheckBox;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.G;
@@ -30,7 +29,6 @@ import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**

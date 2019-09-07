@@ -11,9 +11,9 @@
 package net.iGap.adapter.items.chat;
 
 import android.graphics.Color;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +27,6 @@ import net.iGap.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.List;
-
-import io.realm.Realm;
 
 import static android.view.Gravity.CENTER;
 import static android.widget.LinearLayout.HORIZONTAL;

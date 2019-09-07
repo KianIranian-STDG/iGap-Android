@@ -30,7 +30,7 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp6">
@@ -44,7 +44,7 @@
                     app:layout_constraintStart_toStartOf="@id/lastTermTitle"
                     app:layout_constraintTop_toTopOf="@id/lastTermTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/lastTermTitle"
                     style="?textSubColorSettingTheme"
                     android:layout_width="match_parent"
@@ -56,7 +56,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/lastTermMessage"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lastTermTitle" />
 
-                <android.support.constraint.Barrier
+                <androidx.constraintlayout.widget.Barrier
                     android:id="@+id/line"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -78,7 +78,7 @@
                     app:barrierDirection="end"
                     app:constraint_referenced_ids="billIdTitle,lastTermPayIdTitle,lastTermAmountTitle,midTermBillIdTitle,midTermPayIdTitle,midTermAmountTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/billIdTitle"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lastTermMessage" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/billId"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -109,7 +109,7 @@
                     app:layout_constraintStart_toEndOf="@id/line"
                     app:layout_constraintTop_toTopOf="@id/billIdTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/lastTermPayIdTitle"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -122,7 +122,7 @@
                     app:layout_constraintStart_toStartOf="@id/billIdTitle"
                     app:layout_constraintTop_toBottomOf="@id/billIdTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/lastTermPayId"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -136,7 +136,7 @@
                     app:layout_constraintStart_toStartOf="@id/billId"
                     app:layout_constraintTop_toTopOf="@id/lastTermPayIdTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/lastTermAmountTitle"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -149,7 +149,7 @@
                     app:layout_constraintStart_toStartOf="@id/billIdTitle"
                     app:layout_constraintTop_toBottomOf="@id/lastTermPayIdTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/lastTermAmount"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -163,7 +163,7 @@
                     app:layout_constraintStart_toStartOf="@id/billId"
                     app:layout_constraintTop_toTopOf="@id/lastTermAmountTitle" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/payLastTermButton"
                     style="?iGapButton"
                     android:layout_width="match_parent"
@@ -186,7 +186,7 @@
                     app:layout_constraintStart_toStartOf="@id/midTermTitle"
                     app:layout_constraintTop_toTopOf="@id/midTermTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/midTermTitle"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -200,7 +200,7 @@
                     app:layout_constraintStart_toStartOf="@id/lastTermTitle"
                     app:layout_constraintTop_toBottomOf="@id/payLastTermButton" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/midTermMessage"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -214,7 +214,7 @@
                     app:layout_constraintStart_toStartOf="@id/midTermTitle"
                     app:layout_constraintTop_toBottomOf="@id/midTermTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/midTermBillIdTitle"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -229,7 +229,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/midTermMessage" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/midTermBillId"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -245,7 +245,7 @@
                     app:layout_constraintStart_toEndOf="@id/line"
                     app:layout_constraintTop_toTopOf="@id/midTermBillIdTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/midTermPayIdTitle"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -257,7 +257,7 @@
                     app:layout_constraintStart_toStartOf="@id/midTermBillIdTitle"
                     app:layout_constraintTop_toBottomOf="@id/midTermBillIdTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/midTermPayId"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -271,7 +271,7 @@
                     app:layout_constraintStart_toStartOf="@id/midTermBillId"
                     app:layout_constraintTop_toTopOf="@id/midTermPayIdTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/midTermAmountTitle"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -284,7 +284,7 @@
                     app:layout_constraintStart_toStartOf="@id/midTermBillIdTitle"
                     app:layout_constraintTop_toBottomOf="@id/midTermPayId" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -297,7 +297,7 @@
                     app:layout_constraintStart_toStartOf="@id/midTermBillId"
                     app:layout_constraintTop_toTopOf="@id/midTermAmountTitle" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/midTermPayButton"
                     style="?iGapButton"
                     android:layout_width="match_parent"
@@ -310,7 +310,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/midTermAmountTitle" />
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </LinearLayout>
 </layout>

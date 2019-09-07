@@ -21,6 +21,22 @@ public interface BaseViewHolder {
     default void onCreateFragment(BaseFragment fragment) {
     }
 
+    default void onStartFragment() {
+    }
+
+    default void onDestroyFragment() {
+    }
+
+    default void onPauseFragment() {
+    }
+
+    default void onResumeFragment() {
+    }
+
+    default void onCreateFragment() {
+    }
+
+
     default void onDestroyViewModel() {
     }
 }

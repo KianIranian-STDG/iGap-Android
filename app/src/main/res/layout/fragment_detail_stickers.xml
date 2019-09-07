@@ -7,7 +7,7 @@
     tools:ignore="MissingPrefix"
     android:background="@color/white">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvSettingPage"
         android:layout_width="match_parent"
 
