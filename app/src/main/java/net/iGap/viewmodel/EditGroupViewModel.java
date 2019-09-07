@@ -31,6 +31,8 @@ import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupEdit;
 import net.iGap.request.RequestGroupLeft;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import io.realm.Realm;
