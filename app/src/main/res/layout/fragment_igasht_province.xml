@@ -15,6 +15,7 @@
         android:layout_height="match_parent"
         android:clickable="true"
         android:focusable="true"
+        android:layoutDirection="locale"
         android:orientation="vertical">
 
         <LinearLayout
@@ -25,143 +26,134 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-        <!--
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:isScrollContainer="false"
-                    android:fillViewport="true">-->
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v7.widget.AppCompatImageView
+            <net.iGap.module.RadiusImageView
                 android:id="@+id/backgroundImage"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/dp8"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp16"
+                android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                app:imageUrl="@{viewModel.backgroundImageUrl}"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/image_igasht_province"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:riv_corner_radius="@dimen/dp8" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/iGashtTitle"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/main_font"
-                android:text="@string/igasht_title"
-                android:textColor="@color/white"
-                android:textSize="@dimen/dp32"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/chooseProvinceTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/backgroundImage"
-                app:layout_constraintVertical_bias="0.3"
-                app:layout_constraintVertical_chainStyle="packed" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/chooseProvinceTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:fontFamily="@font/main_font"
-                android:text="@string/igasht_choose_province_title"
-                android:textColor="@color/white"
-                android:textSize="@dimen/largeTextSize"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@{context.getResources().getDrawable(viewModel.getBackgroundShap)}"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="@dimen/dp8"
                 android:visibility="@{viewModel.showMainView}"
-                app:layout_constraintBottom_toTopOf="@id/v"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iGashtTitle" />
+                app:layout_constraintEnd_toEndOf="@+id/backgroundImage"
+                app:layout_constraintStart_toStartOf="@+id/backgroundImage"
+                app:layout_constraintTop_toBottomOf="@+id/backgroundImage">
 
-            <android.support.design.card.MaterialCardView
-                android:id="@+id/v"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:visibility="@{viewModel.showMainView}"
-                app:cardCornerRadius="@dimen/dp20"
-                app:cardUseCompatPadding="true"
-                app:contentPadding="@dimen/dp8"
-                app:layout_constraintBottom_toTopOf="@id/loadingView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/chooseProvinceTitle"
-                app:layout_constraintWidth_percent=".8">
-
-                <LinearLayout
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/chooseProvinceTitle"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp8"
+                    android:gravity="center"
+                    android:text="@string/igasht_choose_province_title"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/largeTextSize"
+                    app:layout_constraintEnd_toEndOf="@+id/frameLayout"
+                    app:layout_constraintStart_toStartOf="@+id/frameLayout"
+                    app:layout_constraintTop_toTopOf="@+id/frameLayout" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/clearProvinceSearch"
-                        style="@style/baseFontIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:onClick="@{()->viewModel.onClearProVinceSearchClick()}"
-                        android:text="@string/close_icon" />
+                <android.support.design.card.MaterialCardView
+                    android:id="@+id/v"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginEnd="@dimen/dp8"
+                    android:layout_marginRight="@dimen/dp8"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="@{viewModel.showMainView}"
+                    app:cardCornerRadius="@dimen/dp12"
+                    app:cardUseCompatPadding="true"
+                    app:contentPadding="@dimen/dp8"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/chooseProvinceTitle"
+                    app:layout_constraintStart_toStartOf="@+id/chooseProvinceTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/chooseProvinceTitle">
 
-                    <android.support.v7.widget.AppCompatAutoCompleteTextView
-                        android:id="@+id/provinceSearchText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp8"
-                        android:layout_marginLeft="@dimen/dp8"
-                        android:layout_weight="1"
-                        android:background="@color/transparent"
-                        android:completionThreshold="0" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <View
-                        android:layout_width="@dimen/dp1"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/dp8"
-                        android:layout_marginTop="@dimen/dp4"
-                        android:layout_marginRight="@dimen/dp8"
-                        android:layout_marginBottom="@dimen/dp4"
-                        android:background="@color/gray" />
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/baseFontIcon"
+                            android:layout_width="@dimen/dp40"
+                            android:layout_height="@dimen/dp40"
+                            android:layout_gravity="center"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:onClick="@{()->viewModel.onSearchPlaceButtonClick()}"
+                            android:text="@string/search_icon" />
 
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/baseFontIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/search_icon" />
+                        <View
+                            android:layout_width="@dimen/dp1"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/dp8"
+                            android:layout_marginTop="@dimen/dp4"
+                            android:layout_marginRight="@dimen/dp8"
+                            android:layout_marginBottom="@dimen/dp4"
+                            android:background="@color/gray" />
 
-                </LinearLayout>
-            </android.support.design.card.MaterialCardView>
+                        <android.support.v7.widget.AppCompatAutoCompleteTextView
+                            android:id="@+id/provinceSearchText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:afterTextChanged="@{(s)->viewModel.onProvinceSearchTextChange(s.toString())}"
+                            android:background="@color/transparent"
+                            android:completionThreshold="0"
+                            android:maxLength="30"
+                            android:maxLines="1" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/clearProvinceSearch"
+                            style="@style/baseFontIcon"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:onClick="@{()->viewModel.onClearProVinceSearchClick()}"
+                            android:text="@{viewModel.selectIcon}" />
+
+                    </LinearLayout>
+                </android.support.design.card.MaterialCardView>
+            </LinearLayout>
 
             <ProgressBar
                 android:id="@+id/loadingView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:visibility="@{viewModel.showLoadingView}"
-                app:layout_constraintBottom_toTopOf="@id/searchButton"
-                app:layout_constraintTop_toBottomOf="@id/v"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <android.support.design.button.MaterialButton
-                android:id="@+id/searchButton"
-                style="@style/BaseIGapButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{()->viewModel.onSearchPlaceButtonClick()}"
-                android:text="@string/igasht_search_by_location"
-                android:visibility="@{viewModel.showMainView}"
-                app:backgroundTint="@color/buttonColor"
-                app:icon="@drawable/ic_location"
-                app:iconGravity="textStart"
-                app:iconTint="@color/white"
-                app:layout_constraintBottom_toBottomOf="@id/backgroundImage"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/loadingView" />
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <android.support.v7.widget.AppCompatTextView
                 style="@style/myIconTextViewStyle"
@@ -171,13 +163,11 @@
                 android:onClick="@{()->viewModel.onRetryClick()}"
                 android:text="@string/retry_icon"
                 android:visibility="@{viewModel.showViewRefresh}"
-                app:layout_constraintBottom_toBottomOf="@id/backgroundImage"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/backgroundImage" />
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+                app:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
-
-        <!-- </ScrollView>-->
-
     </LinearLayout>
 </layout>

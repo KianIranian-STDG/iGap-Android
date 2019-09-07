@@ -16,7 +16,6 @@ import net.iGap.databinding.FragmentIgashtLocationBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.igasht.IGashtBaseView;
-import net.iGap.igasht.favoritelocation.IGashtFavoritePlaceListFragment;
 import net.iGap.igasht.historylocation.IGashtHistoryPlaceListFragment;
 import net.iGap.igasht.locationdetail.IGashtLocationDetailFragment;
 import net.iGap.interfaces.ToolbarListener;
@@ -47,7 +46,7 @@ public class IGashtLocationListFragment extends IGashtBaseView {
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.score_star_icon, R.string.history_icon)
+                .setRightIcons(/*R.string.score_star_icon,*/ R.string.history_icon)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {
                     @Override
@@ -60,41 +59,37 @@ public class IGashtLocationListFragment extends IGashtBaseView {
                     @Override
                     public void onRightIconClickListener(View view) {
                         if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtFavoritePlaceListFragment()).setReplace(false).load(true);
+                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
                         }
                     }
 
-                    @Override
+                 /*   @Override
                     public void onSecondRightIconClickListener(View view) {
                         if (getActivity() != null) {
                             new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
                         }
-                    }
+                    }*/
                 }).getView());
 
         binding.locationListView.addItemDecoration(new DividerItemDecoration(binding.locationListView.getContext(), DividerItemDecoration.VERTICAL));
-        binding.locationListView.setAdapter(new IGashtLocationListAdapter());
+        binding.locationListView.setAdapter(new IGashtLocationListAdapter(((IGashtLocationViewModel) viewModel).getSelectedProvinceName(), new IGashtLocationListAdapter.onLocationItemClickListener() {
+            @Override
+            public void buyTicket(int position) {
+                ((IGashtLocationViewModel) viewModel).buyTicket(position);
+            }
+
+            @Override
+            public void onItem(int position) {
+                ((IGashtLocationViewModel) viewModel).buyTicket(position);
+            }
+        }));
 
         ((IGashtLocationViewModel) viewModel).getLocationList().observe(getViewLifecycleOwner(), data -> {
             if (binding.locationListView.getAdapter() instanceof IGashtLocationListAdapter && data != null) {
-                ((IGashtLocationListAdapter) binding.locationListView.getAdapter()).setItems(data, new IGashtLocationListAdapter.onLocationItemClickListener() {
-                    @Override
-                    public void addToFavorite(int position) {
-                        ((IGashtLocationViewModel) viewModel).addToFavorite(position);
-                    }
-
-                    @Override
-                    public void buyTicket(int position) {
-                        ((IGashtLocationViewModel) viewModel).buyTicket(position);
-                    }
-
-                    @Override
-                    public void onItem(int position) {
-                        ((IGashtLocationViewModel) viewModel).buyTicket(position);
-                    }
-                });
+                ((IGashtLocationListAdapter) binding.locationListView.getAdapter()).setItems(data);
             }
         });
+
 
         ((IGashtLocationViewModel) viewModel).getGoToLocationDetail().observe(getViewLifecycleOwner(), isGo -> {
             if (getActivity() != null && isGo != null) {
@@ -106,6 +101,8 @@ public class IGashtLocationListFragment extends IGashtBaseView {
             }
         });
 
-        ((IGashtLocationViewModel) viewModel).getAddToFavorite().observe(getViewLifecycleOwner(), aBoolean -> Toast.makeText(getContext(), "add to favorite", Toast.LENGTH_SHORT).show());
+//        ((IGashtLocationViewModel) viewModel).getAddToFavorite().observe(getViewLifecycleOwner(), aBoolean -> Toast.makeText(getContext(), "add to favorite", Toast.LENGTH_SHORT).show());
+
     }
+
 }

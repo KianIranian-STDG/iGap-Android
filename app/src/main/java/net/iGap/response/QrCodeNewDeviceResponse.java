@@ -34,8 +34,6 @@ public class QrCodeNewDeviceResponse extends MessageHandler {
         super.handler();
 
         ProtoQrCodeNewDevice.QrCodeNewDeviceResponse.Builder builder = (ProtoQrCodeNewDevice.QrCodeNewDeviceResponse.Builder) message;
-        builder.getQrCodeImage();
-        builder.getExpireTime();
 
         if (identity instanceof OnQrCodeNewDevice) {
             ((OnQrCodeNewDevice) identity).getQrCode(builder.getQrCodeImage(), builder.getExpireTime() - builder.getResponse().getTimestamp());

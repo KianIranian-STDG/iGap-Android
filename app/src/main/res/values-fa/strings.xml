@@ -1927,14 +1927,14 @@
     <string name="igasht_buy_ticket_title">خرید بلیط</string>
     <string name="detail_title">جزئیات</string>
     <string name="igasht_place_of_visit_title">محل بازدید</string>
-    <string name="igasht_add_new_place_title">اضافه کردن بازدید جدید</string>
+    <string name="igasht_addـexternal_visits">اضافه کردن بازدید کننده خارجی </string>
     <string name="igasht_ticket_type_title">نوع بلیط را مشخص کنید</string>
     <string name="igasht_enter_ticket_count_title">تعداد بازدید کننده را وارد کنید.</string>
     <string name="igasht_add_ticket_count_button_title">ثبت</string>
     <string name="igasht_order_ticket_title">%s برای %d نفر</string>
     <string name="igasht_favorites_title">علاقه مندی ها</string>
     <string name="igasht_history_title">تاریخچه</string>
-    <string name="igasht_total_ticket_price">مبلغ نهایی: %d تومان</string>
+    <string name="igasht_total_ticket_price">مبلغ نهایی: %d ریال</string>
     <string name="igasht_add_ticket_error">لطفا بلیت خود را اضافه کنید.</string>
     <string name="igasht_buy_ticket_successful">خرید با موفقیت انجام شد.</string>
 
@@ -1986,6 +1986,10 @@
     <string name="mpl_transaction_merchent_name">نام پذیرنده</string>
     <string name="mpl_do_you_want_save_receipt">آیا مایل به ذخیره ی رسید هستید؟</string>
     <string name="mpl_transaction_nul">شما هیچ تراکنشی در ۵ روز گذشته ندارید!</string>
+    <string name="scan_barcode_to_enter_visit">جهت ورود و بازدید بارکد فوق را اسکن کنید</string>
+    <string name="Your_purchase_code">کد خرید شما %s</string>
+    <string name="igasht_count_title">تعداد</string>
+    <string name="igasht_service_title">سرویس</string>
 
     <string name="of_from_total">از %s</string>
     <string name="app_version_change_log">لیست تغییرات</string>
@@ -2010,4 +2014,16 @@
     <string name="popular_channel">کانال های جذاب</string>
     <string name="referral_code_invalid">کد معرف نامعتبر است</string>
     <string name="already_registered">شما قبلا کد معرف ثبت کرده اید</string>
+    <string name="igasht_select_location_button_title">انتخاب محل</string>
+    <string name="igasht_selected_location_title">نقاط تفریحی استان %s</string>
+    <string name="igasht_location_found_count">%d مورد یافت شد</string>
+    <string name="igasht_success_payment">پرداخت شما با موفقیت انجام شد</string>
+    <string name="noDetail_textView">فاقد توضیحات</string>
+    <string name="igasht_empty_history_message">هنوز بلیطی خریداری نشده است.</string>
+    <string name="Restaurant_textView">رستوران</string>
+    <string name="parking_textView">پارکینگ</string>
+    <string name="wifi_textView">وای فای</string>
+    <string name="coffeeShop_textView">کافی شاپ</string>
+    <string name="wheelchair_textView">ویلچر</string>
+    <string name="prayerRoom_textView">نمازخانه</string>
 </resources>

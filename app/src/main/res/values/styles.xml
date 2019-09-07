@@ -728,18 +728,18 @@
         <item name="android:textSize">@dimen/dp22</item>
     </style>
 
-  <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
-    <item name="android:windowIsFloating">false</item>
-    <item name="bottomSheetStyle">@style/BottomSheet</item>
-    <item name="android:statusBarColor">@android:color/transparent</item>
-    <item name="android:windowSoftInputMode">adjustResize</item>
-  </style>
+    <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
 
-  <style name="CardToCardBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
-    <item name="android:windowIsFloating">false</item>
-    <item name="bottomSheetStyle">@style/BottomSheet</item>
-    <item name="android:statusBarColor">@android:color/transparent</item>
-  </style>
+    <style name="CardToCardBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 
     <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/bottom_sheet_background</item>
@@ -752,18 +752,18 @@
         <item name="behavior_hideable">true</item>
     </style>
 
-  <style name="BaseBottomSheetDialogLight" parent="@style/Theme.Design.Light.BottomSheetDialog">
-    <item name="android:windowIsFloating">false</item>
-    <item name="bottomSheetStyle">@style/BottomSheetLight</item>
-    <item name="android:statusBarColor">@android:color/transparent</item>
-    <item name="android:windowSoftInputMode">adjustResize</item>
-  </style>
+    <style name="BaseBottomSheetDialogLight" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheetLight</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
 
-  <style name="CardToCardBottomSheetDialogLight" parent="@style/Theme.Design.Light.BottomSheetDialog">
-    <item name="android:windowIsFloating">false</item>
-    <item name="bottomSheetStyle">@style/BottomSheetLight</item>
-    <item name="android:statusBarColor">@android:color/transparent</item>
-  </style>
+    <style name="CardToCardBottomSheetDialogLight" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheetLight</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 
     <style name="BottomSheetLight" parent="@style/Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/bottom_sheet_light_background</item>

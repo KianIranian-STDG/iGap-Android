@@ -31,6 +31,8 @@ public class IGashtLocationService {
     @SerializedName("type_amounts")
     private List<IGashtServiceAmount> amounts;
 
+    private int count;
+
     public int getServiceId() {
         return serviceId;
     }
@@ -75,7 +77,15 @@ public class IGashtLocationService {
         return amounts;
     }
 
-    public String getSeviceNameWithLanguage() {
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getServiceNameWithLanguage() {
         switch (G.selectedLanguage) {
             case "en":
                 return getEnglishName();
@@ -84,5 +94,14 @@ public class IGashtLocationService {
             default:
                 return getServiceName();
         }
+    }
+
+    public IGashtServiceAmount getPersianTicket(){
+        for (int i = 0; i < amounts.size();i++){
+            if (amounts.get(i).getVoucherTypeId() == 3){
+                return amounts.get(i);
+            }
+        }
+        return null;
     }
 }

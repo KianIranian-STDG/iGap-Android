@@ -1,37 +1,44 @@
-package net.iGap.igasht.favoritelocation;
+package net.iGap.igasht.barcodescaner;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DividerItemDecoration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import net.iGap.R;
-import net.iGap.databinding.FragmentIgashtFavoritePlaceBinding;
+import net.iGap.databinding.FragmentIgashtBarcodeScanerBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.igasht.IGashtBaseView;
 import net.iGap.interfaces.ToolbarListener;
 
-public class IGashtFavoritePlaceListFragment extends IGashtBaseView {
+public class FragmentIgashtBarcodeScan extends IGashtBaseView {
 
-    private FragmentIgashtFavoritePlaceBinding binding;
+    private FragmentIgashtBarcodeScanerBinding binding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(IGashtFavoritePlaceViewModel.class);
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new IGashtBarcodeScannerViewModel(getArguments() != null ? getArguments().getString("voucher_number") : "");
+            }
+        }).get(IGashtBarcodeScannerViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_favorite_place, container, false);
-        binding.setViewModel((IGashtFavoritePlaceViewModel) viewModel);
-        binding.setLifecycleOwner(getViewLifecycleOwner());
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_barcode_scaner, container, false);
+        binding.setViewModel((IGashtBarcodeScannerViewModel) viewModel);
+        binding.setLifecycleOwner(this);
         return binding.getRoot();
     }
 
@@ -41,9 +48,8 @@ public class IGashtFavoritePlaceListFragment extends IGashtBaseView {
 
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
-                .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
-                .setDefaultTitle(getString(R.string.igasht_favorites_title))
+                .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -53,12 +59,9 @@ public class IGashtFavoritePlaceListFragment extends IGashtBaseView {
                     }
                 }).getView());
 
-        binding.favoriteList.setAdapter(new FavoriteListAdapter(position -> ((IGashtFavoritePlaceViewModel) viewModel).onClickFavoriteItem(position)));
-        binding.favoriteList.addItemDecoration(new DividerItemDecoration(binding.favoriteList.getContext(), DividerItemDecoration.VERTICAL));
-
-        ((IGashtFavoritePlaceViewModel) viewModel).getFavoriteList().observe(getViewLifecycleOwner(), data -> {
-            if (data != null && binding.favoriteList.getAdapter() instanceof FavoriteListAdapter) {
-                ((FavoriteListAdapter) binding.favoriteList.getAdapter()).setItems(data);
+        ((IGashtBarcodeScannerViewModel)viewModel).getShowQRCodeImage().observe(getViewLifecycleOwner(), imageBitmap -> {
+            if (imageBitmap != null) {
+                binding.barCodeImage.setImageBitmap(imageBitmap);
             }
         });
     }

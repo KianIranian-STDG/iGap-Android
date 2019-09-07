@@ -2,8 +2,10 @@ package net.iGap.igasht.provinceselect;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.view.View;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.igasht.BaseIGashtViewModel;
@@ -13,7 +15,9 @@ import java.util.List;
 
 public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtResponse<IGashtProvince>> {
 
-    private ObservableField<String> backgroundImageUrl = new ObservableField<>();
+    private ObservableField<String> backgroundImageUrl = new ObservableField<>("");
+    private ObservableInt selectIcon = new ObservableInt(R.string.down_arrow_icon);
+    private ObservableInt backgroundShape = new ObservableInt(R.drawable.shape_igasht_yellow);
     private MutableLiveData<List<IGashtProvince>> provinceList = new MutableLiveData<>();
     private MutableLiveData<Boolean> goToShowLocationListPage = new MutableLiveData<>();
     private MutableLiveData<Boolean> clearEditText = new MutableLiveData<>();
@@ -21,12 +25,19 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
     private IGashtRepository repository;
 
     public IGashtProvinceViewModel() {
+        if (G.isDarkTheme) {
+            backgroundShape.set(R.drawable.shape_igasht_gradient_gray);
+        }
         repository = IGashtRepository.getInstance();
         getProvinceList();
     }
 
     public ObservableField<String> getBackgroundImageUrl() {
         return backgroundImageUrl;
+    }
+
+    public ObservableInt getBackgroundShap() {
+        return backgroundShape;
     }
 
     public MutableLiveData<Boolean> getGoToShowLocationListPage() {
@@ -39,6 +50,10 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
 
     public MutableLiveData<Boolean> getClearEditText() {
         return clearEditText;
+    }
+
+    public ObservableInt getSelectIcon() {
+        return selectIcon;
     }
 
     public void onClearProVinceSearchClick() {
@@ -55,11 +70,22 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
     }
 
     public void setSelectedLocation(int position) {
-        repository.setSelectedProvince(provinceList.getValue().get(position));
+        if (provinceList.getValue() != null) {
+            repository.setSelectedProvince(provinceList.getValue().get(position));
+            onSearchPlaceButtonClick();
+        }
     }
 
     public void onRetryClick() {
         getProvinceList();
+    }
+
+    public void onProvinceSearchTextChange(String s) {
+        if (s.length() > 0) {
+            selectIcon.set(R.string.close_icon);
+        } else {
+            selectIcon.set(R.string.down_arrow_icon);
+        }
     }
 
     private void getProvinceList() {
