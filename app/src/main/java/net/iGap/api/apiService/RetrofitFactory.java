@@ -35,7 +35,7 @@ public class RetrofitFactory {
         builder.addInterceptor(chain -> {
             Request original = chain.request();
             Request request = original.newBuilder()
-                    .header("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VySWQiOjE5NTMwMDczNzc0OTg1NTQ2MywicGhvbmVOdW1iZXIiOjk4OTMzNzEyMjYxNywic2Vzc2lvbklkIjoyMDM3MDQ1NTIxNjM1ODE5MDYsImlhdCI6MTU2MDk1MzkzMSwiZXhwIjoxNjA3Nzc1MTMyfQ.YV7WVHTCOGnPlkIUfmrNmcxguBI5t1W7xrDvqNqorsIt4lpW6AiQpsT-uDiBYgSWCAFUDRPaGV7n8xFX43rhh0N7CxK5dXFA_-y1kDjf4xkovy_HQf5Gt-feTpsLTM1ETFFy8ucoySKeiHgoRGI2k6uiR63Fx7WE7boPWiNUdes"/*G.getApiToken()*/)
+                    .header("Authorization", G.getApiToken())
                     .header("Content-Type", "application/json")
                     .method(original.method(), original.body())
                     .build();
@@ -109,6 +109,14 @@ public class RetrofitFactory {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build().create(CharityApi.class);
+    }
+
+    public Retrofit getNewsRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.NEWS_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build();
     }
 
     private OkHttpClient.Builder enableTls12OnPreLollipop(OkHttpClient.Builder client) {

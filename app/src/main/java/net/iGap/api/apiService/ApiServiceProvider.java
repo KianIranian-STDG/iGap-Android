@@ -5,6 +5,7 @@ import net.iGap.api.IgashtApi;
 import net.iGap.api.KuknosApi;
 import net.iGap.api.KuknosHorizenApi;
 import net.iGap.api.FavoriteChannelApi;
+import net.iGap.api.NewsApi;
 
 public class ApiServiceProvider {
     private static RetrofitFactory factory = new RetrofitFactory();
@@ -12,6 +13,7 @@ public class ApiServiceProvider {
     private static BeepTunesApi beepTunesApi;
     private static FavoriteChannelApi channelApi;
     private static KuknosApi kuknosApi;
+    private static NewsApi newsApi;
     private static KuknosHorizenApi kuknosHorizenApi;
 
     public static BeepTunesApi getBeepTunesClient() {
@@ -33,6 +35,13 @@ public class ApiServiceProvider {
             kuknosApi = factory.getKuknosRetrofit().create(KuknosApi.class);
         }
         return kuknosApi;
+    }
+
+    public static NewsApi getNewsClient() {
+        if (newsApi == null) {
+            newsApi = factory.getKuknosRetrofit().create(NewsApi.class);
+        }
+        return newsApi;
     }
 
     //todo clean this comment
