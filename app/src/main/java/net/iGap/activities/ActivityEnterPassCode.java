@@ -208,7 +208,9 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
 
     @Override
     public void onBackPressed() {
-        setResult(RESULT_CANCELED);
+        if (ActivityMain.finishActivity != null) {
+            ActivityMain.finishActivity.finishActivity();
+        }
         finish();
     }
 

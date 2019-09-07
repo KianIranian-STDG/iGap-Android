@@ -10,7 +10,6 @@
 
 package net.iGap.activities;
 
-import android.Manifest;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
@@ -38,10 +37,8 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintSet;
 import android.support.transition.TransitionManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -118,7 +115,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     private boolean isVerticalOrient = true;
     private boolean isFirst = true;
     private LocalBroadcastManager localBroadcastManager;
-    private Observer<String> timerObserver ;
+    private Observer<String> timerObserver;
     private int musicVolume = 0;
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -194,9 +191,9 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         HelperTracker.sendTracker(HelperTracker.TRACKER_CALL_PAGE);
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
-
         canSetUserStatus = false;
 
         getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
@@ -212,18 +209,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         binding.setActivityCallViewModel(viewModel);
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        viewModel.setHandsFreeConnected(audioManager.isWiredHeadsetOn());
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter != null) {
-            if (mBluetoothAdapter.getProfileConnectionState(HEADSET) == BluetoothAdapter.STATE_CONNECTED) {
-                viewModel.setBluetoothConnected(true);
-                audioManager.setSpeakerphoneOn(false);
-            } else {
-                viewModel.setBluetoothConnected(false);
-                if (viewModel.isVideoCall())
-                    audioManager.setSpeakerphoneOn(true);
-            }
-        }
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -235,20 +221,33 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             phoneWidth = displayMetrics.heightPixels;
         }
 
-        if (isGoingfromApp) {
-            isGoingfromApp = false;
-        } else {
-            EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT , false);
-            G.isInCall = false;
-            Intent intent = new Intent(this, ActivityMain.class);
-            startActivity(intent);
-            finish();
-            return;
+        if (savedInstanceState == null) {
+            viewModel.setHandsFreeConnected(audioManager.isWiredHeadsetOn());
+            if (mBluetoothAdapter != null) {
+                if (mBluetoothAdapter.getProfileConnectionState(HEADSET) == BluetoothAdapter.STATE_CONNECTED) {
+                    viewModel.setBluetoothConnected(true);
+                    audioManager.setSpeakerphoneOn(false);
+                } else {
+                    viewModel.setBluetoothConnected(false);
+                    if (viewModel.isVideoCall())
+                        audioManager.setSpeakerphoneOn(true);
+                }
+            }
+            if (isGoingfromApp) {
+                isGoingfromApp = false;
+            } else {
+                EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT, false);
+                G.isInCall = false;
+                Intent intent = new Intent(this, ActivityMain.class);
+                startActivity(intent);
+                finish();
+                return;
+            }
         }
 
         G.isInCall = true;
         viewModel.callTimerListener.postValue("");
-        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT , true);
+        EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT, true);
         ActivityCall.allowOpenCall = true;
 
         PermissionHelper permissionHelper = new PermissionHelper(this);
@@ -300,7 +299,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     @Override
     protected void onResume() {
         super.onResume();
-
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
         filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
@@ -343,16 +341,25 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
         if (viewModel != null) {
             viewModel.callTimerListener.removeObserver(timerObserver);
-            viewModel.onDestroy();
         }
-        if (G.onHoldBackgroundChanegeListener != null) {
-            G.onHoldBackgroundChanegeListener = null;
-        }
+
 
         if (player != null) {
             if (player.isPlaying())
                 player.stop();
             player.release();
+        }
+
+        if (ringtonePlayer != null) {
+            if (ringtonePlayer.isPlaying()) {
+                ringtonePlayer.stop();
+            }
+            ringtonePlayer.release();
+        }
+
+        if (vibrator != null) {
+            vibrator.cancel();
+            vibrator = null;
         }
     }
 
@@ -461,6 +468,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             }
         });
         viewModel.playSound.observe(this, soundRes -> {
+            Log.wtf(this.getClass().getName(), "playSound");
             if (soundRes != null) {
                 playSound(soundRes);
             }
@@ -495,7 +503,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             }
         });
 
-        timerObserver =  time -> {
+        timerObserver = time -> {
             if (time == null) return;
             Intent intent = new Intent(CALL_TIMER_BROADCAST);
             intent.putExtra(TIMER_TEXT, time);
@@ -509,6 +517,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
     @Override
     public void onLeaveView(String type) {
+        Log.wtf(this.getClass().getName(), "onLeaveView");
         if (viewModel != null) {
             viewModel.onLeaveView(type);
         }
@@ -609,7 +618,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             case AudioManager.RINGER_MODE_VIBRATE:
                 canPlay = false;
 
-                vibrator = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 long[] pattern = {0, 100, 1000};
                 vibrator.vibrate(pattern, 0);
 
@@ -635,13 +644,19 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                     e.printStackTrace();
                 }
 
-
-                ringtonePlayer = new MediaPlayer();
+                if (ringtonePlayer == null) {
+                    ringtonePlayer = new MediaPlayer();
+                } else {
+                    if (ringtonePlayer.isPlaying()) {
+                        ringtonePlayer.stop();
+                        ringtonePlayer.reset();
+                    }
+                }
 
                 if (path == null) {
-                    ringtonePlayer.setDataSource(G.context, Uri.parse("android.resource://" + G.context.getPackageName() + "/" + R.raw.tone));
+                    ringtonePlayer.setDataSource(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.tone));
                 } else {
-                    ringtonePlayer.setDataSource(G.context, alert);
+                    ringtonePlayer.setDataSource(this, alert);
                 }
 
                 if (audioManager.isWiredHeadsetOn()) {

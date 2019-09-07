@@ -98,7 +98,7 @@
 
         <LinearLayout
             android:id="@+id/callInfo"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@id/fcr_btn_end"
@@ -110,7 +110,8 @@
                 android:id="@+id/fcr_txt_name"
                 style="@style/TextAppearance.AppCompat.Display1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:singleLine="true"
                 android:text="@{activityCallViewModel.callBackTxtName}"
                 android:visibility="@{activityCallViewModel.showChatButton}" />
@@ -118,18 +119,18 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/fcr_txt_status"
                 style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:gravity="center"
                 android:padding="4dp"
                 android:text="@{activityCallViewModel.callBackTxtStatus}"
                 android:visibility="@{activityCallViewModel.showChatButton}" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/fcr_txt_timer"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:gravity="center"
                 android:shadowColor="@color/black"
                 android:shadowDx="0"
                 android:shadowDy="3"
@@ -149,7 +150,7 @@
             android:onClick="@{() -> activityCallViewModel.addPersonClickListener()}"
             android:text="@string/invite_icon"
             android:textSize="@dimen/dp28"
-            android:visibility="@{activityCallViewModel.showAddMemberButton,default=gone}"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/fcr_btn_end"
             app:layout_constraintLeft_toRightOf="@id/rippleItem"
             app:layout_constraintRight_toLeftOf="@id/fcr_btn_end"
@@ -209,7 +210,7 @@
             android:onClick="@{() -> activityCallViewModel.videoCallClickListener()}"
             android:text="@string/video_call_icon"
             android:textSize="@dimen/dp28"
-            android:visibility="@{activityCallViewModel.showChangeToVideoCall,default=gone}"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/fcr_btn_end"
             app:layout_constraintLeft_toRightOf="@id/fcr_btn_end"
             app:layout_constraintRight_toRightOf="parent"
