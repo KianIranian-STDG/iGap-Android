@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
 
 public class ChatAttachmentPopup {
 
-    private static final String TAG = "ChatAttachmentPopup";
+    private final String TAG = "ChatAttachmentPopup";
 
     private Context mContext ;
     private View mRootView;
@@ -56,15 +56,23 @@ public class ChatAttachmentPopup {
         return this;
     }
 
+    public ChatAttachmentPopup build(){
+        if (mContext == null) throw new IllegalArgumentException(TAG + " : CONTEXT can not be null!");
+        if (mRootView == null) throw new IllegalArgumentException(TAG + " : set root view!");
+        return this;
+    }
+
     public void show(){
 
-
+        //get height of keyboard if it was gone set wrap content to popup
         int height = getKeyboardHeight() ;
         if (height == 0) height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
+        //inflate layout
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(R.layout.bottom_sheet_new , null , false);
 
+        //setup popup
         mPopup = new PopupWindow(mContext);
         mPopup.setContentView(view);
         mPopup.setHeight(height);
@@ -77,36 +85,41 @@ public class ChatAttachmentPopup {
 
         mPopup.showAtLocation(mRootView , Gravity.BOTTOM , 0 , 0 );
 
+        //animate views after popup showed -> delay set base on xml animation
         G.handler.postDelayed(() -> setupViews(view) , 250);
     }
 
     private void setupViews(View view) {
-        TextView txtCamera = view.findViewById(R.id.txtCamera);
-        TextView textPicture = view.findViewById(R.id.textPicture);
-        TextView txtVideo = view.findViewById(R.id.txtVideo);
-        TextView txtMusic = view.findViewById(R.id.txtMusic);
-        TextView txtFile = view.findViewById(R.id.txtFile);
-        TextView txtLocation = view.findViewById(R.id.txtLocation);
-        TextView txtContact = view.findViewById(R.id.txtContact);
-        TextView send = view.findViewById(R.id.txtSend);
 
-        TextView _txtCamera = view.findViewById(R.id.txtCamera2);
-        TextView _textPicture = view.findViewById(R.id.textPicture2);
-        TextView _txtVideo = view.findViewById(R.id.txtVideo2);
-        TextView _txtMusic = view.findViewById(R.id.txtMusic2);
-        TextView _txtFile = view.findViewById(R.id.txtFile2);
-        TextView _txtLocation = view.findViewById(R.id.txtLocation2);
-        TextView _txtContact = view.findViewById(R.id.txtContact2);
-        TextView _send = view.findViewById(R.id.txtNumberItem);
+        //icons
+        TextView icoCamera = view.findViewById(R.id.txtCamera);
+        TextView icoPicture = view.findViewById(R.id.textPicture);
+        TextView icoVideo = view.findViewById(R.id.txtVideo);
+        TextView icoMusic = view.findViewById(R.id.txtMusic);
+        TextView icoFile = view.findViewById(R.id.txtFile);
+        TextView icoLocation = view.findViewById(R.id.txtLocation);
+        TextView icoContact = view.findViewById(R.id.txtContact);
+        TextView icoSend = view.findViewById(R.id.txtSend);
 
-        animateViewWithCircularReveal(txtCamera , _txtCamera);
-        animateViewWithCircularReveal(textPicture, _textPicture);
-        animateViewWithCircularReveal(txtVideo, _txtVideo);
-        animateViewWithCircularReveal(txtMusic , _txtMusic);
-        animateViewWithCircularReveal(txtFile , _txtFile);
-        animateViewWithCircularReveal(txtLocation , _txtLocation);
-        animateViewWithCircularReveal(txtContact , _txtContact);
-        animateViewWithCircularReveal(send ,_send);
+        //labels
+        TextView lblCamera = view.findViewById(R.id.txtCamera2);
+        TextView lblPicture = view.findViewById(R.id.textPicture2);
+        TextView lblVideo = view.findViewById(R.id.txtVideo2);
+        TextView lblMusic = view.findViewById(R.id.txtMusic2);
+        TextView lblFile = view.findViewById(R.id.txtFile2);
+        TextView lblLocation = view.findViewById(R.id.txtLocation2);
+        TextView lblContact = view.findViewById(R.id.txtContact2);
+        TextView lblSend = view.findViewById(R.id.txtNumberItem);
+
+        //animate all icons and after anim show their label
+        animateViewWithCircularReveal(icoCamera     , lblCamera);
+        animateViewWithCircularReveal(icoPicture    , lblPicture);
+        animateViewWithCircularReveal(icoVideo      , lblVideo);
+        animateViewWithCircularReveal(icoMusic      , lblMusic);
+        animateViewWithCircularReveal(icoFile       , lblFile);
+        animateViewWithCircularReveal(icoLocation   , lblLocation);
+        animateViewWithCircularReveal(icoContact    , lblContact);
+        animateViewWithCircularReveal(icoSend       , lblSend);
 
     }
 
@@ -139,8 +152,7 @@ public class ChatAttachmentPopup {
             int finalRadius = Math.max(myView.getWidth(), myView.getHeight()) / 2;
 
             // create the animator for this view (the start radius is zero)
-            Animator anim = null;
-            anim = ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
+            Animator anim = ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
 
             anim.setDuration(500);
 
@@ -188,14 +200,3 @@ public class ChatAttachmentPopup {
         PHOTO , VIDEO , CAMERA , MUSIC , FILE , CONTACT , LOCATION , CLOSE
     }
 }
-
-/**
- *
- *
- *
- *
- *
- *
- *        // To avoid borders and overdraw.
- *
- */
