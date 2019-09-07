@@ -721,6 +721,7 @@
     <string name="charge_balance">Charge balance</string>
     <string name="total_balance">Total balance</string>
     <string name="rials">Rial</string>
+    <string name="amount_rials">%s Rials</string>
     <string name="unverified">Unverified/</string>
     <string name="send_documents">Sending documents</string>
     <string name="charge">Charge</string>
@@ -1236,6 +1237,7 @@ Want to get it?</string>
     <string name="lbl_contrast">Contrast</string>
     <string name="lbl_saturation">Saturation</string>
     <string name="tab_filters">Filters</string>
+    <string name="filter">Filter</string>
     <string name="tab_edit">Edit</string>
     <string name="can_not_open_file">This file can not be opened</string>
     <string name="pin_messages_content" formatted="false">"Do you want to %s this message?"</string>
@@ -1288,6 +1290,8 @@ Want to get it?</string>
     <string name="charge_5"> 50,000 Rials</string>
     <string name="charge_10"> 100,000 Rials</string>
     <string name="charge_20"> 200,000 Rials</string>
+    <string name="charge_50"> 500,000 Rials</string>
+    <string name="charge_100"> 1,000,000 Rials</string>
 
     <string name="charge_1_ir">10,000 Rials + 9% Value Added = 10,900 Rials</string>
     <string name="charge_2_ir">20,000 Rials + 9% Value Added = 21,180 Rials</string>
@@ -1987,6 +1991,19 @@ Want to get it?</string>
     <string name="check_update_title">Check Update</string>
     <string name="unblock">Unblock</string>
     <string name="view_profile">View Profile</string>
+    <string name="there_is_no_car_available">There is no car available.</string>
+    <string name="add_car">Add Car</string>
+    <string name="cars_plaque">Cars Plaque</string>
+    <string name="car_plaque">Car Plaque</string>
+    <string name="c_pay_title">Car services</string>
+    <string name="add_plaque">Submit Plaque</string>
+    <string name="from_first">From First</string>
+    <string name="national_code">National ID</string>
+    <string name="plaque_is_not_valid">Plaque is not valid.</string>
+    <string name="complete_correct">Informations are invalid.</string>
+    <string name="plaque_added">Plaque Added.</string>
+    <string name="at_least_cpay_amout">Amount (Minimum 20,000 Rials)</string>
+    <string name="cpay_title">C-Pay</string>
     <string name="link_not_valid">Invalid link</string>
     <string name="popular_channel">Interesting channels</string>
     <string name="referral_code_invalid">Referral code invalid</string>

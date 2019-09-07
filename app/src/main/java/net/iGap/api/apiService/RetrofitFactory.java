@@ -5,6 +5,7 @@ import android.util.Log;
 
 import net.iGap.BuildConfig;
 import net.iGap.G;
+import net.iGap.api.CPayApi;
 import net.iGap.api.CharityApi;
 
 import java.util.ArrayList;
@@ -83,6 +84,15 @@ public class RetrofitFactory {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build();
+    }
+
+    public CPayApi getCPayApi() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.CPAY_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build()
+                .create(CPayApi.class);
     }
 
     public Retrofit getMciRetrofit() {
