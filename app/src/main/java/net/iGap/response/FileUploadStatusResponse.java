@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import android.os.Looper;
+
 import net.iGap.G;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperUploadFile;
