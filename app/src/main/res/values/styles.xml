@@ -827,4 +827,9 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="chatAttachmentAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/translate_enter_down</item>
+        <item name="android:windowExitAnimation">@anim/translate_exit_down</item>
+    </style>
+
 </resources>
