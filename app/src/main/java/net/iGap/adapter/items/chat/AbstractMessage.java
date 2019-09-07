@@ -436,23 +436,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             });
         }
 
-        if (holder instanceof BotInlineItem.ViewHolder) {
-            BotInlineItem.ViewHolder viewHolder = (BotInlineItem.ViewHolder) holder;
-            viewHolder.getRootView().setMinimumWidth(G.maxChatBox);
-            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
-            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
-            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
-            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
-            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
-
-
-            if (G.isDarkTheme) {
-                viewHolder.getMessageTv().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_dark))));
-            } else {
-                viewHolder.getMessageTv().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_light))));
-            }
-
-        }
+//        if (holder instanceof BotInlineItem.ViewHolder) {
+//            BotInlineItem.ViewHolder viewHolder = (BotInlineItem.ViewHolder) holder;
+//            viewHolder.getRootView().setMinimumWidth(G.maxChatBox);
+//            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
+//            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
+//            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
+//            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
+//            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
+//
+//
+//            if (G.isDarkTheme) {
+//                viewHolder.getMessageTv().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_dark))));
+//            } else {
+//                viewHolder.getMessageTv().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_light))));
+//            }
+//
+//        }
 
 
         if (holder instanceof ChatItemWithTextHolder) {
