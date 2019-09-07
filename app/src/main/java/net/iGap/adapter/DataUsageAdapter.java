@@ -2,13 +2,14 @@ package net.iGap.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -91,8 +92,8 @@ public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             }
             //    ((BaseHolder) holder).txtTitle.setText(dataList.get(position).getTitle());
-    /*        if (HelperCalander.isPersianUnicode) {
-            *//*    holder.txtLastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtLastMessage.getText().toString()));
+            /*        if (HelperCalander.isPersianUnicode) {
+             *//*    holder.txtLastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtLastMessage.getText().toString()));
                 holder.txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getText().toString()));*//*
 
                 ((BaseHolder) holder).txtSentNum.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(dataList.get(position).getSendNum())));
@@ -238,7 +239,7 @@ public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    private void setTypeFace(TextView textView){
+    private void setTypeFace(TextView textView) {
         textView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/IRANSansMobile.ttf"));
     }
 }

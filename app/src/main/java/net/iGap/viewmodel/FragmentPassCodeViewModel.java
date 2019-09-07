@@ -11,17 +11,18 @@ package net.iGap.viewmodel;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import androidx.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import androidx.databinding.ObservableField;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
-import androidx.core.app.ActivityCompat;
 import android.text.InputType;
 import android.view.View;
 import android.view.WindowManager;
+
+import androidx.core.app.ActivityCompat;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -464,7 +465,7 @@ public class FragmentPassCodeViewModel {
         View view1 = dialog.getCustomView();
 
         assert view1 != null;
-        numberPickerMinutes = (net.iGap.module.NumberPicker) view1.findViewById(R.id.numberPicker);
+        numberPickerMinutes = view1.findViewById(R.id.numberPicker);
         numberPickerMinutes.setMinValue(0);
         numberPickerMinutes.setMaxValue(4);
         //numberPickerMinutes.setWrapSelectorWheel(true);
@@ -703,11 +704,7 @@ public class FragmentPassCodeViewModel {
             if (fingerprintManager != null) {
                 if (!fingerprintManager.isHardwareDetected()) {
                     deviceHasFingerPrint = false;
-                } else if (!fingerprintManager.hasEnrolledFingerprints()) {
-                    deviceHasFingerPrint = false;
-                } else {
-                    deviceHasFingerPrint = true;
-                }
+                } else deviceHasFingerPrint = fingerprintManager.hasEnrolledFingerprints();
             }
         }
     }

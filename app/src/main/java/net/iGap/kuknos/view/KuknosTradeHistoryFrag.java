@@ -1,16 +1,17 @@
 package net.iGap.kuknos.view;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosTraceHistoryBinding;
@@ -71,8 +72,7 @@ public class KuknosTradeHistoryFrag extends BaseFragment {
             if (offerResponsePage.getRecords().size() != 0) {
                 WalletTradeHistoryAdapter mAdapter = new WalletTradeHistoryAdapter(offerResponsePage.getRecords(), 0, getContext());
                 binding.kuknosTradeHistoryRecycler.setAdapter(mAdapter);
-            }
-            else {
+            } else {
                 binding.kuknosTradeHistoryNOitem.setVisibility(View.VISIBLE);
             }
         });
@@ -104,8 +104,7 @@ public class KuknosTradeHistoryFrag extends BaseFragment {
             public void onChanged(@Nullable Boolean aBoolean) {
                 if (aBoolean == true) {
                     binding.kuknosTradeHistoryProgressV.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     binding.kuknosTradeHistoryProgressV.setVisibility(View.GONE);
                 }
             }

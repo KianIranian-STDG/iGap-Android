@@ -3,7 +3,6 @@ package net.iGap.helper;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -39,7 +38,7 @@ public class CardToCardHelper {
                             Intent intent = new Intent(G.context, CardToCardInitiator.class);
                             intent.putExtra("Token", token);
 
-                            activity.startActivityForResult(intent , requestCodeCardToCard);
+                            activity.startActivityForResult(intent, requestCodeCardToCard);
                             dialog.dismiss();
                         }
                     }
@@ -88,7 +87,7 @@ public class CardToCardHelper {
                             intent.putExtra("Token", token);
                             intent.putExtra("destinationCard", cardNumber);
                             intent.putExtra("amount", amount);
-                            activity.startActivityForResult(intent , requestCodeCardToCard);
+                            activity.startActivityForResult(intent, requestCodeCardToCard);
                             dialog.dismiss();
                         }
                     }
@@ -126,34 +125,34 @@ public class CardToCardHelper {
         }
         final ProgressDialog dialog = dialogg;
         boolean isSend = new RequestMplSetCardToCardResult().onSetCardToCardResult(data, toUserId, new RequestMplSetCardToCardResult.OnSetCardToCardResult() {
+            @Override
+            public void onSetResultCardToCardReady() {
+                G.handler.post(new Runnable() {
                     @Override
-                    public void onSetResultCardToCardReady() {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                dialog.dismiss();
-                                if (messageToShow.length() > 0)
-                                    HelperError.showSnackMessage(messageToShow, false);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(int major, int minor) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (major == 5) {
-                                    retryCardToCardSetResult(data, retryCount + 1, dialog, messageToShow);
-                                } else {
-                                    dialog.dismiss();
-                                    if (messageToShow.length() > 0)
-                                        HelperError.showSnackMessage(messageToShow, false);
-                                }
-                            }
-                        });
+                    public void run() {
+                        dialog.dismiss();
+                        if (messageToShow.length() > 0)
+                            HelperError.showSnackMessage(messageToShow, false);
                     }
                 });
+            }
+
+            @Override
+            public void onError(int major, int minor) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (major == 5) {
+                            retryCardToCardSetResult(data, retryCount + 1, dialog, messageToShow);
+                        } else {
+                            dialog.dismiss();
+                            if (messageToShow.length() > 0)
+                                HelperError.showSnackMessage(messageToShow, false);
+                        }
+                    }
+                });
+            }
+        });
 
         if (!isSend) {
             retryCardToCardSetResult(data, retryCount + 1, dialog, messageToShow);

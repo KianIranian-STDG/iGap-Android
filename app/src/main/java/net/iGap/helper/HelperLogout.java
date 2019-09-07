@@ -82,7 +82,7 @@ public final class HelperLogout {
         });
     }
 
-    private static void clearPreferences(){
+    private static void clearPreferences() {
         SharedPreferences sharedPreferencesFile = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         sharedPreferencesFile.edit().clear().apply();
 

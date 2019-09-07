@@ -1,19 +1,20 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.adapter.items;
 
 import android.graphics.Typeface;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.items.AbstractItem;
 
@@ -121,8 +122,8 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
             avatar = (CircleImageView) view.findViewById(R.id.sfsl_imv_contact_avatar);
             name = (CustomTextViewMedium) view.findViewById(R.id.sfsl_txt_contact_name);
             lastSeen = (EmojiTextViewE) view.findViewById(R.id.sfsl_txt_contact_lastseen);
-            txtIcon = (TextView) view.findViewById(R.id.sfsl_txt_icon);
-            txtTime = (TextView) view.findViewById(R.id.sfsl_txt_time);
+            txtIcon = view.findViewById(R.id.sfsl_txt_icon);
+            txtTime = view.findViewById(R.id.sfsl_txt_time);
         }
     }
 }

@@ -7,7 +7,7 @@ package net.iGap.interfaces;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
 public interface OnPushLoginToken {
 

@@ -1,11 +1,12 @@
 package net.iGap.module;
 
 import android.graphics.Typeface;
-import androidx.fragment.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -171,7 +172,7 @@ public class MyInfoWindow extends InfoWindow {
                 HelperPublicMethod.goToChatRoom(userId, new HelperPublicMethod.OnComplete() {
                     @Override
                     public void complete() {
-                      //  new HelperFragment(mActivity.getSupportFragmentManager(),fragmentiGapMap).remove();
+                        //  new HelperFragment(mActivity.getSupportFragmentManager(),fragmentiGapMap).remove();
                     }
                 }, null);
             }

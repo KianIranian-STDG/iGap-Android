@@ -27,7 +27,7 @@ public class SendMoneyViewModel extends ViewModel {
     }
 
     public void onShebaClick() {
-        if (shebaModeIsSelected.getValue()!=null) {
+        if (shebaModeIsSelected.getValue() != null) {
             if (!shebaModeIsSelected.getValue()) {
                 shebaModeIsSelected.setValue(true);
                 destinationInfo.setValue(R.string.destination_sheba_number);
@@ -36,8 +36,8 @@ public class SendMoneyViewModel extends ViewModel {
     }
 
     public void onCardClick() {
-        if (shebaModeIsSelected.getValue()!=null){
-            if (shebaModeIsSelected.getValue()){
+        if (shebaModeIsSelected.getValue() != null) {
+            if (shebaModeIsSelected.getValue()) {
                 shebaModeIsSelected.setValue(false);
                 destinationInfo.setValue(R.string.destination_card);
             }

@@ -52,7 +52,7 @@ public class UserTwoStepVerificationRecoverPasswordByTokenResponse extends Messa
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
 
         if (identity instanceof TwoStepVerificationRecoverPasswordByToken) {
-            ((TwoStepVerificationRecoverPasswordByToken) identity).errorRecoveryByEmail(errorResponse.getMajorCode(),errorResponse.getMinorCode());
+            ((TwoStepVerificationRecoverPasswordByToken) identity).errorRecoveryByEmail(errorResponse.getMajorCode(), errorResponse.getMinorCode());
         } else {
             throw new ClassCastException("identity must be : " + TwoStepVerificationRecoverPasswordByToken.class.getName());
         }

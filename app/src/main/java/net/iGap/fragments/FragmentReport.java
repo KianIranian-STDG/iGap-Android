@@ -3,13 +3,14 @@ package net.iGap.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -55,8 +56,8 @@ public class FragmentReport extends BaseFragment {
             isUserReport = extras.getBoolean("USER_ID");
         }
 
-        txtBack = (RippleView) view.findViewById(R.id.stns_ripple_back);
-        rippleOk = (RippleView) view.findViewById(R.id.verifyPassword_rippleOk);
+        txtBack = view.findViewById(R.id.stns_ripple_back);
+        rippleOk = view.findViewById(R.id.verifyPassword_rippleOk);
 
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +83,7 @@ public class FragmentReport extends BaseFragment {
             }
         });
 
-        edtReport = (EditText) view.findViewById(R.id.edtReport);
+        edtReport = view.findViewById(R.id.edtReport);
 
     }
 

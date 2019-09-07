@@ -8,31 +8,31 @@ public class DailNumberViewModel extends ViewModel {
 
     private final MutableLiveData<String> mCurrentDialNumber = new MutableLiveData<>();
 
-    public DailNumberViewModel(){
+    public DailNumberViewModel() {
         mCurrentDialNumber.setValue("");
     }
 
-    public LiveData<String> getCurrentDialNumber(){
+    public LiveData<String> getCurrentDialNumber() {
         return mCurrentDialNumber;
     }
 
-    public void addNumber(String number){
+    public void addNumber(String number) {
         mCurrentDialNumber.setValue(mCurrentDialNumber.getValue().concat(number));
     }
 
-    public void removeNumber(){
-        mCurrentDialNumber.setValue(mCurrentDialNumber.getValue().replaceFirst(".$",""));
+    public void removeNumber() {
+        mCurrentDialNumber.setValue(mCurrentDialNumber.getValue().replaceFirst(".$", ""));
     }
 
-    public void voiceButtonOnClick(){
-
-    }
-
-    public void videoButtonOnClick(){
+    public void voiceButtonOnClick() {
 
     }
 
-    public void addContactButtonOnClick(){
+    public void videoButtonOnClick() {
+
+    }
+
+    public void addContactButtonOnClick() {
 
     }
 }

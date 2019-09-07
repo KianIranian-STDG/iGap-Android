@@ -3,10 +3,11 @@ package net.iGap.libs.bottomNavigation.Util;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
-import androidx.cardview.widget.CardView;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -39,18 +40,18 @@ public class Utils {
         }
     }
 
-    public static void setShapeBackground(View view , int light , int dark){
-        if (G.isDarkTheme){
+    public static void setShapeBackground(View view, int light, int dark) {
+        if (G.isDarkTheme) {
             view.setBackgroundResource(dark);
-        }else {
+        } else {
             view.setBackgroundResource(light);
         }
     }
 
-    public static void setCardsBackground(CardView cardView , int light , int dark){
-        if (G.isDarkTheme){
+    public static void setCardsBackground(CardView cardView, int light, int dark) {
+        if (G.isDarkTheme) {
             cardView.setCardBackgroundColor(context.getResources().getColor(dark));
-        }else {
+        } else {
             cardView.setCardBackgroundColor(context.getResources().getColor(light));
         }
     }

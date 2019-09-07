@@ -22,11 +22,11 @@ public class GetMoneyViewModel extends ViewModel {
         this.completeListener = completeListener;
     }
 
-    public LiveData<Integer> forDetailErrorMessage(){
+    public LiveData<Integer> forDetailErrorMessage() {
         return forDetailErrorMessage;
     }
 
-    public LiveData<Boolean> forDetailEnableError(){
+    public LiveData<Boolean> forDetailEnableError() {
         return forDetailEnableError;
     }
 

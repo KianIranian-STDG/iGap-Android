@@ -3,9 +3,6 @@ package net.iGap.dialog;
 import android.animation.Animator;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
-
-import androidx.annotation.RequiresApi;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,15 +22,15 @@ public class ChatAttachmentPopup {
 
     private final String TAG = "ChatAttachmentPopup";
 
-    private Context mContext ;
+    private Context mContext;
     private View mRootView;
     private ChatPopupListener mPopupListener;
-    private PopupWindow mPopup ;
+    private PopupWindow mPopup;
 
     private ChatAttachmentPopup() {
     }
 
-    public static ChatAttachmentPopup create(){
+    public static ChatAttachmentPopup create() {
         return new ChatAttachmentPopup();
     }
 
@@ -42,31 +39,32 @@ public class ChatAttachmentPopup {
         return this;
     }
 
-    public ChatAttachmentPopup setRootView(View view){
-        this.mRootView = view ;
+    public ChatAttachmentPopup setRootView(View view) {
+        this.mRootView = view;
         return this;
     }
 
-    public ChatAttachmentPopup setListener(ChatPopupListener listener){
-        this.mPopupListener = listener ;
+    public ChatAttachmentPopup setListener(ChatPopupListener listener) {
+        this.mPopupListener = listener;
         return this;
     }
 
-    public ChatAttachmentPopup build(){
-        if (mContext == null) throw new IllegalArgumentException(TAG + " : CONTEXT can not be null!");
+    public ChatAttachmentPopup build() {
+        if (mContext == null)
+            throw new IllegalArgumentException(TAG + " : CONTEXT can not be null!");
         if (mRootView == null) throw new IllegalArgumentException(TAG + " : set root view!");
         return this;
     }
 
-    public void show(){
+    public void show() {
 
         //get height of keyboard if it was gone set wrap content to popup
-        int height = getKeyboardHeight() ;
+        int height = getKeyboardHeight();
         if (height == 0) height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
         //inflate layout
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.bottom_sheet_new , null , false);
+        View view = inflater.inflate(R.layout.bottom_sheet_new, null, false);
 
         //setup popup
         mPopup = new PopupWindow(mContext);
@@ -79,10 +77,10 @@ public class ChatAttachmentPopup {
         mPopup.setOutsideTouchable(true);
         mPopup.setAnimationStyle(R.style.chatAttachmentAnimation);
 
-        mPopup.showAtLocation(mRootView , Gravity.BOTTOM , 0 , 0 );
+        mPopup.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
 
         //animate views after popup showed -> delay set base on xml animation
-        G.handler.postDelayed(() -> setupViews(view) , 250);
+        G.handler.postDelayed(() -> setupViews(view), 250);
     }
 
     private void setupViews(View view) {
@@ -108,14 +106,14 @@ public class ChatAttachmentPopup {
         TextView lblSend = view.findViewById(R.id.txtNumberItem);
 
         //animate all icons and after anim show their label
-        animateViewWithCircularReveal(icoCamera     , lblCamera);
-        animateViewWithCircularReveal(icoPicture    , lblPicture);
-        animateViewWithCircularReveal(icoVideo      , lblVideo);
-        animateViewWithCircularReveal(icoMusic      , lblMusic);
-        animateViewWithCircularReveal(icoFile       , lblFile);
-        animateViewWithCircularReveal(icoLocation   , lblLocation);
-        animateViewWithCircularReveal(icoContact    , lblContact);
-        animateViewWithCircularReveal(icoSend       , lblSend);
+        animateViewWithCircularReveal(icoCamera, lblCamera);
+        animateViewWithCircularReveal(icoPicture, lblPicture);
+        animateViewWithCircularReveal(icoVideo, lblVideo);
+        animateViewWithCircularReveal(icoMusic, lblMusic);
+        animateViewWithCircularReveal(icoFile, lblFile);
+        animateViewWithCircularReveal(icoLocation, lblLocation);
+        animateViewWithCircularReveal(icoContact, lblContact);
+        animateViewWithCircularReveal(icoSend, lblSend);
 
     }
 
@@ -134,10 +132,10 @@ public class ChatAttachmentPopup {
             e.printStackTrace();
         }
 
-        return ViewGroup.LayoutParams.WRAP_CONTENT ;
+        return ViewGroup.LayoutParams.WRAP_CONTENT;
     }
 
-    private void animateViewWithCircularReveal(View myView , View lbl) {
+    private void animateViewWithCircularReveal(View myView, View lbl) {
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             // get the center for the clipping circle
@@ -177,22 +175,25 @@ public class ChatAttachmentPopup {
 
                 }
             });
-        }else {
+        } else {
             myView.setVisibility(View.VISIBLE);
         }
-        
+
     }
 
-    public interface ChatPopupListener{
+    public interface ChatPopupListener {
 
         void onChatPopupItemClicked();
+
         void onChatPopupImageSelected();
+
         void onChatPopupShowed();
+
         void onChatPopupDissmissed();
 
     }
 
     public enum ChatPopupAction {
-        PHOTO , VIDEO , CAMERA , MUSIC , FILE , CONTACT , LOCATION , CLOSE
+        PHOTO, VIDEO, CAMERA, MUSIC, FILE, CONTACT, LOCATION, CLOSE
     }
 }

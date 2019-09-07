@@ -45,7 +45,7 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
-        if (identity instanceof OnUserProfileSetNickNameResponse){
+        if (identity instanceof OnUserProfileSetNickNameResponse) {
             ((OnUserProfileSetNickNameResponse) identity).onUserProfileNickNameTimeOut();
         }
     }
@@ -57,7 +57,7 @@ public class UserProfileSetNicknameResponse extends MessageHandler {
         final int majorCode = errorResponse.getMajorCode();
         final int minorCode = errorResponse.getMinorCode();
 
-        if (identity instanceof OnUserProfileSetNickNameResponse){
+        if (identity instanceof OnUserProfileSetNickNameResponse) {
             ((OnUserProfileSetNickNameResponse) identity).onUserProfileNickNameError(majorCode, minorCode);
         }
     }

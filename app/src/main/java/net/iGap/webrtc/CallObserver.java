@@ -16,9 +16,8 @@ import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentCall;
-import net.iGap.fragments.CallSelectFragment;
 import net.iGap.activities.ActivityCall;
+import net.iGap.fragments.CallSelectFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.interfaces.ISignalingAccept;
 import net.iGap.interfaces.ISignalingCandidate;

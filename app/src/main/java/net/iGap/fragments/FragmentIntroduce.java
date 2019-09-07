@@ -10,15 +10,16 @@
 
 package net.iGap.fragments;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.res.Configuration;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 
 import net.iGap.G;
 import net.iGap.R;

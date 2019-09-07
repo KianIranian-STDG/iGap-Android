@@ -13,16 +13,17 @@ package net.iGap.adapter.items.chat;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.os.Build;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -105,7 +106,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         });
 
         holder.mMessageID = mMessage.getMessageId() + "";
-        animationPlayer(holder,anim);
+        animationPlayer(holder, anim);
 
         holder.complete = (result, messageOne, MessageTow) -> {
             if (holder.waveView.getTag().equals(mMessage.getMessageId()) && (mMessage.getMessageId() + "").equals(MusicPlayer.messageId)) {
@@ -180,7 +181,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                 holder.mTimeMusic = MusicPlayer.musicTime;
             }
             MusicPlayer.messageId = mMessage.getMessageId() + "";
-            animationPlayer(holder,anim);
+            animationPlayer(holder, anim);
         });
 
         holder.waveView.setOnTouchListener((v, event) -> {
@@ -244,7 +245,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
     }
 
-    private void animationPlayer(ViewHolder holder,ValueAnimator anim){
+    private void animationPlayer(ViewHolder holder, ValueAnimator anim) {
         if (holder.mMessageID.equals(MusicPlayer.messageId)) {
             MusicPlayer.playerStatusObservable.observe(G.fragmentActivity, playerStatus -> {
                 if (playerStatus != null) {

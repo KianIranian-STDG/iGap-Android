@@ -7,12 +7,13 @@ import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -222,7 +223,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         }
     }
 
-    public int getCurrentTab(){
+    public int getCurrentTab() {
         return selectedItemPosition;
     }
 }

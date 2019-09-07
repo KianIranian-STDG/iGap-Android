@@ -1,10 +1,11 @@
 package net.iGap.adapter;
 
-import androidx.annotation.StringRes;
-import com.google.android.material.textfield.TextInputLayout;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.annotation.StringRes;
+
+import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.R;

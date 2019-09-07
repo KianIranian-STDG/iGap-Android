@@ -1,16 +1,8 @@
 package net.iGap.kuknos.view;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.SharedPreferences;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,6 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosRestoreSignupBinding;
@@ -103,8 +104,7 @@ public class KuknosRestoreSignupFrag extends BaseFragment {
                     if (errorM.getMessage().equals("1")) {
                         binding.fragKuknosSIEmailHolder.setError("" + getString(errorM.getResID()));
                         binding.fragKuknosSIEmail.requestFocus();
-                    }
-                    else if (errorM.getMessage().equals("0")){
+                    } else if (errorM.getMessage().equals("0")) {
                         binding.fragKuknosSIUsernameHolder.setError("" + getString(errorM.getResID()));
                         binding.fragKuknosSIUsername.requestFocus();
                     }
@@ -142,8 +142,7 @@ public class KuknosRestoreSignupFrag extends BaseFragment {
             public void onChanged(@Nullable Integer integer) {
                 if (integer == 0) {
                     progressCheckUserVisibility(true);
-                }
-                else if (integer == 1) {
+                } else if (integer == 1) {
                     // success
                     usernameStateVisibility(true);
                     binding.fragKuknosSICheckIcon.setText(getString(R.string.valid_icon));
@@ -151,16 +150,14 @@ public class KuknosRestoreSignupFrag extends BaseFragment {
                     binding.fragKuknosSICheckUsername.setText(getString(R.string.kuknos_SignupInfo_ValidUsername));
                     binding.fragKuknosSICheckUsername.setTextColor(getResources().getColor(R.color.green));
 
-                }
-                else if (integer == 2) {
+                } else if (integer == 2) {
                     // error
                     usernameStateVisibility(true);
                     binding.fragKuknosSICheckIcon.setText(getString(R.string.error_icon));
                     binding.fragKuknosSICheckIcon.setTextColor(getResources().getColor(R.color.red));
                     binding.fragKuknosSICheckUsername.setText(getString(R.string.kuknos_SignupInfo_errorUsernameInvalid));
                     binding.fragKuknosSICheckUsername.setTextColor(getResources().getColor(R.color.red));
-                }
-                else {
+                } else {
                     usernameStatusGone();
                 }
             }
@@ -188,12 +185,11 @@ public class KuknosRestoreSignupFrag extends BaseFragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    Log.d("amini" , "false in here");
+                    Log.d("amini", "false in here");
                     kuknosSignupInfoVM.cancelUsernameServer();
-                }
-                else {
+                } else {
                     //TODO delete log
-                    Log.d("amini" , "true in here");
+                    Log.d("amini", "true in here");
                     if (kuknosSignupInfoVM.getProgressSendDServerState().getValue() != true)
                         kuknosSignupInfoVM.isUsernameValid(false);
                 }
@@ -238,8 +234,7 @@ public class KuknosRestoreSignupFrag extends BaseFragment {
             binding.fragKuknosSICheckUsername.setText(getText(R.string.kuknos_SignupInfo_checkUsername));
             binding.fragKuknosSICheckUsername.setTextColor(getResources().getColor(R.color.black));
             binding.fragKuknosSICheckIcon.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             usernameStatusGone();
         }
     }
@@ -253,8 +248,7 @@ public class KuknosRestoreSignupFrag extends BaseFragment {
                     binding.fragKuknosSIUsername.setEnabled(false);
                     binding.fragKuknosSIEmail.setEnabled(false);
                     binding.fragKuknosSIProgressV.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     binding.fragKuknosSISubmit.setText(getString(R.string.kuknos_SignupInfo_submitBtn));
                     binding.fragKuknosSIUsername.setEnabled(true);
                     binding.fragKuknosSIEmail.setEnabled(true);
@@ -275,8 +269,7 @@ public class KuknosRestoreSignupFrag extends BaseFragment {
             binding.fragKuknosSIProgress.setVisibility(View.GONE);
             binding.fragKuknosSICheckUsername.setVisibility(View.VISIBLE);
             binding.fragKuknosSICheckIcon.setVisibility(View.VISIBLE);
-        }
-        else
+        } else
             usernameStatusGone();
     }
 

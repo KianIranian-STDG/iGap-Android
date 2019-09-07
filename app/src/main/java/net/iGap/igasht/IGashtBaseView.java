@@ -1,11 +1,13 @@
 package net.iGap.igasht;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import android.view.View;
-import android.widget.Toast;
+
 import net.iGap.activities.ActivityMain;
 
 public abstract class IGashtBaseView<G> extends Fragment {

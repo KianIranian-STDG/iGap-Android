@@ -14,9 +14,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -26,6 +23,10 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -118,7 +119,6 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
                         countryCode = numberProto.getCountryCode() + "";
                     } catch (NumberParseException e) {
                         phoneFromUrl = phoneFromUrl.substring(1);
-                        ;
                     }
                 } else if (phoneFromUrl.startsWith("0")) {
                     phoneFromUrl = phoneFromUrl.substring(1);
@@ -219,10 +219,10 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
             txtCodeCountry.setText("+" + countryCode);
             CountryReader countryReade = new CountryReader();
             StringBuilder fileListBuilder = countryReade.readFromAssetsTextFile("country.txt", G.fragmentActivity);
-            String listArray[] = fileListBuilder.toString().split("\\r?\\n");
+            String[] listArray = fileListBuilder.toString().split("\\r?\\n");
 
             for (String aListArray : listArray) {
-                String listItem[] = aListArray.split(";");
+                String[] listItem = aListArray.split(";");
                 if (countryCode.equals(listItem[0])) {
                     txtCodeCountry.setText(listItem[2]);
                     if (listItem.length > 3) {
@@ -282,7 +282,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
         String saveNumber;
 
         if (edtPhoneNumber.getText().toString().startsWith("0")) {
-            saveNumber = codeCountry + _phone.substring(1, _phone.length());
+            saveNumber = codeCountry + _phone.substring(1);
         } else {
             saveNumber = codeCountry + _phone;
         }

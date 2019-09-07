@@ -1,23 +1,24 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.viewmodel;
 
 import android.content.Context;
-import androidx.databinding.ObservableField;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
-import androidx.annotation.NonNull;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.ObservableField;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -286,9 +287,9 @@ public class FragmentNotificationViewModel {
 
         View view1 = dialog.getCustomView();
         assert view1 != null;
-        final ColorPicker picker = (ColorPicker) view1.findViewById(R.id.picker);
-        SVBar svBar = (SVBar) view1.findViewById(R.id.svbar);
-        OpacityBar opacityBar = (OpacityBar) view1.findViewById(R.id.opacitybar);
+        final ColorPicker picker = view1.findViewById(R.id.picker);
+        SVBar svBar = view1.findViewById(R.id.svbar);
+        OpacityBar opacityBar = view1.findViewById(R.id.opacitybar);
         picker.addSVBar(svBar);
         picker.addOpacityBar(opacityBar);
 

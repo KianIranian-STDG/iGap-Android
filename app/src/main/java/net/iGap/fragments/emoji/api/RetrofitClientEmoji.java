@@ -26,9 +26,8 @@ public class RetrofitClientEmoji {
     private static Retrofit retrofit = null;
 
 
-
     public static Retrofit getClient(String baseUrl) {
-        String s ="Bearer " +  EncryptKeySticker.enccriptData();
+        String s = "Bearer " + EncryptKeySticker.enccriptData();
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(new Interceptor() {
             @Override
@@ -36,7 +35,7 @@ public class RetrofitClientEmoji {
                 Request original = chain.request();
 
                 Request request = original.newBuilder()
-                        .header("Authorization", s )
+                        .header("Authorization", s)
                         .header("Content-Type", "application/json")
                         .method(original.method(), original.body())
                         .build();

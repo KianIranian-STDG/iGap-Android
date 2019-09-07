@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
@@ -37,14 +37,14 @@ public class SignalingClearLogResponse extends MessageHandler {
 
         ProtoSignalingClearLog.SignalingClearLog.Builder builderRequest = (ProtoSignalingClearLog.SignalingClearLog.Builder) identity;
 
-        if (builderRequest.getClearId() != 0 ){
+        if (builderRequest.getClearId() != 0) {
             RealmCallLog.clearCallLog(builder.getClearId());
-        }else {
+        } else {
             try (Realm realm = Realm.getDefaultInstance()) {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        for (int i= 0 ; i< builder.getLogIdCount() ; i++){
+                        for (int i = 0; i < builder.getLogIdCount(); i++) {
                             try {
                                 realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.LOG_ID, builderRequest.getLogIdList().get(i)).findFirst().deleteFromRealm();
                             }catch (Exception e){

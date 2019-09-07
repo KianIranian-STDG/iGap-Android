@@ -11,12 +11,13 @@
 package net.iGap.adapter;
 
 import android.graphics.Color;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -34,87 +35,87 @@ import java.util.Arrays;
 public class AdapterSolidChatBackground extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
-
     private ArrayList<String> mList;
     private FragmentChatBackground.OnImageClick onImageClick;
     private Fragment fragment;
     private Enum imgSwitcher;
-ArrayList<String> palletList=new ArrayList<>(Arrays.asList("#2962ff","#00b8d4",
-        "#b71c1c","#e53935","#e57373",
-        "#880e4f","#d81b60","#f06292",
-        "#4a148c","#8e24aa","#ba68c8",
-        "#311b92","#5e35b1","#9575cd",
-        "#1a237e","#3949ab","#7986cb",
-        "#0d47a1","#1e88e5","#64b5f6",
-        "#01579b","#039be5","#4fc3f7",
-        "#006064","#00acc1","#4dd0e1",
-        "#004d40","#00897b","#4db6ac",
-        "#1b5e20","#43a047","#81c784",
-        "#33691e","#7cb342","#aed581",
-        "#827717","#c0ca33","#dce775",
-        "#f57f17","#fdd835","#fff176",
-        "#ff6f00","#ffb300","#ffd54f",
-        "#e65100","#fb8c00","#fb8c00",
-        "#bf360c","#f4511e","#ff8a65",
-        "#3e2723","#6d4c41","#a1887f",
-        "#212121","#757575","#e0e0e0",
-        "#263238","#546e7a","#90a4ae"));
+    ArrayList<String> palletList = new ArrayList<>(Arrays.asList("#2962ff", "#00b8d4",
+            "#b71c1c", "#e53935", "#e57373",
+            "#880e4f", "#d81b60", "#f06292",
+            "#4a148c", "#8e24aa", "#ba68c8",
+            "#311b92", "#5e35b1", "#9575cd",
+            "#1a237e", "#3949ab", "#7986cb",
+            "#0d47a1", "#1e88e5", "#64b5f6",
+            "#01579b", "#039be5", "#4fc3f7",
+            "#006064", "#00acc1", "#4dd0e1",
+            "#004d40", "#00897b", "#4db6ac",
+            "#1b5e20", "#43a047", "#81c784",
+            "#33691e", "#7cb342", "#aed581",
+            "#827717", "#c0ca33", "#dce775",
+            "#f57f17", "#fdd835", "#fff176",
+            "#ff6f00", "#ffb300", "#ffd54f",
+            "#e65100", "#fb8c00", "#fb8c00",
+            "#bf360c", "#f4511e", "#ff8a65",
+            "#3e2723", "#6d4c41", "#a1887f",
+            "#212121", "#757575", "#e0e0e0",
+            "#263238", "#546e7a", "#90a4ae"));
+
     public AdapterSolidChatBackground(Fragment fragment, ArrayList<String> List, FragmentChatBackground.OnImageClick onImageClick) {
         this.fragment = fragment;
         this.mList = List;
         this.onImageClick = onImageClick;
-        this.imgSwitcher=imgSwitcher;
+        this.imgSwitcher = imgSwitcher;
         mList.addAll(palletList);
-        ;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
 
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_background_image, parent, false);
-            return new ViewHolderItem(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_background_image, parent, false);
+        return new ViewHolderItem(view);
 
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
-            final ViewHolderItem holder2 = (ViewHolderItem) holder;
-            holder2.img.setImageDrawable(null);
+        final ViewHolderItem holder2 = (ViewHolderItem) holder;
+        holder2.img.setImageDrawable(null);
 
-            if (mList.size() < (position + 1)) {
-                return;
+        if (mList.size() < (position + 1)) {
+            return;
+        }
+        String wallpaper = mList.get(position);
+
+
+        holder2.img.setBackgroundColor(Color.parseColor(wallpaper));
+
+
+        String bigImagePath;
+
+        bigImagePath = wallpaper;
+
+        if (bigImagePath != null) {
+            holder2.messageProgress.setVisibility(View.GONE);
+            try {
+                if (wallpaper != null)
+                    holder2.mPath = wallpaper;
+                else
+                    holder2.mPath = bigImagePath;
+            } catch (Exception e) {
             }
-           String wallpaper = mList.get(position);
 
-
-               holder2.img.setBackgroundColor(Color.parseColor(wallpaper));
-
-
-            String bigImagePath;
-
-                bigImagePath = wallpaper;
-
-            if (bigImagePath!=null) {
-                holder2.messageProgress.setVisibility(View.GONE);
-                try{
-                    if (wallpaper != null)
-                        holder2.mPath = wallpaper;
-                    else
-                        holder2.mPath = bigImagePath;
-                }catch (Exception e){}
-
-            } else {
-                holder2.mPath = "";
-                holder2.messageProgress.setVisibility(View.VISIBLE);
-            }
+        } else {
+            holder2.mPath = "";
+            holder2.messageProgress.setVisibility(View.VISIBLE);
+        }
 
     }
 
     @Override
     public int getItemViewType(int position) {
-            return mList.size();
+        return mList.size();
     }
 
     @Override
@@ -130,7 +131,7 @@ ArrayList<String> palletList=new ArrayList<>(Arrays.asList("#2962ff","#00b8d4",
         public ViewHolderImage(View itemView) {
             super(itemView);
 
-            imageView = (ImageView) itemView.findViewById(R.id.imgBackgroundImage);
+            imageView = itemView.findViewById(R.id.imgBackgroundImage);
 
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -172,9 +173,9 @@ ArrayList<String> palletList=new ArrayList<>(Arrays.asList("#2962ff","#00b8d4",
         ViewHolderItem(View itemView) {
             super(itemView);
 
-            img = (ImageView) itemView.findViewById(R.id.imgBackground);
+            img = itemView.findViewById(R.id.imgBackground);
 
-            messageProgress = (MessageProgress) itemView.findViewById(R.id.progress);
+            messageProgress = itemView.findViewById(R.id.progress);
             AppUtils.setProgresColor(messageProgress.progressBar);
 
             messageProgress.withDrawable(R.drawable.ic_download, true);

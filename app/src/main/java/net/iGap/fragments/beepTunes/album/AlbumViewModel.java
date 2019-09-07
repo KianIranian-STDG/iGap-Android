@@ -1,11 +1,11 @@
 package net.iGap.fragments.beepTunes.album;
 
-import androidx.lifecycle.MutableLiveData;
 import android.content.SharedPreferences;
-import androidx.fragment.app.FragmentManager;
 import android.util.Log;
 
-import com.downloader.Error;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MutableLiveData;
+
 import com.downloader.PRDownloader;
 import com.downloader.Progress;
 

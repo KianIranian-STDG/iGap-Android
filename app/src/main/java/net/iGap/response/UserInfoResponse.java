@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
@@ -99,7 +99,7 @@ public class UserInfoResponse extends MessageHandler {
                         G.onContactImport.onContactInfo(builder.getUser());
                     }
 
-                } else if (identity instanceof RequestUserInfo.UserInfoBody){
+                } else if (identity instanceof RequestUserInfo.UserInfoBody) {
                     if (((RequestUserInfo.UserInfoBody) identity).onComplete != null) {
                         ((RequestUserInfo.UserInfoBody) identity).onComplete.complete(true, "" + builder.getUser().getId(), "OK");
                     }
@@ -140,7 +140,7 @@ public class UserInfoResponse extends MessageHandler {
     public void timeOut() {
         super.timeOut();
         G.onUserInfoResponse.onUserInfoTimeOut();
-        if (G.onContactImport!=null)
+        if (G.onContactImport != null)
             G.onContactImport.onTimeOut();
     }
 
@@ -167,7 +167,7 @@ public class UserInfoResponse extends MessageHandler {
             ((RequestUserInfo.UserInfoBody) identity).onComplete.complete(true, "", "");
         }
         if (G.onContactImport != null)
-            G.onContactImport.onError(majorCode,minorCode);
+            G.onContactImport.onError(majorCode, minorCode);
     }
 }
 

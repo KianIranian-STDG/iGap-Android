@@ -17,6 +17,7 @@ public class RequestMplGetCardToCardToken {
 
     public interface OnMplCardToCardToken {
         void onToken(String token);
+
         void onError(int major, int minor);
     }
 

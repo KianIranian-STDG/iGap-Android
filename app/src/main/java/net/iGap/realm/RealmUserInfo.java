@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.realm;
 
@@ -333,10 +333,7 @@ public class RealmUserInfo extends RealmObject {
     }
 
     public boolean isAuthorMe(String author) {
-        if (author.equals(authorHash)) {
-            return true;
-        }
-        return false;
+        return author.equals(authorHash);
     }
 
     public boolean isImportContactLimit() {
@@ -376,7 +373,7 @@ public class RealmUserInfo extends RealmObject {
         setRepresentPhoneNumber(realm, realmUserInfo, representPhoneNumber);
     }
 
-    public static void setRepresentPhoneNumber(Realm realm, RealmUserInfo realmUserInfo , String representPhoneNumber) {
+    public static void setRepresentPhoneNumber(Realm realm, RealmUserInfo realmUserInfo, String representPhoneNumber) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

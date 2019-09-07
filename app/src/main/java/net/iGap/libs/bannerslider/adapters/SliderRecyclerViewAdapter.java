@@ -1,10 +1,11 @@
 package net.iGap.libs.bannerslider.adapters;
 
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.libs.bannerslider.SlideType;
 import net.iGap.libs.bannerslider.event.OnSlideClickListener;

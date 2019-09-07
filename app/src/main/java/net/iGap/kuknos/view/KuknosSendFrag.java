@@ -1,12 +1,7 @@
 package net.iGap.kuknos.view;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -15,6 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
@@ -139,13 +140,11 @@ public class KuknosSendFrag extends BaseFragment {
                         //Wallet ID Problem
                         binding.fragKuknosSWalletAddressHolder.setError("" + getString(errorM.getResID()));
                         binding.fragKuknosSWalletAddressHolder.requestFocus();
-                    }
-                    else if (errorM.getMessage().equals("1")){
+                    } else if (errorM.getMessage().equals("1")) {
                         //Amount enough
                         binding.fragKuknosSAmountHolder.setError("" + getString(errorM.getResID()));
                         binding.fragKuknosSAmountHolder.requestFocus();
-                    }
-                    else if (errorM.getMessage().equals("2")) {
+                    } else if (errorM.getMessage().equals("2")) {
                         //server related errors
 
                     }
@@ -169,8 +168,7 @@ public class KuknosSendFrag extends BaseFragment {
                             popBackStackFragment();
                         }
                     });
-                }
-                else {
+                } else {
                     // error
                     defaultRoundDialog.setPositiveButton(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack), null);
                 }
@@ -189,8 +187,7 @@ public class KuknosSendFrag extends BaseFragment {
                     binding.fragKuknosSWalletAddressET.setEnabled(false);
                     binding.fragKuknosSTextET.setEnabled(false);
                     binding.fragKuknosSProgressV.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     binding.fragKuknosSSubmit.setText(getString(R.string.kuknos_send_sendBtn));
                     binding.fragKuknosSAmountET.setEnabled(true);
                     binding.fragKuknosSWalletAddressET.setEnabled(true);

@@ -2,10 +2,11 @@ package net.iGap.module;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.util.DisplayMetrics;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.DisplayMetrics;
 
 /**
  * Created by android3 on 7/31/2017.

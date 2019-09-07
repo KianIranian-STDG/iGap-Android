@@ -1,7 +1,7 @@
 package net.iGap.viewmodel;
 
-import androidx.lifecycle.ViewModel;
 import androidx.databinding.ObservableField;
+import androidx.lifecycle.ViewModel;
 
 public class FragmentCPayInquiryViewModel extends ViewModel {
 
@@ -10,13 +10,13 @@ public class FragmentCPayInquiryViewModel extends ViewModel {
     public FragmentCPayInquiryViewModel() {
     }
 
-    public void onInquiryClicked(){
+    public void onInquiryClicked() {
 
     }
 
-    private String getInquiryResult(long amount){
+    private String getInquiryResult(long amount) {
         String textStart = "کاربر گرامی , بدهی عوارضی پلاک انتخاب شده تا ساعت 24 شب گذشته ";
         String textEnd = " تومان می باشد";
-        return textStart + amount + textEnd ;
+        return textStart + amount + textEnd;
     }
 }

@@ -10,15 +10,15 @@ public class FragmentCPayHistoryViewModel extends ViewModel {
     public FragmentCPayHistoryViewModel() {
     }
 
-    public void onFilterClicked(){
+    public void onFilterClicked() {
         onFiltersButtonStateChangeListener.setValue(1);
     }
 
-    public void onTodayClicked(){
+    public void onTodayClicked() {
         onFiltersButtonStateChangeListener.setValue(2);
     }
 
-    public void onFromFirstClicked(){
+    public void onFromFirstClicked() {
         onFiltersButtonStateChangeListener.setValue(3);
     }
 

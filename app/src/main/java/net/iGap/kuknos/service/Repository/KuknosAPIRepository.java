@@ -1,10 +1,6 @@
 package net.iGap.kuknos.service.Repository;
 
-import android.util.Log;
-
-import net.iGap.api.BeepTunesApi;
 import net.iGap.api.KuknosApi;
-import net.iGap.api.KuknosHorizenApi;
 import net.iGap.api.apiService.ApiResponse;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.kuknos.service.model.KuknosInfoM;
@@ -12,13 +8,6 @@ import net.iGap.kuknos.service.model.KuknosLoginM;
 import net.iGap.kuknos.service.model.KuknosSendM;
 import net.iGap.kuknos.service.model.KuknosSubmitM;
 import net.iGap.kuknos.service.model.KuknoscheckUserM;
-import net.iGap.module.api.beepTunes.Album;
-import net.iGap.module.api.beepTunes.AlbumTrack;
-import net.iGap.module.api.beepTunes.Albums;
-import net.iGap.module.api.beepTunes.Artist;
-import net.iGap.module.api.beepTunes.SearchArtist;
-import net.iGap.module.api.beepTunes.SearchTrack;
-import net.iGap.module.api.beepTunes.TrackInfo;
 
 import org.stellar.sdk.responses.AccountResponse;
 import org.stellar.sdk.responses.AssetResponse;

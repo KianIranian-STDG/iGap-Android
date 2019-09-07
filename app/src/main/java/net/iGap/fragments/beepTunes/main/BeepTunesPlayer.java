@@ -1,12 +1,8 @@
 package net.iGap.fragments.beepTunes.main;
 
-import androidx.lifecycle.MutableLiveData;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;

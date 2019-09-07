@@ -1,13 +1,14 @@
 package net.iGap.fragments;
 
-import androidx.lifecycle.ViewModelProviders;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -111,14 +112,14 @@ public class FragmentPaymentCharge extends BaseFragment {
             }
         });
 
-        viewModel.getShowError().observe(getViewLifecycleOwner(),errorMessageRes->{
-            if (errorMessageRes != null){
+        viewModel.getShowError().observe(getViewLifecycleOwner(), errorMessageRes -> {
+            if (errorMessageRes != null) {
                 HelperError.showSnackMessage(getString(errorMessageRes), false);
             }
         });
 
-        viewModel.getShowMciPaymentError().observe(getViewLifecycleOwner(),errorModel->{
-            if (errorModel != null){
+        viewModel.getShowMciPaymentError().observe(getViewLifecycleOwner(), errorModel -> {
+            if (errorModel != null) {
                 HelperError.showSnackMessage(errorModel.getMessage(), false);
             }
         });

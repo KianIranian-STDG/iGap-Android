@@ -1,24 +1,25 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -84,10 +85,10 @@ public class FragmentExplorer extends BaseFragment {
                     }
                 });
 
-        ViewGroup layoutToolbar = view.findViewById(R.id.ae_toolbar) ;
+        ViewGroup layoutToolbar = view.findViewById(R.id.ae_toolbar);
         layoutToolbar.addView(mHelperToolbar.getView());
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.ae_recycler_view_explorer);
+        recyclerView = view.findViewById(R.id.ae_recycler_view_explorer);
         recyclerView.setItemViewCacheSize(100);
         mLayoutManager = new LinearLayoutManager(G.fragmentActivity);
         recyclerView.setLayoutManager(mLayoutManager);

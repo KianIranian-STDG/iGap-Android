@@ -1,27 +1,28 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ProgressBar;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.ProgressBar;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -94,13 +95,13 @@ public class FragmentActiveSessions extends BaseFragment {
         ViewGroup layoutToolbar = view.findViewById(R.id.fas_layout_toolbar);
         layoutToolbar.addView(toolbar.getView());
 
-        prgWaiting = (ProgressBar) view.findViewById(R.id.stas_prgWaiting);
+        prgWaiting = view.findViewById(R.id.stas_prgWaiting);
         AppUtils.setProgresColler(prgWaiting);
 
         prgWaiting.setVisibility(View.VISIBLE);
 
         fastItemAdapter = new FastItemAdapter();
-        rcvContent = (RecyclerView) view.findViewById(R.id.stas_rcvContent);
+        rcvContent = view.findViewById(R.id.stas_rcvContent);
         rcvContent.setLayoutManager(new LinearLayoutManager(getContext()));
         rcvContent.setItemAnimator(new DefaultItemAnimator());
         rcvContent.setAdapter(fastItemAdapter);

@@ -5,9 +5,6 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -16,6 +13,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import net.iGap.R;
 import net.iGap.adapter.cPay.CPaySpinnerAdapter;
 import net.iGap.helper.HelperCPay;
@@ -23,9 +24,9 @@ import net.iGap.helper.HelperCalander;
 
 public class PlaqueView extends ConstraintLayout {
 
-    private AppCompatEditText p1, p2, pCity ;
+    private AppCompatEditText p1, p2, pCity;
     private AppCompatTextView pAlphabet;
-    private Spinner spAlphabet ;
+    private Spinner spAlphabet;
     private String strP1 = "", strP2 = "", strPCity = "", strPAlphabet = "";
     private boolean isEditable = true;
 
@@ -63,7 +64,7 @@ public class PlaqueView extends ConstraintLayout {
         spAlphabet.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                strPAlphabet = HelperCPay.getPlaqueAlphabet(position+1);
+                strPAlphabet = HelperCPay.getPlaqueAlphabet(position + 1);
             }
 
             @Override
@@ -181,11 +182,7 @@ public class PlaqueView extends ConstraintLayout {
 
     public boolean isPlaqueCorrect() {
 
-        if (strP1.length() == 2 && strP2.length() == 3 && strPAlphabet.length() != 0 && strPCity.length() == 2) {
-            return true;
-        }
-
-        return false;
+        return strP1.length() == 2 && strP2.length() == 3 && strPAlphabet.length() != 0 && strPCity.length() == 2;
     }
 
     /**
@@ -216,9 +213,9 @@ public class PlaqueView extends ConstraintLayout {
         this.p1.setText(getPersianNumbers(strP1));
         this.p2.setText(getPersianNumbers(strP2));
         this.pCity.setText(getPersianNumbers(strPCity));
-        if (isEditable){
-            spAlphabet.setSelection(HelperCPay.getPlaqueIndexByValue(HelperCPay.getPlaqueAlphabets() , strPAlphabet));
-        }else {
+        if (isEditable) {
+            spAlphabet.setSelection(HelperCPay.getPlaqueIndexByValue(HelperCPay.getPlaqueAlphabets(), strPAlphabet));
+        } else {
             this.pAlphabet.setText(this.strPAlphabet);
         }
 
@@ -241,9 +238,9 @@ public class PlaqueView extends ConstraintLayout {
 
     public void setPlaqueAlphabet(String strPAlphabet) {
         this.strPAlphabet = strPAlphabet;
-        if (isEditable){
-            spAlphabet.setSelection(HelperCPay.getPlaqueIndexByValue(HelperCPay.getPlaqueAlphabets() , this.strPAlphabet));
-        }else {
+        if (isEditable) {
+            spAlphabet.setSelection(HelperCPay.getPlaqueIndexByValue(HelperCPay.getPlaqueAlphabets(), this.strPAlphabet));
+        } else {
             pAlphabet.setText(this.strPAlphabet);
         }
     }
@@ -284,10 +281,10 @@ public class PlaqueView extends ConstraintLayout {
         return spAlphabet;
     }
 
-    public String getPersianNumbers(String text){
+    public String getPersianNumbers(String text) {
         if (isEditable) {
             return text;
-        }else{
+        } else {
             return HelperCalander.convertToUnicodeFarsiNumber(text);
         }
     }

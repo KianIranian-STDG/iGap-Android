@@ -31,8 +31,8 @@ public class ClientGetFavoriteMenuResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoClientGetFavoriteMenu.ClientGetFavoriteMenuResponse.Builder builder = (ProtoClientGetFavoriteMenu.ClientGetFavoriteMenuResponse.Builder) message;
-        if(identity instanceof OnGetFavoriteMenu){
-            ((OnGetFavoriteMenu)identity).onGetList(builder.getFavoritesList());
+        if (identity instanceof OnGetFavoriteMenu) {
+            ((OnGetFavoriteMenu) identity).onGetList(builder.getFavoritesList());
         }
     }
 

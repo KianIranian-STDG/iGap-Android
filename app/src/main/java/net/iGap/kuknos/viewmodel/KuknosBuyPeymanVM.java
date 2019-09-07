@@ -1,10 +1,11 @@
 package net.iGap.kuknos.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableField;
 import android.os.Handler;
 import android.util.Log;
+
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;

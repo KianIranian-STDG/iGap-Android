@@ -1,15 +1,16 @@
 package net.iGap.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableBoolean;
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
-import androidx.appcompat.widget.PopupMenu;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+
+import androidx.appcompat.widget.PopupMenu;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -599,13 +600,13 @@ public class FragmentGroupProfileViewModel extends ViewModel {
                             setToModerator(info.peerId);
                             return true;
                         case R.id.menu_remove_admin:
-                            ((FragmentGroupProfile) fragment).kickAdmin(info.peerId);
+                            fragment.kickAdmin(info.peerId);
                             return true;
                         case R.id.menu_remove_moderator:
-                            ((FragmentGroupProfile) fragment).kickModerator(info.peerId);
+                            fragment.kickModerator(info.peerId);
                             return true;
                         case R.id.menu_kick:
-                            ((FragmentGroupProfile) fragment).kickMember(info.peerId);
+                            fragment.kickMember(info.peerId);
                             return true;
                         default:
                             return false;

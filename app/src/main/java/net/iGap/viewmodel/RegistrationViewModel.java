@@ -1,7 +1,8 @@
 package net.iGap.viewmodel;
 
-import androidx.lifecycle.ViewModel;
 import android.util.Log;
+
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.model.GoToMainFromRegister;
 import net.iGap.model.repository.RegisterRepository;
@@ -48,8 +49,8 @@ public class RegistrationViewModel extends ViewModel {
         return loadFromBackStack;
     }
 
-    public void startApp(int backStackCount){
-        Log.wtf(this.getClass().getName(),"startApp");
+    public void startApp(int backStackCount) {
+        Log.wtf(this.getClass().getName(), "startApp");
         StartupActions.makeFolder();
         if (backStackCount == 0) {
             if (showPro) {
@@ -57,7 +58,7 @@ public class RegistrationViewModel extends ViewModel {
             } else {
                 goToIntroduction.setValue(true);
             }
-        }else{
+        } else {
             loadFromBackStack.setValue(true);
         }
     }

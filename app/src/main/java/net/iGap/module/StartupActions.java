@@ -8,9 +8,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowManager;
 
 import com.downloader.PRDownloader;
 import com.downloader.PRDownloaderConfig;
@@ -25,7 +23,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.WebSocketClient;
-import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDataUsage;

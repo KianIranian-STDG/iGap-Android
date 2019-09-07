@@ -9,7 +9,7 @@ public class BillInquiry implements Parcelable {
     private long amount;
     private String message;
 
-    public BillInquiry(long billId, long payId, long amount,String message) {
+    public BillInquiry(long billId, long payId, long amount, String message) {
         this.billId = billId;
         this.payId = payId;
         this.amount = amount;

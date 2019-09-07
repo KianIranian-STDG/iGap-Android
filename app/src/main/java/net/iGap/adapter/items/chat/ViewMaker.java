@@ -5,11 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.view.ViewCompat;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.appcompat.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -22,6 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.ViewCompat;
 
 import com.daimajia.swipe.SwipeLayout;
 
@@ -902,8 +903,8 @@ public class ViewMaker {
         checkBox.setVisibility(View.GONE);
         checkBox.setClickable(false);
         checkBox.setButtonDrawable(R.drawable.check_box_background);
-        LinearLayout.LayoutParams lp_checkBox = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT , ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp_checkBox.setMargins(i_Dp(R.dimen.dp10), 0 , i_Dp(R.dimen.dp4), 0);
+        LinearLayout.LayoutParams lp_checkBox = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp_checkBox.setMargins(i_Dp(R.dimen.dp10), 0, i_Dp(R.dimen.dp4), 0);
         lp_checkBox.gravity = Gravity.CENTER;
         checkBox.setLayoutParams(lp_checkBox);
         linearLayout_205.addView(checkBox);

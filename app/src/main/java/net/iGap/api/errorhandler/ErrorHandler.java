@@ -21,7 +21,7 @@ public class ErrorHandler {
         }
     }
 
-    public boolean checkHandShakeFailure(Throwable throwable){
+    public boolean checkHandShakeFailure(Throwable throwable) {
         return throwable instanceof SSLHandshakeException;
     }
 }

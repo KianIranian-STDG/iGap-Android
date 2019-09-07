@@ -1,14 +1,15 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
@@ -58,7 +59,7 @@ public class FragmentChooseCountry extends BaseFragment implements ToolbarListen
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ViewGroup root = (ViewGroup) view.findViewById(R.id.rootChooseCountry);
+        ViewGroup root = view.findViewById(R.id.rootChooseCountry);
         root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +83,7 @@ public class FragmentChooseCountry extends BaseFragment implements ToolbarListen
         for (int i = 0; i < items.size(); i++) {
             fastItemAdapter.add(new AdapterChooseCountry(items.get(i)).withIdentifier(index++));
         }
-        rcvChooseCountry = (RecyclerView) view.findViewById(R.id.rcvChooseCountry);
+        rcvChooseCountry = view.findViewById(R.id.rcvChooseCountry);
         rcvChooseCountry.setItemViewCacheSize(1000);
         rcvChooseCountry.setItemAnimator(null);
         rcvChooseCountry.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
@@ -115,13 +116,13 @@ public class FragmentChooseCountry extends BaseFragment implements ToolbarListen
 
         String list = fileListBuilder.toString();
         // Split line by line Into array
-        String listArray[] = list.split("\\r?\\n");
-        final String countryNameList[] = new String[listArray.length];
+        String[] listArray = list.split("\\r?\\n");
+        final String[] countryNameList = new String[listArray.length];
         //Convert array
         for (int i = 0; listArray.length > i; i++) {
             StructCountry structCountry = new StructCountry();
 
-            String listItem[] = listArray[i].split(";");
+            String[] listItem = listArray[i].split(";");
             structCountry.setId(i);
             structCountry.setCountryCode(listItem[0]);
             structCountry.setAbbreviation(listItem[1]);
@@ -165,7 +166,7 @@ public class FragmentChooseCountry extends BaseFragment implements ToolbarListen
 
             CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
             textView.setText(items.get(position).getName().toUpperCase().substring(0, 1));
-            textView.setPadding(getDimen(R.dimen.dp20) , getDimen(R.dimen.dp20) , getDimen(R.dimen.dp20) , getDimen(R.dimen.dp20));
+            textView.setPadding(getDimen(R.dimen.dp20), getDimen(R.dimen.dp20), getDimen(R.dimen.dp20), getDimen(R.dimen.dp20));
 
             if (G.isDarkTheme)
                 textView.setTextColor(G.context.getResources().getColor(R.color.white));
@@ -214,7 +215,6 @@ public class FragmentChooseCountry extends BaseFragment implements ToolbarListen
             super.bindView(holder, payloads);
 
 
-
             holder.txtNameCountry.setText(item.getName());
             holder.txtCodeCountry.setText(item.getCountryCode());
 
@@ -247,9 +247,9 @@ public class FragmentChooseCountry extends BaseFragment implements ToolbarListen
             public ViewHolder(View view) {
                 super(view);
 
-                txtNameCountry = (TextView) view.findViewById(R.id.txtNameCountry);
-                txtCodeCountry = (TextView) view.findViewById(R.id.txtCodeCountry);
-                vgListCountry = (ViewGroup) view.findViewById(R.id.vgListCountry);
+                txtNameCountry = view.findViewById(R.id.txtNameCountry);
+                txtCodeCountry = view.findViewById(R.id.txtCodeCountry);
+                vgListCountry = view.findViewById(R.id.vgListCountry);
 
             }
         }

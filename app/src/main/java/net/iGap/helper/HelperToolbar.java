@@ -1,6 +1,5 @@
 package net.iGap.helper;
 
-import androidx.lifecycle.LifecycleOwner;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,14 +7,6 @@ import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Build;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.fragment.app.FragmentActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -35,6 +26,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -74,24 +76,24 @@ import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
  */
 public class HelperToolbar {
 
-    private ConstraintLayout mRootConstraint ;
-    private AppCompatTextView mLeftBtn, passCodeBtn,scannerBtn , mRightBtn, m2RightBtn, m3RightBtn, m4RightBtn;
+    private ConstraintLayout mRootConstraint;
+    private AppCompatTextView mLeftBtn, passCodeBtn, scannerBtn, mRightBtn, m2RightBtn, m3RightBtn, m4RightBtn;
     private TextView mTxtLogo, mTxtCounter, mTxtBigAvatarUserName, mTxtCallStatus, mTxtChatSeenStatus;
     private EmojiTextViewE mTxtChatUserName;
     private CircleImageView mAvatarSmall, mAvatarBig, mAvatarChat, groupAvatar;
     private RelativeLayout mSearchBox;
     private TextView mTxtSearch;
-    private AppCompatTextView groupName, groupMemberCount , profileStatus , profileTell;
-    private FloatingActionButton profileFabChat ;
+    private AppCompatTextView groupName, groupMemberCount, profileStatus, profileTell;
+    private FloatingActionButton profileFabChat;
     public EditText mEdtSearch;
     private TextView mChatVerifyIcon;
     private TextView mChatMuteIcon;
     private CircleImageView mCloudChatIcon;
     private TextView mBtnClearSearch;
-    private View callLayout ;
+    private View callLayout;
 
-    private CircleImageView mTabletUserAvatar ;
-    private TextView mTabletUserName ;
+    private CircleImageView mTabletUserAvatar;
+    private TextView mTabletUserName;
     private TextView mTabletUserPhone;
 
     private TextView mTabletSearchIcon;
@@ -103,9 +105,9 @@ public class HelperToolbar {
     private ViewGroup mViewGroup = null;
     private ToolbarListener mToolbarListener;
 
-    private int[] mLeftIcon = {0 , 0};
+    private int[] mLeftIcon = {0, 0};
     private int[] mRightIcons = {0, 0, 0, 0};
-    private int[] mTabletIcons = {0 , 0 , 0};
+    private int[] mTabletIcons = {0, 0, 0};
     private boolean isAttachToRoot;
     private boolean isSearchBoxShown;
     private boolean isLogoShown;
@@ -120,8 +122,8 @@ public class HelperToolbar {
     private boolean isSharedMedia;
     private boolean isContactProfile;
     private boolean isBigSearchBox;
-    private boolean isTabletMode ;
-    private boolean isShowConnectionState = true ;
+    private boolean isTabletMode;
+    private boolean isShowConnectionState = true;
     public boolean isToolbarSearchAnimationInProccess;
     private boolean isScannerEnable;
     private boolean isPassCodeEnable;
@@ -188,10 +190,10 @@ public class HelperToolbar {
         return this;
     }
 
-    public HelperToolbar setSearchBoxShown(boolean searchBoxShown ,boolean isShowEditTextForSearch , boolean isBigSearchBox) {
+    public HelperToolbar setSearchBoxShown(boolean searchBoxShown, boolean isShowEditTextForSearch, boolean isBigSearchBox) {
         this.isSearchBoxShown = searchBoxShown;
         this.isShowEditTextForSearch = isShowEditTextForSearch;
-        this.isBigSearchBox = isBigSearchBox ;
+        this.isBigSearchBox = isBigSearchBox;
         return this;
     }
 
@@ -215,15 +217,15 @@ public class HelperToolbar {
         return this;
     }
 
-    public HelperToolbar setScannerVisibility(boolean isVisible , int icon) {
+    public HelperToolbar setScannerVisibility(boolean isVisible, int icon) {
         this.isScannerEnable = isVisible;
-        this.mScannerIcon = icon ;
+        this.mScannerIcon = icon;
         return this;
     }
 
-    public HelperToolbar setPassCodeVisibility(boolean isVisible , int icon) {
+    public HelperToolbar setPassCodeVisibility(boolean isVisible, int icon) {
         this.isPassCodeEnable = isVisible;
-        this.mPassCodeIcon = icon ;
+        this.mPassCodeIcon = icon;
         if (passCodeBtn != null) passCodeBtn.setText(icon);
 
         return this;
@@ -327,24 +329,24 @@ public class HelperToolbar {
             rootView.setOnClickListener(v -> mToolbarListener.onChatAvatarClickListener(v));
         }
 
-        if (mSearchBox != null){
-            setSearchBoxVisibility( isSearchBoxShown);
+        if (mSearchBox != null) {
+            setSearchBoxVisibility(isSearchBoxShown);
         }
 
-        if (isMediaPlayerEnabled){
-            setMusicPlayer(viewMaker , isInChatRoom);
+        if (isMediaPlayerEnabled) {
+            setMusicPlayer(viewMaker, isInChatRoom);
         }
 
-        if (isRightSmallAvatarShown){
+        if (isRightSmallAvatarShown) {
             mAvatarSmall.setOnClickListener(v -> mToolbarListener.onSmallAvatarClickListener(v));
         }
 
-        if (isPassCodeEnable){
+        if (isPassCodeEnable) {
             checkPassCodeVisibility();
             passCodeBtn.setOnClickListener(v -> onPassCodeButtonClickListener());
         }
 
-        if (isScannerEnable){
+        if (isScannerEnable) {
             scannerBtn.setOnClickListener(v -> onScannerClickListener());
         }
 
@@ -357,7 +359,7 @@ public class HelperToolbar {
             mTabletSearchIcon.setOnClickListener(v -> mToolbarListener.onSearchClickListener(v));
         }
 
-        if (mTxtLogo != null){
+        if (mTxtLogo != null) {
             mTxtLogo.setOnClickListener(v -> mToolbarListener.onToolbarTitleClickListener(v));
             toolBarTitleHandler();
             checkIGapFont();
@@ -368,27 +370,27 @@ public class HelperToolbar {
     }
 
     //offset must be negative or zero
-    public void animateSearchBox(boolean isGone , int lastItemPosition , int offset){
+    public void animateSearchBox(boolean isGone, int lastItemPosition, int offset) {
 
-        if (mSearchBox == null ) return;
+        if (mSearchBox == null) return;
 
-        if (lastItemPosition == 0 ){
+        if (lastItemPosition == 0) {
 
-            mAnimationOldPositionItem = 0 ;
+            mAnimationOldPositionItem = 0;
             mSearchBox.setVisibility(View.VISIBLE);
             mSearchBox.clearAnimation();
 
-        }else if ((lastItemPosition - mAnimationOldPositionItem ) > Math.abs(offset)){
+        } else if ((lastItemPosition - mAnimationOldPositionItem) > Math.abs(offset)) {
 
-            mAnimationOldPositionItem = lastItemPosition ;
-            if ( !mSearchBox.isShown() && isGone) return;
+            mAnimationOldPositionItem = lastItemPosition;
+            if (!mSearchBox.isShown() && isGone) return;
             if (isToolbarSearchAnimationInProccess) return;
             setAnimation(isGone);
 
-        }else if ((lastItemPosition - mAnimationOldPositionItem ) < offset){
+        } else if ((lastItemPosition - mAnimationOldPositionItem) < offset) {
 
-            mAnimationOldPositionItem = lastItemPosition ;
-            if ( mSearchBox.isShown() && !isGone) return;
+            mAnimationOldPositionItem = lastItemPosition;
+            if (mSearchBox.isShown() && !isGone) return;
             if (isToolbarSearchAnimationInProccess) return;
             setAnimation(isGone);
 
@@ -396,16 +398,16 @@ public class HelperToolbar {
 
     }
 
-    public void resizeSearchBoxWithAnimation(final boolean bigView , final boolean isOpenKeyboard ) {
+    public void resizeSearchBoxWithAnimation(final boolean bigView, final boolean isOpenKeyboard) {
 
 
         if (!isOpenKeyboard) {
             setSearchEditableMode(false);
         }
 
-        Animation animation ;
+        Animation animation;
 
-        if (bigView){
+        if (bigView) {
 
             animation = new ScaleAnimation(
                     1f, 1.09f,
@@ -414,11 +416,11 @@ public class HelperToolbar {
                     Animation.RELATIVE_TO_SELF, 0.5f
             );
 
-        }else {
+        } else {
 
             animation = new ScaleAnimation(
-                    1.09f , 1f ,
-                    1.01f , 1f,
+                    1.09f, 1f,
+                    1.01f, 1f,
                     Animation.RELATIVE_TO_SELF, 0.5f,
                     Animation.RELATIVE_TO_SELF, 0.5f
             );
@@ -435,12 +437,12 @@ public class HelperToolbar {
             @Override
             public void onAnimationEnd(Animation animation) {
 
-                if (isOpenKeyboard){
+                if (isOpenKeyboard) {
                     setSearchEditableMode(true);
 
-                    G.handler.postDelayed( () -> {
+                    G.handler.postDelayed(() -> {
                         openKeyboard();
-                    } , 200);
+                    }, 200);
                 }
             }
 
@@ -453,24 +455,24 @@ public class HelperToolbar {
         mSearchBox.startAnimation(animation);
     }
 
-    public void unRegisterTimerBroadcast(){
+    public void unRegisterTimerBroadcast() {
         if (mContext == null || callTimerReceiver == null) return;
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(callTimerReceiver);
     }
 
-    public void registerTimerBroadcast(){
+    public void registerTimerBroadcast() {
         if (mContext == null || callTimerReceiver == null) {
-            Log.wtf(this.getClass().getName(),"registerTimerBroadcast");
+            Log.wtf(this.getClass().getName(), "registerTimerBroadcast");
             return;
         }
         IntentFilter intentFilter = new IntentFilter(ActivityCall.CALL_TIMER_BROADCAST);
-        LocalBroadcastManager.getInstance(mContext).registerReceiver(callTimerReceiver , intentFilter);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(callTimerReceiver, intentFilter);
     }
 
     private void openKeyboard() {
         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(mEdtSearch, InputMethodManager.SHOW_IMPLICIT);
-     }
+    }
 
     private void closeKeyboard() {
         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -484,14 +486,14 @@ public class HelperToolbar {
 
         Animation animation;
 
-        if (isGone){
+        if (isGone) {
             animation = new ScaleAnimation(
-                    1f , 0f ,
+                    1f, 0f,
                     1f, 0f,
                     Animation.RELATIVE_TO_SELF, 0.5f,
                     Animation.RELATIVE_TO_SELF, 0.5f
             );
-        }else {
+        } else {
             animation = new ScaleAnimation(
                     0f, 1f,
                     0f, 1f,
@@ -505,12 +507,12 @@ public class HelperToolbar {
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                isToolbarSearchAnimationInProccess = true ;
+                isToolbarSearchAnimationInProccess = true;
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                isToolbarSearchAnimationInProccess = false ;
+                isToolbarSearchAnimationInProccess = false;
 
                 if (isGone)
                     mSearchBox.setVisibility(View.GONE);
@@ -682,7 +684,7 @@ public class HelperToolbar {
 
     private void setMusicPlayer(ViewMaker view, boolean isChat) {
 
-        LinearLayout musicLayout = (LinearLayout) view.getMusicLayout() ;
+        LinearLayout musicLayout = (LinearLayout) view.getMusicLayout();
 
         LinearLayout stripCallLayout = (LinearLayout) view.getCallLayout();
 
@@ -690,8 +692,8 @@ public class HelperToolbar {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction() == null || intent.getExtras() == null) return;
-                if (intent.getAction().equals(ActivityCall.CALL_TIMER_BROADCAST)){
-                    String time = intent.getExtras().getString(ActivityCall.TIMER_TEXT , "");
+                if (intent.getAction().equals(ActivityCall.CALL_TIMER_BROADCAST)) {
+                    String time = intent.getExtras().getString(ActivityCall.TIMER_TEXT, "");
                     mTxtCallTimer.setText(time);
                 }
             }
@@ -709,7 +711,7 @@ public class HelperToolbar {
 
         if (isChat) {
             MusicPlayer.chatLayout = musicLayout;
-            ActivityCall.stripLayoutChat = view.getCallLayout() ;
+            ActivityCall.stripLayoutChat = view.getCallLayout();
 
             TextView txtCallActivityBack = rootView.findViewById(R.id.cslcs_btn_call_strip);
             txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
@@ -865,7 +867,7 @@ public class HelperToolbar {
             if (G.connectionState == ConnectionState.CONNECTING) {
                 mTxtLogo.setText(R.string.connecting);
                 checkIGapFont();
-            }else if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK){
+            } else if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
                 mTxtLogo.setText(R.string.waiting_for_network);
                 checkIGapFont();
             }
@@ -910,13 +912,13 @@ public class HelperToolbar {
 
     }
 
-    private void setSearchBoxVisibility( boolean visible) {
+    private void setSearchBoxVisibility(boolean visible) {
 
         if (visible && mSearchBox != null) {
 
             mSearchBox.setOnClickListener(v -> {
                 if (isShowEditTextForSearch) {
-                    if (!mBtnClearSearch.isShown()) resizeSearchBoxWithAnimation(true , true);
+                    if (!mBtnClearSearch.isShown()) resizeSearchBoxWithAnimation(true, true);
                     //setSearchEditableMode(mTxtSearch.isShown());
                 }
                 mToolbarListener.onSearchClickListener(v);
@@ -929,14 +931,14 @@ public class HelperToolbar {
                 else if (isShowEditTextForSearch) {
                     closeKeyboard();
                     G.handler.postDelayed(() -> {
-                        if (mToolbarListener!=null)
+                        if (mToolbarListener != null)
                             mToolbarListener.onSearchBoxClosed();
-                        resizeSearchBoxWithAnimation(false , false);
-                    } , 200);
+                        resizeSearchBoxWithAnimation(false, false);
+                    }, 200);
                 }
                 G.handler.postDelayed(() -> {
                     mToolbarListener.onBtnClearSearchClickListener(v);
-                } , 500);
+                }, 500);
             });
 
             mEdtSearch.addTextChangedListener(new TextWatcher() {
@@ -1019,18 +1021,18 @@ public class HelperToolbar {
             intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
             intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
             intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
-            intent.putExtra("isScan",true);
+            intent.putExtra("isScan", true);
             G.fragmentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
         }
     }
 
     private void initViews(ViewMaker view) {
 
-        mRootConstraint = view.getMainConstraint() ;
+        mRootConstraint = view.getMainConstraint();
 
-        mLeftBtn = view.getLeftIcon() ;
-        passCodeBtn = view.getpassCodeIcon() ;
-        scannerBtn = view.getScannerIcon() ;
+        mLeftBtn = view.getLeftIcon();
+        passCodeBtn = view.getpassCodeIcon();
+        scannerBtn = view.getScannerIcon();
         mRightBtn = view.getRightIcon();
         m2RightBtn = view.getRightIcon2();
         m3RightBtn = view.getRightIcon3();
@@ -1056,12 +1058,12 @@ public class HelperToolbar {
         groupName = view.getTvProfileName();
         groupMemberCount = view.getTvProfileMemberCount();
         profileStatus = view.getTvProfileStatus();
-        profileTell = view.getTvProfileTell() ;
-        profileFabChat = view.getFabChat() ;
+        profileTell = view.getTvProfileTell();
+        profileFabChat = view.getFabChat();
 
         mTabletUserAvatar = view.gettUserAvatar();
         mTabletUserName = view.gettUserName();
-        mTabletUserPhone = view.gettUserPhone() ;
+        mTabletUserPhone = view.gettUserPhone();
 
         mTxtCallTimer = rootView.findViewById(R.id.cslcs_txt_timer);
 
@@ -1168,41 +1170,41 @@ public class HelperToolbar {
         private int VALUE_10DP;
         private boolean isDark;
 
-        private View musicLayout ;
-        private View callLayout ;
-        private LinearLayout layoutMedia ;
-        private ConstraintLayout mainConstraint ;
+        private View musicLayout;
+        private View callLayout;
+        private LinearLayout layoutMedia;
+        private ConstraintLayout mainConstraint;
         private AppCompatTextView leftIcon = null;
         private AppCompatTextView passCodeIcon = null;
-        private AppCompatTextView rightIcon4 = null ;
+        private AppCompatTextView rightIcon4 = null;
         private AppCompatTextView rightIcon3 = null;
         private AppCompatTextView rightIcon2 = null;
         private AppCompatTextView rightIcon = null;
-        private TextView logo ;
-        private RelativeLayout searchLayout ;
-        private TextView tvSearch ;
-        private TextView tvClearSearch ;
-        private EditText edtSearch ;
-        private RelativeLayout rlChatAvatar ;
-        private CircleImageView civAvatar ;
-        private CircleImageView civCloud ;
-        private LinearLayout layoutChatName ;
-        private EmojiTextViewE tvChatName ;
-        private TextView tvChatStatus ;
-        private TextView iconChatVerify ;
-        private TextView muteChatIcon ;
-        private CircleImageView civProfileAvatar = null  ;
-        private AppCompatTextView tvProfileName ;
-        private AppCompatTextView tvProfileMemberCount ;
-        private AppCompatTextView tvProfileTell ;
-        private AppCompatTextView tvProfileStatus ;
-        private FloatingActionButton fabChat ;
-        private CircleImageView tUserAvatar ;
-        private TextView tUserName ;
+        private TextView logo;
+        private RelativeLayout searchLayout;
+        private TextView tvSearch;
+        private TextView tvClearSearch;
+        private EditText edtSearch;
+        private RelativeLayout rlChatAvatar;
+        private CircleImageView civAvatar;
+        private CircleImageView civCloud;
+        private LinearLayout layoutChatName;
+        private EmojiTextViewE tvChatName;
+        private TextView tvChatStatus;
+        private TextView iconChatVerify;
+        private TextView muteChatIcon;
+        private CircleImageView civProfileAvatar = null;
+        private AppCompatTextView tvProfileName;
+        private AppCompatTextView tvProfileMemberCount;
+        private AppCompatTextView tvProfileTell;
+        private AppCompatTextView tvProfileStatus;
+        private FloatingActionButton fabChat;
+        private CircleImageView tUserAvatar;
+        private TextView tUserName;
         private TextView tUserPhone;
-        private AppCompatTextView tIconAdd ;
-        private AppCompatTextView tIconEdit ;
-        private AppCompatTextView tIconSearch ;
+        private AppCompatTextView tIconAdd;
+        private AppCompatTextView tIconEdit;
+        private AppCompatTextView tIconSearch;
         private AppCompatTextView scannerIcon;
         private CircleImageView smallAvatar;
 
@@ -1218,29 +1220,28 @@ public class HelperToolbar {
                 setLayoutDirection(LAYOUT_DIRECTION_LTR);
             }
 
-            if (!isTabletMode){
+            if (!isTabletMode) {
 
                 ConstraintSet setRoot = new ConstraintSet();
                 ConstraintSet set = new ConstraintSet();
 
 
-
                 //region media player and ongoing call
                 //check and add media player cause of ui and this must be the below of main toolbar view
-                if (isMediaPlayerEnabled){
+                if (isMediaPlayerEnabled) {
 
                     LayoutInflater inflater = LayoutInflater.from(getContext());
 
                     //music player layout
-                    musicLayout = inflater.inflate(R.layout.music_layout_small , this , false);
+                    musicLayout = inflater.inflate(R.layout.music_layout_small, this, false);
                     musicLayout.setId(R.id.view_toolbar_layout_player_music);
-                    setLayoutParams(musicLayout , LinearLayout.LayoutParams.MATCH_PARENT , LinearLayout.LayoutParams.WRAP_CONTENT , i_Dp(R.dimen.toolbar_search_box_size));
+                    setLayoutParams(musicLayout, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, i_Dp(R.dimen.toolbar_search_box_size));
                     musicLayout.setVisibility(VISIBLE);
 
                     //online call view
-                    callLayout = inflater.inflate(R.layout.chat_sub_layout_strip_call , this , false);
+                    callLayout = inflater.inflate(R.layout.chat_sub_layout_strip_call, this, false);
                     callLayout.setId(R.id.view_toolbar_layout_strip_call);
-                    setLayoutParams(callLayout , LinearLayout.LayoutParams.MATCH_PARENT , LinearLayout.LayoutParams.WRAP_CONTENT , i_Dp(R.dimen.toolbar_search_box_size));
+                    setLayoutParams(callLayout, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, i_Dp(R.dimen.toolbar_search_box_size));
                     callLayout.setVisibility(GONE);
 
                     //player root view for add , handle two above views
@@ -1249,21 +1250,21 @@ public class HelperToolbar {
                     layoutMedia.setOrientation(LinearLayout.VERTICAL);
                     addView(layoutMedia);
 
-                    if (isDark){
+                    if (isDark) {
                         layoutMedia.setBackgroundResource(R.drawable.shape_toolbar_player_dark);
-                    }else{
+                    } else {
                         layoutMedia.setBackgroundResource(R.drawable.shape_toolbar_player);
                     }
 
                     layoutMedia.addView(musicLayout);
                     layoutMedia.addView(callLayout);
 
-                    setRoot.constrainHeight(layoutMedia.getId() , WRAP_CONTENT);
-                    setRoot.constrainWidth(layoutMedia.getId() , MATCH_CONSTRAINT);
+                    setRoot.constrainHeight(layoutMedia.getId(), WRAP_CONTENT);
+                    setRoot.constrainWidth(layoutMedia.getId(), MATCH_CONSTRAINT);
 
-                    setRoot.connect(layoutMedia.getId() , START , PARENT_ID , START);
-                    setRoot.connect(layoutMedia.getId() , END , PARENT_ID , END);
-                    setRoot.connect(layoutMedia.getId() , TOP , PARENT_ID , TOP , i_Dp(R.dimen.margin_for_below_layouts_of_toolbar));
+                    setRoot.connect(layoutMedia.getId(), START, PARENT_ID, START);
+                    setRoot.connect(layoutMedia.getId(), END, PARENT_ID, END);
+                    setRoot.connect(layoutMedia.getId(), TOP, PARENT_ID, TOP, i_Dp(R.dimen.margin_for_below_layouts_of_toolbar));
                 }
 
                 //endregion media player and ongoing call
@@ -1273,12 +1274,12 @@ public class HelperToolbar {
                 mainConstraint = new ConstraintLayout(getContext());
                 mainConstraint.setId(R.id.view_toolbar_main_constraint);
 
-                if (isRoundBackground){
+                if (isRoundBackground) {
                     if (isDark)
                         mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_dark);
                     else
                         mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background);
-                }else {
+                } else {
                     if (isDark)
                         mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_rect_dark);
                     else
@@ -1294,17 +1295,17 @@ public class HelperToolbar {
                 //endregion main constraint
 
                 //region small avatar
-                if (isRightSmallAvatarShown){
+                if (isRightSmallAvatarShown) {
                     smallAvatar = new CircleImageView(getContext());
                     smallAvatar.setId(R.id.view_toolbar_user_small_avatar);
-                    smallAvatar.setPadding(VALUE_4DP , VALUE_4DP , VALUE_4DP , VALUE_4DP);
+                    smallAvatar.setPadding(VALUE_4DP, VALUE_4DP, VALUE_4DP, VALUE_4DP);
                     mainConstraint.addView(smallAvatar);
 
-                    set.constrainWidth(smallAvatar.getId() , i_Dp(R.dimen.toolbar_icon_size));
-                    set.constrainHeight(smallAvatar.getId() , i_Dp(R.dimen.toolbar_icon_size));
-                    set.connect(smallAvatar.getId() , END , PARENT_ID , END , VALUE_4DP);
-                    set.connect(smallAvatar.getId() , BOTTOM , PARENT_ID , BOTTOM , VALUE_10DP);
-                    set.connect(smallAvatar.getId() , TOP , PARENT_ID , TOP , VALUE_4DP);
+                    set.constrainWidth(smallAvatar.getId(), i_Dp(R.dimen.toolbar_icon_size));
+                    set.constrainHeight(smallAvatar.getId(), i_Dp(R.dimen.toolbar_icon_size));
+                    set.connect(smallAvatar.getId(), END, PARENT_ID, END, VALUE_4DP);
+                    set.connect(smallAvatar.getId(), BOTTOM, PARENT_ID, BOTTOM, VALUE_10DP);
+                    set.connect(smallAvatar.getId(), TOP, PARENT_ID, TOP, VALUE_4DP);
                 }
                 //endregion small avatar
 
@@ -1314,9 +1315,9 @@ public class HelperToolbar {
                     mainConstraint.addView(leftIcon);
                     setIconViewSize(leftIcon, set);
 
-                    set.connect(leftIcon.getId(), START, PARENT_ID, START , VALUE_4DP);
-                    set.connect(leftIcon.getId(), TOP, PARENT_ID, TOP , VALUE_4DP);
-                    set.connect(leftIcon.getId(), BOTTOM, PARENT_ID, BOTTOM , VALUE_10DP);
+                    set.connect(leftIcon.getId(), START, PARENT_ID, START, VALUE_4DP);
+                    set.connect(leftIcon.getId(), TOP, PARENT_ID, TOP, VALUE_4DP);
+                    set.connect(leftIcon.getId(), BOTTOM, PARENT_ID, BOTTOM, VALUE_10DP);
 
                 }
                 //endregion left buttons
@@ -1396,7 +1397,7 @@ public class HelperToolbar {
                     Utils.setTextSize(logo, R.dimen.standardTextSize);
                     logo.setTextColor(getContext().getResources().getColor(R.color.white));
                     logo.setTypeface(tfFontIcon);
-                    logo.setPadding(0 , 0 , 0 , i_Dp(R.dimen.dp4));
+                    logo.setPadding(0, 0, 0, i_Dp(R.dimen.dp4));
                     InputFilter[] fArray = new InputFilter[1];
                     fArray[0] = new InputFilter.LengthFilter(31);
                     logo.setFilters(fArray);
@@ -1429,10 +1430,10 @@ public class HelperToolbar {
 
                     setRoot.constrainWidth(searchLayout.getId(), MATCH_CONSTRAINT);
 
-                    if (isBigSearchBox){
+                    if (isBigSearchBox) {
                         setRoot.setMargin(searchLayout.getId(), START, i_Dp(R.dimen.dp40));
                         setRoot.setMargin(searchLayout.getId(), END, i_Dp(R.dimen.dp40));
-                    }else{
+                    } else {
                         setRoot.setMargin(searchLayout.getId(), START, i_Dp(R.dimen.dp52));
                         setRoot.setMargin(searchLayout.getId(), END, i_Dp(R.dimen.dp52));
                     }
@@ -1440,7 +1441,7 @@ public class HelperToolbar {
                     setRoot.connect(searchLayout.getId(), START, mainConstraint.getId(), START);
                     setRoot.connect(searchLayout.getId(), END, mainConstraint.getId(), END);
                     setRoot.connect(searchLayout.getId(), TOP, mainConstraint.getId(), BOTTOM);
-                    setRoot.connect(searchLayout.getId(), BOTTOM, mainConstraint.getId(), BOTTOM );
+                    setRoot.connect(searchLayout.getId(), BOTTOM, mainConstraint.getId(), BOTTOM);
                     addView(searchLayout);
 
                     tvSearch = new TextView(getContext());
@@ -1492,35 +1493,35 @@ public class HelperToolbar {
                         tvSearch.setTextColor(getContext().getResources().getColor(R.color.gray_9d));
                     }
 
-                    if (isBigSearchBox){
-                        Utils.setTextSize(tvSearch , R.dimen.standardTextSize);
-                        Utils.setTextSize(edtSearch , R.dimen.standardTextSize);
-                        Utils.setTextSize(tvClearSearch , R.dimen.xlargeTextSize);
+                    if (isBigSearchBox) {
+                        Utils.setTextSize(tvSearch, R.dimen.standardTextSize);
+                        Utils.setTextSize(edtSearch, R.dimen.standardTextSize);
+                        Utils.setTextSize(tvClearSearch, R.dimen.xlargeTextSize);
                     }
                 }
                 //endregion search box
 
                 //region chat
 
-                if (isInChatRoom){
+                if (isInChatRoom) {
 
                     //region avatar
                     rlChatAvatar = new RelativeLayout(getContext());
                     rlChatAvatar.setId(R.id.view_toolbar_user_chat_avatar_layout);
 
-                    set.constrainWidth(rlChatAvatar.getId() , i_Dp(R.dimen.toolbar_chat_avatar_size) );
-                    set.constrainHeight(rlChatAvatar.getId() , i_Dp(R.dimen.toolbar_chat_avatar_size) );
-                    set.connect(rlChatAvatar.getId() , TOP , PARENT_ID , TOP);
-                    set.connect(rlChatAvatar.getId() , BOTTOM , PARENT_ID , BOTTOM);
-                    set.setMargin(rlChatAvatar.getId() , END , i_Dp(R.dimen.dp8));
+                    set.constrainWidth(rlChatAvatar.getId(), i_Dp(R.dimen.toolbar_chat_avatar_size));
+                    set.constrainHeight(rlChatAvatar.getId(), i_Dp(R.dimen.toolbar_chat_avatar_size));
+                    set.connect(rlChatAvatar.getId(), TOP, PARENT_ID, TOP);
+                    set.connect(rlChatAvatar.getId(), BOTTOM, PARENT_ID, BOTTOM);
+                    set.setMargin(rlChatAvatar.getId(), END, i_Dp(R.dimen.dp8));
                     if (leftIcon != null) {
-                        set.connect(rlChatAvatar.getId(), START , leftIcon.getId() , END , i_Dp(R.dimen.dp8));
-                    }else {
-                        set.connect(rlChatAvatar.getId(), START , PARENT_ID , END , i_Dp(R.dimen.dp8));
+                        set.connect(rlChatAvatar.getId(), START, leftIcon.getId(), END, i_Dp(R.dimen.dp8));
+                    } else {
+                        set.connect(rlChatAvatar.getId(), START, PARENT_ID, END, i_Dp(R.dimen.dp8));
                     }
 
                     civAvatar = new CircleImageView(getContext());
-                    civCloud  = new CircleImageView(getContext());
+                    civCloud = new CircleImageView(getContext());
 
                     civAvatar.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
@@ -1529,8 +1530,8 @@ public class HelperToolbar {
 
                     civCloud.setImageResource(R.drawable.ic_cloud_space_blue);
 
-                    setLayoutParams(civAvatar ,RelativeLayout.LayoutParams.MATCH_PARENT , RelativeLayout.LayoutParams.MATCH_PARENT , 0 , 0 , 0);
-                    setLayoutParams(civCloud ,RelativeLayout.LayoutParams.MATCH_PARENT , RelativeLayout.LayoutParams.MATCH_PARENT , 0 , 0 , 0);
+                    setLayoutParams(civAvatar, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT, 0, 0, 0);
+                    setLayoutParams(civCloud, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT, 0, 0, 0);
 
                     civAvatar.setVisibility(GONE);
                     civCloud.setVisibility(GONE);
@@ -1549,24 +1550,24 @@ public class HelperToolbar {
                     layoutChatName.setGravity(Gravity.LEFT);
                     mainConstraint.addView(layoutChatName);
 
-                    set.constrainWidth(layoutChatName.getId() , MATCH_CONSTRAINT);
-                    set.constrainHeight(layoutChatName.getId() , WRAP_CONTENT);
+                    set.constrainWidth(layoutChatName.getId(), MATCH_CONSTRAINT);
+                    set.constrainHeight(layoutChatName.getId(), WRAP_CONTENT);
 
-                    set.connect(layoutChatName.getId() , START , rlChatAvatar.getId() , END , i_Dp(R.dimen.dp4));
-                    set.connect(layoutChatName.getId() , TOP , rlChatAvatar.getId() , TOP);
+                    set.connect(layoutChatName.getId(), START, rlChatAvatar.getId(), END, i_Dp(R.dimen.dp4));
+                    set.connect(layoutChatName.getId(), TOP, rlChatAvatar.getId(), TOP);
                     if (rightIcon4 != null) {
-                        set.connect(layoutChatName.getId() , END , rightIcon4.getId() , START , i_Dp(R.dimen.dp8));
-                    }else if (rightIcon3 != null){
-                        set.connect(layoutChatName.getId() , END , rightIcon3.getId() , START , i_Dp(R.dimen.dp8));
+                        set.connect(layoutChatName.getId(), END, rightIcon4.getId(), START, i_Dp(R.dimen.dp8));
+                    } else if (rightIcon3 != null) {
+                        set.connect(layoutChatName.getId(), END, rightIcon3.getId(), START, i_Dp(R.dimen.dp8));
 
-                    }else if (rightIcon2 != null){
-                        set.connect(layoutChatName.getId() , END , rightIcon2.getId() , START , i_Dp(R.dimen.dp8));
+                    } else if (rightIcon2 != null) {
+                        set.connect(layoutChatName.getId(), END, rightIcon2.getId(), START, i_Dp(R.dimen.dp8));
 
-                    }else if (rightIcon != null){
-                        set.connect(layoutChatName.getId() , END , rightIcon.getId() , START , i_Dp(R.dimen.dp8));
+                    } else if (rightIcon != null) {
+                        set.connect(layoutChatName.getId(), END, rightIcon.getId(), START, i_Dp(R.dimen.dp8));
 
                     } else {
-                        set.connect(layoutChatName.getId() , END , PARENT_ID , END , i_Dp(R.dimen.dp8));
+                        set.connect(layoutChatName.getId(), END, PARENT_ID, END, i_Dp(R.dimen.dp8));
                     }
 
                     //chat name
@@ -1574,30 +1575,30 @@ public class HelperToolbar {
                     tvChatName.setId(R.id.view_toolbar_chat_txt_userName);
                     tvChatName.setTypeface(tfMain);
                     tvChatName.setTextSize(TypedValue.COMPLEX_UNIT_PX, (int) getContext().getResources().getDimension(R.dimen.standardTextSize));
-                    tvChatName.setEmojiSize( (int) getContext().getResources().getDimension(R.dimen.standardTextSize));
+                    tvChatName.setEmojiSize((int) getContext().getResources().getDimension(R.dimen.standardTextSize));
                     tvChatName.setSingleLine();
                     tvChatName.setEllipsize(TextUtils.TruncateAt.MARQUEE);
                     tvChatName.setGravity(Gravity.LEFT);
                     tvChatName.setTextColor(getContext().getResources().getColor(R.color.white));
-                    setLayoutParams(tvChatName , LinearLayout.LayoutParams.WRAP_CONTENT , LinearLayout.LayoutParams.WRAP_CONTENT);
+                    setLayoutParams(tvChatName, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     tvChatName.setMaxWidth(i_Dp(R.dimen.toolbar_txt_name_max_width));
                     layoutChatName.addView(tvChatName);
 
                     //verify icon
-                    iconChatVerify = makeIcon(R.id.view_toolbar_chat_txt_verify , R.string.verify_icon);
+                    iconChatVerify = makeIcon(R.id.view_toolbar_chat_txt_verify, R.string.verify_icon);
                     iconChatVerify.setTextColor(getContext().getResources().getColor(R.color.verify_color));
-                    Utils.setTextSize(iconChatVerify , R.dimen.smallTextSize);
+                    Utils.setTextSize(iconChatVerify, R.dimen.smallTextSize);
                     iconChatVerify.setVisibility(GONE);
-                    iconChatVerify.setPadding(i_Dp(R.dimen.dp4) , 0 , 0 , 0);
-                    setLayoutParams(iconChatVerify , LinearLayout.LayoutParams.WRAP_CONTENT , LinearLayout.LayoutParams.WRAP_CONTENT);
+                    iconChatVerify.setPadding(i_Dp(R.dimen.dp4), 0, 0, 0);
+                    setLayoutParams(iconChatVerify, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     layoutChatName.addView(iconChatVerify);
 
                     //mute icon
                     muteChatIcon = makeIcon(R.id.view_toolbar_chat_txt_isMute, R.string.mute_icon);
-                    Utils.setTextSize(muteChatIcon , R.dimen.smallTextSize);
+                    Utils.setTextSize(muteChatIcon, R.dimen.smallTextSize);
                     muteChatIcon.setVisibility(GONE);
-                    muteChatIcon.setPadding(i_Dp(R.dimen.dp4) , 0 , 0 , 0);
-                    setLayoutParams(muteChatIcon , LinearLayout.LayoutParams.WRAP_CONTENT , LinearLayout.LayoutParams.WRAP_CONTENT);
+                    muteChatIcon.setPadding(i_Dp(R.dimen.dp4), 0, 0, 0);
+                    setLayoutParams(muteChatIcon, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     layoutChatName.addView(muteChatIcon);
 
                     //status or member count
@@ -1607,16 +1608,16 @@ public class HelperToolbar {
                     tvChatStatus.setTextColor(getContext().getResources().getColor(R.color.white));
                     tvChatStatus.setSingleLine();
                     tvChatStatus.setGravity(Gravity.LEFT);
-                    Utils.setTextSize(tvChatStatus , R.dimen.verySmallTextSize);
+                    Utils.setTextSize(tvChatStatus, R.dimen.verySmallTextSize);
                     mainConstraint.addView(tvChatStatus);
 
-                    set.constrainWidth(tvChatStatus.getId() , MATCH_CONSTRAINT);
-                    set.constrainHeight(tvChatStatus.getId() , WRAP_CONTENT);
-                    set.setMargin(tvChatStatus.getId() , TOP , i_Dp(R.dimen.dp6));
+                    set.constrainWidth(tvChatStatus.getId(), MATCH_CONSTRAINT);
+                    set.constrainHeight(tvChatStatus.getId(), WRAP_CONTENT);
+                    set.setMargin(tvChatStatus.getId(), TOP, i_Dp(R.dimen.dp6));
 
-                    set.connect(tvChatStatus.getId() , START , layoutChatName.getId() , START);
-                    set.connect(tvChatStatus.getId() , BOTTOM , rlChatAvatar.getId() , BOTTOM);
-                    set.connect(tvChatStatus.getId() , END , layoutChatName.getId() , END);
+                    set.connect(tvChatStatus.getId(), START, layoutChatName.getId(), START);
+                    set.connect(tvChatStatus.getId(), BOTTOM, rlChatAvatar.getId(), BOTTOM);
+                    set.connect(tvChatStatus.getId(), END, layoutChatName.getId(), END);
 
                     //endregion chat titles
 
@@ -1625,7 +1626,7 @@ public class HelperToolbar {
                 //endregion chat
 
                 //region profile
-                if (isGroupProfile){
+                if (isGroupProfile) {
 
                     //extend root for adding avatar and titles
                     setRoot.constrainHeight(mainConstraint.getId(), i_Dp(R.dimen.toolbar_height_root_with_profile));
@@ -1636,62 +1637,62 @@ public class HelperToolbar {
                     //civProfileAvatar.setImageResource(R.drawable.ic_cloud_space_blue);
                     mainConstraint.addView(civProfileAvatar);
 
-                    set.constrainHeight(civProfileAvatar.getId() , i_Dp(R.dimen.dp68));
-                    set.constrainWidth(civProfileAvatar.getId() , i_Dp(R.dimen.dp68));
-                    set.connect(civProfileAvatar.getId() , START , PARENT_ID , START , i_Dp(R.dimen.dp14));
-                    set.connect(civProfileAvatar.getId() , BOTTOM , PARENT_ID , BOTTOM , i_Dp(R.dimen.dp14));
+                    set.constrainHeight(civProfileAvatar.getId(), i_Dp(R.dimen.dp68));
+                    set.constrainWidth(civProfileAvatar.getId(), i_Dp(R.dimen.dp68));
+                    set.connect(civProfileAvatar.getId(), START, PARENT_ID, START, i_Dp(R.dimen.dp14));
+                    set.connect(civProfileAvatar.getId(), BOTTOM, PARENT_ID, BOTTOM, i_Dp(R.dimen.dp14));
                     if (leftIcon != null) {
-                        set.connect(civProfileAvatar.getId() , TOP , leftIcon.getId() , BOTTOM );
-                    }else {
-                        set.connect(civProfileAvatar.getId() , TOP , PARENT_ID , TOP , i_Dp(R.dimen.dp52) );
+                        set.connect(civProfileAvatar.getId(), TOP, leftIcon.getId(), BOTTOM);
+                    } else {
+                        set.connect(civProfileAvatar.getId(), TOP, PARENT_ID, TOP, i_Dp(R.dimen.dp52));
                     }
 
                     //titles
-                    tvProfileName  = new AppCompatTextView(getContext());
+                    tvProfileName = new AppCompatTextView(getContext());
                     tvProfileName.setId(R.id.groupName);
                     tvProfileName.setTypeface(tfMain);
                     tvProfileName.setGravity(Gravity.LEFT);
                     tvProfileName.setSingleLine();
-                    Utils.setTextSize(tvProfileName , R.dimen.largeTextSize);
+                    Utils.setTextSize(tvProfileName, R.dimen.largeTextSize);
                     tvProfileName.setTextColor(getContext().getResources().getColor(R.color.white));
                     mainConstraint.addView(tvProfileName);
 
-                    set.constrainWidth(tvProfileName.getId() , MATCH_CONSTRAINT);
-                    set.constrainHeight(tvProfileName.getId() , WRAP_CONTENT);
+                    set.constrainWidth(tvProfileName.getId(), MATCH_CONSTRAINT);
+                    set.constrainHeight(tvProfileName.getId(), WRAP_CONTENT);
 
-                    set.connect(tvProfileName.getId() , TOP , civProfileAvatar.getId() , TOP);
-                    set.connect(tvProfileName.getId() , START , civProfileAvatar.getId() , END , i_Dp(R.dimen.dp16));
-                    set.connect(tvProfileName.getId() , END , PARENT_ID , END , i_Dp(R.dimen.dp16));
+                    set.connect(tvProfileName.getId(), TOP, civProfileAvatar.getId(), TOP);
+                    set.connect(tvProfileName.getId(), START, civProfileAvatar.getId(), END, i_Dp(R.dimen.dp16));
+                    set.connect(tvProfileName.getId(), END, PARENT_ID, END, i_Dp(R.dimen.dp16));
 
-                    tvProfileMemberCount  = new AppCompatTextView(getContext());
+                    tvProfileMemberCount = new AppCompatTextView(getContext());
                     tvProfileMemberCount.setId(R.id.groupMemberCount);
                     tvProfileMemberCount.setTypeface(tfMain);
                     tvProfileMemberCount.setGravity(Gravity.LEFT);
                     tvProfileMemberCount.setSingleLine();
-                    Utils.setTextSize(tvProfileMemberCount , R.dimen.largeTextSize);
+                    Utils.setTextSize(tvProfileMemberCount, R.dimen.largeTextSize);
                     tvProfileMemberCount.setTextColor(getContext().getResources().getColor(R.color.white));
                     mainConstraint.addView(tvProfileMemberCount);
 
-                    set.constrainWidth(tvProfileMemberCount.getId() , MATCH_CONSTRAINT);
-                    set.constrainHeight(tvProfileMemberCount.getId() , WRAP_CONTENT);
+                    set.constrainWidth(tvProfileMemberCount.getId(), MATCH_CONSTRAINT);
+                    set.constrainHeight(tvProfileMemberCount.getId(), WRAP_CONTENT);
 
-                    set.connect(tvProfileMemberCount.getId() , TOP , tvProfileName.getId() , BOTTOM );
-                    set.connect(tvProfileMemberCount.getId() , START , tvProfileName.getId() , START );
-                    set.connect(tvProfileMemberCount.getId() , BOTTOM , civProfileAvatar.getId() , BOTTOM );
-                    set.connect(tvProfileMemberCount.getId() , END , tvProfileName.getId() , END );
+                    set.connect(tvProfileMemberCount.getId(), TOP, tvProfileName.getId(), BOTTOM);
+                    set.connect(tvProfileMemberCount.getId(), START, tvProfileName.getId(), START);
+                    set.connect(tvProfileMemberCount.getId(), BOTTOM, civProfileAvatar.getId(), BOTTOM);
+                    set.connect(tvProfileMemberCount.getId(), END, tvProfileName.getId(), END);
 
-                    if (leftIcon != null){
-                        set.connect(leftIcon.getId(), BOTTOM, civProfileAvatar.getId() , TOP);
+                    if (leftIcon != null) {
+                        set.connect(leftIcon.getId(), BOTTOM, civProfileAvatar.getId(), TOP);
                     }
-                    if (rightIcon != null){
-                        set.connect(rightIcon.getId(), BOTTOM, civProfileAvatar.getId() , TOP);
+                    if (rightIcon != null) {
+                        set.connect(rightIcon.getId(), BOTTOM, civProfileAvatar.getId(), TOP);
                     }
-                    if (logo != null){
-                        set.connect(logo.getId(), BOTTOM, civProfileAvatar.getId() , TOP);
+                    if (logo != null) {
+                        set.connect(logo.getId(), BOTTOM, civProfileAvatar.getId(), TOP);
                     }
                 }
 
-                if (isContactProfile){
+                if (isContactProfile) {
 
                     //extend root for adding avatar and titles
                     setRoot.constrainHeight(mainConstraint.getId(), i_Dp(R.dimen.toolbar_height_root_with_profile));
@@ -1702,19 +1703,19 @@ public class HelperToolbar {
                     //civProfileAvatar.setImageResource(R.drawable.ic_cloud_space_blue);
                     addView(civProfileAvatar);
 
-                    setRoot.constrainHeight(civProfileAvatar.getId() , i_Dp(R.dimen.dp120));
-                    setRoot.constrainWidth(civProfileAvatar.getId() , i_Dp(R.dimen.dp120));
-                    setRoot.connect(civProfileAvatar.getId() , START , PARENT_ID , START , i_Dp(R.dimen.dp14));
-                    setRoot.connect(civProfileAvatar.getId() , BOTTOM , mainConstraint.getId() , BOTTOM );
-                    setRoot.connect(civProfileAvatar.getId() , TOP , mainConstraint.getId() , BOTTOM );
+                    setRoot.constrainHeight(civProfileAvatar.getId(), i_Dp(R.dimen.dp120));
+                    setRoot.constrainWidth(civProfileAvatar.getId(), i_Dp(R.dimen.dp120));
+                    setRoot.connect(civProfileAvatar.getId(), START, PARENT_ID, START, i_Dp(R.dimen.dp14));
+                    setRoot.connect(civProfileAvatar.getId(), BOTTOM, mainConstraint.getId(), BOTTOM);
+                    setRoot.connect(civProfileAvatar.getId(), TOP, mainConstraint.getId(), BOTTOM);
 
                     //button to go on chat room
                     fabChat = new FloatingActionButton(getContext());
                     fabChat.setId(R.id.chi_fab_setPic);
 
-                    if (G.isDarkTheme){
+                    if (G.isDarkTheme) {
                         fabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.navigation_dark_mode_bg)));
-                    }else{
+                    } else {
                         fabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.green)));
                     }
 
@@ -1722,53 +1723,53 @@ public class HelperToolbar {
                     fabChat.setSize(FloatingActionButton.SIZE_MINI);
                     addView(fabChat);
 
-                    setRoot.constrainHeight(fabChat.getId() , WRAP_CONTENT);
-                    setRoot.constrainWidth(fabChat.getId() , WRAP_CONTENT);
+                    setRoot.constrainHeight(fabChat.getId(), WRAP_CONTENT);
+                    setRoot.constrainWidth(fabChat.getId(), WRAP_CONTENT);
 
-                    setRoot.connect(fabChat.getId() , END , PARENT_ID , END , i_Dp(R.dimen.dp16));
-                    setRoot.connect(fabChat.getId() , TOP , mainConstraint.getId() , BOTTOM);
-                    setRoot.connect(fabChat.getId() , BOTTOM , mainConstraint.getId() , BOTTOM);
+                    setRoot.connect(fabChat.getId(), END, PARENT_ID, END, i_Dp(R.dimen.dp16));
+                    setRoot.connect(fabChat.getId(), TOP, mainConstraint.getId(), BOTTOM);
+                    setRoot.connect(fabChat.getId(), BOTTOM, mainConstraint.getId(), BOTTOM);
 
 
                     //titles
-                    tvProfileMemberCount  = new AppCompatTextView(getContext());
+                    tvProfileMemberCount = new AppCompatTextView(getContext());
                     tvProfileMemberCount.setId(R.id.groupMemberCount);
                     tvProfileMemberCount.setTypeface(tfMain);
                     tvProfileMemberCount.setGravity(Gravity.LEFT);
                     tvProfileMemberCount.setSingleLine();
-                    Utils.setTextSize(tvProfileMemberCount , R.dimen.smallTextSize);
+                    Utils.setTextSize(tvProfileMemberCount, R.dimen.smallTextSize);
                     tvProfileMemberCount.setTextColor(getContext().getResources().getColor(R.color.white));
                     addView(tvProfileMemberCount);
 
-                    setRoot.constrainWidth(tvProfileMemberCount.getId() , MATCH_CONSTRAINT);
-                    setRoot.constrainHeight(tvProfileMemberCount.getId() , WRAP_CONTENT);
+                    setRoot.constrainWidth(tvProfileMemberCount.getId(), MATCH_CONSTRAINT);
+                    setRoot.constrainHeight(tvProfileMemberCount.getId(), WRAP_CONTENT);
 
-                    setRoot.connect(tvProfileMemberCount.getId() , START , civProfileAvatar.getId() , END , i_Dp(R.dimen.dp8) );
-                    setRoot.connect(tvProfileMemberCount.getId() , BOTTOM , mainConstraint.getId() , BOTTOM , i_Dp(R.dimen.dp1) );
-                    setRoot.connect(tvProfileMemberCount.getId() , END , fabChat.getId() , START , i_Dp(R.dimen.dp4) );
+                    setRoot.connect(tvProfileMemberCount.getId(), START, civProfileAvatar.getId(), END, i_Dp(R.dimen.dp8));
+                    setRoot.connect(tvProfileMemberCount.getId(), BOTTOM, mainConstraint.getId(), BOTTOM, i_Dp(R.dimen.dp1));
+                    setRoot.connect(tvProfileMemberCount.getId(), END, fabChat.getId(), START, i_Dp(R.dimen.dp4));
 
-                    tvProfileName  = new AppCompatTextView(getContext());
+                    tvProfileName = new AppCompatTextView(getContext());
                     tvProfileName.setId(R.id.groupName);
                     tvProfileName.setTypeface(tfMain);
                     tvProfileName.setGravity(Gravity.LEFT);
                     tvProfileName.setSingleLine();
-                    Utils.setTextSize(tvProfileName , R.dimen.standardTextSize);
+                    Utils.setTextSize(tvProfileName, R.dimen.standardTextSize);
                     tvProfileName.setTextColor(getContext().getResources().getColor(R.color.white));
                     addView(tvProfileName);
 
-                    setRoot.constrainWidth(tvProfileName.getId() , MATCH_CONSTRAINT);
-                    setRoot.constrainHeight(tvProfileName.getId() , WRAP_CONTENT);
+                    setRoot.constrainWidth(tvProfileName.getId(), MATCH_CONSTRAINT);
+                    setRoot.constrainHeight(tvProfileName.getId(), WRAP_CONTENT);
 
-                    setRoot.connect(tvProfileName.getId() , BOTTOM , tvProfileMemberCount.getId() , TOP );
-                    setRoot.connect(tvProfileName.getId() , START , tvProfileMemberCount.getId() , START);
-                    setRoot.connect(tvProfileName.getId() , END , tvProfileMemberCount.getId() , END);
+                    setRoot.connect(tvProfileName.getId(), BOTTOM, tvProfileMemberCount.getId(), TOP);
+                    setRoot.connect(tvProfileName.getId(), START, tvProfileMemberCount.getId(), START);
+                    setRoot.connect(tvProfileName.getId(), END, tvProfileMemberCount.getId(), END);
 
-                    tvProfileTell  = new AppCompatTextView(getContext());
+                    tvProfileTell = new AppCompatTextView(getContext());
                     tvProfileTell.setId(R.id.phoneNumber);
                     tvProfileTell.setTypeface(tfMain);
                     tvProfileTell.setGravity(Gravity.LEFT);
                     tvProfileTell.setSingleLine();
-                    Utils.setTextSize(tvProfileTell , R.dimen.smallTextSize);
+                    Utils.setTextSize(tvProfileTell, R.dimen.smallTextSize);
                     if (G.isDarkTheme)
                         tvProfileTell.setTextColor(getContext().getResources().getColor(R.color.gray_300));
                     else
@@ -1776,19 +1777,19 @@ public class HelperToolbar {
 
                     addView(tvProfileTell);
 
-                    setRoot.constrainWidth(tvProfileTell.getId() , MATCH_CONSTRAINT);
-                    setRoot.constrainHeight(tvProfileTell.getId() , WRAP_CONTENT);
+                    setRoot.constrainWidth(tvProfileTell.getId(), MATCH_CONSTRAINT);
+                    setRoot.constrainHeight(tvProfileTell.getId(), WRAP_CONTENT);
 
-                    setRoot.connect(tvProfileTell.getId() , TOP , mainConstraint.getId() , BOTTOM , i_Dp(R.dimen.dp2) );
-                    setRoot.connect(tvProfileTell.getId() , START , tvProfileMemberCount.getId() , START);
-                    setRoot.connect(tvProfileTell.getId() , END , tvProfileMemberCount.getId() , END);
+                    setRoot.connect(tvProfileTell.getId(), TOP, mainConstraint.getId(), BOTTOM, i_Dp(R.dimen.dp2));
+                    setRoot.connect(tvProfileTell.getId(), START, tvProfileMemberCount.getId(), START);
+                    setRoot.connect(tvProfileTell.getId(), END, tvProfileMemberCount.getId(), END);
 
-                    tvProfileStatus  = new AppCompatTextView(getContext());
+                    tvProfileStatus = new AppCompatTextView(getContext());
                     tvProfileStatus.setId(R.id.status);
                     tvProfileStatus.setTypeface(tfMain);
                     tvProfileStatus.setGravity(Gravity.LEFT);
                     tvProfileStatus.setSingleLine();
-                    Utils.setTextSize(tvProfileStatus , R.dimen.smallTextSize);
+                    Utils.setTextSize(tvProfileStatus, R.dimen.smallTextSize);
                     if (G.isDarkTheme)
                         tvProfileStatus.setTextColor(getContext().getResources().getColor(R.color.gray_300));
                     else
@@ -1797,21 +1798,21 @@ public class HelperToolbar {
                     addView(tvProfileStatus);
 
 
-                    setRoot.constrainWidth(tvProfileStatus.getId() , MATCH_CONSTRAINT);
-                    setRoot.constrainHeight(tvProfileStatus.getId() , WRAP_CONTENT);
+                    setRoot.constrainWidth(tvProfileStatus.getId(), MATCH_CONSTRAINT);
+                    setRoot.constrainHeight(tvProfileStatus.getId(), WRAP_CONTENT);
 
-                    setRoot.connect(tvProfileStatus.getId() , TOP , tvProfileTell.getId() , BOTTOM , i_Dp(R.dimen.dp2) );
-                    setRoot.connect(tvProfileStatus.getId() , START , tvProfileMemberCount.getId() , START);
-                    setRoot.connect(tvProfileStatus.getId() , END , tvProfileMemberCount.getId() , END);
+                    setRoot.connect(tvProfileStatus.getId(), TOP, tvProfileTell.getId(), BOTTOM, i_Dp(R.dimen.dp2));
+                    setRoot.connect(tvProfileStatus.getId(), START, tvProfileMemberCount.getId(), START);
+                    setRoot.connect(tvProfileStatus.getId(), END, tvProfileMemberCount.getId(), END);
 
-                    if (leftIcon != null){
-                        set.connect(leftIcon.getId(), BOTTOM, civProfileAvatar.getId() , TOP);
+                    if (leftIcon != null) {
+                        set.connect(leftIcon.getId(), BOTTOM, civProfileAvatar.getId(), TOP);
                     }
-                    if (rightIcon != null){
-                        set.connect(rightIcon.getId(), BOTTOM, civProfileAvatar.getId() , TOP);
+                    if (rightIcon != null) {
+                        set.connect(rightIcon.getId(), BOTTOM, civProfileAvatar.getId(), TOP);
                     }
-                    if (logo != null){
-                        set.connect(logo.getId(), BOTTOM, civProfileAvatar.getId() , TOP);
+                    if (logo != null) {
+                        set.connect(logo.getId(), BOTTOM, civProfileAvatar.getId(), TOP);
                     }
                 }
 
@@ -1829,17 +1830,17 @@ public class HelperToolbar {
                         set.connect(passCodeIcon.getId(), START, leftIcon.getId(), END);
                         set.connect(passCodeIcon.getId(), TOP, leftIcon.getId(), TOP);
                         set.connect(passCodeIcon.getId(), BOTTOM, leftIcon.getId(), BOTTOM);
-                    }else {
-                        set.connect(passCodeIcon.getId(), START, PARENT_ID, START , VALUE_4DP);
-                        set.connect(passCodeIcon.getId(), TOP, PARENT_ID, TOP , VALUE_4DP);
-                        set.connect(passCodeIcon.getId(), BOTTOM, PARENT_ID, BOTTOM , VALUE_10DP);
+                    } else {
+                        set.connect(passCodeIcon.getId(), START, PARENT_ID, START, VALUE_4DP);
+                        set.connect(passCodeIcon.getId(), TOP, PARENT_ID, TOP, VALUE_4DP);
+                        set.connect(passCodeIcon.getId(), BOTTOM, PARENT_ID, BOTTOM, VALUE_10DP);
                     }
                 }
 
                 //endregion PassCode
 
                 //region scanner
-                if (isScannerEnable){
+                if (isScannerEnable) {
 
                     scannerIcon = makeIcon(R.id.view_toolbar_btn_scanner, mScannerIcon);
                     mainConstraint.addView(scannerIcon);
@@ -1849,14 +1850,14 @@ public class HelperToolbar {
                         set.connect(scannerIcon.getId(), END, rightIcon.getId(), START);
                         set.connect(scannerIcon.getId(), TOP, rightIcon.getId(), TOP);
                         set.connect(scannerIcon.getId(), BOTTOM, rightIcon.getId(), BOTTOM);
-                    }else if (smallAvatar != null) {
+                    } else if (smallAvatar != null) {
                         set.connect(scannerIcon.getId(), END, smallAvatar.getId(), START);
                         set.connect(scannerIcon.getId(), TOP, smallAvatar.getId(), TOP);
                         set.connect(scannerIcon.getId(), BOTTOM, smallAvatar.getId(), BOTTOM);
-                    }else {
-                        set.connect(scannerIcon.getId(), END, PARENT_ID, END , VALUE_4DP);
-                        set.connect(scannerIcon.getId(), TOP, PARENT_ID, TOP , VALUE_4DP);
-                        set.connect(scannerIcon.getId(), BOTTOM, PARENT_ID, BOTTOM , VALUE_10DP);
+                    } else {
+                        set.connect(scannerIcon.getId(), END, PARENT_ID, END, VALUE_4DP);
+                        set.connect(scannerIcon.getId(), TOP, PARENT_ID, TOP, VALUE_4DP);
+                        set.connect(scannerIcon.getId(), BOTTOM, PARENT_ID, BOTTOM, VALUE_10DP);
                     }
                 }
                 //endregion scanner
@@ -1864,13 +1865,13 @@ public class HelperToolbar {
                 setRoot.applyTo(this);
                 set.applyTo(mainConstraint);
 
-            }else{
+            } else {
 
                 ConstraintSet set = new ConstraintSet();
 
-                if (isDark){
+                if (isDark) {
                     setBackgroundResource(R.color.background_setting_dark_2);
-                }else {
+                } else {
                     setBackgroundResource(R.color.white);
                 }
 
@@ -1880,11 +1881,11 @@ public class HelperToolbar {
                 tUserAvatar.setImageResource(R.drawable.ic_cloud_space_blue);
                 addView(tUserAvatar);
 
-                set.constrainWidth(tUserAvatar.getId() , i_Dp(R.dimen.dp60) );
-                set.constrainHeight(tUserAvatar.getId() , i_Dp(R.dimen.dp60) );
-                set.connect(tUserAvatar.getId() , TOP , PARENT_ID , TOP , i_Dp(R.dimen.dp20));
-                set.connect(tUserAvatar.getId() , START , PARENT_ID , START , i_Dp(R.dimen.dp10));
-                set.setMargin(tUserAvatar.getId() , END , i_Dp(R.dimen.dp10));
+                set.constrainWidth(tUserAvatar.getId(), i_Dp(R.dimen.dp60));
+                set.constrainHeight(tUserAvatar.getId(), i_Dp(R.dimen.dp60));
+                set.connect(tUserAvatar.getId(), TOP, PARENT_ID, TOP, i_Dp(R.dimen.dp20));
+                set.connect(tUserAvatar.getId(), START, PARENT_ID, START, i_Dp(R.dimen.dp10));
+                set.setMargin(tUserAvatar.getId(), END, i_Dp(R.dimen.dp10));
 
                 //user name
                 tUserName = new TextView(getContext());
@@ -1894,15 +1895,15 @@ public class HelperToolbar {
                 Utils.darkModeHandler(tUserName);
                 tUserName.setSingleLine();
                 tUserName.setGravity(Gravity.LEFT);
-                Utils.setTextSize(tUserName , R.dimen.standardTextSize);
+                Utils.setTextSize(tUserName, R.dimen.standardTextSize);
                 addView(tUserName);
 
-                set.constrainWidth(tUserName.getId() , MATCH_CONSTRAINT);
-                set.constrainHeight(tUserName.getId() , WRAP_CONTENT);
+                set.constrainWidth(tUserName.getId(), MATCH_CONSTRAINT);
+                set.constrainHeight(tUserName.getId(), WRAP_CONTENT);
 
-                set.connect(tUserName.getId() , START , tUserAvatar.getId() , END , i_Dp(R.dimen.dp10));
-                set.connect(tUserName.getId() , TOP , tUserAvatar.getId() , TOP , i_Dp(R.dimen.dp6));
-                set.connect(tUserName.getId() , END , PARENT_ID , END , i_Dp(R.dimen.dp10));
+                set.connect(tUserName.getId(), START, tUserAvatar.getId(), END, i_Dp(R.dimen.dp10));
+                set.connect(tUserName.getId(), TOP, tUserAvatar.getId(), TOP, i_Dp(R.dimen.dp6));
+                set.connect(tUserName.getId(), END, PARENT_ID, END, i_Dp(R.dimen.dp10));
 
                 //phone number
                 tUserPhone = new TextView(getContext());
@@ -1912,15 +1913,15 @@ public class HelperToolbar {
                 tUserPhone.setSingleLine();
                 tUserPhone.setText("0910 267 7509");
                 tUserPhone.setGravity(Gravity.LEFT);
-                Utils.setTextSize(tUserPhone , R.dimen.smallTextSize);
+                Utils.setTextSize(tUserPhone, R.dimen.smallTextSize);
                 addView(tUserPhone);
 
-                set.constrainWidth(tUserPhone.getId() , MATCH_CONSTRAINT);
-                set.constrainHeight(tUserPhone.getId() , WRAP_CONTENT);
+                set.constrainWidth(tUserPhone.getId(), MATCH_CONSTRAINT);
+                set.constrainHeight(tUserPhone.getId(), WRAP_CONTENT);
 
-                set.connect(tUserPhone.getId() , START , tUserName.getId() , START);
-                set.connect(tUserPhone.getId() , BOTTOM , tUserAvatar.getId() , BOTTOM , i_Dp(R.dimen.dp6));
-                set.connect(tUserPhone.getId() , END , tUserName.getId() , END);
+                set.connect(tUserPhone.getId(), START, tUserName.getId(), START);
+                set.connect(tUserPhone.getId(), BOTTOM, tUserAvatar.getId(), BOTTOM, i_Dp(R.dimen.dp6));
+                set.connect(tUserPhone.getId(), END, tUserName.getId(), END);
 
                 //vertical splitter line
                 View tViewSplitter1 = new View(getContext());
@@ -1928,12 +1929,12 @@ public class HelperToolbar {
                 Utils.setBackgroundColorGray(tViewSplitter1);
                 addView(tViewSplitter1);
 
-                set.constrainWidth(tViewSplitter1.getId() , MATCH_CONSTRAINT);
-                set.constrainHeight(tViewSplitter1.getId() , 1 );
+                set.constrainWidth(tViewSplitter1.getId(), MATCH_CONSTRAINT);
+                set.constrainHeight(tViewSplitter1.getId(), 1);
 
-                set.connect(tViewSplitter1.getId() , START , tUserAvatar.getId() , START);
-                set.connect(tViewSplitter1.getId() , END , PARENT_ID , END);
-                set.connect(tViewSplitter1.getId() , TOP , tUserAvatar.getId() , BOTTOM , i_Dp(R.dimen.dp10));
+                set.connect(tViewSplitter1.getId(), START, tUserAvatar.getId(), START);
+                set.connect(tViewSplitter1.getId(), END, PARENT_ID, END);
+                set.connect(tViewSplitter1.getId(), TOP, tUserAvatar.getId(), BOTTOM, i_Dp(R.dimen.dp10));
 
                 //add button
                 tIconAdd = makeIcon(R.id.toolbar_tablet_btn_add, mTabletIcons[0]);
@@ -1941,8 +1942,8 @@ public class HelperToolbar {
                 addView(tIconAdd);
                 setIconViewSize(tIconAdd, set);
 
-                set.connect(tIconAdd.getId(), END, tViewSplitter1.getId(), END ,VALUE_4DP);
-                set.connect(tIconAdd.getId(), TOP, tViewSplitter1.getId() , BOTTOM ,VALUE_4DP );
+                set.connect(tIconAdd.getId(), END, tViewSplitter1.getId(), END, VALUE_4DP);
+                set.connect(tIconAdd.getId(), TOP, tViewSplitter1.getId(), BOTTOM, VALUE_4DP);
 
                 //edit button
                 tIconEdit = makeIcon(R.id.toolbar_tablet_btn_edit, mTabletIcons[1]);
@@ -1950,7 +1951,7 @@ public class HelperToolbar {
                 addView(tIconEdit);
                 setIconViewSize(tIconEdit, set);
 
-                set.connect(tIconEdit.getId(), END, tIconAdd.getId(), START , VALUE_1DP);
+                set.connect(tIconEdit.getId(), END, tIconAdd.getId(), START, VALUE_1DP);
                 set.connect(tIconEdit.getId(), TOP, tIconAdd.getId(), TOP);
                 set.connect(tIconEdit.getId(), BOTTOM, tIconAdd.getId(), BOTTOM);
 
@@ -1961,12 +1962,12 @@ public class HelperToolbar {
                 Utils.setBackgroundColorGray(tViewSplitter2);
                 addView(tViewSplitter2);
 
-                set.constrainWidth(tViewSplitter2.getId() , 1);
-                set.constrainHeight(tViewSplitter2.getId() , MATCH_CONSTRAINT );
+                set.constrainWidth(tViewSplitter2.getId(), 1);
+                set.constrainHeight(tViewSplitter2.getId(), MATCH_CONSTRAINT);
 
-                set.connect(tViewSplitter2.getId() , END , tIconEdit.getId() , START , VALUE_4DP);
-                set.connect(tViewSplitter2.getId() , TOP , tIconEdit.getId() , TOP);
-                set.connect(tViewSplitter2.getId() , BOTTOM , tIconEdit.getId() , BOTTOM);
+                set.connect(tViewSplitter2.getId(), END, tIconEdit.getId(), START, VALUE_4DP);
+                set.connect(tViewSplitter2.getId(), TOP, tIconEdit.getId(), TOP);
+                set.connect(tViewSplitter2.getId(), BOTTOM, tIconEdit.getId(), BOTTOM);
 
 
                 //edit button
@@ -1975,7 +1976,7 @@ public class HelperToolbar {
                 addView(tIconSearch);
                 setIconViewSize(tIconSearch, set);
 
-                set.connect(tIconSearch.getId(), END, tViewSplitter2.getId(), START , VALUE_1DP);
+                set.connect(tIconSearch.getId(), END, tViewSplitter2.getId(), START, VALUE_1DP);
                 set.connect(tIconSearch.getId(), TOP, tIconAdd.getId(), TOP);
                 set.connect(tIconSearch.getId(), BOTTOM, tIconAdd.getId(), BOTTOM);
 
@@ -1986,12 +1987,12 @@ public class HelperToolbar {
                 Utils.setBackgroundColorGray(tViewSplitter3);
                 addView(tViewSplitter3);
 
-                set.constrainWidth(tViewSplitter3.getId() , MATCH_CONSTRAINT);
-                set.constrainHeight(tViewSplitter3.getId() , 1 );
+                set.constrainWidth(tViewSplitter3.getId(), MATCH_CONSTRAINT);
+                set.constrainHeight(tViewSplitter3.getId(), 1);
 
-                set.connect(tViewSplitter3.getId() , START , tViewSplitter1.getId() , START);
-                set.connect(tViewSplitter3.getId() , END , tViewSplitter1.getId() , END);
-                set.connect(tViewSplitter3.getId() , TOP , tIconAdd.getId() , BOTTOM , i_Dp(R.dimen.dp6));
+                set.connect(tViewSplitter3.getId(), START, tViewSplitter1.getId(), START);
+                set.connect(tViewSplitter3.getId(), END, tViewSplitter1.getId(), END);
+                set.connect(tViewSplitter3.getId(), TOP, tIconAdd.getId(), BOTTOM, i_Dp(R.dimen.dp6));
 
                 set.applyTo(this);
             }
@@ -2037,7 +2038,7 @@ public class HelperToolbar {
             view.setLayoutParams(lp);
             view.setPadding(lpadding, 0, rpadding, 0);
 
-            return lp ;
+            return lp;
         }
 
         private RelativeLayout.LayoutParams setLayoutParams(View view, int width, int height, int mlef, int mright, int padding) {
@@ -2054,10 +2055,10 @@ public class HelperToolbar {
             view.setLayoutParams(lp);
         }
 
-        private void setLayoutParams(View view, int width, int height , int marginTop) {
+        private void setLayoutParams(View view, int width, int height, int marginTop) {
 
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, height);
-            lp.setMargins(0 , marginTop , 0 , 0);
+            lp.setMargins(0, marginTop, 0, 0);
             view.setLayoutParams(lp);
         }
 

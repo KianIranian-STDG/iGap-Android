@@ -1,13 +1,13 @@
 package net.iGap.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.view.Gravity;
+import android.view.View;
+
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
-import androidx.annotation.NonNull;
-import android.view.Gravity;
-import android.view.View;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -123,7 +123,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     private String avatarPath;
     private AvatarHandler avatarHandler;
     private boolean isBot = false;
-    private boolean isCloud ;
+    private boolean isCloud;
 
     public FragmentContactsProfileViewModel() {
         realm = Realm.getDefaultInstance();
@@ -280,9 +280,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         new RequestUserContactsDelete().contactsDelete(phone.get());
     }
 
-    public void onUserNameClicked(){
+    public void onUserNameClicked() {
 
-        if (registeredInfo != null){
+        if (registeredInfo != null) {
             copyUserNameToClipBoard.postValue(registeredInfo.getUsername());
         }
 
@@ -313,9 +313,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             isShowReportView.set(false);
         }
 
-        if (userId == G.userId){
+        if (userId == G.userId) {
             cloudVisibility.postValue(true);
-        }else
+        } else
             cloudVisibility.postValue(false);
 
         registeredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);

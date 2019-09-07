@@ -144,7 +144,7 @@ public class AvatarHandler {
         if (cache != null && cache.fileId == fileId) {
             return;
         }
-        
+
         final Bitmap bmImg = BitmapFactory.decodeFile(avatarPath);
         if (bmImg != null) {
             synchronized (mutex3) {
@@ -160,7 +160,7 @@ public class AvatarHandler {
                         myAvatarCache.remove(ss);
                     }
                     myLimitedList.add(avatarOwnerId);
-                } else if (myLimitedList.size() - 1 != index){
+                } else if (myLimitedList.size() - 1 != index) {
                     Collections.swap(myLimitedList, myLimitedList.size() - 1, index);
                 }
             }
@@ -313,7 +313,7 @@ public class AvatarHandler {
                     if (initialsStart != null) {
                         cacheValue = HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(((ParamWithAvatarType) baseParam).avatarSize), initialsStart[0], initialsStart[1]);
                     }
-                } else if (baseParam instanceof ParamWithInitBitmap){
+                } else if (baseParam instanceof ParamWithInitBitmap) {
                     cacheValue = ((ParamWithInitBitmap) baseParam).initAvatar;
                 }
             }
@@ -356,8 +356,8 @@ public class AvatarHandler {
     private void getAvatarImage(BaseParam baseParam, Realm _realm) {
         RealmAvatar realmAvatar = getLastAvatar(baseParam.avatarOwnerId, _realm);
 
-        if (realmAvatar == null && baseParam instanceof ParamWithAvatarType && ((ParamWithAvatarType)baseParam).registeredUser != null) {
-            insertRegisteredInfoToDB(((ParamWithAvatarType)baseParam).registeredUser, _realm);
+        if (realmAvatar == null && baseParam instanceof ParamWithAvatarType && ((ParamWithAvatarType) baseParam).registeredUser != null) {
+            insertRegisteredInfoToDB(((ParamWithAvatarType) baseParam).registeredUser, _realm);
             realmAvatar = getLastAvatar(baseParam.avatarOwnerId, _realm);
         }
 

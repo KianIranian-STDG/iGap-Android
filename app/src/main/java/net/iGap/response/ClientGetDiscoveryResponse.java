@@ -35,7 +35,7 @@ public class ClientGetDiscoveryResponse extends MessageHandler {
         super.handler();
         ProtoClientGetDiscovery.ClientGetDiscoveryResponse.Builder builder = (ProtoClientGetDiscovery.ClientGetDiscoveryResponse.Builder) message;
         ArrayList<DiscoveryItem> res = new ArrayList<>();
-        for (ProtoGlobal.Discovery discovery: builder.getDiscoveriesList()) {
+        for (ProtoGlobal.Discovery discovery : builder.getDiscoveriesList()) {
             res.add(new DiscoveryItem(discovery));
         }
 

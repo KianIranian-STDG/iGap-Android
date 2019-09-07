@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the kianiranian Company - http://www.kianiranian.com/
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the kianiranian Company - http://www.kianiranian.com/
+ * All rights reserved.
+ */
 
 package net.iGap;
 
@@ -23,7 +23,6 @@ import net.iGap.helper.HelperConnectionState;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.realm.RealmRoom;
-import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestWrapper;
 import net.iGap.response.HandleResponse;
@@ -183,10 +182,7 @@ public class WebSocketClient {
      */
 
     public static boolean isConnect() {
-        if (webSocketClient != null && webSocketClient.isOpen()) {
-            return true;
-        }
-        return false;
+        return webSocketClient != null && webSocketClient.isOpen();
     }
 
     /**

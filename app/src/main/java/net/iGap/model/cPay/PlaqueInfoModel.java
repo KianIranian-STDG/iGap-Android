@@ -5,31 +5,31 @@ import com.google.gson.annotations.SerializedName;
 public class PlaqueInfoModel {
 
     @SerializedName("data")
-    private Data data ;
+    private Data data;
 
     public Data getData() {
         return data;
     }
 
-    public class Data{
+    public class Data {
 
         @SerializedName("first_name")
-        private String firstName ;
+        private String firstName;
 
         @SerializedName("last_name")
-        private String lastName ;
+        private String lastName;
 
         @SerializedName("national_id")
-        private String nationalId ;
+        private String nationalId;
 
         @SerializedName("plate")
-        private String plaque ;
+        private String plaque;
 
         @SerializedName("mobile")
-        private String mobile ;
+        private String mobile;
 
         @SerializedName("PAN")
-        private String pan ;
+        private String pan;
 
         public String getFirstName() {
             return firstName;

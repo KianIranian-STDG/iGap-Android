@@ -12,14 +12,14 @@ package net.iGap.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
@@ -52,7 +52,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
     private Realm realmBlockedUser;
     private StickyRecyclerHeadersDecoration decoration;
     private HelperToolbar mHelperToolbar;
-    private FastScroller fastScroller ;
+    private FastScroller fastScroller;
 
     private Realm getRealmBlockedUser() {
         if (realmBlockedUser == null || realmBlockedUser.isClosed()) {
@@ -142,7 +142,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                 return;
             }
 
-           viewHolder.root.setOnClickListener(v -> unblock(viewHolder, registeredInfo.getId()));
+            viewHolder.root.setOnClickListener(v -> unblock(viewHolder, registeredInfo.getId()));
 
             viewHolder.title.setText(registeredInfo.getDisplayName());
 
@@ -174,13 +174,13 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                         .onPositive((dialog12, which) -> {
                             new RequestUserContactsUnblock().userContactsUnblock(id);
 
-                            if (getItemCount() == 1){
+                            if (getItemCount() == 1) {
                                 fastScroller.setVisibility(View.GONE);
                             }
                         })
                         .onNeutral((dialog1, which) -> {
-                            if (getActivity()!=null) {
-                                new HelperFragment(getActivity().getSupportFragmentManager(),FragmentContactsProfile.newInstance(0, id , "Others")).setReplace(false).load();
+                            if (getActivity() != null) {
+                                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, id, "Others")).setReplace(false).load();
                             }
                         })
                         .negativeText(R.string.B_cancel).build();
@@ -199,7 +199,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
             protected CustomTextViewMedium subtitle;
             RealmRegisteredInfo realmRegisteredInfo;
             private boolean isOpenDialog = false;
-            private View root ;
+            private View root;
 
             public ViewHolder(View view) {
                 super(view);
@@ -209,10 +209,10 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                 title = view.findViewById(R.id.title);
                 subtitle = view.findViewById(R.id.subtitle);
 
-                if (G.selectedLanguage.equals("en")){
+                if (G.selectedLanguage.equals("en")) {
                     title.setGravity(Gravity.LEFT);
                     subtitle.setGravity(Gravity.LEFT);
-                }else {
+                } else {
                     title.setGravity(Gravity.RIGHT);
                     subtitle.setGravity(Gravity.RIGHT);
                 }

@@ -1,8 +1,9 @@
 package net.iGap.view;
 
 import android.content.Context;
-import androidx.appcompat.widget.AppCompatImageView;
 import android.util.AttributeSet;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 public class SquareImageView extends AppCompatImageView {
     public SquareImageView(Context context) {

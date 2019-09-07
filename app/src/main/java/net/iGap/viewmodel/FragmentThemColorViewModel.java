@@ -9,12 +9,13 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
+
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.Theme;
@@ -164,11 +165,11 @@ public class FragmentThemColorViewModel extends ViewModel {
         setSetting(Theme.GREY_COMPLETE, false);
     }
 
-    private void setSetting(int config,boolean isDark) {
-        showDialogChangeTheme.setValue(new ChangeTheme(config,isDark));
+    private void setSetting(int config, boolean isDark) {
+        showDialogChangeTheme.setValue(new ChangeTheme(config, isDark));
     }
 
-    public void setNewTheme(ChangeTheme newTheme,boolean applyColorsToCustomize){
+    public void setNewTheme(ChangeTheme newTheme, boolean applyColorsToCustomize) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(SHP_SETTING.KEY_THEME_COLOR, newTheme.getConfig());
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, newTheme.isDark());

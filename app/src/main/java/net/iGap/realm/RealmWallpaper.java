@@ -30,9 +30,9 @@ public class RealmWallpaper extends RealmObject {
     private int type;
     private RealmList<RealmWallpaperProto> realmWallpaperProto;
 
-    public static void updateField(final List<ProtoGlobal.Wallpaper> protoList, final String localPath , int type_) {
+    public static void updateField(final List<ProtoGlobal.Wallpaper> protoList, final String localPath, int type_) {
         try (Realm realm = Realm.getDefaultInstance()) {
-            final RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE , type_).findFirst();
+            final RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, type_).findFirst();
 
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -83,7 +83,7 @@ public class RealmWallpaper extends RealmObject {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE , ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
+                    RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
                     if (realmWallpaper != null) {
                         realmWallpaper.setWallPaperList(realm, wallpaperList);
                     }

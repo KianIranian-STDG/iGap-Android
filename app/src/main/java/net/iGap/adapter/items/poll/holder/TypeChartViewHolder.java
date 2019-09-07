@@ -2,9 +2,10 @@ package net.iGap.adapter.items.poll.holder;
 
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.View;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -73,8 +74,8 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
     public void bindView(String[] labels, ArrayList<BarEntry> barEntries) {
         int maxSize = 0;
         int totalWith = (int) ViewMaker.pixelsToDp((float) Resources.getSystem().getDisplayMetrics().widthPixels, itemView.getContext());
-        for (int i = 0; i < labels.length ; i++) {
-            if (labels[i].length() > 13 ) {
+        for (int i = 0; i < labels.length; i++) {
+            if (labels[i].length() > 13) {
                 labels[i] = labels[i].substring(0, 10) + "...";
             }
             if (labels[i].length() > maxSize) {

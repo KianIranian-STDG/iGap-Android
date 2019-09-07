@@ -1,16 +1,11 @@
 package net.iGap.kuknos.view;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import androidx.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.google.zxing.BarcodeFormat;
@@ -38,7 +38,7 @@ public class KuknosRecieveFrag extends BaseFragment {
     private FragmentKuknosRecieveBinding binding;
     private KuknosRecieveVM kuknosRecieveVM;
     private HelperToolbar mHelperToolbar;
-    public final static int QRcodeWidth = 500 ;
+    public final static int QRcodeWidth = 500;
 
     public static KuknosRecieveFrag newInstance() {
         KuknosRecieveFrag kuknosLoginFrag = new KuknosRecieveFrag();
@@ -110,7 +110,7 @@ public class KuknosRecieveFrag extends BaseFragment {
         Toast.makeText(getContext(), R.string.kuknos_recieve_copyToast, Toast.LENGTH_SHORT).show();
     }
 
-    private Bitmap TextToImageEncode(String Value){
+    private Bitmap TextToImageEncode(String Value) {
         Log.d("amini", "TextToImageEncode: " + Value);
         BitMatrix bitMatrix = null;
         try {
@@ -139,7 +139,7 @@ public class KuknosRecieveFrag extends BaseFragment {
             for (int x = 0; x < bitMatrixWidth; x++) {
 
                 pixels[offset + x] = bitMatrix.get(x, y) ?
-                        getResources().getColor(R.color.black):getResources().getColor(R.color.white);
+                        getResources().getColor(R.color.black) : getResources().getColor(R.color.white);
             }
         }
         Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);
@@ -161,8 +161,7 @@ public class KuknosRecieveFrag extends BaseFragment {
             Bitmap bitmap = null;
             try {
                 bitmap = TextToImageEncode(kuknosRecieveVM.getClientKey().get());
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return bitmap;

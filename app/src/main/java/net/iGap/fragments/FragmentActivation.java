@@ -1,17 +1,10 @@
 package net.iGap.fragments;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import androidx.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.transition.TransitionManager;
-import androidx.appcompat.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,6 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.transition.TransitionManager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -126,7 +127,7 @@ public class FragmentActivation extends BaseFragment {
 
         viewModel.goToTwoStepVerificationPage.observe(getViewLifecycleOwner(), userId -> {
             if (getActivity() instanceof ActivityRegistration && userId != null) {
-                ((ActivityRegistration) getActivity()).loadFragment( TwoStepVerificationFragment.newInstant(userId),true);
+                ((ActivityRegistration) getActivity()).loadFragment(TwoStepVerificationFragment.newInstant(userId), true);
             }
         });
 

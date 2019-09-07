@@ -3,13 +3,15 @@ package net.iGap.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -43,7 +45,7 @@ public class FragmentCallAction extends BottomSheetDialogFragment {
         messageAction.setOnClickListener(v -> {
             if (phoneNumber != null) {
                 dismiss();
-                Uri uri = Uri.parse("smsto:"+phoneNumber);
+                Uri uri = Uri.parse("smsto:" + phoneNumber);
                 Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
                 intent.putExtra("sms_body", "");
                 startActivity(intent);

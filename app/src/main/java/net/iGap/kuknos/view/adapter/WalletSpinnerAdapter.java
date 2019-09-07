@@ -2,8 +2,6 @@ package net.iGap.kuknos.view.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.squareup.picasso.Picasso;
 
@@ -49,7 +49,7 @@ public class WalletSpinnerAdapter extends BaseAdapter {
                 .placeholder(R.drawable.ic_tab_wallet_normal)
                 .into(walletPic);*/
 
-        if (position == (getCount()-1) && position != 0 /*&& wallets.get(position).getAssetCode().equals("Add Asset")*/) {
+        if (position == (getCount() - 1) && position != 0 /*&& wallets.get(position).getAssetCode().equals("Add Asset")*/) {
             // set
             walletName.setText(context.getResources().getString(R.string.kuknos_panel_addAsset));
             Picasso.get().load(R.mipmap.kuknos_add).into(walletPic);
@@ -80,7 +80,7 @@ public class WalletSpinnerAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return wallets.size()+1;
+        return wallets.size() + 1;
     }
 
     @Override

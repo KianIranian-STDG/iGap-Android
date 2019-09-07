@@ -6,14 +6,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +14,15 @@ import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -112,7 +113,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER;
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.PAYMENT;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
-public class FragmentMain extends BaseMainFragments implements ToolbarListener, EventListener , OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseMainFragments implements ToolbarListener, EventListener, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     private static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
 
@@ -281,7 +282,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             });
         }
 
-        EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT , this);
+        EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT, this);
 
         mRecyclerView = view.findViewById(R.id.cl_recycler_view_contact);
         mRecyclerView.setItemAnimator(null);
@@ -322,7 +323,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp60), 0, 0);
                 } else if (isChatMultiSelectEnable) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp1), 0, 0);
-                } else if ( MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+                } else if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
                 } else {
                     mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
@@ -526,10 +527,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private boolean checkValidationForRealm(RealmRoom realmRoom) {
-        if (realmRoom != null && realmRoom.isManaged() && realmRoom.isValid() && realmRoom.isLoaded()) {
-            return true;
-        }
-        return false;
+        return realmRoom != null && realmRoom.isManaged() && realmRoom.isValid() && realmRoom.isLoaded();
     }
 
 
@@ -631,11 +629,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         }
 
 
-        if (roomList.size() == 0) {
-            isThereAnyMoreItemToLoad = false;
-        } else {
-            isThereAnyMoreItemToLoad = true;
-        }
+        isThereAnyMoreItemToLoad = roomList.size() != 0;
 
         putChatToDatabase(roomList);
 
@@ -1060,12 +1054,13 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     @Override
     public void receivedMessage(int id, Object... message) {
 
-        if (id == ActivityCall.CALL_EVENT){
+        if (id == ActivityCall.CALL_EVENT) {
             if (message == null || message.length == 0) return;
-            boolean state = (boolean) message[0] ;
-            G.handler.post(()-> {
+            boolean state = (boolean) message[0];
+            G.handler.post(() -> {
                 notifyChatRoomsList();
-                if (!mHelperToolbar.getmSearchBox().isShown()) mHelperToolbar.animateSearchBox(false, 0, 0);
+                if (!mHelperToolbar.getmSearchBox().isShown())
+                    mHelperToolbar.animateSearchBox(false, 0, 0);
                 mHelperToolbar.getCallLayout().setVisibility(state ? View.VISIBLE : View.GONE);
                 if (MusicPlayer.chatLayout != null) MusicPlayer.chatLayout.setVisibility(View.GONE);
                 if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
@@ -1174,10 +1169,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             }
             final boolean isMyCloud;
 
-            if (mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() > 0 && mInfo.getChatRoom().getPeerId() == userId)
-                isMyCloud = true;
-            else
-                isMyCloud = false;
+            isMyCloud = mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() > 0 && mInfo.getChatRoom().getPeerId() == userId;
 
             if (mInfo.isValid()) {
 
@@ -1651,7 +1643,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                                 if (!G.fragmentActivity.isFinishing()) {
                                     long peerId = mInfo.getChatRoom() != null ? mInfo.getChatRoom().getPeerId() : 0;
                                     boolean isCloud = peerId > 0 && peerId == G.userId;
-                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId , isCloud , mInfo, new OnComplete() {
+                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId, isCloud, mInfo, new OnComplete() {
                                         @Override
                                         public void complete(boolean result, String messageOne, String MessageTow) {
                                             onSelectRoomMenu(messageOne, mInfo);

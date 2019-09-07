@@ -13,16 +13,17 @@ package net.iGap.adapter.items.chat;
 import android.content.Intent;
 import android.graphics.Color;
 import android.provider.ContactsContract;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.fragment.app.FragmentActivity;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.fragment.app.FragmentActivity;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -106,7 +107,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
 
     @Override
     public ViewHolder getViewHolder(View v) {
-        return new ViewHolder(activity,v);
+        return new ViewHolder(activity, v);
     }
 
     protected static class ViewHolder extends NewChatItemHolder {
@@ -125,7 +126,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         private int contactStatus;
         private long contactId;
 
-        public ViewHolder(FragmentActivity activity,View view) {
+        public ViewHolder(FragmentActivity activity, View view) {
             super(view);
 
             contactImage = new AppCompatImageView(getContext());
@@ -253,7 +254,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
 
             viewContactBtn.setOnClickListener(v -> {
                 if (contactStatus == IN_CONTACT_AND_HAVE_IGAP) {
-                    new HelperFragment(activity.getSupportFragmentManager(),FragmentContactsProfile.newInstance(0, contactId,"Others")).setReplace(false).load();
+                    new HelperFragment(activity.getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, contactId, "Others")).setReplace(false).load();
                 } else if (contactStatus == NOT_CONTACT_AND_HAVE_NOT_IGAP) {
                     Intent intent = new Intent(Intent.ACTION_INSERT);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

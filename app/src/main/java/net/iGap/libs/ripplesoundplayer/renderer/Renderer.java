@@ -1,6 +1,7 @@
 package net.iGap.libs.ripplesoundplayer.renderer;
 
 import android.graphics.Canvas;
+
 import androidx.annotation.CallSuper;
 import androidx.annotation.ColorInt;
 

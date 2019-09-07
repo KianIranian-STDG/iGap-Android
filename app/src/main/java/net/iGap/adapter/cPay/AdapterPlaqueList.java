@@ -1,14 +1,15 @@
 package net.iGap.adapter.cPay;
 
-import androidx.lifecycle.MutableLiveData;
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCPay;
@@ -59,7 +60,7 @@ public class AdapterPlaqueList extends RecyclerView.Adapter<AdapterPlaqueList.Pl
         private PlaqueView plaqueView;
         private TextView edit;
         private ViewGroup root;
-        private View view ;
+        private View view;
 
         public PlaqueViewHolder(@NonNull View itemView) {
             super(itemView);

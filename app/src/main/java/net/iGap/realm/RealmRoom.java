@@ -11,7 +11,6 @@
 package net.iGap.realm;
 
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.helper.HelperCalander;
@@ -1205,11 +1204,7 @@ public class RealmRoom extends RealmObject {
     }
 
     public void setMute(ProtoGlobal.RoomMute muteState) {
-        if (muteState == ProtoGlobal.RoomMute.MUTE) {
-            this.mute = true;
-        } else {
-            this.mute = false;
-        }
+        this.mute = muteState == ProtoGlobal.RoomMute.MUTE;
     }
 
     public RealmChatRoom getChatRoom() {
@@ -1578,7 +1573,7 @@ public class RealmRoom extends RealmObject {
                 }
                 all += rm.getUnreadCount();
             }
-            String ar[];
+            String[] ar;
             if (HelperCalander.isPersianUnicode) {
                 ar = new String[]{"0", "0", all + ""};
             } else {

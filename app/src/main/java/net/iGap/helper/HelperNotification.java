@@ -19,9 +19,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.view.Display;
+
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
-import android.view.Display;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -82,7 +83,7 @@ public class HelperNotification {
         public ProtoGlobal.Room.Type roomType;
         public String name = "";
         public String message = "";
-        public long time ;
+        public long time;
         public String initialize;
         public String color;
     }
@@ -229,7 +230,7 @@ public class HelperNotification {
                     .setContentIntent(pi);
 
             //maybe time not set , this if not work and time of notify will set .
-            if (mTime != 0){
+            if (mTime != 0) {
                 builder.setWhen(mTime * 1000);
             }
 
@@ -582,11 +583,11 @@ public class HelperNotification {
 
         private boolean getForegroundApp() {
 
-            ActivityManager am = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+            ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
 
             try {
-                if (taskInfo.get(0).topActivity.getClassName().toString().toLowerCase().contains("launcher"))
+                if (taskInfo.get(0).topActivity.getClassName().toLowerCase().contains("launcher"))
                     return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -720,7 +721,7 @@ public class HelperNotification {
         sn.roomId = roomId;
         sn.roomMessage = roomMessage;
         sn.roomType = roomType;
-        sn.time = roomMessage.getUpdateTime() ;
+        sn.time = roomMessage.getUpdateTime();
         sn.message = parseMessage(roomMessage);
         sn.name = room.getTitle() + ":";
         sn.senderId = room.getType() == ProtoGlobal.Room.Type.CHAT ? room.getChatRoom().getPeerId() : room.getId();
@@ -779,7 +780,7 @@ public class HelperNotification {
                     text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
                 } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MEMBER_LEFT) {
                     text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
-                }  else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VOICE_CALL) {
+                } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VOICE_CALL) {
                     text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
                 } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VIDEO_CALL) {
                     text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
@@ -946,6 +947,6 @@ public class HelperNotification {
                     .build();
         }
 
-        notificationManager.notify(1032,notification);
+        notificationManager.notify(1032, notification);
     }
 }

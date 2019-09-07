@@ -1,14 +1,8 @@
 package net.iGap.fragments;
 
 import android.content.Intent;
-import androidx.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +12,12 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -123,7 +123,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         toolbarLayout.addView(mHelperToolbar.getView());
         mHelperToolbar.setListener(this);
 
-        prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);
+        prgWaiting = view.findViewById(R.id.prgWaiting_addContact);
         AppUtils.setProgresColler(prgWaiting);
 
         Bundle bundle = this.getArguments();
@@ -136,7 +136,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         // My Code H.Amini
         //ContactUtils.syncContacts();
 
-        realmRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        realmRecyclerView = view.findViewById(R.id.recycler_view);
         realmRecyclerView.setItemViewCacheSize(1000);
         realmRecyclerView.setItemAnimator(null);
         layoutManager = new LinearLayoutManager(realmRecyclerView.getContext());
@@ -228,12 +228,10 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                         G.fragmentActivity.finish();
                     }
                 });
-            }
-            else {
+            } else {
                 if (results.size() == 0) {
                     new RequestUserContactsGetList().userContactGetList();
-                }
-                else {
+                } else {
                     hideProgress();
                 }
 
@@ -419,7 +417,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         }
 
         public String getBubbleText(int position) {
-            if (usersList.size() == 0 || position > (usersList.size()-1) || position == -1)
+            if (usersList.size() == 0 || position > (usersList.size() - 1) || position == -1)
                 return "-";
             else {
                 return usersList.get(position).getDisplay_name().substring(0, 1).toUpperCase();
@@ -541,33 +539,32 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                                 }).show();
                             }
 
-                        }
-                        else {
+                        } else {
                             showProgress();
                             HelperPublicMethod.goToChatRoomFromFirstContact(realmContacts.getId(), new HelperPublicMethod.OnComplete() {
-                                        @Override
-                                        public void complete() {
-                                            hideProgress();
-                                            popBackStackFragment();
-                                            G.fragmentActivity.finish();
-                                        }
-                                    }, new HelperPublicMethod.OnError() {
-                                        @Override
-                                        public void error() {
-                                            hideProgress();
-                                            G.handler.post(()->{
-                                                new DefaultRoundDialog(getContext())
-                                                        .setTitle(R.string.warning)
-                                                        .setMessage(R.string.str_frag_sync_error)
-                                                        // Specifying a listener allows you to take an action before dismissing the dialog.
-                                                        // The dialog is automatically dismissed when a dialog button is clicked.
-                                                        .setPositiveButton(R.string.dialog_ok, null)
-                                                        .show();
-                                            });
-                                        }
-                                    });
-
+                                @Override
+                                public void complete() {
+                                    hideProgress();
+                                    popBackStackFragment();
+                                    G.fragmentActivity.finish();
                                 }
+                            }, new HelperPublicMethod.OnError() {
+                                @Override
+                                public void error() {
+                                    hideProgress();
+                                    G.handler.post(() -> {
+                                        new DefaultRoundDialog(getContext())
+                                                .setTitle(R.string.warning)
+                                                .setMessage(R.string.str_frag_sync_error)
+                                                // Specifying a listener allows you to take an action before dismissing the dialog.
+                                                // The dialog is automatically dismissed when a dialog button is clicked.
+                                                .setPositiveButton(R.string.dialog_ok, null)
+                                                .show();
+                                    });
+                                }
+                            });
+
+                        }
                     } else {
                         /*if (onClickRecyclerView != null)
                             onClickRecyclerView.onClick(v, getAdapterPosition());*/

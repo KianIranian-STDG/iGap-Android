@@ -3,12 +3,13 @@ package net.iGap.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -51,7 +52,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
         private TextView title;
         private TextView subtitle;
         private ViewGroup rootView;
-        private View line ;
+        private View line;
 
         public ViewHolder(View view) {
             super(view);
@@ -65,16 +66,16 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
 
         void initView(StructListOfContact contact) {
 
-            if (getAdapterPosition() != 0 ) {
+            if (getAdapterPosition() != 0) {
                 line.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 line.setVisibility(View.GONE);
             }
             title.setText(contact.getDisplayName());
             subtitle.setText(contact.getPhone());
 
             rootView.setOnClickListener(v -> {
-                Intent smsIntent = new Intent(Intent.ACTION_SENDTO , Uri.parse("smsto:" + contact.getPhone()));
+                Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + contact.getPhone()));
                 smsIntent.putExtra("sms_body", context.getResources().getString(R.string.invitation_message) + ActivityMain.userPhoneNumber);
                 smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 G.context.startActivity(smsIntent);

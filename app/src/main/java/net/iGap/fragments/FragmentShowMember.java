@@ -15,10 +15,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -28,6 +24,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -147,11 +148,11 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         return newInstance3(frg, roomId, mainrool, userid, selectedRole, isNeedGetMemberList, isGroup, true);
     }
 
-    public static FragmentShowMember newInstance3(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList, boolean isGroup , boolean isShowAddMemberButton) {
+    public static FragmentShowMember newInstance3(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList, boolean isGroup, boolean isShowAddMemberButton) {
         return newInstance4(frg, roomId, mainrool, userid, selectedRole, isNeedGetMemberList, isGroup, isShowAddMemberButton, ShowMemberMode.NONE);
     }
 
-    public static FragmentShowMember newInstance4(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList, boolean isGroup , boolean isShowAddMemberButton, ShowMemberMode showMemberMode) {
+    public static FragmentShowMember newInstance4(Fragment frg, long roomId, String mainrool, long userid, String selectedRole, boolean isNeedGetMemberList, boolean isGroup, boolean isShowAddMemberButton, ShowMemberMode showMemberMode) {
 
         Bundle bundle = new Bundle();
         bundle.putLong(ROOMIDARGUMENT, roomId);
@@ -208,7 +209,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 showMemberMode = ShowMemberMode.NONE;
             }
 
-            isShowAddButton = getArguments().getBoolean(ISSHOWADDMEMBER , true);
+            isShowAddButton = getArguments().getBoolean(ISSHOWADDMEMBER, true);
 
             roomType = RealmRoom.detectType(mRoomID);
 
@@ -449,7 +450,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 mBtnAdd.setText(context.getResources().getString(R.string.add_new_subscriber));
             }
 
-            if (!isShowAddButton){
+            if (!isShowAddButton) {
                 mBtnAdd.setVisibility(View.GONE);
                 view.findViewById(R.id.fcm_splitter_add).setVisibility(View.GONE);
             }
@@ -522,7 +523,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             }
         });
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.fcm_recycler_view_show_member);
+        mRecyclerView = view.findViewById(R.id.fcm_recycler_view_show_member);
         mRecyclerView.setItemViewCacheSize(100);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
@@ -530,7 +531,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         final PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(G.fragmentActivity, DeviceUtils.getScreenHeight(G.fragmentActivity));
         mRecyclerView.setLayoutManager(preCachingLayoutManager);
 
-        progressBar = (ProgressBar) view.findViewById(R.id.fcg_prgWaiting);
+        progressBar = view.findViewById(R.id.fcg_prgWaiting);
         AppUtils.setProgresColler(progressBar);
 
 
@@ -700,7 +701,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             } else {
                 showMemberMode = ShowMemberMode.SELECT_FOR_ADD_MODERATOR;
             }
-            FragmentShowMember fragment1 = FragmentShowMember.newInstance4(fragment, mRoomID, role, G.userId, SelectedRole, true , isGroup , false, showMemberMode);
+            FragmentShowMember fragment1 = FragmentShowMember.newInstance4(fragment, mRoomID, role, G.userId, SelectedRole, true, isGroup, false, showMemberMode);
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment1).setReplace(false).load(false);
         }
     }
@@ -1014,13 +1015,13 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             public ViewHolder(View itemView) {
                 super(itemView);
 
-                image =  itemView.findViewById(R.id.cigp_imv_contact_avatar);
-                title =  itemView.findViewById(R.id.cigp_txt_contact_name);
-                subtitle =  itemView.findViewById(R.id.cigp_txt_contact_lastseen);
+                image = itemView.findViewById(R.id.cigp_imv_contact_avatar);
+                title = itemView.findViewById(R.id.cigp_txt_contact_name);
+                subtitle = itemView.findViewById(R.id.cigp_txt_contact_lastseen);
                 topLine = itemView.findViewById(R.id.cigp_view_topLine);
-                txtNumberOfSharedMedia =  itemView.findViewById(R.id.cigp_txt_nomber_of_shared_media);
-                roleStar =  itemView.findViewById(R.id.cigp_txt_member_role);
-                btnMenu =  itemView.findViewById(R.id.cigp_moreButton);
+                txtNumberOfSharedMedia = itemView.findViewById(R.id.cigp_txt_nomber_of_shared_media);
+                roleStar = itemView.findViewById(R.id.cigp_txt_member_role);
+                btnMenu = itemView.findViewById(R.id.cigp_moreButton);
             }
         }
     }

@@ -1,11 +1,12 @@
 package net.iGap.fragments.mplTranaction;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -85,7 +86,7 @@ public class MplTransactionAdapter extends RecyclerView.Adapter<MplTransactionAd
                     break;
             }
 
-            String time = HelperCalander.getClocktime(mplTransaction.getPayTime()* 1000L, false);
+            String time = HelperCalander.getClocktime(mplTransaction.getPayTime() * 1000L, false);
             transferActionDataTv.setText(HelperCalander.getPersianCalander(mplTransaction.getPayTime() * 1000L));
             transferActionTimeTv.setText(time);
             transferActionOrderIdTv.setText(itemView.getContext().getResources().getString(R.string.pay_id) + " : " + mplTransaction.getOrderId());

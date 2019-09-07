@@ -1,9 +1,10 @@
 package net.iGap.igasht.locationdetail;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.databinding.ObservableBoolean;
 import android.util.Log;
 import android.view.View;
+
+import androidx.databinding.ObservableBoolean;
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.igasht.BaseIGashtViewModel;
 import net.iGap.igasht.IGashtRepository;

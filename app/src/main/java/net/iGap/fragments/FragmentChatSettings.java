@@ -1,15 +1,16 @@
 package net.iGap.fragments;
 
 
-import androidx.lifecycle.Observer;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -55,8 +56,9 @@ public class FragmentChatSettings extends BaseFragment {
         });
 
 
-        fcsViewModel.goToDateFragment.observe(getViewLifecycleOwner() , go -> {
-            if (getActivity() != null && go != null && go) new HelperFragment(getActivity().getSupportFragmentManager() ,new FragmentData()).setReplace(false).load();
+        fcsViewModel.goToDateFragment.observe(getViewLifecycleOwner(), go -> {
+            if (getActivity() != null && go != null && go)
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentData()).setReplace(false).load();
         });
     }
 

@@ -54,10 +54,10 @@ public class UserTwoStepVerificationVerifyRecoveryEmailResponse extends MessageH
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        if (identity instanceof RecoveryEmailCallback){
-            ((RecoveryEmailCallback) identity).errorEmail(majorCode,minorCode);
-        }else{
-            throw new ClassCastException("identity must be: "+ RecoveryEmailCallback.class.getName());
+        if (identity instanceof RecoveryEmailCallback) {
+            ((RecoveryEmailCallback) identity).errorEmail(majorCode, minorCode);
+        } else {
+            throw new ClassCastException("identity must be: " + RecoveryEmailCallback.class.getName());
         }
     }
 }

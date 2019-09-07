@@ -10,7 +10,7 @@
 
 package net.iGap.interfaces;
 
-public interface OnBotClick <T> {
+public interface OnBotClick<T> {
     void onBotCommandText(Object message, int botAction);
 }
 

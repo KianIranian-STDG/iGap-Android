@@ -2,12 +2,13 @@ package net.iGap.kuknos.view.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -42,10 +43,9 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        if (kuknosWHistoryMS.getRecords().get(i) instanceof  PaymentOperationResponse) {
+        if (kuknosWHistoryMS.getRecords().get(i) instanceof PaymentOperationResponse) {
             viewHolder.initView((PaymentOperationResponse) kuknosWHistoryMS.getRecords().get(i));
-        }
-        else {
+        } else {
             viewHolder.initViewCreateAccount((CreateAccountOperationResponse) kuknosWHistoryMS.getRecords().get(i));
         }
     }
@@ -77,7 +77,7 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
         public void initView(PaymentOperationResponse model) {
             String[] temp = model.getCreatedAt().split("T");
             date.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp[0]) : temp[0]);
-            time.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp[1].substring(0,5)) : temp[1].substring(0,5));
+            time.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp[1].substring(0, 5)) : temp[1].substring(0, 5));
             DecimalFormat df = new DecimalFormat("#,###.00");
             amount.setText(HelperCalander.isPersianUnicode ?
                     HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(model.getAmount())))
@@ -86,8 +86,7 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
                 desc.setText(context.getResources().getString(R.string.kuknos_wHistory_sent));
                 icon.setText(context.getResources().getString(R.string.upload_ic));
                 icon.setTextColor(Color.RED);
-            }
-            else {
+            } else {
                 desc.setText(context.getResources().getString(R.string.kuknos_wHistory_receive));
                 icon.setText(context.getResources().getString(R.string.download_ic));
 //                icon.setTextColor(context.getResources().getColor(R.color.buttonColor));
@@ -97,7 +96,7 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
         public void initViewCreateAccount(CreateAccountOperationResponse model) {
             String[] temp = model.getCreatedAt().split("T");
             date.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp[0]) : temp[0]);
-            time.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp[1].substring(0,5)) : temp[1].substring(0,5));
+            time.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(temp[1].substring(0, 5)) : temp[1].substring(0, 5));
             DecimalFormat df = new DecimalFormat("#,###.00");
             amount.setText(HelperCalander.isPersianUnicode ?
                     HelperCalander.convertToUnicodeFarsiNumber(df.format(Double.valueOf(model.getStartingBalance())))

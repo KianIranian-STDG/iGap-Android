@@ -4,14 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Environment;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -181,9 +181,9 @@ public class FileListerAdapter extends RecyclerView.Adapter<FileListerAdapter.Fi
     public void onBindViewHolder(FileListHolder holder, int position) {
         File f = data.get(position);
 
-        if (G.selectedLanguage.equals("en")){
+        if (G.selectedLanguage.equals("en")) {
             holder.name.setGravity(Gravity.LEFT);
-        }else{
+        } else {
             holder.name.setGravity(Gravity.RIGHT);
         }
 

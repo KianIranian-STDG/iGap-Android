@@ -2,9 +2,6 @@ package net.iGap;
 
 import android.content.SharedPreferences;
 
-import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.ios.IosEmojiProvider;
-
 import net.iGap.module.SHP_SETTING;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -845,7 +842,7 @@ public class Theme {
                         "#FFFFFF",//txtIconCheckColor,
                         "#C5CAE9",//bubbleChatMusicColor,
                         "#448AFF",//linkColor,
-                        "#212121" , //textChatMusicColor
+                        "#212121", //textChatMusicColor
                         "#007eff", // messageTypeColor
                         "#FF616161", //roomSenderTextColor
                         default_indigo_appBarColor

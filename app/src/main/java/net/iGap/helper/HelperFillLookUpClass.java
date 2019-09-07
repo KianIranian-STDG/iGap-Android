@@ -12,8 +12,6 @@ package net.iGap.helper;
 
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
-import net.iGap.proto.ProtoMplTransactionInfo;
-import net.iGap.proto.ProtoMplTransactionList;
 
 import static net.iGap.G.forcePriorityActionId;
 import static net.iGap.G.generalImmovableClasses;

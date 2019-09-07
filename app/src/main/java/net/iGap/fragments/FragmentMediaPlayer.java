@@ -11,15 +11,10 @@
 package net.iGap.fragments;
 
 import android.content.res.Configuration;
-import androidx.databinding.DataBindingUtil;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.Nullable;
-import androidx.collection.ArrayMap;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,6 +23,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.collection.ArrayMap;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
@@ -207,7 +208,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     private void initComponent(final View view) {
 
-        final ImageView img_MusicImage = (ImageView) view.findViewById(R.id.ml_img_music_picture);
+        final ImageView img_MusicImage = view.findViewById(R.id.ml_img_music_picture);
         onSetImage = new OnSetImage() {
             @Override
             public void setImage() {
@@ -236,8 +237,8 @@ public class FragmentMediaPlayer extends BaseFragment {
             }
         };
 
-        rcvListMusicPlayer = (RecyclerView) view.findViewById(R.id.rcvListMusicPlayer);
-        final SlidingUpPanelLayout slidingUpPanelLayout = (SlidingUpPanelLayout) view.findViewById(R.id.sliding_layout);
+        rcvListMusicPlayer = view.findViewById(R.id.rcvListMusicPlayer);
+        final SlidingUpPanelLayout slidingUpPanelLayout = view.findViewById(R.id.sliding_layout);
 
         footerAdapter = new ItemAdapter<>();
         fastItemAdapter = new FastItemAdapter();
@@ -326,7 +327,7 @@ public class FragmentMediaPlayer extends BaseFragment {
                     holder.iconPlay.setText(R.string.play_icon);
                 }
                 //holder.txtNameMusic.setText(realmRoomMessagesList.getAttachment().getName());
-                MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
+                MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
                 String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
                 if (artist != null) {
                     holder.txtMusicplace.setText(artist);

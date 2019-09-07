@@ -10,22 +10,15 @@
 
 package net.iGap.fragments;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
-import androidx.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.graphics.drawable.DrawableCompat;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,8 +27,15 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -81,11 +81,11 @@ public class FragmentContactsProfile extends BaseFragment {
     private static final String PEER_ID = "peerId";
     private static final String ENTER_FROM = "enterFrom";
 
-    private final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.7f;
-    private final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
-    private final int ALPHA_ANIMATIONS_DURATION              = 200;
+    private final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f;
+    private final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
+    private final int ALPHA_ANIMATIONS_DURATION = 200;
 
-    private boolean mIsTheTitleVisible          = false;
+    private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
 
     private String report;
@@ -135,7 +135,7 @@ public class FragmentContactsProfile extends BaseFragment {
         checkTheme();
         initialToolbar();
 
-        userAvatarImageView = binding.toolbarAvatar ;
+        userAvatarImageView = binding.toolbarAvatar;
         userAvatarImageView.setOnClickListener(v -> viewModel.onImageClick());
 
         binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
@@ -143,7 +143,7 @@ public class FragmentContactsProfile extends BaseFragment {
         binding.toolbarVideoCall.setOnClickListener(v -> viewModel.onVideoCallClick());
         binding.toolbarVoiceCall.setOnClickListener(v -> viewModel.onVoiceCallButtonClick());
 
-        viewModel.copyUserNameToClipBoard.observe(getViewLifecycleOwner() , userName -> {
+        viewModel.copyUserNameToClipBoard.observe(getViewLifecycleOwner(), userName -> {
 
             if (userName == null) return;
 
@@ -155,15 +155,15 @@ public class FragmentContactsProfile extends BaseFragment {
 
         });
 
-        viewModel.getCloudVisibility().observe(getViewLifecycleOwner(),thisMyCloud -> {
-            if (thisMyCloud!=null){
-                if (thisMyCloud){
+        viewModel.getCloudVisibility().observe(getViewLifecycleOwner(), thisMyCloud -> {
+            if (thisMyCloud != null) {
+                if (thisMyCloud) {
                     binding.report.setVisibility(View.GONE);
                     binding.block.setVisibility(View.GONE);
                     binding.enableNotificationLyt.setVisibility(View.GONE);
                     binding.line1.setVisibility(View.GONE);
                     binding.customNotification.setVisibility(View.GONE);
-                }else {
+                } else {
                     binding.report.setVisibility(View.VISIBLE);
                     binding.block.setVisibility(View.VISIBLE);
                     binding.line1.setVisibility(View.VISIBLE);
@@ -174,15 +174,15 @@ public class FragmentContactsProfile extends BaseFragment {
         });
 
 
-        viewModel.menuVisibility.observe(this , visible -> {
+        viewModel.menuVisibility.observe(this, visible -> {
             if (visible != null) binding.toolbarMore.setVisibility(visible);
         });
 
-        viewModel.callVisibility.observe(this , visible -> {
+        viewModel.callVisibility.observe(this, visible -> {
             if (visible != null) binding.toolbarVoiceCall.setVisibility(visible);
         });
 
-        viewModel.videoCallVisibility.observe(this , visible -> {
+        viewModel.videoCallVisibility.observe(this, visible -> {
             if (visible != null) binding.toolbarVideoCall.setVisibility(visible);
         });
 
@@ -232,7 +232,7 @@ public class FragmentContactsProfile extends BaseFragment {
 
             if (viewModel.phone.get().equals("0")) {
                 binding.toolbarTxtTelExpanded.setVisibility(View.GONE);
-            }else {
+            } else {
                 binding.toolbarTxtTelExpanded.setText(viewModel.phone.get());
                 binding.toolbarTxtTelExpanded.setOnClickListener(v -> viewModel.onPhoneNumberClick());
             }
@@ -544,7 +544,7 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
             if (aBoolean != null) {
                 if (aBoolean) {
                     avatarHandler.getAvatar(new ParamWithAvatarType(userAvatarImageView, viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
-                }else{
+                } else {
                     userAvatarImageView.setImageResource(R.drawable.ic_cloud_space_blue);
                 }
             }
@@ -586,7 +586,7 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
             }
         });
 
-        viewModel.blockDialogListener.observe(getViewLifecycleOwner() , isBlockUser ->{
+        viewModel.blockDialogListener.observe(getViewLifecycleOwner(), isBlockUser -> {
             if (isBlockUser == null) return;
 
             if (isBlockUser) {
@@ -596,7 +596,7 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
                         new RequestUserContactsUnblock().userContactsUnblock(viewModel.userId);
                     }
                 }).negativeText(R.string.cancel)
-                        .dismissListener(dialog ->  checkViewsState())
+                        .dismissListener(dialog -> checkViewsState())
                         .showListener(dialog -> checkViewsState()).show();
             } else {
                 new MaterialDialog.Builder(getContext()).title(R.string.block_the_user).content(R.string.block_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -612,13 +612,13 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
 
     }
 
-    private void checkViewsState(){
+    private void checkViewsState() {
         if (isCollapsed) startAlphaAnimation(binding.toolbarFabChat, 0, View.INVISIBLE);
     }
 
     private void checkTheme() {
 
-        if (G.isDarkTheme){
+        if (G.isDarkTheme) {
             binding.toolbarFabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.navigation_dark_mode_bg)));
         }
     }
@@ -644,7 +644,7 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
     private void handleToolbarTitleVisibility(float percentage) {
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
 
-            if(!mIsTheTitleVisible) {
+            if (!mIsTheTitleVisible) {
                 startAlphaAnimation(binding.toolbarTxtNameCollapsed, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 mIsTheTitleVisible = true;
             }
@@ -660,7 +660,7 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
 
     private void handleAlphaOnTitle(float percentage) {
         if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
-            if(mIsTheTitleContainerVisible) {
+            if (mIsTheTitleContainerVisible) {
                 startAlphaAnimation(binding.toolbarLayoutExpTitles, 100, View.INVISIBLE);
                 startAlphaAnimation(binding.toolbarFabChat, 100, View.INVISIBLE);
                 mIsTheTitleContainerVisible = false;
@@ -676,7 +676,7 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
         }
     }
 
-    public static void startAlphaAnimation (View v, long duration, int visibility) {
+    public static void startAlphaAnimation(View v, long duration, int visibility) {
 
         if (visibility == View.VISIBLE) v.setVisibility(visibility);
 
@@ -691,7 +691,7 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
 
     @Override
     public void onResume() {
-        if (binding != null && !mIsTheTitleContainerVisible){
+        if (binding != null && !mIsTheTitleContainerVisible) {
             startAlphaAnimation(binding.toolbarFabChat, 0, View.INVISIBLE);
         }
         super.onResume();

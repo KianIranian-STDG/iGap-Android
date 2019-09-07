@@ -1,19 +1,20 @@
 package net.iGap.fragments;
 
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -235,7 +236,7 @@ public class DataStoreageFragment extends BaseFragment {
                         checkBoxAudio.setChecked(isChecked);
                         checkBoxMap.setChecked(isChecked);
                         checkBoxOtherFiles.setChecked(isChecked);
-                    }else {
+                    } else {
                         boolean state = checkBoxAudio.isChecked() && checkBoxPhoto.isChecked() && checkBoxVideo.isChecked() && checkBoxDocument.isChecked() && checkBoxOtherFiles.isChecked() && checkBoxMap.isChecked();
                         checkBoxAll.setChecked(state);
                     }
@@ -268,8 +269,8 @@ public class DataStoreageFragment extends BaseFragment {
             }
         });
 
-        viewModel.getShowClearAllDialog().observe(getViewLifecycleOwner(),isShow->{
-            if (getContext()!= null && isShow != null && isShow){
+        viewModel.getShowClearAllDialog().observe(getViewLifecycleOwner(), isShow -> {
+            if (getContext() != null && isShow != null && isShow) {
                 MaterialDialog inDialog = new MaterialDialog.Builder(getContext()).customView(R.layout.dialog_content_custom, true).build();
                 View dialogView = inDialog.getCustomView();
                 inDialog.show();
@@ -296,8 +297,8 @@ public class DataStoreageFragment extends BaseFragment {
             }
         });
 
-        viewModel.getShowActiveSDCardDialog().observe(getViewLifecycleOwner(),isShow->{
-            if (getContext()!= null && isShow!= null && isShow){
+        viewModel.getShowActiveSDCardDialog().observe(getViewLifecycleOwner(), isShow -> {
+            if (getContext() != null && isShow != null && isShow) {
                 new MaterialDialog.Builder(getContext())
                         .title(R.string.are_you_sure)
                         .negativeText(R.string.B_cancel)

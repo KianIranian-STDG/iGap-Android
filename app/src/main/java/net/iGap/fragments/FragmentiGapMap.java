@@ -32,12 +32,6 @@ import android.location.LocationManager;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.solver.widgets.Helper;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.viewpager.widget.ViewPager;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
@@ -52,9 +46,14 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -448,14 +447,14 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
         G.onGeoGetComment = this;
         G.onMapUsersGet = this;
         attentionDialog();
-        map = (MapView) view.findViewById(R.id.map);
+        map = view.findViewById(R.id.map);
 
         initToolbar(view);
         startMap(view);
         //clickDrawMarkActive();
 
 
-        fabStateSwitcher = (ArcMenu) view.findViewById(R.id.st_fab_state);
+        fabStateSwitcher = view.findViewById(R.id.st_fab_state);
 
 
       /*  fabStateSwitcher.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
@@ -476,7 +475,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
         });
 
 
-        btnOrginView = (FloatingActionButton) view.findViewById(R.id.ac_fab_orgin);
+        btnOrginView = view.findViewById(R.id.ac_fab_orgin);
         btnOrginView.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
 
         btnOrginView.setOnClickListener(new View.OnClickListener() {
@@ -507,7 +506,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
             }
         });
 
-        btnSatelliteView = (FloatingActionButton) view.findViewById(R.id.ac_fab_satellite);
+        btnSatelliteView = view.findViewById(R.id.ac_fab_satellite);
         btnSatelliteView.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
         btnSatelliteView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -834,7 +833,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
             });
 
 
-            ViewGroup mapContainer = (ViewGroup) view.findViewById(R.id.mapContainer);
+            ViewGroup mapContainer = view.findViewById(R.id.mapContainer);
             mapContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -842,24 +841,24 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 }
             });
 
-           getRealmMapUsers().executeTransaction(new Realm.Transaction() {
+            getRealmMapUsers().executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
                 }
             });
-            rootTurnOnGps = (ScrollView) view.findViewById(R.id.scrollView);
+            rootTurnOnGps = view.findViewById(R.id.scrollView);
             rootTurnOnGps.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //have to empty
                 }
             });
-            vgMessageGps = (ViewGroup) view.findViewById(R.id.vgMessageGps);
+            vgMessageGps = view.findViewById(R.id.vgMessageGps);
 
-            txtTextTurnOnOffGps = (TextView) view.findViewById(R.id.txtTextTurnOnOffGps);
-            txtDescriptionMap = (TextView) view.findViewById(R.id.txtDescriptionMap);
-            edtMessageGps = (EditText) view.findViewById(R.id.edtMessageGps);
+            txtTextTurnOnOffGps = view.findViewById(R.id.txtTextTurnOnOffGps);
+            txtDescriptionMap = view.findViewById(R.id.txtDescriptionMap);
+            edtMessageGps = view.findViewById(R.id.edtMessageGps);
 
             edtMessageGps.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -869,9 +868,9 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 }
             });
 
-            prgWaitingGetUser = (ProgressBar) view.findViewById(R.id.prgWaitingGetUser);
+            prgWaitingGetUser = view.findViewById(R.id.prgWaitingGetUser);
 
-            toggleGps = (ToggleButton) view.findViewById(R.id.toggleGps);
+            toggleGps = view.findViewById(R.id.toggleGps);
             toggleGps.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -904,8 +903,8 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 }
             });
 
-            prgWaitingSendMessage = (ProgressBar) view.findViewById(R.id.prgWaitSendMessage);
-            txtSendMessageGps = (TextView) view.findViewById(R.id.txtSendMessageGps);
+            prgWaitingSendMessage = view.findViewById(R.id.prgWaitSendMessage);
+            txtSendMessageGps = view.findViewById(R.id.txtSendMessageGps);
             txtSendMessageGps.setText(G.context.getString(R.string.close_icon));
             if (G.isDarkTheme) {
                 txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
@@ -1074,7 +1073,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 }
             });
 
-            fabGps = (FloatingActionButton) view.findViewById(st_fab_gps);
+            fabGps = view.findViewById(st_fab_gps);
 
 
             fabGps.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
@@ -1095,9 +1094,9 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
             view.findViewById(R.id.backgroundToolbarMap).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-            btnBack = (RippleView) view.findViewById(R.id.ripple_back_map);
+            btnBack = view.findViewById(R.id.ripple_back_map);
 
-            rippleMoreMap = (RippleView) view.findViewById(R.id.ripple_more_map);
+            rippleMoreMap = view.findViewById(R.id.ripple_more_map);
 
             if (FragmentiGapMap.mineStaticLocation != null) {
                 GPSTracker.getGpsTrackerInstance().onLocationChanged(FragmentiGapMap.mineStaticLocation);
@@ -1347,7 +1346,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
     @Override
     public void onLocationChanged(Location location) {
-        this.location = location;
+        FragmentiGapMap.location = location;
 
         if (firstEnter) {
             lastLatitude = location.getLatitude();

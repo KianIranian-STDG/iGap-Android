@@ -31,11 +31,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -46,6 +41,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -54,6 +54,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -199,7 +200,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         /* *//**//* itemIcon = (MaterialDesignTextView) view.findViewById(R.id.mf_icon);*/
 
 
-        rvIcon = (RelativeLayout) view.findViewById(R.id.rv_icon);
+        rvIcon = view.findViewById(R.id.rv_icon);
 
         Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.ic_circle_shape);
         if (mDrawableSkip != null) {
@@ -210,21 +211,21 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         }
 
 
-        imgProfile = (ImageView) view.findViewById(R.id.mf_imgProfile);
+        imgProfile = view.findViewById(R.id.mf_imgProfile);
 
-        rvSendPosition = (RelativeLayout) view.findViewById(R.id.mf_rv_send_position);
-        rvSeePosition = (RelativeLayout) view.findViewById(R.id.mf_rv_see_position);
+        rvSendPosition = view.findViewById(R.id.mf_rv_send_position);
+        rvSeePosition = view.findViewById(R.id.mf_rv_see_position);
 
         rvSendPosition.setEnabled(false);
 
-        accuracy = (TextView) view.findViewById(R.id.mf_txt_accuracy);
+        accuracy = view.findViewById(R.id.mf_txt_accuracy);
         accuracy.setText(getResources().getString(R.string.get_location_data));
 
 
-        txtTitle = (TextView) view.findViewById(R.id.mf_txt_message);
+        txtTitle = view.findViewById(R.id.mf_txt_message);
 
-        txtUserName = (TextView) view.findViewById(R.id.mf_txt_userName);
-        txtDistance = (TextView) view.findViewById(R.id.mf_txt_distance);
+        txtUserName = view.findViewById(R.id.mf_txt_userName);
+        txtDistance = view.findViewById(R.id.mf_txt_distance);
 
         txtDistance.setText(getResources().getString(R.string.calculation));
 
@@ -237,7 +238,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         //rvSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
         txtTitle.setTextColor(Color.parseColor(G.appBarColor));
 
-        fabOpenMap = (FloatingActionButton) view.findViewById(R.id.mf_fab_openMap);
+        fabOpenMap = view.findViewById(R.id.mf_fab_openMap);
         fabOpenMap.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
         fabOpenMap.setColorFilter(Color.WHITE);
 
@@ -250,7 +251,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
             mode = (Mode) bundle.getSerializable(PosoitionMode);
 
-            if (mode == Mode.sendPosition){
+            if (mode == Mode.sendPosition) {
                 if (G.onHelperSetAction != null) {
                     G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_LOCATION);
                 }
@@ -665,7 +666,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     }
 
     public enum Mode {
-        sendPosition, seePosition;
+        sendPosition, seePosition
     }
 
     public interface OnGetPicture {

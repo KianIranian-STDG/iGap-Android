@@ -14,19 +14,19 @@ public class FinancialServicesViewModel extends ViewModel {
         return walletValue;
     }
 
-    public void onScanQRCodeClick(){
+    public void onScanQRCodeClick() {
 
     }
 
-    public void onChargeButtonClick(){
+    public void onChargeButtonClick() {
 
     }
 
-    public void onCashOutClick(){
+    public void onCashOutClick() {
 
     }
 
-    public void onAddCardButtonClick(){
+    public void onAddCardButtonClick() {
 
     }
 }

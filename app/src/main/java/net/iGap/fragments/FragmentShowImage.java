@@ -17,10 +17,6 @@ import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.core.view.ViewCompat;
-import androidx.viewpager.widget.ViewPager;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -34,6 +30,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.topsheet.TopSheetDialog;
@@ -270,7 +272,7 @@ public class FragmentShowImage extends BaseFragment {
 
             @Override
             public void onComplete(RippleView rippleView) {
-                Log.wtf(this.getClass().getName(),"on back");
+                Log.wtf(this.getClass().getName(), "on back");
                 popBackStackFragment();
             }
         });
@@ -302,15 +304,15 @@ public class FragmentShowImage extends BaseFragment {
         //colorAnimation.start();
 
 
-        viewPager = (ViewPager) view.findViewById(R.id.asi_view_pager);
+        viewPager = view.findViewById(R.id.asi_view_pager);
 
-        txtImageNumber = (TextView) view.findViewById(R.id.asi_txt_image_number);
-        ltImageName = (ViewGroup) view.findViewById(R.id.asi_layout_image_name);
-        txtImageName = (TextView) view.findViewById(R.id.asi_txt_image_name);
-        txtImageDate = (TextView) view.findViewById(R.id.asi_txt_image_date);
-        txtImageTime = (TextView) view.findViewById(R.id.asi_txt_image_time);
+        txtImageNumber = view.findViewById(R.id.asi_txt_image_number);
+        ltImageName = view.findViewById(R.id.asi_layout_image_name);
+        txtImageName = view.findViewById(R.id.asi_txt_image_name);
+        txtImageDate = view.findViewById(R.id.asi_txt_image_date);
+        txtImageTime = view.findViewById(R.id.asi_txt_image_time);
         txtImageDesc = (EmojiTextViewE) view.findViewById(R.id.asi_txt_image_desc);
-        toolbarShowImage = (LinearLayout) view.findViewById(R.id.toolbarShowImage);
+        toolbarShowImage = view.findViewById(R.id.toolbarShowImage);
 
         initViewPager();
 
@@ -604,12 +606,12 @@ public class FragmentShowImage extends BaseFragment {
         public Object instantiateItem(ViewGroup container, final int position) {
 
             LayoutInflater inflater = LayoutInflater.from(G.fragmentActivity);
-            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
-            final TextureView mTextureView = (TextureView) layout.findViewById(R.id.textureView);
-            final ImageView imgPlay = (ImageView) layout.findViewById(R.id.imgPlay);
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, container, false);
+            final TextureView mTextureView = layout.findViewById(R.id.textureView);
+            final ImageView imgPlay = layout.findViewById(R.id.imgPlay);
             final TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
 
-            FrameLayout frameLayout = (FrameLayout) layout.findViewById(R.id.Layout_showImage);
+            FrameLayout frameLayout = layout.findViewById(R.id.Layout_showImage);
             frameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -617,7 +619,7 @@ public class FragmentShowImage extends BaseFragment {
                 }
             });
 
-            final MessageProgress progress = (MessageProgress) layout.findViewById(R.id.progress);
+            final MessageProgress progress = layout.findViewById(R.id.progress);
             AppUtils.setProgresColor(progress.progressBar);
 
             final RealmRoomMessage rm = RealmRoomMessage.getFinalMessage(mFList.get(position));
@@ -815,7 +817,7 @@ public class FragmentShowImage extends BaseFragment {
                 }
             });
 
-            ((ViewGroup) container).addView(layout);
+            container.addView(layout);
             return layout;
         }
 

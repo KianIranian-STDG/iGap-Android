@@ -14,9 +14,6 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +22,10 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -130,7 +131,7 @@ public class FragmentDeleteAccount extends BaseFragment implements ToolbarListen
 
         new RequestUserGetDeleteToken().userGetDeleteToken();
 
-        ViewGroup rootDeleteAccount = (ViewGroup) view.findViewById(R.id.rootDeleteAccount);
+        ViewGroup rootDeleteAccount = view.findViewById(R.id.rootDeleteAccount);
         rootDeleteAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,12 +139,12 @@ public class FragmentDeleteAccount extends BaseFragment implements ToolbarListen
             }
         });
 
-        prgWaiting = (ProgressBar) view.findViewById(R.id.stda_prgWaiting_addContact);
+        prgWaiting = view.findViewById(R.id.stda_prgWaiting_addContact);
         AppUtils.setProgresColler(prgWaiting);
 
-        ltTime = (ViewGroup) view.findViewById(R.id.stda_layout_time);
+        ltTime = view.findViewById(R.id.stda_layout_time);
 
-        TextView txtPhoneNumber = (TextView) view.findViewById(R.id.stda_txt_phoneNumber);
+        TextView txtPhoneNumber = view.findViewById(R.id.stda_txt_phoneNumber);
         if (phone != null) txtPhoneNumber.setText("" + phone);
         else txtPhoneNumber.setText(getString(R.string.unknown));
 
@@ -151,7 +152,7 @@ public class FragmentDeleteAccount extends BaseFragment implements ToolbarListen
 
         final View viewLineBottom = view.findViewById(R.id.stda_line_below_editText);
 
-        final TextView txtTimerLand = (TextView) view.findViewById(R.id.stda_txt_time);
+        final TextView txtTimerLand = view.findViewById(R.id.stda_txt_time);
 
         G.handler.post(new Runnable() {
             @Override
@@ -320,7 +321,7 @@ public class FragmentDeleteAccount extends BaseFragment implements ToolbarListen
 
         View v = dialog.getCustomView();
 
-        final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
+        final TextView remindTime = v.findViewById(R.id.remindTime);
         CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {

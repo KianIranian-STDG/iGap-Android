@@ -13,9 +13,10 @@ package net.iGap.adapter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.CountDownTimer;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
@@ -54,7 +55,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
         @Override
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
-            if (item instanceof TimeItem || item instanceof LogItem || item instanceof LogWallet || item instanceof LogWalletCardToCard|| item instanceof CardToCardItem) {
+            if (item instanceof TimeItem || item instanceof LogItem || item instanceof LogWallet || item instanceof LogWalletCardToCard || item instanceof CardToCardItem) {
                 if (item.isSelected()) v.performLongClick();
             } else {
                 if (iMessageItem != null && item.mMessage != null && item.mMessage.getUserId() != -1) {
@@ -275,10 +276,12 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
         return null;
     }
-    public long getItemByPosition(int position){
+
+    public long getItemByPosition(int position) {
         try {
             return getAdapterItem(position).mMessage.getUpdateOrCreateTime();
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         return 0;
 
     }

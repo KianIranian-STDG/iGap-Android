@@ -1,7 +1,5 @@
 package net.iGap.module;
 
-import android.content.Context;
-import android.media.AudioManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 

@@ -2,15 +2,15 @@ package net.iGap.module.FileListerDialog;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import android.view.View;
 
 import net.iGap.G;
 import net.iGap.R;
 
 import java.io.File;
-
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_NEUTRAL;
@@ -90,7 +90,7 @@ public class FileListerDialog {
     private void init(Context context) {
         filesListerView = new FilesListerView(context);
         alertDialog.setView(filesListerView);
-        alertDialog.setButton(BUTTON_POSITIVE,  G.context.getResources().getString(R.string.Select), new DialogInterface.OnClickListener() {
+        alertDialog.setButton(BUTTON_POSITIVE, G.context.getResources().getString(R.string.Select), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -98,7 +98,7 @@ public class FileListerDialog {
                     onFileSelectedListener.onFileSelected(filesListerView.getSelected(), filesListerView.getSelected().getAbsolutePath());
             }
         });
-        alertDialog.setButton(BUTTON_NEUTRAL,  G.context.getResources().getString(R.string.Default_Dir), new DialogInterface.OnClickListener() {
+        alertDialog.setButton(BUTTON_NEUTRAL, G.context.getResources().getString(R.string.Default_Dir), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //filesListerView.goToDefaultDir();

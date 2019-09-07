@@ -16,7 +16,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import androidx.lifecycle.MutableLiveData;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -38,8 +37,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
@@ -47,6 +44,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -202,7 +203,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         repeatMode = str;
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("RepeatMode", str);
         editor.apply();
@@ -215,7 +216,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static void shuffleClick() {
 
         isShuffelOn = !isShuffelOn;
-        SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("Shuffel", isShuffelOn);
         editor.apply();
@@ -241,13 +242,13 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             }
         });
 
-        txt_music_time = (TextView) layout.findViewById(R.id.mls_txt_music_time);
+        txt_music_time = layout.findViewById(R.id.mls_txt_music_time);
 
-        txt_music_time_counter = (TextView) layout.findViewById(R.id.mls_txt_music_time_counter);
-        txt_music_name = (TextView) layout.findViewById(R.id.mls_txt_music_name);
+        txt_music_time_counter = layout.findViewById(R.id.mls_txt_music_time_counter);
+        txt_music_name = layout.findViewById(R.id.mls_txt_music_name);
         txt_music_info = layout.findViewById(R.id.mls_txt_music_info);
 
-        btnPlayMusic = (TextView) layout.findViewById(R.id.mls_btn_play_music);
+        btnPlayMusic = layout.findViewById(R.id.mls_btn_play_music);
         btnPlayMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -255,7 +256,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             }
         });
 
-        btnCloseMusic = (TextView) layout.findViewById(R.id.mls_btn_close);
+        btnCloseMusic = layout.findViewById(R.id.mls_btn_close);
         btnCloseMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -273,7 +274,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
             if (isVoice) {
                 txt_music_info.setVisibility(View.GONE);
-            }else {
+            } else {
                 txt_music_info.setVisibility(View.VISIBLE);
                 txt_music_time.setText(musicTime);
             }
@@ -820,7 +821,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
             if (isVoice) {
                 txt_music_info.setVisibility(View.GONE);
-            }else {
+            } else {
                 txt_music_info.setVisibility(View.VISIBLE);
                 txt_music_info.setText(musicInfoTitle);
             }
@@ -1180,12 +1181,12 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         musicInfo = "";
         musicInfoTitle = context.getString(R.string.unknown_artist);
 
-        MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
+        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
 
         Uri uri = null;
 
         if (MusicPlayer.musicPath != null) {
-            uri = (Uri) Uri.fromFile(new File(MusicPlayer.musicPath));
+            uri = Uri.fromFile(new File(MusicPlayer.musicPath));
         }
 
         if (uri != null) {
@@ -1194,7 +1195,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                 mediaMetadataRetriever.setDataSource(context, uri);
 
-                String title = (String) mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+                String title = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
 
                 if (title != null) {
                     musicInfo += title + "       ";
@@ -1240,12 +1241,12 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
     private static void getMusicArtist() {
 
-        MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
+        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
 
         Uri uri = null;
 
         if (MusicPlayer.musicPath != null) {
-            uri = (Uri) Uri.fromFile(new File(MusicPlayer.musicPath));
+            uri = Uri.fromFile(new File(MusicPlayer.musicPath));
         }
 
         if (uri != null) {
@@ -1254,7 +1255,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                 mediaMetadataRetriever.setDataSource(context, uri);
 
-                String title = (String) mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+                String title = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
 
                 if (title != null) {
                     musicInfo += title + "       ";
@@ -1273,9 +1274,9 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     musicInfoTitle = artist;
                 }
 
-            }catch (Exception e){
+            } catch (Exception e) {
 
-                if (musicInfoTitle != null && musicInfoTitle.trim().equals("")){
+                if (musicInfoTitle != null && musicInfoTitle.trim().equals("")) {
                     txt_music_info.setVisibility(View.GONE);
                 }
             }
@@ -1284,7 +1285,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     }
 
     private static void getAttribute() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", MODE_PRIVATE);
         repeatMode = sharedPreferences.getString("RepeatMode", RepeatMode.noRepeat.toString());
         isShuffelOn = sharedPreferences.getBoolean("Shuffel", false);
     }
@@ -1687,7 +1688,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
 
     public enum RepeatMode {
-        noRepeat, oneRpeat, repeatAll;
+        noRepeat, oneRpeat, repeatAll
     }
 
     public interface UpdateName {

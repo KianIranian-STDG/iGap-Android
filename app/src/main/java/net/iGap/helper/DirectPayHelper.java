@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -36,7 +33,7 @@ public class DirectPayHelper {
         int k = 0;
         StringBuilder newPP = new StringBuilder();
         for (int i = pp.length() - 1; i > -1; i--) {
-            k ++;
+            k++;
             newPP.insert(0, pp.charAt(i));
             if (k % 3 == 0 && i != 0) {
                 newPP.insert(0, ",");
@@ -44,9 +41,9 @@ public class DirectPayHelper {
         }
 
         if (HelperCalander.isPersianUnicode) {
-            return HelperCalander.convertToUnicodeFarsiNumber(newPP.toString()) +  " " + G.currentActivity.getString(R.string.rial);
+            return HelperCalander.convertToUnicodeFarsiNumber(newPP.toString()) + " " + G.currentActivity.getString(R.string.rial);
         } else {
-            return newPP.toString() +  " " + G.currentActivity.getString(R.string.rial);
+            return newPP.toString() + " " + G.currentActivity.getString(R.string.rial);
         }
     }
 
@@ -123,8 +120,8 @@ public class DirectPayHelper {
                         if (!activity.isFinishing()) {
                             dialog.dismiss();
                             Intent intent = new Intent(activity, PaymentInitiator.class);
-                            intent.putExtra("Type" , "1");
-                            intent.putExtra("Token" , token);
+                            intent.putExtra("Type", "1");
+                            intent.putExtra("Token", token);
 //                        intent.putExtra("OrderID" , int_something);
                             activity.startActivityForResult(intent, requestCodeDirectPay);
                         }

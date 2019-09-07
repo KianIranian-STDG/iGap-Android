@@ -1,8 +1,9 @@
 package net.iGap.igasht.locationlist;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.databinding.ObservableInt;
 import android.view.View;
+
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -18,7 +19,7 @@ public class IGashtLocationViewModel extends BaseIGashtViewModel<BaseIGashtRespo
     private MutableLiveData<List<IGashtLocationItem>> locationList = new MutableLiveData<>();
     private MutableLiveData<Boolean> goToLocationDetail = new MutableLiveData<>();
     private MutableLiveData<List<IGashtProvince>> provinceList = new MutableLiveData<>();
-//    private MutableLiveData<Boolean> addToFavorite = new MutableLiveData<>();
+    //    private MutableLiveData<Boolean> addToFavorite = new MutableLiveData<>();
     private ObservableInt selectIcon = new ObservableInt(R.string.down_arrow_icon);
     private MutableLiveData<Boolean> clearEditText = new MutableLiveData<>();
 
@@ -51,7 +52,7 @@ public class IGashtLocationViewModel extends BaseIGashtViewModel<BaseIGashtRespo
     }
 
     public String getSelectedProvinceName() {
-        switch (G.selectedLanguage){
+        switch (G.selectedLanguage) {
             case "en":
                 return repository.getSelectedProvince().getEnglishName();
             case "fa":

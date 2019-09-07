@@ -12,8 +12,9 @@ package net.iGap.realm;
 
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.Nullable;
 import android.text.format.DateUtils;
+
+import androidx.annotation.Nullable;
 
 import com.vanniktech.emoji.EmojiUtils;
 
@@ -195,7 +196,7 @@ public class RealmRoomMessage extends RealmObject {
         return isImageOrVideo;
     }
 
-    public static long findCustomMessageId(long roomId,int count) {
+    public static long findCustomMessageId(long roomId, int count) {
         long messageId = 0;
         try (Realm realm = Realm.getDefaultInstance()) {
             if (count == 0) {
@@ -453,7 +454,7 @@ public class RealmRoomMessage extends RealmObject {
                     }
                 }
             }
-        } , onSuccess);
+        }, onSuccess);
     }
 
     public static void addTimeIfNeed(RealmRoomMessage message, Realm realm) {
@@ -493,11 +494,7 @@ public class RealmRoomMessage extends RealmObject {
         Calendar date2 = Calendar.getInstance();
         date2.setTimeInMillis(nextTime);
 
-        if (date1.get(Calendar.YEAR) == date2.get(Calendar.YEAR) && date1.get(Calendar.DAY_OF_YEAR) == date2.get(Calendar.DAY_OF_YEAR)) {
-            return false;
-        } else {
-            return true;
-        }
+        return date1.get(Calendar.YEAR) != date2.get(Calendar.YEAR) || date1.get(Calendar.DAY_OF_YEAR) != date2.get(Calendar.DAY_OF_YEAR);
     }
 
     public static void isEmojiInText(RealmRoomMessage roomMessage, String message) {

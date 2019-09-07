@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
@@ -15,15 +15,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -169,11 +170,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
             fillListAvatar(from);
 
-            if (avatarListSize > 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return avatarListSize > 0;
         } else {
             return false;
         }
@@ -184,7 +181,7 @@ public class FragmentShowAvatars extends BaseFragment {
         //ViewGroup rooShowImage = (ViewGroup) view.findViewById(R.id.rooShowImage);
         //rooShowImage.setBackgroundColor(G.fragmentActivity.getResources().getColor(R.color.black));
 
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.asi_ripple_back);
+        RippleView rippleBack = view.findViewById(R.id.asi_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
             @Override
@@ -193,7 +190,7 @@ public class FragmentShowAvatars extends BaseFragment {
             }
         });
 
-        RippleView rippleMenu = (RippleView) view.findViewById(R.id.asi_ripple_menu);
+        RippleView rippleMenu = view.findViewById(R.id.asi_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(rippleView -> {
 
             List<String> items = new ArrayList<>();
@@ -244,14 +241,14 @@ public class FragmentShowAvatars extends BaseFragment {
                 }
             }).show();
         });
-        viewPager = (ViewPager) view.findViewById(R.id.asi_view_pager);
+        viewPager = view.findViewById(R.id.asi_view_pager);
 
-        txtImageNumber = (TextView) view.findViewById(R.id.asi_txt_image_number);
-        txtImageName = (TextView) view.findViewById(R.id.asi_txt_image_name);
-        ltImageName = (ViewGroup) view.findViewById(R.id.asi_layout_image_name);
+        txtImageNumber = view.findViewById(R.id.asi_txt_image_number);
+        txtImageName = view.findViewById(R.id.asi_txt_image_name);
+        ltImageName = view.findViewById(R.id.asi_layout_image_name);
         ltImageName.setVisibility(View.GONE);
 
-        toolbarShowImage = (LinearLayout) view.findViewById(R.id.toolbarShowImage);
+        toolbarShowImage = view.findViewById(R.id.toolbarShowImage);
 
         initViewPager();
     }
@@ -564,7 +561,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
         public void clearBitmaps() {
             synchronized (mutex) {
-                for (Bitmap bitmap: bitmaps) {
+                for (Bitmap bitmap : bitmaps) {
                     if (bitmap != null && !bitmap.isRecycled()) {
                         bitmap.recycle();
                     }
@@ -591,7 +588,6 @@ public class FragmentShowAvatars extends BaseFragment {
             AppUtils.setProgresColor(progress.progressBar);
 
             final RealmAttachment ra = avatarList.get(position).getFile();
-
 
 
             if (HelperDownloadFile.getInstance().isDownLoading(ra.getCacheId())) {
@@ -628,7 +624,7 @@ public class FragmentShowAvatars extends BaseFragment {
                     final String filePathTumpnail = AndroidUtils.getFilePathWithCashId(ra.getCacheId(), ra.getName(), G.DIR_TEMP, true);
 
                     if (selector != null && fileSize > 0) {
-                        HelperDownloadFile.getInstance().startDownload(  ProtoGlobal.RoomMessageType.IMAGE,System.currentTimeMillis() + "", ra.getToken(), ra.getUrl(), ra.getCacheId(), ra.getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
+                        HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", ra.getToken(), ra.getUrl(), ra.getCacheId(), ra.getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
                             @Override
                             public void OnProgress(final String path, int progress) {
 
@@ -732,7 +728,7 @@ public class FragmentShowAvatars extends BaseFragment {
             });
 
 
-            HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE,System.currentTimeMillis() + "", ra.getToken(), ra.getUrl(), ra.getCacheId(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", ra.getToken(), ra.getUrl(), ra.getCacheId(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, final int progres) {
                     G.currentActivity.runOnUiThread(new Runnable() {

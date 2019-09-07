@@ -7,7 +7,7 @@ package net.iGap.module;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -16,6 +16,7 @@ import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.CancellationSignal;
+
 import androidx.core.app.ActivityCompat;
 
 import net.iGap.interfaces.FingerPrint;

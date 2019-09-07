@@ -10,7 +10,6 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
 import net.iGap.interfaces.OnGroupUpdateUsername;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupUpdateUsername;
