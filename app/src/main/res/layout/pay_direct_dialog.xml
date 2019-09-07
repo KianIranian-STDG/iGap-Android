@@ -22,8 +22,7 @@
     <View
         android:layout_width="match_parent"
         android:background="#10000000"
-        android:layout_height="1dp"
-        />
+        android:layout_height="1dp" />
 
     <net.iGap.module.CustomTextViewMedium
         android:id="@+id/description"

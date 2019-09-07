@@ -5,10 +5,7 @@
 
         <shape android:shape="rectangle">
 
-            <gradient
-                android:angle="135"
-                android:endColor="@color/colorToolbarBackgroundStart"
-                android:startColor="@color/colorToolbarBackgroundEnd"/>
+            <gradient android:angle="135" android:endColor="@color/colorToolbarBackgroundStart" android:startColor="@color/colorToolbarBackgroundEnd" />
 
 
         </shape>

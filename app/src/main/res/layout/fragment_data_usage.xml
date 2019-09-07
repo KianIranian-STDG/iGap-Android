@@ -10,12 +10,12 @@
         android:id="@+id/fdu_layout_toolbar"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"/>
+        android:layout_height="@dimen/toolbar_height" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@+id/fdu_layout_toolbar"
         android:id="@+id/rcDataUsage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

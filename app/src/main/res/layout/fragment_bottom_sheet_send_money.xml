@@ -5,7 +5,9 @@
     <data>
 
         <import type="android.view.View" />
+
         <import type="net.iGap.G" />
+
         <variable
             name="viewModel"
             type="net.iGap.dialog.payment.sendmoney.SendMoneyViewModel" />

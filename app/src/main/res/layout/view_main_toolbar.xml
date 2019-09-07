@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             layout="@layout/music_layout_small"
             android:visibility="gone"
-            android:layout_marginTop="@dimen/toolbar_search_box_size"/>
+            android:layout_marginTop="@dimen/toolbar_search_box_size" />
 
         <include
             android:id="@+id/view_toolbar_layout_strip_call"
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             layout="@layout/chat_sub_layout_strip_call"
             android:visibility="gone"
-            android:layout_marginTop="@dimen/toolbar_search_box_size"/>
+            android:layout_marginTop="@dimen/toolbar_search_box_size" />
 
     </LinearLayout>
 

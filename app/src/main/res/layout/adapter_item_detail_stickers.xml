@@ -12,6 +12,6 @@
         android:layout_height="80dp"
         android:layout_margin="@dimen/dp2"
         android:layout_gravity="center"
-        android:src="@mipmap/icon"/>
+        android:src="@mipmap/icon" />
 
 </LinearLayout>

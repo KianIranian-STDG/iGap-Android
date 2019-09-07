@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:clickable="true"
-  android:orientation="vertical"
-  android:background="@android:color/transparent"
-  android:padding="@dimen/dp16">
-
-  <TextView
-    android:id="@+id/textRemindTime"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
-    android:text="@string/Toast_time_wait"
-    style="?textTitleColorSettingTheme"
-    android:textSize="@dimen/dp18" />
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:background="@android:color/transparent"
+    android:padding="@dimen/dp16">
 
-  <net.iGap.module.HeaderTextView
-    android:id="@+id/remindTime"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/dp16"
-    android:gravity="center_horizontal"
-    android:text="356 secend"
-    android:textColor="@color/green"
-    android:textSize="@dimen/dp18" />
+    <TextView
+        android:id="@+id/textRemindTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/Toast_time_wait"
+        style="?textTitleColorSettingTheme"
+        android:textSize="@dimen/dp18" />
+
+    <net.iGap.module.HeaderTextView
+        android:id="@+id/remindTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp16"
+        android:gravity="center_horizontal"
+        android:text="356 secend"
+        android:textColor="@color/green"
+        android:textSize="@dimen/dp18" />
 
 </LinearLayout>

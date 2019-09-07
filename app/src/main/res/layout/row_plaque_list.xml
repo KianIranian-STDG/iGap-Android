@@ -16,7 +16,7 @@
         android:layout_marginRight="@dimen/dp6"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/row_plaque_edit"
@@ -28,7 +28,7 @@
         android:layout_marginStart="@dimen/dp6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <net.iGap.libs.PlaqueView
         android:id="@+id/row_plaque_plaqueView"
@@ -42,7 +42,7 @@
         app:layout_constraintStart_toEndOf="@id/row_plaque_check_box"
         app:layout_constraintEnd_toStartOf="@id/row_plaque_edit"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <!--just for fix root click-->
     <View
@@ -53,6 +53,6 @@
         app:layout_constraintStart_toStartOf="@id/row_plaque_plaqueView"
         app:layout_constraintEnd_toEndOf="@id/row_plaque_plaqueView"
         app:layout_constraintTop_toTopOf="@id/row_plaque_plaqueView"
-        app:layout_constraintBottom_toBottomOf="@id/row_plaque_plaqueView"/>
+        app:layout_constraintBottom_toBottomOf="@id/row_plaque_plaqueView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

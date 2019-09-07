@@ -13,7 +13,7 @@
         android:layout_height="8dp"
         android:background="@drawable/badge_shape"
         android:layout_marginBottom="8dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/price"
@@ -36,21 +36,21 @@
             android:layout_height="wrap_content"
             android:textColor="@color/primary_text"
             android:drawablePadding="4dp"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/primary_text"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
-            android:textColor="@color/A8"/>
+            android:textColor="@color/A8" />
 
     </LinearLayout>
 

@@ -150,7 +150,7 @@
         android:layout_marginRight="16dp"
         android:textColor="@color/black"
         android:textSize="18sp"
-        android:text="@string/wallet_Your_credit"/>
+        android:text="@string/wallet_Your_credit" />
 
     <TextView
         android:id="@+id/fragment_ivand_profile_txt_credit"
@@ -191,7 +191,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp" />
 
     <ImageView
         android:id="@+id/fragment_ivand_profile_img_score"
@@ -216,7 +216,7 @@
         android:layout_marginRight="16dp"
         android:textColor="@color/black"
         android:textSize="18sp"
-        android:text="@string/your_rate"/>
+        android:text="@string/your_rate" />
 
     <TextView
         android:id="@+id/fragment_ivand_profile_txt_score"
@@ -231,8 +231,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.866"
         app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_lbl_score"
-        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_score"
-        />
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_score" />
 
     <TextView
         android:id="@+id/fragment_ivand_profile_btn_increase_score"
@@ -258,7 +257,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp" />
 
 
     <TextView
@@ -285,8 +284,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.866"
         app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_lbl_inviteFriend"
-        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_inviteFriend"
-        />
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_inviteFriend" />
 
 
     <TextView
@@ -313,8 +311,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.866"
         app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_lbl_payment"
-        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_payment"
-        />
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_payment" />
 
 
     <TextView
@@ -341,8 +338,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.866"
         app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_lbl_scan_qrCode"
-        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_scan_qrCode"
-        />
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_scan_qrCode" />
 
 
     <TextView
@@ -369,8 +365,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.866"
         app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_lbl_bot_channels"
-        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_bot_channels"
-        />
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_bot_channels" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

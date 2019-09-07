@@ -2,6 +2,7 @@
 <layout>
 
     <data>
+
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.FragmentSeePayViewModel" />
@@ -51,7 +52,7 @@
             android:layout_marginLeft="@dimen/dp20"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/btn_inquiry"/>
+            app:layout_constraintBottom_toTopOf="@id/btn_inquiry" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_inquiry"
@@ -67,7 +68,7 @@
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_charge"
-            app:layout_constraintStart_toStartOf="@id/btn_add_car_"/>
+            app:layout_constraintStart_toStartOf="@id/btn_add_car_" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_charge"

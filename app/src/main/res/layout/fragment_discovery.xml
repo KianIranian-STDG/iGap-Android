@@ -24,7 +24,7 @@
             android:paddingTop="@dimen/dp14"
             android:clipToPadding="false"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -35,7 +35,7 @@
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/emptyRecycle"

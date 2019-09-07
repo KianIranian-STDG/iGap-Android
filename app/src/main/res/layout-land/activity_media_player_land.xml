@@ -1,375 +1,375 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <data>
+    <data>
 
-    <import type="android.view.View" />
+        <import type="android.view.View" />
 
-    <import type="android.graphics.Color" />
+        <import type="android.graphics.Color" />
 
-    <import type="net.iGap.G" />
+        <import type="net.iGap.G" />
 
-    <variable
-      name="fragmentMediaPlayerViewModel"
-      type="net.iGap.viewmodel.FragmentMediaPlayerViewModel" />
-  </data>
-
-
-  <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:sothree="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/sliding_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="bottom"
-    sothree:umanoDragView="@+id/dragView"
-    sothree:umanoOverlay="true"
-    sothree:umanoPanelHeight="@dimen/dp100"
-    sothree:umanoParallaxOffset="@dimen/dp10"
-    sothree:umanoScrollableView="@+id/rcvListMusicPlayer"
-    sothree:umanoShadowHeight="4dp">
+        <variable
+            name="fragmentMediaPlayerViewModel"
+            type="net.iGap.viewmodel.FragmentMediaPlayerViewModel" />
+    </data>
 
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      style="?backgroundSubChatTheme"
-      android:clickable="true"
-      android:layoutDirection="ltr"
-      android:orientation="horizontal">
-
-
-      <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="5"
-        android:background="#f0f0f0">
-
-
-        <ImageView
-          android:id="@+id/ml_img_music_icon_default"
-          android:layout_width="@dimen/dp100"
-          android:layout_height="@dimen/dp100"
-          android:layout_gravity="center"
-          android:scaleType="centerCrop"
-          android:src="@mipmap/music_icon_gray"
-          android:visibility="@{fragmentMediaPlayerViewModel.imgMusIciconDefault }" />
-
-
-        <ImageView
-          android:id="@+id/ml_img_music_picture"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:scaleType="centerCrop"
-          android:visibility="@{fragmentMediaPlayerViewModel.imgMusicPicture }" />
-
-        <TextView
-          android:id="@+id/ml_txt_music_info"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_gravity="bottom"
-          android:background="@color/greenStatus"
-          android:ellipsize="marquee"
-          android:fadingEdge="horizontal"
-          android:marqueeRepeatLimit="marquee_forever"
-          android:paddingBottom="@dimen/dp4"
-          android:paddingTop="@dimen/dp4"
-          android:scrollHorizontally="true"
-          android:singleLine="true"
-          android:text="@{fragmentMediaPlayerViewModel.callBackTxtMusicInfo}"
-          android:textColor="@color/white"
-          android:textSize="@dimen/dp16"
-          android:visibility="@{fragmentMediaPlayerViewModel.txtMusicInfoVisibility}" />
-
-
-      </FrameLayout>
-
-      <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="4"
-        android:orientation="vertical">
-
-        <com.google.android.material.appbar.AppBarLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-            android:background="@android:color/transparent">
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
-            style="?backgroundColorSettingTheme_2"
-            android:gravity="left|center">
-
-            <net.iGap.libs.rippleeffect.RippleView
-              android:id="@+id/ml_ripple_back"
-              rv_centered="true"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:onClick="@{fragmentMediaPlayerViewModel::onClickRippleBack}"
-              app:rv_alpha="200"
-              app:rv_centered="true"
-              app:rv_rippleDuration="0"
-              app:rv_ripplePadding="5dp"
-
-              >
-
-              <net.iGap.module.MaterialDesignTextView
-                android:id="@+id/ml_btn_back"
-                android:layout_width="@dimen/dp52"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:gravity="center"
-                android:text="@string/back_icon"
-                android:textAppearance="@style/TextIconAppearance_toolbar"
-                style="@style/myIconTextViewStyle" />
-            </net.iGap.libs.rippleeffect.RippleView>
-
-            <LinearLayout
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_weight="1"
-              android:gravity="center|left"
-              android:orientation="vertical">
-
-              <TextView
-                android:id="@+id/ml_txt_music_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="@{fragmentMediaPlayerViewModel.callBackMusicName , default = @string/music_name}"
-                style="?textTitleColorSettingTheme"
-                android:textSize="@dimen/dp16" />
-
-              <TextView
-                android:id="@+id/ml_txt_music_place"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="@{fragmentMediaPlayerViewModel.callBackMusicPlace , default = @string/place}"
-                style="?textSubColorSettingTheme"
-                android:textSize="@dimen/dp14" />
-            </LinearLayout>
-
-            <net.iGap.libs.rippleeffect.RippleView
-              android:id="@+id/amp_ripple_menu"
-              rv_centered="true"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:onClick="@{fragmentMediaPlayerViewModel::onClickRippleMenu}"
-              app:rv_alpha="200"
-              app:rv_centered="true"
-              app:rv_rippleDuration="150"
-              app:rv_ripplePadding="5dp">
-
-              <net.iGap.module.MaterialDesignTextView
-                android:id="@+id/ml_btn_music_menu"
-                android:layout_width="@dimen/dp52"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:gravity="center"
-                android:text="@string/more_icon"
-                android:textAppearance="@style/TextIconAppearance_toolbar"
-                style="@style/myIconTextViewStyle" />
-            </net.iGap.libs.rippleeffect.RippleView>
-
-
-          </LinearLayout>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <net.iGap.libs.ripplesoundplayer.RippleVisualizerView
-          android:id="@+id/line_renderer_demo"
-          android:layout_width="match_parent"
-          android:layout_height="0dp"
-          android:layout_margin="@dimen/dp8"
-          android:layout_weight="1"
-
-          />
-
-      </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/dragView"
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="false"
-        android:orientation="vertical"
-        android:layoutDirection="ltr"
-        android:background="@{G.isDarkTheme ? @drawable/shape_top_round_gray_background : @drawable/shape_top_round_gray_background_light}">
+        android:gravity="bottom"
+        sothree:umanoDragView="@+id/dragView"
+        sothree:umanoOverlay="true"
+        sothree:umanoPanelHeight="@dimen/dp100"
+        sothree:umanoParallaxOffset="@dimen/dp10"
+        sothree:umanoScrollableView="@+id/rcvListMusicPlayer"
+        sothree:umanoShadowHeight="4dp">
 
-      <androidx.constraintlayout.widget.ConstraintLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:padding="@dimen/dp16">
 
-        <androidx.appcompat.widget.AppCompatSeekBar
-            android:id="@+id/ml_seekBar1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:thumbTint="@color/toolbar_player_base_color"
-            android:progress="@{fragmentMediaPlayerViewModel.seekBar1}"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/ml_txt_timer"
-            app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="?backgroundSubChatTheme"
+            android:clickable="true"
+            android:layoutDirection="ltr"
+            android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/ml_txt_timer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/standardTextSize"
-            android:text="@{fragmentMediaPlayerViewModel.callBackTxtTimer  , default = 00_00}"
-            android:textColor="@color/toolbar_player_base_color"
-            app:layout_constraintBottom_toBottomOf="@id/ml_seekBar1"
-            app:layout_constraintLeft_toRightOf="@id/ml_seekBar1"
-            app:layout_constraintRight_toLeftOf="@id/ml_splitter_timers"
-            app:layout_constraintTop_toTopOf="@id/ml_seekBar1" />
 
-        <View
-            android:id="@+id/ml_splitter_timers"
-            android:layout_width="1dp"
-            android:layout_height="0dp"
-            android:layout_marginLeft="@dimen/dp6"
-            android:layout_marginRight="@dimen/dp6"
-            app:layout_constraintTop_toTopOf="@id/ml_txt_timer"
-            app:layout_constraintBottom_toBottomOf="@id/ml_txt_music_time"
-            app:layout_constraintStart_toEndOf="@id/ml_txt_timer"
-            app:layout_constraintEnd_toStartOf="@id/ml_txt_music_time"
-            android:background="@color/toolbar_player_base_color"/>
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:background="#f0f0f0">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/ml_txt_music_time"
-            style="?textSubColorSettingTheme"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/standardTextSize"
-            android:textColor="@color/toolbar_player_base_color"
-            android:text="@{fragmentMediaPlayerViewModel.callBackTxtMusicTime , default = @string/music_time}"
-            app:layout_constraintBottom_toBottomOf="@id/ml_seekBar1"
-            app:layout_constraintLeft_toRightOf="@id/ml_splitter_timers"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/ml_seekBar1" />
 
-        <net.iGap.module.MaterialDesignTextView
-            android:id="@+id/ml_btn_Previous_music"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:gravity="center"
-            android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnPreviousMusic}"
-            android:text="@string/player_previous_icon"
-            android:textAppearance="@style/TextIconAppearance.all"
-            style="@style/myIconTextViewStyle"
-            android:textSize="@dimen/dp22"
-            android:layout_marginTop="@dimen/dp16"
-            android:layout_marginRight="@dimen/dp14"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/ml_btn_play_music"
-            app:layout_constraintTop_toBottomOf="@id/ml_seekBar1" />
+                <ImageView
+                    android:id="@+id/ml_img_music_icon_default"
+                    android:layout_width="@dimen/dp100"
+                    android:layout_height="@dimen/dp100"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/music_icon_gray"
+                    android:visibility="@{fragmentMediaPlayerViewModel.imgMusIciconDefault }" />
 
-        <net.iGap.module.MaterialDesignTextView
-            android:id="@+id/ml_btn_play_music"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:gravity="center"
-            android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnPlayMusic}"
-            android:text="@{fragmentMediaPlayerViewModel.callBackBtnPlayMusic , default = @string/play_icon}"
-            android:textAppearance="@style/TextIconAppearance.all"
-            style="@style/myIconTextViewStyle"
-            android:textColor="@color/toolbar_player_base_color"
-            android:layout_marginRight="@dimen/dp14"
-            android:textSize="@dimen/dp36"
-            app:layout_constraintBottom_toBottomOf="@id/ml_btn_Previous_music"
-            app:layout_constraintLeft_toRightOf="@id/ml_btn_Previous_music"
-            app:layout_constraintRight_toLeftOf="@id/ml_btn_forward_music"
-            app:layout_constraintTop_toTopOf="@id/ml_btn_Previous_music" />
 
-        <net.iGap.module.MaterialDesignTextView
-            android:id="@+id/ml_btn_forward_music"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:gravity="center"
-            android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnForwardMusic}"
-            android:text="@string/player_next_icon"
-            android:textAppearance="@style/TextIconAppearance.all"
-            style="@style/myIconTextViewStyle"
-            android:layout_marginRight="@dimen/dp20"
-            android:textSize="@dimen/dp22"
-            app:layout_constraintBottom_toBottomOf="@id/ml_btn_Previous_music"
-            app:layout_constraintLeft_toRightOf="@id/ml_btn_play_music"
-            app:layout_constraintRight_toLeftOf="@id/ml_btn_replay_music"
-            app:layout_constraintTop_toTopOf="@id/ml_btn_Previous_music" />
+                <ImageView
+                    android:id="@+id/ml_img_music_picture"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:visibility="@{fragmentMediaPlayerViewModel.imgMusicPicture }" />
 
-        <net.iGap.module.MaterialDesignTextView
-            android:id="@+id/ml_btn_replay_music"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:gravity="center"
-            android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnReplayMusic}"
-            android:text="@{fragmentMediaPlayerViewModel.callBackBtnReplayMusic , default = @string/retry_icon}"
-            android:textAppearance="@style/TextIconAppearance.all"
-            android:layout_marginRight="@dimen/dp14"
-            style="@style/myIconTextViewStyle"
-            android:textColor="@{fragmentMediaPlayerViewModel.btnReplayMusicColor , default = @android:color/white}"
-            android:textSize="@dimen/dp24"
-            app:layout_constraintBottom_toBottomOf="@id/ml_btn_Previous_music"
-            app:layout_constraintLeft_toRightOf="@id/ml_btn_forward_music"
-            app:layout_constraintRight_toLeftOf="@id/ml_btn_shuffel_music"
-            app:layout_constraintTop_toTopOf="@id/ml_btn_Previous_music" />
+                <TextView
+                    android:id="@+id/ml_txt_music_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@color/greenStatus"
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:paddingBottom="@dimen/dp4"
+                    android:paddingTop="@dimen/dp4"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="@{fragmentMediaPlayerViewModel.callBackTxtMusicInfo}"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{fragmentMediaPlayerViewModel.txtMusicInfoVisibility}" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ml_img_repead_one"
-            android:layout_width="@dimen/dp16"
-            android:layout_height="@dimen/dp16"
-            android:layout_gravity="right|center"
-            android:layout_marginRight="@dimen/dp4"
-            android:layout_marginBottom="@dimen/dp12"
-            android:padding="1dp"
-            android:src="@mipmap/red_one"
-            android:visibility="@{fragmentMediaPlayerViewModel.imgRepeadOneVisibility  , default = visible}"
-            app:layout_constraintBottom_toTopOf="@id/ml_btn_replay_music"
-            app:layout_constraintLeft_toRightOf="@id/ml_btn_replay_music"
-            app:layout_constraintRight_toRightOf="@id/ml_btn_replay_music"
-            app:layout_constraintTop_toTopOf="@id/ml_btn_replay_music" />
 
-        <net.iGap.module.MaterialDesignTextView
-            android:id="@+id/ml_btn_shuffel_music"
-            android:layout_width="@dimen/dp40"
-            android:layout_height="@dimen/dp40"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:gravity="center"
-            android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnShuffelMusic}"
-            android:text="@string/player_shuffle_icon"
-            android:textAppearance="@style/TextIconAppearance.all"
-            style="@style/myIconTextViewStyle"
-            android:textColor="@{fragmentMediaPlayerViewModel.btnShuffelMusicColor , default =@android:color/white }"
-            android:textSize="@dimen/dp20"
-            app:layout_constraintBottom_toBottomOf="@id/ml_btn_Previous_music"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/ml_btn_replay_music"
-            app:layout_constraintTop_toTopOf="@id/ml_btn_Previous_music" />
+            </FrameLayout>
 
-      </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:orientation="vertical">
 
-      <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/rcvListMusicPlayer"
-          android:layout_width="match_parent"
-          android:layout_height="0dp"
-          android:layout_weight="1" />
+                <com.google.android.material.appbar.AppBarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent">
 
-    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp60"
+                        style="?backgroundColorSettingTheme_2"
+                        android:gravity="left|center">
 
-  </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+                        <net.iGap.libs.rippleeffect.RippleView
+                            android:id="@+id/ml_ripple_back"
+                            rv_centered="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{fragmentMediaPlayerViewModel::onClickRippleBack}"
+                            app:rv_alpha="200"
+                            app:rv_centered="true"
+                            app:rv_rippleDuration="0"
+                            app:rv_ripplePadding="5dp"
+
+                            >
+
+                            <net.iGap.module.MaterialDesignTextView
+                                android:id="@+id/ml_btn_back"
+                                android:layout_width="@dimen/dp52"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:gravity="center"
+                                android:text="@string/back_icon"
+                                android:textAppearance="@style/TextIconAppearance_toolbar"
+                                style="@style/myIconTextViewStyle" />
+                        </net.iGap.libs.rippleeffect.RippleView>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|left"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/ml_txt_music_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:singleLine="true"
+                                android:text="@{fragmentMediaPlayerViewModel.callBackMusicName , default = @string/music_name}"
+                                style="?textTitleColorSettingTheme"
+                                android:textSize="@dimen/dp16" />
+
+                            <TextView
+                                android:id="@+id/ml_txt_music_place"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:singleLine="true"
+                                android:text="@{fragmentMediaPlayerViewModel.callBackMusicPlace , default = @string/place}"
+                                style="?textSubColorSettingTheme"
+                                android:textSize="@dimen/dp14" />
+                        </LinearLayout>
+
+                        <net.iGap.libs.rippleeffect.RippleView
+                            android:id="@+id/amp_ripple_menu"
+                            rv_centered="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{fragmentMediaPlayerViewModel::onClickRippleMenu}"
+                            app:rv_alpha="200"
+                            app:rv_centered="true"
+                            app:rv_rippleDuration="150"
+                            app:rv_ripplePadding="5dp">
+
+                            <net.iGap.module.MaterialDesignTextView
+                                android:id="@+id/ml_btn_music_menu"
+                                android:layout_width="@dimen/dp52"
+                                android:layout_height="match_parent"
+                                android:background="@null"
+                                android:gravity="center"
+                                android:text="@string/more_icon"
+                                android:textAppearance="@style/TextIconAppearance_toolbar"
+                                style="@style/myIconTextViewStyle" />
+                        </net.iGap.libs.rippleeffect.RippleView>
+
+
+                    </LinearLayout>
+
+                </com.google.android.material.appbar.AppBarLayout>
+
+                <net.iGap.libs.ripplesoundplayer.RippleVisualizerView
+                    android:id="@+id/line_renderer_demo"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="@dimen/dp8"
+                    android:layout_weight="1"
+
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dragView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="false"
+            android:orientation="vertical"
+            android:layoutDirection="ltr"
+            android:background="@{G.isDarkTheme ? @drawable/shape_top_round_gray_background : @drawable/shape_top_round_gray_background_light}">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp16">
+
+                <androidx.appcompat.widget.AppCompatSeekBar
+                    android:id="@+id/ml_seekBar1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:thumbTint="@color/toolbar_player_base_color"
+                    android:progress="@{fragmentMediaPlayerViewModel.seekBar1}"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/ml_txt_timer"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/ml_txt_timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/standardTextSize"
+                    android:text="@{fragmentMediaPlayerViewModel.callBackTxtTimer  , default = 00_00}"
+                    android:textColor="@color/toolbar_player_base_color"
+                    app:layout_constraintBottom_toBottomOf="@id/ml_seekBar1"
+                    app:layout_constraintLeft_toRightOf="@id/ml_seekBar1"
+                    app:layout_constraintRight_toLeftOf="@id/ml_splitter_timers"
+                    app:layout_constraintTop_toTopOf="@id/ml_seekBar1" />
+
+                <View
+                    android:id="@+id/ml_splitter_timers"
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="@dimen/dp6"
+                    android:layout_marginRight="@dimen/dp6"
+                    app:layout_constraintTop_toTopOf="@id/ml_txt_timer"
+                    app:layout_constraintBottom_toBottomOf="@id/ml_txt_music_time"
+                    app:layout_constraintStart_toEndOf="@id/ml_txt_timer"
+                    app:layout_constraintEnd_toStartOf="@id/ml_txt_music_time"
+                    android:background="@color/toolbar_player_base_color" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/ml_txt_music_time"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textColor="@color/toolbar_player_base_color"
+                    android:text="@{fragmentMediaPlayerViewModel.callBackTxtMusicTime , default = @string/music_time}"
+                    app:layout_constraintBottom_toBottomOf="@id/ml_seekBar1"
+                    app:layout_constraintLeft_toRightOf="@id/ml_splitter_timers"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/ml_seekBar1" />
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/ml_btn_Previous_music"
+                    android:layout_width="@dimen/dp40"
+                    android:layout_height="@dimen/dp40"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnPreviousMusic}"
+                    android:text="@string/player_previous_icon"
+                    android:textAppearance="@style/TextIconAppearance.all"
+                    style="@style/myIconTextViewStyle"
+                    android:textSize="@dimen/dp22"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp14"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/ml_btn_play_music"
+                    app:layout_constraintTop_toBottomOf="@id/ml_seekBar1" />
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/ml_btn_play_music"
+                    android:layout_width="@dimen/dp40"
+                    android:layout_height="@dimen/dp40"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnPlayMusic}"
+                    android:text="@{fragmentMediaPlayerViewModel.callBackBtnPlayMusic , default = @string/play_icon}"
+                    android:textAppearance="@style/TextIconAppearance.all"
+                    style="@style/myIconTextViewStyle"
+                    android:textColor="@color/toolbar_player_base_color"
+                    android:layout_marginRight="@dimen/dp14"
+                    android:textSize="@dimen/dp36"
+                    app:layout_constraintBottom_toBottomOf="@id/ml_btn_Previous_music"
+                    app:layout_constraintLeft_toRightOf="@id/ml_btn_Previous_music"
+                    app:layout_constraintRight_toLeftOf="@id/ml_btn_forward_music"
+                    app:layout_constraintTop_toTopOf="@id/ml_btn_Previous_music" />
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/ml_btn_forward_music"
+                    android:layout_width="@dimen/dp40"
+                    android:layout_height="@dimen/dp40"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnForwardMusic}"
+                    android:text="@string/player_next_icon"
+                    android:textAppearance="@style/TextIconAppearance.all"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_marginRight="@dimen/dp20"
+                    android:textSize="@dimen/dp22"
+                    app:layout_constraintBottom_toBottomOf="@id/ml_btn_Previous_music"
+                    app:layout_constraintLeft_toRightOf="@id/ml_btn_play_music"
+                    app:layout_constraintRight_toLeftOf="@id/ml_btn_replay_music"
+                    app:layout_constraintTop_toTopOf="@id/ml_btn_Previous_music" />
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/ml_btn_replay_music"
+                    android:layout_width="@dimen/dp40"
+                    android:layout_height="@dimen/dp40"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnReplayMusic}"
+                    android:text="@{fragmentMediaPlayerViewModel.callBackBtnReplayMusic , default = @string/retry_icon}"
+                    android:textAppearance="@style/TextIconAppearance.all"
+                    android:layout_marginRight="@dimen/dp14"
+                    style="@style/myIconTextViewStyle"
+                    android:textColor="@{fragmentMediaPlayerViewModel.btnReplayMusicColor , default = @android:color/white}"
+                    android:textSize="@dimen/dp24"
+                    app:layout_constraintBottom_toBottomOf="@id/ml_btn_Previous_music"
+                    app:layout_constraintLeft_toRightOf="@id/ml_btn_forward_music"
+                    app:layout_constraintRight_toLeftOf="@id/ml_btn_shuffel_music"
+                    app:layout_constraintTop_toTopOf="@id/ml_btn_Previous_music" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ml_img_repead_one"
+                    android:layout_width="@dimen/dp16"
+                    android:layout_height="@dimen/dp16"
+                    android:layout_gravity="right|center"
+                    android:layout_marginRight="@dimen/dp4"
+                    android:layout_marginBottom="@dimen/dp12"
+                    android:padding="1dp"
+                    android:src="@mipmap/red_one"
+                    android:visibility="@{fragmentMediaPlayerViewModel.imgRepeadOneVisibility  , default = visible}"
+                    app:layout_constraintBottom_toTopOf="@id/ml_btn_replay_music"
+                    app:layout_constraintLeft_toRightOf="@id/ml_btn_replay_music"
+                    app:layout_constraintRight_toRightOf="@id/ml_btn_replay_music"
+                    app:layout_constraintTop_toTopOf="@id/ml_btn_replay_music" />
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/ml_btn_shuffel_music"
+                    android:layout_width="@dimen/dp40"
+                    android:layout_height="@dimen/dp40"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnShuffelMusic}"
+                    android:text="@string/player_shuffle_icon"
+                    android:textAppearance="@style/TextIconAppearance.all"
+                    style="@style/myIconTextViewStyle"
+                    android:textColor="@{fragmentMediaPlayerViewModel.btnShuffelMusicColor , default =@android:color/white }"
+                    android:textSize="@dimen/dp20"
+                    app:layout_constraintBottom_toBottomOf="@id/ml_btn_Previous_music"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/ml_btn_replay_music"
+                    app:layout_constraintTop_toTopOf="@id/ml_btn_Previous_music" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvListMusicPlayer"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 </layout>

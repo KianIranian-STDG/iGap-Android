@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2010 Sam Steele 
   
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,11 +14,10 @@
   limitations under the License.
 -->
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-  android:contentAuthority="com.android.contacts"
-  android:accountType="net.iGap"
+    android:contentAuthority="com.android.contacts"
+    android:accountType="net.iGap"
 
     android:userVisible="true"
     android:supportsUploading="false"
     android:allowParallelSyncs="false"
-    android:isAlwaysSyncable="true"
-    />
+    android:isAlwaysSyncable="true" />

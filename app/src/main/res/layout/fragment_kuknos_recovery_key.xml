@@ -137,6 +137,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <data>
+
         <variable
             name="viewmodel"
             type="net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeyVM" />

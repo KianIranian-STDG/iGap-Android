@@ -37,7 +37,7 @@
                 android:paddingTop="16dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:layout_marginBottom="-8dp"/>
+                android:layout_marginBottom="-8dp" />
 
             <EditText
                 android:id="@+id/current_pass"
@@ -49,7 +49,7 @@
                 android:textColor="#212121"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:layout_margin="16dp"/>
+                android:layout_margin="16dp" />
 
             <TextView
                 android:id="@+id/new_pass_title"
@@ -61,7 +61,7 @@
                 android:paddingTop="16dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:layout_marginBottom="-8dp"/>
+                android:layout_marginBottom="-8dp" />
 
             <EditText
                 android:id="@+id/new_pass"
@@ -73,7 +73,7 @@
                 android:textColor="#212121"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:layout_margin="16dp"/>
+                android:layout_margin="16dp" />
 
             <TextView
                 android:id="@+id/confirm_pass_title"
@@ -85,7 +85,7 @@
                 android:paddingTop="16dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:layout_marginBottom="-8dp"/>
+                android:layout_marginBottom="-8dp" />
 
             <EditText
                 android:id="@+id/confirm_pass"
@@ -97,7 +97,7 @@
                 android:textColor="#212121"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:layout_margin="16dp"/>
+                android:layout_margin="16dp" />
 
 
             <FrameLayout
@@ -111,14 +111,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:gravity="center"
-                    android:text="@string/ok"/>
+                    android:text="@string/ok" />
 
                 <ProgressBar
                     android:id="@+id/progress"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </FrameLayout>
 
