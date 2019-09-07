@@ -103,6 +103,7 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelAddMessageReaction;
+import net.iGap.view.InlineButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -433,6 +434,24 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             cardToCardHolder.setOnCardToCard(cardToCard -> {
                 CardToCardHelper.NewCallCardToCard(G.currentActivity, cardToCard.getUserId(), cardToCard.getAmount(), cardToCard.getCardNumber());
             });
+        }
+
+        if (holder instanceof BotInlineItem.ViewHolder) {
+            BotInlineItem.ViewHolder viewHolder = (BotInlineItem.ViewHolder) holder;
+            viewHolder.getRootView().setMinimumWidth(G.maxChatBox);
+            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
+            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
+            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
+            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
+            viewHolder.getButtonContainer().addView(new InlineButton(holder.itemView.getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT,0,0,4,0,0));
+
+
+            if (G.isDarkTheme) {
+                viewHolder.getMessageTv().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_dark))));
+            } else {
+                viewHolder.getMessageTv().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_light))));
+            }
+
         }
 
 
