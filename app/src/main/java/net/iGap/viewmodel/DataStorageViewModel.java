@@ -173,7 +173,7 @@ public class DataStorageViewModel extends ViewModel {
                 sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_VIDEO, -1),
                 sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_FILE, -1),
                 sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1),
-                sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_GIF, 1)
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_GIF, 5)
         });
     }
 
@@ -188,21 +188,26 @@ public class DataStorageViewModel extends ViewModel {
                 .apply();
 
         for (Integer aWhich : items) {
-            String tmp = "";
-            if (aWhich == 0) {
-                tmp = SHP_SETTING.KEY_AD_DATA_PHOTO;
-            } else if (aWhich == 1) {
-                tmp = SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE;
-            } else if (aWhich == 2) {
-                tmp = SHP_SETTING.KEY_AD_DATA_VIDEO;
-            } else if (aWhich == 3) {
-                tmp = SHP_SETTING.KEY_AD_DATA_FILE;
-            } else if (aWhich == 4) {
-                tmp = SHP_SETTING.KEY_AD_DATA_MUSIC;
-            } else if (aWhich == 5) {
-                tmp = SHP_SETTING.KEY_AD_DATA_GIF;
+            switch (aWhich) {
+                case 0:
+                    sharedPreferences.edit().putInt(SHP_SETTING.KEY_AD_DATA_PHOTO, 0).apply();
+                    break;
+                case 1:
+                    sharedPreferences.edit().putInt(SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, 1).apply();
+                    break;
+                case 2:
+                    sharedPreferences.edit().putInt(SHP_SETTING.KEY_AD_DATA_VIDEO, 2).apply();
+                    break;
+                case 3:
+                    sharedPreferences.edit().putInt(SHP_SETTING.KEY_AD_DATA_FILE, 3).apply();
+                    break;
+                case 4:
+                    sharedPreferences.edit().putInt(SHP_SETTING.KEY_AD_DATA_MUSIC, 4).apply();
+                    break;
+                case 5:
+                    sharedPreferences.edit().putInt(SHP_SETTING.KEY_AD_DATA_GIF, 5).apply();
+                    break;
             }
-            sharedPreferences.edit().putInt(tmp, 1).apply();
         }
     }
 
@@ -213,7 +218,7 @@ public class DataStorageViewModel extends ViewModel {
                 sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, -1),
                 sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_FILE, -1),
                 sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1),
-                sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, 1)
+                sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, 5)
         });
     }
 
@@ -228,21 +233,27 @@ public class DataStorageViewModel extends ViewModel {
                 .apply();
 
         for (Integer aWhich : items) {
-            String tmp = null;
-            if (aWhich == 0) {
-                tmp = SHP_SETTING.KEY_AD_WIFI_PHOTO;
-            } else if (aWhich == 1) {
-                tmp = SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE;
-            } else if (aWhich == 2) {
-                tmp = SHP_SETTING.KEY_AD_WIFI_VIDEO;
-            } else if (aWhich == 3) {
-                tmp = SHP_SETTING.KEY_AD_WIFI_FILE;
-            } else if (aWhich == 4) {
-                tmp = SHP_SETTING.KEY_AD_WIFI_MUSIC;
-            } else if (aWhich == 5) {
-                tmp = SHP_SETTING.KEY_AD_WIFI_GIF;
+            switch (aWhich) {
+                case 0:
+                    sharedPreferences.edit().putInt(SHP_SETTING.KEY_AD_WIFI_PHOTO, 0).apply();
+                    break;
+                case 1:
+                    sharedPreferences.edit().putInt(SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, 1).apply();
+                    break;
+                case 2:
+                    sharedPreferences.edit().putInt(SHP_SETTING.KEY_AD_WIFI_VIDEO, 2).apply();
+                    break;
+                case 3:
+                    sharedPreferences.edit().putInt(SHP_SETTING.KEY_AD_WIFI_FILE, 3).apply();
+                    break;
+                case 4:
+                    sharedPreferences.edit().putInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, 4).apply();
+                    break;
+                case 5:
+                    sharedPreferences.edit().putInt(SHP_SETTING.KEY_AD_WIFI_GIF, 5).apply();
+                    break;
+
             }
-            sharedPreferences.edit().putInt(tmp, 1).apply();
         }
     }
 
@@ -289,7 +300,7 @@ public class DataStorageViewModel extends ViewModel {
     }
 
     public void onClickAutoGif(boolean isChecked) {
-        setAutoPlayGift(isChecked);
+        setAutoPlayGift(!isChecked);
     }
 
     public void onCheckedChangeAutoGif(boolean isChecked) {
@@ -343,10 +354,13 @@ public class DataStorageViewModel extends ViewModel {
 
     public void clearAll() {
         try (Realm realm = Realm.getDefaultInstance()) {
-            RealmRoomMessage.ClearAllMessage(realm);
-            RealmRoom.clearAllScrollPositions();
-            cleanUpSize.set(FileUtils.formatFileSize(new File(realm.getConfiguration().getPath()).length()));
-            MusicPlayer.closeLayoutMediaPlayer();
+            realm.executeTransactionAsync(realm1 -> {
+                RealmRoomMessage.ClearAllMessage(realm1);
+                RealmRoom.clearAllScrollPositions();
+            }, () -> {
+                cleanUpSize.set(FileUtils.formatFileSize(new File(realm.getConfiguration().getPath()).length()));
+                MusicPlayer.closeLayoutMediaPlayer();
+            });
         }
     }
 
