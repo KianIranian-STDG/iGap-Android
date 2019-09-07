@@ -30,6 +30,7 @@
         <item name="iGapButtonStroke">@style/iGapButtonStrokeDark</item>
         <item name="iGapButtonGray">@style/iGapButtonGrayDark</item>
         <item name="greenTextIconColor">@color/white</item>
+        <item name="iGapKuknosLogout">@style/iGapKuknosLogoutDark</item>
         <!--<item name="colorAccent">@color/colorOldBlack</item>-->
     </style>
 
@@ -58,6 +59,7 @@
         <item name="md_medium_font">IRANSansMobile.ttf</item>
         <item name="md_regular_font">IRANSansMobile.ttf</item>
         <item name="iGapButton">@style/iGapButtonLight</item>
+        <item name="iGapKuknosLogout">@style/iGapKuknosLogoutLight</item>
         <item name="iGapButtonStroke">@style/iGapButtonStrokeLight</item>
         <item name="iGapButtonGray">@style/iGapButtonGrayLight</item>
         <item name="greenTextIconColor">@color/green</item>

@@ -24,6 +24,8 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnUnreadChange;
+import net.iGap.kuknos.view.KuknosLoginFrag;
+import net.iGap.kuknos.view.KuknosPanelFrag;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
 import net.iGap.realm.RealmRoom;
@@ -103,8 +105,10 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         switch (position) {
             case 0:
                 fragment = fragmentManager.findFragmentByTag(RegisteredContactsFragment.class.getName());
+                //fragment = fragmentManager.findFragmentByTag(KuknosLoginFrag.class.getName());
                 if (fragment == null) {
                     fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
+                    //fragment = KuknosLoginFrag.newInstance();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 if (!(current instanceof FragmentMain)) {

@@ -105,6 +105,7 @@
   <attr name="iGapButton" format="reference" />
   <attr name="iGapButtonGray" format="reference"/>
   <attr name="greenTextIconColor" format="reference"/>
+  <attr name="iGapKuknosLogout" format="reference" />
 
   <!--Menu-->
   <attr name="textColorMenuTheme" format="reference" />

@@ -14,6 +14,7 @@ apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://jitpack.io" }
 }
 
 apply plugin: 'realm-android'
@@ -250,6 +251,7 @@ dependencies {
     implementation 'android.arch.lifecycle:common-java8:1.1.1'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.github.stellar:java-stellar-sdk:0.9.0'
 }
 
 configurations.all {

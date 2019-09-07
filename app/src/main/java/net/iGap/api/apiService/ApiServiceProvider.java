@@ -3,6 +3,7 @@ package net.iGap.api.apiService;
 import net.iGap.api.BeepTunesApi;
 import net.iGap.api.IgashtApi;
 import net.iGap.api.KuknosApi;
+import net.iGap.api.KuknosHorizenApi;
 import net.iGap.api.FavoriteChannelApi;
 
 public class ApiServiceProvider {
@@ -11,6 +12,7 @@ public class ApiServiceProvider {
     private static BeepTunesApi beepTunesApi;
     private static FavoriteChannelApi channelApi;
     private static KuknosApi kuknosApi;
+    private static KuknosHorizenApi kuknosHorizenApi;
 
     public static BeepTunesApi getBeepTunesClient() {
         if (beepTunesApi == null) {
@@ -32,4 +34,14 @@ public class ApiServiceProvider {
         }
         return kuknosApi;
     }
+
+    //todo clean this comment
+
+    /*public static KuknosHorizenApi getKuknosHorizonClient() {
+        if (kuknosHorizenApi == null) {
+            kuknosHorizenApi = factory.getKuknosHorizanRetrofit().create(KuknosHorizenApi.class);
+        }
+        return kuknosHorizenApi;
+    }*/
+
 }

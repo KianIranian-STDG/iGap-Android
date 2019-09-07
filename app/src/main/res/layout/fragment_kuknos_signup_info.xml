@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="net.iGap.kuknos.viewmodel.KuknosSignupInfoVM" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="?backgroundColorSettingTheme">
+
+    <!-- TODO clean min height-->
+
+    <LinearLayout
+        android:id="@+id/fragKuknosSIToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:minHeight="48dp"
+        android:background="@color/sky_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragKuknosSIToolbar">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:paddingBottom="@dimen/dp20">
+
+            <android.support.v7.widget.AppCompatTextView
+                style="?textTitleColorSettingTheme"
+                android:id="@+id/fragKuknosSITitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="@string/kuknos_SignupInfo_title"
+                android:textStyle="bold"
+                android:textSize="@dimen/dp18"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.7" />
+
+            <android.support.v7.widget.AppCompatTextView
+                style="?textTitleColorSettingTheme"
+                android:id="@+id/fragKuknosSIMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/kuknos_SignupInfo_desc"
+                android:textSize="@dimen/dp16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragKuknosSITitle"
+                app:layout_constraintWidth_percent="0.7"/>
+
+            <android.support.design.widget.TextInputLayout
+                style="?textTitleColorSettingTheme"
+                android:id="@+id/fragKuknosSIUsernameHolder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:minHeight="48dp"
+                app:layout_constraintRight_toLeftOf="@+id/fragKuknosSIUsernameText"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragKuknosSIMessage"
+                app:layout_constraintWidth_percent="0.52"
+                app:layout_constraintHorizontal_chainStyle="packed">
+                <android.support.v7.widget.AppCompatEditText
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosSIUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:minHeight="48dp"
+                    android:ems="10"
+                    android:hint="@string/kuknos_SignupInfo_username"
+                    android:text="@={viewmodel.username}"
+                    android:textSize="@dimen/dp18"
+                    android:inputType="text"
+                    android:gravity="center"
+                    android:imeOptions="actionDone"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.AppCompatTextView
+                style="?textTitleColorSettingTheme"
+                android:id="@+id/fragKuknosSIUsernameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/kuknos_SignupInfo_friendlyTial"
+                android:textSize="@dimen/dp18"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/fragKuknosSIUsernameHolder"
+                app:layout_constraintTop_toTopOf="@+id/fragKuknosSIUsernameHolder"
+                app:layout_constraintBottom_toBottomOf="@+id/fragKuknosSIUsernameHolder"
+                app:layout_constraintWidth_percent="0.2"
+                app:layout_constraintHorizontal_chainStyle="packed" />
+
+            <ProgressBar
+                android:id="@+id/fragKuknosSIProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="@+id/fragKuknosSICheckUsername"
+                app:layout_constraintBottom_toBottomOf="@+id/fragKuknosSICheckUsername"
+                app:layout_constraintEnd_toStartOf="@+id/fragKuknosSICheckIcon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/myIconTextViewStyle"
+                android:id="@+id/fragKuknosSICheckIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/error_icon"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                app:layout_constraintTop_toTopOf="@+id/fragKuknosSICheckUsername"
+                app:layout_constraintBottom_toBottomOf="@+id/fragKuknosSICheckUsername"
+                app:layout_constraintStart_toEndOf="@+id/fragKuknosSIProgress"
+                app:layout_constraintEnd_toStartOf="@+id/fragKuknosSICheckUsername" />
+
+            <android.support.v7.widget.AppCompatTextView
+                style="?textTitleColorSettingTheme"
+                android:id="@+id/fragKuknosSICheckUsername"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/kuknos_SignupInfo_checkUsername"
+                android:textSize="@dimen/dp14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/fragKuknosSICheckIcon"
+                app:layout_constraintTop_toBottomOf="@+id/fragKuknosSIUsernameHolder"
+                app:layout_constraintWidth_percent="0.6" />
+
+            <android.support.design.widget.TextInputLayout
+                style="?textTitleColorSettingTheme"
+                android:id="@+id/fragKuknosSINameHolder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:minHeight="48dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragKuknosSICheckUsername"
+                app:layout_constraintWidth_percent="0.7">
+                <android.support.v7.widget.AppCompatEditText
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosSIName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:minHeight="48dp"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:hint="@string/kuknos_SignupInfo_name"
+                    android:text="@={viewmodel.name}"
+                    android:textSize="@dimen/dp18"
+                    android:gravity="center"
+                    android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                style="?textTitleColorSettingTheme"
+                android:id="@+id/fragKuknosSIFamilyNameHolder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:minHeight="48dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragKuknosSINameHolder"
+                app:layout_constraintWidth_percent="0.7">
+                <android.support.v7.widget.AppCompatEditText
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosSIFamilyName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:minHeight="48dp"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:hint="@string/kuknos_SignupInfo_family"
+                    android:text="@={viewmodel.family}"
+                    android:textSize="@dimen/dp18"
+                    android:gravity="start|center"
+                    android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                style="?textTitleColorSettingTheme"
+                android:id="@+id/fragKuknosSIEmailHolder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:minHeight="48dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragKuknosSIFamilyNameHolder"
+                app:layout_constraintWidth_percent="0.7">
+                <android.support.v7.widget.AppCompatEditText
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosSIEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:minHeight="48dp"
+                    android:ems="10"
+                    android:hint="@string/kuknos_SignupInfo_email"
+                    android:text="@={viewmodel.email}"
+                    android:textSize="@dimen/dp18"
+                    android:gravity="start|center"
+                    android:inputType="textEmailAddress"
+                    android:imeOptions="actionDone" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.button.MaterialButton
+                style="?iGapButton"
+                android:id="@+id/fragKuknosSISubmit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp36"
+                android:minHeight="58dp"
+                android:text="@string/kuknos_SignupInfo_submitBtn"
+                android:textSize="@dimen/dp16"
+                android:onClick="@{()->viewmodel.onSubmitBtn()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragKuknosSIEmailHolder"
+                app:layout_constraintWidth_percent="0.6"/>
+
+            <ProgressBar
+                android:id="@+id/fragKuknosSIProgressV"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:elevation="2dp"
+                android:visibility="visible"
+                app:layout_constraintTop_toTopOf="@+id/fragKuknosSISubmit"
+                app:layout_constraintStart_toStartOf="@+id/fragKuknosSISubmit"
+                app:layout_constraintEnd_toEndOf="@+id/fragKuknosSISubmit"
+                app:layout_constraintBottom_toBottomOf="@+id/fragKuknosSISubmit"
+                app:layout_constraintHorizontal_bias="0.05"
+                app:layout_constraintHeight_percent="0.06"/>
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+    </android.support.constraint.ConstraintLayout>
+</layout>

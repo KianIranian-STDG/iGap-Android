@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="?textTitleColorSettingTheme"
+    android:id="@+id/fragKuknosPconstraint"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="38dp">
+
+    <LinearLayout
+        android:id="@+id/fragKuknosPLinear"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.5">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/fragKuknosPimgCell"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="@dimen/dp4"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:padding="@dimen/dp4"
+            android:visibility="gone"
+            android:layout_gravity="center_vertical"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            style="?textSubColorSettingTheme"
+            android:id="@+id/fragKuknosPtextCell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="30dp"
+            android:minWidth="30dp"
+            android:text="test"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:textSize="@dimen/dp12"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="@dimen/dp4"
+            android:layout_marginLeft="@dimen/dp4"/>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

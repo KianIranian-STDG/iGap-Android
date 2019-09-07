@@ -138,4 +138,33 @@ public class RetrofitFactory {
 
         return client;
     }
+
+
+    // TODO clean this comment
+/*
+    Retrofit getKuknosHorizanRetrofit() {
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        builder.addInterceptor(interceptor);
+
+        builder.addInterceptor(chain -> {
+            Request original = chain.request();
+            Request request = original.newBuilder()
+                    .header("Content-Type", "application/json")
+                    .method(original.method(), original.body())
+                    .build();
+            return chain.proceed(request);
+        });
+        OkHttpClient httpClient = builder.build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApiStatic.KUKNOS_Horizan_Server)
+                .addConverterFactory(GsonConverterFactory.create(*//*GsonSingleton.getInstance()*//*))
+                .client(httpClient)
+                .build();
+        return retrofit;
+    }*/
 }

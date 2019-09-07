@@ -1,0 +1,143 @@
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="net.iGap.G" />
+        <variable
+            name="viewmodel"
+            type="net.iGap.kuknos.viewmodel.KuknosAddAssetVM" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/fragKuknosAddAContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layoutDirection="locale"
+        style="?backgroundColorSettingTheme">
+
+        <!-- TODO clean min height-->
+
+        <LinearLayout
+            android:id="@+id/fragKuknosAddAToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:minHeight="48dp"
+            android:background="@color/sky_blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragKuknosAddAToolbar">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp70"
+                android:paddingBottom="@dimen/dp20">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragKuknosAddARecyclerAdv"
+                    android:layout_width="match_parent"
+                    android:layout_height="210dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintHeight_percent="0.3"/>
+
+                <View
+                    android:id="@+id/seperatorView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp2"
+                    android:background="@color/buttonColor"
+                    android:layout_marginStart="@dimen/dp32"
+                    android:layout_marginLeft="@dimen/dp32"
+                    android:layout_marginEnd="@dimen/dp32"
+                    android:layout_marginRight="@dimen/dp32"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosAddATitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <TextView
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosAddATitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/dp36"
+                    android:gravity="center"
+                    android:text="@string/kuknos_AddAsset_title"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/dp18"
+                    android:singleLine="true"
+                    android:layout_margin="@dimen/dp4"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosAddARecyclerAdv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/fragKuknosAddARecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosAddATitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <ProgressBar
+                    android:id="@+id/fragKuknosAddAProgressV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:elevation="2dp"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosAddARecycler"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosAddARecycler"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosAddARecycler"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosAddARecycler"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHeight_percent="0.08"/>
+
+                <ProgressBar
+                    android:id="@+id/fragKuknosAddAProgressVAdv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:elevation="2dp"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosAddARecyclerAdv"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosAddARecyclerAdv"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosAddARecyclerAdv"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosAddARecyclerAdv"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHeight_percent="0.08"/>
+
+            </android.support.constraint.ConstraintLayout>
+        </ScrollView>
+
+        <android.support.design.button.MaterialButton
+            style="?iGapButton"
+            android:id="@+id/ragKuknosAddAadd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp20"
+            android:minHeight="58dp"
+            android:text="@string/kuknos_AddAsset_AddBTN"
+            android:textSize="@dimen/dp16"
+            android:onClick="@{()->viewmodel.onSubmit()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintWidth_percent="0.8"/>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
