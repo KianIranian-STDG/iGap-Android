@@ -11,8 +11,8 @@
 package net.iGap.adapter.items.chat;
 
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -24,8 +24,6 @@ import net.iGap.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.List;
-
-import io.realm.Realm;
 
 public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.ViewHolder> {
 

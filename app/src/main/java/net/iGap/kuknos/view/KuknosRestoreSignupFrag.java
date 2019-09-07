@@ -1,16 +1,16 @@
 package net.iGap.kuknos.view;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,14 +21,12 @@ import android.widget.LinearLayout;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosRestoreSignupBinding;
-import net.iGap.databinding.FragmentKuknosSignupInfoBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosRestoreSignupVM;
-import net.iGap.kuknos.viewmodel.KuknosSignupInfoVM;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
 public class KuknosRestoreSignupFrag extends BaseFragment {

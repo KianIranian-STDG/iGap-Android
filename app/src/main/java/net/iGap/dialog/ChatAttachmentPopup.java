@@ -2,14 +2,10 @@ package net.iGap.dialog;
 
 import android.animation.Animator;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.constraint.Group;
-import android.transition.Transition;
-import android.transition.TransitionSet;
-import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;

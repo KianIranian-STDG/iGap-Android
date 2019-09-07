@@ -12,7 +12,7 @@ package net.iGap.module.structs;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;

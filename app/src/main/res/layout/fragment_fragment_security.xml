@@ -61,7 +61,7 @@
 
                     />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/tsv_txtSetAdditionPassword"
                     style="?iGapButton"
                     android:layout_width="match_parent"

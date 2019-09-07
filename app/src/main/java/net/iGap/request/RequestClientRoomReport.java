@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import net.iGap.proto.ProtoClientRoomReport;
 

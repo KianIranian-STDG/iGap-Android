@@ -2,8 +2,8 @@ package net.iGap.kuknos.view.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +12,6 @@ import android.widget.TextView;
 import net.iGap.R;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.helper.HelperCalander;
-import net.iGap.kuknos.service.model.KuknosTradeHistoryM;
-import net.iGap.kuknos.service.model.KuknosWHistoryM;
 
 import org.stellar.sdk.responses.OfferResponse;
 

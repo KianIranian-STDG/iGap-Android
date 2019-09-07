@@ -1,7 +1,7 @@
 package net.iGap.igasht.barcodescaner;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+import androidx.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;

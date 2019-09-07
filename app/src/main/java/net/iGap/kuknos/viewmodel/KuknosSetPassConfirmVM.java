@@ -1,8 +1,7 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.os.Handler;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.api.apiService.ApiResponse;

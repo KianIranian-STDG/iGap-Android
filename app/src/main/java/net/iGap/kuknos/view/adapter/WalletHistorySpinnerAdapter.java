@@ -1,18 +1,11 @@
 package net.iGap.kuknos.view.adapter;
 
 import android.content.Context;
-import android.graphics.Typeface;
-import android.support.constraint.ConstraintLayout;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
 

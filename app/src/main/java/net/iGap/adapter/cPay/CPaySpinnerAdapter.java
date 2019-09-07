@@ -1,17 +1,12 @@
 package net.iGap.adapter.cPay;
 
-import android.support.v7.widget.AppCompatTextView;
+import androidx.appcompat.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import net.iGap.R;
-import net.iGap.internetpackage.MciInternetPackageFilter;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class CPaySpinnerAdapter extends BaseAdapter {
 

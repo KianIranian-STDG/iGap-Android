@@ -1,7 +1,7 @@
 package net.iGap.igasht.locationdetail;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableBoolean;
+import androidx.lifecycle.MutableLiveData;
+import androidx.databinding.ObservableBoolean;
 import android.util.Log;
 import android.view.View;
 

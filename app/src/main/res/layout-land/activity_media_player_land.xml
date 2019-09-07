@@ -91,7 +91,7 @@
         android:layout_weight="4"
         android:orientation="vertical">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
             android:background="@android:color/transparent">
@@ -179,7 +179,7 @@
 
           </LinearLayout>
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <net.iGap.libs.ripplesoundplayer.RippleVisualizerView
           android:id="@+id/line_renderer_demo"
@@ -203,12 +203,12 @@
         android:layoutDirection="ltr"
         android:background="@{G.isDarkTheme ? @drawable/shape_top_round_gray_background : @drawable/shape_top_round_gray_background_light}">
 
-      <android.support.constraint.ConstraintLayout
+      <androidx.constraintlayout.widget.ConstraintLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:padding="@dimen/dp16">
 
-        <android.support.v7.widget.AppCompatSeekBar
+        <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/ml_seekBar1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -220,7 +220,7 @@
             app:layout_constraintRight_toLeftOf="@id/ml_txt_timer"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/ml_txt_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -244,7 +244,7 @@
             app:layout_constraintEnd_toStartOf="@id/ml_txt_music_time"
             android:background="@color/toolbar_player_base_color"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/ml_txt_music_time"
             style="?textSubColorSettingTheme"
             android:layout_width="wrap_content"
@@ -329,7 +329,7 @@
             app:layout_constraintRight_toLeftOf="@id/ml_btn_shuffel_music"
             app:layout_constraintTop_toTopOf="@id/ml_btn_Previous_music" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ml_img_repead_one"
             android:layout_width="@dimen/dp16"
             android:layout_height="@dimen/dp16"
@@ -361,9 +361,9 @@
             app:layout_constraintLeft_toRightOf="@id/ml_btn_replay_music"
             app:layout_constraintTop_toTopOf="@id/ml_btn_Previous_music" />
 
-      </android.support.constraint.ConstraintLayout>
+      </androidx.constraintlayout.widget.ConstraintLayout>
 
-      <android.support.v7.widget.RecyclerView
+      <androidx.recyclerview.widget.RecyclerView
           android:id="@+id/rcvListMusicPlayer"
           android:layout_width="match_parent"
           android:layout_height="0dp"

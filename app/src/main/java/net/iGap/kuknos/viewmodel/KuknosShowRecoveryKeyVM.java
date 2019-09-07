@@ -1,16 +1,14 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.databinding.ObservableField;
-import android.os.Handler;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.databinding.ObservableField;
 
 import net.iGap.R;
 import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.UserRepo;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosRestoreM;
 import net.iGap.kuknos.service.model.KuknosSubmitM;
 
 public class KuknosShowRecoveryKeyVM extends ViewModel {

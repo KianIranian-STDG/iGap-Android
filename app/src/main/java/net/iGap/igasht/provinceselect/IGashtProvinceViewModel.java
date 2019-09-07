@@ -1,8 +1,8 @@
 package net.iGap.igasht.provinceselect;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 import android.view.View;
 
 import net.iGap.G;

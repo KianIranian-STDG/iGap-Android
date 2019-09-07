@@ -1,6 +1,6 @@
 package net.iGap.dialog.bottomsheet;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 public class BottomSheetViewModel extends ViewModel {
 

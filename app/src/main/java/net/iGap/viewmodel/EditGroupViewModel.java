@@ -1,8 +1,8 @@
 package net.iGap.viewmodel;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -30,8 +30,6 @@ import net.iGap.request.RequestGroupAvatarAdd;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupEdit;
 import net.iGap.request.RequestGroupLeft;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 

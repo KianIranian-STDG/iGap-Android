@@ -24,17 +24,17 @@
             android:layout_height="@dimen/toolbar_height"
             android:orientation="horizontal" />
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/dp16">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/networkTitle"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -47,7 +47,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/wifiTitle"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -61,7 +61,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/networkTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/mobileDataTitle"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -75,7 +75,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/wifiTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/keepMediaTitle"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -88,7 +88,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/mobileDataTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/keepMedia"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -101,7 +101,7 @@
                     app:layout_constraintStart_toEndOf="@id/keepMediaTitle"
                     app:layout_constraintTop_toTopOf="@id/keepMediaTitle" />
 
-                <android.support.constraint.Group
+                <androidx.constraintlayout.widget.Group
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="?attr/selectableItemBackground"
@@ -121,7 +121,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/keepMediaTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/autoDownloadMediaTitle"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -135,7 +135,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider1" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/autoDownloadData"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -149,7 +149,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/autoDownloadMediaTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/autoDownloadWifi"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -162,7 +162,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/autoDownloadData" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/autoDownloadRoaming"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -186,7 +186,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/autoDownloadRoaming" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/autoPlayMediaTitle"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -201,7 +201,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider2" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/autoGifTitle"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -224,7 +224,7 @@
                     app:layout_constraintStart_toEndOf="@id/autoGifTitle"
                     app:layout_constraintTop_toTopOf="@id/autoGifTitle" />
 
-                <android.support.constraint.Group
+                <androidx.constraintlayout.widget.Group
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="?attr/selectableItemBackground"
@@ -244,7 +244,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/autoGifTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/cacheTitle"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
@@ -258,7 +258,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider3" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/clearCacheTitle"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -270,7 +270,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cacheTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/clearCache"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -283,7 +283,7 @@
                     app:layout_constraintStart_toEndOf="@id/clearCacheTitle"
                     app:layout_constraintTop_toTopOf="@id/clearCacheTitle" />
 
-                <android.support.constraint.Group
+                <androidx.constraintlayout.widget.Group
                     android:id="@+id/st_layout_clearCache"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -294,7 +294,7 @@
                     app:layout_constraintStart_toStartOf="@id/clearCacheTitle"
                     app:layout_constraintTop_toTopOf="@id/clearCacheTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/cleanUpTitle"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -306,7 +306,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/clearCacheTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/cleanUp"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
@@ -318,7 +318,7 @@
                     app:layout_constraintStart_toEndOf="@id/cleanUpTitle"
                     app:layout_constraintTop_toTopOf="@id/cleanUpTitle" />
 
-                <android.support.constraint.Group
+                <androidx.constraintlayout.widget.Group
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="?attr/selectableItemBackground"
@@ -328,7 +328,7 @@
                     app:layout_constraintStart_toStartOf="@id/cleanUpTitle"
                     app:layout_constraintTop_toTopOf="@id/cleanUpTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/useSdkTitle"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -353,14 +353,14 @@
                     app:layout_constraintStart_toEndOf="@id/useSdkTitle"
                     app:layout_constraintTop_toTopOf="@id/useSdkTitle" />
 
-                <android.support.constraint.Group
+                <androidx.constraintlayout.widget.Group
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:onClick="@{()->viewModel.onClickSdkEnable()}"
                     android:visibility="@{viewModel.showLayoutSdk}" />
 
-            </android.support.constraint.ConstraintLayout>
-        </android.support.v4.widget.NestedScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
 </layout>

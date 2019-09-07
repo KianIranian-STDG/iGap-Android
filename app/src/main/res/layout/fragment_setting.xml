@@ -12,7 +12,7 @@
             type="net.iGap.viewmodel.FragmentSettingViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -51,7 +51,7 @@
             app:layout_constraintTop_toBottomOf="@id/chatSetting"
             app:layout_constraintWidth_percent=".95" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/notification"
             style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
@@ -69,7 +69,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/privacyAndSecurity"
             style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
@@ -86,7 +86,7 @@
             app:layout_constraintStart_toStartOf="@id/notification"
             app:layout_constraintTop_toBottomOf="@id/notification" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/dataAndStorage"
             style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
@@ -103,7 +103,7 @@
             app:layout_constraintStart_toStartOf="@id/notification"
             app:layout_constraintTop_toBottomOf="@id/privacyAndSecurity" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/chatSetting"
             style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
@@ -120,7 +120,7 @@
             app:layout_constraintStart_toStartOf="@id/notification"
             app:layout_constraintTop_toBottomOf="@id/dataAndStorage" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/languageTitle"
             style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
@@ -138,7 +138,7 @@
             app:layout_constraintStart_toStartOf="@id/notification"
             app:layout_constraintTop_toBottomOf="@id/line2" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -173,7 +173,7 @@
             app:layout_constraintRight_toRightOf="@id/name"
             app:layout_constraintTop_toBottomOf="@id/logout" />-->
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/logout"
             style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
@@ -191,6 +191,6 @@
             app:layout_constraintStart_toStartOf="@id/notification"
             app:layout_constraintTop_toBottomOf="@id/language" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

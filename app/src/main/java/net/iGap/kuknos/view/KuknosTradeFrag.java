@@ -1,16 +1,13 @@
 package net.iGap.kuknos.view;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,31 +15,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import net.iGap.R;
-import net.iGap.databinding.FragmentKuknosPanelBinding;
 import net.iGap.databinding.FragmentKuknosTradeBinding;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.DefaultRoundDialog;
-import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosWalletsAccountM;
 import net.iGap.kuknos.view.adapter.WalletHistorySpinnerAdapter;
-import net.iGap.kuknos.view.adapter.WalletSpinnerAdapter;
-import net.iGap.kuknos.viewmodel.KuknosPanelVM;
 import net.iGap.kuknos.viewmodel.KuknosTradeVM;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 
 import org.stellar.sdk.responses.AccountResponse;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class KuknosTradeFrag extends BaseFragment {
 

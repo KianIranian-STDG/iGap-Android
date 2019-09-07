@@ -2,8 +2,8 @@ package net.iGap.adapter.items.poll.holder;
 
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.github.mikephil.charting.charts.BarChart;

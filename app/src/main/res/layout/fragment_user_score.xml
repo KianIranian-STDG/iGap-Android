@@ -9,7 +9,7 @@
             type="net.iGap.viewmodel.UserScoreViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         style="?backgroundColorSettingTheme">
@@ -23,14 +23,14 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/root"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -47,7 +47,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent=".4" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/userRank"
                     style="@style/TextAppearance.AppCompat.Display1"
                     android:layout_width="0dp"
@@ -62,7 +62,7 @@
                     app:layout_constraintTop_toTopOf="@id/rankView"
                     app:layout_constraintVertical_chainStyle="packed" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/totalRank"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
                     app:layout_constraintTop_toTopOf="@id/rankView"
                     app:layout_constraintWidth_percent=".4" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/userScore"
                     style="@style/TextAppearance.AppCompat.Display1"
                     android:layout_width="0dp"
@@ -108,7 +108,7 @@
                     app:layout_constraintCircleAngle="0"
                     app:layout_constraintCircleRadius="83dp" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/rankTitle"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -120,7 +120,7 @@
                     app:layout_constraintRight_toRightOf="@id/rankView"
                     app:layout_constraintTop_toBottomOf="@id/rankView" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/scoreTitle"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -132,7 +132,7 @@
                     app:layout_constraintRight_toRightOf="@id/scoreView"
                     app:layout_constraintTop_toBottomOf="@id/scoreView" />
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvScoreList"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -142,7 +142,7 @@
                     app:layout_constraintTop_toBottomOf="@id/scoreTitle"
                     app:layout_constraintBottom_toTopOf="@id/scanBarcodeButton"/>
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/scanBarcodeButton"
                     style="?iGapButton"
                     android:layout_width="0dp"
@@ -155,7 +155,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintWidth_percent=".7" />
 
-            </android.support.constraint.ConstraintLayout>
-        </android.support.v4.widget.NestedScrollView>
-    </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

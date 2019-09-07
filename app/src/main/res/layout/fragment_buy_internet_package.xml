@@ -9,7 +9,7 @@
             type="net.iGap.internetpackage.BuyInternetPackageViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,7 +26,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/phoneNumberIcon"
             style="@style/greenIconTextViewStyle"
             android:layout_width="@dimen/dp48"
@@ -38,7 +38,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/phoneNumberEditText"
             style="?hintColorSettingTheme"
             android:layout_width="0dp"
@@ -63,7 +63,7 @@
             app:layout_constraintStart_toEndOf="@id/phoneNumberIcon"
             app:layout_constraintTop_toTopOf="@id/phoneNumberIcon" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/phoneNumberExample"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
             app:layout_constraintStart_toStartOf="@id/phoneNumberEditText"
             app:layout_constraintTop_toBottomOf="@id/phoneNumberEditText" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/packageTypeTitle"
             style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
@@ -101,7 +101,7 @@
             app:layout_constraintStart_toEndOf="@id/packageTypeTitle"
             app:layout_constraintTop_toTopOf="@id/packageTypeTitle">
 
-            <android.support.v7.widget.AppCompatRadioButton
+            <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/timeType"
                 style="?textSubColorSettingTheme"
                 android:layout_width="0dp"
@@ -110,7 +110,7 @@
                 android:button="@drawable/check_box_background"
                 android:text="@string/buy_internet_package_time_type_title" />
 
-            <android.support.v7.widget.AppCompatRadioButton
+            <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/volumeType"
                 style="?textSubColorSettingTheme"
                 android:layout_width="0dp"
@@ -120,7 +120,7 @@
                 android:text="@string/buy_internet_package_volume_type_title" />
         </RadioGroup>
 
-        <android.support.v7.widget.AppCompatSpinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/filterType"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -142,7 +142,7 @@
             app:layout_constraintStart_toStartOf="@id/filterType"
             app:layout_constraintTop_toTopOf="@id/filterType" />
 
-        <android.support.v7.widget.AppCompatSpinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/packageList"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -164,7 +164,7 @@
             app:layout_constraintStart_toStartOf="@id/packageList"
             app:layout_constraintTop_toTopOf="@id/packageList" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             style="?iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -189,7 +189,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/packageList" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/retryView"
             style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp48"
@@ -202,5 +202,5 @@
             app:layout_constraintStart_toStartOf="@id/loadingView"
             app:layout_constraintTop_toTopOf="@id/loadingView" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -8,7 +8,7 @@
             type="net.iGap.kuknos.viewmodel.KuknosRecieveVM" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fragKuknosRcContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -37,13 +37,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragKuknosRcToolbar">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="50dp"
                 android:paddingBottom="@dimen/dp20">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosRcMessage"
                     android:layout_width="0dp"
@@ -57,7 +57,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.7" />
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/fragKuknosRcQrCode"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -82,7 +82,7 @@
                     app:layout_constraintTop_toTopOf="@+id/fragKuknosRcQrCode"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosRcQrCode"/>
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosRcWalletIDT"
                     android:layout_width="0dp"
@@ -97,7 +97,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosRcQrCode"
                     app:layout_constraintWidth_percent="0.7" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosRcWalletID"
                     android:layout_width="0dp"
@@ -112,7 +112,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosRcWalletIDT"
                     app:layout_constraintWidth_percent="0.7" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     style="?iGapButton"
                     android:id="@+id/fragKuknosRcCopy"
                     android:layout_width="0dp"
@@ -126,7 +126,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosRcWalletID"
                     app:layout_constraintWidth_percent="0.7" />
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

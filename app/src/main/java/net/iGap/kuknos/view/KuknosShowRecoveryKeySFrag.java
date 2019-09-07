@@ -1,30 +1,25 @@
 package net.iGap.kuknos.view;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import net.iGap.R;
-import net.iGap.databinding.FragmentKuknosRecoveryKeyBinding;
 import net.iGap.databinding.FragmentKuknosShowRecoveryBinding;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeySVM;
-import net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeyVM;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
 public class KuknosShowRecoveryKeySFrag extends BaseFragment {

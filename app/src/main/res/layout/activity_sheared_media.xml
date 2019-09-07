@@ -129,7 +129,7 @@
 
         </HorizontalScrollView>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/asm_recycler_view_sheared_media"
             style="?backgroundSubChatTheme"
             android:layout_width="match_parent"

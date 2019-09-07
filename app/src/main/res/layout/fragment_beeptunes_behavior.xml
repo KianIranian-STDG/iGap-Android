@@ -11,7 +11,7 @@
     app:behavior_peekHeight="56dp"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_btPlayer_toolBar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -47,9 +47,9 @@
             tools:text="Abolfazl Abbasi" />
 
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_btPlayer_behavior"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -134,7 +134,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/tv_btBehavior_songName"
             app:layout_constraintRight_toRightOf="@+id/tv_btBehavior_artistName"
             app:layout_constraintTop_toTopOf="@+id/tv_btBehavior_songName" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
         android:id="@+id/fl_btPlayer_container"

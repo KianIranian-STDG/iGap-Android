@@ -1,11 +1,13 @@
 package org.paygear;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.OnLifecycleEvent;
-import android.arch.lifecycle.ProcessLifecycleOwner;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.ProcessLifecycleOwner;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.fragment.app.Fragment;
 
 import org.paygear.fragment.PaymentHistoryFragment;
 import org.paygear.model.Card;
@@ -69,7 +71,7 @@ public class RaadApp {
         WebBase.isDebug = false;
         WebBase.onResponseListener = new OnWebResponseListener() {
             @Override
-            public boolean onResponse(final Context context, Response response, final android.support.v4.app.Fragment fragment) {
+            public boolean onResponse(final Context context, Response response, final Fragment fragment) {
                 if (context instanceof NavigationBarActivity) {
                     if (response.raw().request().url().url().getPath().contains("refresh") && response.code() == 403) {
                         Utils.signOutAndGoLogin(fragment.getActivity());

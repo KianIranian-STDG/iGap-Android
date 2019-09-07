@@ -1,6 +1,6 @@
 package net.iGap.news.viewmodel;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 public class NewsGroupListVM extends ViewModel {
 }

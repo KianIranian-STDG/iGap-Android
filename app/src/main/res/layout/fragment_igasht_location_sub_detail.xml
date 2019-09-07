@@ -11,7 +11,7 @@
             name="viewModel"
             type="net.iGap.igasht.locationdetail.subdetail.IGashtLocationSubDetailViewModel" />
     </data>
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp6"
@@ -32,7 +32,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/subTitle"
             style="?textTitleColorSettingTheme"
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/itemImage" />
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/null_txt"
             style="?textTitleColorSettingTheme"
             android:layout_width="match_parent"
@@ -69,7 +69,7 @@
             app:layout_constraintStart_toStartOf="@+id/subTitle"
             app:layout_constraintTop_toBottomOf="@+id/subTitle" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/subDetail"
             style="?textTitleColorSettingTheme"
             android:layout_width="match_parent"
@@ -86,7 +86,7 @@
             app:layout_constraintStart_toStartOf="@+id/view4"
             app:layout_constraintTop_toBottomOf="@+id/view4" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/subTitle2"
             style="?textTitleColorSettingTheme"
             android:layout_width="match_parent"
@@ -114,7 +114,7 @@
             app:layout_constraintEnd_toEndOf="@+id/subTitle2"
             app:layout_constraintStart_toStartOf="@+id/subTitle2"
             app:layout_constraintTop_toBottomOf="@+id/subTitle2" />
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/subDetail2"
             style="?textTitleColorSettingTheme"
             android:layout_width="match_parent"
@@ -141,7 +141,7 @@
             app:layout_constraintStart_toStartOf="@+id/subDetail2"
             app:layout_constraintTop_toBottomOf="@+id/subDetail2" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/subTitle3"
             style="?textTitleColorSettingTheme"
             android:layout_width="match_parent"
@@ -175,7 +175,7 @@
                 android:layout_marginLeft="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp8"
                 android:layout_marginStart="@dimen/dp8">
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_parking"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -183,7 +183,7 @@
                     android:text="@string/parking_textView"
                     android:layout_margin="@dimen/dp4"
                     android:layout_weight="2" />
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/check_parking"
                     style="@style/baseFontIcon"
                     android:layout_width="wrap_content"
@@ -198,7 +198,7 @@
                     android:layout_height="@dimen/dp32"
                     android:layout_margin="@dimen/dp4"
                     android:layout_gravity="center_vertical" />
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_wifi"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -206,7 +206,7 @@
                     android:text="@string/wifi_textView"
                     android:layout_margin="@dimen/dp4"
                     android:layout_weight="2" />
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/check_wifi"
                     style="@style/baseFontIcon"
                     android:layout_width="wrap_content"
@@ -229,7 +229,7 @@
                 android:layout_marginLeft="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp8"
                 android:layout_marginStart="@dimen/dp8">
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_resturant"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -237,7 +237,7 @@
                     android:text="@string/Restaurant_textView"
                     android:layout_margin="@dimen/dp4"
                     android:layout_weight="2" />
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/cheked_resturant"
                     style="@style/baseFontIcon"
                     android:layout_width="wrap_content"
@@ -252,7 +252,7 @@
                     android:layout_height="@dimen/dp32"
                     android:layout_margin="@dimen/dp4"
                     android:layout_gravity="center_vertical" />
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_coffeeShop"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -260,7 +260,7 @@
                     android:text="@string/coffeeShop_textView"
                     android:layout_margin="@dimen/dp4"
                     android:layout_weight="2" />
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/cheked_coffeeShop"
                     style="@style/baseFontIcon"
                     android:layout_width="wrap_content"
@@ -283,7 +283,7 @@
                 android:layout_marginLeft="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp8"
                 android:layout_marginStart="@dimen/dp8">
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_wheelchair"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -291,7 +291,7 @@
                     android:text="@string/wheelchair_textView"
                     android:layout_margin="@dimen/dp4"
                     android:layout_weight="2" />
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/check_wheelchair"
                     style="@style/baseFontIcon"
                     android:layout_width="wrap_content"
@@ -306,7 +306,7 @@
                     android:layout_height="@dimen/dp32"
                     android:layout_margin="@dimen/dp4"
                     android:layout_gravity="center_vertical" />
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_PrayerRoom"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -314,7 +314,7 @@
                     android:text="@string/prayerRoom_textView"
                     android:layout_margin="@dimen/dp4"
                     android:layout_weight="2" />
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/check_PrayerRoom"
                     style="@style/baseFontIcon"
                     android:layout_width="wrap_content"
@@ -337,7 +337,7 @@
                 android:layout_marginLeft="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp8"
                 android:layout_marginStart="@dimen/dp8">
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_wc"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -345,7 +345,7 @@
                     android:text="@string/parking_textView"
                     android:layout_margin="@dimen/dp4"
                     android:layout_weight="2" />
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/check_wc"
                     style="@style/baseFontIcon"
                     android:layout_width="wrap_content"
@@ -360,13 +360,13 @@
                     android:background="@color/gray_300"
                     android:layout_margin="@dimen/dp4"
                     android:layout_gravity="center_vertical" />
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp4"
                     android:layout_weight="2" />
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="@style/baseFontIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -375,7 +375,7 @@
             </TableRow>
 
         </TableLayout>
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </layout>

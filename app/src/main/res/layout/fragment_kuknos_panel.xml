@@ -9,7 +9,7 @@
             type="net.iGap.kuknos.viewmodel.KuknosPanelVM" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fragKuknosPContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,13 +38,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragKuknosPToolbar">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="50dp"
                 android:paddingBottom="@dimen/dp20">
 
-                <android.support.v7.widget.AppCompatSpinner
+                <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/fragKuknosPWalletSpinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintWidth_percent="0.9"/>
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosPBalance"
                     android:layout_width="0dp"
@@ -105,7 +105,7 @@
                     app:layout_constraintTop_toTopOf="@+id/fragKuknosPBalanceCircle"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPBalanceCircle"/>
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fragKuknosPCredit"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -122,7 +122,7 @@
                     app:layout_constraintTop_toTopOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintVertical_chainStyle="packed" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosPCurrency"
                     android:layout_width="0dp"
@@ -134,7 +134,7 @@
                     app:layout_constraintRight_toRightOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintTop_toBottomOf="@id/fragKuknosPCredit" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosPError"
                     android:layout_width="0dp"
@@ -151,14 +151,14 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintWidth_percent="0.9"/>
 
-                <android.support.constraint.Group
+                <androidx.constraintlayout.widget.Group
                     android:id="@+id/fragKuknosPBalanceHolder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:constraint_referenced_ids="fragKuknosPCurrency,fragKuknosPCredit,fragKuknosPBalanceCircle"
                     android:onClick="@{()->viewmodel.goToDetail()}"/>
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     style="?iGapButton"
                     android:id="@+id/fragKuknosPRecieve"
                     android:layout_width="0dp"
@@ -178,7 +178,7 @@
                     app:layout_constraintWidth_percent="0.3"
                     app:layout_constraintHorizontal_chainStyle="packed"/>
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     style="?iGapButton"
                     android:id="@+id/fragKuknosPSend"
                     android:layout_width="0dp"
@@ -195,7 +195,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPRecieve"
                     app:layout_constraintWidth_percent="0.3"/>
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     style="?iGapButton"
                     android:id="@+id/fragKuknosPHistory"
                     android:layout_width="0dp"
@@ -232,7 +232,7 @@
                     app:layout_constraintWidth_percent="0.2"
                     app:layout_constraintHorizontal_chainStyle="packed">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         style="@style/myIconTextViewStyleGray"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -242,7 +242,7 @@
                         android:textSize="35dp"
                         android:gravity="center"/>
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -279,7 +279,7 @@
                     app:layout_constraintWidth_percent="0.2"
                     app:layout_constraintHorizontal_chainStyle="packed">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         style="@style/myIconTextViewStyleGray"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -289,7 +289,7 @@
                         android:textSize="35dp"
                         android:gravity="center"/>
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -326,7 +326,7 @@
                     app:layout_constraintWidth_percent="0.2"
                     app:layout_constraintHorizontal_chainStyle="packed">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         style="@style/myIconTextViewStyleGray"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -336,7 +336,7 @@
                         android:textSize="35dp"
                         android:gravity="center"/>
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -374,7 +374,7 @@
                     app:layout_constraintHorizontal_chainStyle="packed"
                     android:visibility="gone">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         style="@style/myIconTextViewStyleGray"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -384,7 +384,7 @@
                         android:textSize="35dp"
                         android:gravity="center"/>
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -403,7 +403,7 @@
 
                 </LinearLayout>
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

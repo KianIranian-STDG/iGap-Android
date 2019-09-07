@@ -197,7 +197,7 @@
               android:layoutDirection="ltr"
             android:orientation="horizontal">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
               android:id="@+id/fch_txtInput_nikeName"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -222,7 +222,7 @@
                 android:textDirection="ltr"
                 android:textSize="@dimen/dp15" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
           </LinearLayout>
 

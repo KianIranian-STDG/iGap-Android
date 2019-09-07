@@ -1,11 +1,10 @@
 package net.iGap.kuknos.view.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.media.Image;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,16 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.helper.HelperCalander;
-import net.iGap.kuknos.service.Repository.UserRepo;
 
 import org.stellar.sdk.responses.AssetResponse;
-import org.stellar.sdk.responses.Page;
-import org.stellar.sdk.responses.operations.CreateAccountOperationResponse;
-import org.stellar.sdk.responses.operations.OperationResponse;
-import org.stellar.sdk.responses.operations.PaymentOperationResponse;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class AddAssetAdvAdapter extends RecyclerView.Adapter<AddAssetAdvAdapter.ViewHolder> {

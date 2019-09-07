@@ -9,7 +9,7 @@
             type="net.iGap.fragments.inquiryBill.PaymentInquiryTelephoneViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,7 +27,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/areaCodeIcon"
             style="@style/greenIconTextViewStyle"
             android:layout_width="@dimen/dp44"
@@ -44,7 +44,7 @@
             app:layout_constraintVertical_bias=".3"
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/areaCodeEditText"
             style="?hintColorSettingTheme"
             android:layout_width="0dp"
@@ -65,7 +65,7 @@
             app:layout_constraintStart_toEndOf="@id/areaCodeIcon"
             app:layout_constraintTop_toTopOf="@id/areaCodeIcon" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/areaCodeExample"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
             app:layout_constraintStart_toStartOf="@id/areaCodeEditText"
             app:layout_constraintTop_toBottomOf="@id/areaCodeIcon" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/telephoneNumberIcon"
             style="@style/greenIconTextViewStyle"
             android:layout_width="@dimen/dp44"
@@ -92,7 +92,7 @@
             app:layout_constraintStart_toStartOf="@id/areaCodeIcon"
             app:layout_constraintTop_toBottomOf="@id/areaCodeExample" />
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/telephoneEditText"
             style="?hintColorSettingTheme"
             android:layout_width="0dp"
@@ -111,7 +111,7 @@
             app:layout_constraintStart_toStartOf="@id/areaCodeEditText"
             app:layout_constraintTop_toTopOf="@id/telephoneNumberIcon" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/telephoneNumberExample"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -123,7 +123,7 @@
             app:layout_constraintStart_toStartOf="@id/telephoneEditText"
             app:layout_constraintTop_toBottomOf="@id/telephoneNumberIcon" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/inquiryButton"
             style="?iGapButton"
             android:layout_width="0dp"
@@ -148,5 +148,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/telephoneNumberExample" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

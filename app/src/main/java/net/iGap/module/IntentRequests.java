@@ -10,7 +10,7 @@
 
 package net.iGap.module;
 
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 
 @IntDef({IntentRequests.REQ_CROP, IntentRequests.REQ_CAMERA, IntentRequests.REQ_GALLERY})
 public @interface IntentRequests {

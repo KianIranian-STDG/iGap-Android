@@ -39,7 +39,7 @@
         android:text="9121111111"
         android:textSize="@dimen/dp16" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="?hintColorSettingTheme"
@@ -65,7 +65,7 @@
             android:background="@color/border_editText"
             android:scaleY=".5" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         style="?textTitleColorSettingTheme"

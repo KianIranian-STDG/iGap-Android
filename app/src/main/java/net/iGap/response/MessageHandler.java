@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import android.support.annotation.CallSuper;
+import androidx.annotation.CallSuper;
 import android.util.Log;
 
 import net.iGap.BuildConfig;

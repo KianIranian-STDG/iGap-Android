@@ -10,7 +10,7 @@
 
 package net.iGap.realm;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import net.iGap.G;
 import net.iGap.helper.HelperString;

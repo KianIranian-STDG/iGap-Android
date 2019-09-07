@@ -9,11 +9,11 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import android.content.SharedPreferences;
-import android.databinding.ObservableInt;
-import android.util.Log;
+import androidx.databinding.ObservableInt;
+
 import android.view.View;
 
 import net.iGap.G;

@@ -1,6 +1,6 @@
 package net.iGap.api.repository;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.CPayApi;
 import net.iGap.api.apiService.RetrofitFactory;

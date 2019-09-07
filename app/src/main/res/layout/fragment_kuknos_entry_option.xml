@@ -11,7 +11,7 @@
     </data>
 
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         style="?backgroundColorSettingTheme">
@@ -40,12 +40,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragKuknosEToolbar">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="@dimen/dp20">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosEMessage"
                 android:layout_width="0dp"
@@ -58,7 +58,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.8" />
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/fragKuknosENewToken"
                 style="?iGapButton"
                 android:layout_width="0dp"
@@ -76,7 +76,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosEMessage"
                 app:layout_constraintWidth_percent="0.8"/>
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/fragKuknosERestoreToken"
                 style="?iGapButton"
                 android:layout_width="0dp"
@@ -92,7 +92,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosENewToken"
                 app:layout_constraintWidth_percent="0.8" />
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/fragKuknosERestoreSeed"
                 style="?iGapButton"
                 android:layout_width="0dp"
@@ -111,7 +111,7 @@
 
 
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

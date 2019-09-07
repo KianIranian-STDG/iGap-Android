@@ -9,13 +9,12 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import android.content.Context;
-import android.databinding.ObservableField;
+import androidx.databinding.ObservableField;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.View;
 import android.view.WindowManager;
@@ -27,11 +26,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
-import net.iGap.fragments.ContactGroupFragment;
-import net.iGap.fragments.FragmentCreateChannel;
-import net.iGap.fragments.FragmentNewGroup;
-import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnChannelCreate;
 import net.iGap.interfaces.OnChatConvertToGroup;
 import net.iGap.interfaces.OnClientGetRoomResponse;

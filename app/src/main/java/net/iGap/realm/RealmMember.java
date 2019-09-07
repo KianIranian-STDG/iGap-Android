@@ -12,7 +12,7 @@ package net.iGap.realm;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import net.iGap.G;
 import net.iGap.module.SUID;

@@ -1,7 +1,7 @@
 package net.iGap.viewmodel;
 
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.repository.CPayRepository;
 import net.iGap.model.cPay.UserPlaquesModel;

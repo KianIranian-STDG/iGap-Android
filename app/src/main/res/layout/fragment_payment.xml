@@ -46,7 +46,7 @@
                 android:layout_margin="@dimen/dp14"
                 android:orientation="vertical">
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     style="?iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
                     android:onClick="@{()->fragmentPaymentViewModel.onClickCardToCard()}"
                     android:text="@string/card_to_card" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     style="?iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                     android:onClick="@{()->fragmentPaymentViewModel.onClickCharge()}"
                     android:text="@string/buy_charge" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     style="?iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                     android:onClick="@{()->fragmentPaymentViewModel.onClickBill()}"
                     android:text="@string/pay_bills" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     style="?iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                     android:onClick="@{()->fragmentPaymentViewModel.onClickBillTraffic()}"
                     android:text="@string/pay_bills_crime" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     style="?iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                     android:onClick="@{()->fragmentPaymentViewModel.onClickInquiryMci()}"
                     android:text="@string/bills_inquiry_mci" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     style="?iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
                     android:onClick="@{()->fragmentPaymentViewModel.onClickInquiryTelecom()}"
                     android:text="@string/bills_inquiry_telecom" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     style="?iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

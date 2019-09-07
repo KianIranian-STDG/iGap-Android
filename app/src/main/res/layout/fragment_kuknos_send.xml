@@ -9,7 +9,7 @@
             type="net.iGap.kuknos.viewmodel.KuknosSendVM" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         style="?backgroundColorSettingTheme">
@@ -38,13 +38,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragKuknosSToolbar">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="50dp"
                 android:paddingBottom="@dimen/dp20">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosSTitle"
                     android:layout_width="0dp"
@@ -58,7 +58,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.7" />
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosSWalletAddressHolder"
                     android:layout_width="0dp"
@@ -69,7 +69,7 @@
                     app:layout_constraintStart_toStartOf="@+id/fragKuknosSTextHolder"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosSTitle"
                     app:layout_constraintHorizontal_chainStyle="packed">
-                    <android.support.v7.widget.AppCompatEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         style="?textTitleColorSettingTheme"
                         android:id="@+id/fragKuknosSWalletAddressET"
                         android:layout_width="match_parent"
@@ -86,9 +86,9 @@
                         android:maxLines="4"
                         android:inputType="textMultiLine"
                         android:imeOptions="actionNext"/>
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="@style/myIconTextViewStyleGray"
                     android:id="@+id/fragKuknosSQRCode"
                     android:layout_width="wrap_content"
@@ -103,7 +103,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/fragKuknosSTextHolder"
                     app:layout_constraintStart_toEndOf="@+id/fragKuknosSWalletAddressHolder"/>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosSTextHolder"
                     android:layout_width="0dp"
@@ -114,7 +114,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosSWalletAddressHolder"
                     app:layout_constraintWidth_percent="0.7">
-                    <android.support.v7.widget.AppCompatEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         style="?textTitleColorSettingTheme"
                         android:id="@+id/fragKuknosSTextET"
                         android:layout_width="match_parent"
@@ -130,10 +130,10 @@
                         android:gravity="start|center"
                         android:inputType="text"
                         android:imeOptions="actionNext" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosSAmountHolder"
                     android:layout_width="0dp"
@@ -144,7 +144,7 @@
                     app:layout_constraintStart_toStartOf="@+id/fragKuknosSTextHolder"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosSTextHolder"
                     app:layout_constraintHorizontal_chainStyle="packed">
-                    <android.support.v7.widget.AppCompatEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         style="?textTitleColorSettingTheme"
                         android:id="@+id/fragKuknosSAmountET"
                         android:layout_width="match_parent"
@@ -161,9 +161,9 @@
                         android:inputType="numberDecimal"
                         android:digits="0123456789."
                         android:imeOptions="actionDone" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosSCurrency"
                     android:layout_width="wrap_content"
@@ -177,7 +177,7 @@
                     app:layout_constraintStart_toEndOf="@+id/fragKuknosSAmountHolder"
                     app:layout_constraintVertical_bias="0.7"/>
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     style="?iGapButton"
                     android:id="@+id/fragKuknosSSubmit"
                     android:layout_width="0dp"
@@ -205,7 +205,7 @@
                     app:layout_constraintHorizontal_bias="0.05"
                     app:layout_constraintHeight_percent="0.08"/>
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

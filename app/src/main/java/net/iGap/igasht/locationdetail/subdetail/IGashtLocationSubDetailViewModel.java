@@ -1,6 +1,6 @@
 package net.iGap.igasht.locationdetail.subdetail;
 
-import android.databinding.ObservableInt;
+import androidx.databinding.ObservableInt;
 import android.view.View;
 
 import net.iGap.R;

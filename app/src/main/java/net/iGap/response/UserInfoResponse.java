@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import net.iGap.G;
 import net.iGap.adapter.items.chat.AbstractMessage;
@@ -23,7 +23,6 @@ import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserInfo;
 

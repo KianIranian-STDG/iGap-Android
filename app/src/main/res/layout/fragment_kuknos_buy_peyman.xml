@@ -9,7 +9,7 @@
             type="net.iGap.kuknos.viewmodel.KuknosBuyPeymanVM" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         style="?backgroundColorSettingTheme">
@@ -39,13 +39,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPToolbar">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
             android:paddingBottom="@dimen/dp20">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosBuyPTitle"
                 android:layout_width="0dp"
@@ -59,7 +59,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.7" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosBuyPMessage"
                 android:layout_width="0dp"
@@ -73,7 +73,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPTitle"
                 app:layout_constraintWidth_percent="0.7" />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosBuyPAmountHolder"
                 android:layout_width="0dp"
@@ -84,7 +84,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPMessage"
                 app:layout_constraintWidth_percent="0.7">
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosBuyPAmount"
                     android:layout_width="match_parent"
@@ -101,9 +101,9 @@
                     android:inputType="numberDecimal"
                     android:imeOptions="actionDone"
                     android:digits="0123456789"/>
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosBuyPSumTitle"
                 android:layout_width="wrap_content"
@@ -118,7 +118,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/fragKuknosBuyPSum"
                 app:layout_constraintHorizontal_chainStyle="packed"/>
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosBuyPSum"
                 android:layout_width="wrap_content"
@@ -133,7 +133,7 @@
                 app:layout_constraintStart_toEndOf="@+id/fragKuknosBuyPSumTitle"
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPAmountHolder"/>
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosBuyPSumCurrency"
                 android:layout_width="wrap_content"
@@ -146,14 +146,14 @@
                 app:layout_constraintTop_toTopOf="@+id/fragKuknosBuyPSum"
                 app:layout_constraintBottom_toBottomOf="@+id/fragKuknosBuyPSum"/>
             
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/fragKuknosBuyPSumGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:constraint_referenced_ids="fragKuknosBuyPSum,fragKuknosBuyPSumTitle,fragKuknosBuyPSumCurrency"
                 android:visibility="visible"/>
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 style="?iGapButton"
                 android:id="@+id/fragKuknosBuyPSubmit"
                 android:layout_width="0dp"
@@ -181,7 +181,7 @@
                 app:layout_constraintHorizontal_bias="0.05"
                 app:layout_constraintHeight_percent="0.06"/>
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosBuyPPS"
                 android:layout_width="0dp"
@@ -195,7 +195,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPSubmit"
                 app:layout_constraintWidth_percent="0.7" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

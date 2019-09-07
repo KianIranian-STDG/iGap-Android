@@ -1,10 +1,8 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.databinding.ObservableField;
-import android.os.Handler;
-import android.util.Log;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.databinding.ObservableField;
 
 import com.google.gson.Gson;
 
@@ -13,15 +11,10 @@ import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.PanelRepo;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosSendM;
-import net.iGap.kuknos.service.model.KuknosWalletBalanceInfoM;
 
 import org.stellar.sdk.KeyPair;
 import org.stellar.sdk.responses.AccountResponse;
 import org.stellar.sdk.responses.SubmitTransactionResponse;
-import org.stellar.sdk.xdr.TransactionResult;
-import org.stellar.sdk.xdr.TransactionResultCode;
-
-import java.io.IOException;
 
 public class KuknosSendVM extends ViewModel {
 

@@ -1,6 +1,6 @@
 package net.iGap.helper;
 
-import android.arch.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleOwner;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,14 +8,14 @@ import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.AppCompatTextView;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.fragment.app.FragmentActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -49,19 +49,18 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.viewmodel.ActivityCallViewModel;
 
 import org.paygear.WalletActivity;
 
 import io.realm.Realm;
 
-import static android.support.constraint.ConstraintSet.BOTTOM;
-import static android.support.constraint.ConstraintSet.END;
-import static android.support.constraint.ConstraintSet.MATCH_CONSTRAINT;
-import static android.support.constraint.ConstraintSet.PARENT_ID;
-import static android.support.constraint.ConstraintSet.START;
-import static android.support.constraint.ConstraintSet.TOP;
-import static android.support.constraint.ConstraintSet.WRAP_CONTENT;
+import static androidx.constraintlayout.widget.ConstraintSet.BOTTOM;
+import static androidx.constraintlayout.widget.ConstraintSet.END;
+import static androidx.constraintlayout.widget.ConstraintSet.MATCH_CONSTRAINT;
+import static androidx.constraintlayout.widget.ConstraintSet.PARENT_ID;
+import static androidx.constraintlayout.widget.ConstraintSet.START;
+import static androidx.constraintlayout.widget.ConstraintSet.TOP;
+import static androidx.constraintlayout.widget.ConstraintSet.WRAP_CONTENT;
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
@@ -872,7 +871,7 @@ public class HelperToolbar {
             }
         }
 
-        G.connectionStateMutableLiveData.observe(owner, new android.arch.lifecycle.Observer<ConnectionState>() {
+        G.connectionStateMutableLiveData.observe(owner, new androidx.lifecycle.Observer<ConnectionState>() {
             @Override
             public void onChanged(@Nullable ConnectionState connectionState) {
 

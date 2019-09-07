@@ -10,7 +10,7 @@
             type="net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeySVM" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fragKuknosSRContainer"
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
@@ -40,13 +40,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRToolbar">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
             android:paddingBottom="@dimen/dp20">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosSRMessage"
                 android:layout_width="0dp"
@@ -60,7 +60,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.7" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosSRDescription"
                 android:layout_width="0dp"
@@ -73,7 +73,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRMessage"
                 app:layout_constraintWidth_percent="0.7" />
 
-            <android.support.v7.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosSRkeysET"
                 android:layout_width="0dp"
@@ -98,7 +98,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRDescription"
                 app:layout_constraintWidth_percent="0.8" />
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 style="?iGapButton"
                 android:id="@+id/fragKuknosIdSubmit"
                 android:layout_width="0dp"
@@ -127,7 +127,7 @@
                 app:layout_constraintHorizontal_bias="0.05"
                 app:layout_constraintHeight_percent="0.08"/>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

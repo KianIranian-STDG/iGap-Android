@@ -11,7 +11,7 @@
             type="net.iGap.viewmodel.FragmentPaymentChargeViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,7 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/phoneNumberIcon"
             style="@style/greenIconTextViewStyle"
             android:layout_width="@dimen/dp48"
@@ -39,7 +39,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fpc_toolbar" />
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/phoneNumberEditText"
             style="?hintColorSettingTheme"
             android:layout_width="0dp"
@@ -63,7 +63,7 @@
             app:layout_constraintStart_toEndOf="@id/phoneNumberIcon"
             app:layout_constraintTop_toTopOf="@id/phoneNumberIcon" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/phoneNumberExample"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
             app:layout_constraintStart_toStartOf="@id/phoneNumberEditText"
             app:layout_constraintTop_toBottomOf="@id/phoneNumberEditText" />
 
-        <android.support.v7.widget.AppCompatCheckBox
+        <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/fpc_checkBox_trabord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
             app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
             app:layout_constraintTop_toBottomOf="@id/phoneNumberExample" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/operatorIcon"
             style="@style/greenIconTextViewStyle"
             android:layout_width="@dimen/dp48"
@@ -104,7 +104,7 @@
             app:layout_constraintEnd_toEndOf="@id/phoneNumberIcon"
             app:layout_constraintTop_toBottomOf="@id/fpc_checkBox_trabord" />
 
-        <android.support.v7.widget.AppCompatSpinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/fpc_spinner_operator"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
             app:layout_constraintStart_toStartOf="@id/fpc_spinner_operator"
             app:layout_constraintTop_toTopOf="@id/fpc_spinner_operator" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/chargeTypeIcon"
             style="@style/greenIconTextViewStyle"
             android:layout_width="@dimen/dp48"
@@ -139,7 +139,7 @@
             app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
             app:layout_constraintTop_toBottomOf="@id/operatorIcon" />
 
-        <android.support.v7.widget.AppCompatSpinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/fpc_spinner_ChargeType"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
             app:layout_constraintStart_toStartOf="@id/fpc_spinner_ChargeType"
             app:layout_constraintTop_toTopOf="@id/fpc_spinner_ChargeType" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/priceIcon"
             style="@style/greenIconTextViewStyle"
             android:layout_width="@dimen/dp48"
@@ -174,7 +174,7 @@
             app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
             app:layout_constraintTop_toBottomOf="@id/chargeTypeIcon" />
 
-        <android.support.v7.widget.AppCompatSpinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/fpc_spinner_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -207,7 +207,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/priceIcon" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             style="?iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -221,5 +221,5 @@
             app:layout_constraintTop_toBottomOf="@id/loadingView"
             app:layout_constraintWidth_percent=".6" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,6 +1,6 @@
 package net.iGap.libs.bannerslider;
 
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 import android.widget.ImageView;
 
 /**

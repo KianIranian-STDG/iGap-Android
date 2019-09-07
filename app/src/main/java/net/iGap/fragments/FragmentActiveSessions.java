@@ -10,14 +10,13 @@
 
 package net.iGap.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,16 +38,13 @@ import net.iGap.adapter.items.chat.AdapterActiveSessionsHeader;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnUserSessionGetActiveList;
-import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.interfaces.OnUserSessionTerminate;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SUID;
 import net.iGap.module.structs.StructSessions;
 import net.iGap.proto.ProtoUserSessionGetActiveList;
 import net.iGap.request.RequestUserSessionGetActiveList;
-import net.iGap.request.RequestUserSessionLogout;
 import net.iGap.request.RequestUserSessionTerminate;
 
 import java.util.ArrayList;

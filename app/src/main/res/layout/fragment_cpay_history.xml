@@ -9,7 +9,7 @@
     </data>
 
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         style="?backgroundColorSettingTheme"
@@ -27,7 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/fch_filter"
             style="?iGapButtonStroke"
             android:layout_width="0dp"
@@ -41,7 +41,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fch_toolbar" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/fch_today"
             style="?iGapButtonStroke"
             android:layout_width="0dp"
@@ -55,7 +55,7 @@
             app:layout_constraintStart_toEndOf="@id/fch_filter"
             app:layout_constraintTop_toTopOf="@id/fch_filter" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/fch_fromFirst"
             style="?iGapButtonStroke"
             android:layout_width="0dp"
@@ -71,7 +71,7 @@
             app:layout_constraintStart_toEndOf="@id/fch_today"
             app:layout_constraintTop_toTopOf="@id/fch_filter" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fch_rv_history"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -81,7 +81,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fch_filter" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/fch_txt_noItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -93,6 +93,6 @@
             app:layout_constraintStart_toStartOf="@id/fch_rv_history"
             app:layout_constraintEnd_toEndOf="@id/fch_rv_history"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

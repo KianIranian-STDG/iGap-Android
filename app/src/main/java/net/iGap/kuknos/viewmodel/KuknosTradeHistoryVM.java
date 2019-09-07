@@ -1,20 +1,14 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.os.Handler;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.Repository.TradeRepo;
 import net.iGap.kuknos.service.model.ErrorM;
-import net.iGap.kuknos.service.model.KuknosTradeHistoryM;
-import net.iGap.kuknos.service.model.KuknosWHistoryM;
 
 import org.stellar.sdk.responses.OfferResponse;
 import org.stellar.sdk.responses.Page;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class KuknosTradeHistoryVM extends ViewModel {
 

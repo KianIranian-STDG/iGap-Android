@@ -17,7 +17,7 @@ import android.view.inputmethod.InputConnection;
 /**
  * it's custom Edit text for prevent open fullPage EditText in land Scape mode
  */
-public class MEditText extends android.support.v7.widget.AppCompatEditText {
+public class MEditText extends androidx.appcompat.widget.AppCompatEditText {
     public MEditText(Context context) {
         super(context);
     }

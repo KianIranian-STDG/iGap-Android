@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/menu_parent_layout"
     style="?backgroundColorSettingTheme"
@@ -55,7 +55,7 @@
             android:fontFamily="@font/main_font"
             android:textSize="@dimen/standardTextSize" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/fc_selected_mode_btn_delete"
             style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/toolbar_icon_size"
@@ -67,7 +67,7 @@
             android:text="@string/delete_icon"
             android:textSize="@dimen/dp22" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/fc_selected_mode_btn_share"
             style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/toolbar_icon_size"
@@ -82,7 +82,7 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/inviteFriendsIcon"
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
@@ -92,7 +92,7 @@
         app:layout_constraintStart_toStartOf="@id/menu_layout_inviteFriend"
         app:layout_constraintTop_toTopOf="@id/inviteFriendsTitle" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/inviteFriendsTitle"
         style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
@@ -109,7 +109,7 @@
         app:layout_constraintStart_toEndOf="@id/inviteFriendsIcon"
         app:layout_constraintTop_toTopOf="@id/menu_layout_inviteFriend" />
 
-    <android.support.constraint.Group
+    <androidx.constraintlayout.widget.Group
         android:id="@+id/menu_layout_inviteFriend"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -122,7 +122,7 @@
         app:layout_constraintTop_toBottomOf="@id/fc_layout_selected_mode"
         app:layout_constraintWidth_percent=".9" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/newChannelIcon"
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
@@ -132,7 +132,7 @@
         app:layout_constraintStart_toStartOf="@id/menu_layout_add_new_channel"
         app:layout_constraintTop_toTopOf="@id/newChannelTitle" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/newChannelTitle"
         style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
@@ -149,7 +149,7 @@
         app:layout_constraintStart_toEndOf="@id/newChannelIcon"
         app:layout_constraintTop_toTopOf="@id/menu_layout_add_new_channel" />
 
-    <android.support.constraint.Group
+    <androidx.constraintlayout.widget.Group
         android:id="@+id/menu_layout_add_new_channel"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -162,7 +162,7 @@
         app:layout_constraintTop_toBottomOf="@id/menu_layout_inviteFriend"
         app:layout_constraintWidth_percent=".9" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/newGroupIcon"
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
@@ -172,7 +172,7 @@
         app:layout_constraintStart_toStartOf="@id/menu_layout_add_new_group"
         app:layout_constraintTop_toTopOf="@id/newGroupTitle" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/newGroupTitle"
         style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
@@ -189,7 +189,7 @@
         app:layout_constraintStart_toEndOf="@id/newGroupIcon"
         app:layout_constraintTop_toTopOf="@id/menu_layout_add_new_group" />
 
-    <android.support.constraint.Group
+    <androidx.constraintlayout.widget.Group
         android:id="@+id/menu_layout_add_new_group"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -202,7 +202,7 @@
         app:layout_constraintTop_toBottomOf="@id/menu_layout_add_new_channel"
         app:layout_constraintWidth_percent=".9" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/secretChatIcon"
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
@@ -213,7 +213,7 @@
         app:layout_constraintStart_toStartOf="@id/menu_layout_btn_secret_chat"
         app:layout_constraintTop_toTopOf="@id/secretChatTitle" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/secretChatTitle"
         style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
@@ -230,7 +230,7 @@
         app:layout_constraintStart_toEndOf="@id/secretChatIcon"
         app:layout_constraintTop_toTopOf="@id/menu_layout_btn_secret_chat" />
 
-    <android.support.constraint.Group
+    <androidx.constraintlayout.widget.Group
         android:id="@+id/menu_layout_btn_secret_chat"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -243,7 +243,7 @@
         app:layout_constraintTop_toBottomOf="@id/menu_layout_add_new_group"
         app:layout_constraintWidth_percent=".9" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/newGroupCallIcon"
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
@@ -254,7 +254,7 @@
         app:layout_constraintStart_toStartOf="@id/menu_layout_new_group_call"
         app:layout_constraintTop_toTopOf="@id/newGroupCallTitle" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/newGroupCallTitle"
         style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
@@ -270,7 +270,7 @@
         app:layout_constraintStart_toEndOf="@id/newGroupCallIcon"
         app:layout_constraintTop_toTopOf="@id/menu_layout_new_group_call" />
 
-    <android.support.constraint.Group
+    <androidx.constraintlayout.widget.Group
         android:id="@+id/menu_layout_new_group_call"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -283,7 +283,7 @@
         app:layout_constraintTop_toBottomOf="@id/menu_layout_btn_secret_chat"
         app:layout_constraintWidth_percent=".9" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/addContactIcon"
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
@@ -294,7 +294,7 @@
         app:layout_constraintStart_toStartOf="@id/menu_layout_add_new_contact"
         app:layout_constraintTop_toTopOf="@id/addContactTitle" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/addContactTitle"
         style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
@@ -310,7 +310,7 @@
         app:layout_constraintStart_toEndOf="@id/addContactIcon"
         app:layout_constraintTop_toTopOf="@id/menu_layout_add_new_contact" />
 
-    <android.support.constraint.Group
+    <androidx.constraintlayout.widget.Group
         android:id="@+id/menu_layout_add_new_contact"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -323,7 +323,7 @@
         app:layout_constraintTop_toBottomOf="@id/menu_layout_new_group_call"
         app:layout_constraintWidth_percent=".9" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/dialNumberIcon"
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
@@ -335,7 +335,7 @@
         app:layout_constraintStart_toStartOf="@id/menu_layout_btn_dial_number"
         app:layout_constraintTop_toTopOf="@id/dialNumberTitle" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/dialNumberTitle"
         style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
@@ -351,7 +351,7 @@
         app:layout_constraintStart_toEndOf="@id/dialNumberIcon"
         app:layout_constraintTop_toTopOf="@id/menu_layout_btn_dial_number" />
 
-    <android.support.constraint.Group
+    <androidx.constraintlayout.widget.Group
         android:id="@+id/menu_layout_btn_dial_number"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -376,7 +376,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/menu_layout_btn_dial_number" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
@@ -420,4 +420,4 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

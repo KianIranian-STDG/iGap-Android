@@ -1,12 +1,12 @@
 package net.iGap.igasht.locationdetail.buyticket;
 
-import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.DividerItemDecoration;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DividerItemDecoration;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtBuyTicketBinding;
-import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.igasht.IGashtBaseView;
 import net.iGap.igasht.locationdetail.IGashtLocationDetailFragment;
 

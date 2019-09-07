@@ -9,7 +9,7 @@
             type="net.iGap.kuknos.viewmodel.KuknosChangePassVM" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         style="?backgroundColorSettingTheme">
@@ -38,13 +38,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragKuknosCPToolbar">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
             android:paddingBottom="@dimen/dp20">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosCPTitle"
                 android:layout_width="0dp"
@@ -58,7 +58,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="0.7" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosCPMessage"
                 android:layout_width="0dp"
@@ -72,7 +72,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosCPTitle"
                 app:layout_constraintWidth_percent="0.7" />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosCPOldPHolder"
                 android:layout_width="0dp"
@@ -83,7 +83,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosCPMessage"
                 app:layout_constraintWidth_percent="0.7">
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosCPOldP"
                     android:layout_width="match_parent"
@@ -101,10 +101,10 @@
                     android:imeOptions="actionNext"
                     android:digits="0123456789"
                     android:maxLength="4"/>
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosCPNewPHolder"
                 android:layout_width="0dp"
@@ -115,7 +115,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosCPOldPHolder"
                 app:layout_constraintWidth_percent="0.7">
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosCPNewP"
                     android:layout_width="match_parent"
@@ -133,10 +133,10 @@
                     android:imeOptions="actionNext"
                     android:digits="0123456789"
                     android:maxLength="4" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 style="?textTitleColorSettingTheme"
                 android:id="@+id/fragKuknosCPENewPHolder"
                 android:layout_width="0dp"
@@ -147,7 +147,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragKuknosCPNewPHolder"
                 app:layout_constraintWidth_percent="0.7">
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosCPENewP"
                     android:layout_width="match_parent"
@@ -164,9 +164,9 @@
                     android:imeOptions="actionDone"
                     android:digits="0123456789"
                     android:maxLength="4" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 style="?iGapButton"
                 android:id="@+id/fragKuknosCPSubmit"
                 android:layout_width="0dp"
@@ -194,7 +194,7 @@
                 app:layout_constraintHorizontal_bias="0.05"
                 app:layout_constraintHeight_percent="0.06"/>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

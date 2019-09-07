@@ -13,11 +13,11 @@
 
   >
 
-  <android.support.design.widget.AppBarLayout
+  <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
       android:id="@+id/asn_toolbar"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp60"
@@ -95,9 +95,9 @@
         </net.iGap.libs.rippleeffect.RippleView>
 
       </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
-  </android.support.design.widget.AppBarLayout>
+  </com.google.android.material.appbar.AppBarLayout>
 
   <LinearLayout
     android:id="@+id/st_layout_fa"

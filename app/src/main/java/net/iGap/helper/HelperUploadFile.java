@@ -11,8 +11,7 @@
 package net.iGap.helper;
 
 import android.os.AsyncTask;
-import android.support.v4.util.ArrayMap;
-import android.util.Log;
+import androidx.collection.ArrayMap;
 
 import net.iGap.G;
 import net.iGap.R;

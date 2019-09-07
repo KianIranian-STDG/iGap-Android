@@ -1,10 +1,9 @@
 package net.iGap.igasht.locationdetail.buyticket;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.databinding.ObservableInt;
 import android.view.View;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.igasht.BaseIGashtViewModel;

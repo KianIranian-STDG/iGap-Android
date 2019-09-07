@@ -19,8 +19,8 @@ import android.database.ContentObserver;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.provider.ContactsContract;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import net.iGap.Config;
 import net.iGap.module.Contacts;

@@ -9,7 +9,7 @@
   android:layoutDirection="ltr">
 
 
-  <android.support.v4.view.ViewPager
+  <androidx.viewpager.widget.ViewPager
     android:id="@+id/asi_view_pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -34,7 +34,7 @@
       app:rv_rippleDuration="0"
       app:rv_ripplePadding="5dp">
 
-      <android.support.v7.widget.AppCompatTextView
+      <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/asi_btn_back"
         android:layout_width="@dimen/dp52"
         android:layout_height="match_parent"
@@ -66,7 +66,7 @@
       app:rv_rippleDuration="100"
       app:rv_ripplePadding="5dp">
 
-      <android.support.v7.widget.AppCompatTextView
+      <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/asi_btn_menu"
         android:layout_width="@dimen/dp52"
         android:layout_height="match_parent"

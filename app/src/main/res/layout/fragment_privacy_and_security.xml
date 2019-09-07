@@ -30,13 +30,13 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"/>
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
       android:id="@+id/stps_backgroundToolbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:visibility="gone">
 
-      <android.support.v7.widget.Toolbar
+      <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:layout_alignParentLeft="true"
@@ -87,8 +87,8 @@
 
           </net.iGap.libs.rippleeffect.RippleView>
         </RelativeLayout>
-      </android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
+      </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
     <ScrollView

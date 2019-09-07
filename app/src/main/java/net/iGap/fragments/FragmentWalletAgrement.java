@@ -1,22 +1,20 @@
 package net.iGap.fragments;
 
 
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.text.Html;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
@@ -24,18 +22,11 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentWalletAgrementBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.IBackHandler;
-import net.iGap.interfaces.OnReceivePageInfoWalletAgreement;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.model.GoToWalletPage;
-import net.iGap.request.RequestInfoPage;
-import net.iGap.request.RequestWalletRegister;
 import net.iGap.viewmodel.FragmentWalletAgreementViewModel;
 
 import org.jetbrains.annotations.NotNull;
 import org.paygear.WalletActivity;
-
-import ir.radsense.raadcore.model.Auth;
 
 /**
  * A simple {@link Fragment} subclass.

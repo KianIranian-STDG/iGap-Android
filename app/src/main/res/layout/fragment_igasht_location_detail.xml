@@ -13,7 +13,7 @@
             type="net.iGap.igasht.locationdetail.IGashtLocationDetailViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/root"
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             app:layout_constraintStart_toStartOf="@id/toolbar"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp8"
@@ -79,7 +79,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/ll_igasht_detail"
                     app:layout_constraintWidth_percent=".9">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/buyTicket"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -93,7 +93,7 @@
                         android:textColor="@color/igasht_tab_text_color"
                         android:textSize="@dimen/standardTextSize" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/detail"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -127,14 +127,14 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <android.support.constraint.ConstraintLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp2"
                         app:layout_constraintBottom_toTopOf="@id/view2"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/itemTitle"
                             style="?textTitleColorSettingTheme"
                             android:layout_width="0dp"
@@ -152,7 +152,7 @@
                             app:layout_constraintTop_toTopOf="@id/itemImage"
                             app:layout_constraintVertical_chainStyle="packed" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/itemAddress"
                             style="?textTitleColorSettingTheme"
                             android:layout_width="0dp"
@@ -179,7 +179,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintWidth_percent=".3" />
-                    </android.support.constraint.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View
                         android:id="@+id/view2"
@@ -195,14 +195,14 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <android.support.constraint.ConstraintLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp2"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/view2">
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/itemLocation"
                             style="?textTitleColorSettingTheme"
                             android:layout_width="0dp"
@@ -219,7 +219,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/iv_location"
                             app:layout_constraintTop_toTopOf="@+id/iv_location" />
 
-                        <android.support.v7.widget.AppCompatTextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/iv_location"
                             style="@style/baseFontIcon"
                             android:layout_width="0dp"
@@ -233,11 +233,11 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintWidth_percent=".3" />
 
-                    </android.support.constraint.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

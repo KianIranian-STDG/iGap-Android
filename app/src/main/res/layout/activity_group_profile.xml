@@ -13,12 +13,12 @@
             type="net.iGap.viewmodel.FragmentGroupProfileViewModel" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolbar_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
             android:layoutDirection="ltr"
             app:elevation="0dp">
 
-            <android.support.design.widget.CollapsingToolbarLayout
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/toolbar_layout_collapse"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height_root_with_profile"
@@ -156,18 +156,18 @@
 
                 </FrameLayout>
 
-            </android.support.design.widget.CollapsingToolbarLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layoutDirection="locale"
             android:scrollbars="none"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layoutDirection="locale">
@@ -199,7 +199,7 @@
                     app:layout_constraintTop_toBottomOf="@id/description"
                     app:layout_constraintWidth_percent=".95" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/inviteLink"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -214,7 +214,7 @@
                     app:layout_constraintTop_toBottomOf="@id/inviteLinkTitle"
                     app:layout_constraintWidth_percent=".9" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/inviteLinkTitle"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -251,7 +251,7 @@
                     app:layout_constraintTop_toBottomOf="@id/inviteLink"
                     app:layout_constraintWidth_percent=".95" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/notificationTitle"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -268,7 +268,7 @@
                     app:layout_constraintTop_toBottomOf="@id/divider0"
                     app:layout_constraintWidth_percent=".9" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/notificationAndSound"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -304,7 +304,7 @@
                     app:layout_constraintTop_toBottomOf="@id/notificationAndSound"
                     app:layout_constraintWidth_percent=".95" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/sharedContentTitle"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
@@ -319,7 +319,7 @@
                     app:layout_constraintStart_toStartOf="@id/notificationTitle"
                     app:layout_constraintTop_toBottomOf="@id/divider1" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/photo"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -334,7 +334,7 @@
                     app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/sharedContentTitle" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/photoCount"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -348,7 +348,7 @@
                     app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/photo" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/video"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -363,7 +363,7 @@
                     app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/photo" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/videoCount"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -377,7 +377,7 @@
                     app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/video" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/audioFiles"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -392,7 +392,7 @@
                     app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/video" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/audioFilesCount"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -406,7 +406,7 @@
                     app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/audioFiles" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/voiceMessage"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -421,7 +421,7 @@
                     app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/audioFiles" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/voiceMessageCount"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -435,7 +435,7 @@
                     app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/voiceMessage" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/gif"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -450,7 +450,7 @@
                     app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/voiceMessage" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/gifCount"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -464,7 +464,7 @@
                     app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/gif" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/files"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -479,7 +479,7 @@
                     app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/gif" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/filesCount"
                     style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -493,7 +493,7 @@
                     app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toTopOf="@id/files" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/links"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -508,7 +508,7 @@
                     app:layout_constraintStart_toStartOf="@id/sharedContentTitle"
                     app:layout_constraintTop_toBottomOf="@id/files" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/linksCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -533,7 +533,7 @@
                     app:layout_constraintTop_toBottomOf="@id/links"
                     app:layout_constraintWidth_percent=".95" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/addMember"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -549,7 +549,7 @@
                     app:layout_constraintStart_toStartOf="@id/notificationTitle"
                     app:layout_constraintTop_toBottomOf="@id/divider2" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/showMemberList"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -575,7 +575,7 @@
                     app:layout_constraintTop_toBottomOf="@id/showMemberList"
                     app:layout_constraintWidth_percent=".95" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/leaveGroup"
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
@@ -601,9 +601,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </android.support.v4.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <net.iGap.module.CircleImageView
             android:id="@+id/toolbar_avatar"
@@ -618,6 +618,6 @@
             app:collapsedTarget="@id/toolbar_avatar_collapsed_target"
             app:layout_behavior="net.iGap.module.CollapsingImageBehavior" />
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

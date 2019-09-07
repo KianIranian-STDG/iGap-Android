@@ -9,7 +9,7 @@
             type="net.iGap.igasht.locationdetail.buyticket.IGashtBuyTicketViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
             app:layout_constraintStart_toEndOf="@id/serviceTitle"
             app:layout_constraintTop_toTopOf="@id/priceTitle" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/priceTitle"
             style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
@@ -68,7 +68,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent=".3" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/countTitle"
             style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
@@ -83,7 +83,7 @@
             app:layout_constraintTop_toTopOf="@id/priceTitle"
             app:layout_constraintWidth_percent=".3" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/serviceTitle"
             style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
@@ -98,7 +98,7 @@
             app:layout_constraintTop_toTopOf="@id/priceTitle"
             app:layout_constraintWidth_percent=".4" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/totalPrice"
             style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
@@ -114,13 +114,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addNewPlaceButton" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/addedPlaceList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="@dimen/dp100"
             android:visibility="@{viewModel.showMainView}"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/priceTitle"
@@ -142,7 +142,7 @@
             app:layout_constraintTop_toBottomOf="@id/addedPlaceList"
             app:layout_constraintWidth_percent=".6" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/payButton"
             style="?iGapButton"
             android:layout_width="0dp"
@@ -157,7 +157,7 @@
             app:layout_constraintTop_toBottomOf="@id/totalPrice"
             app:layout_constraintWidth_percent=".6" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/refreshView"
             style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp48"
@@ -180,5 +180,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

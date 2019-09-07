@@ -11,20 +11,14 @@ package net.iGap.viewmodel;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 import android.graphics.Color;
-import android.net.Uri;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.helper.HelperCalander;
@@ -36,10 +30,8 @@ import net.iGap.libs.ripplesoundplayer.RippleVisualizerView;
 import net.iGap.libs.ripplesoundplayer.renderer.LineRenderer;
 import net.iGap.libs.ripplesoundplayer.util.PaintUtil;
 import net.iGap.module.AppUtils;
-import net.iGap.module.DialogAnimation;
 import net.iGap.module.MusicPlayer;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

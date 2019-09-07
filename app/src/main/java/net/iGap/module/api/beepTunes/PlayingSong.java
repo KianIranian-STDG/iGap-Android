@@ -1,7 +1,7 @@
 package net.iGap.module.api.beepTunes;
 
 import android.graphics.Bitmap;
-import android.support.design.widget.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 public class PlayingSong {
     public static final int PLAY = 0;

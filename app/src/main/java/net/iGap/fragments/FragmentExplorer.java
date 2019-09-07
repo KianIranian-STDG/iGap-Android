@@ -10,16 +10,14 @@
 
 package net.iGap.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import net.iGap.G;
@@ -30,9 +28,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.IOnBackPressed;
 import net.iGap.interfaces.IPickFile;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.FileUtils;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.structs.StructExplorerItem;
 
 import java.io.File;

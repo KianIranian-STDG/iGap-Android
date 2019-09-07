@@ -7,7 +7,7 @@
             type="net.iGap.viewmodel.FragmentSeePayViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         style="?backgroundColorSettingTheme"
@@ -26,7 +26,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_add_car"
             style="?iGapButton"
             android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_no_car" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_add_car_"
             style="?iGapButtonStroke"
             android:layout_width="0dp"
@@ -53,7 +53,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/btn_inquiry"/>
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_inquiry"
             style="?iGapButton"
             android:layout_width="0dp"
@@ -69,7 +69,7 @@
             app:layout_constraintEnd_toStartOf="@id/btn_charge"
             app:layout_constraintStart_toStartOf="@id/btn_add_car_"/>
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_charge"
             style="?iGapButton"
             android:layout_width="0dp"
@@ -83,7 +83,7 @@
             app:layout_constraintStart_toEndOf="@id/btn_inquiry"
             app:layout_constraintTop_toTopOf="@id/btn_inquiry" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_no_car"
             style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
@@ -96,7 +96,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fsp_toolbar" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/lbl_plaques"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -108,7 +108,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fsp_toolbar" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_plaques"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -146,20 +146,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fsp_toolbar" />
 
-        <android.support.constraint.Group
+        <androidx.constraintlayout.widget.Group
             android:id="@+id/state_no_car"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="gone"
             app:constraint_referenced_ids="btn_add_car,txt_no_car" />
 
-        <android.support.constraint.Group
+        <androidx.constraintlayout.widget.Group
             android:id="@+id/state_has_car"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="gone"
             app:constraint_referenced_ids="btn_inquiry,btn_charge,btn_add_car_,rv_plaques,lbl_plaques" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

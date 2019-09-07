@@ -31,12 +31,12 @@
         android:layout_height="@dimen/toolbar_height"
         android:orientation="horizontal"/>
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
       android:visibility="gone"
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
 
-      <android.support.v7.widget.Toolbar
+      <androidx.appcompat.widget.Toolbar
         android:id="@+id/asn_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
@@ -88,9 +88,9 @@
             android:visibility="visible" />
 
         </RelativeLayout>
-      </android.support.v7.widget.Toolbar>
+      </androidx.appcompat.widget.Toolbar>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
     <ScrollView

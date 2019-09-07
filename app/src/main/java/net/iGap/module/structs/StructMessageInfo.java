@@ -12,7 +12,10 @@ package net.iGap.module.structs;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.adapter.items.chat.AbstractMessage;
+import net.iGap.interfaces.IChatItemAttachment;
 import net.iGap.G;
 import net.iGap.module.MyType;
 import net.iGap.proto.ProtoGlobal;

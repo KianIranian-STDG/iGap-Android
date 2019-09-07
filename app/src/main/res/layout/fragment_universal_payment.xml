@@ -9,7 +9,7 @@
             type="net.iGap.payment.PaymentViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/greenStatus"
@@ -26,7 +26,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/paymentType" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/paymentStateIcon"
             style="@style/baseFontIcon"
             android:layout_width="@dimen/dp60"
@@ -40,7 +40,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/v" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/paymentType"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -68,7 +68,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintWidth_percent=".9" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title"
             style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
@@ -82,7 +82,7 @@
             app:layout_constraintEnd_toEndOf="@id/paymentType"
             app:layout_constraintStart_toStartOf="@id/paymentType" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/description"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -96,7 +96,7 @@
             app:layout_constraintEnd_toEndOf="@id/paymentType"
             app:layout_constraintStart_toStartOf="@id/paymentType" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/priceTitle"
             style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
@@ -109,7 +109,7 @@
             app:layout_constraintEnd_toEndOf="@id/paymentType"
             app:layout_constraintStart_toStartOf="@id/paymentType" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/price"
             style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
@@ -134,7 +134,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintWidth_percent=".9" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/paymentStatus"
             style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
@@ -147,7 +147,7 @@
             app:layout_constraintEnd_toEndOf="@id/priceTitle"
             app:layout_constraintStart_toStartOf="@id/priceTitle" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/paymentRRN"
             style="?textSubColorSettingTheme"
             android:layout_width="0dp"
@@ -173,7 +173,7 @@
             app:layout_constraintEnd_toEndOf="@id/paymentType"
             app:layout_constraintStart_toStartOf="@id/paymentType" />-->
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/closeButton"
             style="?iGapButton"
             android:layout_width="0dp"
@@ -189,7 +189,7 @@
             app:layout_constraintStart_toEndOf="@id/retryView"
             app:layout_constraintWidth_percent=".45" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/retryView"
             style="@style/BaseIGapButtonStyle"
             android:layout_width="0dp"
@@ -204,7 +204,7 @@
             app:layout_constraintTop_toTopOf="@id/closeButton"
             app:layout_constraintWidth_percent=".45" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/cancelButton"
             style="@style/BaseIGapButtonStyle"
             android:layout_width="0dp"
@@ -219,7 +219,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintWidth_percent=".45" />
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/acceptButton"
             style="@style/BaseIGapButtonStyle"
             android:layout_width="0dp"
@@ -244,5 +244,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/v" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

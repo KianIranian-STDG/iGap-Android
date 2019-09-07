@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/plaque_view_root"
     android:layout_width="match_parent"
@@ -18,7 +18,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.v7.widget.AppCompatEditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/pv_et_p1"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -52,7 +52,7 @@
         app:layout_constraintRight_toLeftOf="@id/pv_et_p2"
         app:layout_constraintTop_toTopOf="parent" >
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/pv_et_pAlphabet"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -72,7 +72,7 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.AppCompatEditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/pv_et_p2"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -120,7 +120,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.3"
@@ -131,7 +131,7 @@
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold" />
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/pv_et_pCity"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -148,4 +148,4 @@
 
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

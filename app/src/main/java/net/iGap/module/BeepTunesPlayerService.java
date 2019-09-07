@@ -1,7 +1,7 @@
 package net.iGap.module;
 
 import android.app.Service;
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -9,8 +9,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
+import androidx.annotation.Nullable;
+
 import android.util.Log;
 
 import net.iGap.module.api.beepTunes.PlayingSong;

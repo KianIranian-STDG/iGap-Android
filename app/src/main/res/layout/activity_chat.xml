@@ -42,7 +42,7 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/chl_recycler_view_chat"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
@@ -79,7 +79,7 @@
                         </RelativeLayout>
 
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rcvDrBot"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/dp52"
@@ -232,7 +232,7 @@
 
             </LinearLayout>
 
-            <android.support.v7.widget.ViewStubCompat
+            <androidx.appcompat.widget.ViewStubCompat
                 android:id="@+id/replayLayoutStub"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -336,7 +336,7 @@
                         android:layout_height="wrap_content"
                         android:visibility="gone" />
 
-                    <android.support.constraint.ConstraintLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/ac_layout_selected_item"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp44"
@@ -414,7 +414,7 @@
                             app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_copy" />
 
 
-                    </android.support.constraint.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </RelativeLayout>
 
@@ -493,7 +493,7 @@
 
         </RelativeLayout>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/cardFloatingTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -528,7 +528,7 @@
 
 
             </RelativeLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
         <include
             android:id="@+id/layout_mic_recorde"

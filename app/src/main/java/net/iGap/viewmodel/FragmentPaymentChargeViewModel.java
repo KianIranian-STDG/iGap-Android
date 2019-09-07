@@ -9,31 +9,20 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
-import android.content.Context;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.MciApi;
-import net.iGap.api.PaymentApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.databinding.FragmentPaymentChargeBinding;
-import net.iGap.helper.HelperError;
-import net.iGap.interfaces.OnMplResult;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
 import net.iGap.proto.ProtoMplGetTopupToken;
@@ -42,9 +31,6 @@ import net.iGap.request.RequestMplGetTopupToken;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;

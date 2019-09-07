@@ -10,7 +10,7 @@
 
 package net.iGap.interfaces;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.module.enums.LocalFileType;
 
