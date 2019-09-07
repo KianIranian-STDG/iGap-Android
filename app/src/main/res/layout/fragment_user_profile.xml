@@ -815,10 +815,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:gravity="bottom"
-                android:paddingBottom="6dp"
-                android:visibility="@{viewModel.countryCodeVisibility}"
-                android:text="@{viewModel.referralCountryCodeObservableField}"
                 android:onClick="@{() -> viewModel.onCountryCodeClick()}"
+                android:paddingBottom="6dp"
+                android:text="@{viewModel.referralCountryCodeObservableField}"
+                android:visibility="@{viewModel.countryCodeVisibility}"
                 app:layout_constraintBottom_toBottomOf="@id/referralView"
                 app:layout_constraintStart_toStartOf="@id/name"
                 app:layout_constraintTop_toTopOf="@id/referralView" />
@@ -880,6 +880,7 @@
                 android:id="@+id/profileViewGroup"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 app:constraint_referenced_ids="inviteTitle,inviteIcon,scanQRIcon,scanQRTitle,nearByIcon,nearByTitle,darkTheme,darkThemeTitle,fup_btn_dark_view_handler_view,fup_btn_faq_view_handler_view,faqTitle,fup_user_name,fup_user_tel,fup_user_bio,cloudIcon,cloudTitle,settingIcon,settingTitle,addIcon,addTitle,fup_splitter_1,fup_btn_credit,fup_splitter_2,fup_btn_score,fup_splitter_3,inviteIcon,inviteTitle,fup_btn_qr_scanner,fup_btn_nearBy,fup_btn_dark_mode,fup_btn_faq,fup_splitter_4,versionTitle,fup_txt_app_version,userFullName,versionChange"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />
@@ -888,7 +889,6 @@
                 android:id="@+id/editProfileView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:visibility="gone"
                 app:constraint_referenced_ids="referralView,addAvatar,name,userName,bio,email,gender,genderValue" />
 
         </android.support.constraint.ConstraintLayout>
