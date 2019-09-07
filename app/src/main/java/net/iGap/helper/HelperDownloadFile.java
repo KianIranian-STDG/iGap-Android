@@ -13,6 +13,7 @@ package net.iGap.helper;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.downloader.Error;
 import com.downloader.OnCancelListener;
 import com.downloader.OnDownloadListener;
 import com.downloader.OnPauseListener;

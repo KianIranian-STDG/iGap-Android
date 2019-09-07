@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 
+import com.downloader.Error;
 import com.downloader.PRDownloader;
 import com.downloader.Progress;
 
