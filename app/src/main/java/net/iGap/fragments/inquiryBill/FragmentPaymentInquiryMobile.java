@@ -1,13 +1,14 @@
 package net.iGap.fragments.inquiryBill;
 
-import androidx.lifecycle.ViewModelProviders;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentInquiryMobileBinding;
@@ -62,7 +63,7 @@ public class FragmentPaymentInquiryMobile extends BaseFragment {
 
         viewModel.getGoToShowInquiryBillPage().observe(getViewLifecycleOwner(), data -> {
             if (getActivity() != null && data != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), ShowBillInquiryFragment.getInstance(data,R.string.bills_inquiry_mci)).setReplace(false).load(true);
+                new HelperFragment(getActivity().getSupportFragmentManager(), ShowBillInquiryFragment.getInstance(data, R.string.bills_inquiry_mci)).setReplace(false).load(true);
             }
         });
     }

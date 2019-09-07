@@ -1,4 +1,3 @@
-
 package net.iGap.model.popularChannel;
 
 

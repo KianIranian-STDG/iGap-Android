@@ -85,15 +85,15 @@ public class FragmentDataViewModel {
 
 
     public boolean iconMiladi() {
-        return typeData == MILADI ? true : false;
+        return typeData == MILADI;
     }
 
     public boolean iconShamsi() {
-        return typeData == SHAMSI ? true : false;
+        return typeData == SHAMSI;
     }
 
     public boolean iconGhamari() {
-        return typeData == GHAMARY ? true : false;
+        return typeData == GHAMARY;
     }
 
 

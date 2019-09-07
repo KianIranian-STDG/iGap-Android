@@ -1,8 +1,8 @@
 package net.iGap.kuknos.viewmodel;
 
+import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableField;
 
 import com.google.gson.Gson;
 
@@ -80,8 +80,7 @@ public class KuknosSendVM extends ViewModel {
         try {
             KeyPair keyPair = KeyPair.fromAccountId(walletID.get());
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -100,13 +99,11 @@ public class KuknosSendVM extends ViewModel {
             Double maxCredit = Double.valueOf(balanceInfoM.getBalance());
             if (reqAmount < (maxCredit - 1)) {
                 return true;
-            }
-            else {
+            } else {
                 errorM.setValue(new ErrorM(true, "Not Enough Credit", "1", R.string.kuknos_send_CreditError));
                 return false;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // Format is wrong
             errorM.setValue(new ErrorM(true, "Invalid Amount Format", "1", R.string.kuknos_send_AmountFromatError));
             return false;
@@ -117,7 +114,7 @@ public class KuknosSendVM extends ViewModel {
         kuknosSendM.setAmount(amount.get());
         kuknosSendM.setSrc(panelRepo.getUserRepo().getSeedKey());
         kuknosSendM.setDest(walletID.get());
-        kuknosSendM.setMemo((text.get()==null ? "" : text.get()));
+        kuknosSendM.setMemo((text.get() == null ? "" : text.get()));
 
         Gson gson = new Gson();
 

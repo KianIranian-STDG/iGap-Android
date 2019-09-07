@@ -11,15 +11,6 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.Group;
-import androidx.fragment.app.Fragment;
-import androidx.collection.ArrayMap;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Gravity;
@@ -32,6 +23,16 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.collection.ArrayMap;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -343,7 +344,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 bundle1.putBoolean("NewRoom", true);
                 fragment.setArguments(bundle1);
                 if (FragmentNewGroup.onRemoveFragmentNewGroup != null) {
-                    Log.wtf(this.getClass().getName(),"onRemoveFragmentNewGroup");
+                    Log.wtf(this.getClass().getName(), "onRemoveFragmentNewGroup");
                     FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
                 }
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
@@ -474,7 +475,8 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     public void onResume() {
         super.onResume();
 
-        if (isSearchEnabled && mHelperToolbar != null) mHelperToolbar.getmSearchBox().performClick();
+        if (isSearchEnabled && mHelperToolbar != null)
+            mHelperToolbar.getmSearchBox().performClick();
         if (isContact && mHelperToolbar != null) mHelperToolbar.checkPassCodeVisibility();
     }
 
@@ -601,7 +603,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
     @Override
     public void onSearchClickListener(View view) {
-        isSearchEnabled = true ;
+        isSearchEnabled = true;
         inSearchMode = true;
     }
 
@@ -631,7 +633,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
     @Override
     public void onBtnClearSearchClickListener(View view) {
-        isSearchEnabled = false ;
+        isSearchEnabled = false;
     }
 
     @Override

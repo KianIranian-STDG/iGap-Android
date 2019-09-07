@@ -2,8 +2,9 @@ package net.iGap;
 
 import android.content.Context;
 import android.os.Build;
-import androidx.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.GlideBuilder;

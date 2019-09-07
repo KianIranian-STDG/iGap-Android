@@ -12,22 +12,12 @@ package net.iGap.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Intent;
 import android.content.res.Configuration;
-import androidx.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.appcompat.widget.SearchView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -42,6 +32,16 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.SearchView;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -125,7 +125,7 @@ public class FragmentRegister extends BaseFragment {
 
         fragmentRegisterViewModel.goNextStep.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() instanceof ActivityRegistration && aBoolean != null && aBoolean) {
-                ((ActivityRegistration) getActivity()).loadFragment(new FragmentActivation(),true);
+                ((ActivityRegistration) getActivity()).loadFragment(new FragmentActivation(), true);
             }
         });
 
@@ -212,7 +212,7 @@ public class FragmentRegister extends BaseFragment {
                 if (dialogQrCode != null && dialogQrCode.isShowing()) {
                     dialogQrCode.dismiss();
                 }
-                ((ActivityRegistration) getActivity()).loadFragment(TwoStepVerificationFragment.newInstant(userId),true);
+                ((ActivityRegistration) getActivity()).loadFragment(TwoStepVerificationFragment.newInstant(userId), true);
             }
         });
 

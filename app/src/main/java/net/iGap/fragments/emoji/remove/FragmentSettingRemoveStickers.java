@@ -2,21 +2,22 @@ package net.iGap.fragments.emoji.remove;
 
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.tabs.TabLayout;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
@@ -47,7 +48,7 @@ public class FragmentSettingRemoveStickers extends FragmentToolBarBack {
         FragmentSettingRemoveStickers fragmentDetailStickers = new FragmentSettingRemoveStickers();
         Bundle bundle = new Bundle();
         bundle.putSerializable("GROUP_ID", (Serializable) stickerList);
-        bundle.putSerializable("RECENT", (Serializable) recentStickerList);
+        bundle.putSerializable("RECENT", recentStickerList);
         fragmentDetailStickers.setArguments(bundle);
         return fragmentDetailStickers;
     }
@@ -135,15 +136,15 @@ public class FragmentSettingRemoveStickers extends FragmentToolBarBack {
             tv.setGravity(Gravity.CENTER);
             tv.setTypeface(G.typeface_IRANSansMobile);
 
-            if (G.isDarkTheme){
+            if (G.isDarkTheme) {
                 tv.setTextColor(G.context.getResources().getColor(R.color.white));
-            }
-            else {
+            } else {
                 tv.setTextColor(G.context.getResources().getColor(R.color.black));
             }
             tabLayout.getTabAt(i).setCustomView(tv);
         }
     }
+
     public class SectionPagerAdapter extends FragmentStatePagerAdapter {
 
         public SectionPagerAdapter(FragmentManager fm) {

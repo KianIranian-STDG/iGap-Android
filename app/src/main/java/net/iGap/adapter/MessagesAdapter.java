@@ -13,18 +13,16 @@ package net.iGap.adapter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.CountDownTimer;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.mikepenz.fastadapter.FastAdapter;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-import com.mikepenz.fastadapter.listeners.ClickEventHook;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
 import com.mikepenz.fastadapter.listeners.OnLongClickListener;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.CardToCardItem;
@@ -44,8 +42,6 @@ import net.iGap.proto.ProtoGlobal;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.ErrorManager;
 
 public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item> implements OnLongClickListener<Item> {
     // contain sender id
@@ -59,7 +55,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
         @Override
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
-            if (item instanceof TimeItem || item instanceof LogItem || item instanceof LogWallet || item instanceof LogWalletCardToCard|| item instanceof CardToCardItem) {
+            if (item instanceof TimeItem || item instanceof LogItem || item instanceof LogWallet || item instanceof LogWalletCardToCard || item instanceof CardToCardItem) {
                 if (item.isSelected()) v.performLongClick();
             } else {
                 if (iMessageItem != null && item.mMessage != null && item.mMessage.senderID != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {
@@ -274,10 +270,12 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
         return null;
     }
-    public long getItemByPosition(int position){
+
+    public long getItemByPosition(int position) {
         try {
             return getAdapterItem(position).mMessage.time;
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         return 0;
 
     }

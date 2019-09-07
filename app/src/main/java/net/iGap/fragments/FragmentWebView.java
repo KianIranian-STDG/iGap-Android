@@ -7,9 +7,6 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,15 +23,19 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.IOnBackPressed;
-import net.iGap.interfaces.ToolbarListener;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.WebAppInterface;
 
 import java.io.IOException;
@@ -261,9 +262,9 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             super.onPageFinished(view, url);
             if (isWebViewVisible && view != null && view.getTitle() != null && !view.getTitle().contains("صفحه وب در دسترس")) {
                 titleTextView.setText(view.getTitle());
-                if (view.getTitle().length() > 23){
-                    mHelperToolbar.setDefaultTitle(view.getTitle().substring(0 , 23) + "...");
-                }else {
+                if (view.getTitle().length() > 23) {
+                    mHelperToolbar.setDefaultTitle(view.getTitle().substring(0, 23) + "...");
+                } else {
                     mHelperToolbar.setDefaultTitle(view.getTitle());
                 }
             }
@@ -272,7 +273,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            boolean a = HelperUrl.handleAppUrl(getActivity(),url);
+            boolean a = HelperUrl.handleAppUrl(getActivity(), url);
             if (a) {
                 // onBackButtonClicked(view);
             }
@@ -286,6 +287,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
 
     public class GeoWebChromeClient extends android.webkit.WebChromeClient {
         private boolean remember;
+
         public GeoWebChromeClient() {
             remember = false;
         }
@@ -332,7 +334,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
                 @TargetApi(Build.VERSION_CODES.M)
                 @Override
                 public void run() {
-                    if(request.getOrigin().toString().equals("file:///")) {
+                    if (request.getOrigin().toString().equals("file:///")) {
                         request.grant(request.getResources());
                     } else {
                         request.deny();
@@ -369,7 +371,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
 
     private void getLocation(String origin,
                              GeolocationPermissions.Callback callback) {
-        try{
+        try {
             HelperPermission.getLocationPermission(getActivity(), new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {

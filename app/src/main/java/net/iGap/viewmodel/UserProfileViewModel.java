@@ -1,24 +1,25 @@
 package net.iGap.viewmodel;
 
 import android.app.ActivityManager;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import android.content.SharedPreferences;
-import androidx.databinding.ObservableBoolean;
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
-import androidx.databinding.ObservableLong;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.core.text.HtmlCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.core.text.HtmlCompat;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.databinding.ObservableLong;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -580,7 +581,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             }
             if (phoneNumber.length() == phoneMax && sendReferral) {
                 editProfileIcon.set(R.string.check_icon);
-            }else{
+            } else {
                 editProfileIcon.set(R.string.close_icon);
             }
             referralNumberObservableField.set(phoneNumber);
@@ -656,7 +657,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                             G.selectedCard = response.body().get(0);
                         }
 
-                        for (Card card: response.body()) {
+                        for (Card card : response.body()) {
                             G.cardamount += card.cashOutBalance;
                         }
 
@@ -934,6 +935,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     /**
      * just when user profile downloaded and available in realm load it
      * else send null to mutable live data to set default at fragment
+     *
      * @param realm
      */
     private void checkProfileWallpaper(Realm realm) {
@@ -948,10 +950,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 } else {
                     setProfileWallpaperOrDefault(bigImagePath);
                 }
-            }else {
+            } else {
                 changeUserProfileWallpaper.postValue(null);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             changeUserProfileWallpaper.postValue(null);
         }
     }
@@ -973,6 +975,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                                     setProfileWallpaperOrDefault(bigImagePath);
                                 }
                             }
+
                             @Override
                             public void OnError(String token) {
                             }
@@ -1118,36 +1121,36 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
 
     public void setReferral(String phoneNumber) {
-             new RequestUserProfileSetRepresentative().userProfileSetRepresentative(phoneNumber, new OnUserProfileSetRepresentative() {
-                    @Override
-                    public void onSetRepresentative(String phone) {
-                        referralEnableLiveData.postValue(false);
-                        referralNumberObservableField.set("");
-                        countryCodeVisibility.set(View.GONE);
-                        G.handler.post(() -> submitData());
-                    }
-
-                    @Override
-                    public void onErrorSetRepresentative(int majorCode, int minorCode) {
-                        showReferralErrorLiveData.postValue(true);
-
-                        switch (majorCode) {
-                            case 10177:
-                                referralError.set(R.string.phone_number_is_not_valid);
-                                break;
-                            case 10178:
-                                if (minorCode == 2)
-                                    referralError.set(R.string.already_registered);
-                                else
-                                    referralError.set(R.string.server_error);
-                                break;
-                        }
-                    }
-                });
-                editProfileIcon.set(R.string.check_icon);
+        new RequestUserProfileSetRepresentative().userProfileSetRepresentative(phoneNumber, new OnUserProfileSetRepresentative() {
+            @Override
+            public void onSetRepresentative(String phone) {
+                referralEnableLiveData.postValue(false);
+                referralNumberObservableField.set("");
+                countryCodeVisibility.set(View.GONE);
+                G.handler.post(() -> submitData());
             }
 
-    private void countryReader(){
+            @Override
+            public void onErrorSetRepresentative(int majorCode, int minorCode) {
+                showReferralErrorLiveData.postValue(true);
+
+                switch (majorCode) {
+                    case 10177:
+                        referralError.set(R.string.phone_number_is_not_valid);
+                        break;
+                    case 10178:
+                        if (minorCode == 2)
+                            referralError.set(R.string.already_registered);
+                        else
+                            referralError.set(R.string.server_error);
+                        break;
+                }
+            }
+        });
+        editProfileIcon.set(R.string.check_icon);
+    }
+
+    private void countryReader() {
         structCountryArrayList = new ArrayList<>();
         CountryReader countryReade = new CountryReader();
         StringBuilder fileListBuilder = countryReade.readFromAssetsTextFile("country.txt", G.context);
@@ -1178,7 +1181,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     }
 
-    private void getReferral(){
+    private void getReferral() {
         showDialogSelectCountry.postValue(false);
         showReferralErrorLiveData.postValue(false);
         new RequestUserProfileGetRepresentative().userProfileGetRepresentative(new RequestUserProfileGetRepresentative.OnRepresentReady() {
@@ -1186,12 +1189,12 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             public void onRepresent(String phoneNumber) {
                 referralNumberObservableField.set(phoneNumber);
 
-                if (phoneNumber.equals("")){
+                if (phoneNumber.equals("")) {
                     referralEnableLiveData.postValue(true);
                     countryCodeVisibility.set(View.VISIBLE);
                     countryReader();
                     sendReferral = true;
-                }else {
+                } else {
                     referralEnableLiveData.postValue(false);
                     countryCodeVisibility.set(View.GONE);
                     sendReferral = false;
@@ -1207,7 +1210,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
 
     public void setCountry(StructCountry country) {
-        phoneMax = country.getPhonePattern().replace(" " , "").length();
+        phoneMax = country.getPhonePattern().replace(" ", "").length();
         new RequestInfoCountry().infoCountry(country.getAbbreviation(), new OnInfoCountryResponse() {
             @Override
             public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {

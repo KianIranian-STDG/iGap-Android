@@ -7,18 +7,19 @@ package net.iGap.viewmodel;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import androidx.databinding.ObservableField;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
-import androidx.annotation.NonNull;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.ObservableField;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -69,7 +70,6 @@ public class FragmentNotificationAndSoundViewModel {
     private String soundMessageGroupSelected = "";
     private int soundMessageWhich = 0;
     private int soundMessageGroupWhich = 0;
-
 
 
     public FragmentNotificationAndSoundViewModel(FragmentNotificationAndSoundBinding fragmentNotificationAndSoundBinding) {
@@ -365,9 +365,9 @@ public class FragmentNotificationAndSoundViewModel {
 
         View view1 = dialog.getCustomView();
         assert view1 != null;
-        final ColorPicker picker = (ColorPicker) view1.findViewById(R.id.picker);
-        SVBar svBar = (SVBar) view1.findViewById(R.id.svbar);
-        OpacityBar opacityBar = (OpacityBar) view1.findViewById(R.id.opacitybar);
+        final ColorPicker picker = view1.findViewById(R.id.picker);
+        SVBar svBar = view1.findViewById(R.id.svbar);
+        OpacityBar opacityBar = view1.findViewById(R.id.opacitybar);
         picker.addSVBar(svBar);
         picker.addOpacityBar(opacityBar);
 
@@ -513,9 +513,9 @@ public class FragmentNotificationAndSoundViewModel {
 
         View view1 = dialog.getCustomView();
         assert view1 != null;
-        final ColorPicker picker = (ColorPicker) view1.findViewById(R.id.picker);
-        SVBar svBar = (SVBar) view1.findViewById(R.id.svbar);
-        OpacityBar opacityBar = (OpacityBar) view1.findViewById(R.id.opacitybar);
+        final ColorPicker picker = view1.findViewById(R.id.picker);
+        SVBar svBar = view1.findViewById(R.id.svbar);
+        OpacityBar opacityBar = view1.findViewById(R.id.opacitybar);
         picker.setOldCenterColor(ledColorGroup);
         picker.addSVBar(svBar);
         picker.addOpacityBar(opacityBar);
@@ -672,10 +672,7 @@ public class FragmentNotificationAndSoundViewModel {
     //===============================================================================
 
     private boolean getBoolean(int num) {
-        if (num == 0) {
-            return false;
-        }
-        return true;
+        return num != 0;
     }
 
     private void getInfo() {
@@ -768,7 +765,6 @@ public class FragmentNotificationAndSoundViewModel {
                 mp.release();
             }
 
-            ;
         });
 
     }

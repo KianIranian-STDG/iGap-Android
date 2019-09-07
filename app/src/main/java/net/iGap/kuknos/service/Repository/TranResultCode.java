@@ -1,6 +1,5 @@
 package net.iGap.kuknos.service.Repository;
 
-import org.stellar.sdk.xdr.TransactionResultCode;
 import org.stellar.sdk.xdr.XdrDataInputStream;
 
 import java.io.IOException;
@@ -17,17 +16,18 @@ public enum TranResultCode {
     tx_insufficient_balance(-7),
     tx_no_account(-8),
     tx_insufficient_fee(-9),
-    tx_internal_error(-11),;
+    tx_internal_error(-11),
+    ;
 
     private int mValue;
 
-    private TranResultCode(int value) {
+    TranResultCode(int value) {
         this.mValue = value;
     }
 
     static TranResultCode decode(XdrDataInputStream stream) throws IOException {
         int value = stream.readInt();
-        switch(value) {
+        switch (value) {
             case 0:
                 return tx_insufficient_fee;
             default:

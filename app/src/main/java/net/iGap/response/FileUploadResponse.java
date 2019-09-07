@@ -51,15 +51,11 @@ public class FileUploadResponse extends MessageHandler {
             if (HelperCheckInternetConnection.currentConnectivityType != null) {
 
 
-                if (HelperCheckInternetConnection.currentConnectivityType == HelperCheckInternetConnection.ConnectivityType.WIFI)
-                    connectivityType = true;
-                else
-                    connectivityType = false;
+                connectivityType = HelperCheckInternetConnection.currentConnectivityType == HelperCheckInternetConnection.ConnectivityType.WIFI;
             }
 
         } catch (Exception e) {
         }
-        ;
 
 
         HelperDataUsage.progressUpload(connectivityType, fileUploadResponse.getNextLimit(), identityFileUpload.type);

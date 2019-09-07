@@ -1,10 +1,11 @@
 package net.iGap.adapter.items.discovery.holder;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.cardview.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentActivity;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -15,7 +16,7 @@ public class Type7ViewHolder extends BaseViewHolder {
     private CardView card0, card1, card2;
 
     public Type7ViewHolder(@NonNull View itemView, FragmentActivity activity) {
-        super(itemView,activity);
+        super(itemView, activity);
         img0 = itemView.findViewById(R.id.type7_img0);
         img1 = itemView.findViewById(R.id.type7_img1);
         img2 = itemView.findViewById(R.id.type7_img2);

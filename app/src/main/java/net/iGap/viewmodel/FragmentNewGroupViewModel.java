@@ -9,10 +9,7 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import android.content.Context;
-import androidx.databinding.ObservableField;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
@@ -21,6 +18,10 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -132,7 +133,7 @@ public class FragmentNewGroupViewModel extends ViewModel {
             titleToolbar.setValue(G.fragmentActivity.getResources().getString(R.string.New_Chanel));
         } else if (prefix.equals("ConvertToGroup")) {
             titleToolbar.setValue(G.fragmentActivity.getResources().getString(R.string.chat_to_group));
-        }else {
+        } else {
             titleToolbar.setValue(G.fragmentActivity.getResources().getString(R.string.new_group));
         }
 
@@ -209,7 +210,7 @@ public class FragmentNewGroupViewModel extends ViewModel {
                             new RequestChannelAvatarAdd().channelAvatarAdd(room.getId(), token);
                         } else {
                             hideProgressBar();
-                            goToCreateChannelPage.setValue(new CreateChannelModel(room.getId(), mInviteLink,token));
+                            goToCreateChannelPage.setValue(new CreateChannelModel(room.getId(), mInviteLink, token));
                         }
                     }
                 });
@@ -236,7 +237,7 @@ public class FragmentNewGroupViewModel extends ViewModel {
         G.onChatConvertToGroup = new OnChatConvertToGroup() {
             @Override
             public void onChatConvertToGroup(long roomId, final String name, final String description, ProtoGlobal.GroupRoom.Role role) {
-                getRoom(roomId, ProtoGlobal.Room.Type.GROUP , false);
+                getRoom(roomId, ProtoGlobal.Room.Type.GROUP, false);
             }
 
             @Override
@@ -264,7 +265,7 @@ public class FragmentNewGroupViewModel extends ViewModel {
                     public void run() {
                         roomId = roomIdR;
                         hideProgressBar();
-                        getRoom(roomIdR, ProtoGlobal.Room.Type.GROUP , true);
+                        getRoom(roomIdR, ProtoGlobal.Room.Type.GROUP, true);
                     }
                 });
 
@@ -304,7 +305,7 @@ public class FragmentNewGroupViewModel extends ViewModel {
         new RequestGroupCreate().groupCreate(edtSetNewGroup.get(), edtDescription.get());
     }
 
-    private void getRoom(final long roomId, final ProtoGlobal.Room.Type typeCreate , boolean isGroup) {
+    private void getRoom(final long roomId, final ProtoGlobal.Room.Type typeCreate, boolean isGroup) {
 
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
             @Override
@@ -329,9 +330,9 @@ public class FragmentNewGroupViewModel extends ViewModel {
                             } else {
                                 hideProgressBar();
                                 if (isGroup) {
-                                    createdRoomId.postValue( roomId);
-                                }else {
-                                    goToContactGroupPage.setValue(new ContactGroupFragmentModel(roomId,room.getGroupRoomExtra().getParticipantsCountLimitLabel(),typeCreate.toString(),true));
+                                    createdRoomId.postValue(roomId);
+                                } else {
+                                    goToContactGroupPage.setValue(new ContactGroupFragmentModel(roomId, room.getGroupRoomExtra().getParticipantsCountLimitLabel(), typeCreate.toString(), true));
                                 }
                             }
                         }
@@ -385,7 +386,7 @@ public class FragmentNewGroupViewModel extends ViewModel {
 
     }
 
-    public class ContactGroupFragmentModel{
+    public class ContactGroupFragmentModel {
         private Long roomId;
         private String limit;
         private String type;
@@ -415,7 +416,7 @@ public class FragmentNewGroupViewModel extends ViewModel {
         }
     }
 
-    public class CreateChannelModel{
+    public class CreateChannelModel {
         private long roomId;
         private String inviteLink;
         private String token;

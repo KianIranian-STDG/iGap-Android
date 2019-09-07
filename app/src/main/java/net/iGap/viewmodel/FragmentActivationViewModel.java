@@ -1,11 +1,12 @@
 package net.iGap.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableBoolean;
-import androidx.databinding.ObservableField;
 import android.os.CountDownTimer;
 import android.text.format.DateUtils;
+
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.Config;
 import net.iGap.G;

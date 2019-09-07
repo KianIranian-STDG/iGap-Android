@@ -1,8 +1,8 @@
 package net.iGap.dialog.payment.paybills;
 
-import androidx.lifecycle.ViewModel;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.dialog.payment.CompleteListener;

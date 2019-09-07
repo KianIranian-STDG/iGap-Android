@@ -1,9 +1,10 @@
 package net.iGap.kuknos.viewmodel;
 
+import android.os.Handler;
+
+import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableField;
-import android.os.Handler;
 
 import net.iGap.R;
 import net.iGap.kuknos.service.model.ErrorM;
@@ -21,7 +22,8 @@ public class KuknosViewRecoveryEPVM extends ViewModel {
         if (progressState == null) {
             progressState = new MutableLiveData<>();
             progressState.setValue(false);
-        }if (nextPage == null) {
+        }
+        if (nextPage == null) {
             nextPage = new MutableLiveData<>();
             nextPage.setValue(false);
         }

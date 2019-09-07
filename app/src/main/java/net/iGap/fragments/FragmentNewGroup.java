@@ -11,21 +11,13 @@
 package net.iGap.fragments;
 
 import android.app.Activity;
-import androidx.lifecycle.Observer;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import androidx.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -40,6 +32,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -94,7 +95,7 @@ import static net.iGap.G.context;
 import static net.iGap.module.AttachFile.isInAttach;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
-public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarResponse, OnChannelAvatarAdd, ToolbarListener ,FragmentEditImage.OnImageEdited{
+public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarResponse, OnChannelAvatarAdd, ToolbarListener, FragmentEditImage.OnImageEdited {
 
     public static RemoveSelectedContact removeSelectedContact;
     public static long avatarId = 0;
@@ -503,10 +504,10 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                         if (fragmentNewGroupViewModel.isChannel) {
                             startChannelRoom(roomId);
                         } else {
-                            if (isGroup){
-                                createdRoomId = roomId ;
+                            if (isGroup) {
+                                createdRoomId = roomId;
                                 addMembersToGroup();
-                            }else {
+                            } else {
                                 startRoom(roomId);
                             }
                         }
@@ -606,7 +607,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
         // Save a file: path for use with ACTION_VIEW intents
         //mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        fragmentNewGroupViewModel.mCurrentPhotoPath = image.getAbsolutePath();
+        FragmentNewGroupViewModel.mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
 
@@ -696,7 +697,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         } else {
 
             if (getActivity() instanceof ActivityMain && isAdded()) {
-                Log.wtf(this.getClass().getName(),"addMembersToGroup is done");
+                Log.wtf(this.getClass().getName(), "addMembersToGroup is done");
                /* if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
                     FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();*/
                 G.refreshRealmUi();

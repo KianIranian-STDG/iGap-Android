@@ -9,11 +9,11 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
+import android.text.Html;
+
+import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableField;
-import androidx.annotation.NonNull;
-import android.text.Html;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -77,7 +77,7 @@ public class FragmentWalletAgreementViewModel extends ViewModel {
             public void run() {
                 if (Auth.getCurrentAuth() != null) {
                     goToWalletPage.setValue(new GoToWalletPage(phone, isScan));
-                }else{
+                } else {
                     goToWalletPage();
                 }
             }

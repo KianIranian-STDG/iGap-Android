@@ -36,11 +36,10 @@ public class KuknosRestorePassVM extends ViewModel {
     }
 
     public void onSubmitBtn() {
-        if (completePin){
+        if (completePin) {
             PIN = PIN1 + PIN2 + PIN3 + PIN4;
             generateKeypair();
-        }
-        else {
+        } else {
             error.setValue(new ErrorM(true, "Set Pin", "0", R.string.kuknos_SetPass_error));
         }
     }

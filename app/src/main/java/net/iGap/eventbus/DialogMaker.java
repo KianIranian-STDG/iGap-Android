@@ -4,9 +4,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
-import androidx.annotation.NonNull;
 import android.view.KeyEvent;
 import android.view.Window;
+
+import androidx.annotation.NonNull;
 
 import net.iGap.R;
 

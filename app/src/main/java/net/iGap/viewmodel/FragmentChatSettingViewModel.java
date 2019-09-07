@@ -1,11 +1,12 @@
 package net.iGap.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import android.content.SharedPreferences;
+import android.view.View;
+
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
-import android.view.View;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -320,13 +321,10 @@ public class FragmentChatSettingViewModel extends ViewModel {
     }
 
     private boolean getBoolean(int num) {
-        if (num == 0) {
-            return false;
-        }
-        return true;
+        return num != 0;
     }
 
-    public void setTextSizeToPref(int size){
+    public void setTextSizeToPref(int size) {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);

@@ -4,11 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +11,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
@@ -78,7 +79,7 @@ public class BannerSlider extends FrameLayout {
                         .hideIndicators(typedArray.getBoolean(R.styleable.BannerSlider_slider_hideIndicators, false))
                         .build();
             } catch (Exception e) {
-                Log.e("Slider", "setupViews: ".toString());
+                Log.e("Slider", "setupViews: ");
             } finally {
                 typedArray.recycle();
             }
@@ -111,7 +112,7 @@ public class BannerSlider extends FrameLayout {
         });
         if (config.emptyView != Config.NOT_SELECTED) {
             emptyView = LayoutInflater.from(getContext()).inflate(config.emptyView, this, false);
-            addView(emptyView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT,LayoutCreator.MATCH_PARENT));
+            addView(emptyView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
         }
     }
 

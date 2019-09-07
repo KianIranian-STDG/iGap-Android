@@ -9,7 +9,7 @@ import net.iGap.dialog.payment.CompleteListener;
 public class CharityPaymentViewModel extends ViewModel {
 
     private MutableLiveData<Boolean> pinEnableError = new MutableLiveData<>();
-    private MutableLiveData<Integer> pinErrorMessage= new MutableLiveData<>();
+    private MutableLiveData<Integer> pinErrorMessage = new MutableLiveData<>();
     private MutableLiveData<Boolean> cvv2ErrorEnable = new MutableLiveData<>();
     private MutableLiveData<Integer> cvv2ErrorMessage = new MutableLiveData<>();
     private CompleteListener completeListener;
@@ -18,26 +18,27 @@ public class CharityPaymentViewModel extends ViewModel {
         this.completeListener = completeListener;
     }
 
-    public LiveData<Boolean> getPinEnableError(){
+    public LiveData<Boolean> getPinEnableError() {
         return pinEnableError;
     }
 
-    public LiveData<Integer> getPinErrorMessage(){
+    public LiveData<Integer> getPinErrorMessage() {
         return pinErrorMessage;
     }
 
-    public LiveData<Boolean> getCvv2MessageEnable(){
+    public LiveData<Boolean> getCvv2MessageEnable() {
         return cvv2ErrorEnable;
     }
 
-    public LiveData<Integer> getCvv2ErrorMessage(){
+    public LiveData<Integer> getCvv2ErrorMessage() {
         return cvv2ErrorMessage;
     }
+
     public void onActionInfoClick() {
 
     }
 
-    public void onPersonIconClick(){
+    public void onPersonIconClick() {
 
     }
 

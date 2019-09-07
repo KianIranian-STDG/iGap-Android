@@ -1,8 +1,6 @@
 package net.iGap.module.structs;
 
 import net.iGap.realm.RealmAdditional;
-import net.iGap.realm.RealmChannelExtra;
-import net.iGap.realm.RealmRoomMessageWallet;
 
 import org.parceler.Parcel;
 

@@ -1,17 +1,16 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.module;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -45,9 +44,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 public final class AndroidUtils {
     private AndroidUtils() throws InstantiationException {
@@ -170,7 +169,7 @@ public final class AndroidUtils {
 
     public static String saveBitmap(Bitmap bmp) {
         FileOutputStream out = null;
-        String outPath = G.DIR_TEMP + "/thumb_" + Long.toString(SUID.id().get()) + ".jpg";
+        String outPath = G.DIR_TEMP + "/thumb_" + SUID.id().get() + ".jpg";
         try {
             out = new FileOutputStream(outPath);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
@@ -491,7 +490,7 @@ public final class AndroidUtils {
     private static String makeSHA1Hash(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA1");
         md.reset();
-        byte[] buffer = input.getBytes("UTF-8");
+        byte[] buffer = input.getBytes(StandardCharsets.UTF_8);
         md.update(buffer);
         byte[] digest = md.digest();
 
@@ -599,7 +598,7 @@ public final class AndroidUtils {
         }
     }
 
-    public static boolean canOpenDialog(){
+    public static boolean canOpenDialog() {
         return isActivityRunning();
     }
 }

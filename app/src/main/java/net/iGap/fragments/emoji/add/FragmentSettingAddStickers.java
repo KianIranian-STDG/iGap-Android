@@ -2,13 +2,6 @@ package net.iGap.fragments.emoji.add;
 
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +9,14 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 
 import net.iGap.G;
@@ -112,14 +113,14 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
                             StickerCategory[] tabs = structCategoryResult.getStickerCategories();
 
                             if (G.selectedLanguage.equals("fa")) {
-                                tabs = reverseArray(tabs , tabs.length);
+                                tabs = reverseArray(tabs, tabs.length);
                             }
 
                             adapter.setData(tabs);
                             adapter.notifyDataSetChanged();
                             updateFontTabLayout();
 
-                            if (G.selectedLanguage.equals("fa")){
+                            if (G.selectedLanguage.equals("fa")) {
                                 viewPager.setCurrentItem(tabs.length - 1);
                             }
                         }
@@ -138,7 +139,7 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
         });
     }
 
-    private  StickerCategory[] reverseArray(StickerCategory[] old, int size) {
+    private StickerCategory[] reverseArray(StickerCategory[] old, int size) {
         StickerCategory[] newArray = new StickerCategory[size];
         int j = size;
         for (int i = 0; i < size; i++) {
@@ -160,10 +161,9 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
             tv.setGravity(Gravity.CENTER);
             tv.setTypeface(G.typeface_IRANSansMobile);
 
-            if (G.isDarkTheme){
+            if (G.isDarkTheme) {
                 tv.setTextColor(G.context.getResources().getColor(R.color.white));
-            }
-            else {
+            } else {
                 tv.setTextColor(G.context.getResources().getColor(R.color.black));
             }
             tabLayout.getTabAt(i).setCustomView(tv);

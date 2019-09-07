@@ -1,18 +1,19 @@
 package net.iGap.kuknos.view;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosChangePassBinding;
@@ -86,16 +87,13 @@ public class KuknosChangePassFrag extends BaseFragment {
                 if (errorM.getState() == true && errorM.getMessage().equals("0")) {
                     binding.fragKuknosCPOldPHolder.setError(getResources().getString(errorM.getResID()));
                     binding.fragKuknosCPOldPHolder.requestFocus();
-                }
-                else if (errorM.getState() == true && errorM.getMessage().equals("1")) {
+                } else if (errorM.getState() == true && errorM.getMessage().equals("1")) {
                     binding.fragKuknosCPNewPHolder.setError(getResources().getString(errorM.getResID()));
                     binding.fragKuknosCPNewPHolder.requestFocus();
-                }
-                else if (errorM.getState() == true && errorM.getMessage().equals("2")) {
+                } else if (errorM.getState() == true && errorM.getMessage().equals("2")) {
                     binding.fragKuknosCPENewPHolder.setError(getResources().getString(errorM.getResID()));
                     binding.fragKuknosCPENewPHolder.requestFocus();
-                }
-                else if (errorM.getMessage().equals("3")) {
+                } else if (errorM.getMessage().equals("3")) {
                     showDialog(errorM.getState(), errorM.getResID());
                 }
             }
@@ -128,8 +126,7 @@ public class KuknosChangePassFrag extends BaseFragment {
                     binding.fragKuknosCPENewP.setEnabled(false);
                     binding.fragKuknosCPOldP.setEnabled(false);
                     binding.fragKuknosCPSubmit.setText(getResources().getText(R.string.kuknos_changePIN_load));
-                }
-                else {
+                } else {
                     binding.fragKuknosCPProgressV.setVisibility(View.GONE);
                     binding.fragKuknosCPNewP.setEnabled(true);
                     binding.fragKuknosCPENewP.setEnabled(true);

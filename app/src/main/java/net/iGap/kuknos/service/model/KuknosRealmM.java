@@ -1,7 +1,5 @@
 package net.iGap.kuknos.service.model;
 
-import net.iGap.realm.RealmUserInfo;
-
 import io.realm.Realm;
 import io.realm.RealmObject;
 

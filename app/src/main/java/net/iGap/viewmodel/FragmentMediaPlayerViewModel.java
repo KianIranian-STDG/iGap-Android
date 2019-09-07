@@ -11,11 +11,12 @@ package net.iGap.viewmodel;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.view.View;
+
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
-import android.graphics.Color;
-import android.view.View;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -164,9 +165,9 @@ public class FragmentMediaPlayerViewModel {
         items.add(G.fragmentActivity.getString(R.string.share_item_dialog));
 
         new TopSheetDialog(G.fragmentActivity).setListData(items, -1, position -> {
-            if (items.get(position).equals(G.fragmentActivity.getString(R.string.save_to_Music))){
+            if (items.get(position).equals(G.fragmentActivity.getString(R.string.save_to_Music))) {
                 saveToMusic();
-            }else if (items.get(position).equals(G.fragmentActivity.getString(R.string.share_item_dialog))){
+            } else if (items.get(position).equals(G.fragmentActivity.getString(R.string.share_item_dialog))) {
                 shareMusic();
             }
         }).show();
@@ -194,7 +195,7 @@ public class FragmentMediaPlayerViewModel {
                     @Override
                     public void Allow() throws IOException {
 
-                        rippleVisualizerView = (RippleVisualizerView) view.findViewById(R.id.line_renderer_demo);
+                        rippleVisualizerView = view.findViewById(R.id.line_renderer_demo);
 
                         if (rippleVisualizerView != null) {
 
@@ -267,17 +268,17 @@ public class FragmentMediaPlayerViewModel {
             imgRepeadOneVisibility.set(View.GONE);
         } else if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.repeatAll.toString())) {
             callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.retry_icon));
-            if (G.isDarkTheme){
+            if (G.isDarkTheme) {
                 btnReplayMusicColor.set(Color.WHITE);
-            }else {
+            } else {
                 btnReplayMusicColor.set(Color.BLACK);
             }
             imgRepeadOneVisibility.set(View.GONE);
         } else if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.oneRpeat.toString())) {
             callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.retry_icon));
-            if (G.isDarkTheme){
+            if (G.isDarkTheme) {
                 btnReplayMusicColor.set(Color.WHITE);
-            }else {
+            } else {
                 btnReplayMusicColor.set(Color.BLACK);
             }
             imgRepeadOneVisibility.set(View.VISIBLE);
@@ -287,9 +288,9 @@ public class FragmentMediaPlayerViewModel {
     private void setShuffleButton() {
 
         if (MusicPlayer.isShuffelOn) {
-            if (G.isDarkTheme){
+            if (G.isDarkTheme) {
                 btnShuffelMusicColor.set(Color.WHITE);
-            }else {
+            } else {
                 btnShuffelMusicColor.set(Color.BLACK);
             }
         } else {

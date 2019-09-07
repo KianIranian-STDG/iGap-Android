@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.helper;
 
@@ -19,8 +19,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.MediaStore;
-import androidx.core.content.FileProvider;
 import android.widget.ImageView;
+
+import androidx.core.content.FileProvider;
 
 import net.iGap.R;
 
@@ -57,7 +58,7 @@ public class HelperMimeType {
 
     private static boolean isFileText(String path) {
         return path.endsWith(".txt") || path.endsWith(".csv") || path.endsWith(".xml") || path.endsWith(".html") || path.endsWith(".docx") || path.endsWith(".doc")
-      || path.endsWith(".docs");
+                || path.endsWith(".docs");
     }
 
     private static boolean isFilePakage(String path) {

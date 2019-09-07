@@ -16,7 +16,7 @@ public class LooperThreadHelper {
         initHandler();
     }
 
-    public Handler getHandler(){
+    public Handler getHandler() {
         return handler;
     }
 

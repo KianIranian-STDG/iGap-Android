@@ -1,17 +1,18 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.request;
 
-import androidx.annotation.Nullable;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import com.neovisionaries.ws.client.WebSocket;
 
@@ -348,11 +349,7 @@ public class RequestQueue {
         long currentTime = System.currentTimeMillis();
         difference = (currentTime - beforeTime);
 
-        if (difference >= Config.TIME_OUT_MS) {
-            return true;
-        }
-
-        return false;
+        return difference >= Config.TIME_OUT_MS;
     }
 
 

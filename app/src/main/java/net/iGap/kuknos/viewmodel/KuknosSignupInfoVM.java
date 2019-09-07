@@ -1,9 +1,10 @@
 package net.iGap.kuknos.viewmodel;
 
+import android.os.Handler;
+
+import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableField;
-import android.os.Handler;
 
 import net.iGap.R;
 import net.iGap.kuknos.service.Repository.UserRepo;
@@ -59,30 +60,25 @@ public class KuknosSignupInfoVM extends ViewModel {
 
         if (username.get() == null) {
             error.setValue(new ErrorM(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
-        }
-        else if (username.get().isEmpty()) {
+        } else if (username.get().isEmpty()) {
             error.setValue(new ErrorM(true, "empty username", "0", R.string.kuknos_SignupInfo_errorUsernameEmpty));
-        }
-        else {
+        } else {
             // TODO: fetch data from server for valid username
             checkUsernameServer(isCallFromBTN);
         }
     }
 
     private boolean checkEmail() {
-        if (email.get()!= null) {
+        if (email.get() != null) {
             if (!email.get().isEmpty()) {
                 if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email.get()).matches()) {
                     error.setValue(new ErrorM(true, "Invalid Email Format", "1", R.string.kuknos_SignupInfo_errorEmailInvalid));
                     return false;
-                }
-                else
+                } else
                     return true;
-            }
-            else
+            } else
                 return true;
-        }
-        else
+        } else
             return true;
     }
 

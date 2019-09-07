@@ -1,6 +1,5 @@
 package net.iGap.interfaces;
 
-import com.downloader.Error;
 import com.downloader.Progress;
 
 import net.iGap.module.api.beepTunes.DownloadSong;

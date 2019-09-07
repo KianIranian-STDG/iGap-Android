@@ -2,25 +2,15 @@ package net.iGap.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import androidx.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.transition.TransitionManager;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +21,17 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.transition.TransitionManager;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -98,10 +99,10 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         super.onViewCreated(view, savedInstanceState);
         Log.wtf(this.getClass().getName(), "onViewCreated");
 
-        viewModel.changeUserProfileWallpaper.observe(getViewLifecycleOwner() , drawable -> {
-            if (drawable != null){
+        viewModel.changeUserProfileWallpaper.observe(getViewLifecycleOwner(), drawable -> {
+            if (drawable != null) {
                 binding.fupBgAvatar.setImageDrawable(drawable);
-            }else {
+            } else {
                 binding.fupBgAvatar.setImageResource(R.drawable.test_bg);
             }
         });
@@ -127,7 +128,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             if (phoneNumber != null) {
                 Intent intent = new Intent(getActivity(), WalletActivity.class);
                 intent.putExtra("Language", "fa");
-                intent.putExtra("Mobile",  phoneNumber);
+                intent.putExtra("Mobile", phoneNumber);
                 intent.putExtra("PrimaryColor", G.appBarColor);
                 intent.putExtra("DarkPrimaryColor", G.appBarColor);
                 intent.putExtra("AccentColor", G.appBarColor);
@@ -329,7 +330,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
 
         binding.fupUserBio.setSelected(true);
 
-        viewModel.getShowDialogSelectCountry().observe(getViewLifecycleOwner(),isShow -> {
+        viewModel.getShowDialogSelectCountry().observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null && isShow) {
                 showCountryDialog();
             }

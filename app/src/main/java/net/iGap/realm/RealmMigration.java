@@ -14,7 +14,6 @@ import io.realm.DynamicRealm;
 import io.realm.FieldAttribute;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
-import io.realm.annotations.PrimaryKey;
 
 import static net.iGap.Config.REALM_LATEST_MIGRATION_VERSION;
 
@@ -413,7 +412,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("approved", boolean.class, FieldAttribute.REQUIRED)
                     .addField("isFavorite", boolean.class, FieldAttribute.REQUIRED)
                     .addField("sort", int.class, FieldAttribute.REQUIRED)
-                    .addRealmListField("realmStickersDetails",realmStickerDetails);
+                    .addRealmListField("realmStickersDetails", realmStickerDetails);
 
             oldVersion++;
         }

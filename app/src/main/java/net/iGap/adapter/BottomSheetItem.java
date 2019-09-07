@@ -10,12 +10,13 @@
 
 package net.iGap.adapter;
 
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.items.AbstractItem;
 

@@ -9,16 +9,17 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothProfile;
+import android.util.Log;
+import android.view.View;
+
+import androidx.annotation.StringRes;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
-import androidx.annotation.StringRes;
-import android.util.Log;
-import android.view.View;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;

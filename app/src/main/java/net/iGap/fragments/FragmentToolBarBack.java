@@ -1,13 +1,14 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -52,7 +53,7 @@ public abstract class FragmentToolBarBack extends BaseFragment {
         titleTextView = view.findViewById(R.id.title);
         titleTextView.setTypeface(G.typeface_IRANSansMobile);
         appBarLayout = view.findViewById(R.id.ac_appBarLayout);
-        if (G.isDarkTheme){
+        if (G.isDarkTheme) {
             appBarLayout.setBackground(G.context.getResources().getDrawable(R.drawable.shape_toolbar_background_dark));
         }
         menu_item1 = view.findViewById(R.id.menu_item1);

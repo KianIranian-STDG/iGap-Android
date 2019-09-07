@@ -11,8 +11,6 @@
 package net.iGap.response;
 
 import net.iGap.G;
-import net.iGap.fragments.FragmentWallet;
-import net.iGap.helper.HelperFragment;
 import net.iGap.proto.ProtoWalletRegister;
 import net.iGap.request.RequestWalletGetAccessToken;
 

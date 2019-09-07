@@ -9,7 +9,6 @@
  */
 package net.iGap.response;
 
-import net.iGap.G;
 import net.iGap.interfaces.OnGroupEdit;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupEdit;

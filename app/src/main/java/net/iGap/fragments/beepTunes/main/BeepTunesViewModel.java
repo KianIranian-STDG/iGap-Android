@@ -1,12 +1,13 @@
 package net.iGap.fragments.beepTunes.main;
 
-import androidx.lifecycle.MutableLiveData;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.media.MediaPlayer;
 import android.os.IBinder;
+
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.fragments.BaseFragment;
 import net.iGap.libs.bannerslider.BannerSlider;

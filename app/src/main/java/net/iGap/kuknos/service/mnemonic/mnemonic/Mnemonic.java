@@ -3,12 +3,13 @@ package net.iGap.kuknos.service.mnemonic.mnemonic;
 
 import net.iGap.kuknos.service.mnemonic.util.PrimitiveUtil;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 import java.util.List;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 /**
  * Mnemonic.

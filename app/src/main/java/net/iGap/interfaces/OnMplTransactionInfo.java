@@ -14,7 +14,7 @@ import net.iGap.proto.ProtoGlobal;
 
 public interface OnMplTransactionInfo {
 
-    void onMplTransAction(ProtoGlobal.MplTransaction transaction,int status);
+    void onMplTransAction(ProtoGlobal.MplTransaction transaction, int status);
 
     void onError();
 }

@@ -19,11 +19,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.CountDownTimer;
-import androidx.annotation.CallSuper;
-import androidx.annotation.NonNull;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.collection.ArrayMap;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -38,6 +33,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.collection.ArrayMap;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -94,7 +95,6 @@ import net.iGap.payment.PaymentResult;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelExtraFields;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -136,7 +136,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private RealmChannelExtra realmChannelExtra;
     private RealmRoom realmRoomForwardedFrom;
     private MessagesAdapter<AbstractMessage> mAdapter;
-    private final Drawable SEND_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_sent_bg_light) ;
+    private final Drawable SEND_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_sent_bg_light);
     private final Drawable RECEIVED_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_receive_bg_light);
 
 
@@ -181,7 +181,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         };
     }
-
 
 
     public static ArrayList<Tuple<Integer, Integer>> getBoldPlaces(String text) {
@@ -272,7 +271,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (boldPlaces.size() == 0)
             stringBuilder.append(text);
         else {
-            for (int i = 0 ; i < boldPlaces.size(); i++) {
+            for (int i = 0; i < boldPlaces.size(); i++) {
                 Tuple<Integer, Integer> point = boldPlaces.get(i);
                 Tuple<Integer, Integer> previousPoint = null;
 
@@ -294,7 +293,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     private void updateBoldPlaces(ArrayList<Tuple<Integer, Integer>> boldPlaces) {
-        for (int i = 0 ; i < boldPlaces.size(); i++) {
+        for (int i = 0; i < boldPlaces.size(); i++) {
             Tuple<Integer, Integer> point = boldPlaces.get(i);
             point.x = point.x - i * 4;
             point.y = point.y - i * 4 - 2;
@@ -500,7 +499,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                         holder.itemView.performLongClick();
                                         return;
                                     }
-                                    onBotBtnClick(view,buttonEntity);
+                                    onBotBtnClick(view, buttonEntity);
                                 }, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -566,7 +565,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (mMessage.isEdited)
             if (mMessage.channelExtra != null && mMessage.channelExtra.signature.length() > 0)
                 mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited) + " " + mMessage.channelExtra.signature);
-            else{
+            else {
                 mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited));
                 Utils.darkModeHandlerGray(mHolder.getSignatureTv());
             }
@@ -618,7 +617,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        if (type == ProtoGlobal.Room.Type.CHANNEL){
+        if (type == ProtoGlobal.Room.Type.CHANNEL) {
             mHolder.getForwardContainer().setVisibility(View.VISIBLE);
             mHolder.getChannelForwardIv().setOnClickListener(v -> messageClickListener.onForwardClick(mMessage));
         }
@@ -896,7 +895,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         if (G.isDarkTheme) {
-            viewHolder.getChatBloke().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_dark))));
+            viewHolder.getChatBloke().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND, ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_dark))));
             setThemeColor(viewHolder.getViewsLabelTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getEyeIconTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getVoteUpTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
@@ -906,7 +905,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             setThemeColor(viewHolder.getSignatureTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
         } else {
-            viewHolder.getChatBloke().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_light))));
+            viewHolder.getChatBloke().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND, ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_light))));
             setThemeColor(viewHolder.getViewsLabelTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getEyeIconTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getVoteUpTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
@@ -976,10 +975,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         if (G.isDarkTheme) {
-            viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_dark))));
+            viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND, ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_dark))));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.send_message_time_dark));
         } else {
-            viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND ,ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_light))));
+            viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND, ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_light))));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.send_message_time_light));
         }
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp36);
@@ -1022,7 +1021,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             final View replayView = ViewMaker.getViewReplay();
 
             if (replayView != null) {
-                final TextView replyFrom = (TextView) replayView.findViewById(R.id.chslr_txt_replay_from);
+                final TextView replyFrom = replayView.findViewById(R.id.chslr_txt_replay_from);
                 final EmojiTextViewE replayMessage = (EmojiTextViewE) replayView.findViewById(R.id.chslr_txt_replay_message);
                 replayView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1039,7 +1038,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 replayView.setOnLongClickListener(getLongClickPerform(holder));
 
                 try {
-                    AppUtils.rightFileThumbnailIcon(((ImageView) replayView.findViewById(R.id.chslr_imv_replay_pic)), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
+                    AppUtils.rightFileThumbnailIcon(replayView.findViewById(R.id.chslr_imv_replay_pic), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }
@@ -1245,11 +1244,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      * @return true if item has a progress
      */
     private boolean hasProgress(VH holder) {
-        if (holder instanceof IProgress){
-            return true;
-        } else {
-            return false;
-        }
+        return holder instanceof IProgress;
     }
 
     private void setClickListener(SharedPreferences sharedPreferences, String key, final VH holder, final RealmAttachment attachment) {
@@ -1440,7 +1435,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
                 int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight, type);
-                ((ViewGroup) mHolder.getContentBloke()).getLayoutParams().width = dimens[0];
+                mHolder.getContentBloke().getLayoutParams().width = dimens[0];
             }
 
             /**
@@ -1583,9 +1578,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public boolean hasFileSize(String filPath) {
         if (filPath != null) {
             File file = new File(filPath);
-            if (file.exists() && file.length() > 0) {
-                return true;
-            }
+            return file.exists() && file.length() > 0;
         }
         return false;
     }
@@ -1925,14 +1918,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         try (Realm realm = Realm.getDefaultInstance()) {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
                 //TODO: fixed this and do not use G.currentActivity
-                HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity,((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
+                HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
             } else if (v.getId() == ButtonActionType.BOT_ACTION) {
                 Long identity = System.currentTimeMillis();
 
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm ,ProtoGlobal.RoomMessageType.TEXT);
+                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, ((ArrayList<String>) v.getTag()).get(1), ((ArrayList<String>) v.getTag()).get(2), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
                         G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
                         messageClickListener.sendFromBot(realmRoomMessage);
                     }
@@ -1940,13 +1933,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             } else if (v.getId() == ButtonActionType.JOIN_LINK) {
                 //TODO: fixed this and do not use G.currentActivity
-                HelperUrl.checkAndJoinToRoom(G.currentActivity,((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
+                HelperUrl.checkAndJoinToRoom(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(14));
 
             } else if (v.getId() == ButtonActionType.WEB_LINK) {
-                HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
+                HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0));
 
             } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {
-                messageClickListener.sendFromBot(((ArrayList<String>) v.getTag()).get(0).toString());
+                messageClickListener.sendFromBot(((ArrayList<String>) v.getTag()).get(0));
             } else if (v.getId() == ButtonActionType.REQUEST_PHONE) {
                 try {
                     new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_number).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -1958,7 +1951,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 @Override
                                 public void execute(Realm realm) {
                                     RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
-                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(),null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
                                     G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
                                     messageClickListener.sendFromBot(realmRoomMessage);
                                 }
@@ -1990,7 +1983,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             } else if (v.getId() == ButtonActionType.PAY_DIRECT) {
                 JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                Log.wtf(this.getClass().getName(),"tag: " + ((ArrayList<String>) v.getTag()).get(0));
+                Log.wtf(this.getClass().getName(), "tag: " + ((ArrayList<String>) v.getTag()).get(0));
                 RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
                 long peerId;
                 if (room != null && room.getChatRoom() != null) {

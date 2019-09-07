@@ -1,10 +1,11 @@
 package net.iGap.adapter.cPay;
 
-import androidx.appcompat.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.R;
 

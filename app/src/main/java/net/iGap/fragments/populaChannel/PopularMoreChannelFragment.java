@@ -1,20 +1,21 @@
 package net.iGap.fragments.populaChannel;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.widget.NestedScrollView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -35,7 +36,7 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
     private BannerSlider slider;
     private SwipeRefreshLayout swipeRefreshLayout;
     private NestedScrollView scrollView;
-    private  HelperToolbar helperToolbar;
+    private HelperToolbar helperToolbar;
 
     private String id;
     private int page = 1;
@@ -79,7 +80,7 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
         viewModel.getMoreChannelMutableLiveData().observe(getViewLifecycleOwner(), childChannel -> {
             if (childChannel != null) {
 
-                if (title.equals("")){
+                if (title.equals("")) {
                     if (G.isAppRtl)
                         title = childChannel.getInfo().getTitle();
                     else

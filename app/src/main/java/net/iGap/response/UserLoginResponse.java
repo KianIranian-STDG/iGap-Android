@@ -11,7 +11,6 @@
 package net.iGap.response;
 
 import android.os.Looper;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.WebSocketClient;
@@ -24,8 +23,6 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestWalletGetAccessToken;
-
-import java.util.logging.Handler;
 
 import io.realm.Realm;
 
@@ -51,7 +48,7 @@ public class UserLoginResponse extends MessageHandler {
         super.handler();
         HelperConnectionState.connectionState(ConnectionState.IGAP);
         ProtoUserLogin.UserLoginResponse.Builder builder = (ProtoUserLogin.UserLoginResponse.Builder) message;
-        G.serverHashContact = builder.getContactHash() ;
+        G.serverHashContact = builder.getContactHash();
       /*builder.getDeprecatedClient();
         builder.getSecondaryNodeName();
         builder.getUpdateAvailable();*/
@@ -87,7 +84,7 @@ public class UserLoginResponse extends MessageHandler {
         }
 
 
-        G.isNeedToCheckProfileWallpaper = true ;
+        G.isNeedToCheckProfileWallpaper = true;
         G.currentServerTime = builder.getResponse().getTimestamp();
         G.bothChatDeleteTime = builder.getChatDeleteMessageForBothPeriod() * 1000;
         G.userLogin = true;

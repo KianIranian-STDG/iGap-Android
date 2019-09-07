@@ -1,8 +1,7 @@
 package net.iGap.kuknos.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import androidx.databinding.ObservableField;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.kuknos.service.Repository.UserRepo;
 

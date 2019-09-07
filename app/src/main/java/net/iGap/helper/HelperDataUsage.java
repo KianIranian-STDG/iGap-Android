@@ -1,7 +1,5 @@
 package net.iGap.helper;
 
-import android.util.Log;
-
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmDataUsage;
 
@@ -79,7 +77,7 @@ public class HelperDataUsage {
                             usage.setConnectivityType(conectivityType);
 
                             if (isDownloaded) {
-                                if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
+                                if (type != null && usage.getType().equalsIgnoreCase(type.toString()))
                                     usage.setNumDownloadedFile(usage.getNumDownloadedFile() + 1);
 
                                 if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
@@ -96,7 +94,7 @@ public class HelperDataUsage {
 
                                 } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
 
-                                    usage.setDownloadSize(usage.getDownloadSize()  +wDownloadedAudioSize);
+                                    usage.setDownloadSize(usage.getDownloadSize() + wDownloadedAudioSize);
 
 
                                 } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.UNRECOGNIZED.toString())) {
@@ -106,7 +104,7 @@ public class HelperDataUsage {
                                 }
 
                             } else {
-                                if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
+                                if (type != null && usage.getType().equalsIgnoreCase(type.toString()))
                                     usage.setNumUploadedFiles(usage.getNumUploadedFiles() + 1);
 
                                 if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
@@ -141,7 +139,7 @@ public class HelperDataUsage {
 
                             usage.setConnectivityType(conectivityType);
 
-                            if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
+                            if (type != null && usage.getType().equalsIgnoreCase(type.toString()))
                                 usage.setNumDownloadedFile(usage.getNumDownloadedFile() + 1);
                             if (isDownloaded) {
 
@@ -161,7 +159,7 @@ public class HelperDataUsage {
 
                                 } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
 
-                                    usage.setDownloadSize(usage.getDownloadSize()  +dDownloadedAudioSize);
+                                    usage.setDownloadSize(usage.getDownloadSize() + dDownloadedAudioSize);
 
 
                                 } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.UNRECOGNIZED.toString())) {
@@ -171,7 +169,7 @@ public class HelperDataUsage {
                                 }
 
                             } else {
-                                if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
+                                if (type != null && usage.getType().equalsIgnoreCase(type.toString()))
                                     usage.setNumUploadedFiles(usage.getNumUploadedFiles() + 1);
 
                                 if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
@@ -198,7 +196,6 @@ public class HelperDataUsage {
 
                                 }
                             }
-
 
 
                         }

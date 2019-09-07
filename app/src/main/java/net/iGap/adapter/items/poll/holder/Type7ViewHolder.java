@@ -1,9 +1,10 @@
 package net.iGap.adapter.items.poll.holder;
 
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -15,7 +16,7 @@ public class Type7ViewHolder extends BaseViewHolder {
     private CardView card0, card1, card2;
     private View tick0, tick1, tick2;
 
-    public Type7ViewHolder(PollAdapter pollAdapter,  @NonNull View itemView) {
+    public Type7ViewHolder(PollAdapter pollAdapter, @NonNull View itemView) {
         super(pollAdapter, itemView);
         img0 = itemView.findViewById(R.id.type7_img0);
         img1 = itemView.findViewById(R.id.type7_img1);

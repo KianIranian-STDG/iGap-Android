@@ -2,16 +2,17 @@ package net.iGap.fragments.emoji.add;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
@@ -139,7 +140,7 @@ public class DialogAddSticker extends DialogFragment {
                                         FragmentChat.onUpdateSticker.update();
                                         getDialog().dismiss();
 
-                                        HelperError.showSnackMessage(getResources().getString(R.string.Sticker_added_successfully) ,false);
+                                        HelperError.showSnackMessage(getResources().getString(R.string.Sticker_added_successfully), false);
                                     }
                                 }
                             }

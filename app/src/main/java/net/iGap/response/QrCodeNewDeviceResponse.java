@@ -10,7 +10,6 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
 import net.iGap.interfaces.OnQrCodeNewDevice;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoQrCodeNewDevice;
@@ -52,7 +51,7 @@ public class QrCodeNewDeviceResponse extends MessageHandler {
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         if (identity instanceof OnQrCodeNewDevice) {
-            ((OnQrCodeNewDevice) identity).onError(errorResponse.getMajorCode(),errorResponse.getMinorCode());
+            ((OnQrCodeNewDevice) identity).onError(errorResponse.getMajorCode(), errorResponse.getMinorCode());
         } else {
             throw new ClassCastException("identity must be : " + OnQrCodeNewDevice.class.getName());
         }

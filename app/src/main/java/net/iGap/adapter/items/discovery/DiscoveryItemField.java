@@ -17,7 +17,7 @@ public class DiscoveryItemField implements Serializable {
 
     public DiscoveryItemField(ProtoGlobal.DiscoveryField discoveryField) {
         id = discoveryField.getId();
-        imageUrl=  discoveryField.getImageurl();
+        imageUrl = discoveryField.getImageurl();
         value = discoveryField.getValue();
         orderId = discoveryField.getOrderid();
         actionType = discoveryField.getActiontype();

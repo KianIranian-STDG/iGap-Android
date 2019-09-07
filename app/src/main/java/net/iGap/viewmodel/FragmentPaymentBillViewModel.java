@@ -9,13 +9,14 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.view.View;
+
+import androidx.annotation.DrawableRes;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
-import androidx.annotation.DrawableRes;
-import android.view.View;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;

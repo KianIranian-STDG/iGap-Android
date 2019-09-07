@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -100,7 +101,7 @@ public class HelperString {
 
     public static PublicKey getPublicKeyFromPemFormat(String PEMString) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         BufferedReader pemReader = null;
-        pemReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(PEMString.getBytes("UTF-8"))));
+        pemReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(PEMString.getBytes(StandardCharsets.UTF_8))));
         StringBuffer content = new StringBuffer();
         String line = null;
         while ((line = pemReader.readLine()) != null) {
@@ -209,20 +210,20 @@ public class HelperString {
     }
 
     public static boolean isInteger(String s) {
-        return isInteger(s,10);
+        return isInteger(s, 10);
     }
 
     public static boolean isInteger(String s, int radix) {
-        if(s.isEmpty())
+        if (s.isEmpty())
             return false;
-        for(int i = 0; i < s.length(); i++) {
-            if(i == 0 && s.charAt(i) == '-') {
-                if(s.length() == 1)
+        for (int i = 0; i < s.length(); i++) {
+            if (i == 0 && s.charAt(i) == '-') {
+                if (s.length() == 1)
                     return false;
                 else
                     continue;
             }
-            if(Character.digit(s.charAt(i),radix) < 0)
+            if (Character.digit(s.charAt(i), radix) < 0)
                 return false;
         }
         return true;
@@ -257,12 +258,8 @@ public class HelperString {
      */
     public static String getUtf8String(String text) {
         String result = "";
-        try {
-            byte[] utf8 = text.getBytes("UTF-8");
-            result = new String(utf8, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        byte[] utf8 = text.getBytes(StandardCharsets.UTF_8);
+        result = new String(utf8, StandardCharsets.UTF_8);
 
         return result;
     }

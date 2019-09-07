@@ -1,23 +1,25 @@
 package net.iGap.fragments.beepTunes.main;
 
-import androidx.lifecycle.MutableLiveData;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.beepTunes.BeepTunesLocalSongAdapter;
 import net.iGap.adapter.beepTunes.BeepTunesMainAdapter;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.adapter.beepTunes.BeepTunesLocalSongAdapter;
 import net.iGap.fragments.beepTunes.BeepTunesLocalSongFragment;
 import net.iGap.fragments.beepTunes.BeepTunesProfileFragment;
 import net.iGap.fragments.beepTunes.album.BeepTunesAlbumFragment;

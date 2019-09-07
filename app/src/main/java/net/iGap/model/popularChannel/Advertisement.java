@@ -1,4 +1,3 @@
-
 package net.iGap.model.popularChannel;
 
 import com.google.gson.annotations.SerializedName;
@@ -22,6 +21,7 @@ public class Advertisement {
     private String mTitleEn;
     @SerializedName("scale")
     private String mScale;
+
     public String getId() {
         return mId;
     }
@@ -39,7 +39,6 @@ public class Advertisement {
     }
 
 
-
     public List<Slide> getSlides() {
         return mSlides;
     }
@@ -55,7 +54,6 @@ public class Advertisement {
     public void setTitle(String title) {
         mTitle = title;
     }
-
 
 
     public String getmScale() {

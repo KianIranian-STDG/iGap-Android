@@ -1,9 +1,10 @@
 package net.iGap.viewmodel;
 
 import android.app.Activity;
-import androidx.lifecycle.MutableLiveData;
-import androidx.databinding.ObservableField;
 import android.view.View;
+
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 

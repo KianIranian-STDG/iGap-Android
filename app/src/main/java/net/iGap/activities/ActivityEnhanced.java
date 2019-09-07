@@ -20,9 +20,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.WindowManager;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.WindowManager;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -297,7 +298,6 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
             } catch (Exception e) {
             }
-            ;
 
             if (!AttachFile.isInAttach && canSetUserStatus) {
                 UserStatusController.getInstance().setOffline();
@@ -394,7 +394,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
         updateResources(getBaseContext());
     }
 
-    public void onRefreshActivity(boolean changeColor,String language) {
+    public void onRefreshActivity(boolean changeColor, String language) {
 
         G.isUpdateNotificaionColorMain = changeColor;
         G.isUpdateNotificaionColorChannel = changeColor;

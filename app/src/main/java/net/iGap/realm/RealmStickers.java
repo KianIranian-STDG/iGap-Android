@@ -313,7 +313,7 @@ public class RealmStickers extends RealmObject {
 
     public void removeFromRealm() {
         if (realmStickersDetails != null) {
-            for (Iterator<RealmStickersDetails> iterator = realmStickersDetails.iterator(); iterator.hasNext();) {
+            for (Iterator<RealmStickersDetails> iterator = realmStickersDetails.iterator(); iterator.hasNext(); ) {
                 RealmStickersDetails stickersDetails = iterator.next();
                 if (stickersDetails != null) {
                     iterator.remove();
@@ -333,12 +333,12 @@ public class RealmStickers extends RealmObject {
                     HashSet<String> hashedData = new HashSet<>();
                     ArrayList<RealmStickers> itemToDelete = new ArrayList<>();
                     HashSet<String> itemNotNeedToAdd = new HashSet<>();
-                    for (StructGroupSticker structGroupSticker: mData) {
+                    for (StructGroupSticker structGroupSticker : mData) {
                         hashedData.add(structGroupSticker.getId());
                     }
 
                     RealmResults<RealmStickers> allStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.IS_FAVORITE, true).findAll();
-                    for (RealmStickers realmStickers: allStickers) {
+                    for (RealmStickers realmStickers : allStickers) {
                         if (!hashedData.contains(realmStickers.st_id)) {
                             itemToDelete.add(realmStickers);
                         } else {
@@ -346,11 +346,11 @@ public class RealmStickers extends RealmObject {
                         }
                     }
 
-                    for (RealmStickers realmStickers: itemToDelete) {
+                    for (RealmStickers realmStickers : itemToDelete) {
                         realmStickers.removeFromRealm();
                     }
 
-                    for (StructGroupSticker item: mData) {
+                    for (StructGroupSticker item : mData) {
                         if (!itemNotNeedToAdd.contains(item.getId())) {
                             RealmStickers.put(realm, item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), true);
                         }

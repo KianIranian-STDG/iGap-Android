@@ -37,7 +37,7 @@ public class SubmitScoreDialog extends Dialog {
         if (isOk) {
             image.setText(getContext().getString(R.string.md_get_score_ok));
             image.setTextColor(getContext().getResources().getColor(R.color.green));
-        }  else {
+        } else {
             image.setText(G.context.getString(R.string.md_get_score_failed));
             image.setTextColor(getContext().getResources().getColor(R.color.red));
         }

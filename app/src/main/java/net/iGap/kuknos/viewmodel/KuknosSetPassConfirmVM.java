@@ -44,11 +44,10 @@ public class KuknosSetPassConfirmVM extends ViewModel {
     }
 
     public void onSubmitBtn() {
-        if (completePin){
+        if (completePin) {
             PIN = PIN1 + PIN2 + PIN3 + PIN4;
             checkPIN();
-        }
-        else {
+        } else {
             error.setValue(new ErrorM(true, "Set Pin", "0", R.string.kuknos_SetPass_error));
         }
     }
@@ -56,8 +55,7 @@ public class KuknosSetPassConfirmVM extends ViewModel {
     public void checkPIN() {
         if (PIN.equals(selectedPin)) {
             sendDataToServer();
-        }
-        else {
+        } else {
             error.setValue(new ErrorM(true, "PIN NOT Match", "0", R.string.kuknos_SetPassConf_error));
         }
     }

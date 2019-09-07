@@ -16,22 +16,22 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.adapter.AdapterSolidChatBackground;
-import net.iGap.helper.HelperSaveFile;
 import net.iGap.dialog.topsheet.TopSheetDialog;
+import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnGetWallpaper;
@@ -100,7 +100,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.more_icon , R.string.check_icon, R.string.retry_icon)
+                .setRightIcons(R.string.more_icon, R.string.check_icon, R.string.retry_icon)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.st_title_Background))
                 .setListener(this);
@@ -109,7 +109,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         layoutToolbar.addView(toolbar.getView());
 
         toolbar.getSecondRightButton().setVisibility(View.GONE);
-        imgFullImage = (ImageView) view.findViewById(R.id.stchf_fullImage);
+        imgFullImage = view.findViewById(R.id.stchf_fullImage);
 
         SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
@@ -123,8 +123,8 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
 
         fillList(true);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.rcvContent);
-        rcvSolidColor = (RecyclerView) view.findViewById(R.id.rcvSolidColor);
+        mRecyclerView = view.findViewById(R.id.rcvContent);
+        rcvSolidColor = view.findViewById(R.id.rcvSolidColor);
 
 
         adapterChatBackgroundSetting = new AdapterChatBackground(fragment, wList, new OnImageClick() {
@@ -215,7 +215,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         if (filePath != null) {
 
             if (new File(filePath).exists()) {
-                RealmWallpaper.updateField(null, filePath , ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE);
+                RealmWallpaper.updateField(null, filePath, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE);
 
                 fillList(false);
 
@@ -228,7 +228,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         G.onGetWallpaper = new OnGetWallpaper() {
             @Override
             public void onGetWallpaperList(final List<ProtoGlobal.Wallpaper> list) {
-                RealmWallpaper.updateField(list, "" , ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE);
+                RealmWallpaper.updateField(list, "", ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE);
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -255,7 +255,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         sw.setWallpaperType(WallpaperType.addNew);
         wList.add(sw);
         try (Realm realm = Realm.getDefaultInstance()) {
-            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE , ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
+            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
 
             if (realmWallpaper != null) {
 
@@ -280,7 +280,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
                         solidList.add(_swp.getProtoWallpaper().getColor());
                     }
 
-                }else if (getInfoFromServer) {
+                } else if (getInfoFromServer) {
 
                     long time = realmWallpaper.getLastTimeGetList();
                     if (time > 0) {
@@ -327,7 +327,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
     public void onSecondRightIconClickListener(View view) {
         if (getActivity() != null && savePath != null && savePath.length() > 0) {
             String finalPath = "";
-            if (isSolidColor){
+            if (isSolidColor) {
                 finalPath = savePath;
                 HelperSaveFile.removeFromPrivateDirectory(getActivity());
             } else {

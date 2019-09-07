@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class PlaqueBodyModel {
 
     @SerializedName("plate")
-    private String plaque ;
+    private String plaque;
 
     public PlaqueBodyModel() {
     }

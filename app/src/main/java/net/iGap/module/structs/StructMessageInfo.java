@@ -12,14 +12,10 @@ package net.iGap.module.structs;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.adapter.items.chat.AbstractMessage;
-import net.iGap.interfaces.IChatItemAttachment;
 import net.iGap.G;
 import net.iGap.module.MyType;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelExtraFields;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -32,7 +28,6 @@ import org.parceler.Parcels;
 
 import io.realm.Realm;
 
-import static net.iGap.G.themeColor;
 import static net.iGap.G.userId;
 
 /**
@@ -349,10 +344,10 @@ public class StructMessageInfo implements Parcelable {
             }
         }
 
-        if (roomMessage.getRealmAdditional()!=null ){
-            messageInfo.additionalData=StructAdditionalData.convert(roomMessage.getRealmAdditional());
-        }else if( roomMessage.getForwardMessage()!=null && roomMessage.getForwardMessage().getRealmAdditional()!=null){
-            messageInfo.additionalData=StructAdditionalData.convert(roomMessage.getForwardMessage().getRealmAdditional());
+        if (roomMessage.getRealmAdditional() != null) {
+            messageInfo.additionalData = StructAdditionalData.convert(roomMessage.getRealmAdditional());
+        } else if (roomMessage.getForwardMessage() != null && roomMessage.getForwardMessage().getRealmAdditional() != null) {
+            messageInfo.additionalData = StructAdditionalData.convert(roomMessage.getForwardMessage().getRealmAdditional());
         }
 
         messageInfo.replayTo = roomMessage.getReplyTo();

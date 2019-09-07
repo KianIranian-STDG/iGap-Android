@@ -7,18 +7,12 @@ package net.iGap.viewmodel;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
-import androidx.lifecycle.MutableLiveData;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import androidx.databinding.ObservableBoolean;
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.appcompat.widget.PopupMenu;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
@@ -27,6 +21,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RadioGroup;
+
+import androidx.appcompat.widget.PopupMenu;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.Config;
 import net.iGap.G;

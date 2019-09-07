@@ -11,13 +11,14 @@
 package net.iGap.adapter;
 
 import android.content.Context;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.R;
 import net.iGap.module.CircleImageView;

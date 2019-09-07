@@ -49,7 +49,7 @@ public class UserTwoStepVerificationRecoverPasswordByAnswersResponse extends Mes
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         if (identity instanceof TwoStepVerificationRecoverPasswordByAnswersCallback) {
-            ((TwoStepVerificationRecoverPasswordByAnswersCallback) identity).errorRecoveryByQuestion(errorResponse.getMajorCode(),errorResponse.getMinorCode());
+            ((TwoStepVerificationRecoverPasswordByAnswersCallback) identity).errorRecoveryByQuestion(errorResponse.getMajorCode(), errorResponse.getMinorCode());
         } else {
             throw new ClassCastException("identity must be: " + TwoStepVerificationRecoverPasswordByAnswersCallback.class.getName());
         }

@@ -1,18 +1,8 @@
 package net.iGap.kuknos.view;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.SharedPreferences;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -20,6 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosSetpasswordConfirmBinding;
@@ -89,7 +91,7 @@ public class KuknosSetPassConfirmFrag extends BaseFragment {
         getCachedData();
     }
 
-    private void getCachedData () {
+    private void getCachedData() {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
         kuknosSetPassConfirmVM.setToken(sharedpreferences.getString("Token", ""));
         kuknosSetPassConfirmVM.setUsername(sharedpreferences.getString("Username", ""));
@@ -126,7 +128,7 @@ public class KuknosSetPassConfirmFrag extends BaseFragment {
                         }
                     });
                     snackbar.show();
-                    if (errorM.getMessage().equals("")){
+                    if (errorM.getMessage().equals("")) {
                         binding.fragKuknosSPSubmit.setEnabled(false);
                     }
                 }
@@ -259,8 +261,7 @@ public class KuknosSetPassConfirmFrag extends BaseFragment {
                 if (show == true) {
                     binding.fragKuknosSPSubmit.setText(getString(R.string.kuknos_SignupInfo_submitConnecting));
                     binding.fragKuknosSPProgressV.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     binding.fragKuknosSPSubmit.setText(getString(R.string.kuknos_SetPassConf_submit));
                     binding.fragKuknosSPProgressV.setVisibility(View.GONE);
                 }

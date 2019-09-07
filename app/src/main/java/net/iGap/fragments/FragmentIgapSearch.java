@@ -14,11 +14,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.core.widget.ContentLoadingProgressBar;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -29,6 +24,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.core.widget.ContentLoadingProgressBar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -89,10 +90,10 @@ public class FragmentIgapSearch extends BaseFragment {
 
         //view.findViewById(R.id.sfl_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        imvNothingFound = (ImageView) view.findViewById(R.id.sfl_imv_nothing_found);
+        imvNothingFound = view.findViewById(R.id.sfl_imv_nothing_found);
         imvNothingFound.setImageResource(R.drawable.find1);
 
-        txtEmptyListComment = (TextView) view.findViewById(R.id.sfl_txt_empty_list_comment);
+        txtEmptyListComment = view.findViewById(R.id.sfl_txt_empty_list_comment);
 
 
         //txtNothing = (TextView) view.findViewById(R.id.sfl_txt_empty_nothing);
@@ -106,10 +107,10 @@ public class FragmentIgapSearch extends BaseFragment {
             }
         }, 150);
 
-        loadingProgressBar = (ContentLoadingProgressBar) view.findViewById(R.id.sfl_progress_loading);
+        loadingProgressBar = view.findViewById(R.id.sfl_progress_loading);
         loadingProgressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(G.progressColor), PorterDuff.Mode.SRC_IN);
 
-        edtSearch = (EditText) view.findViewById(R.id.sfl_edt_search);
+        edtSearch = view.findViewById(R.id.sfl_edt_search);
 
         edtSearch.setInputType(InputType.TYPE_CLASS_TEXT);
 
@@ -152,8 +153,8 @@ public class FragmentIgapSearch extends BaseFragment {
                 }
 
                 if (strSize > 5) {
-                    if (G.userLogin ) {
-                        if ((!edtSearch.getText().toString().equals(preventRepeatSearch))){
+                    if (G.userLogin) {
+                        if ((!edtSearch.getText().toString().equals(preventRepeatSearch))) {
                             itemAdapter.clear();
                             new RequestClientSearchUsername().clientSearchUsername(edtSearch.getText().toString().substring(1));
                             loadingProgressBar.setVisibility(View.VISIBLE);
@@ -200,8 +201,8 @@ public class FragmentIgapSearch extends BaseFragment {
                 edtSearch.setSelection(1);
             }
         });
-        rippleDown = (RippleView) view.findViewById(R.id.sfl_ripple_done);
-        ((View) rippleDown).setEnabled(false);
+        rippleDown = view.findViewById(R.id.sfl_ripple_done);
+        rippleDown.setEnabled(false);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
@@ -209,7 +210,7 @@ public class FragmentIgapSearch extends BaseFragment {
             }
         });
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.sfl_recycleview);
+        recyclerView = view.findViewById(R.id.sfl_recycleview);
     }
 
     private void initRecycleView() {
@@ -254,13 +255,13 @@ public class FragmentIgapSearch extends BaseFragment {
 
                 if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.USER) {
 
-                    HelperUrl.checkUsernameAndGoToRoom(getActivity(),item.getUser().getUsername(), HelperUrl.ChatEntry.profile);
+                    HelperUrl.checkUsernameAndGoToRoom(getActivity(), item.getUser().getUsername(), HelperUrl.ChatEntry.profile);
                 } else if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.ROOM) {
 
                     if (item.getRoom().getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                        HelperUrl.checkUsernameAndGoToRoom(getActivity(),item.getRoom().getChannelRoomExtra().getPublicExtra().getUsername(), HelperUrl.ChatEntry.profile);
+                        HelperUrl.checkUsernameAndGoToRoom(getActivity(), item.getRoom().getChannelRoomExtra().getPublicExtra().getUsername(), HelperUrl.ChatEntry.profile);
                     } else if (item.getRoom().getType() == ProtoGlobal.Room.Type.GROUP) {
-                        HelperUrl.checkUsernameAndGoToRoom(getActivity(),item.getRoom().getGroupRoomExtra().getPublicExtra().getUsername(), HelperUrl.ChatEntry.profile);
+                        HelperUrl.checkUsernameAndGoToRoom(getActivity(), item.getRoom().getGroupRoomExtra().getPublicExtra().getUsername(), HelperUrl.ChatEntry.profile);
                     }
                 }
 

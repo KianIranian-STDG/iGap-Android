@@ -2,11 +2,11 @@ package net.iGap.adapter.items.poll.holder;
 
 import android.app.Activity;
 import android.os.SystemClock;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -49,7 +49,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     void handlePollFieldsClick(PollItemField pollField) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return;
         }
         Activity activity = G.currentActivity;
@@ -91,7 +91,8 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
     private static void showDialog(Activity activity, String message) {
         new MaterialDialog.Builder(activity).content(message).positiveText(R.string.dialog_ok)
-                .onPositive((dialog, which) -> {})
+                .onPositive((dialog, which) -> {
+                })
                 .show();
     }
 

@@ -3,16 +3,18 @@ package net.iGap.dialog.bottomsheet;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -37,7 +39,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
         return this;
     }
 
-    public BottomSheetFragment setListDataWithResourceId(Context context,List<Integer> itemListId, int range, BottomSheetItemClickCallback bottomSheetItemClickCallback) {
+    public BottomSheetFragment setListDataWithResourceId(Context context, List<Integer> itemListId, int range, BottomSheetItemClickCallback bottomSheetItemClickCallback) {
         this.itemList = new ArrayList<>();
         for (int i = 0; i < itemListId.size(); i++) {
             this.itemList.add(context.getString(itemListId.get(i)));

@@ -1,18 +1,19 @@
 package net.iGap.kuknos.view;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosBuyPeymanBinding;
@@ -89,8 +90,7 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
                 if (errorM.getState() == true && errorM.getMessage().equals("0")) {
                     binding.fragKuknosBuyPAmountHolder.setError(getResources().getString(errorM.getResID()));
                     binding.fragKuknosBuyPAmountHolder.requestFocus();
-                }
-                else if (errorM.getState() == true && errorM.getMessage().equals("1")) {
+                } else if (errorM.getState() == true && errorM.getMessage().equals("1")) {
                     showDialog(errorM.getResID());
                 }
             }
@@ -117,13 +117,11 @@ public class KuknosBuyPeymanFrag extends BaseFragment {
                     binding.fragKuknosBuyPProgressV.setVisibility(View.GONE);
                     binding.fragKuknosBuyPAmount.setEnabled(true);
                     binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn));
-                }
-                else if (integer == 1) {
+                } else if (integer == 1) {
                     binding.fragKuknosBuyPProgressV.setVisibility(View.VISIBLE);
                     binding.fragKuknosBuyPAmount.setEnabled(false);
                     binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn_server));
-                }
-                else if (integer == 2) {
+                } else if (integer == 2) {
                     binding.fragKuknosBuyPSubmit.setText(getResources().getText(R.string.kuknos_buyP_btn_server2));
                 }
             }

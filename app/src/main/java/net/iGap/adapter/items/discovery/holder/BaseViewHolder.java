@@ -5,11 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.SystemClock;
+import android.view.View;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.View;
-import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -86,7 +87,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         this.activity = activity;
     }
 
-    public static void handleDiscoveryFieldsClickStatic(DiscoveryItemField discoveryField, FragmentActivity activity , boolean haveNext) {
+    public static void handleDiscoveryFieldsClickStatic(DiscoveryItemField discoveryField, FragmentActivity activity, boolean haveNext) {
         if (activity == null || activity.isFinishing()) {
             return;
         }
@@ -102,7 +103,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
         switch (discoveryField.actionType) {
             case PAGE:/** tested **/
-                actionPage(discoveryField.value, activity , haveNext);
+                actionPage(discoveryField.value, activity, haveNext);
                 break;
             case JOIN_LINK:
                 int index = discoveryField.value.lastIndexOf("/");
@@ -337,7 +338,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case CHARITY:
                 try {
                     JSONObject jsonObject = new JSONObject(discoveryField.value);
-                    sendRequestGetCharityPaymentToken(activity,jsonObject.getString("charityId"),jsonObject.getInt("price"));
+                    sendRequestGetCharityPaymentToken(activity, jsonObject.getString("charityId"), jsonObject.getInt("price"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -346,20 +347,20 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private static void sendRequestGetCharityPaymentToken(FragmentActivity activity ,String charityId,int charityAmount){
-        new RetrofitFactory().getCharityRetrofit().sendRequestGetCharity(charityId,charityAmount).enqueue(new Callback<MciPurchaseResponse>() {
+    private static void sendRequestGetCharityPaymentToken(FragmentActivity activity, String charityId, int charityAmount) {
+        new RetrofitFactory().getCharityRetrofit().sendRequestGetCharity(charityId, charityAmount).enqueue(new Callback<MciPurchaseResponse>() {
             @Override
             public void onResponse(@NotNull Call<MciPurchaseResponse> call, @NotNull Response<MciPurchaseResponse> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     new HelperFragment(activity.getSupportFragmentManager()).loadPayment(activity.getString(R.string.charity_title), response.body().getToken(), new PaymentCallBack() {
                         @Override
                         public void onPaymentFinished(PaymentResult result) {
 
                         }
                     });
-                }else{
+                } else {
                     try {
-                        HelperError.showSnackMessage(new ErrorHandler().getError(response.code(),response.errorBody().string()).getMessage(),false);
+                        HelperError.showSnackMessage(new ErrorHandler().getError(response.code(), response.errorBody().string()).getMessage(), false);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -369,10 +370,11 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onFailure(@NotNull Call<MciPurchaseResponse> call, @NotNull Throwable t) {
                 t.printStackTrace();
-                HelperError.showSnackMessage(activity.getString(R.string.connection_error),false);
+                HelperError.showSnackMessage(activity.getString(R.string.connection_error), false);
             }
         });
     }
+
     private static void actionPage(String value, FragmentActivity activity, boolean haveNext) {
         DiscoveryFragment discoveryFragment = DiscoveryFragment.newInstance(Integer.valueOf(value));
         discoveryFragment.setNeedToCrawl(haveNext);
@@ -410,7 +412,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             return;
         }
         mLastClickTime = SystemClock.elapsedRealtime();
-        handleDiscoveryFieldsClickStatic(discoveryField, activity,false);
+        handleDiscoveryFieldsClickStatic(discoveryField, activity, false);
     }
 
 }

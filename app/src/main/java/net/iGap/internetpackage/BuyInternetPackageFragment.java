@@ -1,13 +1,14 @@
 package net.iGap.internetpackage;
 
-import androidx.lifecycle.ViewModelProviders;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -95,15 +96,15 @@ public class BuyInternetPackageFragment extends BaseFragment {
         viewModel.getGoToPaymentPage().observe(getViewLifecycleOwner(), token -> {
             if (getActivity() != null && token != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_internet_package_title), token, result -> {
-                    if (getActivity()!= null && result.isSuccess()) {
+                    if (getActivity() != null && result.isSuccess()) {
                         getActivity().onBackPressed();
                     }
                 });
             }
         });
 
-        viewModel.getClearTypeChecked().observe(getViewLifecycleOwner(),isCleared->{
-            if (isCleared != null && isCleared){
+        viewModel.getClearTypeChecked().observe(getViewLifecycleOwner(), isCleared -> {
+            if (isCleared != null && isCleared) {
                 binding.typeGroup.clearCheck();
             }
         });

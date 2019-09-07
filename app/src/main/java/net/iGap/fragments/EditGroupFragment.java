@@ -1,24 +1,25 @@
 package net.iGap.fragments;
 
 import android.app.Activity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import androidx.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -198,16 +199,16 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
                             FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false, null);
-                            FragmentEditImage fragmentEditImage =  FragmentEditImage.newInstance(null, false, false, 0);
+                            FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
                             fragmentEditImage.setOnProfileImageEdited(this);
-                            new HelperFragment(getActivity().getSupportFragmentManager(),fragmentEditImage).setReplace(false).load();
+                            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
 
                         } else {
                             ImageHelper.correctRotateImage(AttachFile.imagePath, true);
                             FragmentEditImage.insertItemList(AttachFile.imagePath, false, null);
                             FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0);
                             fragmentEditImage.setOnProfileImageEdited(this);
-                            new HelperFragment(getActivity().getSupportFragmentManager(),fragmentEditImage).setReplace(false).load();
+                            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                         }
                     }
                     break;
@@ -227,7 +228,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
         }
     }
 
-    private void setAvatar(){
+    private void setAvatar() {
         avatarHandler.getAvatar(new ParamWithAvatarType(binding.groupAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
     }
 

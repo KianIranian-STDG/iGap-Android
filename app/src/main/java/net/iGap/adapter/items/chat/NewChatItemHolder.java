@@ -3,12 +3,6 @@ package net.iGap.adapter.items.chat;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -18,6 +12,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -96,7 +97,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         signatureTv.setId(R.id.tv_chatItem_signature);
         setTextSize(signatureTv, R.dimen.verySmallTextSize);
         signatureTv.setEllipsize(TextUtils.TruncateAt.END);
-        signatureTv.setPadding(0,0,LayoutCreator.dp(4),0);
+        signatureTv.setPadding(0, 0, LayoutCreator.dp(4), 0);
         setTypeFace(signatureTv);
         signatureTv.setSingleLine(true);
         signatureTv.setGravity(CENTER_VERTICAL);
@@ -216,7 +217,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         voteContainer.addView(voteUpContainer,
                 LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
                         Gravity.CENTER, 8, 0, 2, 0));
-        voteContainer.addView(voteDownContainer,LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
+        voteContainer.addView(voteDownContainer, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
                 Gravity.CENTER, 0, 0, 8, 0));
 
         int[] views = {viewContainer.getId(), voteContainer.getId(), signatureTv.getId(), messageTimeTv.getId(), messageStatusTv.getId()};

@@ -1,12 +1,13 @@
 package net.iGap.fragments.beepTunes;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
@@ -34,8 +35,6 @@ public class PurchaseFragment extends BaseFragment implements ToolbarListener {
 
         LinearLayout toolBarContainer = rootView.findViewById(R.id.ll_purchase_tollBar);
         toolBarContainer.addView(toolbar.getView());
-
-
 
 
     }

@@ -1,8 +1,8 @@
 package net.iGap.dialog.payment.charity;
 
-import androidx.lifecycle.ViewModel;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.dialog.payment.CompleteListener;
@@ -15,7 +15,7 @@ public class CharityViewModel extends ViewModel {
     private ObservableInt amountErrorMessage = new ObservableInt(R.string.empty_error_message);
     private CompleteListener completeListener;
 
-    public CharityViewModel(CompleteListener completeListener){
+    public CharityViewModel(CompleteListener completeListener) {
         this.completeListener = completeListener;
     }
 

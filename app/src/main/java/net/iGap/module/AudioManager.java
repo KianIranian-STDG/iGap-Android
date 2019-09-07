@@ -11,9 +11,6 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-
-import net.iGap.R;
-
 import org.webrtc.ThreadUtils;
 
 import java.util.Collections;
@@ -49,7 +46,7 @@ public class AudioManager {
     /**
      * Selected audio device change event.
      */
-    public static interface AudioManagerEvents {
+    public interface AudioManagerEvents {
         // Callback fired once audio device is changed or list of available audio devices changed.
         void onAudioDeviceChanged(
                 AudioDevice selectedAudioDevice, Set<AudioDevice> availableAudioDevices);
@@ -150,8 +147,6 @@ public class AudioManager {
             updateAudioDeviceState();
         }
     }
-
-    ;
 
     /**
      * Construction.

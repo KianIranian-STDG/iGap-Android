@@ -1,21 +1,23 @@
 package net.iGap.kuknos.view;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.res.Configuration;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosAddAssetBinding;
@@ -112,13 +114,13 @@ public class KuknosAddAssetFrag extends BaseFragment {
             public void onChanged(@Nullable ErrorM errorM) {
                 if (errorM.getState() == true) {
                     Snackbar snackbar = Snackbar.make(binding.fragKuknosAddAContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
-                        snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                snackbar.dismiss();
-                            }
-                        });
-                        snackbar.show();
+                    snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            snackbar.dismiss();
+                        }
+                    });
+                    snackbar.show();
                 }
             }
         });
@@ -131,8 +133,7 @@ public class KuknosAddAssetFrag extends BaseFragment {
             public void onChanged(@Nullable Boolean aBoolean) {
                 if (aBoolean == true) {
                     binding.fragKuknosAddAProgressV.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     binding.fragKuknosAddAProgressV.setVisibility(View.GONE);
                 }
             }
@@ -143,8 +144,7 @@ public class KuknosAddAssetFrag extends BaseFragment {
             public void onChanged(@Nullable Boolean aBoolean) {
                 if (aBoolean == true) {
                     binding.fragKuknosAddAProgressVAdv.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     binding.fragKuknosAddAProgressVAdv.setVisibility(View.GONE);
                 }
             }

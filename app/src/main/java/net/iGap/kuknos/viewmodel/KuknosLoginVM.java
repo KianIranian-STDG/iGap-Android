@@ -1,9 +1,10 @@
 package net.iGap.kuknos.viewmodel;
 
+import android.text.TextUtils;
+
+import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableField;
-import android.text.TextUtils;
 
 import net.iGap.R;
 import net.iGap.api.apiService.ApiResponse;
@@ -33,11 +34,9 @@ public class KuknosLoginVM extends ViewModel {
     public void onSubmit() {
         if (TextUtils.isEmpty(ID.get())) {
             error.setValue(new ErrorM(true, "Empty Entry", "0", R.string.kuknos_login_error_empty_str));
-        }
-        else if (ID.get().length() != 10) {
+        } else if (ID.get().length() != 10) {
             error.setValue(new ErrorM(true, "Invalid Entry", "0", R.string.kuknos_login_error_invalid_str));
-        }
-        else {
+        } else {
             if (isRegisteredBefore == true)
                 nextPage.setValue(true);
             else
@@ -49,7 +48,7 @@ public class KuknosLoginVM extends ViewModel {
         userRepo.checkUser(userNum.get(), ID.get(), new ApiResponse<KuknoscheckUserM>() {
             @Override
             public void onResponse(KuknoscheckUserM kuknoscheckUserM) {
-                if (kuknoscheckUserM.getToken()!=null) {
+                if (kuknoscheckUserM.getToken() != null) {
                     KuknosLoginVM.this.kuknoscheckUserM = kuknoscheckUserM;
                     nextPage.setValue(true);
                 }
@@ -75,8 +74,7 @@ public class KuknosLoginVM extends ViewModel {
 
     public boolean loginStatus() {
         if (userRepo.getSeedKey() != null) {
-            if (!userRepo.getSeedKey().equals("-1"))
-                return true;
+            return !userRepo.getSeedKey().equals("-1");
         }
         return false;
     }

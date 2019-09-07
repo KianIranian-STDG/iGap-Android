@@ -1,8 +1,9 @@
 package net.iGap.activities;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.fragments.DataStoreageFragment;

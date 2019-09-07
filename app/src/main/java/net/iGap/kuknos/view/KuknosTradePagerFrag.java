@@ -1,17 +1,19 @@
 package net.iGap.kuknos.view;
 
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.tabs.TabLayout;
-import androidx.viewpager.widget.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -96,10 +98,9 @@ public class KuknosTradePagerFrag extends BaseFragment {
             tv.setGravity(Gravity.CENTER);
             tv.setTypeface(G.typeface_IRANSansMobile);
 
-            if (G.isDarkTheme){
+            if (G.isDarkTheme) {
                 tv.setTextColor(G.context.getResources().getColor(R.color.white));
-            }
-            else {
+            } else {
                 tv.setTextColor(G.context.getResources().getColor(R.color.black));
             }
             tabLayout.getTabAt(i).setCustomView(tv);

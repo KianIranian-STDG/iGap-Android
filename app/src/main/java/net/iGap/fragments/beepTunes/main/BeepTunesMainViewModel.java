@@ -1,8 +1,9 @@
 package net.iGap.fragments.beepTunes.main;
 
-import androidx.lifecycle.MutableLiveData;
 import android.util.Log;
 import android.view.View;
+
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.BeepTunesApi;
 import net.iGap.api.apiService.ApiServiceProvider;

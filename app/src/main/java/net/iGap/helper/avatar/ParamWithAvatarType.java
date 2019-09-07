@@ -5,7 +5,7 @@ import android.widget.ImageView;
 import net.iGap.R;
 import net.iGap.proto.ProtoGlobal;
 
-public class ParamWithAvatarType extends BaseParam{
+public class ParamWithAvatarType extends BaseParam {
     AvatarHandler.AvatarType avatarType = null;
     int avatarSize = R.dimen.dp60;
     ProtoGlobal.RegisteredUser registeredUser = null;

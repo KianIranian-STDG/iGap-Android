@@ -8,8 +8,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.appcompat.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -22,8 +20,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.widget.AppCompatEditText;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 
 import net.iGap.G;
@@ -104,7 +105,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         if (userName != null)
             paymentDialogBinding.subtitle.setText(userName);
         if (G.selectedCard != null) {
-            paymentDialogBinding.amountCard.setText(getString(R.string.wallet_Your_credit) + " " + String.format(getString(R.string.wallet_Reial),G.cardamount));
+            paymentDialogBinding.amountCard.setText(getString(R.string.wallet_Your_credit) + " " + String.format(getString(R.string.wallet_Reial), G.cardamount));
         } else {
             paymentDialogBinding.amountCard.setVisibility(View.GONE);
         }
@@ -196,17 +197,17 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                                 @Override
                                 public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
                                     if (progressDialog != null) progressDialog.dismiss();
-                                    if (getActivity()!=null) {
+                                    if (getActivity() != null) {
                                         if (!new HelperFragment(getActivity().getSupportFragmentManager()).isFragmentVisible("PaymentFragment"))
                                             return;
                                         if (response.body() != null) {
                                             selectedCard = null;
                                             for (Card card : response.body()) {
-                                            if (card.isRaadCard()) {
-                                                selectedCard = card;
-                                                break;
+                                                if (card.isRaadCard()) {
+                                                    selectedCard = card;
+                                                    break;
+                                                }
                                             }
-                                        }
                                             if (selectedCard != null) {
                                                 if (selectedCard.cashOutBalance >= Long.parseLong(mPrice[0])) {
                                                     if (!selectedCard.isProtected) {
@@ -242,7 +243,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                                                     payment.price = Long.parseLong(mPrice[0]);
                                                     Intent intent = new Intent(context, WalletActivity.class);
                                                     intent.putExtra("Language", "fa");
-                                                    intent.putExtra("Mobile", "0" + String.valueOf(G.userId));
+                                                    intent.putExtra("Mobile", "0" + G.userId);
                                                     intent.putExtra("IsP2P", true);
                                                     intent.putExtra("Payment", payment);
                                                     intent.putExtra("PrimaryColor", G.appBarColor);
@@ -413,7 +414,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                 if (resultCode == RESULT_OK) {
                     PaymentResult paymentResult = (PaymentResult) data.getSerializableExtra("result");
                     if (paymentResult != null) {
-                        HelperError.showSnackMessage(getResources().getString(R.string.trace_number) + String.valueOf(paymentResult.traceNumber) + getResources().getString(R.string.amount_2) + String.valueOf(paymentResult.amount), false);
+                        HelperError.showSnackMessage(getResources().getString(R.string.trace_number) + String.valueOf(paymentResult.traceNumber) + getResources().getString(R.string.amount_2) + paymentResult.amount, false);
                         EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedSuccess);
                     } else {
                         HelperError.showSnackMessage(getResources().getString(R.string.not_success), false);

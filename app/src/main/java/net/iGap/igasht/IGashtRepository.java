@@ -1,7 +1,5 @@
 package net.iGap.igasht;
 
-import android.util.Log;
-
 import net.iGap.api.IgashtApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;

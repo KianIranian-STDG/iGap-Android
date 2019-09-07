@@ -12,20 +12,12 @@ package net.iGap.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import androidx.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +28,14 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -234,12 +234,12 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PermissionHelper.StoragePermissionRequestCode){
+        if (requestCode == PermissionHelper.StoragePermissionRequestCode) {
             boolean t = true;
             for (int grantResult : grantResults) {
                 t = t && grantResult == PackageManager.PERMISSION_GRANTED;
             }
-            if (t){
+            if (t) {
                 openGallery();
             }
         }
@@ -265,13 +265,13 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
 
     public void useGallery() {
         if (getActivity() != null) {
-            if (new PermissionHelper(getActivity()).grantReadAndRightStoragePermission()){
+            if (new PermissionHelper(getActivity()).grantReadAndRightStoragePermission()) {
                 openGallery();
             }
         }
     }
 
-    private void openGallery(){
+    private void openGallery() {
         try {
             new AttachFile(getActivity()).requestOpenGalleryForImageSingleSelect(FragmentRegistrationNickname.this);
         } catch (Exception e) {

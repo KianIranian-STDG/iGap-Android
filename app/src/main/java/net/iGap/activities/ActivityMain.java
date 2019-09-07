@@ -25,9 +25,6 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -38,6 +35,10 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -916,7 +917,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             case kuknosRequestCodeQrCode:
                 IntentResult kuknosWID = IntentIntegrator.parseActivityResult(resultCode, data);
                 if (kuknosWID.getContents() != null) {
-                    KuknosSendFrag myFragment = (KuknosSendFrag)getSupportFragmentManager().findFragmentByTag(KuknosSendFrag.class.getName());
+                    KuknosSendFrag myFragment = (KuknosSendFrag) getSupportFragmentManager().findFragmentByTag(KuknosSendFrag.class.getName());
                     if (myFragment != null && myFragment.isVisible()) {
                         myFragment.setWalletIDQrCode(kuknosWID.getContents());
                     }

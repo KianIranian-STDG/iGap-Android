@@ -35,10 +35,7 @@ public class RealmNotificationRoomMessage extends RealmObject {
                 .equalTo(RealmNotificationRoomMessageFields.MESSAGE_ID, messageId)
                 .equalTo(RealmNotificationRoomMessageFields.ROOM_ID, roomId)
                 .findFirst();
-        if (message == null) {
-            return true;
-        }
-        return false;
+        return message == null;
     }
 
 }

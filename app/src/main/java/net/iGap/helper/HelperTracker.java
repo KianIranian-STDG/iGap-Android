@@ -67,7 +67,9 @@ public class HelperTracker {
     }
 
     public static void sendTracker(String trackerTag) {
-        if (BuildConfig.DEBUG) { return; }
+        if (BuildConfig.DEBUG) {
+            return;
+        }
 
         boolean allowSendTracker = true;
 

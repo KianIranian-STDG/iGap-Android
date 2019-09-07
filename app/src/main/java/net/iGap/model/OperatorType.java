@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class OperatorType {
 
     public enum Type {
-        HAMRAH_AVAL, IRANCELL, RITEL;
+        HAMRAH_AVAL, IRANCELL, RITEL
     }
 
     private HashMap<String, Type> phoneMap = new HashMap<String, Type>() {
@@ -41,13 +41,13 @@ public class OperatorType {
         }
     };
 
-    public Type getOperation(String phoneNumber){
+    public Type getOperation(String phoneNumber) {
         return phoneMap.get(phoneNumber);
     }
 
-    public boolean isMci(String phoneNumber){
+    public boolean isMci(String phoneNumber) {
         Type tmp = phoneMap.get(phoneNumber);
-        if (tmp != null){
+        if (tmp != null) {
             return tmp == Type.HAMRAH_AVAL;
         }
         return false;

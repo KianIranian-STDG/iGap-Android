@@ -1,12 +1,13 @@
 package net.iGap.viewmodel;
 
 import android.app.TimePickerDialog;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import android.content.SharedPreferences;
-import androidx.databinding.ObservableField;
 import android.view.View;
 import android.widget.TimePicker;
+
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -37,7 +38,6 @@ public class FragmentDarkThemeViewModel extends ViewModel {
     public ObservableField<Integer> isAutoDarkTheme = new ObservableField<>();
     public ObservableField<Integer> isDisableDarkTheme = new ObservableField<>();
     public MutableLiveData<Boolean> resetApp = new MutableLiveData<>();
-
 
 
     public FragmentDarkThemeViewModel() {

@@ -1,13 +1,7 @@
 package net.iGap.kuknos.view;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,6 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosTradeBinding;
@@ -127,17 +127,15 @@ public class KuknosTradeFrag extends BaseFragment {
         kuknosTradeVM.getError().observe(getViewLifecycleOwner(), new Observer<ErrorM>() {
             @Override
             public void onChanged(@Nullable ErrorM errorM) {
-                if (errorM.getMessage().equals("0") && errorM.getState() == true){
+                if (errorM.getMessage().equals("0") && errorM.getState() == true) {
                     //origin Problem
                     binding.fragKuknosTranTAmountHolder.setError("" + getString(errorM.getResID()));
                     binding.fragKuknosTranTAmountHolder.requestFocus();
-                }
-                else if (errorM.getMessage().equals("1") && errorM.getState() == true){
+                } else if (errorM.getMessage().equals("1") && errorM.getState() == true) {
                     //origin Problem
                     binding.fragKuknosTranExchangeHolder.setError("" + getString(errorM.getResID()));
                     binding.fragKuknosTranExchangeHolder.requestFocus();
-                }
-                else if (errorM.getMessage().equals("2")){
+                } else if (errorM.getMessage().equals("2")) {
                     showDialog(errorM.getState(), errorM.getResID());
                 }
             }
@@ -169,8 +167,7 @@ public class KuknosTradeFrag extends BaseFragment {
                     binding.fragKuknosTranExchange.setEnabled(false);
                     binding.fragKuknosTranTAmount.setEnabled(false);
                     binding.fragKuknosTranSubmit.setText(getResources().getText(R.string.kuknos_trade_server));
-                }
-                else {
+                } else {
                     binding.fragKuknosTranProgressV.setVisibility(View.GONE);
                     binding.fragKuknosTranExchange.setEnabled(true);
                     binding.fragKuknosTranTAmount.setEnabled(true);

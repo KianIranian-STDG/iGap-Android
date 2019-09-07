@@ -7,7 +7,7 @@ package net.iGap.module.enums;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
 public enum Security {
 

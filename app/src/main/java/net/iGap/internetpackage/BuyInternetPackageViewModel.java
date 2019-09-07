@@ -1,10 +1,11 @@
 package net.iGap.internetpackage;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.view.View;
+
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
-import android.view.View;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.api.errorhandler.ErrorModel;

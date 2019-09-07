@@ -31,7 +31,7 @@ public class RealmStickersDetails extends RealmObject {
             realmStickersDetails.setRefId(refId);
             realmStickersDetails.setName(name);
             realmStickersDetails.setToken(avatarToken);
-            realmStickersDetails.setUri(HelperDownloadSticker.createPathFile(avatarToken , avatarName));
+            realmStickersDetails.setUri(HelperDownloadSticker.createPathFile(avatarToken, avatarName));
             realmStickersDetails.setFileName(avatarName);
             realmStickersDetails.setFileSize(avatarSize);
             realmStickersDetails.setSort(sort);

@@ -11,8 +11,6 @@
 package net.iGap.adapter.items.chat;
 
 import android.graphics.Color;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -20,6 +18,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.G;
 import net.iGap.R;

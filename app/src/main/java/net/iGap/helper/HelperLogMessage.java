@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.helper;
 
@@ -429,7 +429,7 @@ public class HelperLogMessage {
                 bundle.putString("enterFrom", "GROUP");
                 contactsProfile.setArguments(bundle);
                 //ToDo:fixed it and change to do not use G.currentActivity
-                new HelperFragment(G.currentActivity.getSupportFragmentManager(),contactsProfile).setReplace(false).load();
+                new HelperFragment(G.currentActivity.getSupportFragmentManager(), contactsProfile).setReplace(false).load();
 
             } else {
                 G.onChatGetRoom = new OnChatGetRoom() {
@@ -445,7 +445,7 @@ public class HelperLogMessage {
                                 bundle.putString("enterFrom", "GROUP");
                                 contactsProfile.setArguments(bundle);
                                 //ToDo:fixed it and change to do not use G.currentActivity
-                                new HelperFragment(G.currentActivity.getSupportFragmentManager(),contactsProfile).setReplace(false).load();
+                                new HelperFragment(G.currentActivity.getSupportFragmentManager(), contactsProfile).setReplace(false).load();
                                 G.onChatGetRoom = null;
                             }
                         });

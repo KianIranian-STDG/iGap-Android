@@ -10,8 +10,6 @@
 
 package net.iGap.response;
 
-import android.util.Log;
-
 import net.iGap.G;
 import net.iGap.proto.ProtoSignalingSessionHold;
 import net.iGap.webrtc.WebRTC;

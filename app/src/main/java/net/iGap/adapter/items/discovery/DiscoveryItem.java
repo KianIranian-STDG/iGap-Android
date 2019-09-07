@@ -12,7 +12,7 @@ public class DiscoveryItem {
     public DiscoveryItem(ProtoGlobal.Discovery discovery) {
         model = discovery.getModel();
         discoveryFields = new ArrayList<>();
-        for (ProtoGlobal.DiscoveryField discoveryField :discovery.getDiscoveryfieldsList()) {
+        for (ProtoGlobal.DiscoveryField discoveryField : discovery.getDiscoveryfieldsList()) {
             discoveryFields.add(new DiscoveryItemField(discoveryField));
         }
         scale = discovery.getScale();

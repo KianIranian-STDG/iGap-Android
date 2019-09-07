@@ -26,7 +26,6 @@ import org.stellar.sdk.responses.OfferResponse;
 import org.stellar.sdk.responses.Page;
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 import org.stellar.sdk.responses.operations.OperationResponse;
-import org.stellar.sdk.xdr.ManageOfferOp;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -158,13 +157,12 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
         try {
             SubmitTransactionResponse response = server.submitTransaction(transaction);
             //todo clean this hard code for monitoring
-            Gson gson =  new Gson();
+            Gson gson = new Gson();
             Log.d("amini", "paymentToOther: " + gson.toJson(response) + "\n" + response.isSuccess());
             if (response.isSuccess()) {
                 successStatus = true;
                 return (T) response;
-            }
-            else {
+            } else {
                 successStatus = false;
                 return (T) checkResponseCode(response);
             }
@@ -261,13 +259,12 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
         try {
             SubmitTransactionResponse response = server.submitTransaction(transaction);
             //todo clean this hard code for monitoring
-            Gson gson =  new Gson();
+            Gson gson = new Gson();
             Log.d("amini", "paymentToOther: " + gson.toJson(response) + "\n" + response.isSuccess());
             if (response.isSuccess()) {
                 successStatus = true;
                 return (T) response;
-            }
-            else {
+            } else {
                 // todo change response code for this option
                 successStatus = false;
                 return (T) checkResponseCode(response);
@@ -336,13 +333,12 @@ public class KuknosAPIAsync<T> extends AsyncTask<String, Boolean, T> {
         try {
             SubmitTransactionResponse response = server.submitTransaction(transaction);
             //todo clean this hard code for monitoring
-            Gson gson =  new Gson();
+            Gson gson = new Gson();
             Log.d("amini", "paymentToOther: " + gson.toJson(response) + "\n" + response.isSuccess());
             if (response.isSuccess()) {
                 successStatus = true;
                 return (T) response;
-            }
-            else {
+            } else {
                 // todo change response code for this option
                 successStatus = false;
                 return (T) checkResponseCode(response);

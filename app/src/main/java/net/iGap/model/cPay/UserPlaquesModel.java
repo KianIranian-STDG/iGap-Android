@@ -7,7 +7,7 @@ import java.util.List;
 public class UserPlaquesModel {
 
     @SerializedName("data")
-    private List<String> data ;
+    private List<String> data;
 
     public void setData(List<String> data) {
         this.data = data;

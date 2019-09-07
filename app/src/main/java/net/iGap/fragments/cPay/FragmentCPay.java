@@ -1,17 +1,17 @@
 package net.iGap.fragments.cPay;
 
 
-import androidx.lifecycle.ViewModelProviders;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import net.iGap.R;
 import net.iGap.adapter.cPay.AdapterPlaqueList;
@@ -28,9 +28,9 @@ import java.util.List;
 
 public class FragmentCPay extends BaseFragment implements ToolbarListener {
 
-    private FragmentSeePayViewModel viewModel ;
-    private FragmentCpayBinding binding ;
-    private AdapterPlaqueList adapter ;
+    private FragmentSeePayViewModel viewModel;
+    private FragmentCpayBinding binding;
+    private AdapterPlaqueList adapter;
     private List<String> plaqueList = new ArrayList<>();
 
     public FragmentCPay() {
@@ -45,7 +45,7 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater ,R.layout.fragment_cpay, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cpay, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
@@ -62,69 +62,69 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
 
     private void initCallBacks() {
 
-        viewModel.getOnAddClickListener().observe(getViewLifecycleOwner() , isOpen -> {
+        viewModel.getOnAddClickListener().observe(getViewLifecycleOwner(), isOpen -> {
             openEditOrAddFragment(null);
         });
 
-        viewModel.getOnInquiryClickListener().observe(getViewLifecycleOwner() , isOpen -> {
+        viewModel.getOnInquiryClickListener().observe(getViewLifecycleOwner(), isOpen -> {
             if (getActivity() == null) return;
 
-            if (adapter.getSelectedPlaqueList().size() == 0){
+            if (adapter.getSelectedPlaqueList().size() == 0) {
                 Toast.makeText(getContext(), getString(R.string.no_item_selected), Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            new HelperFragment(getActivity().getSupportFragmentManager() , FragmentCPayInquiry.getInstance(adapter.getSelectedPlaqueList().get(0)))
+            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentCPayInquiry.getInstance(adapter.getSelectedPlaqueList().get(0)))
                     .setReplace(false)
                     .load();
         });
 
-        viewModel.getOnChargeClickListener().observe(getViewLifecycleOwner() , isOpen -> {
+        viewModel.getOnChargeClickListener().observe(getViewLifecycleOwner(), isOpen -> {
             if (getActivity() == null) return;
 
-            if (adapter.getSelectedPlaqueList().size() == 0){
+            if (adapter.getSelectedPlaqueList().size() == 0) {
                 Toast.makeText(getContext(), getString(R.string.no_item_selected), Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            new HelperFragment(getActivity().getSupportFragmentManager() , FragmentCPayCharge.getInstance(adapter.getSelectedPlaqueList().get(0)))
+            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentCPayCharge.getInstance(adapter.getSelectedPlaqueList().get(0)))
                     .setReplace(false)
                     .load();
         });
 
-        viewModel.getPlaqueChangeListener().observe(getViewLifecycleOwner() , isUpdate ->{
+        viewModel.getPlaqueChangeListener().observe(getViewLifecycleOwner(), isUpdate -> {
             if (isUpdate != null && isUpdate) viewModel.getPlaqueListByApi();
         });
 
-        viewModel.getLoaderListener().observe(getViewLifecycleOwner() , isLoading -> {
+        viewModel.getLoaderListener().observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading == null) return;
             handleView(isLoading ? PageState.LOADING : PageState.ERROR);
         });
 
-        viewModel.getPlaquesReceiverListener().observe(getViewLifecycleOwner() , userPlaques -> {
-            if (userPlaques == null){
+        viewModel.getPlaquesReceiverListener().observe(getViewLifecycleOwner(), userPlaques -> {
+            if (userPlaques == null) {
                 handleView(PageState.NO_CAR);
-            }else {
+            } else {
                 plaqueList = userPlaques.getData();
                 updateRecyclerView();
                 handleView(PageState.HAS_CAR);
             }
         });
 
-        viewModel.getMessageToUser().observe(getViewLifecycleOwner() , resID -> {
+        viewModel.getMessageToUser().observe(getViewLifecycleOwner(), resID -> {
             if (resID == null) return;
             Toast.makeText(getActivity(), getString(resID), Toast.LENGTH_LONG).show();
         });
 
-        viewModel.getMessageToUserText().observe(getViewLifecycleOwner() , s -> {
+        viewModel.getMessageToUserText().observe(getViewLifecycleOwner(), s -> {
             if (s == null) return;
-            Toast.makeText(getActivity(), s , Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
         });
 
     }
 
     private void handleView(PageState state) {
-        switch (state){
+        switch (state) {
             case NO_CAR:
                 binding.retry.setVisibility(View.GONE);
                 binding.loader.setVisibility(View.GONE);
@@ -158,18 +158,18 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
 
     private void updateRecyclerView() {
 
-        if (adapter == null){
+        if (adapter == null) {
             adapter = new AdapterPlaqueList(getActivity());
             adapter.setPlaqueList(plaqueList);
             binding.rvPlaques.setLayoutManager(new LinearLayoutManager(getActivity()));
             binding.rvPlaques.setAdapter(adapter);
-        }else {
+        } else {
             adapter.notifyDataSetChanged();
         }
 
-        adapter.onEditClickListener.observe(getViewLifecycleOwner() , plaque -> {
-            if (plaque != null){
-               openEditOrAddFragment(plaque);
+        adapter.onEditClickListener.observe(getViewLifecycleOwner(), plaque -> {
+            if (plaque != null) {
+                openEditOrAddFragment(plaque);
             }
         });
     }
@@ -177,7 +177,7 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
     private void openEditOrAddFragment(String plaque) {
         if (getActivity() == null) return;
 
-        new HelperFragment(getActivity().getSupportFragmentManager() , FragmentCPayEdit.getInstance(plaque))
+        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentCPayEdit.getInstance(plaque))
                 .setReplace(false)
                 .load();
     }
@@ -206,13 +206,13 @@ public class FragmentCPay extends BaseFragment implements ToolbarListener {
 
         if (getActivity() == null) return;
 
-        new HelperFragment(getActivity().getSupportFragmentManager() , new FragmentCPayHistory())
+        new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentCPayHistory())
                 .setReplace(false)
                 .load();
 
     }
 
     enum PageState {
-        LOADING , HAS_CAR , NO_CAR , ERROR
+        LOADING, HAS_CAR, NO_CAR, ERROR
     }
 }

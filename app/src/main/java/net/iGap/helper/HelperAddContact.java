@@ -27,7 +27,7 @@ public class HelperAddContact {
 
         String saveNumber;
         if (phone.startsWith("0")) {
-            saveNumber = codeNumber + phone.substring(1, phone.length());
+            saveNumber = codeNumber + phone.substring(1);
         } else {
             saveNumber = codeNumber + phone;
         }

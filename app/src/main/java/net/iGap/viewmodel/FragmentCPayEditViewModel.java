@@ -1,7 +1,6 @@
 package net.iGap.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -11,7 +10,7 @@ import net.iGap.model.cPay.RegisterPlaqueModel;
 
 public class FragmentCPayEditViewModel extends BaseCPayViewModel<RegisterPlaqueModel> {
 
-   private MutableLiveData<Boolean> addCarListener = new MutableLiveData<>();
+    private MutableLiveData<Boolean> addCarListener = new MutableLiveData<>();
 
     private String nameTxt = "", familyTxt = "", nationalIDTxt = "";
 

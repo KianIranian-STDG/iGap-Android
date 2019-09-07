@@ -1,9 +1,10 @@
 package net.iGap.adapter.items.poll.holder;
 
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 
 import net.iGap.G;
 import net.iGap.R;

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class RegisterPlaqueModel {
 
     @SerializedName("PAN")
-    private String pan ;
+    private String pan;
 
     public String getPan() {
         return pan;

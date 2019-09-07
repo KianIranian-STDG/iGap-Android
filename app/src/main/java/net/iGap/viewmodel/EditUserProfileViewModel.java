@@ -8,7 +8,6 @@ public class EditUserProfileViewModel extends BaseViewModel {
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList<>();
 
 
-
     public ArrayList<StructCountry> getStructCountryArrayList() {
         return structCountryArrayList;
     }

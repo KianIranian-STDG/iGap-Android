@@ -1,9 +1,6 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -111,9 +112,9 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
         ViewGroup layoutToolbar = view.findViewById(R.id.fmu_toolbar);
         layoutToolbar.addView(toolbar.getView());
 
-        imvNothingFound = (ImageView) view.findViewById(R.id.sfl_imv_nothing_found);
-        txtEmptyListComment = (TextView) view.findViewById(R.id.sfl_txt_empty_list_comment);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.rcy_map_user);
+        imvNothingFound = view.findViewById(R.id.sfl_imv_nothing_found);
+        txtEmptyListComment = view.findViewById(R.id.sfl_txt_empty_list_comment);
+        mRecyclerView = view.findViewById(R.id.rcy_map_user);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
         getRealmMapUsers().executeTransaction(new Realm.Transaction() {
@@ -374,8 +375,8 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
                 holder.layoutMap.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (getActivity()!=null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(),FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
+                        if (getActivity() != null) {
+                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
                         }
                     }
                 });
@@ -419,10 +420,10 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             public ViewHolder(View itemView) {
                 super(itemView);
 
-                layoutMap = (LinearLayout) itemView.findViewById(R.id.lyt_map_user);
+                layoutMap = itemView.findViewById(R.id.lyt_map_user);
                 avatar = (CircleImageView) itemView.findViewById(R.id.img_user_avatar_map);
-                username = (TextView) itemView.findViewById(R.id.txt_user_name_map);
-                comment = (TextView) itemView.findViewById(R.id.txt_user_comment_map);
+                username = itemView.findViewById(R.id.txt_user_name_map);
+                comment = itemView.findViewById(R.id.txt_user_comment_map);
                 arrow = (MaterialDesignTextView) itemView.findViewById(R.id.txt_arrow_list_map);
                 distance = (CustomTextViewMedium) itemView.findViewById(R.id.txt_user_distance_map);
 

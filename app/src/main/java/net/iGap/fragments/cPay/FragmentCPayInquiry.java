@@ -1,15 +1,15 @@
 package net.iGap.fragments.cPay;
 
 
-import androidx.lifecycle.ViewModelProviders;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentCpayInquiryBinding;
@@ -22,18 +22,18 @@ import net.iGap.viewmodel.FragmentCPayInquiryViewModel;
 public class FragmentCPayInquiry extends BaseFragment implements ToolbarListener {
 
     private FragmentCpayInquiryBinding binding;
-    private FragmentCPayInquiryViewModel viewModel ;
+    private FragmentCPayInquiryViewModel viewModel;
     private String plaqueText;
 
     public FragmentCPayInquiry() {
     }
 
-    public static FragmentCPayInquiry getInstance(String plaque){
+    public static FragmentCPayInquiry getInstance(String plaque) {
         FragmentCPayInquiry fragmentCPayInquiry = new FragmentCPayInquiry();
         Bundle bundle = new Bundle();
-        bundle.putString(HelperCPay.PLAQUE, plaque );
+        bundle.putString(HelperCPay.PLAQUE, plaque);
         fragmentCPayInquiry.setArguments(bundle);
-        return fragmentCPayInquiry ;
+        return fragmentCPayInquiry;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class FragmentCPayInquiry extends BaseFragment implements ToolbarListener
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater ,R.layout.fragment_cpay_inquiry, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cpay_inquiry, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
@@ -70,7 +70,6 @@ public class FragmentCPayInquiry extends BaseFragment implements ToolbarListener
         binding.fciPlaqueView.setPlaqueAlphabet(HelperCPay.getPlaqueAlphabet(Integer.valueOf(plaqueValue[1])));
         binding.fciPlaqueView.setPlaque2(plaqueValue[2]);
         binding.fciPlaqueView.setPlaqueCity(plaqueValue[3]);
-
 
 
     }

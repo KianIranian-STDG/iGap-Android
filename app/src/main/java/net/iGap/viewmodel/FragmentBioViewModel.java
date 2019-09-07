@@ -7,14 +7,15 @@ package net.iGap.viewmodel;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
 import android.content.Context;
-import androidx.databinding.ObservableField;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.databinding.ObservableField;
 
 import net.iGap.G;
 import net.iGap.R;

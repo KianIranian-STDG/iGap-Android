@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -22,10 +23,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.NonNull;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -34,6 +31,11 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -216,7 +218,7 @@ public class HelperUrl {
 
                     G.isLinkClicked = true;
                     boolean openLocalWebPage;
-                    SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, G.context.MODE_PRIVATE);
+                    SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
 
                     int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
 
@@ -751,7 +753,8 @@ public class HelperUrl {
     }
 
     private static boolean isIgapDeepLink(String text) {
-        return text.matches("(igap?://)([^:^/]*)(:\\d*)?(.*)?");    }
+        return text.matches("(igap?://)([^:^/]*)(:\\d*)?(.*)?");
+    }
 
     private static boolean isBotLink(String text) {
         return text.matches("^\\/\\w+");
@@ -1445,7 +1448,7 @@ public class HelperUrl {
     }
 
     enum linkType {
-        hash, atSighn, igapLink, igapResolve, webLink, bot, digitLink , igapDeepLink
+        hash, atSighn, igapLink, igapResolve, webLink, bot, digitLink, igapDeepLink
 
     }
 

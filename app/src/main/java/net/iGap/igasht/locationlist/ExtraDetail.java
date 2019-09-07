@@ -1,4 +1,3 @@
-
 package net.iGap.igasht.locationlist;
 
 import com.google.gson.annotations.SerializedName;
@@ -93,7 +92,7 @@ public class ExtraDetail {
         return mLong;
     }
 
-        public String getMainPicture() {
+    public String getMainPicture() {
         return mMainPicture;
     }
 

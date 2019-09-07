@@ -15,11 +15,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.webkit.MimeTypeMap;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import net.iGap.G;
 import net.iGap.activities.ActivityMain;
@@ -49,7 +48,7 @@ public class HelperGetDataFromOtherApp {
         public FileType fileType;
     }
 
-    public HelperGetDataFromOtherApp(AppCompatActivity activityCompat,Intent intent) {
+    public HelperGetDataFromOtherApp(AppCompatActivity activityCompat, Intent intent) {
 
         this.intent = intent;
 
@@ -57,7 +56,7 @@ public class HelperGetDataFromOtherApp {
             return;
         }
 
-        checkData(activityCompat,intent);
+        checkData(activityCompat, intent);
     }
 
     public static FileType getMimeType(Uri uri) {
@@ -106,7 +105,7 @@ public class HelperGetDataFromOtherApp {
 
             if (type.equals("text/plain")) {
 
-                if ((Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM) != null)
+                if (intent.getParcelableExtra(Intent.EXTRA_STREAM) != null)
                     SetOutPutSingleFile(FileType.file);
                 else
                     handleSendText(intent);
@@ -153,7 +152,7 @@ public class HelperGetDataFromOtherApp {
     //*****************************************************************************************************
 
     private void SetOutPutSingleFile(FileType type) {
-        Uri fileAddressUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM); // get file attachment
+        Uri fileAddressUri = intent.getParcelableExtra(Intent.EXTRA_STREAM); // get file attachment
         //String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT); get text
         if (fileAddressUri != null) {
             String extension = HelperString.dotSplit(fileAddressUri.getPath());
@@ -213,7 +212,7 @@ public class HelperGetDataFromOtherApp {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && _Uri.getScheme() != null && _Uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                     if (_path == null) {
-                        _path = getPathN(_Uri, type ,intent.getType());
+                        _path = getPathN(_Uri, type, intent.getType());
                     } else {
                         try {
                             FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", new File(_path));
@@ -281,6 +280,6 @@ public class HelperGetDataFromOtherApp {
     //*****************************************************************************************************
 
     public enum FileType {
-        message, video, file, audio, image,gif
+        message, video, file, audio, image, gif
     }
 }

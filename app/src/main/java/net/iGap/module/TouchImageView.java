@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.module;
 
@@ -24,7 +24,6 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Parcelable;
-import androidx.appcompat.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -33,6 +32,8 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.OverScroller;
 import android.widget.Scroller;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 public class TouchImageView extends AppCompatImageView {
 
@@ -60,7 +61,6 @@ public class TouchImageView extends AppCompatImageView {
     private Matrix matrix, prevMatrix;
     private State state;
 
-    ;
     private float minScale;
     private float maxScale;
     private float superMinScale;
@@ -706,11 +706,8 @@ public class TouchImageView extends AppCompatImageView {
             return false;
         } else if (x >= -1 && direction < 0) {
             return false;
-        } else if (Math.abs(x) + viewWidth + 1 >= getImageWidth() && direction > 0) {
-            return false;
-        }
+        } else return !(Math.abs(x) + viewWidth + 1 >= getImageWidth()) || direction <= 0;
 
-        return true;
     }
 
     private void scaleImage(double deltaScale, float focusX, float focusY, boolean stretchImageToSuper) {
@@ -799,13 +796,13 @@ public class TouchImageView extends AppCompatImageView {
         matrix.getValues(n);
     }
 
-    private static enum State {
+    private enum State {
         NONE, DRAG, ZOOM, FLING, ANIMATE_ZOOM
     }
 
     public interface OnTouchImageViewListener {
 
-        public void onMove();
+        void onMove();
     }
 
     /**
@@ -1114,7 +1111,7 @@ public class TouchImageView extends AppCompatImageView {
                 minY = maxY = startY;
             }
 
-            scroller.fling(startX, startY, (int) velocityX, (int) velocityY, minX, maxX, minY, maxY);
+            scroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
             currX = startX;
             currY = startY;
         }

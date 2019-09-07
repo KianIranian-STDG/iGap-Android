@@ -1,19 +1,20 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.adapter;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IItem;
@@ -60,12 +61,12 @@ public class StickyHeaderAdapter<Item extends IItem> extends RecyclerView.Adapte
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
         CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
 
-        if(G.isDarkTheme){
+        if (G.isDarkTheme) {
             textView.setTextColor(G.context.getResources().getColor(R.color.white));
-        }else {
+        } else {
             textView.setTextColor(G.context.getResources().getColor(R.color.white));
         }
-        
+
         IItem item = getItem(position);
         if (item instanceof ContactItem && ((ContactItem) item).mContact != null) {
             //based on the position we set the headers text

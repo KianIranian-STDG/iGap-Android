@@ -21,7 +21,7 @@ public class RequestBillInquiryTelecom {
         builder.setProvinceCode(provinceCode);
         builder.setTelephoneNumber(phoneNumber);
 
-        RequestWrapper requestWrapper = new RequestWrapper(9201, builder,callback);
+        RequestWrapper requestWrapper = new RequestWrapper(9201, builder, callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

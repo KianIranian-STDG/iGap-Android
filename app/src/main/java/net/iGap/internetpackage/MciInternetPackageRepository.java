@@ -8,14 +8,12 @@ import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.errorhandler.ResponseCallback;
 import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.model.MciPurchaseResponse;
-import net.iGap.realm.RealmUserInfo;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.List;
 
-import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -86,9 +84,9 @@ public class MciInternetPackageRepository {
         });
     }
 
-    public void purchaseInternetPackage(String phoneNumber,String internetPackageType ,ResponseCallback<MciPurchaseResponse> callback) {
-        Log.wtf(this.getClass().getName(),"phone number: "+ phoneNumber);
-        api.internetPackagePurchase(phoneNumber,internetPackageType).enqueue(new Callback<MciPurchaseResponse>() {
+    public void purchaseInternetPackage(String phoneNumber, String internetPackageType, ResponseCallback<MciPurchaseResponse> callback) {
+        Log.wtf(this.getClass().getName(), "phone number: " + phoneNumber);
+        api.internetPackagePurchase(phoneNumber, internetPackageType).enqueue(new Callback<MciPurchaseResponse>() {
             @Override
             public void onResponse(@NotNull Call<MciPurchaseResponse> call, @NotNull Response<MciPurchaseResponse> response) {
                 if (response.code() == 200) {

@@ -2,6 +2,7 @@ package net.iGap.libs.notification;
 
 
 import android.util.Log;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -43,8 +44,8 @@ public class NotificationService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         WebSocketClient.reconnect(false);
 
-        if (remoteMessage.getNotification()!=null && remoteMessage.getData().containsKey(ActivityMain.DEEP_LINK)){
-            HelperNotification.sendDeepLink(remoteMessage.getData(),remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
+        if (remoteMessage.getNotification() != null && remoteMessage.getData().containsKey(ActivityMain.DEEP_LINK)) {
+            HelperNotification.sendDeepLink(remoteMessage.getData(), remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
         }
 
         if (remoteMessage.getData().containsKey(MESSAGE_ID)) {
@@ -83,7 +84,7 @@ public class NotificationService extends FirebaseMessagingService {
                                 HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType);
 
                             }
-                        }catch (Exception e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

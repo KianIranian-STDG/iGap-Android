@@ -10,9 +10,6 @@
 
 package net.iGap.response;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import net.iGap.G;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientGetRoomHistory;
@@ -63,7 +60,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                     }
                 });
             }
-            G.onClientGetRoomHistoryResponse.onGetRoomHistory(roomId, builder.getMessageList().get(0).getMessageId(), builder.getMessageList().get(builder.getMessageCount() - 1).getMessageId(), reachMessageId, messageIdGetHistory,  direction);
+            G.onClientGetRoomHistoryResponse.onGetRoomHistory(roomId, builder.getMessageList().get(0).getMessageId(), builder.getMessageList().get(builder.getMessageCount() - 1).getMessageId(), reachMessageId, messageIdGetHistory, direction);
 
         } else {
             RequestClientGetRoomHistory.RequestData requestData = (RequestClientGetRoomHistory.RequestData) identity;

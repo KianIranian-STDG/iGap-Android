@@ -1,16 +1,16 @@
 package net.iGap.fragments.cPay;
 
 
-import androidx.lifecycle.ViewModelProviders;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.api.repository.CPayRepository;
@@ -23,9 +23,9 @@ import net.iGap.viewmodel.FragmentCPayEditViewModel;
 
 public class FragmentCPayEdit extends BaseFragment implements ToolbarListener {
 
-    private FragmentCPayEditViewModel viewModel ;
-    private FragmentCpayEditBinding binding ;
-    private String plaqueText ;
+    private FragmentCPayEditViewModel viewModel;
+    private FragmentCpayEditBinding binding;
+    private String plaqueText;
 
     public FragmentCPayEdit() {
 
@@ -34,7 +34,7 @@ public class FragmentCPayEdit extends BaseFragment implements ToolbarListener {
     public static FragmentCPayEdit getInstance(String plaque) {
         FragmentCPayEdit fragmentCPay = new FragmentCPayEdit();
         Bundle bundle = new Bundle();
-        bundle.putString(HelperCPay.PLAQUE , plaque);
+        bundle.putString(HelperCPay.PLAQUE, plaque);
         fragmentCPay.setArguments(bundle);
         return fragmentCPay;
     }
@@ -47,7 +47,7 @@ public class FragmentCPayEdit extends BaseFragment implements ToolbarListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater ,R.layout.fragment_cpay_edit, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cpay_edit, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
@@ -57,7 +57,7 @@ public class FragmentCPayEdit extends BaseFragment implements ToolbarListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if ( getArguments() != null) plaqueText = getArguments().getString(HelperCPay.PLAQUE, null);
+        if (getArguments() != null) plaqueText = getArguments().getString(HelperCPay.PLAQUE, null);
         initToolbar();
         setupViewIfEditMode();
         setupCallBacks();
@@ -66,31 +66,31 @@ public class FragmentCPayEdit extends BaseFragment implements ToolbarListener {
 
     private void setupCallBacks() {
 
-        viewModel.getMessageToUser().observe(getViewLifecycleOwner() , resID -> {
+        viewModel.getMessageToUser().observe(getViewLifecycleOwner(), resID -> {
             if (resID == null) return;
             Toast.makeText(getActivity(), getString(resID), Toast.LENGTH_LONG).show();
         });
 
-        viewModel.getMessageToUserText().observe(getViewLifecycleOwner() , s -> {
+        viewModel.getMessageToUserText().observe(getViewLifecycleOwner(), s -> {
             if (s == null) return;
-            Toast.makeText(getActivity(), s , Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
         });
 
-        viewModel.getLoaderListener().observe(getViewLifecycleOwner() , isVisible->{
+        viewModel.getLoaderListener().observe(getViewLifecycleOwner(), isVisible -> {
             if (isVisible == null) return;
 
             closeKeyboard(binding.btnAddCar);
 
-            if (isVisible){
+            if (isVisible) {
                 binding.progressBar.setVisibility(View.VISIBLE);
                 binding.btnAddCar.setEnabled(false);
-            }else {
+            } else {
                 binding.progressBar.setVisibility(View.GONE);
                 binding.btnAddCar.setEnabled(true);
             }
         });
 
-        viewModel.getAddCarListener().observe(getViewLifecycleOwner() , isOk -> {
+        viewModel.getAddCarListener().observe(getViewLifecycleOwner(), isOk -> {
             if (isOk == null) return;
             //update list in main
             CPayRepository.getInstance().getPlaquesChangeListener().setValue(true);

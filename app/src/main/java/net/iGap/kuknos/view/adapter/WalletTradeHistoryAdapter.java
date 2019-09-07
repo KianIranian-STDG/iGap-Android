@@ -2,12 +2,13 @@ package net.iGap.kuknos.view.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.dialog.DefaultRoundDialog;
@@ -81,8 +82,7 @@ public class WalletTradeHistoryAdapter extends RecyclerView.Adapter<WalletTradeH
                 date.setText(model.getLastModifiedTime());
                 date.setVisibility(View.VISIBLE);
                 delete.setVisibility(View.GONE);
-            }
-            else {
+            } else {
                 date.setVisibility(View.GONE);
                 delete.setVisibility(View.VISIBLE);
                 delete.setOnClickListener(new View.OnClickListener() {

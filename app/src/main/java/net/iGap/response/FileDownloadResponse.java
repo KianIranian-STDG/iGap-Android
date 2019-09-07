@@ -53,10 +53,7 @@ public class FileDownloadResponse extends MessageHandler {
         boolean connectivityType = true;
         try {
             if (HelperCheckInternetConnection.currentConnectivityType != null) {
-                if (HelperCheckInternetConnection.currentConnectivityType == HelperCheckInternetConnection.ConnectivityType.WIFI)
-                    connectivityType = true;
-                else
-                    connectivityType = false;
+                connectivityType = HelperCheckInternetConnection.currentConnectivityType == HelperCheckInternetConnection.ConnectivityType.WIFI;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,7 +86,7 @@ public class FileDownloadResponse extends MessageHandler {
             case STICKER:
             case STICKER_DETAIL:
                 if (G.onStickerDownloaded != null) {
-                    G.onStickerDownloaded.onStickerDownloaded(filePath, cacheId, fileSize, nextOffset, identityFileDownload.selector ,identityFileDownload.typeDownload , (int) 0);
+                    G.onStickerDownloaded.onStickerDownloaded(filePath, cacheId, fileSize, nextOffset, identityFileDownload.selector, identityFileDownload.typeDownload, 0);
                 }
                 break;
         }
@@ -119,7 +116,7 @@ public class FileDownloadResponse extends MessageHandler {
             if (G.onFileDownloaded != null) {
                 G.onFileDownloaded.onError(majorCode, identity);
             }
-        } else if (type == RequestFileDownload.TypeDownload.STICKER|| type == RequestFileDownload.TypeDownload.STICKER_DETAIL) {
+        } else if (type == RequestFileDownload.TypeDownload.STICKER || type == RequestFileDownload.TypeDownload.STICKER_DETAIL) {
             if (G.onStickerDownloaded != null) {
                 G.onStickerDownloaded.onError(majorCode, identity);
             }

@@ -1,10 +1,11 @@
 package net.iGap.adapter.items.discovery;
 
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.adapter.items.discovery.holder.BaseViewHolder;
@@ -30,7 +31,7 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         this.width = width;
     }
 
-    public void setDiscoveryList(ArrayList<DiscoveryItem> discoveryList,int width) {
+    public void setDiscoveryList(ArrayList<DiscoveryItem> discoveryList, int width) {
         this.discoveryList = discoveryList;
         this.width = width;
     }

@@ -20,7 +20,7 @@ public class RequestUserProfileSetRepresentative {
         ProtoUserProfileRepresentative.UserProfileSetRepresentative.Builder builder = ProtoUserProfileRepresentative.UserProfileSetRepresentative.newBuilder();
         builder.setPhoneNumber(mobileNumber);
 
-        RequestWrapper requestWrapper = new RequestWrapper(152, builder,callback);
+        RequestWrapper requestWrapper = new RequestWrapper(152, builder, callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
