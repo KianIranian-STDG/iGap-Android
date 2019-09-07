@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="android.view.View" />
+        <import type="net.iGap.G" />
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.EditUserProfileViewModel" />
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        style="?backgroundColorSettingTheme"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layoutDirection="locale">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layoutDirection="locale">
+
+            <TextView
+                style="?hintColorSettingTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/name"/>
+
+
+
+
+
+
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>
