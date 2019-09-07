@@ -10,6 +10,7 @@ package net.iGap.viewmodel;
 */
 
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.databinding.ObservableField;
@@ -44,7 +45,7 @@ import io.realm.Realm;
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.module.FileUtils.getFolderSize;
 
-public class ActivityManageSpaceViewModel {
+public class ActivityManageSpaceViewModel extends ViewModel {
 
     public MutableLiveData<Integer[]> autoDownloadDataListener = new MutableLiveData<>();
     public MutableLiveData<Integer[]> autoDownloadWifiListener = new MutableLiveData<>();
@@ -58,7 +59,6 @@ public class ActivityManageSpaceViewModel {
     public ObservableField<Boolean> isAutoGif = new ObservableField<>();
 
 
-    private Context context;
     private SharedPreferences sharedPreferences;
     private int isForever;
     private File fileMap;
@@ -84,10 +84,7 @@ public class ActivityManageSpaceViewModel {
     private int KEY_AD_WIFI_GIF = -1;
     private CompoundButton.OnCheckedChangeListener onCacheCheckedChanged;
 
-    public ActivityManageSpaceViewModel(Context context) {
-
-        this.context = context;
-
+    public ActivityManageSpaceViewModel() {
         getInfo();
     }
 

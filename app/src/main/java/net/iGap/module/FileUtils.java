@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.module;
 
@@ -30,6 +30,10 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLog;
+
+import org.jetbrains.annotations.NotNull;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.config.IConfigurationProvider;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -94,7 +98,7 @@ public class FileUtils {
         }
     };
 
-    private FileUtils() {
+    public FileUtils() {
     } //private constructor to enforce Singleton pattern
 
     /**
@@ -612,5 +616,73 @@ public class FileUtils {
             }
         }
         return storageList;
+    }
+
+    public String getFileTotalSize() {
+        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_IMAGES)) +
+                getFolderSize(new File(G.DIR_VIDEOS)) +
+                getFolderSize(new File(G.DIR_DOCUMENT)) +
+                getFolderSize(new File(G.DIR_AUDIOS)) +
+                getFolderSize(new File(G.DIR_TEMP)) +
+                getFolderSize(new File(G.DIR_CHAT_BACKGROUND)) +
+                getFolderSize(new File(G.DIR_IMAGE_USER)) +
+                getFolderSize(Configuration.getInstance().getOsmdroidBasePath()));
+    }
+
+    public String getImageFileSize() {
+        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_IMAGES)));
+    }
+
+    public String getVideoFileSize() {
+        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_VIDEOS)));
+    }
+
+    public String getDocumentFileSize() {
+        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_DOCUMENT)));
+    }
+
+    public String getAudioFileSize() {
+        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_AUDIOS)));
+    }
+
+    public String getMapFileSize() {
+        return FileUtils.formatFileSize(getFolderSize(Configuration.getInstance().getOsmdroidBasePath()));
+    }
+
+    public String getOtherFileSize() {
+        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_TEMP)) + getFolderSize(new File(G.DIR_CHAT_BACKGROUND)) + getFolderSize(new File(G.DIR_IMAGE_USER)));
+    }
+
+    public void clearImageFile() {
+        clearFile(new File(G.DIR_IMAGE_USER));
+    }
+
+    public void clearVideoFile() {
+        clearFile(new File(G.DIR_VIDEOS));
+    }
+
+    public void clearDocumentFile() {
+        clearFile(new File(G.DIR_DOCUMENT));
+    }
+
+    public void clearAudioFile() {
+        clearFile(new File(G.DIR_AUDIOS));
+    }
+
+    public void clearMapFile() {
+        IConfigurationProvider configurationProvider = Configuration.getInstance();
+        deleteRecursive((configurationProvider.getOsmdroidBasePath()));
+    }
+
+    public void clearOtherFile() {
+        clearFile(new File(G.DIR_TEMP));
+        clearFile(new File(G.DIR_CHAT_BACKGROUND));
+        clearFile(new File(G.DIR_IMAGE_USER));
+    }
+
+    private void clearFile(@NotNull File fileTmp) {
+        for (File file : fileTmp.listFiles()) {
+            if (!file.isDirectory()) file.delete();
+        }
     }
 }
