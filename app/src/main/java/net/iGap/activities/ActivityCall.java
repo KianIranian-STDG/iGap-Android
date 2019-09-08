@@ -290,7 +290,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                     if (position == 3) {
                         HelperPublicMethod.goToChatRoom(userId, null, null);
                     } else {
-                        HelperPublicMethod.goToChatRoomWithMessage(userId, this.getString(strings.get(position)), null, null);
+                        HelperPublicMethod.goToChatRoomWithMessage(this, userId, this.getString(strings.get(position)), null, null);
                     }
                 }).show(getSupportFragmentManager(), null);
             }

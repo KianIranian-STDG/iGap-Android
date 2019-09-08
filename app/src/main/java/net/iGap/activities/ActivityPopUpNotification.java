@@ -48,6 +48,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.helper.HelperNotification;
+import net.iGap.helper.HelperRealm;
 import net.iGap.interfaces.IPopUpListener;
 import net.iGap.interfaces.OnVoiceRecord;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -266,9 +267,9 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     }
 
     public static void sendMessage(final String message, final long mRoomId, ProtoGlobal.Room.Type chatType) {
-        String identity = Long.toString(System.currentTimeMillis());
-        RealmRoomMessage.makeTextMessage(mRoomId, Long.parseLong(identity), message);
-        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId).message(message).sendMessage(identity);
+        RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, message);
+        HelperRealm.copyOrUpdateToRealm(roomMessage);
+        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId).message(message).sendMessage(roomMessage.getMessageId() + "");
     }
 
     private void goToChatActivity() {

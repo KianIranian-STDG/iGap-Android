@@ -851,9 +851,9 @@ public class HelperNotification {
                     }
 
                     if (message != null && message.length() > 0 && roomId > 0) {
-                        String identity = Long.toString(System.currentTimeMillis());
-                        RealmRoomMessage.makeTextMessage(roomId, Long.parseLong(identity), message);
-                        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(identity);
+                        RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(roomId, message);
+                        HelperRealm.copyOrUpdateToRealm(roomMessage);
+                        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(roomMessage.getMessageId() + "");
                     }
 
                     break;

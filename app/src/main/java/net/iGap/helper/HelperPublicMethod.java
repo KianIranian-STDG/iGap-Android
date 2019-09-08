@@ -10,6 +10,7 @@
 
 package net.iGap.helper;
 
+import android.content.Context;
 import android.content.Intent;
 
 import net.iGap.G;
@@ -91,7 +92,7 @@ public class HelperPublicMethod {
     }
 
 
-    public static void goToChatRoomWithMessage(final long peerId, String message, final OnComplete onComplete, final OnError onError) {
+    public static void goToChatRoomWithMessage(final Context context, final long peerId, String message, final OnComplete onComplete, final OnError onError) {
         try (Realm realm = Realm.getDefaultInstance()) {
             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
 
@@ -101,7 +102,7 @@ public class HelperPublicMethod {
                     onComplete.complete();
                 }
 
-                goToRoomWithTextMessage(realmRoom.getId(), message, realmRoom.getType(), -1);
+                goToRoomWithTextMessage(context, realmRoom.getId(), message, realmRoom.getType(), -1);
 
             } else {
                 G.onChatGetRoom = new OnChatGetRoom() {
@@ -115,7 +116,7 @@ public class HelperPublicMethod {
                             realm.executeTransaction(realm1 -> {
                                 RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
                                 room1.setDeleted(true);
-                                goToRoomWithTextMessage(room1.getId(), message, room1.getType(), -1);
+                                goToRoomWithTextMessage(context, room1.getId(), message, room1.getType(), -1);
                             });
                         }
                         getUserInfo(peerId, room.getId(), onComplete, onError);
@@ -276,22 +277,29 @@ public class HelperPublicMethod {
         G.context.startActivity(intent);
     }
 
-    private static void goToRoomWithTextMessage(long roomId, String message, ProtoGlobal.Room.Type type, long peerId) {
+    private static void goToRoomWithTextMessage(final Context context, long roomId, String message, ProtoGlobal.Room.Type type, long peerId) {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                try (Realm realm = Realm.getDefaultInstance()) {
+                    if (message != null && message.length() > 0 && roomId > 0) {
+                        RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(roomId, message);
+                        new ChatSendMessageUtil().newBuilder(type, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(roomMessage.getMessageId() + "");
+                        AsyncTransaction.executeTransactionWithLoading(context, realm, realm1 -> realm1.copyToRealmOrUpdate(roomMessage), () -> {
+                            Intent intent = new Intent(G.context, ActivityMain.class);
+                            intent.putExtra(ActivityMain.openChat, roomId);
+                            if (peerId >= 0) {
+                                intent.putExtra("PeerID", peerId);
+                            }
 
-        if (message != null && message.length() > 0 && roomId > 0) {
-            String identity = Long.toString(System.currentTimeMillis());
-            RealmRoomMessage.makeTextMessage(roomId, Long.parseLong(identity), message);
-            new ChatSendMessageUtil().newBuilder(type, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(identity);
-        }
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            G.context.startActivity(intent);
+                        });
 
-        Intent intent = new Intent(G.context, ActivityMain.class);
-        intent.putExtra(ActivityMain.openChat, roomId);
-        if (peerId >= 0) {
-            intent.putExtra("PeerID", peerId);
-        }
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        G.context.startActivity(intent);
+                    }
+                }
+            }
+        });
     }
 
     public interface OnComplete {

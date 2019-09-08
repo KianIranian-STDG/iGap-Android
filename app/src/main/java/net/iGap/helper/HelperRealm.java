@@ -11,6 +11,7 @@
 package net.iGap.helper;
 
 import io.realm.Realm;
+import io.realm.RealmModel;
 
 /**
  * helper methods while working with Realm
@@ -34,5 +35,13 @@ public final class HelperRealm {
                 }
             });
         }
+    }
+
+    public static <E extends RealmModel> void copyOrUpdateToRealm(E object) {
+        new Thread(() -> {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(object));
+            }
+        }).start();
     }
 }
