@@ -1923,6 +1923,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (fragment instanceof FragmentChat) {
             getSupportFragmentManager().beginTransaction().remove(fragment).commit();
         }
+    }
 
+    public Fragment getFragment(String fragmentTag){
+        return getSupportFragmentManager().findFragmentByTag(fragmentTag);
     }
 }
