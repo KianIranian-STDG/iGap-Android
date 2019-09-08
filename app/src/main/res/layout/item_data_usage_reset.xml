@@ -3,16 +3,16 @@
     android:id="@+id/rvClearDataUsage"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:background="?attr/selectableItemBackground">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtClearData"
         style="?textTitleColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="@dimen/dp14"
-        android:layout_marginRight="@dimen/dp14"
+        android:layout_height="@dimen/dp48"
         android:gravity="center_vertical"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginEnd="@dimen/dp16"
         android:text="@string/clear_data_usage"
         android:textSize="@dimen/largeTextSize" />
 

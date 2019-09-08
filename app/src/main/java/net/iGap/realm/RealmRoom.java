@@ -882,14 +882,19 @@ public class RealmRoom extends RealmObject {
     public static void clearAllScrollPositions() {
         try (Realm realm = Realm.getDefaultInstance()) {
             for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
-                clearScrollPosition(realmRoom.id);
+                setLastScrollPosition(realm, realmRoom.id);
             }
         }
     }
 
-    public static void clearScrollPosition(long roomId) {
-        setLastScrollPosition(roomId, 0, 0);
+    private static void setLastScrollPosition(Realm realm, long roomId) {
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null) {
+            realmRoom.setLastScrollPositionMessageId(0);
+            realmRoom.setLastScrollPositionOffset(0);
+        }
     }
+
 
     public static void setDraft(final long roomId, final String message, final long replyToMessageId, ProtoGlobal.Room.Type chatType) {
         try (Realm realm = Realm.getDefaultInstance()) {

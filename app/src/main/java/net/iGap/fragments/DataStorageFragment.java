@@ -1,20 +1,20 @@
 package net.iGap.fragments;
 
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -30,7 +30,7 @@ import net.iGap.viewmodel.DataStorageViewModel;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class DataStoreageFragment extends BaseFragment {
+public class DataStorageFragment extends BaseFragment {
 
     private FragmentStorageDataBinding binding;
     private DataStorageViewModel viewModel;
@@ -53,7 +53,7 @@ public class DataStoreageFragment extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_storage_data, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return binding.getRoot();
     }
 
     @Override
@@ -93,35 +93,7 @@ public class DataStoreageFragment extends BaseFragment {
                         .titleGravity(GravityEnum.START)
                         .titleColor(getResources().getColor(android.R.color.black))
                         .items(R.array.keepMedia)
-                        .itemsCallbackSingleChoice(selectedPosition, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                                /*switch (which) {
-                                    case 0: {
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
-                                        editor.apply();
-                                        callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_forever));
-                                        break;
-                                    }
-                                    case 1: {
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 30);
-                                        editor.apply();
-                                        callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_1month));
-                                        break;
-                                    }
-                                    case 2: {
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                        editor.putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 180);
-                                        editor.apply();
-                                        callbackKeepMedia.set(G.context.getResources().getString(R.string.keep_media_6month));
-                                        break;
-                                    }
-                                }*/
-                                return false;
-                            }
-                        }).positiveText(R.string.B_ok)
+                        .itemsCallbackSingleChoice(selectedPosition, (dialog, itemView, which, text) -> false).positiveText(R.string.B_ok)
                         .negativeText(R.string.B_cancel)
                         .onPositive((dialog, which) -> viewModel.setKeepMediaTime(dialog.getSelectedIndex())).show();
             }
@@ -132,18 +104,8 @@ public class DataStoreageFragment extends BaseFragment {
                 new MaterialDialog.Builder(getContext())
                         .title(R.string.title_auto_download_data)
                         .items(R.array.auto_download_data)
-                        .itemsCallbackMultiChoice(values, new MaterialDialog.ListCallbackMultiChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-                                return true;
-                            }
-                        }).positiveText(getResources().getString(R.string.B_ok))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                viewModel.setAutoDownloadOverData(dialog.getSelectedIndices());
-                            }
-                        })
+                        .itemsCallbackMultiChoice(values, (dialog, which, text) -> true).positiveText(getResources().getString(R.string.B_ok))
+                        .onPositive((dialog, which) -> viewModel.setAutoDownloadOverData(dialog.getSelectedIndices()))
                         .negativeText(getResources().getString(R.string.B_cancel))
                         .show();
             }
@@ -154,19 +116,8 @@ public class DataStoreageFragment extends BaseFragment {
                 new MaterialDialog.Builder(getContext())
                         .title(R.string.title_auto_download_wifi)
                         .items(R.array.auto_download_data)
-                        .itemsCallbackMultiChoice(values, new MaterialDialog.ListCallbackMultiChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-
-                                return true;
-                            }
-                        }).positiveText(R.string.B_ok)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                viewModel.setAutoDownloadOverWifi(dialog.getSelectedIndices());
-                            }
-                        })
+                        .itemsCallbackMultiChoice(values, (dialog, which, text) -> true).positiveText(R.string.B_ok)
+                        .onPositive((dialog, which) -> viewModel.setAutoDownloadOverWifi(dialog.getSelectedIndices()))
                         .negativeText(R.string.cancel)
                         .show();
             }
@@ -177,19 +128,8 @@ public class DataStoreageFragment extends BaseFragment {
                 new MaterialDialog.Builder(getContext())
                         .title(R.string.title_auto_download_roaming)
                         .items(R.array.auto_download_data)
-                        .itemsCallbackMultiChoice(values, new MaterialDialog.ListCallbackMultiChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-
-                                return true;
-                            }
-                        }).positiveText(R.string.B_ok)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                viewModel.setAutoDownloadOverRoaming(dialog.getSelectedIndices());
-                            }
-                        })
+                        .itemsCallbackMultiChoice(values, (dialog, which, text) -> true).positiveText(R.string.B_ok)
+                        .onPositive((dialog, which) -> viewModel.setAutoDownloadOverRoaming(dialog.getSelectedIndices()))
                         .negativeText(R.string.B_cancel)
                         .show();
             }
@@ -304,12 +244,7 @@ public class DataStoreageFragment extends BaseFragment {
                         .negativeText(R.string.B_cancel)
                         .content(R.string.change_storage_place)
                         .positiveText(R.string.B_ok)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                viewModel.setActiveSDCard();
-                            }
-                        }).show();
+                        .onPositive((dialog, which) -> viewModel.setActiveSDCard()).show();
             }
         });
     }
