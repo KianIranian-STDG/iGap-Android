@@ -9,7 +9,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -131,7 +130,7 @@ public class ChatAttachmentPopup {
 
         //inflate layout
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        viewRoot = inflater.inflate(R.layout.bottom_sheet_new, null, false);
+        viewRoot = inflater.inflate(R.layout.attachment_popup_view, null, false);
 
         attachFile = new AttachFile(mFrgActivity);
         initViews(viewRoot);
