@@ -177,13 +177,15 @@ public class ChatAttachmentPopup {
             setPopupBackground(R.color.navigation_dark_mode_bg , R.color.chat_bottom_bg);
         }
 
-        contentView.setMinimumHeight(height);
-
-/*
-        ViewGroup.LayoutParams lp = contentView.getLayoutParams();
-        lp.height = height;
-        contentView.setLayoutParams(lp);
-*/
+        if (height != ViewGroup.LayoutParams.WRAP_CONTENT){
+            if (contentView.getHeight() >= height){
+                contentView.setMinimumHeight(height);
+            }else {
+                ViewGroup.LayoutParams lp = contentView.getLayoutParams();
+                lp.height = height;
+                contentView.setLayoutParams(lp);
+            }
+        }
 
         contentView.setOnClickListener(v -> {
             //nothing
@@ -196,11 +198,15 @@ public class ChatAttachmentPopup {
             height = ViewGroup.LayoutParams.WRAP_CONTENT;
         }
 
-        contentView.setMinimumHeight(height);
-        /*
-        ViewGroup.LayoutParams lp = contentView.getLayoutParams();
-        lp.height = height;
-        contentView.setLayoutParams(lp);*/
+        if (height != ViewGroup.LayoutParams.WRAP_CONTENT){
+            if (contentView.getHeight() >= height){
+                contentView.setMinimumHeight(height);
+            }else {
+                ViewGroup.LayoutParams lp = contentView.getLayoutParams();
+                lp.height = height;
+                contentView.setLayoutParams(lp);
+            }
+        }
 
     }
 
