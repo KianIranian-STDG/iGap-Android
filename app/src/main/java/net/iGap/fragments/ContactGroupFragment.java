@@ -14,7 +14,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -281,8 +280,8 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     private void addMember(long roomId, ProtoGlobal.Room.Type roomType) {
         RealmRoom.addOwnerToDatabase(roomId);
         RealmRoom.updateMemberCount(roomId, roomType, countMember + 1); // plus with 1 , for own account
-        if (getActivity() != null && isAdded()) {
-            removeFromBaseFragment(ContactGroupFragment.this);
+        if (getActivity() instanceof ActivityMain && isAdded()) {
+            ((ActivityMain) getActivity()).removeAllFragmentFromMain();
             new GoToChatActivity(roomId).startActivity(getActivity());
         }
     }
@@ -390,11 +389,9 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                 }
             }
         } else if (typeCreate.equals("GROUP")) { // addMemberGroup
-            Log.wtf(this.getClass().getName(), "Group");
 
             if (roomId == -127) {
                 if (getActivity() != null) {
-                    Log.wtf(this.getClass().getName(), "roomId == -127");
                     FragmentNewGroup fragment = FragmentNewGroup.newInstance();
                     Bundle bundle_ = new Bundle();
                     bundle_.putString("TYPE", "NewGroup");
@@ -436,7 +433,6 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
             } else {
 
                 if (getActivity() != null && isAdded()) {
-                    Log.wtf(this.getClass().getName(), " group else");
                     removeFromBaseFragment(ContactGroupFragment.this);
                     new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity(getActivity());
                 }
