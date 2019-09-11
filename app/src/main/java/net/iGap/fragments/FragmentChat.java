@@ -5678,6 +5678,8 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
 
+        if (mAttachmentPopup != null) mAttachmentPopup.updateHeight();
+
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(metrics);

@@ -284,6 +284,10 @@
         <item name="android:textColorHint">@color/gray</item>
     </style>
 
+    <style name="icon_gray_text_color">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
     <style name="text_sub_style_setting_dark">
         <item name="android:textColor">@color/gray_9d</item>
     </style>
@@ -411,6 +415,10 @@
 
     <style name="text_title_style_setting_light">
         <item name="android:textColor">@color/black_register</item>
+    </style>
+
+    <style name="icon_green_text_color">
+        <item name="android:textColor">@color/green</item>
     </style>
 
     <style name="text_sub_style_setting_light">
@@ -833,6 +841,10 @@
 
     <style name="myIconTextViewStyle" parent="baseFontIcon">
         <item name="android:theme">?textTitleColorSettingTheme</item>
+    </style>
+
+    <style name="myIconTextViewStyle2" parent="baseFontIcon">
+        <item name="android:theme">?text2TitleColorSettingTheme</item>
     </style>
 
     <style name="greenIconTextViewStyle" parent="baseFontIcon">
