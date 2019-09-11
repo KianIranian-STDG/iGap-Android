@@ -45,6 +45,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
@@ -5991,10 +5993,120 @@ public class FragmentChat extends BaseFragment
         }, 100);
     }
 
+    private boolean isSendVisibilityAnimInProcess;
+    private boolean isAttachVisibilityAnimInProcess;
+    private Animation  animGone , animVisible ;
+
     private void sendButtonVisibility(boolean visibility) {
-        layoutAttachBottom.setVisibility(visibility ? View.GONE : View.VISIBLE);
-        imvSendButton.clearAnimation();
-        imvSendButton.setVisibility(visibility ? View.VISIBLE : View.GONE);
+
+        if (animGone == null || animVisible == null) {
+            animGone = AnimationUtils.loadAnimation(getContext(), R.anim.translate_exit_up);
+            animVisible = AnimationUtils.loadAnimation(getContext(), R.anim.translate_enter_down);
+        }
+
+        animGone.setDuration(70);
+        animVisible.setDuration(70);
+
+        if (visibility && !imvSendButton.isShown()) {
+            if (isSendVisibilityAnimInProcess) return;
+            sendButtonAnimateVisible(animGone, animVisible);
+        }
+        if (!visibility && !layoutAttachBottom.isShown()) {
+            if (isAttachVisibilityAnimInProcess) return;
+            attachLayoutAnimateVisible(animGone, animVisible);
+        }
+
+    }
+
+    private void sendButtonAnimateVisible(Animation animGone, Animation animVisible) {
+
+        layoutAttachBottom.startAnimation(animGone);
+
+        animGone.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                isSendVisibilityAnimInProcess = true;
+                isAttachVisibilityAnimInProcess = false;
+                layoutAttachBottom.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                layoutAttachBottom.setVisibility(View.GONE);
+                imvSendButton.startAnimation(animVisible);
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        animVisible.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                imvSendButton.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                isSendVisibilityAnimInProcess = false;
+                imvSendButton.clearAnimation();
+                layoutAttachBottom.clearAnimation();
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    private void attachLayoutAnimateVisible(Animation animGone, Animation animVisible) {
+
+        imvSendButton.startAnimation(animGone);
+
+        animGone.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                imvSendButton.setVisibility(View.VISIBLE);
+                isSendVisibilityAnimInProcess = false;
+                isAttachVisibilityAnimInProcess = true ;
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                imvSendButton.setVisibility( View.GONE);
+                layoutAttachBottom.startAnimation(animVisible);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        animVisible.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                layoutAttachBottom.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                isAttachVisibilityAnimInProcess = false ;
+                imvSendButton.clearAnimation();
+                layoutAttachBottom.clearAnimation();
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     /**
