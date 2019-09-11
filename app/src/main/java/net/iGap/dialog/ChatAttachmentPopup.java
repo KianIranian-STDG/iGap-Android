@@ -1,8 +1,15 @@
 package net.iGap.dialog;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,20 +19,69 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.mikepenz.fastadapter.IItem;
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.BottomSheetItem;
+import net.iGap.adapter.items.AdapterCamera;
+import net.iGap.fragments.FragmentEditImage;
+import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperPermission;
+import net.iGap.interfaces.OnClickCamera;
+import net.iGap.interfaces.OnGetPermission;
+import net.iGap.interfaces.OnPathAdapterBottomSheet;
+import net.iGap.module.AttachFile;
+import net.iGap.module.SHP_SETTING;
+import net.iGap.module.structs.StructBottomSheet;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+
+import io.fotoapparat.Fotoapparat;
+
+import static io.fotoapparat.parameter.selector.LensPositionSelectors.back;
+import static io.fotoapparat.parameter.selector.SizeSelectors.biggestSize;
+import static net.iGap.R.string.item;
+import static net.iGap.fragments.FragmentChat.listPathString;
 
 public class ChatAttachmentPopup {
 
+    private final long POPUP_ANIMATION_DURATION = 160;
     private final String TAG = "ChatAttachmentPopup";
 
     private Context mContext;
     private View mRootView;
     private ChatPopupListener mPopupListener;
     private PopupWindow mPopup;
+    private SharedPreferences mSharedPref;
+    private FragmentActivity mFrgActivity;
+    private Fragment mFragment;
+    private AttachFile attachFile;
+    private RecyclerView rcvBottomSheet;
+    private FastItemAdapter fastItemAdapter;
+    private boolean isNewBottomSheet;
+    private OnClickCamera onClickCamera;
+    private OnPathAdapterBottomSheet onPathAdapterBottomSheet;
+    private View btnSend;
+    private TextView icoSend;
+    private TextView lblSend;
+    private boolean isPermissionCamera;
+    private View viewRoot;
+    private boolean isCameraAttached;
+    private Fotoapparat fotoapparatSwitcher;
+    private boolean isCameraStart;
+    private Animator animation;
+    private View contentView;
 
     private ChatAttachmentPopup() {
     }
@@ -49,72 +105,548 @@ public class ChatAttachmentPopup {
         return this;
     }
 
-    public ChatAttachmentPopup build() {
-        if (mContext == null)
-            throw new IllegalArgumentException(TAG + " : CONTEXT can not be null!");
-        if (mRootView == null) throw new IllegalArgumentException(TAG + " : set root view!");
+    public ChatAttachmentPopup setSharedPref(SharedPreferences pref) {
+        this.mSharedPref = pref;
         return this;
     }
 
-    public void show() {
+    public ChatAttachmentPopup setFragmentActivity(FragmentActivity fa) {
+        this.mFrgActivity = fa;
+        return this;
+    }
 
-        //get height of keyboard if it was gone set wrap content to popup
-        int height = getKeyboardHeight();
-        if (height == 0) height = ViewGroup.LayoutParams.WRAP_CONTENT;
+    public ChatAttachmentPopup setFragment(Fragment frg) {
+        this.mFragment = frg;
+        return this;
+    }
+
+    public ChatAttachmentPopup build() {
+
+        if (mContext == null)
+            throw new IllegalArgumentException(TAG + " : CONTEXT can not be null!");
+
+        if (mRootView == null)
+            throw new IllegalArgumentException(TAG + " : set root view!");
+
 
         //inflate layout
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.bottom_sheet_new, null, false);
+        viewRoot = inflater.inflate(R.layout.bottom_sheet_new, null, false);
+
+        attachFile = new AttachFile(mFrgActivity);
+        initViews(viewRoot);
 
         //setup popup
         mPopup = new PopupWindow(mContext);
-        mPopup.setContentView(view);
-        mPopup.setHeight(height);
+        mPopup.setContentView(viewRoot);
         mPopup.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        mPopup.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         mPopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NOT_NEEDED);
         mPopup.setBackgroundDrawable(new BitmapDrawable());
         mPopup.setFocusable(true);
         mPopup.setOutsideTouchable(true);
-        mPopup.setAnimationStyle(R.style.chatAttachmentAnimation);
+
+
+        mPopup.setOnDismissListener(() -> {
+            isNewBottomSheet = true;
+            disableCamera(rcvBottomSheet);
+        });
+
+        return this;
+    }
+
+    public void setIsNewDialog(boolean isNew) {
+        this.isNewBottomSheet = isNew;
+    }
+
+    public void show() {
+
+        setupContentView();
+        setupAdapterRecyclerImagesAndShowPopup();
+    }
+
+    private void setupContentView() {
+        contentView = viewRoot.findViewById(R.id.content);
+
+        //get height of keyboard if it was gone set wrap content to popup
+        int height = getKeyboardHeight();
+        if (height == 0){
+            height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            setPopupBackground(R.drawable.popup_background_dark , R.drawable.popup_background);
+        }else {
+            setPopupBackground(R.color.navigation_dark_mode_bg , R.color.chat_bottom_bg);
+        }
+
+        contentView.setMinimumHeight(height);
+
+/*
+        ViewGroup.LayoutParams lp = contentView.getLayoutParams();
+        lp.height = height;
+        contentView.setLayoutParams(lp);
+*/
+
+        contentView.setOnClickListener(v -> {
+            //nothing
+        });
+    }
+
+    public void updateHeight(){
+        int height = getKeyboardHeight();
+        if (height == 0){
+            height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        }
+
+        contentView.setMinimumHeight(height);
+        /*
+        ViewGroup.LayoutParams lp = contentView.getLayoutParams();
+        lp.height = height;
+        contentView.setLayoutParams(lp);*/
+
+    }
+
+    private void setPopupBackground(int dark, int light) {
+        contentView.setBackgroundResource(G.isDarkTheme ? dark : light);
+    }
+
+    private void initViews(View view) {
+
+        View camera, photo, video, music, file, contact, location;
+        View root;
+
+        camera = view.findViewById(R.id.camera);
+        photo = view.findViewById(R.id.picture);
+        video = view.findViewById(R.id.video);
+        music = view.findViewById(R.id.music);
+        file = view.findViewById(R.id.file);
+        location = view.findViewById(R.id.location);
+        contact = view.findViewById(R.id.contact);
+        btnSend = view.findViewById(R.id.close);
+        icoSend = view.findViewById(R.id.txtSend);
+        lblSend = view.findViewById(R.id.txtNumberItem);
+        root = view.findViewById(R.id.root);
+
+
+        root.setOnClickListener(v -> {
+            dismiss();
+        });
+
+        btnSend.setOnClickListener(v -> {
+
+            if (animation != null) animation.cancel();
+
+            if (FragmentEditImage.textImageList.size() > 0) {
+                dismiss();
+                clearRecyclerAdapter();
+                lblSend.setText(mFrgActivity.getString(R.string.close_icon));
+                lblSend.setText(mFrgActivity.getString(R.string.navigation_drawer_close));
+
+                mPopupListener.onAttachPopupSendSelected();
+
+            } else {
+                dismiss();
+            }
+
+        });
+
+        camera.setOnClickListener(v -> {
+            dismiss();
+
+            if (mSharedPref.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
+                attachFile.showDialogOpenCamera(v, null, mFragment);
+            } else {
+                attachFile.showDialogOpenCamera(v, null, mFragment);
+            }
+        });
+
+        photo.setOnClickListener(v -> {
+            dismiss();
+            try {
+                attachFile.requestOpenGalleryForImageMultipleSelect(mFragment);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        video.setOnClickListener(v -> {
+            dismiss();
+            try {
+                attachFile.requestOpenGalleryForVideoMultipleSelect(mFragment);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        music.setOnClickListener(v -> {
+            dismiss();
+            try {
+                attachFile.requestPickAudio(mFragment);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        file.setOnClickListener(v -> {
+            dismiss();
+            try {
+                attachFile.requestPickFile(selectedPathList -> {
+                    mPopupListener.onAttachPopupFilePicked(selectedPathList);
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        contact.setOnClickListener(v -> {
+            dismiss();
+            try {
+                attachFile.requestPickContact(mFragment);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        location.setOnClickListener(v -> {
+            dismiss();
+            try {
+                attachFile.requestGetPosition((result, messageOne, MessageTow) -> {
+                    mPopupListener.onAttachPopupLocation(messageOne);
+                }, mFragment);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        //init local pictures
+        fastItemAdapter = new FastItemAdapter();
+
+
+        onClickCamera = () -> {
+            try {
+                dismiss();
+                new AttachFile(mFrgActivity).requestTakePicture(mFragment);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+
+        onPathAdapterBottomSheet = (path, isCheck, isEdit, mList, id) -> {
+
+            if (isEdit) {
+                dismiss();
+                new HelperFragment(mFrgActivity.getSupportFragmentManager(), FragmentEditImage.newInstance(null, true, false, id)).setReplace(false).load();
+            } else {
+                if (isCheck) {
+                    StructBottomSheet item = new StructBottomSheet();
+                    item.setPath(path);
+                    item.setText("");
+                    item.setId(id);
+                    FragmentEditImage.textImageList.put(path, item);
+                } else {
+                    FragmentEditImage.textImageList.remove(path);
+                }
+                if (FragmentEditImage.textImageList.size() > 0) {
+                    icoSend.setText(mFrgActivity.getString(R.string.md_send_button));
+                    lblSend.setText("" + FragmentEditImage.textImageList.size() + " " + mFrgActivity.getString(item));
+                } else {
+                    icoSend.setText(mFrgActivity.getString(R.string.close_icon));
+                    lblSend.setText(mFrgActivity.getString(R.string.navigation_drawer_close));
+                }
+            }
+        };
+
+
+        rcvBottomSheet = view.findViewById(R.id.rcvContent);
+        rcvBottomSheet.setLayoutManager(new GridLayoutManager(mFrgActivity, 1, GridLayoutManager.HORIZONTAL, false));
+        rcvBottomSheet.setItemViewCacheSize(100);
+        rcvBottomSheet.setAdapter(fastItemAdapter);
+
+
+       /* rcvBottomSheet.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(final View view) {
+                if (isPermissionCamera) {
+
+                    if (rcvBottomSheet.getChildAdapterPosition(view) == 0) {
+                        isCameraAttached = true;
+                    }
+                   enableCamera(view);
+                }
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(final View view) {
+
+                if (isPermissionCamera) {
+                    if (rcvBottomSheet.getChildAdapterPosition(view) == 0) {
+                        isCameraAttached = false;
+                    }
+                    disableCamera(view);
+
+                }
+            }
+        });*/
+
+    }
+
+    private void enableCamera(View view) {
+
+        G.handler.postDelayed(() -> {
+
+            if (!isPermissionCamera) return;
+            //   if (!isCameraAttached) return;
+
+            if (fotoapparatSwitcher != null) {
+                if (!isCameraStart) {
+                    isCameraStart = true;
+                    try {
+                        G.handler.postDelayed(() -> fotoapparatSwitcher.start(), 50);
+                    } catch (Exception e) {
+                        e.getMessage();
+                    }
+                }
+            } else {
+                if (!isCameraStart) {
+                    isCameraStart = true;
+                    try {
+                        fotoapparatSwitcher = Fotoapparat.with(mFrgActivity).into(view.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                                .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                .lensPosition(back())       // we want back camera
+                                .build();
+
+                        fotoapparatSwitcher.start();
+                    } catch (IllegalStateException e) {
+                        e.getMessage();
+                    }
+                }
+            }
+        }, 100);
+    }
+
+    private void disableCamera(View view) {
+
+        G.handler.postDelayed(() -> {
+
+            if (!isPermissionCamera) return;
+            // if (isCameraAttached) return;
+
+            if (fotoapparatSwitcher != null) {
+                if (isCameraStart) {
+
+                    try {
+                        fotoapparatSwitcher.stop();
+                        isCameraStart = false;
+                    } catch (Exception e) {
+                        e.getMessage();
+                    }
+                }
+            } else {
+                if (!isCameraStart) {
+                    isCameraStart = false;
+                    try {
+                        fotoapparatSwitcher = Fotoapparat.with(mFrgActivity).into(view.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                                .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                .lensPosition(back())       // we want back camera
+                                .build();
+
+                        fotoapparatSwitcher.stop();
+                    } catch (IllegalStateException e) {
+                        e.getMessage();
+                    }
+                }
+            }
+        }, 50);
+    }
+
+    public void dismiss() {
+        if (mPopup == null) return;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            hideViewWithCircularReveal(contentView);
+        } else {
+            mPopup.dismiss();
+        }
+    }
+
+    public void notifyRecyclerView() {
+        if (fastItemAdapter == null) return;
+        fastItemAdapter.notifyAdapterDataSetChanged();
+    }
+
+    public void clearRecyclerAdapter() {
+        if (fastItemAdapter == null) return;
+        fastItemAdapter.clear();
+    }
+
+    public void addItemToRecycler(IItem item) {
+        if (fastItemAdapter == null || item == null) return;
+        fastItemAdapter.add(item);
+    }
+
+    private void setupAdapterRecyclerImagesAndShowPopup() {
+
+        clearRecyclerAdapter();
+
+        if (isNewBottomSheet || FragmentEditImage.itemGalleryList.size() <= 1) {
+
+            if (listPathString != null) {
+                listPathString.clear();
+            } else {
+                listPathString = new ArrayList<>();
+            }
+
+            FragmentEditImage.itemGalleryList.clear();
+            if (isNewBottomSheet) {
+                FragmentEditImage.textImageList.clear();
+            }
+
+            try {
+                HelperPermission.getStoragePermision(mFrgActivity, new OnGetPermission() {
+                    @Override
+                    public void Allow() {
+                        FragmentEditImage.itemGalleryList = getAllShownImagesPath(mFrgActivity);
+                        if (rcvBottomSheet != null) rcvBottomSheet.setVisibility(View.VISIBLE);
+                        checkCameraAndLoadImage();
+                    }
+
+                    @Override
+                    public void deny() {
+                        loadImageGallery();
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            checkCameraAndLoadImage();
+        }
+
+
+    }
+
+    private void checkCameraAndLoadImage() {
+        boolean isCameraButtonSheet = mSharedPref.getBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, true);
+        if (isCameraButtonSheet) {
+            try {
+                HelperPermission.getCameraPermission(mFrgActivity, new OnGetPermission() {
+                    @Override
+                    public void Allow() {
+
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                addItemToRecycler(new AdapterCamera("", onClickCamera).withIdentifier(99));
+                                for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
+                                    addItemToRecycler(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
+                                }
+                                isPermissionCamera = true;
+                            }
+                        });
+                        showPopup();
+                    }
+
+                    @Override
+                    public void deny() {
+
+                        loadImageGallery();
+
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            loadImageGallery();
+        }
+    }
+
+    private void showPopup() {
+
+        if (FragmentEditImage.textImageList != null && FragmentEditImage.textImageList.size() > 0) {
+            if (icoSend != null)
+                icoSend.setText(mFrgActivity.getResources().getString(R.string.md_send_button));
+            if (lblSend != null)
+                lblSend.setText("" + FragmentEditImage.textImageList.size() + " " + mFrgActivity.getResources().getString(item));
+        } else {
+            if (icoSend != null)
+                icoSend.setText(mFrgActivity.getResources().getString(R.string.close_icon));
+            if (lblSend != null)
+                lblSend.setText(mFrgActivity.getResources().getString(R.string.navigation_drawer_close));
+        }
+
+        enableCamera(rcvBottomSheet);
+
+
+        if (HelperPermission.grantedUseStorage()) {
+            rcvBottomSheet.setVisibility(View.VISIBLE);
+        } else {
+            rcvBottomSheet.setVisibility(View.GONE);
+        }
+
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+            mPopup.setAnimationStyle(R.style.chatAttachmentAnimation);
+        }
 
         mPopup.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
 
         //animate views after popup showed -> delay set base on xml animation
-        G.handler.postDelayed(() -> setupViews(view), 250);
+        G.handler.postDelayed(this::animateViews, 10);
     }
 
-    private void setupViews(View view) {
+    private void loadImageGallery() {
 
-        //icons
-        TextView icoCamera = view.findViewById(R.id.txtCamera);
-        TextView icoPicture = view.findViewById(R.id.textPicture);
-        TextView icoVideo = view.findViewById(R.id.txtVideo);
-        TextView icoMusic = view.findViewById(R.id.txtMusic);
-        TextView icoFile = view.findViewById(R.id.txtFile);
-        TextView icoLocation = view.findViewById(R.id.txtLocation);
-        TextView icoContact = view.findViewById(R.id.txtContact);
-        TextView icoSend = view.findViewById(R.id.txtSend);
+        G.handler.post(() -> {
+            for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
+                addItemToRecycler(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
+            }
+        });
 
-        //labels
-        TextView lblCamera = view.findViewById(R.id.txtCamera2);
-        TextView lblPicture = view.findViewById(R.id.textPicture2);
-        TextView lblVideo = view.findViewById(R.id.txtVideo2);
-        TextView lblMusic = view.findViewById(R.id.txtMusic2);
-        TextView lblFile = view.findViewById(R.id.txtFile2);
-        TextView lblLocation = view.findViewById(R.id.txtLocation2);
-        TextView lblContact = view.findViewById(R.id.txtContact2);
-        TextView lblSend = view.findViewById(R.id.txtNumberItem);
+        showPopup();
 
-        //animate all icons and after anim show their label
-        animateViewWithCircularReveal(icoCamera, lblCamera);
-        animateViewWithCircularReveal(icoPicture, lblPicture);
-        animateViewWithCircularReveal(icoVideo, lblVideo);
-        animateViewWithCircularReveal(icoMusic, lblMusic);
-        animateViewWithCircularReveal(icoFile, lblFile);
-        animateViewWithCircularReveal(icoLocation, lblLocation);
-        animateViewWithCircularReveal(icoContact, lblContact);
-        animateViewWithCircularReveal(icoSend, lblSend);
+    }
 
+    /**
+     * get images for show in bottom sheet
+     */
+    public ArrayList<StructBottomSheet> getAllShownImagesPath(Activity activity) {
+        ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<>();
+        Uri uri;
+        Cursor cursor;
+        int column_index_data = 0, column_index_folder_name;
+        String absolutePathOfImage = null;
+        uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+        String[] projection = {
+                MediaStore.MediaColumns.DATA,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+                MediaStore.Images.ImageColumns.DATE_TAKEN
+        };
+
+        cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_TAKEN);
+
+        if (cursor != null) {
+            column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+
+            column_index_folder_name = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+
+            while (cursor.moveToNext()) {
+                absolutePathOfImage = cursor.getString(column_index_data);
+
+                StructBottomSheet item = new StructBottomSheet();
+                item.setId(listOfAllImages.size());
+                item.setPath(absolutePathOfImage);
+                item.isSelected = true;
+                listOfAllImages.add(0, item);
+            }
+            cursor.close();
+        }
+        return listOfAllImages;
+    }
+
+    private void animateViews() {
+        try {
+            animateViewWithCircularReveal(contentView);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private int getKeyboardHeight() {
@@ -135,10 +667,10 @@ public class ChatAttachmentPopup {
         return ViewGroup.LayoutParams.WRAP_CONTENT;
     }
 
-    private void animateViewWithCircularReveal(View myView, View lbl) {
+    private void animateViewWithCircularReveal(View myView) {
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            // get the center for the clipping circle
+
             int cx = myView.getMeasuredWidth() / 2;
             int cy = myView.getMeasuredHeight() / 2;
 
@@ -146,51 +678,70 @@ public class ChatAttachmentPopup {
             int finalRadius = Math.max(myView.getWidth(), myView.getHeight()) / 2;
 
             // create the animator for this view (the start radius is zero)
-            Animator anim = ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
+            animation = ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
 
-            anim.setDuration(500);
+            animation.setDuration(POPUP_ANIMATION_DURATION);
 
             // make the view visible and start the animation
             myView.setVisibility(View.VISIBLE);
-            anim.start();
+            animation.start();
 
-            anim.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    lbl.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-            });
         } else {
             myView.setVisibility(View.VISIBLE);
         }
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void hideViewWithCircularReveal(View view) {
+
+        // get the final radius for the clipping circle
+        int finalRadius = Math.max(view.getWidth(), view.getHeight()) / 2;
+
+        int cx = view.getMeasuredWidth() / 2;
+        int cy = view.getMeasuredHeight() / 2;
+
+        animation = ViewAnimationUtils.createCircularReveal(view, cx, cy , finalRadius, 0);
+        animation.setDuration(POPUP_ANIMATION_DURATION);
+        animation.start();
+
+        animation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                isCameraStart = false;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mPopup.dismiss();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                mPopup.dismiss();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+    }
+
     public interface ChatPopupListener {
 
-        void onChatPopupItemClicked();
+        void onAttachPopupImageSelected();
 
-        void onChatPopupImageSelected();
+        void onAttachPopupShowed();
 
-        void onChatPopupShowed();
+        void onAttachPopupDismiss();
 
-        void onChatPopupDissmissed();
+        void onAttachPopupLocation(String message);
 
+        void onAttachPopupFilePicked(ArrayList<String> selectedPathList);
+
+        void onAttachPopupSendSelected();
     }
 
     public enum ChatPopupAction {

@@ -8,7 +8,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -56,7 +55,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -115,9 +113,7 @@ import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterDrBot;
-import net.iGap.adapter.BottomSheetItem;
 import net.iGap.adapter.MessagesAdapter;
-import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.adapter.items.ItemBottomSheetForward;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.AudioItem;
@@ -141,6 +137,7 @@ import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.databinding.PaymentDialogBinding;
+import net.iGap.dialog.ChatAttachmentPopup;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.eventbus.EventListener;
@@ -179,7 +176,6 @@ import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.interfaces.IDispatchTochEvent;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.IOnBackPressed;
-import net.iGap.interfaces.IPickFile;
 import net.iGap.interfaces.IResendMessage;
 import net.iGap.interfaces.ISendPosition;
 import net.iGap.interfaces.IUpdateLogItem;
@@ -200,7 +196,6 @@ import net.iGap.interfaces.OnChatSendMessage;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnChatUpdateStatusResponse;
 import net.iGap.interfaces.OnClearChatHistory;
-import net.iGap.interfaces.OnClickCamera;
 import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.interfaces.OnClientJoinByUsername;
 import net.iGap.interfaces.OnComplete;
@@ -213,7 +208,6 @@ import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnHelperSetAction;
 import net.iGap.interfaces.OnLastSeenUpdateTiming;
 import net.iGap.interfaces.OnMessageReceive;
-import net.iGap.interfaces.OnPathAdapterBottomSheet;
 import net.iGap.interfaces.OnPinedMessage;
 import net.iGap.interfaces.OnSetAction;
 import net.iGap.interfaces.OnUpdateUserOrRoomInfo;
@@ -339,14 +333,12 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
-import io.fotoapparat.Fotoapparat;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
@@ -358,13 +350,10 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE;
-import static io.fotoapparat.parameter.selector.LensPositionSelectors.back;
-import static io.fotoapparat.parameter.selector.SizeSelectors.biggestSize;
 import static java.lang.Long.parseLong;
 import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
 import static net.iGap.R.id.ac_ll_parent;
-import static net.iGap.R.string.item;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
@@ -391,13 +380,11 @@ import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 public class FragmentChat extends BaseFragment
         implements IMessageItem, OnChatClearMessageResponse, OnPinedMessage, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged, LocationListener,
-        OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick, EventListener, ToolbarListener {
+        OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick, EventListener, ToolbarListener, ChatAttachmentPopup.ChatPopupListener {
 
     public static OnComplete onMusicListener;
     public static IUpdateLogItem iUpdateLogItem;
-    public static OnPathAdapterBottomSheet onPathAdapterBottomSheet;
     public static OnForwardBottomSheet onForwardBottomSheet;
-    public static OnClickCamera onClickCamera;
     public static OnComplete hashListener;
     public static OnComplete onComplete;
     public static OnUpdateUserOrRoomInfo onUpdateUserOrRoomInfo;
@@ -488,7 +475,6 @@ public class FragmentChat extends BaseFragment
     private ProtoGlobal.Room.Type chatType;
     private GroupChatRole groupRole;
     private ChannelChatRole channelRole;
-    private PopupWindow popupWindow;
     private MaterialDialog dialogWait;
     private Uri latestUri;
     private Calendar lastDateCalendar = Calendar.getInstance();
@@ -507,16 +493,11 @@ public class FragmentChat extends BaseFragment
     //  private AVLoadingIndicatorView avi;
     private ViewGroup vgSpamUser;
     private RecyclerView.OnScrollListener scrollListener;
-    private RecyclerView rcvBottomSheet;
     private RecyclerView rcvDrBot;
     private FrameLayout llScrollNavigate;
-    private FastItemAdapter fastItemAdapter;
     private FastItemAdapter fastItemAdapterForward;
-    private BottomSheetDialog bottomSheetDialog;
     private BottomSheetDialog bottomSheetDialogForward;
-    private View viewBottomSheet;
     private View viewBottomSheetForward;
-    private Fotoapparat fotoapparatSwitcher;
     private RealmRoomMessage firstUnreadMessage;
     private RealmRoomMessage firstUnreadMessageInChat; // when user is in this room received new message
     private RealmRoomMessage voiceLastMessage = null;
@@ -526,8 +507,6 @@ public class FragmentChat extends BaseFragment
     private ArrayList<StructBackGroundSeen> backGroundSeenList = new ArrayList<>();
     private TextView txtSpamUser;
     private TextView txtSpamClose;
-    private TextView send;
-    private TextView txtCountItem;
     private BadgeView txtNewUnreadMessage;
     private TextView imvCancelForward;
     private TextView btnUp;
@@ -541,7 +520,6 @@ public class FragmentChat extends BaseFragment
     private TextView txtLastSeen;
     private TextView txtEmptyMessages;
     private String userName = "";
-    private String latestFilePath;
     private String mainVideoPath = "";
     private String color;
     private String initialize;
@@ -552,7 +530,6 @@ public class FragmentChat extends BaseFragment
     private Boolean isNotJoin = false; // this value will be trued when come to this chat with username
     private boolean firsInitScrollPosition = false;
     private boolean initHash = false;
-    private boolean initAttach = false;
     private boolean hasDraft = false;
     private boolean hasForward = false;
     private boolean blockUser = false;
@@ -574,16 +551,9 @@ public class FragmentChat extends BaseFragment
     private long savedScrollMessageId;
     private long latestButtonClickTime; // use from this field for avoid from show button again after click it
     private int countNewMessage = 0;
-    private int lastPosition = 0;
     private int unreadCount = 0;
     private int latestRequestCode;
-    private int messageCounter = 0;
-    private int selectedPosition = 0;
-    private boolean isNoMessage = true;
     private boolean isEmojiSHow = false;
-    private boolean isCameraStart = false;
-    private boolean isCameraAttached = false;
-    private boolean isPermissionCamera = false;
     private boolean isPublicGroup = false;
     private ArrayList<Long> bothDeleteMessageId;
     private RelativeLayout layoutMute;
@@ -592,7 +562,6 @@ public class FragmentChat extends BaseFragment
     private boolean isAllSenderId = true;
     private ArrayList<Long> multiForwardList = new ArrayList<>();
     private ArrayList<StructBottomSheetForward> mListForwardNotExict = new ArrayList<>();
-    private boolean isNewBottomSheet = true;
     private ArrayList<StructGroupSticker> stickerArrayList = new ArrayList<>();
     /**
      * **********************************************************************
@@ -636,6 +605,7 @@ public class FragmentChat extends BaseFragment
     private int sendMessageSound;
     private int receiveMessageSound;
     private String TAG = "messageSound";
+    private ChatAttachmentPopup mAttachmentPopup;
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -1179,6 +1149,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mAttachmentPopup = null;
         realmChat.close();
         EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
         mHelperToolbar.unRegisterTimerBroadcast();
@@ -3093,28 +3064,16 @@ public class FragmentChat extends BaseFragment
         G.openBottomSheetItem = new OpenBottomSheetItem() {
             @Override
             public void openBottomSheet(boolean isNew) {
-                isNewBottomSheet = isNew;
+                mAttachmentPopup.setIsNewDialog(isNew);
                 imvAttachFileButton.performClick();
-                fastItemAdapter.notifyAdapterDataSetChanged();
+                mAttachmentPopup.notifyRecyclerView();
             }
 
         };
 
-        imvAttachFileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (!initAttach) {
-                    initAttach = true;
-                    initAttach();
-                }
-
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
-                itemAdapterBottomSheet();
-            }
+        imvAttachFileButton.setOnClickListener(view -> {
+            if (mAttachmentPopup == null) initPopupAttachment();
+            mAttachmentPopup.show();
         });
 
         sendMoney.setOnClickListener(view -> {
@@ -3232,6 +3191,19 @@ public class FragmentChat extends BaseFragment
 
             }
         });
+
+    }
+
+    private void initPopupAttachment() {
+
+        mAttachmentPopup = ChatAttachmentPopup.create()
+                .setContext(getContext())
+                .setRootView(rootView)
+                .setFragment(FragmentChat.this)
+                .setFragmentActivity(G.fragmentActivity)
+                .setSharedPref(sharedPreferences)
+                .setListener(FragmentChat.this)
+                .build();
 
     }
 
@@ -5706,6 +5678,8 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
 
+        if (mAttachmentPopup != null) mAttachmentPopup.updateHeight();
+
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(metrics);
@@ -6585,471 +6559,15 @@ public class FragmentChat extends BaseFragment
         });
     }
 
-    /**
-     * initialize bottomSheet for use in attachment
-     */
-    private void initAttach() {
-
-        fastItemAdapter = new FastItemAdapter();
-        viewBottomSheet = G.fragmentActivity.getLayoutInflater().inflate(R.layout.bottom_sheet, null);
-
-        send = viewBottomSheet.findViewById(R.id.txtSend);
-        txtCountItem = viewBottomSheet.findViewById(R.id.txtNumberItem);
-        View camera = viewBottomSheet.findViewById(R.id.camera);
-        View picture = viewBottomSheet.findViewById(R.id.picture);
-        View video = viewBottomSheet.findViewById(R.id.video);
-        View music = viewBottomSheet.findViewById(R.id.music);
-        boolean isCardToCardEnabled = false;
-        if (!isBot && chatType == CHAT) {
-            isCardToCardEnabled = true;
-        }
-        View close = viewBottomSheet.findViewById(R.id.close);
-        View file = viewBottomSheet.findViewById(R.id.file);
-        /*View paint = viewBottomSheet.findViewById(R.id.paint);*/
-        View location = viewBottomSheet.findViewById(R.id.location);
-        View contact = viewBottomSheet.findViewById(R.id.contact);
-
-
-        TextView txtCamera = viewBottomSheet.findViewById(R.id.txtCamera);
-        TextView textPicture = viewBottomSheet.findViewById(R.id.textPicture);
-        TextView txtVideo = viewBottomSheet.findViewById(R.id.txtVideo);
-        TextView txtMusic = viewBottomSheet.findViewById(R.id.txtMusic);
-        TextView txtFile = viewBottomSheet.findViewById(R.id.txtFile);
-        /*TextView txtPaint = viewBottomSheet.findViewById(R.id.txtPaint);*/
-        TextView txtLocation = viewBottomSheet.findViewById(R.id.txtLocation);
-        TextView txtContact = viewBottomSheet.findViewById(R.id.txtContact);
-        TextView txtCamera2 = viewBottomSheet.findViewById(R.id.txtCamera2);
-        TextView textPicture2 = viewBottomSheet.findViewById(R.id.textPicture2);
-        TextView txtVideo2 = viewBottomSheet.findViewById(R.id.txtVideo2);
-        TextView txtMusic2 = viewBottomSheet.findViewById(R.id.txtMusic2);
-        TextView txtFile2 = viewBottomSheet.findViewById(R.id.txtFile2);
-        /*TextView txtPaint2 = viewBottomSheet.findViewById(R.id.txtPaint2);*/
-        TextView txtLocation2 = viewBottomSheet.findViewById(R.id.txtLocation2);
-        TextView txtContact2 = viewBottomSheet.findViewById(R.id.txtContact2);
-
-        txtCamera.setTextColor(Color.parseColor(G.attachmentColor));
-        textPicture.setTextColor(Color.parseColor(G.attachmentColor));
-        txtVideo.setTextColor(Color.parseColor(G.attachmentColor));
-        txtMusic.setTextColor(Color.parseColor(G.attachmentColor));
-
-        txtFile.setTextColor(Color.parseColor(G.attachmentColor));
-        /*txtPaint.setTextColor(Color.parseColor(G.attachmentColor));*/
-        txtLocation.setTextColor(Color.parseColor(G.attachmentColor));
-        txtContact.setTextColor(Color.parseColor(G.attachmentColor));
-        send.setTextColor(Color.parseColor(G.attachmentColor));
-        txtCountItem.setTextColor(Color.parseColor(G.attachmentColor));
-
-        txtCamera2.setTextColor(Color.parseColor(G.attachmentColor));
-        textPicture2.setTextColor(Color.parseColor(G.attachmentColor));
-        txtVideo2.setTextColor(Color.parseColor(G.attachmentColor));
-        txtMusic2.setTextColor(Color.parseColor(G.attachmentColor));
-        txtFile2.setTextColor(Color.parseColor(G.attachmentColor));
-        /*txtPaint2.setTextColor(Color.parseColor(G.attachmentColor));*/
-        txtLocation2.setTextColor(Color.parseColor(G.attachmentColor));
-        txtContact2.setTextColor(Color.parseColor(G.attachmentColor));
-
-
-        onPathAdapterBottomSheet = new OnPathAdapterBottomSheet() {
-            @Override
-            public void path(String path, boolean isCheck, boolean isEdit, StructBottomSheet mList, int id) {
-
-                if (isEdit) {
-                    bottomSheetDialog.dismiss();
-                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, true, false, id)).setReplace(false).load();
-                } else {
-                    if (isCheck) {
-                        StructBottomSheet item = new StructBottomSheet();
-                        item.setPath(path);
-                        item.setText("");
-                        item.setId(id);
-                        FragmentEditImage.textImageList.put(path, item);
-                    } else {
-                        FragmentEditImage.textImageList.remove(path);
-                    }
-                    if (FragmentEditImage.textImageList.size() > 0) {
-                        send.setText(getString(R.string.md_send_button));
-                        txtCountItem.setText("" + FragmentEditImage.textImageList.size() + " " + getString(item));
-                    } else {
-                        send.setText(getString(R.string.close_icon));
-                        txtCountItem.setText(getString(R.string.navigation_drawer_close));
-                    }
-                }
-            }
-        };
-
-
-        FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
-            @Override
-            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
-                listPathString = null;
-                listPathString = new ArrayList<>();
-
-                if (textImageList.size() == 0) {
-                    return;
-                }
-
-                /**
-                 * sort list
-                 */
-                ArrayList<StructBottomSheet> itemList = new ArrayList<StructBottomSheet>();
-                for (Map.Entry<String, StructBottomSheet> items : textImageList.entrySet()) {
-                    itemList.add(items.getValue());
-                }
-
-                Collections.sort(itemList);
-
-                for (StructBottomSheet item : itemList) {
-                    edtChat.setText(item.getText());
-                    listPathString.add(item.getPath());
-                    latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
-                    ll_attach_text.setVisibility(View.VISIBLE);
-                    imvSendButton.performClick();
-                }
-            }
-        };
-        rcvBottomSheet = viewBottomSheet.findViewById(R.id.rcvContent);
-        rcvBottomSheet.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 1, GridLayoutManager.HORIZONTAL, false));
-        rcvBottomSheet.setItemViewCacheSize(100);
-        rcvBottomSheet.setAdapter(fastItemAdapter);
-        bottomSheetDialog = new BottomSheetDialog(getActivity(), G.isDarkTheme ? R.style.BaseBottomSheetDialog : R.style.BaseBottomSheetDialogLight);
-        bottomSheetDialog.setContentView(viewBottomSheet);
-        final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheet.getParent());
-
-        viewBottomSheet.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    mBehavior.setPeekHeight(viewBottomSheet.getHeight());
-                    viewBottomSheet.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
-            }
-        });
-        //height is ready
-
-        onClickCamera = new OnClickCamera() {
-            @Override
-            public void onclickCamera() {
-                try {
-                    bottomSheetDialog.dismiss();
-                    new AttachFile(G.fragmentActivity).requestTakePicture(FragmentChat.this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        bottomSheetDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialogInterface;
-                FrameLayout bottomSheet = bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
-                BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_COLLAPSED);
-            }
-        });
-
-        rcvBottomSheet.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
-            @Override
-            public void onChildViewAttachedToWindow(final View view) {
-                if (isPermissionCamera) {
-
-                    if (rcvBottomSheet.getChildAdapterPosition(view) == 0) {
-                        isCameraAttached = true;
-                    }
-                    if (isCameraAttached) {
-                        if (fotoapparatSwitcher != null) {
-                            if (!isCameraStart) {
-                                isCameraStart = true;
-                                try {
-                                    G.handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            fotoapparatSwitcher.start();
-                                        }
-                                    }, 50);
-                                } catch (Exception e) {
-                                    e.getMessage();
-                                }
-                            }
-                        } else {
-                            if (!isCameraStart) {
-                                isCameraStart = true;
-                                try {
-                                    G.handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into(view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                    .lensPosition(back())       // we want back camera
-                                                    .build();
-
-                                            fotoapparatSwitcher.start();
-                                        }
-                                    }, 100);
-                                } catch (IllegalStateException e) {
-                                    e.getMessage();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onChildViewDetachedFromWindow(final View view) {
-
-                if (isPermissionCamera) {
-                    if (rcvBottomSheet.getChildAdapterPosition(view) == 0) {
-                        isCameraAttached = false;
-                    }
-                    if (!isCameraAttached) {
-                        if (fotoapparatSwitcher != null) {
-                            //                    if (isCameraStart && ( rcvBottomSheet.getChildAdapterPosition(view)> 4  || rcvBottomSheet.computeHorizontalScrollOffset() >200)){
-                            if (isCameraStart) {
-
-                                try {
-                                    fotoapparatSwitcher.stop();
-                                    isCameraStart = false;
-                                } catch (Exception e) {
-                                    e.getMessage();
-                                }
-                            }
-                        } else {
-                            if (!isCameraStart) {
-                                isCameraStart = false;
-                                try {
-                                    G.handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-
-                                            fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into(view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                    .lensPosition(back())       // we want back camera
-                                                    .build();
-
-                                            fotoapparatSwitcher.stop();
-                                        }
-                                    }, 100);
-                                } catch (IllegalStateException e) {
-                                    e.getMessage();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        rcvBottomSheet.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-            @Override
-            public void onViewAttachedToWindow(final View v) {
-                if (isPermissionCamera) {
-
-                    if (fotoapparatSwitcher != null) {
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!isCameraStart) {
-                                    fotoapparatSwitcher.start();
-                                    isCameraStart = true;
-                                }
-                            }
-                        }, 50);
-                    }
-                }
-            }
-
-            @Override
-            public void onViewDetachedFromWindow(View v) {
-                if (isPermissionCamera) {
-                    if (fotoapparatSwitcher != null) {
-                        if (isCameraStart) {
-                            fotoapparatSwitcher.stop();
-                            isCameraStart = false;
-                        }
-                    }
-                }
-            }
-        });
-
-        if (HelperPermission.grantedUseStorage()) {
-            rcvBottomSheet.setVisibility(View.VISIBLE);
-        } else {
-            rcvBottomSheet.setVisibility(View.GONE);
-        }
-
-        bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                isNewBottomSheet = true;
-                dialog.dismiss();
-            }
-        });
-
-        listPathString = new ArrayList<>();
-
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetDialog.dismiss();
-
-                if (sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) == 1) {
-                    attachFile.showDialogOpenCamera(v, null, FragmentChat.this);
-                } else {
-                    attachFile.showDialogOpenCamera(v, null, FragmentChat.this);
-                }
-            }
-        });
-        picture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetDialog.dismiss();
-                try {
-                    attachFile.requestOpenGalleryForImageMultipleSelect(FragmentChat.this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        video.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetDialog.dismiss();
-                try {
-                    attachFile.requestOpenGalleryForVideoMultipleSelect(FragmentChat.this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        music.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetDialog.dismiss();
-                try {
-                    attachFile.requestPickAudio(FragmentChat.this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (FragmentEditImage.textImageList.size() > 0) {
-                    bottomSheetDialog.dismiss();
-                    fastItemAdapter.clear();
-                    //send.setImageResource(R.mipmap.ic_close);
-                    send.setText(getString(R.string.close_icon));
-                    txtCountItem.setText(getString(R.string.navigation_drawer_close));
-
-
-                    final ArrayList<StructBottomSheet> itemList = new ArrayList<StructBottomSheet>();
-                    for (Map.Entry<String, StructBottomSheet> items : FragmentEditImage.textImageList.entrySet()) {
-                        itemList.add(items.getValue());
-                    }
-                    Collections.sort(itemList);
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    if (itemList.size() == 1) {
-                                        showDraftLayout();
-                                        listPathString.add(itemList.get(0).getPath());
-                                        listPathString.set(0, attachFile.saveGalleryPicToLocal(itemList.get(0).getPath()));
-                                        setDraftMessage(AttachFile.requestOpenGalleryForImageMultipleSelect);
-                                        latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
-                                        //sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, pathStrings.get(0));
-                                    } else {
-                                        for (StructBottomSheet items : itemList) {
-
-                                            //if (!path.toLowerCase().endsWith(".gif")) {
-                                            String localPathNew = attachFile.saveGalleryPicToLocal(items.path);
-                                            edtChat.setText(items.getText());
-                                            sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localPathNew);
-                                            //}
-                                        }
-
-                                    }
-
-                                }
-                            });
-                        }
-                    }).start();
-                } else {
-                    bottomSheetDialog.dismiss();
-                }
-            }
-        });
-        file.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetDialog.dismiss();
-                try {
-                    attachFile.requestPickFile(new IPickFile() {
-                        @Override
-                        public void onPick(ArrayList<String> selectedPathList) {
-                            for (String path : selectedPathList) {
-                                Intent data = new Intent();
-                                data.setData(Uri.parse(path));
-                                onActivityResult(request_code_pic_file, Activity.RESULT_OK, data);
-                            }
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        /*paint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetDialog.dismiss();
-                try {
-                    attachFile.requestPaint(FragmentChat.this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });*/
-        location.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetDialog.dismiss();
-                try {
-                    attachFile.requestGetPosition(complete, FragmentChat.this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        contact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomSheetDialog.dismiss();
-                try {
-                    attachFile.requestPickContact(FragmentChat.this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
     private void cardToCardClick(View v) {
         if (v == null) {
             showDraftLayout();
         } else {
             if ((Boolean) v.getTag()) {
-                bottomSheetDialog.dismiss();
+                mAttachmentPopup.dismiss();
                 showDraftLayout();
             } else {
-                bottomSheetDialog.dismiss();
+                mAttachmentPopup.dismiss();
                 HelperError.showSnackMessage(G.currentActivity.getString(R.string.disable), false);
             }
         }
@@ -7484,129 +7002,6 @@ public class FragmentChat extends BaseFragment
                 }
             }
         }, 100);
-    }
-
-    public void itemAdapterBottomSheet() {
-
-        if (fastItemAdapter != null) fastItemAdapter.clear();
-
-        if (isNewBottomSheet || FragmentEditImage.itemGalleryList.size() <= 1) {
-
-            if (listPathString != null) {
-                listPathString.clear();
-            } else {
-                listPathString = new ArrayList<>();
-            }
-
-            FragmentEditImage.itemGalleryList.clear();
-            if (isNewBottomSheet) {
-                FragmentEditImage.textImageList.clear();
-            }
-
-            try {
-                HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
-                    @Override
-                    public void Allow() {
-                        FragmentEditImage.itemGalleryList = getAllShownImagesPath(G.fragmentActivity);
-                        if (rcvBottomSheet != null) rcvBottomSheet.setVisibility(View.VISIBLE);
-                        checkCameraAndLoadImage();
-                    }
-
-                    @Override
-                    public void deny() {
-                        loadImageGallery();
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            checkCameraAndLoadImage();
-        }
-
-
-    }
-
-    private void checkCameraAndLoadImage() {
-        boolean isCameraButtonSheet = sharedPreferences.getBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, true);
-        if (isCameraButtonSheet) {
-            try {
-                HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
-                    @Override
-                    public void Allow() {
-
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                fastItemAdapter.add(new AdapterCamera("", onClickCamera).withIdentifier(99));
-                                for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-                                    fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
-                                }
-                                isPermissionCamera = true;
-                            }
-                        });
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (isAdded()) {
-                                    showBottomSheet();
-                                }
-                            }
-                        }, 100);
-                    }
-
-                    @Override
-                    public void deny() {
-
-                        loadImageGallery();
-
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            loadImageGallery();
-        }
-    }
-
-    private void showBottomSheet() {
-        bottomSheetDialog.show();
-        if (FragmentEditImage.textImageList != null && FragmentEditImage.textImageList.size() > 0) {
-            //send.setText(R.mipmap.send2);
-            if (send != null)
-                send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-            if (txtCountItem != null)
-                txtCountItem.setText("" + FragmentEditImage.textImageList.size() + " " + G.fragmentActivity.getResources().getString(item));
-        } else {
-            //send.setImageResource(R.mipmap.ic_close);
-            if (send != null)
-                send.setText(G.fragmentActivity.getResources().getString(R.string.close_icon));
-            if (txtCountItem != null)
-                txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
-        }
-    }
-
-    private void loadImageGallery() {
-
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-                    fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
-                }
-            }
-        });
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (isAdded()) {
-                    showBottomSheet();
-                }
-            }
-        }, 100);
-
     }
 
     @Override
@@ -9458,6 +8853,77 @@ public class FragmentChat extends BaseFragment
                 if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
             });
         }
+    }
+
+    @Override
+    public void onAttachPopupImageSelected() {
+
+    }
+
+    @Override
+    public void onAttachPopupShowed() {
+
+    }
+
+    @Override
+    public void onAttachPopupDismiss() {
+    }
+
+    @Override
+    public void onAttachPopupLocation(String message) {
+        try {
+            if (getActivity() != null) {
+                String[] split = message.split(",");
+                Double latitude = Double.parseDouble(split[0]);
+                Double longitude = Double.parseDouble(split[1]);
+                FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
+        } catch (Exception e) {
+            HelperLog.setErrorLog(e);
+        }
+    }
+
+    @Override
+    public void onAttachPopupFilePicked(ArrayList<String> selectedPathList) {
+        for (String path : selectedPathList) {
+            Intent data = new Intent();
+            data.setData(Uri.parse(path));
+            onActivityResult(request_code_pic_file, Activity.RESULT_OK, data);
+        }
+    }
+
+    @Override
+    public void onAttachPopupSendSelected() {
+
+        final ArrayList<StructBottomSheet> itemList = new ArrayList<StructBottomSheet>();
+        for (Map.Entry<String, StructBottomSheet> items : FragmentEditImage.textImageList.entrySet()) {
+            itemList.add(items.getValue());
+        }
+        Collections.sort(itemList);
+
+        new Thread(() -> G.handler.post(() -> {
+
+            if (itemList.size() == 1) {
+                showDraftLayout();
+                listPathString.add(itemList.get(0).getPath());
+                listPathString.set(0, attachFile.saveGalleryPicToLocal(itemList.get(0).getPath()));
+                setDraftMessage(AttachFile.requestOpenGalleryForImageMultipleSelect);
+                latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
+                //sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, pathStrings.get(0));
+            } else {
+                for (StructBottomSheet items : itemList) {
+
+                    //if (!path.toLowerCase().endsWith(".gif")) {
+                    String localPathNew = attachFile.saveGalleryPicToLocal(items.path);
+                    edtChat.setText(items.getText());
+                    sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localPathNew);
+                    //}
+                }
+
+            }
+
+        })).start();
     }
 
     /**

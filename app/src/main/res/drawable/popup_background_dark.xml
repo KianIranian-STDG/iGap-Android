@@ -4,9 +4,6 @@
     <corners
         android:topLeftRadius="@dimen/dp8"
         android:topRightRadius="@dimen/dp8" />
-    <solid android:color="@color/chat_bottom_bg" />
-
-    <stroke
-        android:color="@color/gray_9d"
-        android:width="0.1dp" />
+    <padding android:top="@dimen/dp8" />
+    <solid android:color="@color/navigation_dark_mode_bg" />
 </shape>
