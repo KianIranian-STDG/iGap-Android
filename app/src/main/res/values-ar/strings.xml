@@ -2973,4 +2973,5 @@
     <string name="coffeeShop_textView">کافی شاپ</string>
     <string name="wheelchair_textView">ویلچر</string>
     <string name="prayerRoom_textView">نمازخانه</string>
+    <string name="charity_confirm">شما مبلغ %s ریال جهت کمک به خیریه %s در نظر گرفته اید.</string>
 </resources>

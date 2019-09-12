@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -18,13 +17,10 @@
 
     <LinearLayout
         android:id="@+id/rootFragmentLanguage"
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:orientation="vertical"
-        tools:context="net.iGap.fragments.FragmentLanguage"
-        tools:ignore="MissingPrefix">
+        android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -137,7 +133,7 @@
 
                         <TextView
                             android:id="@+id/asn_txt_app_title_bar_color"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp48"
@@ -176,7 +172,7 @@
 
                         <TextView
                             android:id="@+id/asn_txt_app_notification_color"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp48"
@@ -220,7 +216,7 @@
 
                         <TextView
                             android:id="@+id/asn_txt_app_toggle_botton_color"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp48"
@@ -259,7 +255,7 @@
 
                         <TextView
                             android:id="@+id/asn_txt_send_and_attach_color"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp48"
@@ -298,7 +294,7 @@
 
                         <TextView
                             android:id="@+id/asn_txt_default_header_font_color"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp48"
@@ -338,7 +334,7 @@
 
                         <TextView
                             android:id="@+id/asn_txt_default_progress_color"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp48"
@@ -377,7 +373,7 @@
 
                     <!--<TextView-->
                     <!--android:id="@+id/asn_txt_set_color_to_default"-->
-                    <!--style="?textTitleColorSettingTheme"-->
+                    <!--android:textColor="?iGapTitleTextColor"-->
                     <!--fontPath="fonts/IRANSansMobile.ttf"-->
                     <!--android:layout_width="match_parent"-->
                     <!--android:layout_height="@dimen/dp48"-->

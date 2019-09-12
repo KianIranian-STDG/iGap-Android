@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="?backgroundColorSettingTheme"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -54,7 +54,7 @@
 
                         <TextView
                             android:id="@+id/tv_mplTransActionInfo_descriptionTitle"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -65,7 +65,7 @@
 
                         <TextView
                             android:id="@+id/tv_mplTransActionInfo_description"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
@@ -118,7 +118,7 @@
 
                             <net.iGap.module.FontIconTextView
                                 android:id="@+id/fv_mplTransactionInfo_status"
-                                style="?textTitleColorSettingTheme"
+                                android:textColor="?iGapTitleTextColor"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -127,7 +127,7 @@
                                 android:textSize="25dp" />
 
                             <net.iGap.module.FontIconTextView
-                                style="?textTitleColorSettingTheme"
+                                android:textColor="?iGapTitleTextColor"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -137,7 +137,7 @@
 
 
                             <net.iGap.module.FontIconTextView
-                                style="?textTitleColorSettingTheme"
+                                android:textColor="?iGapTitleTextColor"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -161,7 +161,7 @@
 
                             <TextView
                                 android:id="@+id/tv_mplTransactionInfo_stats"
-                                style="?textTitleColorSettingTheme"
+                                android:textColor="?iGapTitleTextColor"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -170,7 +170,7 @@
 
                             <TextView
                                 android:id="@+id/tv_mplTransactionInfo_data"
-                                style="?textTitleColorSettingTheme"
+                                android:textColor="?iGapTitleTextColor"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -179,7 +179,7 @@
 
                             <TextView
                                 android:id="@+id/tv_mplTransactionInfo_time"
-                                style="?textTitleColorSettingTheme"
+                                android:textColor="?iGapTitleTextColor"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -206,7 +206,7 @@
 
     <TextView
         android:id="@+id/tv_mplTransactionInfo_emptyView"
-        style="?textTitleColorSettingTheme"
+        android:textColor="?iGapTitleTextColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/mpl_transaction_empty"

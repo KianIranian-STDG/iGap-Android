@@ -15,8 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
             android:layout_gravity="bottom"
-            android:orientation="vertical"
-            style="?backgroundColorSettingTheme" />
+            android:background="?rootBackgroundColor"
+            android:orientation="vertical" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,9 +43,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="00:00"
                     android:fontFamily="@font/main_font"
-                    style="?textTitleColorSettingTheme"
+                    android:text="00:00"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14" />
 
                 <TextView
@@ -53,10 +53,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="left"
                     android:fontFamily="@font/main_font"
+                    android:gravity="left"
                     android:text="99"
-                    style="?textTitleColorSettingTheme"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14" />
             </LinearLayout>
 
@@ -72,10 +72,10 @@
                     android:layout_gravity="bottom"
                     android:layout_marginRight="@dimen/dp8"
                     android:layout_weight="1"
-                    android:gravity="right|center"
                     android:fontFamily="@font/main_font"
+                    android:gravity="right|center"
                     android:text="@string/slide_to_cancel_en"
-                    style="?textTitleColorSettingTheme"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14" />
 
                 <LinearLayout

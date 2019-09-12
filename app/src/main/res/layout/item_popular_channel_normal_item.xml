@@ -32,7 +32,6 @@
 
         <TextView
             android:id="@+id/tv_item_popular_rv_grid_linear"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -43,6 +42,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:minLines="1"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/verySmallTextSize" />
     </LinearLayout>
 

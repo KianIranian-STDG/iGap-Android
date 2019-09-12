@@ -12,10 +12,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layoutDirection="locale">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -52,7 +51,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/notification"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp18"
@@ -70,7 +69,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/privacyAndSecurity"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
@@ -87,7 +86,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/dataAndStorage"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
@@ -104,7 +103,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/chatSetting"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
@@ -121,7 +120,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/languageTitle"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -150,7 +149,6 @@
             android:text="@{viewModel.currentLanguage}"
             android:textColor="@color/ivand_green_text_color"
             android:textSize="@dimen/smallTextSize"
-            android:theme="?textTitleColorSettingTheme"
             app:layout_constraintBottom_toBottomOf="@id/languageTitle"
             app:layout_constraintEnd_toEndOf="@id/notification"
             app:layout_constraintStart_toEndOf="@id/languageTitle"
@@ -158,7 +156,7 @@
 
         <!--<android.support.v7.widget.AppCompatTextView
             android:id="@+id/deleteAccount"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
@@ -174,7 +172,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/logout"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

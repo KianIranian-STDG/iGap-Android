@@ -12,12 +12,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:layoutDirection="locale">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/fpc_toolbar"
@@ -77,6 +74,7 @@
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/fpc_checkBox_trabord"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp8"
@@ -86,7 +84,6 @@
             android:onCheckedChanged="@{(view,isChecked)->viewModel.checkBoxTarabordChanged(isChecked,phoneNumberEditText.getEditableText().toString())}"
             android:text="@string/trabord"
             android:textSize="@dimen/dp16"
-            style="?textTitleColorSettingTheme"
             android:visibility="@{viewModel.showDetail}"
             app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
             app:layout_constraintTop_toBottomOf="@id/phoneNumberExample" />
@@ -100,8 +97,8 @@
             android:text="@string/md_format_list_bulleted"
             android:textStyle="bold"
             android:visibility="@{viewModel.observeTarabord}"
-            app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
             app:layout_constraintEnd_toEndOf="@id/phoneNumberIcon"
+            app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
             app:layout_constraintTop_toBottomOf="@id/fpc_checkBox_trabord" />
 
         <androidx.appcompat.widget.AppCompatSpinner

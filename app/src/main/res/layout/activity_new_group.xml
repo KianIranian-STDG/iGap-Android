@@ -14,18 +14,17 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layoutDirection="locale"
-        style="?backgroundColorSettingTheme">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/ng_layout_toolbar"
-            android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="@dimen/toolbar_height"
-            app:layout_constraintStart_toStartOf="parent"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
 
@@ -38,14 +37,14 @@
             android:layout_height="@dimen/dp105"
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ng_layout_toolbar"
             app:rv_alpha="210"
             app:rv_centered="true"
-            app:rv_rippleDuration="150"
-            app:layout_constraintTop_toBottomOf="@id/ng_layout_toolbar"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginRight="@dimen/dp32"
-            android:layout_marginLeft="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp32">
+            app:rv_rippleDuration="150">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -65,9 +64,9 @@
                     android:id="@+id/ng_profile_circle_image_holder"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:srcCompat="@drawable/ic_camera_holder"
                     android:padding="@dimen/dp32"
-                    android:scaleType="fitCenter" />
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_camera_holder" />
 
 
             </RelativeLayout>
@@ -76,54 +75,55 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ng_txtInput_newGroup"
+            style="?hintColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp20"
             android:layout_marginRight="@dimen/dp20"
             android:layout_marginBottom="@dimen/dp10"
-            style="?hintColorSettingTheme"
             android:hint="@{fragmentNewGroupVieModel.txtInputName}"
-            app:layout_constraintStart_toEndOf="@id/ng_ripple_circle_image"
             app:layout_constraintBottom_toBottomOf="@id/ng_ripple_circle_image"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ng_ripple_circle_image">
 
             <net.iGap.module.MEditText
                 android:id="@+id/ng_edt_newGroup"
+                style="?hintColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:background="@android:color/transparent"
-                android:paddingBottom="@dimen/dp4"
                 android:paddingTop="@dimen/dp8"
+                android:paddingBottom="@dimen/dp4"
                 android:singleLine="true"
-                style="?hintColorSettingTheme"
                 android:text="@={fragmentNewGroupVieModel.edtSetNewGroup}"
                 android:textSize="@dimen/standardTextSize" />
 
             <View
                 android:id="@+id/ng_view_newGroup"
+                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                style="?lineColorSettingTheme" />
+                android:layout_height="0.5dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ng_txtInput_description"
+            style="?hintColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp12"
-            style="?hintColorSettingTheme"
-            android:hint="@string/desc_group_chanel"
             android:layout_marginLeft="@dimen/dp32"
+            android:layout_marginTop="@dimen/dp12"
             android:layout_marginRight="@dimen/dp20"
-            app:layout_constraintStart_toStartOf="@id/ng_ripple_circle_image"
+            android:hint="@string/desc_group_chanel"
             app:layout_constraintEnd_toEndOf="@id/ng_txtInput_newGroup"
+            app:layout_constraintStart_toStartOf="@id/ng_ripple_circle_image"
             app:layout_constraintTop_toBottomOf="@id/ng_ripple_circle_image">
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/ng_edt_description"
+                style="?hintColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ng_txtInput_newGroup"
@@ -138,10 +138,9 @@
                 android:lines="@{safeUnbox(fragmentNewGroupVieModel.edtDescriptionLines) , default = 1}"
                 android:maxLength="500"
                 android:maxLines="@{safeUnbox(fragmentNewGroupVieModel.edtDescriptionMaxLines) , default =2}"
-                android:paddingBottom="@dimen/dp8"
                 android:paddingTop="@dimen/dp8"
+                android:paddingBottom="@dimen/dp8"
                 android:singleLine="false"
-                style="?hintColorSettingTheme"
                 android:text="@={fragmentNewGroupVieModel.edtDescription}"
                 android:textCursorDrawable="@drawable/editext_cursor"
                 android:textSize="@dimen/standardTextSize" />
@@ -149,61 +148,61 @@
 
             <View
                 android:id="@+id/ng_view_desc"
+                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="@dimen/dp20"
-                android:layout_marginRight="@dimen/dp20"
-                style="?lineColorSettingTheme" />
+                android:layout_marginRight="@dimen/dp20" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/ang_txt_add_hint"
+            style="?hintColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/ng_txtInput_description"
-            app:layout_constraintEnd_toEndOf="@id/ng_txtInput_description"
-            app:layout_constraintTop_toBottomOf="@id/ng_txtInput_description"
+            android:layout_marginLeft="@dimen/dp20"
             android:layout_marginTop="@dimen/dp16"
-            style="?hintColorSettingTheme"
+            android:layout_marginRight="@dimen/dp20"
             android:fontFamily="@font/main_font"
             android:hint="@{fragmentNewGroupVieModel.txtDescriptionHint}"
             android:textSize="@dimen/verySmallTextSize"
-            android:layout_marginLeft="@dimen/dp20"
-            android:layout_marginRight="@dimen/dp20" />
+            app:layout_constraintEnd_toEndOf="@id/ng_txtInput_description"
+            app:layout_constraintStart_toStartOf="@id/ng_txtInput_description"
+            app:layout_constraintTop_toBottomOf="@id/ng_txtInput_description" />
 
         <LinearLayout
             android:id="@+id/ang_layout_members"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp6"
             android:orientation="vertical"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/ang_txt_add_hint"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="@dimen/dp6">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ang_txt_add_hint">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/member"
-                style="?textTitleColorSettingTheme"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="10dp"
-                style="?lineColorSettingTheme" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:text="@string/member"
+                android:textColor="?titleTextColor" />
+
+            <View
+                style="?lineColorSettingTheme"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="10dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ang_recycler_view_selected_contact"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:paddingBottom="@dimen/dp6"
                 android:visibility="visible" />
 
@@ -216,11 +215,11 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:indeterminate="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="@{safeUnbox(fragmentNewGroupVieModel.prgWaiting)}"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="@{safeUnbox(fragmentNewGroupVieModel.prgWaiting)}" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

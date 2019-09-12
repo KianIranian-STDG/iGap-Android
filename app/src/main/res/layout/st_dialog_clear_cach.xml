@@ -10,12 +10,12 @@
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/all"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:button="@drawable/check_box_background"
         android:text="@string/all"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toStartOf="@id/allFileSize"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,12 +33,12 @@
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/photo"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:button="@drawable/check_box_background"
         android:text="@string/array_Photo"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toStartOf="@id/photoFileSize"
         app:layout_constraintStart_toStartOf="@id/all"
@@ -56,12 +56,12 @@
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/video"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:button="@drawable/check_box_background"
         android:text="@string/array_Video"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toStartOf="@id/videoFileSize"
         app:layout_constraintStart_toStartOf="@id/all"
@@ -79,12 +79,12 @@
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/document"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:button="@drawable/check_box_background"
         android:text="@string/Documents"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toStartOf="@id/documentFileSize"
         app:layout_constraintStart_toStartOf="@id/all"
@@ -102,12 +102,12 @@
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/audio"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:button="@drawable/check_box_background"
         android:text="@string/audio"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toStartOf="@id/audioFileSize"
         app:layout_constraintStart_toStartOf="@id/all"
@@ -125,12 +125,12 @@
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/map"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:button="@drawable/check_box_background"
         android:text="@string/map"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toStartOf="@id/mapFileSize"
         app:layout_constraintStart_toStartOf="@id/all"
@@ -148,12 +148,12 @@
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/other"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:button="@drawable/check_box_background"
         android:text="@string/other_files"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toStartOf="@id/otherFileSize"
         app:layout_constraintStart_toStartOf="@id/all"

@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="@dimen/dp8"
-    style="?backgroundColorSettingTheme"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -169,8 +169,8 @@
         android:layout_width="@dimen/toolbar_icon_size"
         android:layout_height="@dimen/toolbar_icon_size"
         android:layout_marginTop="@dimen/dp8"
-        android:visibility="invisible"
         android:text="@string/md_igap_file"
+        android:visibility="invisible"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/txtContact"
         app:layout_constraintTop_toBottomOf="@id/txtCamera2" />
@@ -237,8 +237,8 @@
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/toolbar_icon_size"
         android:layout_height="@dimen/toolbar_icon_size"
-        android:visibility="invisible"
         android:text="@string/location_pin_icon"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/txtFile"
         app:layout_constraintLeft_toRightOf="@id/txtContact"
         app:layout_constraintRight_toLeftOf="@id/txtSend"

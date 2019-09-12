@@ -13,26 +13,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingRight="@dimen/dp6"
-        android:paddingLeft="@dimen/dp6">
+        android:paddingLeft="@dimen/dp6"
+        android:paddingRight="@dimen/dp6">
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/txt_info_back_map"
+            style="@style/myIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/close_icon"
-            style="@style/myIconTextViewStyle"
             android:textColor="@color/iGapColor"
             android:visibility="gone" />
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/txt_close_map"
+            style="@style/myIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/md_close_button"
-            style="@style/myIconTextViewStyle"
             android:textColor="@color/gray_5c"
             android:visibility="visible" />
     </LinearLayout>
@@ -59,28 +59,28 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/txt_chat_map"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/message_icon"
-                    style="@style/myIconTextViewStyle"
                     android:textColor="@color/iGapColor" />
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/txt_call_map"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp4"
                     android:text="@string/voice_call_icon"
-                    style="@style/myIconTextViewStyle"
                     android:textColor="@color/iGapColor" />
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/txt_video_call_map"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp4"
                     android:text="@string/video_call_icon"
-                    style="@style/myIconTextViewStyle"
                     android:textColor="@color/iGapColor" />
 
                 <View
@@ -95,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:text="Display Name"
-                    style="?textTitleColorSettingTheme"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp18" />
             </LinearLayout>
 
@@ -109,15 +109,16 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/txt_open_comment_map"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/down_arrow_icon"
                     android:rotation="90"
-                    style="@style/myIconTextViewStyle"
+                    android:text="@string/down_arrow_icon"
                     android:textColor="@color/iGapColor" />
 
                 <TextView
                     android:id="@+id/txt_info_comment"
+                    style="?textSubColorSettingTheme"
                     fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -126,7 +127,6 @@
                     android:ellipsize="end"
                     android:gravity="right"
                     android:maxLines="1"
-                    style="?textSubColorSettingTheme"
                     android:text="Comment"
                     android:textSize="@dimen/dp16" />
             </LinearLayout>

@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootRecoveryPassword"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="?backgroundColorSettingTheme"
-    android:clickable="true"
-    android:layoutDirection="ltr"
-    android:orientation="vertical"
-    tools:context="net.iGap.fragments.FragmentSecurityRecovery"
-
-    >
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/fsr_layout_toolbar"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height" />
+        android:layout_height="@dimen/toolbar_height"
+        android:orientation="horizontal" />
 
     <!-- recovery QuestionPassword-->
     <LinearLayout
@@ -27,67 +21,67 @@
         android:visibility="visible">
 
         <TextView
+            style="?textSecurityColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp24"
             android:gravity="center"
             android:text="@string/password_Question_title_one"
-            style="?textSecurityColor"
             android:textSize="@dimen/dp18" />
 
         <TextView
             android:id="@+id/txtSetRecoveryQuestionPassOne"
+            style="?textSubColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp32"
-            android:layout_marginRight="@dimen/dp32"
             android:layout_marginTop="@dimen/dp12"
+            android:layout_marginRight="@dimen/dp32"
             android:singleLine="true"
-            style="?textSubColorSettingTheme"
             android:textSize="@dimen/dp13"
 
             />
 
         <net.iGap.module.MEditText
             android:id="@+id/edtSetRecoveryAnswerPassOne"
+            style="?hintColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp32"
             android:layout_marginRight="@dimen/dp32"
             android:hint="@string/password_answer"
             android:singleLine="true"
-            style="?hintColorSettingTheme"
             android:textSize="@dimen/dp13" />
 
         <TextView
+            style="?textSecurityColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp24"
             android:gravity="center"
             android:text="@string/password_Question_title_two"
-            style="?textSecurityColor"
             android:textSize="@dimen/dp18" />
 
         <TextView
             android:id="@+id/txtSetRecoveryQuestionPassTwo"
+            style="?textSubColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp32"
-            android:layout_marginRight="@dimen/dp32"
             android:layout_marginTop="@dimen/dp12"
+            android:layout_marginRight="@dimen/dp32"
             android:singleLine="true"
-            style="?textSubColorSettingTheme"
             android:text="@string/password_Question_two"
             android:textSize="@dimen/dp13" />
 
         <net.iGap.module.MEditText
             android:id="@+id/edtSetRecoveryAnswerPassTwo"
+            style="?textSubColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp32"
             android:layout_marginRight="@dimen/dp32"
             android:hint="@string/password_answer"
-            style="?textSubColorSettingTheme"
             android:singleLine="true"
             android:textSize="@dimen/dp13" />
 
@@ -96,8 +90,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp32"
-            android:layout_marginRight="@dimen/dp32"
             android:layout_marginTop="@dimen/dp48"
+            android:layout_marginRight="@dimen/dp32"
             android:singleLine="true"
             android:text="@string/recovery_by_email"
             android:textColor="@color/green"
@@ -127,11 +121,11 @@
             android:id="@+id/edtSetRecoveryEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp32"
-            android:layout_marginLeft="@dimen/dp32"
-            android:layout_marginRight="@dimen/dp32"
             android:layout_marginStart="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
             android:layout_marginTop="@dimen/dp32"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
             android:gravity="center"
             android:textSize="@dimen/dp13" />
 
@@ -139,11 +133,11 @@
             android:id="@+id/txtResendConfirmEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp32"
-            android:layout_marginLeft="@dimen/dp32"
-            android:layout_marginRight="@dimen/dp32"
             android:layout_marginStart="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
             android:layout_marginTop="@dimen/dp32"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
             android:gravity="start"
             android:padding="@dimen/dp16"
             android:text="@string/your_resend_email_skip"
@@ -155,11 +149,11 @@
             android:id="@+id/txtSetRecoveryByQuestion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp32"
-            android:layout_marginLeft="@dimen/dp32"
-            android:layout_marginRight="@dimen/dp32"
             android:layout_marginStart="@dimen/dp32"
+            android:layout_marginLeft="@dimen/dp32"
             android:layout_marginTop="@dimen/dp4"
+            android:layout_marginEnd="@dimen/dp32"
+            android:layout_marginRight="@dimen/dp32"
             android:gravity="start"
             android:padding="@dimen/dp16"
             android:singleLine="true"

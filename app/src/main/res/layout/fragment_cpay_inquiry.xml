@@ -11,9 +11,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme"
         tools:context=".fragments.cPay.FragmentCPayInquiry">
 
         <LinearLayout
@@ -42,20 +42,20 @@
             android:id="@+id/fci_plaque_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:pv_edit_mode="false"
-            app:layout_constraintTop_toBottomOf="@id/fci_lbl_plaque"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="@dimen/dp20"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="@dimen/dp20" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fci_lbl_plaque"
+            app:pv_edit_mode="false" />
 
         <TextView
             android:id="@+id/fci_txt_result"
-            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp32"
             android:gravity="right"
             android:text="@{viewModel.inquiryResultText}"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,8 +68,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp52"
             android:minWidth="@dimen/dp200"
-            android:text="@string/inquiry"
             android:onClick="@{()-> viewModel.onInquiryClicked()}"
+            android:text="@string/inquiry"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fci_txt_result" />

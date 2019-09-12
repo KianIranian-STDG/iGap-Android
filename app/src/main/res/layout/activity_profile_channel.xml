@@ -12,7 +12,7 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -49,9 +49,9 @@
                         android:layout_marginStart="@dimen/dp4"
                         android:layout_marginLeft="@dimen/dp4"
                         android:text="@string/back_icon"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <Space
                         android:id="@+id/toolbar_avatar_collapsed_target"
@@ -59,9 +59,9 @@
                         android:layout_height="@dimen/toolbar_profile_avatar_size_collapsed"
                         android:layout_marginLeft="@dimen/dp6"
                         android:layout_marginRight="@dimen/dp6"
+                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back"
                         app:layout_constraintLeft_toRightOf="@id/toolbar_back"
-                        app:layout_constraintTop_toTopOf="@id/toolbar_back"
-                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back" />
+                        app:layout_constraintTop_toTopOf="@id/toolbar_back" />
 
                     <net.iGap.module.EmojiTextViewE
                         android:id="@+id/toolbar_txt_name_collapsed"
@@ -74,40 +74,40 @@
                         android:fontFamily="@font/main_font"
                         android:gravity="left|center_vertical"
                         android:singleLine="true"
-                        android:visibility="gone"
                         android:textColor="@color/white"
                         android:textSize="@dimen/standardTextSize"
+                        android:visibility="gone"
                         app:emojiSize="@dimen/standardTextSize"
+                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back"
                         app:layout_constraintLeft_toRightOf="@id/toolbar_avatar_collapsed_target"
                         app:layout_constraintRight_toLeftOf="@id/toolbar_edit"
-                        app:layout_constraintTop_toTopOf="@id/toolbar_back"
-                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back" />
+                        app:layout_constraintTop_toTopOf="@id/toolbar_back" />
 
                     <TextView
                         android:id="@+id/toolbar_more"
                         style="@style/myIconToolbarStyle"
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
-                        android:visibility="gone"
                         android:layout_marginEnd="@dimen/dp4"
                         android:layout_marginRight="@dimen/dp4"
                         android:text="@string/more_icon"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/toolbar_back"
-                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back" />
+                        app:layout_constraintTop_toTopOf="@id/toolbar_back" />
 
                     <TextView
                         android:id="@+id/toolbar_edit"
                         style="@style/myIconToolbarStyle"
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
-                        android:text="@string/edit_icon"
-                        android:layout_marginRight="@dimen/dp4"
                         android:layout_marginEnd="@dimen/dp4"
+                        android:layout_marginRight="@dimen/dp4"
+                        android:text="@string/edit_icon"
                         android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back"
                         app:layout_constraintRight_toLeftOf="@id/toolbar_more"
-                        app:layout_constraintTop_toTopOf="@id/toolbar_back"
-                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back" />
+                        app:layout_constraintTop_toTopOf="@id/toolbar_back" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -176,11 +176,11 @@
 
                 <net.iGap.module.EmojiTextViewE
                     android:id="@+id/description"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:padding="8dp"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.haveDescription}"
                     app:emojiSize="@dimen/standardTextSize"
@@ -202,11 +202,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/channelInfo"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:text="@string/info"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/largeTextSize"
                     android:visibility="@{viewModel.isVerifiedChannel}"
                     app:layout_constraintLeft_toLeftOf="@id/notification"
@@ -226,7 +226,6 @@
                     app:srcCompat="@drawable/ic_verify" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -245,12 +244,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/channelLinkStatus"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp10"
                     android:padding="4dp"
                     android:text="@{viewModel.channelLinkTitle}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.isShowLink}"
                     app:layout_constraintLeft_toLeftOf="@id/notification"
@@ -286,7 +285,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/notification"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -295,6 +293,7 @@
                     android:onClick="@{()-> viewModel.onNotificationCheckChange()}"
                     android:padding="8dp"
                     android:text="@string/mute_notification"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -322,11 +321,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/members"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:padding="8dp"
                     android:text="@string/member"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/largeTextSize"
                     android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintLeft_toLeftOf="@id/notification"
@@ -335,13 +335,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/subscribers"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onSubscribersClick()}"
                     android:padding="8dp"
                     android:text="@string/subscribers_title"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintEnd_toStartOf="@id/subscribersCount"
@@ -365,13 +365,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/administrators"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onAdministratorsClick()}"
                     android:padding="8dp"
                     android:text="@string/administrators_title"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintEnd_toStartOf="@id/administratorsCount"
@@ -395,13 +395,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/moderator"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onModeratorClick()}"
                     android:padding="8dp"
                     android:text="@string/moderators_title"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintEnd_toStartOf="@id/moderatorsCount"
@@ -436,12 +436,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/sharedContentTitle"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
                     android:padding="8dp"
                     android:text="@string/chi_shared_Media"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/largeTextSize"
                     android:visibility="@{viewModel.noMediaVisibility}"
                     app:layout_constraintLeft_toLeftOf="@id/notification"
@@ -450,7 +450,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/photo"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -458,6 +457,7 @@
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(1)}"
                     android:padding="8dp"
                     android:text="@string/shared_image"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedPhotoVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/photoCount"
@@ -480,13 +480,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/video"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(2)}"
                     android:padding="8dp"
                     android:text="@string/shared_video"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedVideoVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/photoCount"
@@ -664,7 +664,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/leaveChannel"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -15,14 +14,10 @@
 
     <LinearLayout
         android:id="@+id/rootPassCode"
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:layoutDirection="locale"
-        android:orientation="vertical"
-        tools:context="net.iGap.activities.ActivityManageSpace"
-        tools:ignore="MissingPrefix">
+        android:orientation="vertical">
 
 
         <LinearLayout
@@ -33,7 +28,6 @@
 
         <LinearLayout
             android:id="@+id/rootEnterPassword"
-            style="?backgroundColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -70,7 +64,6 @@
 
         <LinearLayout
             android:id="@+id/rootPatternPassword"
-            style="?backgroundColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -79,7 +72,7 @@
 
             <TextView
                 android:id="@+id/st_txt_createNewPattern"
-                style="?textTitleColorSettingTheme"
+                android:textColor="?iGapTitleTextColor"
                 fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -102,7 +95,6 @@
 
         <LinearLayout
             android:id="@+id/scrollPassCode"
-            style="?backgroundColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -117,7 +109,6 @@
                 android:visibility="@{safeUnbox(fragmentPassCodeViewModel.vgTogglePassCodeVisibility) ,default = visible }">
 
                 <LinearLayout
-                    style="?backgroundColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:onClick="@{fragmentPassCodeViewModel::onClickTogglePassCode}"
@@ -130,7 +121,7 @@
 
                     <TextView
                         android:id="@+id/st_txt_st_toggle_passCode"
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -153,7 +144,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    style="?backgroundColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:onClick="@{fragmentPassCodeViewModel::onClickTogglePatternPassCode}"
@@ -166,7 +156,7 @@
 
                     <TextView
                         android:id="@+id/st_txt_st_toggle_patternPassCode"
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -189,7 +179,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    style="?backgroundColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:onClick="@{fragmentPassCodeViewModel::onClickTogglePatternTactileFeedback}"
@@ -202,7 +191,7 @@
 
                     <TextView
                         android:id="@+id/st_txt_st_toggle_tactileFeedback"
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -225,7 +214,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    style="?backgroundColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:onClick="@{fragmentPassCodeViewModel::onClickChangePassCode}"
@@ -234,7 +222,7 @@
 
                     <TextView
                         android:id="@+id/st_txt_ChangePassCode"
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
@@ -277,7 +265,6 @@
 
                 <LinearLayout
                     android:id="@+id/vgToggleFingerPrint"
-                    style="?backgroundColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:onClick="@{fragmentPassCodeViewModel::onClickChangeVgToggleFingerPrint}"
@@ -290,7 +277,7 @@
 
                     <TextView
                         android:id="@+id/st_txt_st_toggle_FingerPrint"
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -314,14 +301,13 @@
 
                 <LinearLayout
                     android:id="@+id/st_layout_autoLock"
-                    style="?backgroundColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:onClick="@{fragmentPassCodeViewModel::onClickChangeAutoLock}"
                     android:orientation="horizontal">
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -365,7 +351,6 @@
                 </RelativeLayout>
 
                 <LinearLayout
-                    style="?backgroundColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp48"
                     android:onClick="@{fragmentPassCodeViewModel::onClickAllowScreenCapture}"
@@ -377,7 +362,7 @@
 
                     <TextView
                         android:id="@+id/st_txt_st_tAllowScreenCapture"
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"

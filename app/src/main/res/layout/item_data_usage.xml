@@ -6,7 +6,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtTitle"
-        style="?textTitleColorSettingTheme"
+        android:textColor="?iGapTitleTextColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"
@@ -32,7 +32,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtSentNum"
-        style="?textTitleColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/setting_items_value_color"
@@ -56,7 +55,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtReceivedNum"
-        style="?textTitleColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/setting_items_value_color"
@@ -79,7 +77,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtByteSentNum"
-        style="?textTitleColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/setting_items_value_color"

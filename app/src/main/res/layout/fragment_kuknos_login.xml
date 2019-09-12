@@ -11,9 +11,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fragKuknosLoginContainer"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme">
+        android:layout_height="match_parent">
 
         <!-- TODO clean min height-->
 
@@ -21,9 +21,9 @@
             android:id="@+id/fragKuknosIdToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:minHeight="48dp"
             android:background="@color/sky_blue"
+            android:minHeight="48dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,10 +31,10 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragKuknosIdToolbar"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/fragKuknosIdToolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -42,21 +42,20 @@
                 android:paddingBottom="@dimen/dp20">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosIdMessage"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="50dp"
-                    android:text="@string/kuknos_login_messge_str"
-                    android:textSize="16dp"
                     android:justificationMode="inter_word"
+                    android:text="@string/kuknos_login_messge_str"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.7" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosIdUserNumHolder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -68,22 +67,21 @@
                     app:layout_constraintWidth_percent="0.7">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        style="?textTitleColorSettingTheme"
                         android:id="@+id/fragKuknosIdUserNum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="48dp"
                         android:ems="10"
                         android:enabled="false"
-                        android:hint="@string/kuknos_login_tel_str"
-                        android:text="@={viewmodel.userNum}"
-                        android:textSize="@dimen/dp18"
                         android:gravity="center"
-                        android:inputType="numberDecimal" />
+                        android:hint="@string/kuknos_login_tel_str"
+                        android:inputType="numberDecimal"
+                        android:minHeight="48dp"
+                        android:text="@={viewmodel.userNum}"
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/dp18" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosIdUserIDHolder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -95,34 +93,34 @@
                     app:layout_constraintWidth_percent="0.7">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        style="?textTitleColorSettingTheme"
                         android:id="@+id/fragKuknosIdUserID"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:maxLength="10"
-                        android:minHeight="48dp"
-                        android:ems="10"
-                        android:hint="@string/kuknos_login_id_str"
-                        android:text="@={viewmodel.ID}"
-                        android:textSize="@dimen/dp18"
-                        android:gravity="center"
                         android:digits="0123456789"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="@string/kuknos_login_id_str"
+                        android:imeOptions="actionDone"
                         android:inputType="numberDecimal"
-                        android:imeOptions="actionDone" />
+                        android:lines="1"
+                        android:maxLength="10"
+                        android:maxLines="1"
+                        android:minHeight="48dp"
+                        android:text="@={viewmodel.ID}"
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/dp18" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
-                    style="?iGapButton"
                     android:id="@+id/fragKuknosIdSubmit"
+                    style="?iGapButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:minHeight="58dp"
+                    android:onClick="@{()->viewmodel.onSubmit()}"
                     android:text="@string/kuknos_login_progress_next"
                     android:textSize="@dimen/dp16"
-                    android:onClick="@{()->viewmodel.onSubmit()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosIdUserIDHolder"
@@ -134,12 +132,12 @@
                     android:layout_height="0dp"
                     android:elevation="2dp"
                     android:visibility="gone"
-                    app:layout_constraintTop_toTopOf="@+id/fragKuknosIdSubmit"
-                    app:layout_constraintStart_toStartOf="@+id/fragKuknosIdSubmit"
-                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosIdSubmit"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosIdSubmit"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosIdSubmit"
+                    app:layout_constraintHeight_percent="0.08"
                     app:layout_constraintHorizontal_bias="0.05"
-                    app:layout_constraintHeight_percent="0.08" />
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosIdSubmit"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosIdSubmit" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

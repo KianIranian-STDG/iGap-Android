@@ -10,12 +10,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:layoutDirection="locale">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -78,12 +75,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/packageTypeTitle"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
             android:padding="@dimen/dp8"
             android:text="@string/buy_internet_package_type_title"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.showDetail}"
             app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
@@ -194,8 +191,8 @@
             style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
-            android:text="@string/retry_icon"
             android:onClick="@{()->viewModel.onRetryClick()}"
+            android:text="@string/retry_icon"
             android:visibility="@{viewModel.showRetryView}"
             app:layout_constraintBottom_toBottomOf="@id/loadingView"
             app:layout_constraintEnd_toEndOf="@id/loadingView"

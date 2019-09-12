@@ -5,9 +5,7 @@
     android:id="@+id/rootFragmentUserMap"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="?backgroundColorSettingTheme"
-    android:clickable="true"
-    android:layoutDirection="locale"
+    style="@style/IGapRootViewStyle"
     tools:context="net.iGap.fragments.FragmentMapUsers">
 
     <LinearLayout
@@ -56,7 +54,7 @@
                     android:paddingRight="@dimen/dp20"
                     android:text="@string/text_empty_user_map"
                     android:textSize="@dimen/dp13"
-                    style="?textTitleColorSettingTheme"
+                    android:textColor="?iGapTitleTextColor"
                     android:visibility="gone" />
 
             </LinearLayout>

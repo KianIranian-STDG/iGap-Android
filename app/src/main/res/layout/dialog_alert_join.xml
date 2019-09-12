@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp80"
+    android:background="@android:color/transparent"
     android:clickable="true"
     android:gravity="center"
-    android:background="@android:color/transparent"
     android:orientation="horizontal">
 
 
@@ -22,21 +22,21 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/daj_txt_room_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:text="hame khoba"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp18" />
 
         <TextView
             android:id="@+id/daj_txt_member_count"
+            style="?textSubColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            style="?textSubColorSettingTheme"
             android:text="12 member" />
     </LinearLayout>
 

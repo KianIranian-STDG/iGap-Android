@@ -20,7 +20,6 @@
         android:paddingEnd="@dimen/dp20"
         android:paddingRight="@dimen/dp20"
         android:text="@string/block_user"
-        style="?textTitleColorSettingTheme"
         android:textColor="@color/red"
         android:textSize="@dimen/standardTextSize" />
 

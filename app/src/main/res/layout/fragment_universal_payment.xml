@@ -70,7 +70,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp8"
@@ -98,7 +98,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/priceTitle"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -111,7 +111,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/price"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp8"
@@ -136,7 +136,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/paymentStatus"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"

@@ -3,21 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ac_ll_parent"
-    style="?backgroundColorSettingTheme"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
     android:layoutDirection="ltr"
     tools:ignore="MissingPrefix">
 
     <RelativeLayout
-        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/chl_img_view_chat"
-            style="?backgroundColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
@@ -142,7 +139,6 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal"
-                style="?backgroundColorSettingTheme"
                 android:visibility="gone">
 
 
@@ -153,7 +149,7 @@
                     android:layout_weight="1"
                     android:singleLine="true"
                     android:text="New Text"
-                    style="?textTitleColorSettingTheme"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
                 <net.iGap.module.MaterialDesignTextView
@@ -168,7 +164,6 @@
 
             <LinearLayout
                 android:id="@+id/ac_ll_hash_navigation"
-                style="?backgroundColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
                 android:clickable="true"
@@ -257,7 +252,6 @@
 
             <LinearLayout
                 android:id="@+id/ac_ll_join"
-                style="?backgroundColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
                 android:clickable="true"
@@ -285,8 +279,6 @@
 
 
                 <LinearLayout
-
-                    style="?backgroundColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentBottom="true"
@@ -294,7 +286,7 @@
 
                     <TextView
                         android:id="@+id/chl_txt_mute_channel"
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -345,7 +337,7 @@
 
                         <TextView
                             android:id="@+id/ac_layout_selected_txt_counter"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="10dp"

@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,6 +48,8 @@ import net.iGap.module.structs.StructSessions;
 import net.iGap.proto.ProtoUserSessionGetActiveList;
 import net.iGap.request.RequestUserSessionGetActiveList;
 import net.iGap.request.RequestUserSessionTerminate;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,13 +79,12 @@ public class FragmentActiveSessions extends BaseFragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
-                .setDefaultTitle(G.context.getResources().getString(R.string.Active_Sessions))
+                .setDefaultTitle(getString(R.string.Active_Sessions))
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {
@@ -102,8 +104,9 @@ public class FragmentActiveSessions extends BaseFragment {
 
         fastItemAdapter = new FastItemAdapter();
         rcvContent = view.findViewById(R.id.stas_rcvContent);
-        rcvContent.setLayoutManager(new LinearLayoutManager(getContext()));
+        rcvContent.setLayoutManager(new LinearLayoutManager(rcvContent.getContext()));
         rcvContent.setItemAnimator(new DefaultItemAnimator());
+        rcvContent.addItemDecoration(new DividerItemDecoration(rcvContent.getContext(),LinearLayoutManager.VERTICAL),2);
         rcvContent.setAdapter(fastItemAdapter);
 
         G.onUserSessionGetActiveList = new OnUserSessionGetActiveList() {
@@ -206,55 +209,7 @@ public class FragmentActiveSessions extends BaseFragment {
 
                 if (item instanceof AdapterActiveSessions) {
                     if (((AdapterActiveSessions) item).getItem().isCurrent()) {
-//                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.active_session_title).content(R.string.active_session_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-//                            @Override
-//                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-//
-//                                prgWaiting.setVisibility(View.VISIBLE);
-//                                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//
-//                                new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
-//                                    @Override
-//                                    public void onUserSessionLogout() {
-//
-//                                        G.handler.post(new Runnable() {
-//                                            @Override
-//                                            public void run() {
-//                                                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//                                                prgWaiting.setVisibility(View.GONE);
-//                                            }
-//                                        });
-//                                    }
-//
-//                                    @Override
-//                                    public void onError() {
-//                                        G.handler.post(new Runnable() {
-//                                            @Override
-//                                            public void run() {
-//                                                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//                                                prgWaiting.setVisibility(View.GONE);
-//
-//                                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
-//                                            }
-//                                        });
-//                                    }
-//
-//                                    @Override
-//                                    public void onTimeOut() {
-//                                        G.handler.post(new Runnable() {
-//                                            @Override
-//                                            public void run() {
-//                                                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//                                                prgWaiting.setVisibility(View.GONE);
-//
-//                                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
-//
-//                                            }
-//                                        });
-//                                    }
-//                                });
-//                            }
-//                        }).show();
+
                     } else {
                         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.active_session_title).content(R.string.active_session_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override

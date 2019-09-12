@@ -10,11 +10,11 @@
         android:id="@+id/view_frame"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/igasht_tabbar_background_light"
         app:layout_constraintBottom_toBottomOf="@id/price_ticket"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/price_ticket"
-        android:background="@drawable/igasht_tabbar_background_light" />
+        app:layout_constraintTop_toTopOf="@id/price_ticket" />
 
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -43,11 +43,11 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/price_ticket"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp8"
+        android:textColor="?iGapTitleTextColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/minusButton"
         app:layout_constraintTop_toTopOf="parent"
@@ -55,11 +55,11 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/count_ticket"
-        style="?textTitleColorSettingTheme"
         android:layout_width="55dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp8"
+        android:textColor="?iGapTitleTextColor"
         app:layout_constraintBottom_toBottomOf="@id/price_ticket"
         app:layout_constraintEnd_toStartOf="@id/minusButton"
         app:layout_constraintStart_toEndOf="@id/plusButton"
@@ -67,11 +67,11 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/service_ticket"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="@dimen/dp8"
+        android:textColor="?iGapTitleTextColor"
         app:layout_constraintBottom_toBottomOf="@id/price_ticket"
         app:layout_constraintEnd_toStartOf="@id/plusButton"
         app:layout_constraintStart_toStartOf="parent"

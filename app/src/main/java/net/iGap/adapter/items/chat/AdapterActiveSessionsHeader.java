@@ -13,12 +13,15 @@ package net.iGap.adapter.items.chat;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.R;
 import net.iGap.module.structs.StructSessions;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -55,23 +58,23 @@ public class AdapterActiveSessionsHeader extends AbstractItem<AdapterActiveSessi
     //The logic to bind your data to the view
 
     @Override
-    public void bindView(ViewHolder holder, List payloads) {
+    public void bindView(@NotNull ViewHolder holder, @NotNull List payloads) {
         super.bindView(holder, payloads);
     }
 
+    @NotNull
     @Override
-    public ViewHolder getViewHolder(View v) {
+    public ViewHolder getViewHolder(@NotNull View v) {
         return new ViewHolder(v);
     }
 
     //The viewHolder used for this item. This viewHolder is always reused by the RecyclerView so scrolling is blazing fast
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ViewGroup root;
+        private AppCompatTextView root;
 
         public ViewHolder(View view) {
             super(view);
-
             root = view.findViewById(R.id.adph_rootLayout);
         }
     }

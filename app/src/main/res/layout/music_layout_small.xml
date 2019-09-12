@@ -30,7 +30,6 @@
 
         <TextView
             android:id="@+id/mls_txt_music_name"
-            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -49,11 +48,11 @@
 
         <TextView
             android:id="@+id/mls_txt_music_info"
-            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical|left"
             android:singleLine="true"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp10"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/mls_txt_music_name"
@@ -64,7 +63,6 @@
 
         <TextView
             android:id="@+id/mls_txt_music_time_counter"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="@dimen/dp28"
@@ -88,7 +86,6 @@
 
         <TextView
             android:id="@+id/mls_txt_music_time"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="11:11"

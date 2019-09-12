@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/transparent"
-    android:clickable="true"
-    style="?backgroundColorSettingTheme"
     android:orientation="vertical">
 
     <net.iGap.module.CustomTextViewMedium
@@ -14,15 +13,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/dp8"
         android:gravity="center"
         android:textSize="@dimen/dp18"
-        android:layout_marginBottom="@dimen/dp8"
         tools:text="" />
 
     <View
         android:layout_width="match_parent"
-        android:background="#10000000"
-        android:layout_height="1dp" />
+        android:layout_height="1dp"
+        android:background="#10000000" />
 
     <net.iGap.module.CustomTextViewMedium
         android:id="@+id/description"
@@ -31,9 +30,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp8"
         android:gravity="center"
         android:textSize="@dimen/dp14"
-        android:layout_marginBottom="@dimen/dp8"
         tools:text="" />
 
 
@@ -53,23 +52,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/dp8"
         android:gravity="center"
         android:textSize="@dimen/dp20"
-        android:layout_marginBottom="@dimen/dp8"
         tools:text="" />
 
     <com.google.android.material.button.MaterialButton
-        style="?iGapButton"
         android:id="@+id/pay"
+        style="?iGapButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp16"
-        android:layout_marginRight="@dimen/dp16"
-        android:textAllCaps="false"
         android:layout_marginTop="@dimen/dp8"
+        android:layout_marginRight="@dimen/dp16"
         android:layout_marginBottom="@dimen/dp8"
         android:paddingStart="@dimen/dp32"
         android:paddingEnd="@dimen/dp32"
-        android:text="@string/pay" />
+        android:text="@string/pay"
+        android:textAllCaps="false" />
 
 </LinearLayout>

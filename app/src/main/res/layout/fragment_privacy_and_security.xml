@@ -16,19 +16,17 @@
 
     <RelativeLayout
         android:id="@+id/parentPrivacySecurity"
+        style="?backgroundColorSettingTheme_2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme_2"
         android:clickable="true"
-        android:layoutDirection="locale"
-        tools:context="net.iGap.fragments.FragmentPrivacyAndSecurity"
-        tools:ignore="MissingPrefix">
+        android:layoutDirection="locale">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:id="@+id/fps_layout_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_height" />
+            android:layout_height="@dimen/toolbar_height"
+            android:orientation="horizontal" />
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/stps_backgroundToolbar"
@@ -39,8 +37,8 @@
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp60"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
                 android:layoutDirection="ltr"
@@ -115,10 +113,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:paddingBottom="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp12"
+                        android:paddingRight="@dimen/dp16"
+                        android:paddingBottom="@dimen/dp16"
                         android:text="@string/privacy"
                         android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
                         android:textSize="@dimen/dp18"
@@ -134,17 +132,17 @@
                         android:layout_height="@dimen/dp48"
                         android:gravity="center_vertical|start"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="@string/Block_Users"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
                     <View
+                        style="?lineColorSettingTheme"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        style="?lineColorSettingTheme" />
+                        android:layout_height="1dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -158,8 +156,8 @@
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/Last_Seen"
                             android:textColor="@color/black_register"
                             android:textSize="@dimen/dp16"
@@ -171,8 +169,8 @@
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/everybody"
                             android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
                             android:textSize="@dimen/dp16"
@@ -208,8 +206,8 @@
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/everybody"
                             android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
                             android:textSize="@dimen/dp16"
@@ -221,35 +219,34 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="?backgroundColorSettingTheme"
                     android:orientation="vertical">
 
                     <TextView
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobil.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/dp12"
-                        android:paddingRight="@dimen/dp12"
                         android:paddingTop="@dimen/dp12"
+                        android:paddingRight="@dimen/dp12"
                         android:paddingBottom="@dimen/dp16"
                         android:text="@string/privacy"
-                        style="?textTitleColorSettingTheme"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
 
                     <TextView
                         android:id="@+id/stps_txt_blocked_user"
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
                         android:gravity="center_vertical|start"
                         android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickBlocked}"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="@string/Block_Users"
-                        style="?textTitleColorSettingTheme"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal" />
 
@@ -261,30 +258,30 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/who_can_see_my_avatar"
-                            style="?textTitleColorSettingTheme"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/stps_txt_who_can_see_my_avatar"
+                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSeeMyAvatar , default=@string/everybody}"
-                            style="?textSubColorSettingTheme"
                             android:textColor="@color/setting_items_value_color"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal"
@@ -302,31 +299,31 @@
                         >
 
                         <TextView
+                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:singleLine="true"
                             android:text="@string/who_can_invite_you_to_channel_s"
-                            style="?textTitleColorSettingTheme"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/stps_txt_who_can_invite_me_to_Channel"
+                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackInviteChannel , default=@string/everybody}"
-                            style="?textSubColorSettingTheme"
                             android:textColor="@color/setting_items_value_color"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal"
@@ -342,31 +339,31 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:singleLine="true"
                             android:text="@string/who_can_invite_you_to_group_s"
-                            style="?textTitleColorSettingTheme"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/stps_txt_who_can_invite_me_to_group"
+                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackInviteGroup , default=@string/everybody}"
-                            style="?textSubColorSettingTheme"
                             android:textColor="@color/setting_items_value_color"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal"
@@ -382,30 +379,30 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/who_is_allowed_to_voice_call"
-                            style="?textTitleColorSettingTheme"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/stps_txt_who_can_voice_call_to_me"
+                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackVoiceCall , default=@string/everybody}"
-                            style="?textSubColorSettingTheme"
                             android:textColor="@color/setting_items_value_color"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal"
@@ -421,30 +418,30 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/who_is_allowed_to_video_call"
-                            style="?textTitleColorSettingTheme"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/stps_txt_who_can_video_call_to_me"
+                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackVideoCall , default=@string/everybody}"
-                            style="?textSubColorSettingTheme"
                             android:textColor="@color/setting_items_value_color"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal"
@@ -460,30 +457,30 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/last_seen"
-                            style="?textTitleColorSettingTheme"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/stps_who_can_see_my_last_seen"
+                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSeeLastSeen , default=@string/everybody}"
-                            style="?textSubColorSettingTheme"
                             android:textColor="@color/setting_items_value_color"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
@@ -493,109 +490,109 @@
                 </LinearLayout>
 
                 <View
+                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    style="?lineColorSettingTheme"
-                    android:layout_marginTop="@dimen/dp10"
-                    android:layout_marginBottom="@dimen/dp10"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10" />
+                    android:layout_marginTop="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:layout_marginBottom="@dimen/dp10" />
 
                 <LinearLayout
+                    style="?backgroundColorSettingTheme_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="?backgroundColorSettingTheme_2"
                     android:orientation="vertical">
 
                     <TextView
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:gravity="center_vertical|start"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="@string/Passcode_Lock"
-                        style="?textTitleColorSettingTheme"
                         android:textSize="@dimen/dp16"
                         android:textStyle="normal"
                         android:visibility="gone" />
 
                     <TextView
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/dp8"
                         android:paddingLeft="@dimen/dp12"
-                        android:paddingRight="@dimen/dp12"
                         android:paddingTop="@dimen/dp12"
+                        android:paddingRight="@dimen/dp12"
+                        android:paddingBottom="@dimen/dp8"
                         android:text="@string/Security"
                         android:textSize="@dimen/largeTextSize"
-                        style="?textTitleColorSettingTheme"
                         android:textStyle="normal" />
 
                     <View
+                        style="?lineColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        style="?lineColorSettingTheme"
                         android:visibility="gone" />
 
                     <TextView
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:gravity="center_vertical|start"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="@string/Two_Step_Verification"
-                        style="?textTitleColorSettingTheme"
                         android:textSize="@dimen/dp16"
                         android:textStyle="normal"
                         android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/stps_passCode"
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
                         android:gravity="center_vertical|start"
                         android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickPassCode}"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="@string/two_step_pass_code"
-                        style="?textTitleColorSettingTheme"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal" />
 
                     <TextView
                         android:id="@+id/stps_twoStepVerification"
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
                         android:gravity="center_vertical|start"
                         android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickTwoStepVerification}"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="@string/two_step_verification"
-                        style="?textTitleColorSettingTheme"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal" />
 
                     <TextView
                         android:id="@+id/stps_activitySessions"
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
                         android:gravity="center_vertical|start"
                         android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickActivitySessions}"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="@string/Active_Sessions"
-                        style="?textTitleColorSettingTheme"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal" />
 
@@ -607,30 +604,29 @@
                 </LinearLayout>
 
                 <View
+                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    style="?lineColorSettingTheme"
-                    android:layout_marginTop="@dimen/dp10"
-                    android:layout_marginBottom="@dimen/dp10"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10" />
+                    android:layout_marginTop="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:layout_marginBottom="@dimen/dp10" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="?backgroundColorSettingTheme"
                     android:orientation="vertical">
 
                     <TextView
+                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/dp16"
                         android:paddingLeft="@dimen/dp12"
-                        android:paddingRight="@dimen/dp12"
                         android:paddingTop="@dimen/dp16"
+                        android:paddingRight="@dimen/dp12"
+                        android:paddingBottom="@dimen/dp16"
                         android:text="@string/Account_Self_destruction"
-                        style="?textTitleColorSettingTheme"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
@@ -642,30 +638,30 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/if_you_are_away_for"
-                            style="?textTitleColorSettingTheme"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/stps_txt_Self_destruction"
+                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSelfDestruction , default=@string/year_1}"
-                            style="?textSubColorSettingTheme"
                             android:textColor="@color/setting_items_value_color"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal"
@@ -674,13 +670,13 @@
                     </LinearLayout>
 
                     <com.uncopt.android.widget.text.justify.JustifiedTextView
+                        style="?textSubColorSettingTheme"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="top"
                         android:padding="@dimen/dp16"
                         android:text="@string/desc_self_destroy"
-                        style="?textSubColorSettingTheme"
                         android:textSize="@dimen/smallTextSize"
                         android:textStyle="normal" />
 

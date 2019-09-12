@@ -221,7 +221,7 @@
 
         <TextView
             android:id="@+id/tv_cardToCard_transferTo"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -234,7 +234,7 @@
 
         <TextView
             android:id="@+id/tv_cardToCard_userName"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/user_name"
@@ -251,7 +251,7 @@
 
             <TextView
                 android:id="@+id/tv_chat_card_amountText"
-                style="?textTitleColorSettingTheme"
+                android:textColor="?iGapTitleTextColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -267,7 +267,6 @@
 
             <EditText
                 android:id="@+id/et_chat_card_cardamount"
-                style="?textTitleColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -291,7 +290,7 @@
 
             <TextView
                 android:id="@+id/et_chat_card_cardNumberTv"
-                style="?textTitleColorSettingTheme"
+                android:textColor="?iGapTitleTextColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -306,7 +305,7 @@
 
             <TextView
                 android:id="@+id/tv_chat_card_bankName"
-                style="?textTitleColorSettingTheme"
+                android:textColor="?iGapTitleTextColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/smallTextSize"
@@ -317,7 +316,6 @@
 
             <com.vicmikhailau.maskededittext.MaskedEditText
                 android:id="@+id/et_chat_card_cardNumber"
-                style="?textTitleColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -342,7 +340,7 @@
 
             <TextView
                 android:id="@+id/tv_chat_card_desc"
-                style="?textTitleColorSettingTheme"
+                android:textColor="?iGapTitleTextColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -357,7 +355,6 @@
 
             <EditText
                 android:id="@+id/et_chat_card_desc"
-                style="?textTitleColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

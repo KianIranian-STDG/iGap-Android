@@ -13,8 +13,7 @@
         android:id="@+id/ntg_fragment_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme"
-        android:clickable="true"
+        style="@style/IGapRootViewStyle"
         android:orientation="vertical"
         tools:context="net.iGap.fragments.FragmentNotification"
         tools:ignore="MissingPrefix">
@@ -45,7 +44,7 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="@string/ntg_notifications"
-                style="?textTitleColorSettingTheme"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -80,7 +79,7 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="@string/st_vibrate"
-                style="?textTitleColorSettingTheme"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -114,7 +113,7 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="@string/ntg_Sound"
-                style="?textTitleColorSettingTheme"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -150,7 +149,7 @@
                 android:paddingRight="@dimen/dp16"
                 android:paddingStart="@dimen/dp16"
                 android:text="@string/st_led_color"
-                style="?textTitleColorSettingTheme"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 

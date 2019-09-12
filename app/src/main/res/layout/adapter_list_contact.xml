@@ -2,15 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/liContactItem"
-    android:background="?android:attr/selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:orientation="vertical"
     android:paddingLeft="@dimen/dp16"
-    android:paddingBottom="@dimen/dp8"
     android:paddingEnd="@dimen/dp16"
-    android:paddingRight="@dimen/dp16">
+    android:paddingRight="@dimen/dp16"
+    android:paddingBottom="@dimen/dp8">
 
 
     <View
@@ -44,24 +44,24 @@
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/title"
-                style="?textTitleColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical|start"
                 android:singleLine="true"
                 android:text="Dominika Faniz"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp16" />
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/subtitle"
                 android:layout_width="wrap_content"
-                style="?textTitleColorSettingTheme"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical|start"
                 android:singleLine="true"
                 android:text="@string/last_seen_recently"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp14" />
 
             <View

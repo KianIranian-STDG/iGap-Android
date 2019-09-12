@@ -6,7 +6,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtTitle"
-        style="?textTitleColorSettingTheme"
+        android:textColor="?iGapTitleTextColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp16"
@@ -44,7 +44,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtTotalReceived"
-        style="?textTitleColorSettingTheme"
+        android:textColor="?iGapTitleTextColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/total_received"
@@ -56,7 +56,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtTotalReceivedByte"
-        style="?textTitleColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="@id/txtTitle"

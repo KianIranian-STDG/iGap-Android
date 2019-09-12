@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
     android:orientation="vertical"
-    android:paddingEnd="@dimen/dp8"
+    android:paddingStart="@dimen/dp8"
     android:paddingLeft="@dimen/dp8"
-    android:paddingRight="@dimen/dp8"
-    style="?backgroundColorSettingTheme"
-    android:paddingStart="@dimen/dp8">
+    android:paddingEnd="@dimen/dp8"
+    android:paddingRight="@dimen/dp8">
 
 
     <View
         android:id="@+id/topLine"
+        style="?lineColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_marginLeft="@dimen/dp8"
         android:layout_marginStart="@dimen/dp8"
-        style="?lineColorSettingTheme" />
+        android:layout_marginLeft="@dimen/dp8" />
 
     <LinearLayout
         android:id="@+id/cig_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layoutDirection="locale"
         android:layout_marginTop="@dimen/dp16"
+        android:layoutDirection="locale"
         android:orientation="horizontal">
 
 
@@ -32,10 +31,10 @@
             android:id="@+id/cig_checkBox_select_user"
             android:layout_width="@dimen/dp24"
             android:layout_height="@dimen/dp24"
-            android:layout_marginRight="@dimen/dp10"
-            android:layout_marginEnd="@dimen/dp10"
-            android:button="@drawable/check_box_background"
             android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp10"
+            android:button="@drawable/check_box_background"
             android:clickable="false"
             android:visibility="visible" />
 
@@ -47,8 +46,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp8"
             android:layout_marginStart="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp8"
             android:orientation="vertical">
 
             <net.iGap.module.CustomTextViewMedium
@@ -60,11 +59,12 @@
                 android:singleLine="true"
                 android:text="Dominika Faniz"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                style="?textTitleColorSettingTheme"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp16" />
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/subtitle"
+                style="?iGapSubtitleTextColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -72,7 +72,6 @@
                 android:singleLine="true"
                 android:text="@string/last_seen_recently"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-                style="?textSubColorSettingTheme"
                 android:textSize="@dimen/dp14" />
         </RelativeLayout>
 

@@ -10,9 +10,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme">
+        android:layout_height="match_parent">
 
         <!-- TODO clean min height-->
 
@@ -20,9 +20,9 @@
             android:id="@+id/fragKuknosSToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:minHeight="48dp"
             android:background="@color/sky_blue"
+            android:minHeight="48dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -33,9 +33,9 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragKuknosSToolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,67 +45,65 @@
                 android:paddingBottom="@dimen/dp20">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosSTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="50dp"
                     android:text="@string/kuknos_send_title"
-                    android:textStyle="bold"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp18"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.7" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosSWalletAddressHolder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:minHeight="48dp"
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosSQRCode"
+                    app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="@+id/fragKuknosSTextHolder"
-                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosSTitle"
-                    app:layout_constraintHorizontal_chainStyle="packed">
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosSTitle">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        style="?textTitleColorSettingTheme"
                         android:id="@+id/fragKuknosSWalletAddressET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="48dp"
                         android:ems="10"
-                        android:hint="@string/kuknos_send_walletAddress"
-                        android:text="@={viewmodel.walletID}"
-                        android:textSize="18dp"
                         android:gravity="start|center"
+                        android:hint="@string/kuknos_send_walletAddress"
+                        android:imeOptions="actionNext"
+                        android:inputType="textMultiLine"
+                        android:maxLines="4"
+                        android:minHeight="48dp"
+                        android:minLines="1"
                         android:scrollbars="vertical"
                         android:scrollHorizontally="false"
-                        android:minLines="1"
-                        android:maxLines="4"
-                        android:inputType="textMultiLine"
-                        android:imeOptions="actionNext" />
+                        android:text="@={viewmodel.walletID}"
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="18dp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/myIconTextViewStyleGray"
                     android:id="@+id/fragKuknosSQRCode"
+                    style="@style/myIconTextViewStyleGray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/scan_qr_code_icon"
-                    android:gravity="center"
-                    android:textSize="30dp"
-                    android:onClick="@{()->viewmodel.QrcodeScan()}"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    app:layout_constraintTop_toTopOf="@+id/fragKuknosSWalletAddressHolder"
+                    android:gravity="center"
+                    android:onClick="@{()->viewmodel.QrcodeScan()}"
+                    android:text="@string/scan_qr_code_icon"
+                    android:textSize="30dp"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosSWalletAddressHolder"
                     app:layout_constraintEnd_toEndOf="@+id/fragKuknosSTextHolder"
-                    app:layout_constraintStart_toEndOf="@+id/fragKuknosSWalletAddressHolder" />
+                    app:layout_constraintStart_toEndOf="@+id/fragKuknosSWalletAddressHolder"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosSWalletAddressHolder" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosSTextHolder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -117,79 +115,78 @@
                     app:layout_constraintWidth_percent="0.7">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        style="?textTitleColorSettingTheme"
                         android:id="@+id/fragKuknosSTextET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:gravity="start|center"
+                        android:hint="@string/kuknos_send_text"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
                         android:lines="1"
                         android:maxLines="1"
                         android:minHeight="48dp"
-                        android:ems="10"
-                        android:enabled="false"
-                        android:hint="@string/kuknos_send_text"
                         android:text="@={viewmodel.text}"
-                        android:textSize="@dimen/dp18"
-                        android:gravity="start|center"
-                        android:inputType="text"
-                        android:imeOptions="actionNext" />
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/dp18" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosSAmountHolder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:minHeight="48dp"
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosSCurrency"
+                    app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="@+id/fragKuknosSTextHolder"
-                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosSTextHolder"
-                    app:layout_constraintHorizontal_chainStyle="packed">
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosSTextHolder">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        style="?textTitleColorSettingTheme"
                         android:id="@+id/fragKuknosSAmountET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="0123456789."
+                        android:ems="10"
+                        android:enabled="false"
+                        android:gravity="start|center"
+                        android:hint="@string/kuknos_send_amount"
+                        android:imeOptions="actionDone"
+                        android:inputType="numberDecimal"
                         android:lines="1"
                         android:maxLines="1"
                         android:minHeight="48dp"
-                        android:ems="10"
-                        android:enabled="false"
-                        android:hint="@string/kuknos_send_amount"
                         android:text="@={viewmodel.amount}"
-                        android:textSize="@dimen/dp18"
-                        android:gravity="start|center"
-                        android:inputType="numberDecimal"
-                        android:digits="0123456789."
-                        android:imeOptions="actionDone" />
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/dp18" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosSCurrency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@={viewmodel.currency}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:textStyle="bold"
-                    app:layout_constraintTop_toTopOf="@+id/fragKuknosSAmountHolder"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosSAmountHolder"
                     app:layout_constraintEnd_toEndOf="@+id/fragKuknosSTextHolder"
                     app:layout_constraintStart_toEndOf="@+id/fragKuknosSAmountHolder"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosSAmountHolder"
                     app:layout_constraintVertical_bias="0.7" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="?iGapButton"
                     android:id="@+id/fragKuknosSSubmit"
+                    style="?iGapButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:minHeight="58dp"
+                    android:onClick="@{()->viewmodel.sendCredit()}"
                     android:text="@string/kuknos_send_sendBtn"
                     android:textSize="@dimen/dp16"
-                    android:onClick="@{()->viewmodel.sendCredit()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosSAmountHolder"
@@ -201,12 +198,12 @@
                     android:layout_height="0dp"
                     android:elevation="2dp"
                     android:visibility="visible"
-                    app:layout_constraintTop_toTopOf="@+id/fragKuknosSSubmit"
-                    app:layout_constraintStart_toStartOf="@+id/fragKuknosSSubmit"
-                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosSSubmit"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosSSubmit"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosSSubmit"
+                    app:layout_constraintHeight_percent="0.08"
                     app:layout_constraintHorizontal_bias="0.05"
-                    app:layout_constraintHeight_percent="0.08" />
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosSSubmit"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosSSubmit" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

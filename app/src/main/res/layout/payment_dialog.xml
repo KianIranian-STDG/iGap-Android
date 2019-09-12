@@ -96,7 +96,6 @@
 
                             <net.iGap.module.CustomTextViewMedium
                                 android:id="@+id/amountCard"
-                                style="?textTitleColorSettingTheme"
                                 fontPath="fonts/IRANSansMobile.ttf"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"

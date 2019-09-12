@@ -5,7 +5,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fragKuknosRKSContainer"
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -25,7 +25,6 @@
         </LinearLayout>
 
         <ScrollView
-            style="?backgroundColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -81,7 +80,6 @@
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/fragKuknosRKSkeysET"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
@@ -98,6 +96,7 @@
                     android:scrollbars="vertical"
                     android:scrollHorizontally="false"
                     android:text="@={viewmodel.mnemonic}"
+                    android:textColor="?rootBackgroundColor"
                     android:textSize="18dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -106,11 +105,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fragKuknosRKSMessage"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="50dp"
                     android:text="@string/kuknos_RecoverySK_Title"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp18"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -120,12 +119,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fragKuknosRKSDescription"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:justificationMode="inter_word"
                     android:text="@string/kuknos_RecoverySK_Message"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

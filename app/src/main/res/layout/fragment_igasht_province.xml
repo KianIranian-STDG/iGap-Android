@@ -10,12 +10,9 @@
     </data>
 
     <LinearLayout
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:layoutDirection="locale"
         android:orientation="vertical">
 
         <LinearLayout
@@ -64,7 +61,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/chooseProvinceTitle"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp8"

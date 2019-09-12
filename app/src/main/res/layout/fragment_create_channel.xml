@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.FragmentCreateChannelViewModel" />
@@ -10,12 +11,9 @@
 
     <RelativeLayout
         android:id="@+id/fch_root"
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:layoutDirection="locale"
         android:orientation="vertical">
 
         <LinearLayout
@@ -50,11 +48,11 @@
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/publicChannel"
-                        style="?textTitleColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="start|center"
                         android:text="@string/public_channel"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15" />
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -68,12 +66,12 @@
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/privateChannel"
-                        style="?textTitleColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp8"
                         android:gravity="start|center"
                         android:text="@string/private_channel"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15" />
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -97,11 +95,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/permanentLinkTitle"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:text="@string/permanent_link"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp15"
                     app:layout_constraintTop_toBottomOf="@id/divider" />
 
@@ -111,14 +109,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onClickTxtInputLink()}"
+                    app:errorText="@{viewModel.channelLinkErrorMessage}"
                     app:errorTextAppearance="@style/error_appearance"
                     app:hintTextAppearance="@style/Hint_appearance"
-                    app:errorText="@{viewModel.channelLinkErrorMessage}"
                     app:layout_constraintTop_toBottomOf="@id/permanentLinkTitle">
 
                     <net.iGap.module.MEditText
                         android:id="@+id/fch_edt_link"
-                        style="?textTitleColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -128,6 +125,7 @@
                         android:layoutDirection="ltr"
                         android:singleLine="true"
                         android:text="@={viewModel.channelLink}"
+                        android:textColor="?iGapTitleTextColor"
                         android:textDirection="ltr"
                         android:textSize="@dimen/dp15" />
 

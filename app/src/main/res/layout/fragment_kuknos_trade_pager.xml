@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layoutDirection="ltr"
-        style="?backgroundColorSettingTheme">
+        android:background="?rootBackgroundColor">
 
         <LinearLayout
             android:id="@+id/kuknos_trade_pager_Toolbar"
@@ -23,10 +23,10 @@
             android:background="@color/sky_blue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <com.google.android.material.tabs.TabLayout
-            style="?backgroundColorSettingTheme"
+            android:background="?rootBackgroundColor"
             android:id="@+id/kuknos_trade_pager_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

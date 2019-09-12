@@ -36,7 +36,7 @@
             app:umanoShadowHeight="4dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                style="?backgroundColorSettingTheme"
+                style="@style/IGapRootViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -72,7 +72,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/ml_txt_music_name"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:singleLine="true"

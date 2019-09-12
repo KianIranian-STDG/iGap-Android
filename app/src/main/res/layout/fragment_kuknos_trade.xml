@@ -12,18 +12,18 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fragKuknosPContainer"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme">
+        android:layout_height="match_parent">
 
         <!-- TODO clean min height-->
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,17 +33,17 @@
                 android:paddingBottom="@dimen/dp20">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosPBalance"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="@string/kuknos_panelStr_balance"
                     android:gravity="center|start"
+                    android:text="@string/kuknos_panelStr_balance"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.9" />
 
                 <View
@@ -74,12 +74,12 @@
                     android:layout_height="0dp"
                     android:elevation="2dp"
                     android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPBalanceCircle"
                     app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintWidth_percent="0.15"
-                    app:layout_constraintStart_toStartOf="@+id/fragKuknosPBalanceCircle"
                     app:layout_constraintEnd_toEndOf="@+id/fragKuknosPBalanceCircle"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosPBalanceCircle"
                     app:layout_constraintTop_toTopOf="@+id/fragKuknosPBalanceCircle"
-                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPBalanceCircle" />
+                    app:layout_constraintWidth_percent="0.15" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fragKuknosPCredit"
@@ -90,8 +90,8 @@
                     android:layout_marginRight="@dimen/dp8"
                     android:gravity="center"
                     android:text="@{viewmodel.balance}"
-                    android:textStyle="bold"
                     android:textSize="@dimen/dp28"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/fragKuknosPCurrency"
                     app:layout_constraintLeft_toLeftOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintRight_toRightOf="@id/fragKuknosPBalanceCircle"
@@ -99,19 +99,18 @@
                     app:layout_constraintVertical_chainStyle="packed" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosPCurrency"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@{viewmodel.currency}"
+                    android:textColor="?iGapTitleTextColor"
                     app:layout_constraintBottom_toBottomOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintLeft_toLeftOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintRight_toRightOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintTop_toBottomOf="@id/fragKuknosPCredit" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosTranTAmountHolder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -120,44 +119,43 @@
                     android:layout_marginRight="@dimen/dp4"
                     android:minHeight="48dp"
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosTranTAmountSpinner"
+                    app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosPBalanceCircle"
-                    app:layout_constraintWidth_percent="0.5"
-                    app:layout_constraintHorizontal_chainStyle="packed">
+                    app:layout_constraintWidth_percent="0.5">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        style="?textTitleColorSettingTheme"
                         android:id="@+id/fragKuknosTranTAmount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="0123456789."
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="@string/kuknos_trade_origin"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
                         android:lines="1"
                         android:maxLines="1"
                         android:minHeight="48dp"
-                        android:ems="10"
-                        android:hint="@string/kuknos_trade_origin"
                         android:text="@={viewmodel.originAmount}"
-                        android:textSize="@dimen/dp18"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-                        android:imeOptions="actionNext"
-                        android:digits="0123456789." />
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/dp18" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/fragKuknosTranTAmountSpinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:minHeight="38dp"
                     android:background="@{G.isDarkTheme ? @drawable/kuknos_spinner_dark_style : @drawable/kuknos_spinner_style}"
-                    app:layout_constraintTop_toTopOf="@+id/fragKuknosTranTAmountHolder"
-                    app:layout_constraintStart_toEndOf="@+id/fragKuknosTranTAmountHolder"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:minHeight="38dp"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosTranTAmountHolder"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/fragKuknosTranTAmountHolder"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosTranTAmountHolder"
                     app:layout_constraintWidth_percent="0.3" />
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosTranExchangeHolder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -166,51 +164,51 @@
                     android:layout_marginRight="@dimen/dp4"
                     android:minHeight="48dp"
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosTranExchangeSpinner"
+                    app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosTranTAmountHolder"
-                    app:layout_constraintWidth_percent="0.5"
-                    app:layout_constraintHorizontal_chainStyle="packed">
+                    app:layout_constraintWidth_percent="0.5">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        style="?textTitleColorSettingTheme"
                         android:id="@+id/fragKuknosTranExchange"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="0123456789."
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="@string/kuknos_trade_dest"
+                        android:imeOptions="actionDone"
+                        android:inputType="numberDecimal"
                         android:lines="1"
                         android:maxLines="1"
                         android:minHeight="48dp"
-                        android:ems="10"
-                        android:hint="@string/kuknos_trade_dest"
                         android:text="@={viewmodel.destAmount}"
-                        android:textSize="@dimen/dp18"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-                        android:imeOptions="actionDone"
-                        android:digits="0123456789." />
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/dp18" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/fragKuknosTranExchangeSpinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:minHeight="38dp"
                     android:background="@{G.isDarkTheme ? @drawable/kuknos_spinner_dark_style : @drawable/kuknos_spinner_style}"
-                    app:layout_constraintTop_toTopOf="@+id/fragKuknosTranExchangeHolder"
-                    app:layout_constraintStart_toEndOf="@+id/fragKuknosTranExchangeHolder"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:minHeight="38dp"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosTranExchangeHolder"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/fragKuknosTranExchangeHolder"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosTranExchangeHolder"
                     app:layout_constraintWidth_percent="0.3" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="?iGapButton"
                     android:id="@+id/fragKuknosTranSubmit"
+                    style="?iGapButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:minHeight="58dp"
+                    android:onClick="@{()->viewmodel.exchangeAction()}"
                     android:text="@string/kuknos_trade_btn"
                     android:textSize="@dimen/dp16"
-                    android:onClick="@{()->viewmodel.exchangeAction()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosTranExchangeHolder"
@@ -222,12 +220,12 @@
                     android:layout_height="0dp"
                     android:elevation="2dp"
                     android:visibility="visible"
-                    app:layout_constraintTop_toTopOf="@+id/fragKuknosTranSubmit"
-                    app:layout_constraintStart_toStartOf="@+id/fragKuknosTranSubmit"
-                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosTranSubmit"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosTranSubmit"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosTranSubmit"
+                    app:layout_constraintHeight_percent="0.06"
                     app:layout_constraintHorizontal_bias="0.05"
-                    app:layout_constraintHeight_percent="0.06" />
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosTranSubmit"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosTranSubmit" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

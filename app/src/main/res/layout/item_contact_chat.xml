@@ -39,7 +39,6 @@
 
     <net.iGap.module.EmojiTextViewE
         android:id="@+id/tv_itemContactChat_userName"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"

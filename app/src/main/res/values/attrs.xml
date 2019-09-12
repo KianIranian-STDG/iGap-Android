@@ -42,19 +42,6 @@
         <attr name="menu_config" format="boolean" />
     </declare-styleable>
 
-
-    <declare-styleable name="SelectableRoundedImageView">
-        <attr name="sriv_left_top_corner_radius" format="dimension" />
-        <attr name="sriv_right_top_corner_radius" format="dimension" />
-        <attr name="sriv_left_bottom_corner_radius" format="dimension" />
-        <attr name="sriv_right_bottom_corner_radius" format="dimension" />
-        <attr name="sriv_border_width" format="dimension" />
-        <attr name="sriv_border_color" format="color" />
-        <attr name="sriv_oval" format="boolean" />
-        <attr name="android:scaleType" />
-    </declare-styleable>
-
-
     <!--ripple library-->
     <declare-styleable name="RippleView">
         <attr name="rv_alpha" format="integer" />
@@ -74,29 +61,6 @@
 
     </declare-styleable>
 
-    <!--NavigationTabStrip library-->
-    <declare-styleable name="NavigationTabStrip">
-        <attr name="nts_color" format="color" />
-        <attr name="nts_size" format="dimension" />
-        <attr name="nts_weight" format="dimension" />
-        <attr name="nts_factor" format="float" />
-        <attr name="nts_titles" format="reference" />
-        <attr name="nts_type" format="enum">
-            <enum name="line" value="0" />
-            <enum name="point" value="1" />
-        </attr>
-        <attr name="nts_gravity" format="enum">
-            <enum name="bottom" value="0" />
-            <enum name="top" value="1" />
-        </attr>
-        <attr name="nts_typeface" format="string" />
-        <attr name="nts_corners_radius" format="dimension" />
-        <attr name="nts_animation_duration" format="integer" />
-        <attr name="nts_inactive_color" format="color" />
-        <attr name="nts_active_color" format="color" />
-    </declare-styleable>
-
-
     <!--=======================custom theme=====================-->
 
     <attr name="pageBackgroundTheme" format="reference" />
@@ -114,10 +78,7 @@
     <attr name="backgroundColorMenuTheme" format="reference" />
 
     <!--setting-->
-
-    <attr name="backgroundColorSettingTheme" format="reference" />
     <attr name="backgroundColorSettingTheme_2" format="reference" />
-    <attr name="textTitleColorSettingTheme" format="reference" />
     <attr name="textSubColorSettingTheme" format="reference" />
     <attr name="lineColorSettingTheme" format="reference" />
     <attr name="hintColorSettingTheme" format="reference" />
@@ -131,6 +92,14 @@
     <attr name="fabButtoniGap" format="reference" />
     <attr name="backgroundPassCode" format="reference" />
 
+    <!--=======================custom new theme=====================-->
+
+    <attr name="rootBackgroundColor" format="reference" />
+    <attr name="iGapTitleTextColor" format="reference" />
+    <attr name="iGapSubtitleTextColor" format="reference" />
+
+    <!--=======================custom theme=====================-->
+
 
     <!--bottom navigation-->
     <declare-styleable name="BottomNavigation">
@@ -143,8 +112,6 @@
         <attr name="unselected_icon" format="reference" />
         <attr name="dark_selected_icon" format="reference" />
         <attr name="dark_unselected_icon" format="reference" />
-
-
     </declare-styleable>
 
     <declare-styleable name="PlaqueView">
@@ -175,15 +142,15 @@
     </declare-styleable>
 
     <declare-styleable name="AudioWave">
-        <attr format="color" name="waveColor" />
-        <attr format="dimension" name="chunkWidth" />
-        <attr format="dimension" name="chunkHeight" />
-        <attr format="dimension" name="minChunkHeight" />
-        <attr format="dimension" name="chunkRadius" />
-        <attr format="dimension" name="chunkSpacing" />
-        <attr format="float" name="progress" />
-        <attr format="boolean" name="animateExpansion" />
-        <attr format="boolean" name="touchable" />
+        <attr name="waveColor" format="color" />
+        <attr name="chunkWidth" format="dimension" />
+        <attr name="chunkHeight" format="dimension" />
+        <attr name="minChunkHeight" format="dimension" />
+        <attr name="chunkRadius" format="dimension" />
+        <attr name="chunkSpacing" format="dimension" />
+        <attr name="progress" format="float" />
+        <attr name="animateExpansion" format="boolean" />
+        <attr name="touchable" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="BannerSlider">

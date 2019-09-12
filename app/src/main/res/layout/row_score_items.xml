@@ -9,7 +9,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/row_score_txt_title"
-        style="?textTitleColorSettingTheme"
+        android:textColor="?iGapTitleTextColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="8dp"
@@ -21,7 +21,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/row_score_txt_score_count"
-        style="?textTitleColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"

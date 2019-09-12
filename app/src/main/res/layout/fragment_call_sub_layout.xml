@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="?backgroundColorSettingTheme"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:clickable="true">
+    android:layout_height="wrap_content">
 
     <CheckBox
         android:id="@+id/fcsl_check_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_gravity="center"
-        android:button="@drawable/check_box_background"
         android:layout_marginLeft="@dimen/dp10"
-        android:layout_marginRight="@dimen/dp4" />
+        android:layout_marginRight="@dimen/dp4"
+        android:button="@drawable/check_box_background"
+        android:visibility="gone" />
 
     <net.iGap.module.CircleImageView
         android:id="@+id/fcsl_imv_picture"
@@ -44,13 +43,13 @@
 
                 <net.iGap.module.EmojiTextViewE
                     android:id="@+id/fcsl_txt_name"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:paddingBottom="1dp"
                     android:singleLine="true"
                     android:text="Name"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp15"
                     android:textStyle="bold" />
 

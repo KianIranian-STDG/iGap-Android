@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".fragments.cPay.FragmentCPayHistory">
@@ -85,13 +85,13 @@
             android:id="@+id/fch_txt_noItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/standardTextSize"
-            style="?textTitleColorSettingTheme"
             android:text="@string/no_item"
-            app:layout_constraintTop_toTopOf="@id/fch_rv_history"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="@id/fch_rv_history"
+            app:layout_constraintEnd_toEndOf="@id/fch_rv_history"
             app:layout_constraintStart_toStartOf="@id/fch_rv_history"
-            app:layout_constraintEnd_toEndOf="@id/fch_rv_history" />
+            app:layout_constraintTop_toTopOf="@id/fch_rv_history" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

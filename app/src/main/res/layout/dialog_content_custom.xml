@@ -23,23 +23,20 @@
 
         <TextView
             android:id="@+id/txtDialogTitle"
-            style="?textTitleColorSettingTheme"
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dp24"
             android:paddingTop="@dimen/dp8"
             android:paddingRight="@dimen/dp24"
             android:text="@string/mute_notification"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp20" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-
-        >
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/txtDialogContent"

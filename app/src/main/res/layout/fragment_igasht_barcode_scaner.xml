@@ -10,12 +10,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:layoutDirection="locale">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -43,10 +40,10 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/paymentStatus"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/igasht_success_payment"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/barCodeImage"
@@ -69,13 +66,13 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/paymentCode"
-            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_igasht_strokeyellow"
             android:gravity="center"
             android:padding="@dimen/dp16"
             android:text="@{@string/Your_purchase_code(viewModel.voucherNumber)}"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/v"

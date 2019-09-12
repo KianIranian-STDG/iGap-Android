@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="BaseTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/green</item>
         <item name="colorPrimaryDark">@color/greenStatus</item>
@@ -279,11 +279,6 @@
         <item name="android:background">@color/background_setting_dark_2</item>
     </style>
 
-    <style name="text_title_style_setting_dark">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textColorHint">@color/gray</item>
-    </style>
-
     <style name="text_sub_style_setting_dark">
         <item name="android:textColor">@color/gray_9d</item>
     </style>
@@ -401,16 +396,9 @@
 
 
     <!--setting-->
-    <style name="background_setting_light">
-        <item name="android:background">@color/white</item>
-    </style>
 
     <style name="background_2_setting_light">
         <item name="android:background">@color/white</item>
-    </style>
-
-    <style name="text_title_style_setting_light">
-        <item name="android:textColor">@color/black_register</item>
     </style>
 
     <style name="text_sub_style_setting_light">
@@ -470,9 +458,6 @@
 
 
     <!--==================================Blue grey complete==================================-->
-    <style name="background_settingBlueGreyComplete">
-        <item name="android:background">#CFD8DC</item>
-    </style>
 
     <style name="background_2_setting_BlueGreyComplete">
         <item name="android:background">@color/white</item>
@@ -528,9 +513,6 @@
 
 
     <!--==================================indigo complete==================================-->
-    <style name="background_settingindigoComplete">
-        <item name="android:background">#C5CAE9</item>
-    </style>
 
     <style name="background_2_setting_indigoComplete">
         <item name="android:background">#C5CAE9</item>
@@ -550,10 +532,6 @@
 
     <style name="icon_style_menu_indigoComplete">
         <item name="android:textColor">#1a237e</item>
-    </style>
-
-    <style name="text_title_style_setting_indigoComplete">
-        <item name="android:textColor">#0d0d0d</item>
     </style>
 
     <style name="text_sub_style_setting_indigoComplete">
@@ -582,7 +560,7 @@
 
     <!--==================================Brown complete==================================-->
     <style name="background_settingBrownComplete">
-        <item name="android:background">@color/white</item> <!--old value = #D7CCC8-->
+        <item name="android:background"></item> <!--old value = #D7CCC8-->
     </style>
 
     <style name="background_2_setting_BrownComplete">
@@ -603,10 +581,6 @@
 
     <style name="icon_style_menu_BrownComplete">
         <item name="android:textColor">#5D4037</item>
-    </style>
-
-    <style name="text_title_style_setting_BrownComplete">
-        <item name="android:textColor">#0d0d0d</item>
     </style>
 
     <style name="text_sub_style_setting_BrownComplete">
@@ -633,9 +607,6 @@
     </style>
 
     <!--==================================Teal complete==================================-->
-    <style name="background_settingTealComplete">
-        <item name="android:background">#B2DFDB</item>
-    </style>
 
     <style name="background_2_setting_TealComplete">
         <item name="android:background">#B2DFDB</item>
@@ -655,10 +626,6 @@
 
     <style name="icon_style_menu_TealComplete">
         <item name="android:textColor">#004d40</item>
-    </style>
-
-    <style name="text_title_style_setting_TealComplete">
-        <item name="android:textColor">#0d0d0d</item>
     </style>
 
     <style name="text_sub_style_setting_TealComplete">
@@ -686,9 +653,6 @@
 
 
     <!--==================================Grey complete==================================-->
-    <style name="background_settingGreyComplete">
-        <item name="android:background">#f5f5f5</item>
-    </style>
 
     <style name="background_2_setting_GreyComplete">
         <item name="android:background">#f5f5f5</item>
@@ -708,10 +672,6 @@
 
     <style name="icon_style_menu_GreyComplete">
         <item name="android:textColor">#616161</item>
-    </style>
-
-    <style name="text_title_style_setting_GreyComplete">
-        <item name="android:textColor">#0d0d0d</item>
     </style>
 
     <style name="text_sub_style_setting_GreyComplete">
@@ -783,10 +743,9 @@
         <item name="android:windowExitAnimation">@anim/top_sheet_slide_out</item>
     </style>
 
-    <style name="BaseIGapButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton">
+    <style name="BaseIGapButtonStyle" parent="@style/Widget.MaterialComponents.Button">
         <item name="android:textColor">@color/buttonTextColor</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:textAppearance">@android:style/TextAppearance</item>
         <item name="cornerRadius">@dimen/dp18</item>
         <item name="android:textSize">@dimen/dp16</item>
     </style>
@@ -832,7 +791,7 @@
     </style>
 
     <style name="myIconTextViewStyle" parent="baseFontIcon">
-        <item name="android:theme">?textTitleColorSettingTheme</item>
+        <item name="android:textColor">?iGapTitleTextColor</item>
     </style>
 
     <style name="greenIconTextViewStyle" parent="baseFontIcon">
@@ -857,6 +816,13 @@
     <style name="chatAttachmentAnimation" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/translate_enter_down</item>
         <item name="android:windowExitAnimation">@anim/translate_exit_down</item>
+    </style>
+
+    <style name="IGapRootViewStyle">
+        <item name="android:background">?rootBackgroundColor</item>
+        <item name="android:layoutDirection">locale</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
 </resources>

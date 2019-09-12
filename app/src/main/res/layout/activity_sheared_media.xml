@@ -3,11 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/asm_ll_parent"
-    style="?backgroundSubChatTheme"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
-    android:layoutDirection="locale"
     tools:ignore="MissingPrefix">
 
     <LinearLayout
@@ -27,10 +25,9 @@
             android:id="@+id/asm_ll_appbar_selelected"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
-            style="?backgroundColorSettingTheme"
-            android:visibility="gone"
             android:layoutDirection="ltr"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <net.iGap.libs.rippleeffect.RippleView
                 android:id="@+id/asm_ripple_close_layout"
@@ -56,14 +53,13 @@
 
             <TextView
                 android:id="@+id/asm_txt_number_of_selected"
-                style="?textTitleColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="left|center"
                 android:padding="@dimen/dp8"
                 android:singleLine="true"
-                android:text="0"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize" />
 
             <net.iGap.module.MaterialDesignTextView
@@ -113,9 +109,9 @@
             style="?backgroundSubChatTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp36"
             android:paddingTop="@dimen/dp4"
             android:paddingBottom="@dimen/dp4"
-            android:minHeight="@dimen/dp36"
             android:scrollbars="none">
 
             <LinearLayout

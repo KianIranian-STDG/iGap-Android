@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/Toast_time_wait"
-        style="?textTitleColorSettingTheme"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/dp18" />
 
     <net.iGap.module.HeaderTextView

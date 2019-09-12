@@ -11,12 +11,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootFragmentLanguage"
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:layoutDirection="locale">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/fl_layout_toolbar"
@@ -42,7 +39,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtLanguageFarsi"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
@@ -79,7 +76,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtLanguageEn"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
@@ -116,7 +113,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtLanguageAr"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"

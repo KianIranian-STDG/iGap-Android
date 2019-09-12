@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        style="?backgroundColorSettingTheme">
+        android:background="?rootBackgroundColor">
 
         <net.iGap.module.CustomTextViewMedium
             android:id="@+id/titleTxt"

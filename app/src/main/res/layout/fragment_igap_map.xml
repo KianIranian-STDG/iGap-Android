@@ -6,8 +6,7 @@
     android:id="@+id/mapContainer_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="?backgroundColorSettingTheme"
-    android:clickable="true"
+    style="@style/IGapRootViewStyle"
     android:fitsSystemWindows="false"
     android:orientation="vertical"
     tools:ignore="MissingPrefix">
@@ -15,7 +14,6 @@
 
     <RelativeLayout
         android:id="@+id/mapContainer"
-        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -125,7 +123,6 @@
 
                         <LinearLayout
                             android:id="@+id/vgMessageGps"
-                            style="?backgroundColorSettingTheme"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"

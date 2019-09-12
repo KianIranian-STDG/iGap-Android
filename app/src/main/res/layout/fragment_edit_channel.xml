@@ -10,10 +10,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layoutDirection="locale">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -160,12 +159,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/channelTypeTitle"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:padding="8dp"
                     android:text="@string/channel_type"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -187,13 +186,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/signedMessageTxt"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/main_font"
                     android:onClick="@{()-> viewModel.onSignMessageClick()}"
                     android:padding="8dp"
                     android:text="@string/sign_message_title"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showLayoutReactStatus}"
                     app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
@@ -216,13 +215,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/rateMessageTxt"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:onClick="@{()-> viewModel.onReactionMessageClick()}"
                     android:padding="8dp"
                     android:text="@string/show_channel_vote"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.showLayoutReactStatus}"
                     app:layout_constraintLeft_toLeftOf="@id/channelTypeTitle"
@@ -245,13 +244,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/administrators"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:onClick="@{()->viewModel.onAdministratorClick()}"
                     android:padding="8dp"
                     android:text="@string/administrators_title"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/smallTextSize"
                     app:layout_constraintEnd_toStartOf="@id/administratorsCount"
                     app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
@@ -274,13 +273,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/moderator"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
                     android:onClick="@{()->viewModel.onModeratorClick()}"
                     android:padding="8dp"
                     android:text="@string/moderators_title"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/smallTextSize"
                     app:layout_constraintEnd_toStartOf="@id/moderatorsCount"
                     app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
@@ -303,13 +302,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/members"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
                     android:onClick="@{()->viewModel.onMemberClick()}"
                     android:padding="8dp"
                     android:text="@string/subscribers_title"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/smallTextSize"
                     app:layout_constraintEnd_toStartOf="@id/membersCount"
                     app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
@@ -333,7 +332,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/deleteChannel"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"

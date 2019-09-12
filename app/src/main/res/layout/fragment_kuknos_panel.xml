@@ -12,9 +12,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fragKuknosPContainer"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme">
+        android:layout_height="match_parent">
 
         <!-- TODO clean min height-->
 
@@ -22,9 +22,9 @@
             android:id="@+id/fragKuknosPToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:minHeight="48dp"
             android:background="@color/sky_blue"
+            android:minHeight="48dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -34,9 +34,9 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragKuknosPToolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,25 +50,25 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:minHeight="38dp"
                     android:background="@{G.isDarkTheme ? @drawable/kuknos_spinner_dark_style : @drawable/kuknos_spinner_style}"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:minHeight="38dp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.9" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosPBalance"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="@string/kuknos_panelStr_balance"
                     android:gravity="center|start"
+                    android:text="@string/kuknos_panelStr_balance"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
-                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosPWalletSpinner"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosPWalletSpinner"
                     app:layout_constraintWidth_percent="0.9" />
 
                 <View
@@ -99,24 +99,24 @@
                     android:layout_height="0dp"
                     android:elevation="2dp"
                     android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPBalanceCircle"
                     app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintWidth_percent="0.15"
-                    app:layout_constraintStart_toStartOf="@+id/fragKuknosPBalanceCircle"
                     app:layout_constraintEnd_toEndOf="@+id/fragKuknosPBalanceCircle"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosPBalanceCircle"
                     app:layout_constraintTop_toTopOf="@+id/fragKuknosPBalanceCircle"
-                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPBalanceCircle" />
+                    app:layout_constraintWidth_percent="0.15" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fragKuknosPCredit"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp8"
                     android:layout_marginRight="@dimen/dp8"
                     android:gravity="center"
                     android:text="@{viewmodel.balance}"
-                    android:textStyle="bold"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp28"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@id/fragKuknosPCurrency"
                     app:layout_constraintLeft_toLeftOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintRight_toRightOf="@id/fragKuknosPBalanceCircle"
@@ -124,93 +124,92 @@
                     app:layout_constraintVertical_chainStyle="packed" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosPCurrency"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@{viewmodel.currency}"
+                    android:textColor="?iGapTitleTextColor"
                     app:layout_constraintBottom_toBottomOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintLeft_toLeftOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintRight_toRightOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintTop_toBottomOf="@id/fragKuknosPCredit" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosPError"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="@string/kuknos_panelStr_firstUser"
                     android:gravity="center"
+                    android:text="@string/kuknos_panelStr_firstUser"
+                    android:textColor="@color/red"
                     android:textSize="@dimen/dp16"
                     android:textStyle="bold"
-                    android:textColor="@color/red"
                     android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosPBalanceCircle"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosPBalanceCircle"
                     app:layout_constraintWidth_percent="0.9" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/fragKuknosPBalanceHolder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:constraint_referenced_ids="fragKuknosPCurrency,fragKuknosPCredit,fragKuknosPBalanceCircle"
-                    android:onClick="@{()->viewmodel.goToDetail()}" />
+                    android:onClick="@{()->viewmodel.goToDetail()}"
+                    app:constraint_referenced_ids="fragKuknosPCurrency,fragKuknosPCredit,fragKuknosPBalanceCircle" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="?iGapButton"
                     android:id="@+id/fragKuknosPRecieve"
+                    style="?iGapButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginLeft="@dimen/dp8"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:layout_marginStart="@dimen/dp8"
-                    android:layout_marginLeft="@dimen/dp8"
                     android:minHeight="48dp"
+                    android:onClick="@{()->viewmodel.receiveW()}"
                     android:text="@string/kuknos_panelStr_recieve"
                     android:textSize="@dimen/dp16"
-                    android:onClick="@{()->viewmodel.receiveW()}"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosPSend"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosPError"
-                    app:layout_constraintWidth_percent="0.3"
-                    app:layout_constraintHorizontal_chainStyle="packed" />
-
-                <com.google.android.material.button.MaterialButton
-                    style="?iGapButton"
-                    android:id="@+id/fragKuknosPSend"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:minHeight="48dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:text="@string/kuknos_panelStr_send"
-                    android:textSize="@dimen/dp16"
-                    android:onClick="@{()->viewmodel.sendW()}"
-                    app:layout_constraintEnd_toStartOf="@+id/fragKuknosPHistory"
-                    app:layout_constraintStart_toEndOf="@+id/fragKuknosPRecieve"
-                    app:layout_constraintTop_toTopOf="@+id/fragKuknosPRecieve"
-                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPRecieve"
                     app:layout_constraintWidth_percent="0.3" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/fragKuknosPSend"
                     style="?iGapButton"
-                    android:id="@+id/fragKuknosPHistory"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:minHeight="48dp"
+                    android:onClick="@{()->viewmodel.sendW()}"
+                    android:text="@string/kuknos_panelStr_send"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPRecieve"
+                    app:layout_constraintEnd_toStartOf="@+id/fragKuknosPHistory"
+                    app:layout_constraintStart_toEndOf="@+id/fragKuknosPRecieve"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosPRecieve"
+                    app:layout_constraintWidth_percent="0.3" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/fragKuknosPHistory"
+                    style="?iGapButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dp8"
                     android:layout_marginRight="@dimen/dp8"
+                    android:minHeight="48dp"
+                    android:onClick="@{()->viewmodel.historyW()}"
                     android:text="@string/kuknos_panelStr_history"
                     android:textSize="16dp"
-                    android:onClick="@{()->viewmodel.historyW()}"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPRecieve"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/fragKuknosPSend"
                     app:layout_constraintTop_toTopOf="@+id/fragKuknosPRecieve"
-                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPRecieve"
                     app:layout_constraintWidth_percent="0.3" />
 
 
@@ -218,20 +217,20 @@
                     android:id="@+id/fragKuknosPSetting"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="25dp"
                     android:layout_marginStart="@dimen/dp10"
                     android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginTop="25dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:background="@drawable/kuknos_bottom_btn_style"
                     android:onClick="@{()->viewmodel.goToSetting()}"
-                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosPRecieve"
+                    android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosPBuyPMN"
-                    app:layout_constraintWidth_percent="0.2"
-                    app:layout_constraintHorizontal_chainStyle="packed">
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosPRecieve"
+                    app:layout_constraintWidth_percent="0.2">
 
                     <androidx.appcompat.widget.AppCompatTextView
                         style="@style/myIconTextViewStyleGray"
@@ -239,26 +238,26 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp15"
                         android:layout_marginBottom="@dimen/dp15"
+                        android:gravity="center"
                         android:text="@string/setting_icon"
-                        android:textSize="35dp"
-                        android:gravity="center" />
+                        android:textSize="35dp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="15dp"
-                        android:textSize="@dimen/dp16"
-                        android:textStyle="bold"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:lines="1"
                         android:ellipsize="end"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:maxLines="1"
                         android:paddingStart="@dimen/dp4"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingEnd="@dimen/dp4"
                         android:paddingRight="@dimen/dp4"
-                        android:text="@string/kuknos_panelStr_setting" />
+                        android:paddingBottom="15dp"
+                        android:text="@string/kuknos_panelStr_setting"
+                        android:textSize="@dimen/dp16"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -266,19 +265,19 @@
                     android:id="@+id/fragKuknosPBuyPMN"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:background="@drawable/kuknos_bottom_btn_style"
                     android:onClick="@{()->viewmodel.goTOBuyPMN()}"
-                    app:layout_constraintTop_toTopOf="@+id/fragKuknosPSetting"
+                    android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPSetting"
-                    app:layout_constraintStart_toEndOf="@+id/fragKuknosPSetting"
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosPTrading"
-                    app:layout_constraintWidth_percent="0.2"
-                    app:layout_constraintHorizontal_chainStyle="packed">
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toEndOf="@+id/fragKuknosPSetting"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosPSetting"
+                    app:layout_constraintWidth_percent="0.2">
 
                     <androidx.appcompat.widget.AppCompatTextView
                         style="@style/myIconTextViewStyleGray"
@@ -286,26 +285,26 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp15"
                         android:layout_marginBottom="@dimen/dp15"
+                        android:gravity="center"
                         android:text="@string/add_icon"
-                        android:textSize="35dp"
-                        android:gravity="center" />
+                        android:textSize="35dp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="15dp"
-                        android:textSize="@dimen/dp16"
-                        android:textStyle="bold"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:lines="1"
                         android:ellipsize="end"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:maxLines="1"
                         android:paddingStart="@dimen/dp4"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingEnd="@dimen/dp4"
                         android:paddingRight="@dimen/dp4"
-                        android:text="@string/kuknos_panelStr_buyPeyman" />
+                        android:paddingBottom="15dp"
+                        android:text="@string/kuknos_panelStr_buyPeyman"
+                        android:textSize="@dimen/dp16"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -313,19 +312,19 @@
                     android:id="@+id/fragKuknosPTrading"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:background="@drawable/kuknos_bottom_btn_style"
                     android:onClick="@{()->viewmodel.goToTrading()}"
-                    app:layout_constraintTop_toTopOf="@+id/fragKuknosPSetting"
+                    android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPSetting"
-                    app:layout_constraintStart_toEndOf="@+id/fragKuknosPBuyPMN"
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosPKYC"
-                    app:layout_constraintWidth_percent="0.2"
-                    app:layout_constraintHorizontal_chainStyle="packed">
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toEndOf="@+id/fragKuknosPBuyPMN"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosPSetting"
+                    app:layout_constraintWidth_percent="0.2">
 
                     <androidx.appcompat.widget.AppCompatTextView
                         style="@style/myIconTextViewStyleGray"
@@ -333,26 +332,26 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp15"
                         android:layout_marginBottom="@dimen/dp15"
+                        android:gravity="center"
                         android:text="@string/cloud_icon"
-                        android:textSize="35dp"
-                        android:gravity="center" />
+                        android:textSize="35dp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="15dp"
-                        android:textSize="@dimen/dp16"
-                        android:textStyle="bold"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:lines="1"
                         android:ellipsize="end"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:maxLines="1"
                         android:paddingStart="@dimen/dp4"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingEnd="@dimen/dp4"
                         android:paddingRight="@dimen/dp4"
-                        android:text="@string/kuknos_panelStr_trading" />
+                        android:paddingBottom="15dp"
+                        android:text="@string/kuknos_panelStr_trading"
+                        android:textSize="@dimen/dp16"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -360,20 +359,20 @@
                     android:id="@+id/fragKuknosPKYC"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginEnd="@dimen/dp10"
                     android:layout_marginRight="@dimen/dp10"
                     android:background="@drawable/kuknos_bottom_btn_style"
                     android:onClick="@{()->viewmodel.goToKYC()}"
-                    app:layout_constraintTop_toTopOf="@+id/fragKuknosPSetting"
+                    android:orientation="vertical"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosPSetting"
-                    app:layout_constraintStart_toEndOf="@+id/fragKuknosPTrading"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintWidth_percent="0.2"
                     app:layout_constraintHorizontal_chainStyle="packed"
-                    android:visibility="gone">
+                    app:layout_constraintStart_toEndOf="@+id/fragKuknosPTrading"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosPSetting"
+                    app:layout_constraintWidth_percent="0.2">
 
                     <androidx.appcompat.widget.AppCompatTextView
                         style="@style/myIconTextViewStyleGray"
@@ -381,26 +380,26 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp15"
                         android:layout_marginBottom="@dimen/dp15"
+                        android:gravity="center"
                         android:text="@string/invite_icon"
-                        android:textSize="35dp"
-                        android:gravity="center" />
+                        android:textSize="35dp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="15dp"
-                        android:textSize="16dp"
-                        android:textStyle="bold"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:lines="1"
                         android:ellipsize="end"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:maxLines="1"
                         android:paddingStart="@dimen/dp4"
                         android:paddingLeft="@dimen/dp4"
                         android:paddingEnd="@dimen/dp4"
                         android:paddingRight="@dimen/dp4"
-                        android:text="@string/kuknos_panelStr_kyc" />
+                        android:paddingBottom="15dp"
+                        android:text="@string/kuknos_panelStr_kyc"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 

@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp68"
-    android:clickable="true"
-    android:layoutDirection="locale"
     android:orientation="vertical">
 
     <View
@@ -61,13 +58,13 @@
 
                         <net.iGap.module.CustomTextViewMedium
                             android:id="@+id/cigp_txt_contact_name"
-                            style="?textTitleColorSettingTheme"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:gravity="start"
                             android:singleLine="true"
                             android:text="Dominika Faniz"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize" />
                     </LinearLayout>
 
