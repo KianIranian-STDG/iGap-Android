@@ -410,8 +410,8 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
 
         } else if (pageMode == ContactMode.EDIT) {
             new MaterialDialog.Builder(G.fragmentActivity)
-                    .title(R.string.edit)
-                    .content(R.string.are_you_sure)
+                    .title(R.string.edit_contact)
+                    .content(R.string.are_you_sure_edit_contact)
                     .positiveText(R.string.yes)
                     .negativeText(R.string.no)
                     .onNegative((dialog, which) -> {

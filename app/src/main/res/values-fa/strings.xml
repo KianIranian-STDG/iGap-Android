@@ -1191,6 +1191,7 @@
     <string name="verify_user">کاربر تأیید شده</string>
     <string name="save_data_in_sd_card">ذخیره اطلاعات در کارت جانبی</string>
     <string name="are_you_sure">شما مطمئن هستید ؟</string>
+    <string name="are_you_sure_edit_contact">از ویرایش کاربر مطمئن هستید ؟</string>
     <string name="change_storage_place">تغییر مکان ذخیره سازی</string>
     <string name="other_files">سایر فایل ها</string>
     <string name="title_import_contact_limit">اخطار: در حال بارگزاری لیست مخاطبین</string>
