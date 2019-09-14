@@ -397,4 +397,12 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     public DiscoveryFragment.CrawlerStruct getCrawlerStruct() {
         return crawlerStruct;
     }
+
+    public void updateContacts() {
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(RegisteredContactsFragment.class.getName());
+
+        if (fragment instanceof RegisteredContactsFragment) {
+            ((RegisteredContactsFragment) fragment).loadContacts();
+        }
+    }
 }

@@ -1386,11 +1386,9 @@ public class HelperUrl {
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 activity.startActivity(intent);
                             } else if (items.get(position).equals(activity.getString(R.string.add_to_contact))) {
-                                FragmentAddContact fragment = FragmentAddContact.newInstance();
-                                Bundle bundle = new Bundle();
-                                bundle.putString("TITLE", activity.getString(R.string.fac_Add_Contact));
-                                bundle.putString("PHONE", text);
-                                fragment.setArguments(bundle);
+                                FragmentAddContact fragment = FragmentAddContact.newInstance(
+                                        text , FragmentAddContact.ContactMode.ADD
+                                );
                                 new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
                             } else if (items.get(position).equals(activity.getString(R.string.verify_register_sms))) {
                                 String uri = "smsto:" + text;

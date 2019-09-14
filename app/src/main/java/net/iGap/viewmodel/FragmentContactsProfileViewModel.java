@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.databinding.ActivityMediaPlayerLandBindingImpl;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.helper.HelperCalander;
@@ -100,6 +101,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public MutableLiveData<GoToSharedMediaModel> goToShearedMediaPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> blockDialogListener = new MutableLiveData<>();
     public MutableLiveData<String> copyUserNameToClipBoard = new MutableLiveData<>();
+    public MutableLiveData<Boolean> editContactListener = new MutableLiveData<>();
 
     public List<String> items;
     private Realm realm;
@@ -110,6 +112,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     public long shearedId = -2;
     public String firstName;
     public String lastName;
+    public String phoneNumber = "+0" ;
     public boolean isBlockUser = false;
     public boolean disableDeleteContact = false;
     public boolean isVerified = false;
@@ -175,6 +178,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         /*items.add(G.fragmentActivity.getString(R.string.clear_history));*/
         if (G.userId != userId && !disableDeleteContact) {
             items.add(G.fragmentActivity.getString(R.string.delete_contact));
+            items.add(G.fragmentActivity.getString(R.string.edit_contact));
         }
         showMenu.setValue(true);
     }
@@ -195,9 +199,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         } else*/
         if (items.get(position).equals(G.fragmentActivity.getString(R.string.delete_contact))) {
             showDeleteContactDialog.setValue(true);
-        } /*else if (items.get(position).equals(G.fragmentActivity.getString(R.string.report))) {
-            showDialogReportContact.setValue(true);
-        }*/
+        } else if (items.get(position).equals(G.fragmentActivity.getString(R.string.edit_contact))) {
+            editContactListener.setValue(true);
+        }
     }
 
     public void onClickGoToChat() {
@@ -372,6 +376,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             }
             username.set(registeredInfo.getUsername());
             phone.set(registeredInfo.getPhoneNumber());
+            phoneNumber = "+" + registeredInfo.getPhoneNumber();
 
             firstName = registeredInfo.getFirstName();
             lastName = registeredInfo.getLastName();
@@ -388,6 +393,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             }
             username.set(realmUser.getUsername());
             phone.set(Long.toString(realmUser.getPhone()));
+            phoneNumber = "+" + realmUser.getPhone() ;
 
             firstName = realmUser.getFirst_name();
             lastName = realmUser.getLast_name();
@@ -445,6 +451,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         if (realmContacts == null && enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
             showNumber.set(false);
             disableDeleteContact = true;
+            menuVisibility.setValue(View.GONE);
         }
 
         if (G.selectedLanguage.equals("en")) {
