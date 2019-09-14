@@ -36,16 +36,68 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/channelAvatar"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/dp32"
+                    android:layout_marginLeft="@dimen/dp32"
+                    android:layout_marginTop="@dimen/dp32"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:onClick="@{()->viewModel.chooseImage()}"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toStartOf="@id/channelNameEditText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent=".2" />
+
                 <ProgressBar
-                    android:id="@+id/loading"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/avatarUpload"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:background="?attr/selectableItemBackground"
-                    android:visibility="@{viewModel.isShowLoading}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:visibility="@{viewModel.showUploadProgressLiveData}"
+                    app:layout_constraintBottom_toBottomOf="@+id/channelAvatar"
+                    app:layout_constraintEnd_toEndOf="@+id/channelAvatar"
+                    app:layout_constraintStart_toStartOf="@+id/channelAvatar"
+                    app:layout_constraintTop_toTopOf="@+id/channelAvatar" />
+
+
+                <net.iGap.module.EmojiEditTextE
+                    android:id="@+id/channelNameEditText"
+                    style="?emojiChat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:enabled="@{viewModel.canChangeChannelName}"
+                    android:gravity="bottom"
+                    android:hint="@string/channel_name"
+                    android:imeOptions="flagNoExtractUi"
+                    android:maxLines="1"
+                    android:text="@={viewModel.channelName}"
+                    android:textSize="@dimen/largeTextSize"
+                    app:emojiSize="@dimen/standardTextSize"
+                    app:layout_constraintBottom_toTopOf="@id/groupDescriptionEditText"
+                    app:layout_constraintEnd_toStartOf="@+id/emojiButton"
+                    app:layout_constraintStart_toEndOf="@id/channelAvatar"
+                    app:layout_constraintTop_toTopOf="@+id/channelAvatar" />
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/emojiButton"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="@dimen/dp40"
+                    android:layout_height="@dimen/dp40"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="@{()->viewModel.onEmojiClickListener()}"
+                    android:text="@string/md_emoticon_with_happy_face"
+                    android:textSize="@dimen/standardIconSize"
+                    app:layout_constraintBottom_toBottomOf="@+id/channelNameEditText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/channelNameEditText" />
 
                 <View
                     android:id="@+id/line"
@@ -56,15 +108,32 @@
                     app:layout_constraintStart_toStartOf="@+id/channelNameEditText"
                     app:layout_constraintTop_toBottomOf="@+id/channelNameEditText" />
 
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/groupDescriptionEditText"
+                    style="?hintColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@null"
+                    android:enabled="@{viewModel.canChangeChannelName}"
+                    android:hint="@string/channel_description"
+                    android:maxLines="8"
+                    android:text="@{viewModel.channelDescription}"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintBottom_toBottomOf="@id/channelAvatar"
+                    app:layout_constraintEnd_toEndOf="@+id/emojiButton"
+                    app:layout_constraintStart_toStartOf="@+id/channelNameEditText"
+                    app:layout_constraintTop_toBottomOf="@+id/channelNameEditText" />
+
                 <View
                     android:id="@+id/line2"
                     style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="@dimen/dp16"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/groupDescriptionEditText"
+                    app:layout_constraintTop_toBottomOf="@id/channelAvatar"
                     app:layout_constraintWidth_percent=".95" />
 
                 <View
@@ -88,22 +157,6 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/membersCount"
                     app:layout_constraintWidth_percent=".95" />
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/groupDescriptionEditText"
-                    style="?hintColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:background="@null"
-                    android:enabled="@{viewModel.canChangeChannelName}"
-                    android:hint="@string/channel_description"
-                    android:maxLines="8"
-                    android:text="@{viewModel.channelDescription}"
-                    android:textSize="@dimen/standardTextSize"
-                    app:layout_constraintEnd_toEndOf="@+id/emojiButton"
-                    app:layout_constraintStart_toStartOf="@+id/channelNameEditText"
-                    app:layout_constraintTop_toBottomOf="@+id/channelNameEditText" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/channelTypeTitle"
@@ -296,28 +349,6 @@
                     app:layout_constraintTop_toBottomOf="@id/line4"
                     app:layout_constraintVertical_bias="0" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/channelAvatar"
-                    android:layout_width="@dimen/dp70"
-                    android:layout_height="@dimen/dp70"
-                    android:layout_margin="@dimen/dp32"
-                    android:onClick="@{()->viewModel.chooseImage()}"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/channelNameEditText"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <ProgressBar
-                    android:id="@+id/avatarUpload"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:visibility="@{viewModel.showUploadProgressLiveData}"
-                    app:layout_constraintBottom_toBottomOf="@+id/channelAvatar"
-                    app:layout_constraintEnd_toEndOf="@+id/channelAvatar"
-                    app:layout_constraintStart_toStartOf="@+id/channelAvatar"
-                    app:layout_constraintTop_toTopOf="@+id/channelAvatar" />
-
                 <net.iGap.module.CustomToggleButton
                     android:id="@+id/signedMessage"
                     android:layout_width="@dimen/toggles_width"
@@ -340,42 +371,16 @@
                     app:layout_constraintEnd_toEndOf="@id/rateMessageTxt"
                     app:layout_constraintTop_toTopOf="@id/rateMessageTxt" />
 
-                <net.iGap.module.EmojiEditTextE
-                    android:id="@+id/channelNameEditText"
-                    style="?emojiChat"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="@null"
-                    android:enabled="@{viewModel.canChangeChannelName}"
-                    android:gravity="bottom"
-                    android:hint="@string/channel_name"
-                    android:imeOptions="flagNoExtractUi"
-                    android:maxLines="1"
-                    android:text="@={viewModel.channelName}"
-                    android:textSize="@dimen/largeTextSize"
-                    app:emojiSize="@dimen/standardTextSize"
-                    app:layout_constraintEnd_toStartOf="@+id/emojiButton"
-                    app:layout_constraintStart_toEndOf="@id/channelAvatar"
-                    app:layout_constraintTop_toTopOf="@+id/channelAvatar" />
-
-                <net.iGap.module.MaterialDesignTextView
-                    android:id="@+id/emojiButton"
-                    style="@style/myIconTextViewStyle"
+                <ProgressBar
+                    android:id="@+id/loading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:gravity="bottom"
-                    android:onClick="@{()->viewModel.onEmojiClickListener()}"
-                    android:paddingLeft="@dimen/dp8"
-                    android:paddingRight="@dimen/dp8"
-                    android:paddingBottom="@dimen/dp8"
-                    android:text="@string/md_emoticon_with_happy_face"
-                    android:textSize="@dimen/standardIconSize"
-                    app:layout_constraintBottom_toBottomOf="@+id/channelNameEditText"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    android:background="?attr/selectableItemBackground"
+                    android:visibility="@{viewModel.isShowLoading}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

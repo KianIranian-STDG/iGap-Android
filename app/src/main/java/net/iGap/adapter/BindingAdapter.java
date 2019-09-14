@@ -62,7 +62,13 @@ public class BindingAdapter {
 
     @androidx.databinding.BindingAdapter("errorText")
     public static void setErrorMessage(TextInputLayout view, @StringRes int errorMessage) {
-        view.setError(view.getContext().getString(errorMessage));
+        if (errorMessage != 0) {
+            view.setErrorEnabled(true);
+            view.setError(view.getContext().getString(errorMessage));
+        }else{
+            view.setError("");
+            view.setErrorEnabled(false);
+        }
     }
 
     @androidx.databinding.BindingAdapter("setSelected")

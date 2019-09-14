@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,115 +10,77 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentChatSettingsBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.FragmentChatSettingViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class FragmentChatSettings extends BaseFragment {
 
-    private final int MAX_TEXT_SIZE = 30;
-    private final int MIN_TEXT_SIZE = 11;
+    private FragmentChatSettingViewModel viewModel;
+    private FragmentChatSettingsBinding binding;
 
-    private FragmentChatSettingViewModel fcsViewModel;
-    private FragmentChatSettingsBinding fcsBinding;
-    private HelperToolbar mHelperToolbar;
-
-    public FragmentChatSettings() {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new FragmentChatSettingViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE));
+            }
+        }).get(FragmentChatSettingViewModel.class);
     }
-
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        fcsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_chat_settings, container, false);
-        return attachToSwipeBack(fcsBinding.getRoot());
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_chat_settings, container, false);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+        return attachToSwipeBack(binding.getRoot());
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initDataBinding();
-        setupToolbar();
-        setupTextSizeSetting();
+        binding.fcsLayoutToolbar.addView(HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.chat_setting))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                }).getView());
 
-        fcsViewModel.goToChatBackgroundPage.observe(this, go -> {
+        viewModel.getGoToChatBackgroundPage().observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentChatBackground.newInstance()).setReplace(false).load();
             }
         });
 
 
-        fcsViewModel.goToDateFragment.observe(getViewLifecycleOwner(), go -> {
+        viewModel.getGoToDateFragment().observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go)
                 new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentData()).setReplace(false).load();
         });
     }
 
-    private void setupTextSizeSetting() {
-
-        SeekBar sb = fcsBinding.stSeekbarMessageTextSize;
-
-        sb.setMax(MAX_TEXT_SIZE - MIN_TEXT_SIZE);
-        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                fcsViewModel.setTextSizeToPref(progress + MIN_TEXT_SIZE);
-                fcsViewModel.callbackTextSize.setValue((progress + MIN_TEXT_SIZE) + "");
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        fcsViewModel.callbackTextSize.observe(G.fragmentActivity, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                fcsBinding.stTxtMessageTextSizeNumber.setText(s);
-
-                try {
-                    sb.setProgress(Integer.valueOf(s) - MIN_TEXT_SIZE);
-                } catch (Exception e) {
-                    sb.setProgress(14 - MIN_TEXT_SIZE);//14 - min = 3 -> for skipping setMin that not support on Apis fewer than 26
-                }
-            }
-        });
-    }
-
-    private void setupToolbar() {
-
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLeftIcon(R.string.back_icon)
-                .setLogoShown(true)
-                .setDefaultTitle(G.context.getResources().getString(R.string.chat_setting))
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-                    }
-                });
-
-        fcsBinding.fcsLayoutToolbar.addView(mHelperToolbar.getView());
-    }
-
-    private void initDataBinding() {
-        fcsViewModel = new FragmentChatSettingViewModel();
-        fcsBinding.setChatSettingsVM(fcsViewModel);
+    public void dateIsChanged(){
+        viewModel.dateIsChange();
     }
 }

@@ -118,6 +118,7 @@
     <attr name="backgroundColorSettingTheme" format="reference" />
     <attr name="backgroundColorSettingTheme_2" format="reference" />
     <attr name="textTitleColorSettingTheme" format="reference" />
+    <attr name="text2TitleColorSettingTheme" format="reference" />
     <attr name="textSubColorSettingTheme" format="reference" />
     <attr name="lineColorSettingTheme" format="reference" />
     <attr name="hintColorSettingTheme" format="reference" />

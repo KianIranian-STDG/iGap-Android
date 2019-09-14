@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
-            name="chatSettingsVM"
+            name="viewModel"
             type="net.iGap.viewmodel.FragmentChatSettingViewModel" />
 
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
+        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        style="?backgroundColorSettingTheme"
+        android:clickable="true"
+        android:focusable="true"
         android:layoutDirection="locale"
-        tools:context=".fragments.FragmentChatSettings"
-        tools:ignore="MissingPrefix">
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/fcs_layout_toolbar"
@@ -25,619 +25,504 @@
             android:layout_height="@dimen/toolbar_height"
             android:orientation="horizontal" />
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:padding="@dimen/dp16">
 
-                <LinearLayout
-                    style="?backgroundColorSettingTheme"
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/messageTitle"
+                    style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="@dimen/dp8"
-                    android:visibility="visible">
+                    android:text="@string/st_title_message"
+                    android:textSize="@dimen/largeTextSize"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp10"
-                        android:paddingLeft="@dimen/dp12"
-                        android:paddingTop="@dimen/dp12"
-                        android:paddingRight="@dimen/dp12"
-                        android:paddingBottom="@dimen/dp12"
-                        android:text="@string/st_title_message"
-                        style="?textTitleColorSettingTheme"
-                        android:textSize="@dimen/largeTextSize"
-                        android:textStyle="normal" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/messageSizeTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp8"
+                    android:text="@string/st_title_message_textSize"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toEndOf="@id/messageTitle"
+                    app:layout_constraintStart_toStartOf="@id/messageTitle"
+                    app:layout_constraintTop_toBottomOf="@id/messageTitle" />
 
-                    <!--
-                                android:onClick="@{chatSettingsVM::onClickMessageTextSize}"
-                    -->
+                <androidx.appcompat.widget.AppCompatSeekBar
+                    android:id="@+id/st_seekbar_messageTextSize"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:progress="@{viewModel.textSize}"
+                    android:max="@{viewModel.textSizeMax}"
+                    android:onProgressChanged="@{(seekBar,progress,fromUser)->viewModel.onProgressChangedTextSize(progress,fromUser)}"
+                    app:layout_constraintEnd_toStartOf="@id/messageTextSizeNumber"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/messageSizeTitle" />
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/messageTextSizeNumber"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@{viewModel.textSizeValue}"
+                    android:textColor="@color/setting_items_value_color"
+                    android:textSize="@dimen/smallTextSize"
+                    app:layout_constraintBottom_toBottomOf="@id/st_seekbar_messageTextSize"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toTopOf="@id/st_seekbar_messageTextSize" />
 
-                    <LinearLayout
-                        android:id="@+id/st_layout_messageTextSize"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/chatBackground"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:onClick="@{()->viewModel.onClickChatBackground()}"
+                    android:text="@string/st_chatBackground"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/st_seekbar_messageTextSize" />
 
-                        <TextView
-                            style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="@dimen/dp16"
-                            android:paddingTop="@dimen/dp4"
-                            android:paddingRight="@dimen/dp16"
-                            android:text="@string/st_title_message_textSize"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/dateTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:gravity="center_vertical"
+                    android:text="@string/date"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/date"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/chatBackground" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dp16"
-                            android:layout_marginTop="@dimen/dp16"
-                            android:layout_marginRight="@dimen/dp16"
-                            android:layout_marginBottom="@dimen/dp16"
-                            android:orientation="horizontal">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/date"
+                    style="?textSubColorSettingTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.dateType}"
+                    android:textColor="@color/setting_items_value_color"
+                    android:textSize="@dimen/smallTextSize"
+                    app:layout_constraintBottom_toBottomOf="@id/dateTitle"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toTopOf="@id/dateTitle" />
 
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/fcs_layout_date"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onDateClick()}"
+                    app:layout_constraintBottom_toBottomOf="@id/dateTitle"
+                    app:layout_constraintEnd_toEndOf="@id/date"
+                    app:layout_constraintStart_toStartOf="@id/dateTitle"
+                    app:layout_constraintTop_toTopOf="@id/dateTitle" />
 
-                            <SeekBar
-                                android:id="@+id/st_seekbar_messageTextSize"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/clockTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:gravity="center_vertical"
+                    android:text="@string/st_24_Clock"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/timeType"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/dateTitle" />
 
-                            <TextView
-                                android:id="@+id/st_txt_messageTextSize_number"
-                                style="?textSubColorSettingTheme"
-                                fontPath="fonts/IRANSansMobile.ttf"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="@{chatSettingsVM.callbackTextSize , default=14}"
-                                android:textColor="@color/setting_items_value_color"
-                                android:textSize="@dimen/smallTextSize"
-                                android:textStyle="normal" />
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/timeType"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@{viewModel.isTime}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/clockTitle"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toTopOf="@id/clockTitle" />
 
-                        </LinearLayout>
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickTime()}"
+                    app:layout_constraintBottom_toBottomOf="@id/clockTitle"
+                    app:layout_constraintEnd_toEndOf="@id/timeType"
+                    app:layout_constraintStart_toStartOf="@id/clockTitle"
+                    app:layout_constraintTop_toTopOf="@id/clockTitle" />
 
-                    </LinearLayout>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/showVoteTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:text="@string/show_vote_layout_in_channel"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/showVote"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/clockTitle" />
 
-                    <TextView
-                        android:id="@+id/st_txt_chatBackground"
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:gravity="center_vertical"
-                        android:onClick="@{chatSettingsVM::onClickChatBackground}"
-                        android:paddingLeft="@dimen/dp12"
-                        android:paddingTop="@dimen/dp4"
-                        android:paddingRight="@dimen/dp12"
-                        android:text="@string/st_chatBackground"
-                        android:textSize="@dimen/standardTextSize"
-                        android:textStyle="normal" />
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/showVote"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@{viewModel.isShowVote}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/showVoteTitle"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toTopOf="@id/showVoteTitle" />
 
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickShowVote()}"
+                    app:layout_constraintBottom_toBottomOf="@id/showVoteTitle"
+                    app:layout_constraintEnd_toEndOf="@id/showVote"
+                    app:layout_constraintStart_toStartOf="@id/showVoteTitle"
+                    app:layout_constraintTop_toTopOf="@id/showVoteTitle" />
 
-                    <RelativeLayout
-                        android:id="@+id/fcs_layout_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{chatSettingsVM::onDateClick}"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/showSenderNameGroupTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:text="@string/show_sender_name_in_group"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/showSenderNameGroup"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/showVoteTitle" />
 
-                        <TextView
-                            style="?textTitleColorSettingTheme"
-                            android:fontFamily="@font/main_font"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:text="@string/date"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/showSenderNameGroup"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@{viewModel.isSenderNameGroup}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/showSenderNameGroupTitle"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toTopOf="@id/showSenderNameGroupTitle" />
 
-                        <TextView
-                            android:id="@+id/fcs_txt_date"
-                            style="?textSubColorSettingTheme"
-                            android:fontFamily="@font/main_font"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:text="@{chatSettingsVM.callbackDataShams , default=Miladi}"
-                            android:textSize="@dimen/smallTextSize"
-                            android:textColor="@color/setting_items_value_color"
-                            android:textStyle="normal" />
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickSenderNameGroup()}"
+                    app:layout_constraintBottom_toBottomOf="@id/showSenderNameGroupTitle"
+                    app:layout_constraintEnd_toEndOf="@id/showSenderNameGroup"
+                    app:layout_constraintStart_toStartOf="@id/showSenderNameGroupTitle"
+                    app:layout_constraintTop_toTopOf="@id/showSenderNameGroupTitle" />
 
-                    </RelativeLayout>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/sendByEnterTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:text="@string/st_send_by_enter"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/sendByEnter"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/showSenderNameGroupTitle" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp52"
-                        android:onClick="@{chatSettingsVM::onClickTime}"
-                        android:orientation="horizontal"
-                        android:paddingLeft="@dimen/dp16"
-                        android:gravity="center_vertical"
-                        android:paddingRight="@dimen/dp16">
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/sendByEnter"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@{viewModel.isSendEnter}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/sendByEnterTitle"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toTopOf="@id/sendByEnterTitle" />
 
-                        <TextView
-                            android:id="@+id/as_txt_24_time"
-                            style="?textTitleColorSettingTheme"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="@string/st_24_Clock"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickSendEnter()}"
+                    app:layout_constraintBottom_toBottomOf="@id/sendByEnterTitle"
+                    app:layout_constraintEnd_toEndOf="@id/sendByEnter"
+                    app:layout_constraintStart_toStartOf="@id/sendByEnterTitle"
+                    app:layout_constraintTop_toTopOf="@id/sendByEnterTitle" />
 
-                        <net.iGap.module.CustomToggleButton
-                            android:id="@+id/as_toggle_time"
-                            android:layout_width="@dimen/toggles_width"
-                            android:layout_height="@dimen/toggles_height"
-                            android:checked="@{safeUnbox(chatSettingsVM.isTime)}"
-                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedTime(checked)}"
-                            android:textOff=""
-                            android:textOn=""
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/playSoundInChatTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:text="@string/play_sound_in_chat"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/playSoundInChat"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/sendByEnterTitle" />
 
-                            />
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/playSoundInChat"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@{viewModel.isSoundPlayInChat}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/playSoundInChatTitle"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toTopOf="@id/playSoundInChatTitle" />
 
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onPlaySoundClick()}"
+                    app:layout_constraintBottom_toBottomOf="@id/playSoundInChatTitle"
+                    app:layout_constraintEnd_toEndOf="@id/playSoundInChat"
+                    app:layout_constraintStart_toStartOf="@id/playSoundInChatTitle"
+                    app:layout_constraintTop_toTopOf="@id/playSoundInChatTitle" />
 
-                    </LinearLayout>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/inAppBrowserTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:text="@string/st_inApp_Browser"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/inAppBrowser"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/playSoundInChatTitle" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp52"
-                        android:onClick="@{chatSettingsVM::onClickShowVote}"
-                        android:orientation="horizontal"
-                        android:paddingLeft="@dimen/dp16"
-                        android:gravity="center_vertical"
-                        android:paddingRight="@dimen/dp16">
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/inAppBrowser"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@{viewModel.isInAppBrowser}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/inAppBrowserTitle"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toTopOf="@id/inAppBrowserTitle" />
 
-                        <TextView
-                            android:id="@+id/as_txt_show_vote"
-                            style="?textTitleColorSettingTheme"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="@string/show_vote_layout_in_channel"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
-
-                        <net.iGap.module.CustomToggleButton
-                            android:id="@+id/as_toggle_show_vote"
-                            android:layout_width="@dimen/toggles_width"
-                            android:layout_height="@dimen/toggles_height"
-                            android:checked="@{safeUnbox(chatSettingsVM.isShowVote)}"
-                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedShowVote(checked)}"
-                            android:textOff=""
-                            android:textOn=""
-
-                            />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp52"
-                        android:onClick="@{chatSettingsVM::onClickSenderNameGroup}"
-                        android:orientation="horizontal"
-                        android:paddingLeft="@dimen/dp16"
-                        android:gravity="center_vertical"
-                        android:paddingRight="@dimen/dp16">
-
-                        <TextView
-                            android:id="@+id/as_txt_show_sender_name_group"
-                            style="?textTitleColorSettingTheme"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="@string/show_sender_name_in_group"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
-
-                        <net.iGap.module.CustomToggleButton
-                            android:id="@+id/as_toggle_show_sender_name_group"
-                            android:layout_width="@dimen/toggles_width"
-                            android:layout_height="@dimen/toggles_height"
-                            android:checked="@{safeUnbox(chatSettingsVM.isSenderNameGroup)}"
-                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedSenderNameGroup(checked)}"
-                            android:textOff=""
-                            android:textOn="" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{chatSettingsVM::onClickSendEnter}"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/dp16"
-                        android:paddingLeft="@dimen/dp16"
-                        android:gravity="center_vertical"
-                        android:paddingEnd="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
-                        android:visibility="visible">
-
-                        <TextView
-                            android:id="@+id/st_txt_sendEnter"
-                            style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:paddingTop="@dimen/dp4"
-                            android:text="@string/st_send_by_enter"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
-
-                        <net.iGap.module.CustomToggleButton
-                            android:id="@+id/st_toggle_sendEnter"
-                            android:layout_width="@dimen/toggles_width"
-                            android:layout_height="@dimen/toggles_height"
-                            android:checked="@{safeUnbox(chatSettingsVM.isSendEnter)}"
-                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedSendEnter(checked)}"
-                            android:textOff=""
-                            android:textOn="" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{chatSettingsVM::onPlaySoundClick}"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/dp16"
-                        android:paddingLeft="@dimen/dp16"
-                        android:gravity="center_vertical"
-                        android:paddingEnd="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
-                        android:visibility="visible">
-
-                        <TextView
-                            android:id="@+id/tv_chatSetting_playSoundInChat"
-                            style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:paddingTop="@dimen/dp4"
-                            android:text="@string/play_sound_in_chat"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
-
-                        <net.iGap.module.CustomToggleButton
-                            android:id="@+id/btn_chatSetting_playSoundInChat"
-                            android:layout_width="@dimen/toggles_width"
-                            android:layout_height="@dimen/toggles_height"
-                            android:checked="@{safeUnbox(chatSettingsVM.isSoundPlayInChat)}"
-                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedPlaySound(checked)}"
-                            android:textOff=""
-                            android:textOn="" />
-
-                    </LinearLayout>
-
-
-                    <!--this part is gone-->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{chatSettingsVM::onClickAppBrowser}"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/dp16"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingEnd="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
-                        android:visibility="visible">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:gravity="center_vertical"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerInParent="true">
-
-                            <net.iGap.module.CustomToggleButton
-                                android:id="@+id/st_toggle_inAppBrowser"
-                                android:layout_width="@dimen/toggles_width"
-                                android:layout_height="@dimen/toggles_height"
-                                android:checked="@{safeUnbox(chatSettingsVM.isInAppBrowser)}"
-                                android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedAppBrowser(checked)}"
-                                android:textOff=""
-                                android:textOn="" />
-
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/st_txt_inAppBrowser"
-                            style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
-                            android:gravity="center_vertical"
-                            android:paddingTop="@dimen/dp4"
-                            android:text="@string/st_inApp_Browser"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
-
-                    </RelativeLayout>
-
-
-                </LinearLayout>
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickAppBrowser()}"
+                    app:layout_constraintBottom_toBottomOf="@id/inAppBrowserTitle"
+                    app:layout_constraintEnd_toEndOf="@id/inAppBrowser"
+                    app:layout_constraintStart_toStartOf="@id/inAppBrowserTitle"
+                    app:layout_constraintTop_toTopOf="@id/inAppBrowserTitle" />
 
                 <View
+                    android:id="@+id/divider"
                     style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginTop="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/inAppBrowserTitle" />
 
-                <LinearLayout
-                    style="?backgroundColorSettingTheme"
-                    android:layout_width="match_parent"
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/multimediaTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="@dimen/dp4"
-                    android:visibility="visible">
+                    android:layout_marginTop="@dimen/dp16"
+                    android:text="@string/st_title_Media"
+                    android:textSize="@dimen/largeTextSize"
+                    app:layout_constraintEnd_toEndOf="@id/messageTitle"
+                    app:layout_constraintStart_toStartOf="@id/messageTitle"
+                    app:layout_constraintTop_toBottomOf="@id/divider" />
 
-                    <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp10"
-                        android:paddingLeft="@dimen/dp12"
-                        android:paddingTop="@dimen/dp12"
-                        android:paddingRight="@dimen/dp12"
-                        android:paddingBottom="@dimen/dp12"
-                        android:text="@string/st_title_Media"
-                        style="?textTitleColorSettingTheme"
-                        android:textSize="@dimen/largeTextSize"
-                        android:textStyle="normal" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/compressVideoTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:gravity="center_vertical"
+                    android:text="@string/st_compress"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/compressVideo"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/multimediaTitle" />
 
-                    <!--this part is Gone-->
-                    <RelativeLayout
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/compressVideo"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@{viewModel.isCompress}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/compressVideoTitle"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toTopOf="@id/compressVideoTitle" />
 
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/dp16"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingEnd="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
-                        android:visibility="gone">
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickCompress()}"
+                    app:layout_constraintBottom_toBottomOf="@id/compressVideoTitle"
+                    app:layout_constraintEnd_toEndOf="@id/compressVideo"
+                    app:layout_constraintStart_toStartOf="@id/compressVideoTitle"
+                    app:layout_constraintTop_toTopOf="@id/compressVideoTitle" />
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerInParent="true">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/trimVideoTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:text="@string/st_trim"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/trimVideo"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/compressVideoTitle" />
 
-                            <net.iGap.module.CustomToggleButton
-                                android:id="@+id/st_toggle_enableAnimation"
-                                android:layout_width="@dimen/toggles_width"
-                                android:layout_height="@dimen/toggles_height"
-                                android:textOff=""
-                                android:textOn="" />
-                        </LinearLayout>
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/trimVideo"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@{viewModel.isTrim}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/trimVideoTitle"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toTopOf="@id/trimVideoTitle" />
 
-                        <TextView
-                            android:id="@+id/st_txt_enableAnimation"
-                            style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
-                            android:gravity="center_vertical"
-                            android:paddingTop="@dimen/dp4"
-                            android:text="@string/st_Enable_Animation"
-                            android:textSize="@dimen/dp15"
-                            android:textStyle="normal" />
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickTrim()}"
+                    app:layout_constraintBottom_toBottomOf="@id/trimVideoTitle"
+                    app:layout_constraintEnd_toEndOf="@id/trimVideo"
+                    app:layout_constraintStart_toStartOf="@id/trimVideoTitle"
+                    app:layout_constraintTop_toTopOf="@id/trimVideoTitle" />
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/openDefaultPlayerTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:text="@string/open_default_player"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/openDefaultPlayer"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/trimVideoTitle" />
 
-                    </RelativeLayout>
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/openDefaultPlayer"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@{viewModel.isDefaultPlayer}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/openDefaultPlayerTitle"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toTopOf="@id/openDefaultPlayerTitle" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{chatSettingsVM::onClickCompress}"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/dp16"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingEnd="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16">
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:onClick="@{()->viewModel.onClickDefaultVideo()}"
+                    app:layout_constraintBottom_toBottomOf="@id/openDefaultPlayerTitle"
+                    app:layout_constraintEnd_toEndOf="@id/openDefaultPlayer"
+                    app:layout_constraintStart_toStartOf="@id/openDefaultPlayerTitle"
+                    app:layout_constraintTop_toTopOf="@id/openDefaultPlayerTitle" />
 
-                        <TextView
-                            android:id="@+id/stsp_txt_compress"
-                            style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:paddingTop="@dimen/dp4"
-                            android:text="@string/st_compress"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/cropAndResizePhotoTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:text="@string/st_crop"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/cropAndResizePhoto"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/openDefaultPlayerTitle" />
 
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/cropAndResizePhoto"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@{viewModel.isCrop}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/cropAndResizePhotoTitle"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toTopOf="@id/cropAndResizePhotoTitle" />
 
-                        <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stsp_toggle_compress"
-                            android:layout_width="@dimen/toggles_width"
-                            android:layout_height="@dimen/toggles_height"
-                            android:checked="@{safeUnbox(chatSettingsVM.isCompress)}"
-                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedCompress(checked)}"
-                            android:textOff=""
-                            android:textOn="" />
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickCrop()}"
+                    app:layout_constraintBottom_toBottomOf="@id/cropAndResizePhotoTitle"
+                    app:layout_constraintEnd_toEndOf="@id/cropAndResizePhoto"
+                    app:layout_constraintStart_toStartOf="@id/cropAndResizePhotoTitle"
+                    app:layout_constraintTop_toTopOf="@id/cropAndResizePhotoTitle" />
 
-                    </LinearLayout>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/cameraBottomSheetTitle"
+                    style="?textTitleColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:text="@string/st_cameraBottomSheet"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/cameraBottomSheet"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/cropAndResizePhotoTitle" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{chatSettingsVM::onClickTrim}"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/dp16"
-                        android:paddingLeft="@dimen/dp16"
-                        android:gravity="center_vertical"
-                        android:paddingEnd="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16">
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/cameraBottomSheet"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@{viewModel.isCameraButtonSheet}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/cameraBottomSheetTitle"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toTopOf="@id/cameraBottomSheetTitle" />
 
-                        <TextView
-                            android:id="@+id/stsp_txt_trim"
-                            style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:paddingTop="@dimen/dp4"
-                            android:text="@string/st_trim"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickCameraButtonSheet()}"
+                    app:layout_constraintBottom_toBottomOf="@id/cameraBottomSheetTitle"
+                    app:layout_constraintEnd_toEndOf="@id/cameraBottomSheet"
+                    app:layout_constraintStart_toStartOf="@id/cameraBottomSheetTitle"
+                    app:layout_constraintTop_toTopOf="@id/cameraBottomSheetTitle">
 
-
-                        <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stsp_toggle_trim"
-                            android:layout_width="@dimen/toggles_width"
-                            android:layout_height="@dimen/toggles_height"
-                            android:checked="@{safeUnbox(chatSettingsVM.isTrim)}"
-                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedTrim(checked)}"
-                            android:textOff=""
-                            android:textOn="" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp48"
-                        android:onClick="@{chatSettingsVM::onClickDefaultVideo}"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/dp16"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingEnd="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16">
-
-                        <TextView
-                            android:id="@+id/stsp_txt_open_default_player"
-                            style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:paddingTop="@dimen/dp4"
-                            android:text="@string/open_default_player"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
-
-                        <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stsp_toggle_open_default_player"
-                            android:layout_width="@dimen/toggles_width"
-                            android:layout_height="@dimen/toggles_height"
-                            android:checked="@{safeUnbox(chatSettingsVM.isDefaultPlayer)}"
-                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedDefaultVideo(checked)}"
-                            android:textOff=""
-                            android:textOn="" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp52"
-                        android:onClick="@{chatSettingsVM::onClickCrop}"
-                        android:orientation="horizontal"
-                        android:paddingLeft="@dimen/dp16"
-                        android:gravity="center_vertical"
-                        android:paddingRight="@dimen/dp16">
-
-                        <TextView
-                            android:id="@+id/stsp_txt_crop"
-                            style="?textTitleColorSettingTheme"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="@string/st_crop"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
-
-                        <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stsp_toggle_crop"
-                            android:layout_width="@dimen/toggles_width"
-                            android:layout_height="@dimen/toggles_height"
-                            android:checked="@{safeUnbox(chatSettingsVM.isCrop)}"
-                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedCrop(checked)}"
-                            android:textOff=""
-                            android:textOn="" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp52"
-                        android:onClick="@{chatSettingsVM::onClickCameraButtonSheet}"
-                        android:orientation="horizontal"
-                        android:layout_gravity="center_vertical"
-                        android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16">
-
-                        <TextView
-                            android:id="@+id/stsp_txt_cameraBottomSheet"
-                            style="?textTitleColorSettingTheme"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="@string/st_cameraBottomSheet"
-                            android:textSize="@dimen/standardTextSize"
-                            android:textStyle="normal" />
-
-                        <net.iGap.module.CustomToggleButton
-                            android:id="@+id/stsp_toggle_cameraBottomSheet"
-                            android:layout_width="@dimen/toggles_width"
-                            android:layout_height="@dimen/toggles_height"
-                            android:checked="@{safeUnbox(chatSettingsVM.isCameraButtonSheet)}"
-                            android:onCheckedChanged="@{(switch, checked) -> chatSettingsVM.onCheckedChangedCameraButtonSheet(checked)}"
-                            android:textOff=""
-                            android:textOn="" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-        </ScrollView>
-
+                </androidx.constraintlayout.widget.Group>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
-
 </layout>

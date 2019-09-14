@@ -43,8 +43,6 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class FragmentSetting extends BaseFragment {
 
-    public static DateType dateType;
-
     private FragmentSettingBinding binding;
     private FragmentSettingViewModel viewModel;
 
@@ -241,10 +239,5 @@ public class FragmentSetting extends BaseFragment {
 
             txtCancel.setOnClickListener(v12 -> inDialog.dismiss());
         }
-    }
-
-    public interface DateType {
-
-        void dataName(String type);
     }
 }

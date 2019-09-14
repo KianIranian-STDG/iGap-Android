@@ -176,8 +176,8 @@ public final class StartupActions {
     /**
      * detect and  initialize text size
      */
-    public static void textSizeDetection(SharedPreferences sharedPreferences) {
-        userTextSize = sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14);
+    public static void textSizeDetection(int size) {
+        userTextSize = size;
 
         if (!G.context.getResources().getBoolean(R.bool.isTablet)) {
 
@@ -420,7 +420,7 @@ public final class StartupActions {
         int checkedSaveToGallery = preferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
         isSaveToGallery = checkedSaveToGallery == 1;
 
-        textSizeDetection(preferences);
+        textSizeDetection(preferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14));
         languageDetection(preferences);
     }
 
