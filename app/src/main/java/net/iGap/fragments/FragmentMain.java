@@ -519,7 +519,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void pinToTop(final long roomId, final boolean isPinned) {
-        //+Realm realm = Realm.getDefaultInstance();
 
         new RequestClientPinRoom().pinRoom(roomId, !isPinned);
         if (!isPinned) {

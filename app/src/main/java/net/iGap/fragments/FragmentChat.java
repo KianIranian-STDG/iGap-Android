@@ -1547,8 +1547,6 @@ public class FragmentChat extends BaseFragment
         attachFile = new AttachFile(G.fragmentActivity);
         backGroundSeenList.clear();
 
-        //+Realm realm = Realm.getDefaultInstance();
-
         RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         pageSettings();
 
@@ -1889,8 +1887,6 @@ public class FragmentChat extends BaseFragment
         /**
          * get userId . use in chat set action.
          */
-
-        //+Realm realm = Realm.getDefaultInstance();
 
         RealmUserInfo realmUserInfo = getRealmChat().where(RealmUserInfo.class).findFirst();
         if (realmUserInfo == null) {
@@ -4222,7 +4218,6 @@ public class FragmentChat extends BaseFragment
         }
 
         ProtoGlobal.RoomMessageType messageType = message.forwardedFrom != null ? message.forwardedFrom.getMessageType() : message.messageType;
-        //+Realm realm = Realm.getDefaultInstance();
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == IMAGE_TEXT) {
             showImage(message, view);
         } else if (messageType == VIDEO || messageType == VIDEO_TEXT) {
@@ -8774,7 +8769,6 @@ public class FragmentChat extends BaseFragment
             }
         }
 
-        //+Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom1 = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         if (realmRoom1 != null) {
 
