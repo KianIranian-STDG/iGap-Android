@@ -57,7 +57,7 @@
 
                     <net.iGap.module.MEditText
                         android:id="@+id/rg_edt_dialog_verifyCode"
-                        style="?hintColorSettingTheme"
+                        style="@style/iGapEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp24"
@@ -75,12 +75,12 @@
 
                     <View
                         android:id="@+id/rg_borderButton"
-                        android:background="?iGapDividerLine"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginLeft="@dimen/dp24"
                         android:layout_marginRight="@dimen/dp24"
                         android:layout_marginBottom="@dimen/dp6"
+                        android:background="?iGapDividerLine"
                         android:visibility="visible" />
                 </LinearLayout>
 

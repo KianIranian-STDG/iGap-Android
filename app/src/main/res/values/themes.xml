@@ -4,7 +4,6 @@
     <style name="iGapDarkTheme" parent="BaseTheme">
         <item name="colorAccent">@color/green</item>
         <item name="backgroundColorSettingTheme_2">@style/background_2_setting_dark</item>
-        <item name="hintColorSettingTheme">@style/hint_style_setting_dark</item>
         <item name="textBackgroundColor_2">@style/text_background_dark_2</item>
         <item name="textBackgroundColor">@style/text_background_dark</item>
         <item name="textSecurityColor">@style/text_title_security_dark</item>
@@ -23,12 +22,12 @@
         <item name="iGapTitleTextColor">@color/white</item>
         <item name="iGapSubtitleTextColor">@color/gray_9d</item>
         <item name="iGapDividerLine">@color/gray_4c</item>
+        <item name="iGapHintTextColor">@color/hint_edit_text</item>
     </style>
 
     <style name="iGapLightTheme" parent="BaseTheme">
         <item name="colorAccent">@color/green</item>
         <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-        <item name="hintColorSettingTheme">@style/hint_style_setting_light</item>
         <item name="textBackgroundColor_2">@style/text_background_light_2</item>
         <item name="textBackgroundColor">@style/text_background_light</item>
         <item name="textSecurityColor">@style/text_title_security_light</item>
@@ -46,6 +45,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">@color/hint_edit_text</item>
     </style>
 
     <style name="iGapBlueGrayTheme" parent="BaseTheme">
@@ -54,7 +54,6 @@
 
         <item name="backgroundColorSettingTheme_2">@style/background_2_setting_BlueGreyComplete
         </item>
-        <item name="hintColorSettingTheme">@style/hint_style_setting_BlueGreyComplete</item>
 
         <item name="textBackgroundColor_2">@style/line_style_setting_BlueGreyComplete</item>
         <item name="textBackgroundColor">@style/line_style_setting_BlueGreyComplete</item>
@@ -69,6 +68,7 @@
         <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/blueGrayDividerLine</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
 
@@ -77,8 +77,6 @@
         <item name="colorPrimary">#303F9F</item>
 
         <item name="backgroundColorSettingTheme_2">@style/background_2_setting_indigoComplete</item>
-
-        <item name="hintColorSettingTheme">@style/hint_style_setting_indigoComplete</item>
 
         <item name="textBackgroundColor_2">@color/indigoDividerLine</item>
         <item name="textBackgroundColor">@color/indigoDividerLine</item>
@@ -93,6 +91,7 @@
         <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/indigoDividerLine</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="iGapBrownTheme" parent="BaseTheme">
@@ -100,8 +99,6 @@
         <item name="colorPrimary">#5D4037</item>
 
         <item name="backgroundColorSettingTheme_2">@style/background_2_setting_BrownComplete</item>
-
-        <item name="hintColorSettingTheme">@style/hint_style_setting_BrownComplete</item>
 
         <item name="textBackgroundColor_2">@color/brownDividerLine</item>
         <item name="textBackgroundColor">@color/brownDividerLine</item>
@@ -116,6 +113,7 @@
         <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/brownDividerLine</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="iGapTealTheme" parent="BaseTheme">
@@ -123,8 +121,6 @@
         <item name="colorPrimary">#00796b</item>
 
         <item name="backgroundColorSettingTheme_2">@style/background_2_setting_TealComplete</item>
-
-        <item name="hintColorSettingTheme">@style/hint_style_setting_TealComplete</item>
 
         <item name="textBackgroundColor_2">@color/tealDividerLine</item>
         <item name="textBackgroundColor">@color/tealDividerLine</item>
@@ -139,14 +135,13 @@
         <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/tealDividerLine</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="iGapGrayTheme" parent="BaseTheme">
         <item name="colorAccent">#616161</item>
         <item name="colorPrimary">#616161</item>
         <item name="backgroundColorSettingTheme_2">@style/background_2_setting_GreyComplete</item>
-
-        <item name="hintColorSettingTheme">@style/hint_style_setting_GreyComplete</item>
 
         <item name="textBackgroundColor_2">@color/grayDividerLine</item>
         <item name="textBackgroundColor">@color/grayDividerLine</item>
@@ -161,6 +156,7 @@
         <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/grayDividerLine</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
 
@@ -174,6 +170,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
 
     </style>
 
@@ -188,6 +185,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="iGapPurpleTheme" parent="BaseTheme">
@@ -199,6 +197,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
 
     </style>
 
@@ -211,6 +210,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
 
     </style>
 
@@ -223,6 +223,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="iGapBlueTheme" parent="BaseTheme">
@@ -234,6 +235,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="iGapLightBlueTheme" parent="BaseTheme">
@@ -245,6 +247,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="iGapCyanTheme" parent="BaseTheme">
@@ -256,6 +259,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="iGapLightTealTheme" parent="BaseTheme">
@@ -267,6 +271,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="iGapGreenTheme" parent="BaseTheme">
@@ -278,6 +283,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="iGapLightGreenTheme" parent="BaseTheme">
@@ -289,6 +295,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="iGapLimeTheme" parent="BaseTheme">
@@ -300,6 +307,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="iGapYellowTheme" parent="BaseTheme">
@@ -311,6 +319,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="iGapAmberTheme" parent="BaseTheme">
@@ -322,6 +331,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="iGapOrangeTheme" parent="BaseTheme">
@@ -333,6 +343,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="iGapDeepOrangeTheme" parent="BaseTheme">
@@ -344,6 +355,7 @@
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
     </style>
 
     <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">

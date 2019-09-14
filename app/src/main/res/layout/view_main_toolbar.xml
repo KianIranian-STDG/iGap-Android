@@ -374,7 +374,7 @@
 
         <EditText
             android:id="@+id/view_toolbar_search_layout_edt_input"
-            style="?hintColorSettingTheme"
+            style="@style/iGapEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"

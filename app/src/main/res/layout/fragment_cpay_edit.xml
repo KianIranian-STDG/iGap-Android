@@ -55,7 +55,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/fce_edt_nationalId"
-            style="?hintColorSettingTheme"
+            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp32"
@@ -75,7 +75,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/fce_edt_name"
-            style="?hintColorSettingTheme"
+            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp32"
@@ -96,7 +96,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/fce_edt_family"
-            style="?hintColorSettingTheme"
+            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp32"

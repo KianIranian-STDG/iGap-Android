@@ -656,11 +656,11 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name"
-                style="?hintColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp16"
                 android:hint="@string/name"
+                android:textColorHint="?iGapHintTextColor"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/versionTitle"
@@ -680,11 +680,11 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/userName"
-                style="?hintColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp8"
                 android:hint="@string/user_name"
+                android:textColorHint="?iGapHintTextColor"
                 app:errorEnabled="@{viewModel.usernameErrorEnable}"
                 app:errorText="@{viewModel.usernameErrorMessage}"
                 app:layout_constraintLeft_toLeftOf="@id/name"
@@ -705,14 +705,13 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/bio"
-                style="?hintColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp8"
                 android:hint="@string/st_bio"
+                android:textColorHint="?iGapHintTextColor"
                 app:counterEnabled="true"
                 app:counterMaxLength="70"
-                app:counterTextAppearance="?hintColorSettingTheme"
                 app:layout_constraintLeft_toLeftOf="@id/name"
                 app:layout_constraintRight_toRightOf="@id/name"
                 app:layout_constraintTop_toBottomOf="@id/userName">
@@ -733,11 +732,11 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/email"
-                style="?hintColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp8"
                 android:hint="@string/email"
+                android:textColorHint="?iGapHintTextColor"
                 app:errorEnabled="@{viewModel.emailErrorEnable}"
                 app:errorText="@{viewModel.emailErrorMessage}"
                 app:layout_constraintLeft_toLeftOf="@id/name"
@@ -758,11 +757,11 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/birthDate"
-                style="?hintColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp8"
                 android:hint="@string/birth_date"
+                android:textColorHint="?iGapHintTextColor"
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="@id/name"
                 app:layout_constraintRight_toRightOf="@id/name"
@@ -781,11 +780,11 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/referralView"
-                style="?hintColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp8"
                 android:hint="@string/referral_code"
+                android:textColorHint="?iGapHintTextColor"
                 app:errorEnabled="@{viewModel.showReferralErrorLiveData}"
                 app:errorText="@{viewModel.referralError}"
                 app:layout_constraintEnd_toEndOf="@id/name"

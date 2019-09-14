@@ -136,7 +136,7 @@
 
                                 <net.iGap.module.MEditText
                                     android:id="@+id/edtMessageGps"
-                                    style="?hintColorSettingTheme"
+                                    style="@style/iGapEditTextStyle"
                                     fontPath="fonts/IRANSansMobile.ttf"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"

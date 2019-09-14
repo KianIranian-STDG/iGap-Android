@@ -439,7 +439,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         viewNewPassword.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
-        TextInputLayout inputNewPassWord = new TextInputLayout(G.fragmentActivity, null, R.attr.hintColorSettingTheme);
+        TextInputLayout inputNewPassWord = new TextInputLayout(G.fragmentActivity, null, R.attr.iGapHintTextColor);
         final AppCompatEditText newPassWord = new AppCompatEditText(G.fragmentActivity);
         newPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password));
         newPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
@@ -462,7 +462,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             newPassWord.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
         }
 
-        TextInputLayout inputConfirmPassWord = new TextInputLayout(G.fragmentActivity, null, R.attr.hintColorSettingTheme);
+        TextInputLayout inputConfirmPassWord = new TextInputLayout(G.fragmentActivity, null, R.attr.iGapHintTextColor);
         final AppCompatEditText confirmPassWord = new AppCompatEditText(G.fragmentActivity);
         confirmPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_re_enter_your_password));
         confirmPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
@@ -593,7 +593,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
-        TextInputLayout inputNewPassWord = new TextInputLayout(G.fragmentActivity, null, R.attr.hintColorSettingTheme);
+        TextInputLayout inputNewPassWord = new TextInputLayout(G.fragmentActivity, null, R.attr.iGapHintTextColor);
         final AppCompatEditText newPassWord = new AppCompatEditText(G.fragmentActivity);
         newPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password));
         newPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);

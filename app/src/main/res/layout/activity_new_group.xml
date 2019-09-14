@@ -75,20 +75,19 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ng_txtInput_newGroup"
-            style="?hintColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp20"
             android:layout_marginRight="@dimen/dp20"
             android:layout_marginBottom="@dimen/dp10"
             android:hint="@{fragmentNewGroupVieModel.txtInputName}"
+            android:textColorHint="?iGapHintTextColor"
             app:layout_constraintBottom_toBottomOf="@id/ng_ripple_circle_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ng_ripple_circle_image">
 
             <net.iGap.module.MEditText
                 android:id="@+id/ng_edt_newGroup"
-                style="?hintColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
@@ -97,6 +96,7 @@
                 android:paddingBottom="@dimen/dp4"
                 android:singleLine="true"
                 android:text="@={fragmentNewGroupVieModel.edtSetNewGroup}"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize" />
 
             <View
@@ -110,25 +110,22 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ng_txtInput_description"
-            style="?hintColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp32"
             android:layout_marginTop="@dimen/dp12"
             android:layout_marginRight="@dimen/dp20"
             android:hint="@string/desc_group_chanel"
+            android:textColorHint="?iGapHintTextColor"
             app:layout_constraintEnd_toEndOf="@id/ng_txtInput_newGroup"
             app:layout_constraintStart_toStartOf="@id/ng_ripple_circle_image"
             app:layout_constraintTop_toBottomOf="@id/ng_ripple_circle_image">
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/ng_edt_description"
-                style="?hintColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ng_txtInput_newGroup"
-                android:layout_marginLeft="@dimen/dp20"
-                android:layout_marginRight="@dimen/dp20"
                 android:background="@android:color/transparent"
                 android:ems="4"
                 android:gravity="top"
@@ -142,7 +139,7 @@
                 android:paddingBottom="@dimen/dp8"
                 android:singleLine="false"
                 android:text="@={fragmentNewGroupVieModel.edtDescription}"
-                android:textCursorDrawable="@drawable/editext_cursor"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize" />
 
 
@@ -156,17 +153,16 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/ang_txt_add_hint"
-            style="?hintColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp20"
             android:layout_marginTop="@dimen/dp16"
             android:layout_marginRight="@dimen/dp20"
-            android:fontFamily="@font/main_font"
             android:hint="@{fragmentNewGroupVieModel.txtDescriptionHint}"
-            android:textSize="@dimen/verySmallTextSize"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/standardTextSize"
             app:layout_constraintEnd_toEndOf="@id/ng_txtInput_description"
             app:layout_constraintStart_toStartOf="@id/ng_txtInput_description"
             app:layout_constraintTop_toBottomOf="@id/ng_txtInput_description" />
@@ -189,7 +185,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:text="@string/member"
-                android:textColor="?titleTextColor" />
+                android:textColor="?iGapTitleTextColor" />
 
             <View
                 android:layout_width="match_parent"

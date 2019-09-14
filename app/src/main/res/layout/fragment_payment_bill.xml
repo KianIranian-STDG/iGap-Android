@@ -56,7 +56,7 @@
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/billId"
-                    style="?hintColorSettingTheme"
+                    style="@style/iGapEditTextStyle"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp44"
                     android:afterTextChanged="@{(s)->viewModel.onTextChangedBillId(s.toString())}"
@@ -93,7 +93,7 @@
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/payId"
-                    style="?hintColorSettingTheme"
+                    style="@style/iGapEditTextStyle"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp44"
                     android:background="@drawable/background_cancel_money_action"
@@ -127,7 +127,7 @@
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/fpb_edt_price"
-                    style="?hintColorSettingTheme"
+                    style="@style/iGapEditTextStyle"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp44"
                     android:background="@drawable/background_cancel_money_action"

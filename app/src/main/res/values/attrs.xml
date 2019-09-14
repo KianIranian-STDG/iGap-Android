@@ -71,7 +71,6 @@
 
     <!--setting-->
     <attr name="backgroundColorSettingTheme_2" format="reference" />
-    <attr name="hintColorSettingTheme" format="reference" />
     <attr name="textBackgroundColor" format="reference" />
     <attr name="textBackgroundColor_2" format="reference" />
     <attr name="textSecurityColor" format="reference" />
@@ -86,6 +85,7 @@
     <attr name="iGapTitleTextColor" format="color" />
     <attr name="iGapSubtitleTextColor" format="color" />
     <attr name="iGapDividerLine" format="color" />
+    <attr name="iGapHintTextColor" format="color" />
 
     <!--=======================custom theme=====================-->
 

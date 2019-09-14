@@ -43,7 +43,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/areaCodeEditText"
-            style="?hintColorSettingTheme"
+            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp44"
             android:layout_marginStart="@dimen/dp8"
@@ -91,7 +91,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/telephoneEditText"
-            style="?hintColorSettingTheme"
+            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp44"
             android:background="@drawable/background_cancel_money_action"

@@ -38,7 +38,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/phoneNumberEditText"
-            style="?hintColorSettingTheme"
+            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp8"
@@ -74,7 +74,6 @@
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/fpc_checkBox_trabord"
-            android:textColor="?iGapTitleTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp8"
@@ -83,6 +82,7 @@
             android:button="@drawable/check_box_background"
             android:onCheckedChanged="@{(view,isChecked)->viewModel.checkBoxTarabordChanged(isChecked,phoneNumberEditText.getEditableText().toString())}"
             android:text="@string/trabord"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp16"
             android:visibility="@{viewModel.showDetail}"
             app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"

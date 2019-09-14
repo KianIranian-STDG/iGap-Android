@@ -150,7 +150,7 @@
                 android:hint="@string/type_message"
                 android:maxLines="4"
                 android:paddingRight="@dimen/dp4"
-                style="?hintColorSettingTheme"
+                style="@style/iGapEditTextStyle"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray_4c"
                 app:emojiSize="26sp" />

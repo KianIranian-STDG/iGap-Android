@@ -39,14 +39,13 @@
         android:textSize="@dimen/dp16" />
 
     <com.google.android.material.textfield.TextInputLayout
-        style="?hintColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp20">
 
         <net.iGap.module.EditTextAdjustPan
             android:id="@+id/stda_edt_dleteAccount"
-            style="?hintColorSettingTheme"
+            style="@style/iGapEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
