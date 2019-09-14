@@ -291,4 +291,9 @@
     <color name="blueGreyBackground">#CFD8DC</color>
 
     <color name="blueGreyTitleTextColor">#0d0d0d</color>
+    <color name="blueGrayDividerLine">#b0bec5</color>
+    <color name="indigoDividerLine">#9fa8da</color>
+    <color name="brownDividerLine">#bcaaa4</color>
+    <color name="tealDividerLine">#80cbc4</color>
+    <color name="grayDividerLine">#e0e0e0</color>
 </resources>

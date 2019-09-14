@@ -73,12 +73,12 @@
 
 
             <View
-                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginRight="@dimen/dp32" />
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
                 android:layout_width="wrap_content"
@@ -109,12 +109,12 @@
 
 
             <View
-                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginRight="@dimen/dp32" />
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
                 android:layout_width="wrap_content"
@@ -144,12 +144,12 @@
             android:orientation="vertical">
 
             <View
-                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginRight="@dimen/dp32" />
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
                 android:layout_width="wrap_content"
@@ -179,12 +179,12 @@
             android:orientation="vertical">
 
             <View
-                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginRight="@dimen/dp32" />
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
                 android:layout_width="wrap_content"
@@ -213,12 +213,12 @@
             android:orientation="vertical">
 
             <View
-                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginRight="@dimen/dp32" />
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
                 android:layout_width="wrap_content"
@@ -249,12 +249,12 @@
             android:orientation="vertical">
 
             <View
-                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginRight="@dimen/dp32" />
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
                 android:layout_width="wrap_content"
@@ -285,12 +285,12 @@
             android:orientation="vertical">
 
             <View
-                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginRight="@dimen/dp32" />
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
                 android:layout_width="wrap_content"
@@ -321,12 +321,12 @@
             android:orientation="vertical">
 
             <View
-                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
-                android:layout_marginRight="@dimen/dp32" />
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
                 android:layout_width="wrap_content"

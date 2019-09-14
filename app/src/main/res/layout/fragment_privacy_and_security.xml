@@ -140,9 +140,9 @@
                         android:textStyle="normal" />
 
                     <View
-                        style="?lineColorSettingTheme"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp" />
+                        android:layout_height="1dp"
+                        android:background="?iGapDividerLine" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -176,11 +176,6 @@
                             android:textSize="@dimen/dp16"
                             android:textStyle="normal" />
                     </LinearLayout>
-
-                    <!--<View-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--style="?lineColorSettingTheme" />-->
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -222,7 +217,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobil.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -231,13 +225,13 @@
                         android:paddingRight="@dimen/dp12"
                         android:paddingBottom="@dimen/dp16"
                         android:text="@string/privacy"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
 
                     <TextView
                         android:id="@+id/stps_txt_blocked_user"
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
@@ -247,6 +241,7 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/Block_Users"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal" />
 
@@ -258,7 +253,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -268,6 +262,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/who_can_see_my_avatar"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -295,7 +290,6 @@
                         >
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -306,6 +300,7 @@
                             android:paddingRight="@dimen/dp16"
                             android:singleLine="true"
                             android:text="@string/who_can_invite_you_to_channel_s"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -331,7 +326,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -342,6 +336,7 @@
                             android:paddingRight="@dimen/dp16"
                             android:singleLine="true"
                             android:text="@string/who_can_invite_you_to_group_s"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -367,7 +362,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -377,6 +371,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/who_is_allowed_to_voice_call"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -402,7 +397,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -412,6 +406,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/who_is_allowed_to_video_call"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -437,7 +432,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -447,6 +441,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/last_seen"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -468,13 +463,13 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/dp10"
                     android:layout_marginTop="@dimen/dp10"
                     android:layout_marginRight="@dimen/dp10"
-                    android:layout_marginBottom="@dimen/dp10" />
+                    android:layout_marginBottom="@dimen/dp10"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     style="?backgroundColorSettingTheme_2"
@@ -483,7 +478,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
@@ -492,12 +486,12 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/Passcode_Lock"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp16"
                         android:textStyle="normal"
                         android:visibility="gone" />
 
                     <TextView
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -506,17 +500,17 @@
                         android:paddingRight="@dimen/dp12"
                         android:paddingBottom="@dimen/dp8"
                         android:text="@string/Security"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
                     <View
-                        style="?lineColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
+                        android:background="?iGapDividerLine"
                         android:visibility="gone" />
 
                     <TextView
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
@@ -525,13 +519,13 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/Two_Step_Verification"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp16"
                         android:textStyle="normal"
                         android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/stps_passCode"
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
@@ -541,12 +535,12 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/two_step_pass_code"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal" />
 
                     <TextView
                         android:id="@+id/stps_twoStepVerification"
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
@@ -556,12 +550,12 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/two_step_verification"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal" />
 
                     <TextView
                         android:id="@+id/stps_activitySessions"
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
@@ -571,24 +565,19 @@
                         android:paddingTop="@dimen/dp4"
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/Active_Sessions"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal" />
-
-                    <!--<View-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--style="?lineColorSettingTheme"-->
-                    <!--/>-->
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/dp10"
                     android:layout_marginTop="@dimen/dp10"
                     android:layout_marginRight="@dimen/dp10"
-                    android:layout_marginBottom="@dimen/dp10" />
+                    android:layout_marginBottom="@dimen/dp10"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -596,7 +585,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -605,6 +593,7 @@
                         android:paddingRight="@dimen/dp12"
                         android:paddingBottom="@dimen/dp16"
                         android:text="@string/Account_Self_destruction"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
@@ -616,7 +605,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -626,6 +614,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/if_you_are_away_for"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 

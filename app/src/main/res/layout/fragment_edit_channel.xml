@@ -100,9 +100,9 @@
 
                 <View
                     android:id="@+id/line"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
+                    android:background="?iGapDividerLine"
                     app:layout_constraintEnd_toEndOf="@+id/channelNameEditText"
                     app:layout_constraintStart_toStartOf="@+id/channelNameEditText"
                     app:layout_constraintTop_toBottomOf="@+id/channelNameEditText" />
@@ -126,10 +126,10 @@
 
                 <View
                     android:id="@+id/line2"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
+                    android:background="?iGapDividerLine"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/channelAvatar"
@@ -137,10 +137,10 @@
 
                 <View
                     android:id="@+id/line3"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
+                    android:background="?iGapDividerLine"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/rateMessageDescription"
@@ -148,10 +148,10 @@
 
                 <View
                     android:id="@+id/line4"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
+                    android:background="?iGapDividerLine"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/membersCount"

@@ -6,11 +6,11 @@
 
     <View
         android:id="@+id/cigp_view_topLine"
-        style="?lineColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginStart="@dimen/dp8"
-        android:layout_marginLeft="@dimen/dp8" />
+        android:layout_marginLeft="@dimen/dp8"
+        android:background="?iGapDividerLine" />
 
     <LinearLayout
         android:layout_width="match_parent"

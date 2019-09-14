@@ -9,30 +9,30 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/imgSticker"
             android:layout_width="52dp"
-            android:layout_gravity="center"
-            android:layout_height="52dp" />
+            android:layout_height="52dp"
+            android:layout_gravity="center" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
             android:paddingStart="7dp"
-            android:paddingLeft="@dimen/dp70"
-            android:orientation="vertical">
+            android:paddingLeft="@dimen/dp70">
 
             <TextView
                 android:id="@+id/txtName"
-                android:textColor="?iGapTitleTextColor"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight=".5"
-                android:gravity="center" />
+                android:gravity="center"
+                android:textColor="?iGapTitleTextColor" />
 
             <TextView
                 android:id="@+id/txtCount"
@@ -45,22 +45,22 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
-            style="?iGapButton"
             android:id="@+id/txtRemoveSticker"
+            style="?iGapButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Add"
             android:layout_gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
+            android:gravity="center"
             android:paddingLeft="25dp"
+            android:paddingTop="5dp"
             android:paddingRight="25dp"
-            android:gravity="center" />
+            android:paddingBottom="5dp"
+            android:text="@string/Add" />
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        style="?lineColorSettingTheme" />
+        android:background="?iGapDividerLine" />
 </LinearLayout>

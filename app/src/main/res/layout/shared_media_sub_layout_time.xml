@@ -23,7 +23,7 @@
 
     <View
         android:id="@+id/smslt_time_shared_splitter"
-        style="?lineColorSettingTheme"
+        android:background="?iGapDividerLine"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp1"
         android:layout_marginLeft="@dimen/dp4"

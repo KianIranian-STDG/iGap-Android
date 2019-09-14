@@ -46,9 +46,9 @@
 
     <View
         android:id="@+id/rg_borderButton"
-        style="?lineColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:background="?iGapDividerLine"
         android:visibility="visible" />
 
     <ListView
@@ -65,9 +65,9 @@
         android:scrollbarThumbVertical="@color/rg_start_background" />
 
     <View
-        style="?lineColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="1dp" />
+        android:layout_height="1dp"
+        android:background="?iGapDividerLine" />
 
     <LinearLayout
         android:layout_width="match_parent"

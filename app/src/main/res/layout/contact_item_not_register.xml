@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layoutDirection="ltr"
@@ -10,14 +9,13 @@
     android:paddingEnd="@dimen/dp28"
     android:paddingRight="@dimen/dp28">
 
-
     <View
         android:id="@+id/topLine"
-        style="?lineColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginStart="@dimen/dp8"
-        android:layout_marginLeft="@dimen/dp8" />
+        android:layout_marginLeft="@dimen/dp8"
+        android:background="?iGapDividerLine" />
 
     <LinearLayout
         android:layout_width="match_parent"

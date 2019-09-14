@@ -170,10 +170,10 @@
 
                 <View
                     android:id="@+id/line1"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
+                    android:background="?iGapDividerLine"
                     android:visibility="@{viewModel.bioVisibility}"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -235,10 +235,10 @@
 
                 <View
                     android:id="@+id/line2"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
+                    android:background="?iGapDividerLine"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/customNotification"
@@ -470,10 +470,10 @@
 
                 <View
                     android:id="@+id/line3"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
+                    android:background="?iGapDividerLine"
                     android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="@id/line2"
                     app:layout_constraintRight_toRightOf="@id/line2"
@@ -517,10 +517,10 @@
 
                 <View
                     android:id="@+id/line4"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
+                    android:background="?iGapDividerLine"
                     android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="@id/line2"
                     app:layout_constraintRight_toRightOf="@id/line2"
@@ -541,10 +541,10 @@
 
                 <View
                     android:id="@+id/line5"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
+                    android:background="?iGapDividerLine"
                     app:layout_constraintLeft_toLeftOf="@id/line2"
                     app:layout_constraintRight_toRightOf="@id/line2"
                     app:layout_constraintTop_toBottomOf="@id/background" />

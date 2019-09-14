@@ -144,94 +144,91 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
     private void setThemeSetting() {
         switch (G.themeColor) {
             case Theme.CUSTOM:
-                this.setTheme(R.style.Material_lightCustom);
-                break;
             case Theme.DEFAULT:
-                this.setTheme(R.style.Material_lightCustom);
+                this.setTheme(R.style.iGapLightTheme);
                 break;
             case Theme.DARK:
-                this.setTheme(R.style.Material_blackCustom);
+                this.setTheme(R.style.iGapDarkTheme);
                 break;
             case Theme.RED:
-                this.setTheme(R.style.Material_red);
+                this.setTheme(R.style.iGapRedTheme);
                 break;
             case Theme.PINK:
-                this.setTheme(R.style.Material_pink);
+                this.setTheme(R.style.iGapPinkTheme);
                 break;
             case Theme.PURPLE:
-                this.setTheme(R.style.Material_purple);
+                this.setTheme(R.style.iGapPurpleTheme);
                 break;
             case Theme.DEEPPURPLE:
-                this.setTheme(R.style.Material_deepPurple);
+                this.setTheme(R.style.iGapDeepPurpleThem);
                 break;
             case Theme.INDIGO:
-                this.setTheme(R.style.Material_indigo);
+                this.setTheme(R.style.iGapLightIndigoTheme);
                 break;
             case Theme.BLUE:
-                this.setTheme(R.style.Material_blue);
+                this.setTheme(R.style.iGapBlueTheme);
                 break;
-
             case Theme.LIGHT_BLUE:
-                this.setTheme(R.style.Material_lightBlue);
+                this.setTheme(R.style.iGapLightBlueTheme);
                 break;
 
             case Theme.CYAN:
-                this.setTheme(R.style.Material_cyan);
+                this.setTheme(R.style.iGapCyanTheme);
                 break;
 
             case Theme.TEAL:
-                this.setTheme(R.style.Material_teal);
+                this.setTheme(R.style.iGapLightTealTheme);
                 break;
 
             case Theme.GREEN:
-                this.setTheme(R.style.Material_green);
+                this.setTheme(R.style.iGapGreenTheme);
                 break;
 
             case Theme.LIGHT_GREEN:
-                this.setTheme(R.style.Material_lightGreen);
+                this.setTheme(R.style.iGapLightGreenTheme);
                 break;
 
             case Theme.LIME:
-                this.setTheme(R.style.Material_lime);
+                this.setTheme(R.style.iGapLimeTheme);
                 break;
 
             case Theme.YELLLOW:
-                this.setTheme(R.style.Material_yellow);
+                this.setTheme(R.style.iGapYellowTheme);
                 break;
             case Theme.AMBER:
-                this.setTheme(R.style.Material_amber);
+                this.setTheme(R.style.iGapAmberTheme);
                 break;
 
             case Theme.ORANGE:
-                this.setTheme(R.style.Material_orange);
+                this.setTheme(R.style.iGapOrangeTheme);
                 break;
 
             case Theme.DEEP_ORANGE:
-                this.setTheme(R.style.Material_deepOrange);
+                this.setTheme(R.style.iGapDeepOrangeTheme);
                 break;
             case Theme.BROWN:
-                this.setTheme(R.style.Material_brown);
+                this.setTheme(R.style.iGapBrownTheme);
                 break;
             case Theme.GREY:
-                this.setTheme(R.style.Material_grey);
+                this.setTheme(R.style.iGapGrayTheme);
                 break;
             case Theme.BLUE_GREY:
-                this.setTheme(R.style.Material_blueGrey);
+                this.setTheme(R.style.iGapBlueGrayTheme);
                 break;
             case Theme.BLUE_GREY_COMPLETE:
-                this.setTheme(R.style.Material_blueGreyComplete);
+                this.setTheme(R.style.iGapBlueGrayTheme);
                 break;
             case Theme.INDIGO_COMPLETE:
-                this.setTheme(R.style.Material_indigoComplete);
+                this.setTheme(R.style.iGapIndigoTheme);
                 break;
             case Theme.BROWN_COMPLETE:
-                this.setTheme(R.style.Material_BrownComplete);
+                this.setTheme(R.style.iGapBrownTheme);
                 break;
             case Theme.TEAL_COMPLETE:
-                this.setTheme(R.style.Material_TealComplete);
+                this.setTheme(R.style.iGapTealTheme);
                 break;
             case Theme.GREY_COMPLETE:
-                this.setTheme(R.style.Material_GreyComplete);
+                this.setTheme(R.style.iGapGrayTheme);
                 break;
 
         }

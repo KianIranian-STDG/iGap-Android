@@ -12,11 +12,11 @@
 
     <View
         android:id="@+id/topLine"
-        style="?lineColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginStart="@dimen/dp8"
-        android:layout_marginLeft="@dimen/dp8" />
+        android:layout_marginLeft="@dimen/dp8"
+        android:background="?iGapDividerLine" />
 
     <LinearLayout
         android:id="@+id/cig_root"

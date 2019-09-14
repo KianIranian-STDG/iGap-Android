@@ -75,7 +75,7 @@
 
                     <View
                         android:id="@+id/rg_borderButton"
-                        style="?lineColorSettingTheme"
+                        android:background="?iGapDividerLine"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginLeft="@dimen/dp24"

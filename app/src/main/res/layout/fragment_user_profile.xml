@@ -262,12 +262,12 @@
 
             <View
                 android:id="@+id/fup_splitter_1"
-                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="@dimen/dp16"
                 android:layout_marginTop="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp16"
+                android:background="?iGapDividerLine"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fup_btn_cloud" />
@@ -328,9 +328,9 @@
 
             <View
                 android:id="@+id/fup_splitter_2"
-                style="?lineColorSettingTheme"
                 android:layout_width="1dp"
                 android:layout_height="0dp"
+                android:background="?iGapDividerLine"
                 app:layout_constraintBottom_toBottomOf="@id/fup_btn_credit"
                 app:layout_constraintEnd_toStartOf="@id/fup_btn_score"
                 app:layout_constraintHorizontal_chainStyle="spread"
@@ -393,12 +393,12 @@
 
             <View
                 android:id="@+id/fup_splitter_3"
-                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="@dimen/dp16"
                 android:layout_marginTop="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp16"
+                android:background="?iGapDividerLine"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fup_btn_credit" />
@@ -601,12 +601,12 @@
 
             <View
                 android:id="@+id/fup_splitter_4"
-                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="@dimen/dp12"
                 android:layout_marginTop="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp12"
+                android:background="?iGapDividerLine"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fup_btn_faq" />

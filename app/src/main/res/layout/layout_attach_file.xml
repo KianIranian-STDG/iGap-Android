@@ -11,14 +11,11 @@
         android:id="@+id/chl_ll_attach"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
 
         <View
-            style="?lineColorSettingTheme"
+            android:background="?iGapDividerLine"
             android:layout_width="match_parent"
             android:layout_height="1dp" />
 

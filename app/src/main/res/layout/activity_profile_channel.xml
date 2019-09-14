@@ -190,10 +190,10 @@
 
                 <View
                     android:id="@+id/divider0"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
+                    android:background="?iGapDividerLine"
                     android:visibility="@{viewModel.haveDescription}"
                     app:layout_constraintLeft_toLeftOf="@id/divider1"
                     app:layout_constraintRight_toRightOf="@id/divider1"
@@ -273,10 +273,10 @@
 
                 <View
                     android:id="@+id/divider1"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
+                    android:background="?iGapDividerLine"
                     android:visibility="@{viewModel.isShowLink}"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -311,10 +311,10 @@
 
                 <View
                     android:id="@+id/divider2"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp8"
+                    android:background="?iGapDividerLine"
                     app:layout_constraintLeft_toLeftOf="@id/divider1"
                     app:layout_constraintRight_toRightOf="@id/divider1"
                     app:layout_constraintTop_toBottomOf="@id/notification" />
@@ -422,10 +422,10 @@
 
                 <View
                     android:id="@+id/divider3"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp8"
+                    android:background="?iGapDividerLine"
                     android:visibility="@{viewModel.showMemberList}"
                     app:layout_constraintLeft_toLeftOf="@id/divider1"
                     app:layout_constraintRight_toRightOf="@id/divider1"
@@ -644,10 +644,10 @@
 
                 <View
                     android:id="@+id/divider4"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp8"
+                    android:background="?iGapDividerLine"
                     android:visibility="@{viewModel.showLeaveChannel}"
                     app:layout_constraintLeft_toLeftOf="@id/divider1"
                     app:layout_constraintRight_toRightOf="@id/divider1"

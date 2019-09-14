@@ -7,13 +7,13 @@
 
     <View
         android:id="@+id/topLine"
-        style="?lineColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginStart="@dimen/dp8"
         android:layout_marginLeft="@dimen/dp8"
         android:layout_marginEnd="@dimen/dp20"
-        android:layout_marginRight="@dimen/dp20" />
+        android:layout_marginRight="@dimen/dp20"
+        android:background="?iGapDividerLine" />
 
     <com.daimajia.swipe.SwipeLayout
         android:id="@+id/swipeRevealLayout"
@@ -110,9 +110,9 @@
 
                     <View
                         android:id="@+id/bottomLine"
-                        style="?lineColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="1px"
+                        android:background="?iGapDividerLine"
                         android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>

@@ -257,11 +257,6 @@
     <style name="background_2_setting_dark">
         <item name="android:background">@color/background_setting_dark_2</item>
     </style>
-
-    <style name="line_style_setting_dark">
-        <item name="android:background">@color/gray_4c</item>
-    </style>
-
     <style name="hint_style_setting_dark">
         <item name="android:textColorHint">@color/hint_edit_text</item>
         <item name="android:textColor">@color/white</item>
@@ -295,18 +290,8 @@
         <item name="android:background">@drawable/background_call_fragment_dark</item>
     </style>
 
-    <style name="backgroundPassCodeDark">
-        <item name="android:background">@color/black90</item>
-    </style>
-
     <style name="backgroundSubChat_dark">
         <item name="android:background">@color/line</item>
-    </style>
-
-    <style name="FabButton_dark">
-        <item name="backgroundTint">@color/colorOldBlack</item>
-        <item name="android:tint">@color/white</item>
-        <item name="android:theme">@color/colorOldBlack</item>
     </style>
 
 
@@ -355,10 +340,6 @@
         <item name="android:background">@color/white</item>
     </style>
 
-    <style name="line_style_setting_light">
-        <item name="android:background">@color/background_editText</item>
-    </style>
-
     <style name="hint_style_setting_light">
         <item name="android:textColorHint">@color/hint_edit_text</item>
         <item name="android:textColor">@color/black90</item>
@@ -394,16 +375,6 @@
 
     <style name="backgroundSubChat_light">
         <item name="android:background">@color/white</item>
-    </style>
-
-    <style name="FabButton_light">
-        <item name="backgroundTint">@color/white</item>
-        <item name="android:tint">@color/gray</item>
-        <item name="android:theme">@color/white</item>
-    </style>
-
-    <style name="backgroundPassCodeLight">
-        <item name="android:background">@color/green</item>
     </style>
 
 
@@ -464,10 +435,6 @@
         <item name="android:background">#C5CAE9</item>
     </style>
 
-    <style name="line_style_setting_indigoComplete">
-        <item name="android:background">#9fa8da</item>
-    </style>
-
     <style name="hint_style_setting_indigoComplete">
         <item name="android:textColorHint">#757575</item>
         <item name="android:textColor">#212121</item>
@@ -496,10 +463,6 @@
 
     <style name="backgroundSubChat_BrownComplete">
         <item name="android:background">#D7CCC8</item>
-    </style>
-
-    <style name="line_style_setting_BrownComplete">
-        <item name="android:background">#bcaaa4</item>
     </style>
 
     <style name="hint_style_setting_BrownComplete">
@@ -531,10 +494,6 @@
         <item name="android:background">#B2DFDB</item>
     </style>
 
-    <style name="line_style_setting_TealComplete">
-        <item name="android:background">#80cbc4</item>
-    </style>
-
     <style name="hint_style_setting_TealComplete">
         <item name="android:textColorHint">#757575</item>
         <item name="android:textColor">#212121</item>
@@ -563,10 +522,6 @@
 
     <style name="backgroundSubChat_GreyComplete">
         <item name="android:background">#f5f5f5</item>
-    </style>
-
-    <style name="line_style_setting_GreyComplete">
-        <item name="android:background">#e0e0e0</item>
     </style>
 
     <style name="hint_style_setting_GreyComplete">

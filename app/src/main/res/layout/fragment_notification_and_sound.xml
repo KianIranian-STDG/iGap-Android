@@ -334,11 +334,11 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10" />
+                    android:layout_marginRight="@dimen/dp10"
+                    android:background="?iGapDividerLine" />
 
                 <!--group-->
                 <LinearLayout
@@ -573,11 +573,11 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10" />
+                    android:layout_marginRight="@dimen/dp10"
+                    android:background="?iGapDividerLine" />
 
                 <!--in app notification-->
                 <LinearLayout
@@ -760,11 +760,11 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10" />
+                    android:layout_marginRight="@dimen/dp10"
+                    android:background="?iGapDividerLine" />
 
                 <!--this part is Gone-->
                 <LinearLayout
@@ -864,11 +864,11 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10" />
+                    android:layout_marginRight="@dimen/dp10"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1114,11 +1114,11 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10" />
+                    android:layout_marginRight="@dimen/dp10"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

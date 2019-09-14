@@ -40,7 +40,7 @@
 
         <View
             android:id="@+id/line2"
-            style="?lineColorSettingTheme"
+            android:background="?iGapDividerLine"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="8dp"

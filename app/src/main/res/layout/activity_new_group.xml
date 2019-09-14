@@ -101,9 +101,9 @@
 
             <View
                 android:id="@+id/ng_view_newGroup"
-                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp" />
+                android:layout_height="0.5dp"
+                android:background="?iGapDividerLine" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -148,11 +148,11 @@
 
             <View
                 android:id="@+id/ng_view_desc"
-                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="@dimen/dp20"
-                android:layout_marginRight="@dimen/dp20" />
+                android:layout_marginRight="@dimen/dp20"
+                android:background="?iGapDividerLine" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -192,10 +192,10 @@
                 android:textColor="?titleTextColor" />
 
             <View
-                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_margin="10dp" />
+                android:layout_margin="10dp"
+                android:background="?iGapDividerLine" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ang_recycler_view_selected_contact"

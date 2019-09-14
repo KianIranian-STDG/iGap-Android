@@ -62,7 +62,6 @@
 
                 </LinearLayout>
 
-
                 <net.iGap.module.CustomTextViewMedium
                     android:id="@+id/txt_user_comment_map"
                     android:layout_width="wrap_content"
@@ -95,10 +94,10 @@
 
     <View
         android:id="@+id/view_topLine_map"
-        style="?lineColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/dp60"
-        android:layout_marginLeft="@dimen/dp60" />
+        android:layout_marginLeft="@dimen/dp60"
+        android:background="?iGapDividerLine" />
 
 </LinearLayout>
