@@ -451,7 +451,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         if (realmContacts == null && enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
             showNumber.set(false);
             disableDeleteContact = true;
-         //   menuVisibility.setValue(View.GONE);
+            menuVisibility.setValue(View.GONE);
         }
 
         if (G.selectedLanguage.equals("en")) {

@@ -232,6 +232,7 @@ public class FragmentContactsProfile extends BaseFragment {
 
             if (viewModel.phone.get().equals("0")) {
                 binding.toolbarTxtTelExpanded.setVisibility(View.GONE);
+                viewModel.menuVisibility.setValue(View.GONE);
             } else {
                 binding.toolbarTxtTelExpanded.setText(viewModel.phone.get());
                 binding.toolbarTxtTelExpanded.setOnClickListener(v -> viewModel.onPhoneNumberClick());
@@ -615,6 +616,8 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
             FragmentAddContact fragment = FragmentAddContact.newInstance(
                     viewModel.userId,viewModel.phoneNumber , viewModel.firstName, viewModel.lastName, FragmentAddContact.ContactMode.EDIT, (name, family) -> {
                         viewModel.contactName.setValue(name + " " + family);
+                        viewModel.firstName = name ;
+                        viewModel.lastName = family ;
                         if (getActivity() != null){
                             ((ActivityMain) getActivity()).onUpdateContacts();
                         }
