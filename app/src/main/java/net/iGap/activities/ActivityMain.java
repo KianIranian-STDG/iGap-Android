@@ -1544,7 +1544,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                          */
                         if (room.getUnreadCount() <= 1) {
                             realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
-                            room.setFirstUnreadMessage(realmRoomMessage);
                         }
                     }
                 }
@@ -1556,6 +1555,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
          */
         if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != userId) {
             // user has received the message, so I make a new delivered update status request
+            // todo:please check in group and channel that user is joined
+
             if (roomType == ProtoGlobal.Room.Type.CHAT) {
                 G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
             } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {

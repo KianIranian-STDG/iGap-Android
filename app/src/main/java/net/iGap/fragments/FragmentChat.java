@@ -500,8 +500,6 @@ public class FragmentChat extends BaseFragment
     private FastItemAdapter fastItemAdapterForward;
     private BottomSheetDialog bottomSheetDialogForward;
     private View viewBottomSheetForward;
-    private RealmRoomMessage firstUnreadMessage;
-    private RealmRoomMessage firstUnreadMessageInChat; // when user is in this room received new message
     private RealmRoomMessage voiceLastMessage = null;
     private boolean showVoteChannel = true;
     private RealmResults<RealmRoom> results = null;
@@ -1905,7 +1903,6 @@ public class FragmentChat extends BaseFragment
             color = managedRoom.getColor();
             isChatReadOnly = managedRoom.getReadOnly();
             unreadCount = managedRoom.getUnreadCount();
-            firstUnreadMessage = managedRoom.getFirstUnreadMessage();
             savedScrollMessageId = managedRoom.getLastScrollPositionMessageId();
             firstVisiblePositionOffset = managedRoom.getLastScrollPositionOffset();
 
@@ -2574,6 +2571,13 @@ public class FragmentChat extends BaseFragment
         };
     }
 
+    private RealmRoomMessage getFirstUnreadMessage() {
+        if (managedRoom != null && managedRoom.isValid()) {
+            return managedRoom.getFirstUnreadMessage();
+        }
+        return null;
+    }
+
     private void initComponent() {
 
         iconMute = mHelperToolbar.getChatMute();
@@ -2801,19 +2805,19 @@ public class FragmentChat extends BaseFragment
                 /**
                  * have unread
                  */
-                if (countNewMessage > 0 && firstUnreadMessageInChat != null) {
+                if (countNewMessage > 0 && getFirstUnreadMessage() != null) {
                     /**
                      * if unread message is exist in list set position to this item and create
                      * unread layout otherwise should clear list and load from unread again
                      */
 
-                    firstUnreadMessage = firstUnreadMessageInChat;
-                    if (!firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
+                    if (!getFirstUnreadMessage().isValid() || getFirstUnreadMessage().isDeleted()) {
                         resetAndGetFromEnd();
                         return;
                     }
 
-                    int position = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
+                    int position = mAdapter.findPositionByMessageId(getFirstUnreadMessage().getMessageId());
+                    String m = getFirstUnreadMessage().getMessage();
                     if (position > 0) {
                         mAdapter.add(position, new UnreadMessage(mAdapter, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), makeUnreadMessage(countNewMessage))).withIdentifier(SUID.id().get()));
                         isShowLayoutUnreadMessage = true;
@@ -2822,15 +2826,14 @@ public class FragmentChat extends BaseFragment
                     } else {
                         resetMessagingValue();
                         unreadCount = countNewMessage;
-                        firstUnreadMessage = firstUnreadMessageInChat;
                         getMessages();
 
-                        if (firstUnreadMessage == null) {
+                        if (getFirstUnreadMessage() == null) {
                             resetAndGetFromEnd();
                             return;
                         }
 
-                        int position1 = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
+                        int position1 = mAdapter.findPositionByMessageId(getFirstUnreadMessage().getMessageId());
                         if (position1 > 0) {
                             LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
                             linearLayout.scrollToPositionWithOffset(position1 - 1, 0);
@@ -3929,9 +3932,6 @@ public class FragmentChat extends BaseFragment
                                 /**
                                  * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
                                  */
-                                if (room.getUnreadCount() <= 1 && countNewMessage < 1) {
-                                    firstUnreadMessage = realm.copyFromRealm(realmRoomMessage);
-                                }
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
@@ -4013,6 +4013,10 @@ public class FragmentChat extends BaseFragment
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
+                                    /**
+                                     * when client load item from unread and don't come down, don't let add the message
+                                     * to the list and after insuring that not any more message in DOWN can add message
+                                     */
                                     if (addToView) {
                                         switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(getRealmChat(), messageCopy))), false);
                                         if (isShowLayoutUnreadMessage) {
@@ -4024,21 +4028,6 @@ public class FragmentChat extends BaseFragment
 
                                 }
                             });
-
-                            /**
-                             * when client load item from unread and don't come down let's not add the message
-                             * to the list and after insuring that not any more message in DOWN can add message
-                             */
-
-                        } else {
-                            if (!isNotJoin) {
-                                // user has received the message, so I make a new delivered update status request
-                                if (roomType == CHAT) {
-                                    G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-                                } else if (roomType == GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
-                                    G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-                                }
-                            }
                         }
                     } else {
 
@@ -4317,13 +4306,12 @@ public class FragmentChat extends BaseFragment
         txtNewUnreadMessage.setVisibility(View.GONE);
         txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
 
-        firstUnreadMessageInChat = null;
-
         try (Realm realm = Realm.getDefaultInstance()) {
             realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     RealmRoom.setCount(realm, mRoomId, 0);
+                    RealmRoom.removeFirstUnreadMessage(realm, mRoomId);
                 }
             });
         }
@@ -4335,7 +4323,7 @@ public class FragmentChat extends BaseFragment
          * if in current room client have new message that not seen yet
          * after first new message come in the view change view for unread count
          */
-        if (firstUnreadMessageInChat != null && firstUnreadMessageInChat.isValid() && !firstUnreadMessageInChat.isDeleted() && firstUnreadMessageInChat.getMessageId() == parseLong(messageInfo.messageID)) {
+        if (getFirstUnreadMessage() != null && getFirstUnreadMessage().isValid() && !getFirstUnreadMessage().isDeleted() && getFirstUnreadMessage().getMessageId() == parseLong(messageInfo.messageID)) {
             setCountNewMessageZero();
         }
 
@@ -5565,7 +5553,6 @@ public class FragmentChat extends BaseFragment
         } else {
             if (countNewMessage == 0) {
                 removeLayoutUnreadMessage();
-                firstUnreadMessageInChat = realmRoomMessage;
             }
             countNewMessage++;
             setDownBtnVisible();
@@ -7883,10 +7870,6 @@ public class FragmentChat extends BaseFragment
         long fetchMessageId = 0; // with this value realm will be queried for get message
         if (hasUnread() || hasSavedState()) {
 
-            if (firstUnreadMessage == null || !firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
-                firstUnreadMessage = getFirstUnreadMessage(getRealmChat());
-            }
-
             /**
              * show unread layout and also set firstUnreadMessageId in startFutureMessageIdUp
              * for try load top message and also topMore default value is true for this target
@@ -7895,27 +7878,26 @@ public class FragmentChat extends BaseFragment
                 fetchMessageId = getSavedState();
 
                 if (hasUnread()) {
-                    if (firstUnreadMessage == null) {
+                    if (getFirstUnreadMessage() == null) {
                         resetMessagingValue();
                         getMessages();
                         return;
                     }
                 }
             } else {
-                if (firstUnreadMessage == null) {
+                if (getFirstUnreadMessage() == null) {
                     resetMessagingValue();
                     getMessages();
                     return;
                 }
                 unreadLayoutMessage();
-                fetchMessageId = firstUnreadMessage.getMessageId();
+                fetchMessageId = getFirstUnreadMessage().getMessageId();
             }
 
             if (hasUnread()) {
                 countNewMessage = unreadCount;
                 txtNewUnreadMessage.setVisibility(View.VISIBLE);
                 txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
-                firstUnreadMessageInChat = firstUnreadMessage;
             }
 
             startFutureMessageIdUp = fetchMessageId;

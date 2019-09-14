@@ -845,6 +845,14 @@ public class RealmRoom extends RealmObject {
         return room;
     }
 
+    public static RealmRoom removeFirstUnreadMessage(Realm realm, final long roomId) {
+        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (room != null) {
+            room.setFirstUnreadMessage(null);
+        }
+        return room;
+    }
+
     public static RealmRoom setCountWithCallBack(Realm realm, final long roomId, final int count) {
         RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (room != null) {
