@@ -126,7 +126,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private Realm realmFragmentMain;
     private ProgressBar pbLoading;
 
-    public static int unreadCount = 0;
     private RoomAdapter roomAdapter;
     private HelperToolbar mHelperToolbar;
     private boolean isChatMultiSelectEnable = false;
@@ -1111,7 +1110,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 @Override
                 public void onChange(RealmResults<RealmRoom> collection, OrderedCollectionChangeSet changeSet) {
                     if (G.onUnreadChange != null) {
-                        unreadCount = 0;
+                        int unreadCount = 0;
                         for (RealmRoom room: collection) {
                             if (!room.getMute() && !room.isDeleted() && room.getUnreadCount() > 0) {
                                 unreadCount += room.getUnreadCount();
