@@ -11,5 +11,5 @@
 package net.iGap.interfaces;
 
 public interface OnUnreadChange {
-    void onChange();
+    void onChange(int unreadTotal);
 }

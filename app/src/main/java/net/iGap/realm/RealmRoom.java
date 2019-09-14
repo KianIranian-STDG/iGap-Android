@@ -556,16 +556,6 @@ public class RealmRoom extends RealmObject {
                 }
             });
         }
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                /** call this listener for update tab bars unread count */
-                if (G.onUnreadChange != null) {
-                    G.onUnreadChange.onChange();
-                }
-            }
-        }, 100);
     }
 
     public static void addOwnerToDatabase(long roomId) {
@@ -850,14 +840,6 @@ public class RealmRoom extends RealmObject {
         if (room != null) {
             room.setUnreadCount(count);
         }
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (G.onUnreadChange != null) {
-                    G.onUnreadChange.onChange();
-                }
-            }
-        }, 100);
 
         return room;
     }
@@ -1138,17 +1120,6 @@ public class RealmRoom extends RealmObject {
         }
     }
 
-    public static int getAllUnreadCount() {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            Number number = realm.where(RealmRoom.class)
-                    .equalTo(RealmRoomFields.MUTE, false)
-                    .equalTo(RealmRoomFields.IS_DELETED, false)
-                    .greaterThan("unreadCount", 0)
-                    .sum("unreadCount");
-            return number.intValue();
-        }
-    }
-
     public long getId() {
         return id;
     }
@@ -1199,14 +1170,6 @@ public class RealmRoom extends RealmObject {
 
     public void setUnreadCount(int unreadCount) {
         this.unreadCount = unreadCount;
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (G.onUnreadChange != null) {
-                    G.onUnreadChange.onChange();
-                }
-            }
-        }, 100);
     }
 
     public boolean getReadOnly() {
