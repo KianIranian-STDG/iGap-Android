@@ -9,7 +9,6 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvContent"
-        style="?textColorMenuTheme"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp100"
         android:layout_margin="@dimen/dp8"

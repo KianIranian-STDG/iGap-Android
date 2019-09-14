@@ -63,19 +63,11 @@
 
     <!--=======================custom theme=====================-->
 
-    <attr name="pageBackgroundTheme" format="reference" />
-    <attr name="textColorTheme" format="reference" />
     <attr name="iGapButtonStroke" format="reference" />
     <attr name="iGapButton" format="reference" />
     <attr name="iGapButtonGray" format="reference" />
     <attr name="greenTextIconColor" format="reference" />
     <attr name="iGapKuknosLogout" format="reference" />
-
-    <!--Menu-->
-    <attr name="textColorMenuTheme" format="reference" />
-    <attr name="textColorBottomSheet" format="reference" />
-    <attr name="iconColorMenuTheme" format="reference" />
-    <attr name="backgroundColorMenuTheme" format="reference" />
 
     <!--setting-->
     <attr name="backgroundColorSettingTheme_2" format="reference" />

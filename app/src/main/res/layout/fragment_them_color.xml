@@ -126,7 +126,6 @@
                         android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
 
                     <net.iGap.module.MaterialDesignTextView
-                        style="?iconColorMenuTheme"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -233,7 +232,6 @@
                         android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
 
                     <net.iGap.module.MaterialDesignTextView
-                        style="?iconColorMenuTheme"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
