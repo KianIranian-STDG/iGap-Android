@@ -53,60 +53,60 @@ public class KuknosRealmM extends RealmObject {
     }
 
     public static void updateMnemonic(String kuknosMnemonic) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                KuknosRealmM realmUserInfo = realm.where(KuknosRealmM.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setKuknosMnemonic(kuknosMnemonic);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    KuknosRealmM realmUserInfo = realm.where(KuknosRealmM.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.setKuknosMnemonic(kuknosMnemonic);
+                    }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public static void updatePIN(String kuknosPin) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                KuknosRealmM realmUserInfo = realm.where(KuknosRealmM.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setKuknosPIN(kuknosPin);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    KuknosRealmM realmUserInfo = realm.where(KuknosRealmM.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.setKuknosPIN(kuknosPin);
+                    }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public static void updateKey(String kuknosSeed, String publicKey) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                KuknosRealmM realmUserInfo = realm.where(KuknosRealmM.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setKuknosSeedKey(kuknosSeed);
-                    realmUserInfo.setKuknosPublicKey(publicKey);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    KuknosRealmM realmUserInfo = realm.where(KuknosRealmM.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.setKuknosSeedKey(kuknosSeed);
+                        realmUserInfo.setKuknosPublicKey(publicKey);
+                    }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public static void updateSeedKey(String kuknosSeed) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                KuknosRealmM realmUserInfo = realm.where(KuknosRealmM.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setKuknosSeedKey(kuknosSeed);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    KuknosRealmM realmUserInfo = realm.where(KuknosRealmM.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.setKuknosSeedKey(kuknosSeed);
+                    }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
 }

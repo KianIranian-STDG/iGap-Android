@@ -461,7 +461,6 @@ public class FragmentMediaPlayer extends BaseFragment {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                //+final Realm realm = Realm.getDefaultInstance();
 
                 getRealm().executeTransaction(new Realm.Transaction() {
                     @Override

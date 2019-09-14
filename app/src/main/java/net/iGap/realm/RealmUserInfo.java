@@ -396,42 +396,42 @@ public class RealmUserInfo extends RealmObject {
     }
 
     public static void updateKuknos(KuknosRealmM kuknosM) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setKuknosM(kuknosM);
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.setKuknosM(kuknosM);
+                    }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public void createKuknos() {
         if (kuknosM == null) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    setKuknosM(realm.createObject(KuknosRealmM.class));
-                }
-            });
-            realm.close();
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        setKuknosM(realm.createObject(KuknosRealmM.class));
+                    }
+                });
+            }
         }
     }
 
     public void deleteKuknos() {
         if (kuknosM != null) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    kuknosM.deleteFromRealm();
-                }
-            });
-            realm.close();
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        kuknosM.deleteFromRealm();
+                    }
+                });
+            }
         }
     }
 
