@@ -1846,6 +1846,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     }
 
+    public void onUpdateContacts() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragment).updateContacts();
+        }
+    }
+
     public enum MainAction {
         downScrool, clinetCondition
     }

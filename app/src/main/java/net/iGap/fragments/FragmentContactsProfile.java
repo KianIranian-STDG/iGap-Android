@@ -610,6 +610,21 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
             }
         });
 
+        viewModel.editContactListener.observe(getViewLifecycleOwner() , aBoolean -> {
+            if (aBoolean == null) return;
+            FragmentAddContact fragment = FragmentAddContact.newInstance(
+                    viewModel.userId,viewModel.phoneNumber , viewModel.firstName, viewModel.lastName, FragmentAddContact.ContactMode.EDIT, (name, family) -> {
+                        viewModel.contactName.setValue(name + " " + family);
+                        if (getActivity() != null){
+                            ((ActivityMain) getActivity()).onUpdateContacts();
+                        }
+                    }
+            );
+            if (getActivity() != null)
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+
+        });
+
     }
 
     private void checkViewsState() {
