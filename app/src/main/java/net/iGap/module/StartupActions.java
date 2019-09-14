@@ -233,6 +233,7 @@ public final class StartupActions {
             new File(DIR_TEMP).mkdirs();
             new File(DIR_CHAT_BACKGROUND + "/" + file).createNewFile();
             new File(DIR_IMAGE_USER + "/" + file).createNewFile();
+            new File(DIR_STICKER + "/" + file).createNewFile();
             new File(DIR_TEMP + "/" + file).createNewFile();
 
             IMAGE_NEW_GROUP = new File(G.DIR_IMAGE_USER, "image_new_group.jpg");
