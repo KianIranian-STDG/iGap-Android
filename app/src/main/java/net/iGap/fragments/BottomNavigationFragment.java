@@ -176,22 +176,8 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     }
 
     @Override
-    public void onChange() {
-
-        int unReadCount = RealmRoom.getAllUnreadCount();
-
-        bottomNavigation.setOnBottomNavigationBadge(new OnBottomNavigationBadge() {
-            @Override
-            public int callCount() {
-                return 0;
-            }
-
-            @Override
-            public int messageCount() {
-                return unReadCount;
-            }
-        });
-
+    public void onChange(int unreadTotal) {
+        bottomNavigation.setOnBottomNavigationBadge(unreadTotal, 0);
     }
 
     public void goToUserProfile() {

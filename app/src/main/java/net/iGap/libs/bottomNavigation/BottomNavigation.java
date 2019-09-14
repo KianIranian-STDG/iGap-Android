@@ -198,7 +198,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         this.backgroundColor = backgroundColor;
     }
 
-    public void setOnBottomNavigationBadge(OnBottomNavigationBadge callBack) {
+    public void setOnBottomNavigationBadge(int unreadCount, int callCount) {
         for (int i = 0; i < tabItems.size(); i++) {
             TabItem tabItem = tabItems.get(i);
             tabItem.setBadgeColor(badgeColor);
@@ -208,10 +208,10 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
                     tabItem.setBadgeCount(0);
                     break;
                 case 1:
-                    tabItem.setBadgeCount(callBack.callCount());
+                    tabItem.setBadgeCount(callCount);
                     break;
                 case 2:
-                    tabItem.setBadgeCount(callBack.messageCount());
+                    tabItem.setBadgeCount(unreadCount);
                     break;
                 case 3:
                     tabItem.setBadgeCount(0);
