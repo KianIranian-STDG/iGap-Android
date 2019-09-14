@@ -96,11 +96,11 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/lbl_plaques"
-            style="?textSubColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp20"
             android:text="@string/cars_plaque"
+            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

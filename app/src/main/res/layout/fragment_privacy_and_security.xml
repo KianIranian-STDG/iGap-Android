@@ -273,8 +273,6 @@
 
                         <TextView
                             android:id="@+id/stps_txt_who_can_see_my_avatar"
-                            style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -284,9 +282,7 @@
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSeeMyAvatar , default=@string/everybody}"
                             android:textColor="@color/setting_items_value_color"
                             android:textSize="@dimen/smallTextSize"
-                            android:textStyle="normal"
-
-                            />
+                            android:textStyle="normal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -315,8 +311,6 @@
 
                         <TextView
                             android:id="@+id/stps_txt_who_can_invite_me_to_Channel"
-                            style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -326,9 +320,7 @@
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackInviteChannel , default=@string/everybody}"
                             android:textColor="@color/setting_items_value_color"
                             android:textSize="@dimen/smallTextSize"
-                            android:textStyle="normal"
-
-                            />
+                            android:textStyle="normal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -355,8 +347,6 @@
 
                         <TextView
                             android:id="@+id/stps_txt_who_can_invite_me_to_group"
-                            style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -366,9 +356,7 @@
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackInviteGroup , default=@string/everybody}"
                             android:textColor="@color/setting_items_value_color"
                             android:textSize="@dimen/smallTextSize"
-                            android:textStyle="normal"
-
-                            />
+                            android:textStyle="normal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -394,8 +382,6 @@
 
                         <TextView
                             android:id="@+id/stps_txt_who_can_voice_call_to_me"
-                            style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -405,9 +391,7 @@
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackVoiceCall , default=@string/everybody}"
                             android:textColor="@color/setting_items_value_color"
                             android:textSize="@dimen/smallTextSize"
-                            android:textStyle="normal"
-
-                            />
+                            android:textStyle="normal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -433,8 +417,6 @@
 
                         <TextView
                             android:id="@+id/stps_txt_who_can_video_call_to_me"
-                            style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -444,9 +426,7 @@
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackVideoCall , default=@string/everybody}"
                             android:textColor="@color/setting_items_value_color"
                             android:textSize="@dimen/smallTextSize"
-                            android:textStyle="normal"
-
-                            />
+                            android:textStyle="normal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -472,8 +452,6 @@
 
                         <TextView
                             android:id="@+id/stps_who_can_see_my_last_seen"
-                            style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -653,8 +631,6 @@
 
                         <TextView
                             android:id="@+id/stps_txt_Self_destruction"
-                            style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -664,14 +640,10 @@
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSelfDestruction , default=@string/year_1}"
                             android:textColor="@color/setting_items_value_color"
                             android:textSize="@dimen/smallTextSize"
-                            android:textStyle="normal"
-
-                            />
+                            android:textStyle="normal" />
                     </LinearLayout>
 
                     <com.uncopt.android.widget.text.justify.JustifiedTextView
-                        style="?textSubColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="top"

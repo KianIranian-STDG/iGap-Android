@@ -259,7 +259,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/photo"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -267,6 +266,7 @@
                     android:onClick="@{()->viewModel.onSharedMediaItemClick(1)}"
                     android:padding="8dp"
                     android:text="@string/shared_image"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedPhotoVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/photoCount"
@@ -275,7 +275,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/photoCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -289,13 +288,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/video"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onSharedMediaItemClick(2)}"
                     android:padding="8dp"
                     android:text="@string/shared_video"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedVideoVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/photoCount"
@@ -304,7 +303,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/videoCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -318,13 +316,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/audioFiles"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onSharedMediaItemClick(3)}"
                     android:padding="8dp"
                     android:text="@string/shared_audio"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedAudioVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/audioFilesCount"
@@ -333,7 +331,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/audioFilesCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -347,13 +344,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/voiceMessage"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onSharedMediaItemClick(4)}"
                     android:padding="8dp"
                     android:text="@string/shared_voice"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedVoiceVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/voiceMessageCount"
@@ -362,7 +359,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/voiceMessageCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -376,13 +372,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/gif"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onSharedMediaItemClick(5)}"
                     android:padding="8dp"
                     android:text="@string/shared_gif"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedGifVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/gifCount"
@@ -391,7 +387,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/gifCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -405,13 +400,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/files"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onSharedMediaItemClick(6)}"
                     android:padding="8dp"
                     android:text="@string/shared_files"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedFileVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/filesCount"
@@ -420,7 +415,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/filesCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -434,13 +428,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/links"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onSharedMediaItemClick(7)}"
                     android:padding="8dp"
                     android:text="@string/shared_links"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedLinkVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/linksCount"
@@ -449,7 +443,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/linksCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -463,12 +456,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/emptySharedMedia"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
                     android:padding="8dp"
                     android:text="@string/there_is_no_sheared_media"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedEmptyVisibility}"
                     app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
@@ -501,7 +494,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/commonGroupCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -680,7 +672,6 @@
 
                 <TextView
                     android:id="@+id/toolbar_txt_username_expanded"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/dp10"
@@ -688,17 +679,18 @@
                     android:gravity="left"
                     android:onClick="@{() -> viewModel.onUserNameClicked()}"
                     android:singleLine="true"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/smallTextSize" />
 
                 <TextView
                     android:id="@+id/toolbar_txt_tel_expanded"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/dp2"
                     android:fontFamily="@font/main_font"
                     android:gravity="left"
                     android:singleLine="true"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/smallTextSize" />
 
             </LinearLayout>

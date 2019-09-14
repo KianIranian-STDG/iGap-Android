@@ -107,7 +107,6 @@
                     android:visibility="visible">
 
                     <TextView
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -116,6 +115,7 @@
                         android:paddingRight="@dimen/dp12"
                         android:paddingBottom="@dimen/dp12"
                         android:text="@string/st_title_messageNotification"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
@@ -132,7 +132,6 @@
 
                         <TextView
                             android:id="@+id/stns_txt_alert"
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -140,6 +139,7 @@
                             android:gravity="center_vertical|start"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/st_alert"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -172,7 +172,6 @@
 
                         <TextView
                             android:id="@+id/stns_txt_messagePreview"
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -180,6 +179,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/st_messagePreview"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -204,7 +204,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -215,6 +214,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/st_led_color"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -240,18 +240,17 @@
                         android:paddingRight="@dimen/dp16">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:text="@string/st_vibrate"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/stns_txt_vibrate_message_text"
-                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -274,19 +273,18 @@
                         android:paddingRight="@dimen/dp16">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:gravity="center_vertical"
                             android:text="@string/st_popupNotification"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/stns_txt_popupNotification_message_text"
-                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -309,18 +307,17 @@
                         android:paddingRight="@dimen/dp16">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:text="@string/st_sound"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/stns_txt_sound_text"
-                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -353,7 +350,6 @@
                     android:visibility="visible">
 
                     <TextView
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -363,6 +359,7 @@
                         android:paddingTop="@dimen/dp12"
                         android:paddingBottom="@dimen/dp12"
                         android:text="@string/st_title_groupNotification"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
@@ -379,7 +376,6 @@
 
                         <TextView
                             android:id="@+id/stns_txt_alert_group"
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -387,6 +383,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/st_alert"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -415,7 +412,6 @@
 
                         <TextView
                             android:id="@+id/stns_txt_messagePreview_group"
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -423,6 +419,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/st_messagePreview"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -446,7 +443,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -456,6 +452,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/st_led_color"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -481,18 +478,17 @@
                         android:paddingRight="@dimen/dp16">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:text="@string/st_vibrate"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/stns_txt_vibrate_group_text"
-                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -515,18 +511,17 @@
                         android:paddingRight="@dimen/dp16">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:text="@string/st_popupNotification"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/stns_txt_popupNotification_group_text"
-                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -549,18 +544,17 @@
                         android:paddingRight="@dimen/dp16">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:text="@string/st_sound"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/stns_txt_sound_group_text"
-                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -595,7 +589,6 @@
                     android:visibility="visible">
 
                     <TextView
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -604,6 +597,7 @@
                         android:paddingTop="@dimen/dp12"
                         android:paddingBottom="@dimen/dp12"
                         android:text="@string/st_title_in_app_notification"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
@@ -621,7 +615,6 @@
 
                         <TextView
                             android:id="@+id/stns_txt_app_sound"
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -629,6 +622,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/st_in_app_sound"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -661,7 +655,6 @@
 
                         <TextView
                             android:id="@+id/stns_txt_app_vibrate"
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -669,6 +662,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/st_in_app_vibrate"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -700,15 +694,15 @@
 
                         <TextView
                             android:id="@+id/stns_txt_app_preview"
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-
                             android:layout_weight="1"
+
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/st_in_app_preview"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -739,7 +733,6 @@
 
                         <TextView
                             android:id="@+id/stns_txt_chat_sound"
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -747,6 +740,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/st_in_chat_sound"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -782,7 +776,6 @@
                     android:visibility="gone">
 
                     <TextView
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -791,6 +784,7 @@
                         android:paddingRight="@dimen/dp16"
                         android:paddingBottom="@dimen/dp16"
                         android:text="@string/st_title_Events"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp16"
                         android:textStyle="normal" />
 
@@ -806,15 +800,15 @@
 
                         <TextView
                             android:id="@+id/stns_txt_Contact_joined"
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-
                             android:layout_weight="1"
+
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/st_Contact_joined_igap"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp16"
                             android:textStyle="normal" />
 
@@ -854,7 +848,6 @@
 
                         <TextView
                             android:id="@+id/stns_txt_pinned_message"
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -862,6 +855,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/st_pinned_message"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp16"
                             android:textStyle="normal" />
 
@@ -885,7 +879,6 @@
                     android:visibility="visible">
 
                     <TextView
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -894,6 +887,7 @@
                         android:paddingRight="@dimen/dp12"
                         android:paddingBottom="@dimen/dp12"
                         android:text="@string/st_title_other"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
@@ -910,7 +904,6 @@
 
                         <TextView
                             android:id="@+id/stns_txt_separate_notifications"
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -918,6 +911,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/separate_notifications"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -934,7 +928,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_title_keep_alive_service"
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -944,6 +937,7 @@
                         android:paddingEnd="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/st_keep_alive_service"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal" />
 
@@ -962,7 +956,6 @@
 
                         <com.uncopt.android.widget.text.justify.JustifiedTextView
                             android:id="@+id/stns_txt_keep_alive_service"
-                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -972,6 +965,7 @@
                             android:paddingEnd="@dimen/dp10"
                             android:paddingRight="@dimen/dp10"
                             android:text="@string/st_text_keep_alive_service"
+                            android:textColor="?iGapSubtitleTextColor"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
 
@@ -1017,17 +1011,16 @@
 
                         <TextView
                             android:id="@+id/stns_txt_title_background_connection"
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/st_background_connection"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp16"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/stns_txt_background_connection"
-                            style="?textSubColorSettingTheme"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1036,6 +1029,7 @@
                             android:paddingEnd="@dimen/dp52"
                             android:paddingRight="@dimen/dp52"
                             android:text="@string/st_text_background_connection"
+                            android:textColor="?iGapSubtitleTextColor"
                             android:textSize="@dimen/dp16"
                             android:textStyle="normal" />
 
@@ -1070,7 +1064,6 @@
 
                         <TextView
                             android:id="@+id/stns_txt_badge_countent"
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -1078,6 +1071,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/dp4"
                             android:text="@string/st_badge_counter"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp16"
                             android:textStyle="normal" />
 
@@ -1095,19 +1089,17 @@
                         android:visibility="gone">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:text="@string/st_Repeat_Notifications"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/dp16"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/st_txt_Repeat_Notifications"
-                            style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -1137,7 +1129,6 @@
                     android:visibility="visible">
 
                     <TextView
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1146,6 +1137,7 @@
                         android:paddingRight="@dimen/dp16"
                         android:paddingBottom="@dimen/dp16"
                         android:text="@string/st_title_reset"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal" />
 
@@ -1158,22 +1150,21 @@
                         android:paddingRight="@dimen/dp16">
 
                         <TextView
-                            android:textColor="?iGapTitleTextColor"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:text="@string/st_reset_all_notification"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
                         <TextView
-                            style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical|top"
                             android:text="@string/st_text_reset_all_notification"
+                            android:textColor="?iGapSubtitleTextColor"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
 

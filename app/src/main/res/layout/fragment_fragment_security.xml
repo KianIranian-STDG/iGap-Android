@@ -43,9 +43,7 @@
                 android:visibility="@{fragmentSecurityViewModel.rootSetAdditionPassword ,default = visible}">
 
 
-                <TextView
-                    style="?textSubColorSettingTheme"
-                    fontPath="fonts/IRANSansMobile.ttf"
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp44"
@@ -55,10 +53,9 @@
                     android:paddingLeft="@dimen/dp20"
                     android:paddingRight="@dimen/dp20"
                     android:text="@string/two_step_verification_description"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/dp14"
-                    android:textStyle="normal"
-
-                    />
+                    android:textStyle="normal" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/tsv_txtSetAdditionPassword"

@@ -23,8 +23,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/root"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layoutDirection="locale">
+            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:id="@+id/fup_avatar_box"
@@ -116,7 +115,6 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/fup_user_tel"
-                style="?textSubColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp8"
@@ -124,6 +122,7 @@
                 android:gravity="@{viewModel.textsGravity}"
                 android:singleLine="true"
                 android:text="@{viewModel.userPhoneNumber}"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/fup_user_bio"
@@ -133,18 +132,17 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/fup_user_bio"
-                style="?textSubColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:fontFamily="@font/main_font"
                 android:gravity="@{viewModel.textsGravity}"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
                 android:text="@{viewModel.bio}"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/fup_user_image"
@@ -167,10 +165,10 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/cloudTitle"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/cloud"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/cloudIcon"
@@ -203,10 +201,10 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/settingTitle"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/settingIcon"
@@ -240,10 +238,10 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/addTitle"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Add"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/addIcon"
@@ -300,12 +298,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fup_btn_credit_lbl"
-                    android:textColor="?iGapTitleTextColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/main_font"
                     android:padding="4dp"
                     android:text="@string/Credit"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/fup_btn_credit_icon"
@@ -316,13 +313,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fup_txt_credit_amount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/main_font"
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="@{@string/wallet_Reial(viewModel.currentCredit)}"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/smallTextSize"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -366,12 +362,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fup_btn_score_lbl"
-                    android:textColor="?iGapTitleTextColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/main_font"
                     android:padding="4dp"
                     android:text="@string/score"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/fup_btn_score_icon"
@@ -382,12 +378,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fup_txt_score"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/main_font"
                     android:gravity="center"
                     android:text="@{viewModel.currentScore}"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/smallTextSize"
                     app:layout_constraintEnd_toEndOf="@id/fup_btn_score_lbl"
                     app:layout_constraintStart_toStartOf="@id/fup_btn_score_icon"
@@ -418,13 +414,13 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/inviteTitle"
-                android:textColor="?iGapTitleTextColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp10"
                 android:layout_marginLeft="@dimen/dp10"
                 android:fontFamily="@font/main_font"
                 android:text="@string/Invite_Friends"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/inviteIcon"
@@ -456,13 +452,13 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/scanQRTitle"
-                android:textColor="?iGapTitleTextColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp10"
                 android:layout_marginEnd="@dimen/dp10"
                 android:fontFamily="@font/main_font"
                 android:text="@string/QrCode_Scan"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/fup_btn_qr_scanner"
@@ -492,13 +488,13 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/nearByTitle"
-                android:textColor="?iGapTitleTextColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp10"
                 android:layout_marginEnd="@dimen/dp10"
                 android:fontFamily="@font/main_font"
                 android:text="@string/igap_nearby"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/fup_btn_nearBy"
@@ -528,7 +524,6 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/darkThemeTitle"
-                android:textColor="?iGapTitleTextColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp10"
@@ -538,6 +533,7 @@
                 android:fontFamily="@font/main_font"
                 android:gravity="center_vertical"
                 android:text="@string/st_dark_theme"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/fup_btn_dark_mode"
@@ -577,7 +573,6 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/faqTitle"
-                android:textColor="?iGapTitleTextColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -585,6 +580,7 @@
                 android:layout_marginEnd="@dimen/dp10"
                 android:fontFamily="@font/main_font"
                 android:text="@string/iGap_FAQ"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/fup_btn_faq"
@@ -617,22 +613,22 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/versionTitle"
-                android:textColor="?iGapTitleTextColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp4"
                 android:padding="@dimen/dp4"
                 android:text="@string/app_version"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
                 app:layout_constraintTop_toBottomOf="@id/fup_splitter_4" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/fup_txt_app_version"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.appVersion}"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/smallTextSize"
                 app:layout_constraintBottom_toBottomOf="@id/versionTitle"
                 app:layout_constraintEnd_toEndOf="@id/fup_btn_invite_friends"
@@ -642,7 +638,6 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/versionChange"
-                android:textColor="?iGapTitleTextColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp4"
@@ -651,6 +646,7 @@
                 android:onClick="@{()->viewModel.onChangeLogClick()}"
                 android:padding="@dimen/dp4"
                 android:text="@string/check_update_title"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/fup_btn_invite_friends"
@@ -672,12 +668,12 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nameEditText"
-                    android:textColor="?iGapTitleTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:afterTextChanged="@{(newName)->viewModel.nameTextChangeListener(newName.toString())}"
                     android:inputType="textPersonName"
                     android:text="@={viewModel.name}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -697,12 +693,12 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/userNameEditText"
-                    android:textColor="?iGapTitleTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:afterTextChanged="@{(newUsername)->viewModel.usernameTextChangeListener(newUsername.toString())}"
                     android:inputType="textPersonName"
                     android:text="@={viewModel.userName}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -723,7 +719,6 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/bioEditText"
-                    android:textColor="?iGapTitleTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:afterTextChanged="@{(newBio)->viewModel.bioTextChangeListener(newBio.toString())}"
@@ -731,6 +726,7 @@
                     android:inputType="text"
                     android:maxLength="70"
                     android:text="@={viewModel.bio}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -750,12 +746,12 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailEditText"
-                    android:textColor="?iGapTitleTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:afterTextChanged="@{(newEmail)->viewModel.emailTextChangeListener(newEmail.toString())}"
                     android:inputType="textEmailAddress"
                     android:text="@={viewModel.email}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -774,11 +770,11 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/birthDateEditText"
-                    android:textColor="?iGapTitleTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="date"
                     android:text="@={viewModel.birthDate}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -798,13 +794,13 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/referralEditText"
-                    android:textColor="?iGapTitleTextColor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:afterTextChanged="@{(phone)->viewModel.referralTextChangeListener(phone.toString())}"
                     android:enabled="@{viewModel.referralEnableLiveData}"
                     android:inputType="phone"
                     android:text="@={viewModel.referralNumberObservableField}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -824,13 +820,13 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/gender"
-                android:textColor="?iGapTitleTextColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp16"
                 android:layout_marginBottom="@dimen/dp16"
                 android:padding="4dp"
                 android:text="@string/set_gender"
+                android:textColor="?iGapTitleTextColor"
                 app:layout_constraintStart_toStartOf="@id/name"
                 app:layout_constraintTop_toBottomOf="@id/referralView" />
 
@@ -848,21 +844,21 @@
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/male"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:button="@drawable/check_box_background"
-                    android:text="@string/male" />
+                    android:text="@string/male"
+                    android:textColor="?iGapSubtitleTextColor" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/female"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:button="@drawable/check_box_background"
-                    android:text="@string/female" />
+                    android:text="@string/female"
+                    android:textColor="?iGapSubtitleTextColor" />
             </RadioGroup>
 
             <ProgressBar

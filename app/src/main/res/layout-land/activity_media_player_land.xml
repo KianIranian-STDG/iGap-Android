@@ -31,9 +31,9 @@
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
+            style="?backgroundSubChatTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            style="?backgroundSubChatTheme"
             android:clickable="true"
             android:layoutDirection="ltr"
             android:orientation="horizontal">
@@ -72,8 +72,8 @@
                     android:ellipsize="marquee"
                     android:fadingEdge="horizontal"
                     android:marqueeRepeatLimit="marquee_forever"
-                    android:paddingBottom="@dimen/dp4"
                     android:paddingTop="@dimen/dp4"
+                    android:paddingBottom="@dimen/dp4"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
                     android:text="@{fragmentMediaPlayerViewModel.callBackTxtMusicInfo}"
@@ -96,9 +96,9 @@
                     android:background="@android:color/transparent">
 
                     <LinearLayout
+                        style="?backgroundColorSettingTheme_2"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp60"
-                        style="?backgroundColorSettingTheme_2"
                         android:gravity="left|center">
 
                         <net.iGap.libs.rippleeffect.RippleView
@@ -116,13 +116,13 @@
 
                             <net.iGap.module.MaterialDesignTextView
                                 android:id="@+id/ml_btn_back"
+                                style="@style/myIconTextViewStyle"
                                 android:layout_width="@dimen/dp52"
                                 android:layout_height="match_parent"
                                 android:background="@null"
                                 android:gravity="center"
                                 android:text="@string/back_icon"
-                                android:textAppearance="@style/TextIconAppearance_toolbar"
-                                style="@style/myIconTextViewStyle" />
+                                android:textAppearance="@style/TextIconAppearance_toolbar" />
                         </net.iGap.libs.rippleeffect.RippleView>
 
                         <LinearLayout
@@ -149,7 +149,7 @@
                                 android:gravity="center"
                                 android:singleLine="true"
                                 android:text="@{fragmentMediaPlayerViewModel.callBackMusicPlace , default = @string/place}"
-                                style="?textSubColorSettingTheme"
+                                android:textColor="?iGapSubtitleTextColor"
                                 android:textSize="@dimen/dp14" />
                         </LinearLayout>
 
@@ -166,13 +166,13 @@
 
                             <net.iGap.module.MaterialDesignTextView
                                 android:id="@+id/ml_btn_music_menu"
+                                style="@style/myIconTextViewStyle"
                                 android:layout_width="@dimen/dp52"
                                 android:layout_height="match_parent"
                                 android:background="@null"
                                 android:gravity="center"
                                 android:text="@string/more_icon"
-                                android:textAppearance="@style/TextIconAppearance_toolbar"
-                                style="@style/myIconTextViewStyle" />
+                                android:textAppearance="@style/TextIconAppearance_toolbar" />
                         </net.iGap.libs.rippleeffect.RippleView>
 
 
@@ -196,11 +196,11 @@
             android:id="@+id/dragView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@{G.isDarkTheme ? @drawable/shape_top_round_gray_background : @drawable/shape_top_round_gray_background_light}"
             android:clickable="true"
             android:focusable="false"
-            android:orientation="vertical"
             android:layoutDirection="ltr"
-            android:background="@{G.isDarkTheme ? @drawable/shape_top_round_gray_background : @drawable/shape_top_round_gray_background_light}">
+            android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -213,8 +213,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:thumbTint="@color/toolbar_player_base_color"
                     android:progress="@{fragmentMediaPlayerViewModel.seekBar1}"
+                    android:thumbTint="@color/toolbar_player_base_color"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@id/ml_txt_timer"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -223,9 +223,9 @@
                     android:id="@+id/ml_txt_timer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/standardTextSize"
                     android:text="@{fragmentMediaPlayerViewModel.callBackTxtTimer  , default = 00_00}"
                     android:textColor="@color/toolbar_player_base_color"
+                    android:textSize="@dimen/standardTextSize"
                     app:layout_constraintBottom_toBottomOf="@id/ml_seekBar1"
                     app:layout_constraintLeft_toRightOf="@id/ml_seekBar1"
                     app:layout_constraintRight_toLeftOf="@id/ml_splitter_timers"
@@ -237,20 +237,19 @@
                     android:layout_height="0dp"
                     android:layout_marginLeft="@dimen/dp6"
                     android:layout_marginRight="@dimen/dp6"
-                    app:layout_constraintTop_toTopOf="@id/ml_txt_timer"
+                    android:background="@color/toolbar_player_base_color"
                     app:layout_constraintBottom_toBottomOf="@id/ml_txt_music_time"
-                    app:layout_constraintStart_toEndOf="@id/ml_txt_timer"
                     app:layout_constraintEnd_toStartOf="@id/ml_txt_music_time"
-                    android:background="@color/toolbar_player_base_color" />
+                    app:layout_constraintStart_toEndOf="@id/ml_txt_timer"
+                    app:layout_constraintTop_toTopOf="@id/ml_txt_timer" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/ml_txt_music_time"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/standardTextSize"
-                    android:textColor="@color/toolbar_player_base_color"
                     android:text="@{fragmentMediaPlayerViewModel.callBackTxtMusicTime , default = @string/music_time}"
+                    android:textColor="@color/toolbar_player_base_color"
+                    android:textSize="@dimen/standardTextSize"
                     app:layout_constraintBottom_toBottomOf="@id/ml_seekBar1"
                     app:layout_constraintLeft_toRightOf="@id/ml_splitter_timers"
                     app:layout_constraintRight_toRightOf="parent"
@@ -258,17 +257,17 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ml_btn_Previous_music"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="@dimen/dp40"
                     android:layout_height="@dimen/dp40"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp14"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center"
                     android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnPreviousMusic}"
                     android:text="@string/player_previous_icon"
                     android:textAppearance="@style/TextIconAppearance.all"
-                    style="@style/myIconTextViewStyle"
                     android:textSize="@dimen/dp22"
-                    android:layout_marginTop="@dimen/dp16"
-                    android:layout_marginRight="@dimen/dp14"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -277,16 +276,16 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ml_btn_play_music"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="@dimen/dp40"
                     android:layout_height="@dimen/dp40"
+                    android:layout_marginRight="@dimen/dp14"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center"
                     android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnPlayMusic}"
                     android:text="@{fragmentMediaPlayerViewModel.callBackBtnPlayMusic , default = @string/play_icon}"
                     android:textAppearance="@style/TextIconAppearance.all"
-                    style="@style/myIconTextViewStyle"
                     android:textColor="@color/toolbar_player_base_color"
-                    android:layout_marginRight="@dimen/dp14"
                     android:textSize="@dimen/dp36"
                     app:layout_constraintBottom_toBottomOf="@id/ml_btn_Previous_music"
                     app:layout_constraintLeft_toRightOf="@id/ml_btn_Previous_music"
@@ -295,15 +294,15 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ml_btn_forward_music"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="@dimen/dp40"
                     android:layout_height="@dimen/dp40"
+                    android:layout_marginRight="@dimen/dp20"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center"
                     android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnForwardMusic}"
                     android:text="@string/player_next_icon"
                     android:textAppearance="@style/TextIconAppearance.all"
-                    style="@style/myIconTextViewStyle"
-                    android:layout_marginRight="@dimen/dp20"
                     android:textSize="@dimen/dp22"
                     app:layout_constraintBottom_toBottomOf="@id/ml_btn_Previous_music"
                     app:layout_constraintLeft_toRightOf="@id/ml_btn_play_music"
@@ -312,15 +311,15 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ml_btn_replay_music"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="@dimen/dp40"
                     android:layout_height="@dimen/dp40"
+                    android:layout_marginRight="@dimen/dp14"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center"
                     android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnReplayMusic}"
                     android:text="@{fragmentMediaPlayerViewModel.callBackBtnReplayMusic , default = @string/retry_icon}"
                     android:textAppearance="@style/TextIconAppearance.all"
-                    android:layout_marginRight="@dimen/dp14"
-                    style="@style/myIconTextViewStyle"
                     android:textColor="@{fragmentMediaPlayerViewModel.btnReplayMusicColor , default = @android:color/white}"
                     android:textSize="@dimen/dp24"
                     app:layout_constraintBottom_toBottomOf="@id/ml_btn_Previous_music"
@@ -345,6 +344,7 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ml_btn_shuffel_music"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="@dimen/dp40"
                     android:layout_height="@dimen/dp40"
                     android:background="?attr/selectableItemBackgroundBorderless"
@@ -352,12 +352,11 @@
                     android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnShuffelMusic}"
                     android:text="@string/player_shuffle_icon"
                     android:textAppearance="@style/TextIconAppearance.all"
-                    style="@style/myIconTextViewStyle"
                     android:textColor="@{fragmentMediaPlayerViewModel.btnShuffelMusicColor , default =@android:color/white }"
                     android:textSize="@dimen/dp20"
                     app:layout_constraintBottom_toBottomOf="@id/ml_btn_Previous_music"
-                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/ml_btn_replay_music"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@id/ml_btn_Previous_music" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

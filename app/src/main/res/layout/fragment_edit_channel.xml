@@ -173,12 +173,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/channelType"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onChannelTypeClick()}"
                     android:padding="8dp"
                     android:text="@{viewModel.channelType}"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/smallTextSize"
                     app:layout_constraintLeft_toLeftOf="@id/channelTypeTitle"
                     app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
@@ -201,11 +201,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/signedMessageDescription"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@string/sign_channel_message_description"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.showLayoutReactStatus}"
                     app:layout_constraintStart_toStartOf="@id/signedMessageTxt"
@@ -230,11 +230,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/rateMessageDescription"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@string/reaction_message_detail"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.showLayoutReactStatus}"
                     app:layout_constraintStart_toStartOf="@id/rateMessageTxt"
@@ -258,7 +258,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/administratorsCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onAdministratorClick()}"
@@ -287,7 +286,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/moderatorsCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onModeratorClick()}"
@@ -317,7 +315,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/membersCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{()->viewModel.onMemberClick()}"

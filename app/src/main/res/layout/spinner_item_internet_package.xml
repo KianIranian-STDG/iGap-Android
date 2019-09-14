@@ -18,11 +18,11 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/price"
-        style="?textSubColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/dp8"
         android:paddingEnd="@dimen/dp8"
+        android:textColor="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toTopOf="@id/line"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title" />

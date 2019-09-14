@@ -200,12 +200,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/inviteLink"
-                    android:textColor="?iGapTitleTextColor"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/dp8"
                     android:paddingBottom="4dp"
                     android:text="@{viewModel.inviteLink}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showLink}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -215,13 +215,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/inviteLinkTitle"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
                     android:paddingLeft="@dimen/dp8"
                     android:paddingRight="@dimen/dp8"
                     android:text="@{viewModel.inviteLinkTitle}"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showLink}"
                     app:layout_constraintEnd_toEndOf="@+id/inviteLink"
@@ -335,7 +335,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/photoCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -364,7 +363,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/videoCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -393,7 +391,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/audioFilesCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -422,7 +419,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/voiceMessageCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -451,7 +447,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/gifCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -480,7 +475,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/filesCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -534,7 +528,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/addMember"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
@@ -542,6 +535,7 @@
                     android:onClick="@{()->viewModel.addNewMember()}"
                     android:padding="8dp"
                     android:text="@string/add_new_member"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.addMemberVisibility}"
                     app:layout_constraintEnd_toEndOf="@id/notificationTitle"
@@ -550,13 +544,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/showMemberList"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onShowMemberClick()}"
                     android:padding="@dimen/dp8"
                     android:text="@string/show_member"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="@id/addMember"
                     app:layout_constraintStart_toStartOf="@id/addMember"
@@ -576,7 +570,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/leaveGroup"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"

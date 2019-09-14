@@ -71,7 +71,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/messageTextSizeNumber"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -112,7 +111,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/date"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{viewModel.dateType}"

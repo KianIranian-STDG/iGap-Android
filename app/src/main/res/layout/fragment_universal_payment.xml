@@ -42,13 +42,13 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/paymentType"
-            style="?textSubColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:gravity="center"
             android:paddingTop="@dimen/dp36"
             android:text="@{viewModel.paymentType}"
+            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/title"
@@ -70,12 +70,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title"
-            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp8"
             android:gravity="center"
             android:text="@{viewModel.title}"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/description"
@@ -84,12 +84,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/description"
-            style="?textSubColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp8"
             android:gravity="center"
             android:text="@{viewModel.description}"
+            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/priceTitle"
@@ -98,11 +98,11 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/priceTitle"
-            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/price"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/price"
@@ -111,12 +111,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/price"
-            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp8"
             android:gravity="center"
             android:text="@{@string/payment_rial(viewModel.price)}"
+            android:textColor="?iGapTitleTextColor"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@id/divider1"
             app:layout_constraintEnd_toEndOf="@id/paymentType"
@@ -136,11 +136,11 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/paymentStatus"
-            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@{viewModel.paymentStatus}"
+            android:textColor="?iGapTitleTextColor"
             android:textStyle="bold"
             android:visibility="@{viewModel.showPaymentStatus}"
             app:layout_constraintBottom_toTopOf="@id/paymentRRN"
@@ -149,12 +149,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/paymentRRN"
-            style="?textSubColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp8"
             android:gravity="center"
             android:text="@{@string/payment_rrn_title(viewModel.paymentRRN)}"
+            android:textColor="?iGapSubtitleTextColor"
             android:visibility="@{viewModel.showPaymentErrorMessage}"
             app:layout_constraintBottom_toTopOf="@id/cancelButton"
             app:layout_constraintEnd_toEndOf="@id/price"
@@ -162,7 +162,7 @@
 
         <!--<android.support.v7.widget.AppCompatTextView
             android:id="@+id/paymentOrderId"
-            style="?textSubColorSettingTheme"
+            android:textColor="?iGapSubtitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp8"

@@ -21,12 +21,12 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/iconDialogTitle"
-            style="?textSubColorSettingTheme"
             android:layout_width="@dimen/dp60"
             android:layout_height="@dimen/dp60"
             android:layout_gravity="center"
             android:text="@string/md_igap_fingerprint"
             android:textAppearance="@style/TextIconAppearance.all"
+            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/dp26" />
 
         <TextView

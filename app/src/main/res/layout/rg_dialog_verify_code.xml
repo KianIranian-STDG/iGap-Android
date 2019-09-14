@@ -32,7 +32,6 @@
 
             <TextView
                 android:id="@+id/txt_show_reason"
-                style="?textSubColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -41,6 +40,7 @@
                 android:gravity="start"
                 android:lineSpacingExtra="0dp"
                 android:text="@string/verify_time_out_message"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
 
@@ -51,8 +51,8 @@
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight=".8"
                     android:layout_height="wrap_content"
+                    android:layout_weight=".8"
                     android:orientation="vertical">
 
                     <net.iGap.module.MEditText
@@ -87,11 +87,11 @@
                 <net.iGap.module.HeaderTextView
                     android:id="@+id/remindTime"
                     android:layout_width="0dp"
-                    android:layout_weight=".2"
                     android:layout_height="match_parent"
+                    android:layout_weight=".2"
                     android:gravity="center"
-                    android:text="60"
                     android:paddingTop="@dimen/dp12"
+                    android:text="60"
                     android:textColor="@color/green"
                     android:textSize="@dimen/dp15" />
 
@@ -111,8 +111,8 @@
                     android:layout_marginEnd="@dimen/dp16"
                     android:layout_marginRight="@dimen/dp16"
                     android:background="@android:color/transparent"
-                    android:gravity="center"
                     android:enabled="false"
+                    android:gravity="center"
                     android:text="@string/rg_verify_dialog_resend_code"
                     android:textColor="@color/gray_9d"
                     android:textSize="@dimen/dp14"

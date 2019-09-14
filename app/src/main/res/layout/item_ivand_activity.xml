@@ -29,7 +29,6 @@
 
     <net.iGap.module.CustomTextViewMedium
         android:id="@+id/txt_score"
-        style="?textSubColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -38,7 +37,7 @@
         android:layout_marginEnd="2dp"
         android:layout_marginRight="2dp"
         android:gravity="end|center_vertical"
-        android:text="TextView"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/dp12"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/image"
@@ -54,13 +53,12 @@
 
     <net.iGap.module.CustomTextViewMedium
         android:id="@+id/txt_subject"
-        style="?textSubColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:gravity="start|center_vertical"
-        android:text="TextView"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/dp12"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
@@ -69,13 +67,12 @@
 
     <net.iGap.module.CustomTextViewMedium
         android:id="@+id/txt_date"
-        style="?textSubColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:gravity="center"
-        android:text="TextView"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/dp12"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"

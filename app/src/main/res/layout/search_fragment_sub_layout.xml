@@ -68,13 +68,13 @@
 
                 <net.iGap.module.EmojiTextViewE
                     android:id="@+id/sfsl_txt_contact_lastseen"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:singleLine="true"
                     android:text="@string/last_seen_recently"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
             </LinearLayout>
@@ -82,12 +82,12 @@
 
             <TextView
                 android:id="@+id/sfsl_txt_time"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/dp8"
                 android:paddingRight="@dimen/dp8"
                 android:text="10:52"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp12"
                 android:visibility="invisible" />
 

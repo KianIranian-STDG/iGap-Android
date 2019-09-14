@@ -87,12 +87,12 @@
 
         <TextView
             android:id="@+id/tv_btBehavior_songName"
-            style="?textSubColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:gravity="left"
             android:text="abolfazl"
+            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/smallTextSize"
             app:layout_constraintLeft_toLeftOf="@+id/tv_btBehavior_artistName"
             app:layout_constraintRight_toLeftOf="@+id/tv_btBehavior_timeDuration"
@@ -126,10 +126,10 @@
 
         <TextView
             android:id="@+id/tv_btBehavior_timeDuration"
-            style="?textSubColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="00:10 | 15:00"
+            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/smallTextSize"
             app:layout_constraintBottom_toBottomOf="@+id/tv_btBehavior_songName"
             app:layout_constraintRight_toRightOf="@+id/tv_btBehavior_artistName"

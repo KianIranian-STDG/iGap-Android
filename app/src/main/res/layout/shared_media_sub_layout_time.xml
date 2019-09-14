@@ -34,7 +34,6 @@
 
     <TextView
         android:id="@+id/smslt_txt_time"
-        style="?textSubColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp4"
@@ -42,5 +41,6 @@
         android:paddingTop="@dimen/dp4"
         android:paddingRight="@dimen/dp10"
         android:text="New Text"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/dp16" />
 </LinearLayout>

@@ -110,11 +110,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/rankTitle"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:text="@string/rank"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintLeft_toLeftOf="@id/rankView"
                     app:layout_constraintRight_toRightOf="@id/rankView"
@@ -122,11 +122,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/scoreTitle"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:text="@string/score"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintLeft_toLeftOf="@id/scoreView"
                     app:layout_constraintRight_toRightOf="@id/scoreView"

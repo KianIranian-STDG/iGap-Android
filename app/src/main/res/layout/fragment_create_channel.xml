@@ -56,12 +56,12 @@
                         android:textSize="@dimen/dp15" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/dp8"
                         android:paddingRight="@dimen/dp8"
                         android:text="@string/desc_public_channel"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/dp14" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
@@ -75,13 +75,13 @@
                         android:textSize="@dimen/dp15" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp8"
                         android:paddingLeft="@dimen/dp8"
                         android:paddingRight="@dimen/dp8"
                         android:text="@string/desc_private_channel"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/dp14" />
                 </RadioGroup>
 
@@ -132,11 +132,11 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textSubColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp8"
                     android:text="@string/new_channels_rules"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintTop_toBottomOf="@id/channelLink" />
             </androidx.constraintlayout.widget.ConstraintLayout>

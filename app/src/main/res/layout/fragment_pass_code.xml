@@ -72,7 +72,6 @@
 
             <TextView
                 android:id="@+id/st_txt_createNewPattern"
-                android:textColor="?iGapTitleTextColor"
                 fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -80,6 +79,7 @@
                 android:gravity="center_vertical|center"
                 android:paddingTop="@dimen/dp4"
                 android:text="@={fragmentPassCodeViewModel.txtCreateNewPattern ,default =@string/new_pattern_passCode}"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal"
                 android:visibility="@{safeUnbox(fragmentPassCodeViewModel.visibilityCreateNewPattern) , default = gone}" />
@@ -121,7 +121,6 @@
 
                     <TextView
                         android:id="@+id/st_txt_st_toggle_passCode"
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -129,6 +128,7 @@
                         android:gravity="center_vertical"
                         android:paddingTop="@dimen/dp4"
                         android:text="@string/two_step_pass_code"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -156,7 +156,6 @@
 
                     <TextView
                         android:id="@+id/st_txt_st_toggle_patternPassCode"
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -164,6 +163,7 @@
                         android:gravity="center_vertical"
                         android:paddingTop="@dimen/dp4"
                         android:text="@string/repeat_pattern_pattern"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -191,7 +191,6 @@
 
                     <TextView
                         android:id="@+id/st_txt_st_toggle_tactileFeedback"
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -199,6 +198,7 @@
                         android:gravity="center_vertical"
                         android:paddingTop="@dimen/dp4"
                         android:text="@string/show_line_pattern"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -222,7 +222,6 @@
 
                     <TextView
                         android:id="@+id/st_txt_ChangePassCode"
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
@@ -232,6 +231,7 @@
                         android:paddingTop="@dimen/dp8"
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/change_pass_code"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -243,12 +243,12 @@
                     android:visibility="@{safeUnbox(fragmentPassCodeViewModel.visibilityDescription) ,default= visible}">
 
                     <com.uncopt.android.widget.text.justify.JustifiedTextView
-                        style="?textSubColorSettingTheme"
-                        android:fontFamily="@font/main_font"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/main_font"
                         android:padding="@dimen/dp14"
                         android:text="@string/set_pass_code_description"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/dp12" />
 
                 </RelativeLayout>
@@ -277,7 +277,6 @@
 
                     <TextView
                         android:id="@+id/st_txt_st_toggle_FingerPrint"
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -285,6 +284,7 @@
                         android:gravity="center_vertical"
                         android:paddingTop="@dimen/dp4"
                         android:text="@string/unlock_with_fingerPrint"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -307,7 +307,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -317,6 +316,7 @@
                         android:paddingTop="@dimen/dp8"
                         android:paddingRight="@dimen/dp16"
                         android:text="@string/auto_lock"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -340,12 +340,12 @@
                     android:layout_height="match_parent">
 
                     <com.uncopt.android.widget.text.justify.JustifiedTextView
-                        style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/main_font"
                         android:padding="@dimen/dp14"
                         android:text="@string/Auto_lock_description"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/dp12" />
 
                 </RelativeLayout>
@@ -362,7 +362,6 @@
 
                     <TextView
                         android:id="@+id/st_txt_st_tAllowScreenCapture"
-                        android:textColor="?iGapTitleTextColor"
                         fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -370,6 +369,7 @@
                         android:gravity="center_vertical"
                         android:paddingTop="@dimen/dp4"
                         android:text="@string/allow_screen_capture"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -391,12 +391,11 @@
                     android:layout_height="match_parent">
 
                     <com.uncopt.android.widget.text.justify.JustifiedTextView
-                        style="?textSubColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp14"
                         android:text="@string/Allow_Screen_Capture_description"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/dp12" />
 
                 </RelativeLayout>

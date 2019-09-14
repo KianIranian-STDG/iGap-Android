@@ -9,12 +9,12 @@
 
     <net.iGap.module.CustomTextViewMedium
         android:id="@+id/title"
-        style="?textSubColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/dp8"
         android:gravity="center"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/dp18"
         tools:text="" />
 
@@ -25,35 +25,35 @@
 
     <net.iGap.module.CustomTextViewMedium
         android:id="@+id/description"
-        style="?textSubColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp8"
         android:layout_marginBottom="@dimen/dp8"
         android:gravity="center"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/dp14"
         tools:text="" />
 
 
     <net.iGap.module.CustomTextViewMedium
         android:id="@+id/priceTitle"
-        style="?textSubColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/dp18"
         tools:text="@string/price" />
 
     <net.iGap.module.CustomTextViewMedium
         android:id="@+id/price"
-        style="?textSubColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/dp8"
         android:gravity="center"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/dp20"
         tools:text="" />
 

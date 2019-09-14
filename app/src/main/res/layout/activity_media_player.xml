@@ -87,7 +87,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/ml_txt_music_place"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
@@ -207,7 +206,6 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/ml_txt_music_time"
-                        style="?textSubColorSettingTheme"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/standardTextSize"

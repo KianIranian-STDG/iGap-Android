@@ -27,17 +27,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="hame khoba"
             android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp18" />
 
         <TextView
             android:id="@+id/daj_txt_member_count"
-            style="?textSubColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="12 member" />
+            android:textColor="?iGapSubtitleTextColor" />
     </LinearLayout>
 
 

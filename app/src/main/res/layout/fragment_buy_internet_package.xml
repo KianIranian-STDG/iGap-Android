@@ -100,21 +100,23 @@
 
             <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/timeType"
-                style="?textSubColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:button="@drawable/check_box_background"
-                android:text="@string/buy_internet_package_time_type_title" />
+                android:padding="@dimen/dp8"
+                android:text="@string/buy_internet_package_time_type_title"
+                android:textColor="?iGapSubtitleTextColor" />
 
             <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/volumeType"
-                style="?textSubColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:button="@drawable/check_box_background"
-                android:text="@string/buy_internet_package_volume_type_title" />
+                android:padding="@dimen/dp8"
+                android:text="@string/buy_internet_package_volume_type_title"
+                android:textColor="?iGapSubtitleTextColor" />
         </RadioGroup>
 
         <androidx.appcompat.widget.AppCompatSpinner

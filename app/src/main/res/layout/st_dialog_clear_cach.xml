@@ -23,9 +23,9 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/allFileSize"
-        style="?textSubColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toBottomOf="@id/all"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,9 +46,9 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/photoFileSize"
-        style="?textSubColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toBottomOf="@id/photo"
         app:layout_constraintEnd_toEndOf="@id/allFileSize"
@@ -69,9 +69,9 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/videoFileSize"
-        style="?textSubColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toBottomOf="@id/video"
         app:layout_constraintEnd_toEndOf="@id/allFileSize"
@@ -92,9 +92,9 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/documentFileSize"
-        style="?textSubColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toBottomOf="@id/document"
         app:layout_constraintEnd_toEndOf="@id/allFileSize"
@@ -115,9 +115,9 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/audioFileSize"
-        style="?textSubColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toBottomOf="@id/audio"
         app:layout_constraintEnd_toEndOf="@id/allFileSize"
@@ -138,9 +138,9 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/mapFileSize"
-        style="?textSubColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toBottomOf="@id/map"
         app:layout_constraintEnd_toEndOf="@id/allFileSize"
@@ -161,9 +161,9 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/otherFileSize"
-        style="?textSubColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toBottomOf="@id/other"
         app:layout_constraintEnd_toEndOf="@id/allFileSize"

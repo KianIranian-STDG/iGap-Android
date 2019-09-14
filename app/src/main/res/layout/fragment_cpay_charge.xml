@@ -47,12 +47,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/lblCredit"
-            style="?textSubColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp20"
             android:gravity="center"
             android:text="@string/wallet_Your_credit"
+            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/largeTextSize"
             app:fontFamily="@font/main_font"
             app:layout_constraintEnd_toEndOf="@id/plaqueView"

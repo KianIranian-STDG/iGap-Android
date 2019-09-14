@@ -84,7 +84,6 @@
 
                     <TextView
                         android:id="@+id/smslf_txt_file_info"
-                        style="?textSubColorSettingTheme"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -92,18 +91,19 @@
                         android:maxWidth="@dimen/dp300"
                         android:singleLine="true"
                         android:text="file info"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/smallTextSize" />
 
 
                     <TextView
                         android:id="@+id/smslf_txt_file_size"
-                        style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
                         android:singleLine="true"
                         android:text="3mb"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/dp14" />
 
 

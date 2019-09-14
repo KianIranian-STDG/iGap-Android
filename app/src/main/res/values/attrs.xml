@@ -79,7 +79,6 @@
 
     <!--setting-->
     <attr name="backgroundColorSettingTheme_2" format="reference" />
-    <attr name="textSubColorSettingTheme" format="reference" />
     <attr name="lineColorSettingTheme" format="reference" />
     <attr name="hintColorSettingTheme" format="reference" />
     <attr name="textBackgroundColor" format="reference" />

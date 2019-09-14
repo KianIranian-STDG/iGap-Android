@@ -31,16 +31,14 @@
 
         <TextView
             android:id="@+id/txtSetRecoveryQuestionPassOne"
-            style="?textSubColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp32"
             android:layout_marginTop="@dimen/dp12"
             android:layout_marginRight="@dimen/dp32"
             android:singleLine="true"
-            android:textSize="@dimen/dp13"
-
-            />
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/dp13" />
 
         <net.iGap.module.MEditText
             android:id="@+id/edtSetRecoveryAnswerPassOne"
@@ -64,7 +62,6 @@
 
         <TextView
             android:id="@+id/txtSetRecoveryQuestionPassTwo"
-            style="?textSubColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp32"
@@ -72,17 +69,18 @@
             android:layout_marginRight="@dimen/dp32"
             android:singleLine="true"
             android:text="@string/password_Question_two"
+            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/dp13" />
 
         <net.iGap.module.MEditText
             android:id="@+id/edtSetRecoveryAnswerPassTwo"
-            style="?textSubColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp32"
             android:layout_marginRight="@dimen/dp32"
             android:hint="@string/password_answer"
             android:singleLine="true"
+            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/dp13" />
 
         <TextView

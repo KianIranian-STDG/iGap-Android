@@ -6,12 +6,12 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtTitle"
-        android:textColor="?iGapTitleTextColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"
         android:layout_marginTop="@dimen/dp16"
         android:layout_marginEnd="@dimen/dp16"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/largeTextSize"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,11 +20,11 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtSent"
-        style="?textSubColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:text="@string/sent"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toStartOf="@id/txtSentNum"
         app:layout_constraintStart_toStartOf="@id/txtTitle"
@@ -43,11 +43,11 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtReceived"
-        style="?textSubColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:text="@string/received"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toStartOf="@id/txtReceivedNum"
         app:layout_constraintStart_toStartOf="@id/txtTitle"
@@ -65,11 +65,11 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtByteSent"
-        style="?textSubColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:text="@string/bytes_sent"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toStartOf="@id/txtByteSentNum"
         app:layout_constraintStart_toStartOf="@id/txtTitle"
@@ -88,11 +88,11 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtByteReceived"
-        style="?textSubColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:text="@string/bytes_received"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toStartOf="@id/txtByteReceivedNum"
         app:layout_constraintStart_toStartOf="@id/txtTitle"

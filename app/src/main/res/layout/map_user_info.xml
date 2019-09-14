@@ -118,8 +118,6 @@
 
                 <TextView
                     android:id="@+id/txt_info_comment"
-                    style="?textSubColorSettingTheme"
-                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -127,7 +125,7 @@
                     android:ellipsize="end"
                     android:gravity="right"
                     android:maxLines="1"
-                    android:text="Comment"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/dp16" />
             </LinearLayout>
         </LinearLayout>

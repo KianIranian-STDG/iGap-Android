@@ -61,13 +61,13 @@
 
                     <TextView
                         android:id="@+id/fcsl_txt_time_info"
-                        style="?textSubColorSettingTheme"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="start"
                         android:singleLine="true"
                         android:text="(4) 9:24 am"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:textDirection="locale"
                         android:textSize="@dimen/dp12"
                         android:textStyle="bold" />

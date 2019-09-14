@@ -53,12 +53,11 @@
 
                     <net.iGap.module.CustomTextViewMedium
                         android:id="@+id/txt_user_distance_map"
-                        style="?textSubColorSettingTheme"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="end"
                         android:gravity="end"
-                        android:text="distance"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/dp14" />
 
                 </LinearLayout>
@@ -66,7 +65,6 @@
 
                 <net.iGap.module.CustomTextViewMedium
                     android:id="@+id/txt_user_comment_map"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/layout_user_name_map"
@@ -75,7 +73,7 @@
                     android:gravity="center_vertical|start"
                     android:singleLine="true"
                     android:tag="menu"
-                    android:text="getting comment..."
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/dp12" />
             </RelativeLayout>
 

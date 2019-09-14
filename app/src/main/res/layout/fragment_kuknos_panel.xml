@@ -243,7 +243,6 @@
                         android:textSize="35dp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -256,6 +255,7 @@
                         android:paddingRight="@dimen/dp4"
                         android:paddingBottom="15dp"
                         android:text="@string/kuknos_panelStr_setting"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/dp16"
                         android:textStyle="bold" />
 
@@ -290,7 +290,6 @@
                         android:textSize="35dp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -303,6 +302,7 @@
                         android:paddingRight="@dimen/dp4"
                         android:paddingBottom="15dp"
                         android:text="@string/kuknos_panelStr_buyPeyman"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/dp16"
                         android:textStyle="bold" />
 
@@ -337,7 +337,6 @@
                         android:textSize="35dp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -350,6 +349,7 @@
                         android:paddingRight="@dimen/dp4"
                         android:paddingBottom="15dp"
                         android:text="@string/kuknos_panelStr_trading"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/dp16"
                         android:textStyle="bold" />
 
@@ -385,7 +385,6 @@
                         android:textSize="35dp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -398,6 +397,7 @@
                         android:paddingRight="@dimen/dp4"
                         android:paddingBottom="15dp"
                         android:text="@string/kuknos_panelStr_kyc"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="16dp"
                         android:textStyle="bold" />
 

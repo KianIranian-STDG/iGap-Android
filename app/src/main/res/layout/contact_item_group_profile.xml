@@ -74,7 +74,6 @@
 
                 <net.iGap.module.CustomTextViewMedium
                     android:id="@+id/cigp_txt_contact_lastseen"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -82,6 +81,7 @@
                     android:singleLine="true"
                     android:tag="menu"
                     android:text="@string/last_seen_recently"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/smallTextSize" />
             </RelativeLayout>
 
@@ -105,10 +105,10 @@
 
             <TextView
                 android:id="@+id/cigp_txt_nomber_of_shared_media"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp16" />
         </LinearLayout>
 

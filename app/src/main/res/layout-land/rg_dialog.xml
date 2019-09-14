@@ -32,12 +32,12 @@
 
         <net.iGap.module.HeaderTextView
             android:id="@+id/rg_txt_titleToolbar"
-            style="?textSubColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="left|center_vertical"
             android:paddingLeft="@dimen/dp24"
             android:text="@string/rg_Select_Country"
+            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/dp20"
             android:textStyle="bold" />
 
