@@ -72,6 +72,7 @@ public class FragmentSecurity extends BaseFragment {
                 });
 
         fragmentSecurityBinding.ffsLayoutToolbar.addView(mHelperToolbar.getView());
+        mHelperToolbar.getRightButton().setVisibility(View.GONE);
 
         fragmentSecurityViewModel.titleToolbar.observe(G.fragmentActivity, s -> mHelperToolbar.setDefaultTitle(s));
 
