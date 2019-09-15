@@ -5918,20 +5918,31 @@ public class FragmentChat extends BaseFragment
         animGone.setDuration(70);
         animVisible.setDuration(70);
 
-        if (visibility && !imvSendButton.isShown()) {
-            if (isSendVisibilityAnimInProcess) return;
-            sendButtonAnimateVisible(animGone, animVisible);
+        if (!visibility && isSendVisibilityAnimInProcess){
+            animGone.reset();
+            animVisible.reset();
+            imvSendButton.clearAnimation();
+            layoutAttachBottom.clearAnimation();
+            isSendVisibilityAnimInProcess =false ;
+            isAttachVisibilityAnimInProcess = false ;
+            layoutAttachBottom.setVisibility(View.GONE);
         }
+
         if (!visibility && !layoutAttachBottom.isShown()) {
             if (isAttachVisibilityAnimInProcess) return;
-            attachLayoutAnimateVisible(animGone, animVisible);
+            attachLayoutAnimateVisible();
+        }
+        if (visibility && !imvSendButton.isShown()) {
+            if (isSendVisibilityAnimInProcess) return;
+            sendButtonAnimateVisible();
         }
 
     }
 
-    private void sendButtonAnimateVisible(Animation animGone, Animation animVisible) {
+    private void sendButtonAnimateVisible() {
 
         layoutAttachBottom.startAnimation(animGone);
+        isSendVisibilityAnimInProcess = true;
 
         animGone.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -5975,9 +5986,10 @@ public class FragmentChat extends BaseFragment
         });
     }
 
-    private void attachLayoutAnimateVisible(Animation animGone, Animation animVisible) {
+    private void attachLayoutAnimateVisible() {
 
         imvSendButton.startAnimation(animGone);
+        isAttachVisibilityAnimInProcess = true ;
 
         animGone.setAnimationListener(new Animation.AnimationListener() {
             @Override
