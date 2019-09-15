@@ -254,6 +254,9 @@
 -keepclassmembers enum * { *; }
 -keep class **.R$* { *; }
 
+#Metrix
+-keep class ir.metrix.sdk.** { *; }
+
 
 # retrofit
 # Retain service method parameters when optimizing.
