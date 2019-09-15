@@ -12,7 +12,7 @@ package net.iGap.realm;
 
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperString;
-import net.iGap.kuknos.service.model.KuknosRealmM;
+import net.iGap.kuknos.service.model.RealmKuknos;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientRegisterDevice;
 
@@ -36,7 +36,7 @@ public class RealmUserInfo extends RealmObject {
     private boolean importContactLimit;
     private String pushNotificationToken;
     private String representPhoneNumber;
-    private KuknosRealmM kuknosM;
+    private RealmKuknos kuknosM;
     private String accessToken;
 
     public static RealmUserInfo getRealmUserInfo(Realm realm) {
@@ -387,15 +387,15 @@ public class RealmUserInfo extends RealmObject {
     // Kuknos seed key save and get process
 
 
-    public KuknosRealmM getKuknosM() {
+    public RealmKuknos getKuknosM() {
         return kuknosM;
     }
 
-    public void setKuknosM(KuknosRealmM kuknosM) {
+    public void setKuknosM(RealmKuknos kuknosM) {
         this.kuknosM = kuknosM;
     }
 
-    public static void updateKuknos(KuknosRealmM kuknosM) {
+    public static void updateKuknos(RealmKuknos kuknosM) {
         try (Realm realm = Realm.getDefaultInstance()) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -415,7 +415,7 @@ public class RealmUserInfo extends RealmObject {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        setKuknosM(realm.createObject(KuknosRealmM.class));
+                        setKuknosM(realm.createObject(RealmKuknos.class));
                     }
                 });
             }
