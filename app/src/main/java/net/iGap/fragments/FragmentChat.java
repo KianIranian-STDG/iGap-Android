@@ -3944,7 +3944,7 @@ public class FragmentChat extends BaseFragment
                                  * to the list and after insuring that not any more message in DOWN can add message
                                  */
                                 if (addToView) {
-                                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(getRealmChat(), messageCopy))), false);
+                                    switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(messageCopy))), false);
                                     if (isShowLayoutUnreadMessage) {
                                         removeLayoutUnreadMessage();
                                     }
@@ -4250,8 +4250,12 @@ public class FragmentChat extends BaseFragment
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    RealmClientCondition.addOfflineSeen(mRoomId, messageInfo.realmRoomMessage.getMessageId());
-                    RealmRoomMessage.setStatusSeenInChat(messageInfo.realmRoomMessage.getMessageId());
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        realm.executeTransaction(realm1 -> {
+                            RealmClientCondition.addOfflineSeen(realm1, mRoomId, messageInfo.realmRoomMessage.getMessageId());
+                            RealmRoomMessage.setStatusSeenInChat(realm1, messageInfo.realmRoomMessage.getMessageId());
+                        });
+                    }
                 }
             }).start();
         }
