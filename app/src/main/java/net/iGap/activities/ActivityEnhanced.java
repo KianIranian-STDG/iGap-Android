@@ -163,7 +163,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
                 this.setTheme(R.style.iGapDeepPurpleThem);
                 break;
             case Theme.INDIGO:
-                this.setTheme(R.style.iGapLightIndigoTheme);
+                this.setTheme(R.style.iGapIndigoTheme);
                 break;
             case Theme.BLUE:
                 this.setTheme(R.style.iGapBlueTheme);
@@ -177,7 +177,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
                 break;
 
             case Theme.TEAL:
-                this.setTheme(R.style.iGapLightTealTheme);
+                this.setTheme(R.style.iGapTealTheme);
                 break;
 
             case Theme.GREEN:

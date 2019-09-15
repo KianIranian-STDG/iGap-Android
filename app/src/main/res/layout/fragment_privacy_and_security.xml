@@ -16,11 +16,9 @@
 
     <RelativeLayout
         android:id="@+id/parentPrivacySecurity"
-        style="?backgroundColorSettingTheme_2"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:layoutDirection="locale">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/fps_layout_toolbar"
@@ -472,7 +470,6 @@
                     android:background="?iGapDividerLine" />
 
                 <LinearLayout
-                    style="?backgroundColorSettingTheme_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">

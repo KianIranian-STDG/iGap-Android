@@ -273,7 +273,7 @@
 
                 <net.iGap.module.EmojiEditTextE
                     android:id="@+id/groupNameEditText"
-                    style="?emojiChat"
+                    style="@style/iGapEmojiChatStyle"
                     android:layout_width="235dp"
                     android:layout_height="wrap_content"
                     android:background="@null"
@@ -290,7 +290,7 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/emojiButton"
-                    style="?emojiChat"
+                    style="@style/iGapEmojiChatStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"

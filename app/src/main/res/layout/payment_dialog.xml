@@ -203,7 +203,7 @@
                         </LinearLayout>
 
                         <com.google.android.material.button.MaterialButton
-                            style="?iGapButton"
+                            style="@style/iGapButton"
                             android:id="@+id/pay_button"
                             fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"

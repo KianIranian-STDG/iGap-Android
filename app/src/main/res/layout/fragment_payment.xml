@@ -43,7 +43,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.button.MaterialButton
-                    style="?iGapButton"
+                    style="@style/iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp6"
@@ -51,7 +51,7 @@
                     android:text="@string/card_to_card" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="?iGapButton"
+                    style="@style/iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp6"
@@ -59,7 +59,7 @@
                     android:text="@string/buy_charge" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="?iGapButton"
+                    style="@style/iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp6"
@@ -67,7 +67,7 @@
                     android:text="@string/pay_bills" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="?iGapButton"
+                    style="@style/iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp6"
@@ -75,7 +75,7 @@
                     android:text="@string/pay_bills_crime" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="?iGapButton"
+                    style="@style/iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp6"
@@ -83,7 +83,7 @@
                     android:text="@string/bills_inquiry_mci" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="?iGapButton"
+                    style="@style/iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp6"
@@ -91,7 +91,7 @@
                     android:text="@string/bills_inquiry_telecom" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="?iGapButton"
+                    style="@style/iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp6"

@@ -64,28 +64,19 @@
     <!--=======================custom theme=====================-->
 
     <attr name="iGapButtonStroke" format="reference" />
-    <attr name="iGapButton" format="reference" />
     <attr name="iGapButtonGray" format="reference" />
     <attr name="greenTextIconColor" format="reference" />
     <attr name="iGapKuknosLogout" format="reference" />
-
-    <!--setting-->
-    <attr name="backgroundColorSettingTheme_2" format="reference" />
-    <attr name="textBackgroundColor" format="reference" />
-    <attr name="textBackgroundColor_2" format="reference" />
-    <attr name="textSecurityColor" format="reference" />
-    <attr name="textColorCall" format="reference" />
-    <attr name="backgroundColorCall" format="reference" />
-    <attr name="emojiChat" format="reference" />
-    <attr name="backgroundSubChatTheme" format="reference" />
 
     <!--=======================custom new theme=====================-->
 
     <attr name="rootBackgroundColor" format="color" />
     <attr name="iGapTitleTextColor" format="color" />
     <attr name="iGapSubtitleTextColor" format="color" />
+    <attr name="iGapPrimaryTextColor" format="color" />
     <attr name="iGapDividerLine" format="color" />
     <attr name="iGapHintTextColor" format="color" />
+    <attr name="iGapButtonColor" format="reference" />
 
     <!--=======================custom theme=====================-->
 

@@ -162,7 +162,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/payLastTermButton"
-                    style="?iGapButton"
+                    style="@style/iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp20"
@@ -296,7 +296,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/midTermPayButton"
-                    style="?iGapButton"
+                    style="@style/iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp20"

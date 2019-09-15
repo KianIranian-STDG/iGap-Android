@@ -175,7 +175,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/closeButton"
-            style="?iGapButton"
+            style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp4"

@@ -35,7 +35,7 @@
 
             <TextView
                 android:id="@+id/setPassword_txtSetPassword"
-                style="?textSecurityColor"
+                style="?iGapTitleTextColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp32"
@@ -386,7 +386,6 @@
                 </LinearLayout>
 
                 <RelativeLayout
-                    style="?backgroundColorSettingTheme_2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 

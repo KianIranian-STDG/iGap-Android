@@ -21,7 +21,7 @@
         android:visibility="visible">
 
         <TextView
-            style="?textSecurityColor"
+            style="?iGapTitleTextColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp24"
@@ -52,7 +52,7 @@
             android:textSize="@dimen/dp13" />
 
         <TextView
-            style="?textSecurityColor"
+            style="?iGapTitleTextColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp24"

@@ -65,7 +65,7 @@
 
                 <net.iGap.module.EmojiEditTextE
                     android:id="@+id/channelNameEditText"
-                    style="?emojiChat"
+                    style="@style/iGapEmojiChatStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"

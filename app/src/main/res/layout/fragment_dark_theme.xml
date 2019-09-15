@@ -250,7 +250,6 @@
         </LinearLayout>
 
         <LinearLayout
-            style="?backgroundColorSettingTheme_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -346,7 +345,6 @@
         </LinearLayout>
 
         <LinearLayout
-            style="?backgroundColorSettingTheme_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">

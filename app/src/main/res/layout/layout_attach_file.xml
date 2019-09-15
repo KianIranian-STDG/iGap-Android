@@ -28,7 +28,7 @@
 
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/chl_imv_smile_button"
-                style="?emojiChat"
+                style="@style/iGapEmojiChatStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom"
@@ -43,7 +43,7 @@
 
             <net.iGap.module.EmojiEditTextE
                 android:id="@+id/chl_edt_chat"
-                style="?emojiChat"
+                style="@style/iGapEmojiChatStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -90,7 +90,7 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/chl_imv_attach_button"
-                    style="?emojiChat"
+                    style="@style/iGapEmojiChatStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -102,7 +102,7 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/chl_imv_sendMoney_button"
-                    style="?emojiChat"
+                    style="@style/iGapEmojiChatStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -113,7 +113,7 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/chl_imv_mic_button"
-                    style="?emojiChat"
+                    style="@style/iGapEmojiChatStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

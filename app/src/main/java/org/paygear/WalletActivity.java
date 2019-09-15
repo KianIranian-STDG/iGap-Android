@@ -208,7 +208,7 @@ public class WalletActivity extends NavigationBarActivity {
                 this.setTheme(R.style.iGapCyanTheme);
                 break;
             case Theme.TEAL:
-                this.setTheme(R.style.iGapLightTealTheme);
+                this.setTheme(R.style.iGapTealTheme);
                 break;
             case Theme.GREEN:
                 this.setTheme(R.style.iGapGreenTheme);
