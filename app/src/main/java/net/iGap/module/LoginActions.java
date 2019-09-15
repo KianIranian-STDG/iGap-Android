@@ -128,7 +128,7 @@ public class LoginActions {
 
     private static void getUserInfo() {
         final long userId;
-        try (final Realm realm = Realm.getDefaultInstance()) {
+        try (Realm realm = Realm.getDefaultInstance()) {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo == null) {
                 throw new Exception("Empty Exception");

@@ -46,17 +46,6 @@ public class ClientMuteRoomResponse extends MessageHandler {
                 }
             });
         }
-
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                G.refreshRealmUi();
-                /** call this listener for update tab bars unread count */
-                if (G.onUnreadChange != null) {
-                    G.onUnreadChange.onChange();
-                }
-            }
-        });
     }
 
     @Override

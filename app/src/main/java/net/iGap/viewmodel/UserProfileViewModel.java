@@ -911,22 +911,22 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
             G.isNeedToCheckProfileWallpaper = false;
 
-            Realm realm = Realm.getDefaultInstance();
-            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
+            try (Realm realm = Realm.getDefaultInstance()) {
+                RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
 
-            if (realmWallpaper != null) {
+                if (realmWallpaper != null) {
 
-                if (realmWallpaper.getWallPaperList().get(0).getFile().getToken().equals(list.get(0).getFile().getToken())) {
-                    getProfileWallpaper(realm);
+                    if (realmWallpaper.getWallPaperList().get(0).getFile().getToken().equals(list.get(0).getFile().getToken())) {
+                        getProfileWallpaper(realm);
+                    } else {
+                        RealmWallpaper.updateWallpaper(list);
+                        getProfileWallpaper(realm);
+                    }
                 } else {
-                    RealmWallpaper.updateWallpaper(list);
+                    RealmWallpaper.updateField(list, "", ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE);
                     getProfileWallpaper(realm);
                 }
-            } else {
-                RealmWallpaper.updateField(list, "", ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE);
-                getProfileWallpaper(realm);
             }
-            realm.close();
         };
 
         new RequestInfoWallpaper().infoWallpaper(ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER);

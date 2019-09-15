@@ -1107,9 +1107,20 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         @Override
         protected OrderedRealmCollectionChangeListener createListener() {
-            return new OrderedRealmCollectionChangeListener() {
+
+            return new OrderedRealmCollectionChangeListener<RealmResults<RealmRoom>>() {
                 @Override
-                public void onChange(Object collection, OrderedCollectionChangeSet changeSet) {
+                public void onChange(RealmResults<RealmRoom> collection, OrderedCollectionChangeSet changeSet) {
+                    if (G.onUnreadChange != null) {
+                        int unreadCount = 0;
+                        for (RealmRoom room: collection) {
+                            if (!room.getMute() && !room.isDeleted() && room.getUnreadCount() > 0) {
+                                unreadCount += room.getUnreadCount();
+                            }
+                        }
+                        G.onUnreadChange.onChange(unreadCount);
+                    }
+
                     if (getData() != null && getData().size() > 0) {
                         emptyView.setVisibility(View.GONE);
                     } else {
