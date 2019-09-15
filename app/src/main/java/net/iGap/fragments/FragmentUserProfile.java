@@ -212,7 +212,8 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
 
         viewModel.goToSettingPage.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(),new FragmentThemColor()).setReplace(false).load(true);
+                /*new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();*/
             }
         });
 

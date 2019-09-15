@@ -30,9 +30,9 @@
 
 
         <LinearLayout
-            style="?backgroundSubChatTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="?rootBackgroundColor"
             android:clickable="true"
             android:layoutDirection="ltr"
             android:orientation="horizontal">

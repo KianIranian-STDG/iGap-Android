@@ -4,8 +4,8 @@
 
     <gradient
         android:angle="135"
-        android:endColor="@color/colorToolbarBackgroundEnd"
-        android:startColor="@color/colorToolbarBackgroundStart" />
+        android:endColor="?attr/colorPrimaryDark"
+        android:startColor="?attr/colorPrimary" />
 
     <corners android:radius="8dp" />
 </shape>

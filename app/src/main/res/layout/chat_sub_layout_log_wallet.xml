@@ -15,9 +15,9 @@
 
     <LinearLayout
         android:id="@+id/chatSubLayoutLogWallet"
-        style="?backgroundSubChatTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?rootBackgroundColor"
         android:orientation="vertical">
 
         <net.iGap.module.CustomTextViewMedium

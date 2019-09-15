@@ -111,7 +111,6 @@
                     android:textColorHint="?iGapHintTextColor"
                     app:errorText="@{viewModel.channelLinkErrorMessage}"
                     app:errorTextAppearance="@style/error_appearance"
-                    app:hintTextAppearance="@style/Hint_appearance"
                     app:layout_constraintTop_toBottomOf="@id/permanentLinkTitle">
 
                     <net.iGap.module.MEditText

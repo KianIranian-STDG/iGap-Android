@@ -1275,14 +1275,14 @@ public class HelperToolbar {
                 mainConstraint.setId(R.id.view_toolbar_main_constraint);
 
                 if (isRoundBackground) {
-                    if (isDark)
+                    /*if (isDark)
                         mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_dark);
-                    else
+                    else*/
                         mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background);
                 } else {
-                    if (isDark)
+                    /*if (isDark)
                         mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_rect_dark);
-                    else
+                    else*/
                         mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_rect);
                 }
                 setRoot.constrainHeight(mainConstraint.getId(), i_Dp(R.dimen.toolbar_height));

@@ -63,7 +63,6 @@
 
     <!--=======================custom theme=====================-->
 
-    <attr name="iGapButtonStroke" format="reference" />
     <attr name="iGapButtonGray" format="reference" />
     <attr name="greenTextIconColor" format="reference" />
     <attr name="iGapKuknosLogout" format="reference" />
@@ -76,7 +75,8 @@
     <attr name="iGapPrimaryTextColor" format="color" />
     <attr name="iGapDividerLine" format="color" />
     <attr name="iGapHintTextColor" format="color" />
-    <attr name="iGapButtonColor" format="reference" />
+    <attr name="iGapButtonColor" format="color" />
+    <attr name="iGapButtonTextColor" format="color" />
 
     <!--=======================custom theme=====================-->
 

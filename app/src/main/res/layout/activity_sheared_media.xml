@@ -106,7 +106,6 @@
 
         <HorizontalScrollView
             android:id="@+id/asm_ll_media_types"
-            style="?backgroundSubChatTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="@dimen/dp36"
@@ -127,7 +126,6 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/asm_recycler_view_sheared_media"
-            style="?backgroundSubChatTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
