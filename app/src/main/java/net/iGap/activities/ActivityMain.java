@@ -25,9 +25,6 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -38,6 +35,10 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -916,7 +917,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             case kuknosRequestCodeQrCode:
                 IntentResult kuknosWID = IntentIntegrator.parseActivityResult(resultCode, data);
                 if (kuknosWID.getContents() != null) {
-                    KuknosSendFrag myFragment = (KuknosSendFrag)getSupportFragmentManager().findFragmentByTag(KuknosSendFrag.class.getName());
+                    KuknosSendFrag myFragment = (KuknosSendFrag) getSupportFragmentManager().findFragmentByTag(KuknosSendFrag.class.getName());
                     if (myFragment != null && myFragment.isVisible()) {
                         myFragment.setWalletIDQrCode(kuknosWID.getContents());
                     }
@@ -1543,7 +1544,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                          */
                         if (room.getUnreadCount() <= 1) {
                             realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
-                            room.setFirstUnreadMessage(realmRoomMessage);
                         }
                     }
                 }
@@ -1555,6 +1555,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
          */
         if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != userId) {
             // user has received the message, so I make a new delivered update status request
+            // todo:please check in group and channel that user is joined
+
             if (roomType == ProtoGlobal.Room.Type.CHAT) {
                 G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
             } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
@@ -1845,6 +1847,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     }
 
+    public void onUpdateContacts() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragment).updateContacts();
+        }
+    }
+
     public enum MainAction {
         downScrool, clinetCondition
     }
@@ -1922,6 +1931,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (fragment instanceof FragmentChat) {
             getSupportFragmentManager().beginTransaction().remove(fragment).commit();
         }
+    }
 
+    public Fragment getFragment(String fragmentTag){
+        return getSupportFragmentManager().findFragmentByTag(fragmentTag);
     }
 }

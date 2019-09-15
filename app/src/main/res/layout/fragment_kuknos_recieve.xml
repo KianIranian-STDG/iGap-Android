@@ -1,8 +1,8 @@
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewmodel"
             type="net.iGap.kuknos.viewmodel.KuknosRecieveVM" />
@@ -67,7 +67,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosRcMessage"
                     app:layout_constraintWidth_percent="0.4"
-                    app:layout_constraintDimensionRatio="1:1"/>
+                    app:layout_constraintDimensionRatio="1:1" />
 
                 <ProgressBar
                     android:id="@+id/fragKuknosPProgressV"
@@ -80,7 +80,7 @@
                     app:layout_constraintStart_toStartOf="@+id/fragKuknosRcQrCode"
                     app:layout_constraintEnd_toEndOf="@+id/fragKuknosRcQrCode"
                     app:layout_constraintTop_toTopOf="@+id/fragKuknosRcQrCode"
-                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosRcQrCode"/>
+                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosRcQrCode" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     style="?textTitleColorSettingTheme"

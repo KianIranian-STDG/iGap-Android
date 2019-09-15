@@ -2,10 +2,6 @@ package net.iGap.fragments;
 
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,6 +11,11 @@ import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -151,7 +152,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
         mRecyclerView.setAdapter(new CallAdapter(realmResults));
 
-        mOffset = 0 ;
+        mOffset = 0;
         getLogListWithOffset();
 
         mRecyclerView.getAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -526,7 +527,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
     @Override
     public boolean isAllowToBackPressed() {
-        if (mIsMultiSelectEnable){
+        if (mIsMultiSelectEnable) {
             setViewState(false);
             return false;
         }
@@ -686,11 +687,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
                             int i = Math.abs((int) (move - event.getX()));
 
-                            if (i < 10) {
-                                canclick = true;
-                            } else {
-                                canclick = false;
-                            }
+                            canclick = i < 10;
                         }
 
                         return false;

@@ -11,7 +11,6 @@
 package net.iGap.realm;
 
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.helper.HelperCalander;
@@ -557,16 +556,6 @@ public class RealmRoom extends RealmObject {
                 }
             });
         }
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                /** call this listener for update tab bars unread count */
-                if (G.onUnreadChange != null) {
-                    G.onUnreadChange.onChange();
-                }
-            }
-        }, 100);
     }
 
     public static void addOwnerToDatabase(long roomId) {
@@ -846,19 +835,19 @@ public class RealmRoom extends RealmObject {
         return room;
     }
 
+    public static RealmRoom removeFirstUnreadMessage(Realm realm, final long roomId) {
+        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (room != null) {
+            room.setFirstUnreadMessage(null);
+        }
+        return room;
+    }
+
     public static RealmRoom setCountWithCallBack(Realm realm, final long roomId, final int count) {
         RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (room != null) {
             room.setUnreadCount(count);
         }
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (G.onUnreadChange != null) {
-                    G.onUnreadChange.onChange();
-                }
-            }
-        }, 100);
 
         return room;
     }
@@ -895,14 +884,19 @@ public class RealmRoom extends RealmObject {
     public static void clearAllScrollPositions() {
         try (Realm realm = Realm.getDefaultInstance()) {
             for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
-                clearScrollPosition(realmRoom.id);
+                setLastScrollPosition(realm, realmRoom.id);
             }
         }
     }
 
-    public static void clearScrollPosition(long roomId) {
-        setLastScrollPosition(roomId, 0, 0);
+    private static void setLastScrollPosition(Realm realm, long roomId) {
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null) {
+            realmRoom.setLastScrollPositionMessageId(0);
+            realmRoom.setLastScrollPositionOffset(0);
+        }
     }
+
 
     public static void setDraft(final long roomId, final String message, final long replyToMessageId, ProtoGlobal.Room.Type chatType) {
         try (Realm realm = Realm.getDefaultInstance()) {
@@ -1134,17 +1128,6 @@ public class RealmRoom extends RealmObject {
         }
     }
 
-    public static int getAllUnreadCount() {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            Number number = realm.where(RealmRoom.class)
-                    .equalTo(RealmRoomFields.MUTE, false)
-                    .equalTo(RealmRoomFields.IS_DELETED, false)
-                    .greaterThan("unreadCount", 0)
-                    .sum("unreadCount");
-            return number.intValue();
-        }
-    }
-
     public long getId() {
         return id;
     }
@@ -1195,14 +1178,6 @@ public class RealmRoom extends RealmObject {
 
     public void setUnreadCount(int unreadCount) {
         this.unreadCount = unreadCount;
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (G.onUnreadChange != null) {
-                    G.onUnreadChange.onChange();
-                }
-            }
-        }, 100);
     }
 
     public boolean getReadOnly() {
@@ -1218,11 +1193,7 @@ public class RealmRoom extends RealmObject {
     }
 
     public void setMute(ProtoGlobal.RoomMute muteState) {
-        if (muteState == ProtoGlobal.RoomMute.MUTE) {
-            this.mute = true;
-        } else {
-            this.mute = false;
-        }
+        this.mute = muteState == ProtoGlobal.RoomMute.MUTE;
     }
 
     public RealmChatRoom getChatRoom() {
@@ -1591,7 +1562,7 @@ public class RealmRoom extends RealmObject {
                 }
                 all += rm.getUnreadCount();
             }
-            String ar[];
+            String[] ar;
             if (HelperCalander.isPersianUnicode) {
                 ar = new String[]{"0", "0", all + ""};
             } else {

@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:button="@drawable/check_box_background"
         android:layout_marginLeft="@dimen/dp10"
-        android:layout_marginRight="@dimen/dp4"/>
+        android:layout_marginRight="@dimen/dp4" />
 
     <net.iGap.module.CircleImageView
         android:id="@+id/fcsl_imv_picture"
@@ -53,6 +53,7 @@
                     android:text="Name"
                     android:textSize="@dimen/dp15"
                     android:textStyle="bold" />
+
                 <LinearLayout
 
                     android:layout_width="match_parent"

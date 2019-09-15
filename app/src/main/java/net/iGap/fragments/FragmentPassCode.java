@@ -1,14 +1,15 @@
 package net.iGap.fragments;
 
 import android.content.SharedPreferences;
-import androidx.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.utils.ResourceUtils;
@@ -34,7 +35,6 @@ public class FragmentPassCode extends BaseFragment {
     private FragmentPassCodeViewModel fragmentPassCodeViewModel;
     private FragmentPassCodeBinding fragmentPassCodeBinding;
     private boolean isPattern;
-
 
 
     public FragmentPassCode() {
@@ -86,28 +86,28 @@ public class FragmentPassCode extends BaseFragment {
         toolbar.getRightButton().setVisibility(View.GONE);
 
         //observe to show tick (ok) button or not
-        fragmentPassCodeViewModel.rippleOkVisibility.observe(this , visibility -> {
+        fragmentPassCodeViewModel.rippleOkVisibility.observe(this, visibility -> {
 
-            if (visibility != null){
-                if (visibility == View.VISIBLE){
+            if (visibility != null) {
+                if (visibility == View.VISIBLE) {
                     toolbar.getRightButton().setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     toolbar.getRightButton().setVisibility(View.GONE);
                 }
             }
         });
 
-        fragmentPassCodeViewModel.passCodeStateChangeListener.observe(getViewLifecycleOwner() , aBoolean -> {
-            if (getActivity() != null){
+        fragmentPassCodeViewModel.passCodeStateChangeListener.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (getActivity() != null) {
                 ((ActivityMain) getActivity()).updatePassCodeState();
             }
         });
 
         boolean isLinePattern;
-        if (isPattern){
+        if (isPattern) {
             SharedPreferences sharedPreferences = G.currentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
             isLinePattern = sharedPreferences.getBoolean(SHP_SETTING.KEY_PATTERN_TACTILE_DRAWN, true);
-        }else {
+        } else {
             isLinePattern = true;
         }
 
@@ -124,7 +124,7 @@ public class FragmentPassCode extends BaseFragment {
         fragmentPassCodeBinding.patternLockView.setAspectRatio(PatternLockView.AspectRatio.ASPECT_RATIO_HEIGHT_BIAS);
         if (G.isDarkTheme) {
             fragmentPassCodeBinding.patternLockView.setNormalStateColor(ResourceUtils.getColor(G.fragmentActivity, R.color.white));
-        }else {
+        } else {
             fragmentPassCodeBinding.patternLockView.setNormalStateColor(Color.parseColor(G.appBarColor));
         }
         fragmentPassCodeBinding.patternLockView.setCorrectStateColor(ResourceUtils.getColor(G.fragmentActivity, R.color.green));

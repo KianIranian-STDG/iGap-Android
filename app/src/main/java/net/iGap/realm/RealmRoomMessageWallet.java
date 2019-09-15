@@ -44,7 +44,7 @@ public class RealmRoomMessageWallet extends RealmObject {
             messageWallet.setRealmRoomMessageWalletCardToCard(RealmRoomMessageWalletCardToCard.put(realm, input.getCardToCard()));
         } else if (input.getType() == MONEY_TRANSFER) {
             messageWallet.setRealmRoomMessageWalletMoneyTransfer(RealmRoomMessageWalletMoneyTransfer.put(realm, input.getMoneyTransfer()));
-        } else if (input.getType() == PAYMENT ) {
+        } else if (input.getType() == PAYMENT) {
             messageWallet.setRealmRoomMessageWalletPayment(RealmRoomMessageWalletPayment.put(realm, input.getMoneyTransfer()));
         } else {
 

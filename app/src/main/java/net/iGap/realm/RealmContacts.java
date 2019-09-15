@@ -102,7 +102,6 @@ public class RealmContacts extends RealmObject {
     }
 
 
-
     public long getId() {
         return id;
     }

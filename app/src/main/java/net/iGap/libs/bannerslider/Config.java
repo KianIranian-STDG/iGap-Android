@@ -2,6 +2,7 @@ package net.iGap.libs.bannerslider;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+
 import androidx.core.content.ContextCompat;
 
 import net.iGap.R;

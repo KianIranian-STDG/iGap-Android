@@ -1,8 +1,8 @@
 package net.iGap.kuknos.viewmodel;
 
+import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableField;
 
 import com.google.gson.Gson;
 

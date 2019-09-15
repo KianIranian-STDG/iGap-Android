@@ -1,16 +1,15 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.adapter.items.chat;
 
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,8 +60,8 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (FragmentChat.isInSelectionMode){
-                        holder.itemView.performLongClick();
+                if (FragmentChat.isInSelectionMode) {
+                    holder.itemView.performLongClick();
                 } else {
                     if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         return;
@@ -126,7 +125,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
             //more.setBackgroundResource(R.drawable.bg_message_image_time);
             more.setGravity(Gravity.CENTER);
             more.setText(R.string.horizontal_more_icon);
-            setTextSize(more , R.dimen.largeTextSize );
+            setTextSize(more, R.dimen.largeTextSize);
             more.setTextColor(G.context.getResources().getColor(R.color.white));
             more.setPadding(i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp12), i_Dp(R.dimen.dp8));
             FrameLayout.LayoutParams layout_50 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

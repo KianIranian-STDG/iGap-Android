@@ -1,23 +1,23 @@
 package net.iGap.kuknos.view;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.SharedPreferences;
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.Observable;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentKuknosRestoreBinding;
@@ -84,7 +84,7 @@ public class KuknosRestoreFrag extends BaseFragment {
         getCachedData();
     }
 
-    private void getCachedData () {
+    private void getCachedData() {
         SharedPreferences sharedpreferences = getContext().getSharedPreferences("KUKNOS_REGISTER", Context.MODE_PRIVATE);
         kuknosRestoreVM.setToken(sharedpreferences.getString("Token", ""));
     }
@@ -106,15 +106,14 @@ public class KuknosRestoreFrag extends BaseFragment {
                     if (errorM.getMessage().equals("0")) {
                         binding.fragKuknosRkeysET.setError("" + getString(errorM.getResID()));
                         binding.fragKuknosRkeysET.requestFocus();
-                    }
-                    else if (errorM.getMessage().equals("1")) {
+                    } else if (errorM.getMessage().equals("1")) {
                         Snackbar snackbar = Snackbar.make(binding.fragKuknosRContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
                         snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        snackbar.dismiss();
-                                    }
-                                });
+                            @Override
+                            public void onClick(View v) {
+                                snackbar.dismiss();
+                            }
+                        });
                         snackbar.show();
                     }
                 }
@@ -124,34 +123,32 @@ public class KuknosRestoreFrag extends BaseFragment {
 
     private void onNextObserver() {
         kuknosRestoreVM.getNextPage().observe(getViewLifecycleOwner(), nextPage -> {
-                FragmentManager fragmentManager = getChildFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Fragment fragment = null;
-                if (nextPage == 1) {
-                    fragment = fragmentManager.findFragmentByTag(KuknosRestorePassFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosRestorePassFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    Bundle bundle = new Bundle();
-                    bundle.putString("key_phrase", kuknosRestoreVM.getKeys().get());
-                    fragment.setArguments(bundle);
+            FragmentManager fragmentManager = getChildFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Fragment fragment = null;
+            if (nextPage == 1) {
+                fragment = fragmentManager.findFragmentByTag(KuknosRestorePassFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosRestorePassFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                else if (nextPage == 2){
-                    fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosPanelFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
+                Bundle bundle = new Bundle();
+                bundle.putString("key_phrase", kuknosRestoreVM.getKeys().get());
+                fragment.setArguments(bundle);
+            } else if (nextPage == 2) {
+                fragment = fragmentManager.findFragmentByTag(KuknosPanelFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosPanelFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                else if (nextPage == 3) {
-                    fragment = fragmentManager.findFragmentByTag(KuknosRestoreSignupFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = KuknosRestoreSignupFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
+            } else if (nextPage == 3) {
+                fragment = fragmentManager.findFragmentByTag(KuknosRestoreSignupFrag.class.getName());
+                if (fragment == null) {
+                    fragment = KuknosRestoreSignupFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         });
     }
 
@@ -164,8 +161,7 @@ public class KuknosRestoreFrag extends BaseFragment {
                     binding.fragKuknosIdSubmit.setEnabled(false);
                     binding.fragKuknosRkeysET.setEnabled(false);
                     binding.fragKuknosRProgressV.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     binding.fragKuknosIdSubmit.setText(getString(R.string.kuknos_Restore_Btn));
                     binding.fragKuknosIdSubmit.setEnabled(true);
                     binding.fragKuknosRkeysET.setEnabled(true);

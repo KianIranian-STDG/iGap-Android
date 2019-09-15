@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
@@ -14,16 +14,17 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -113,16 +114,16 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
          * library does not support change text color or background color at run time until 1.0.8
          */
         ViewGroup layoutChips = view.findViewById(R.id.fcg_layout_search);
-        if (G.isDarkTheme){
-            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout_dark , null));
-        }else {
-            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout , null));
+        if (G.isDarkTheme) {
+            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout_dark, null));
+        } else {
+            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout, null));
         }
 
         chipsInput = view.findViewById(R.id.chips_input);
 
-         final ItemAdapter itemAdapter = new ItemAdapter();
-        fastAdapter = FastAdapter.with( itemAdapter);
+        final ItemAdapter itemAdapter = new ItemAdapter();
+        fastAdapter = FastAdapter.with(itemAdapter);
         fastAdapter.withSelectable(true);
         fastAdapter.setHasStableIds(true);
 
@@ -215,7 +216,7 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
                         isRemove = false;
                     }
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

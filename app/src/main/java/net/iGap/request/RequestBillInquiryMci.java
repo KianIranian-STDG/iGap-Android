@@ -19,7 +19,7 @@ public class RequestBillInquiryMci {
     public void billInquiryMci(long mobileNumber, GeneralResponseCallBack<BillInquiryResponse> callBack) {
         ProtoBillInquiryMci.BillInquiryMci.Builder builder = ProtoBillInquiryMci.BillInquiryMci.newBuilder();
         builder.setMobileNumber(mobileNumber);
-        RequestWrapper requestWrapper = new RequestWrapper(9200, builder,callBack);
+        RequestWrapper requestWrapper = new RequestWrapper(9200, builder, callBack);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -10,10 +10,7 @@
 
 package net.iGap.response;
 
-import android.util.Log;
-
 import net.iGap.helper.HelperPublicMethod;
-import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoWalletIdMapping;
 
 import org.paygear.RaadApp;

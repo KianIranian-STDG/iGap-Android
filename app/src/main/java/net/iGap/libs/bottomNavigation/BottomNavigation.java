@@ -7,12 +7,13 @@ import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -197,7 +198,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         this.backgroundColor = backgroundColor;
     }
 
-    public void setOnBottomNavigationBadge(OnBottomNavigationBadge callBack) {
+    public void setOnBottomNavigationBadge(int unreadCount, int callCount) {
         for (int i = 0; i < tabItems.size(); i++) {
             TabItem tabItem = tabItems.get(i);
             tabItem.setBadgeColor(badgeColor);
@@ -207,10 +208,10 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
                     tabItem.setBadgeCount(0);
                     break;
                 case 1:
-                    tabItem.setBadgeCount(callBack.callCount());
+                    tabItem.setBadgeCount(callCount);
                     break;
                 case 2:
-                    tabItem.setBadgeCount(callBack.messageCount());
+                    tabItem.setBadgeCount(unreadCount);
                     break;
                 case 3:
                     tabItem.setBadgeCount(0);
@@ -222,7 +223,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         }
     }
 
-    public int getCurrentTab(){
+    public int getCurrentTab() {
         return selectedItemPosition;
     }
 }

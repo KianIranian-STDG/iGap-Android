@@ -37,7 +37,7 @@ public class ClientGetPollResponse extends MessageHandler {
         super.handler();
         ProtoClientGetPoll.ClientGetPollResponse.Builder builder = (ProtoClientGetPoll.ClientGetPollResponse.Builder) message;
         ArrayList<PollItem> res = new ArrayList<>();
-        for (ProtoGlobal.Poll poll: builder.getPollsList()) {
+        for (ProtoGlobal.Poll poll : builder.getPollsList()) {
             res.add(new PollItem(poll));
         }
 

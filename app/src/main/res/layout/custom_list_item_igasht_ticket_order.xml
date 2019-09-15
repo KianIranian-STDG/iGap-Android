@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/price_ticket"
-        android:background="@drawable/igasht_tabbar_background_light"/>
+        android:background="@drawable/igasht_tabbar_background_light" />
 
 
     <androidx.appcompat.widget.AppCompatTextView

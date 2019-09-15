@@ -2,7 +2,6 @@ package net.iGap.activities;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -10,6 +9,8 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+
+import androidx.annotation.NonNull;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -89,8 +90,8 @@ public class ActivityRatingBar extends ActivityEnhanced {
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
 
-        ratingBar = (RatingBar) view.findViewById(R.id.arb_ratingBar_call);
-        edtResone = (EditText) view.findViewById(R.id.arb_edt_resone);
+        ratingBar = view.findViewById(R.id.arb_ratingBar_call);
+        edtResone = view.findViewById(R.id.arb_edt_resone);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {

@@ -1,14 +1,15 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -34,16 +35,15 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
     private DataUsageAdapter adapter;
     private HelperToolbar mHelperToolbar;
 
-    public static FragmentDataUsage newInstance() {
-        return new FragmentDataUsage();
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_data_usage, container, false);
+    }
 
-        View view = inflater.inflate(R.layout.fragment_data_usage, container, false);
-
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -52,7 +52,9 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
-                        getActivity().onBackPressed();
+                        if (getActivity() != null) {
+                            getActivity().onBackPressed();
+                        }
 
                     }
                 });
@@ -67,8 +69,10 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
         usageArrayList.add(new DataUsageStruct(1, 0, 0, 0, 0, "Total"));
         usageArrayList.add(new DataUsageStruct(2, 0, 0, 0, 0, "ClearData"));
 
+        RecyclerView rcDataUsage = view.findViewById(R.id.rcDataUsage);
+        adapter = new DataUsageAdapter(usageArrayList, totalReceivedByte, totalSendByte, type, this);
+        rcDataUsage.setAdapter(adapter);
 
-        return view;
     }
 
     private void initData(boolean type) {
@@ -76,7 +80,7 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
             RealmResults<RealmDataUsage> wifiRealmDataUsages;
             RealmResults<RealmDataUsage> dataRealmDataUsages;
             if (type) {
-                mHelperToolbar.setDefaultTitle(getResources().getString(R.string.wifi_data_usage));
+                mHelperToolbar.setDefaultTitle(getString(R.string.wifi_data_usage));
                 totalReceivedByte = 0;
                 totalSendByte = 0;
                 wifiRealmDataUsages = realm.where(RealmDataUsage.class).equalTo("connectivityType", true).findAll();
@@ -103,19 +107,6 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
                 }
             }
         }
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        RecyclerView rcDataUsage = view.findViewById(R.id.rcDataUsage);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
-        adapter = new DataUsageAdapter(G.currentActivity, usageArrayList, totalReceivedByte, totalSendByte, type, this);
-        rcDataUsage.setAdapter(adapter);
-        rcDataUsage.setLayoutManager(layoutManager);
-
-
     }
 
     @Override

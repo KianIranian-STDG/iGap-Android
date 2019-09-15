@@ -1,15 +1,16 @@
 package net.iGap.fragments.discovery;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -76,7 +77,7 @@ public class DiscoveryFragmentAgreement extends FragmentToolBarBack {
                                     G.handler.post(() -> {
                                         discoveryField.agreement = true;
                                         onBackButtonClicked(buttonView);
-                                        BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryField, getActivity(),false);
+                                        BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryField, getActivity(), false);
                                     });
                                 }
 

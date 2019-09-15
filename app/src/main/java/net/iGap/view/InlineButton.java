@@ -2,11 +2,12 @@ package net.iGap.view;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
-import androidx.annotation.NonNull;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import net.iGap.G;
 import net.iGap.R;

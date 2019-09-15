@@ -13,7 +13,7 @@ import javax.crypto.Cipher;
 public class EncryptKeySticker {
     public static String PUBLIC_KEY = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKfzsTIcKJH7P2iHTUIsEIcpTMEzivy1wazIaLif5Limym+0J/6hwb/JNR1K+9kEqWIEX41j25MSyM4nVH2+NucCAwEAAQ==";
 
-   public static String enccriptData() {
+    public static String enccriptData() {
         String encoded = "";
         byte[] encrypted = null;
         try {
@@ -28,6 +28,6 @@ public class EncryptKeySticker {
         } catch (Exception e) {
             e.printStackTrace();
         }
-       return encoded;
+        return encoded;
     }
 }

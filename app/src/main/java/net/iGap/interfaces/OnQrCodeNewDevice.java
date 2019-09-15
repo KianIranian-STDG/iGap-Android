@@ -7,7 +7,7 @@ package net.iGap.interfaces;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
 import com.google.protobuf.ByteString;
 
@@ -15,6 +15,6 @@ public interface OnQrCodeNewDevice {
 
     void getQrCode(ByteString codeImage, int expireTime);
 
-    void onError(int major,int minor);
+    void onError(int major, int minor);
 
 }

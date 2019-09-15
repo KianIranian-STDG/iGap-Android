@@ -18,6 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
 
     private static Retrofit retrofit = null;
+
     public static synchronized Retrofit getClient(String baseUrl) {
 
         if (retrofit == null) {

@@ -19,7 +19,7 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            style="?textTitleColorSettingTheme"/>
+            style="?textTitleColorSettingTheme" />
 
         <TextView
             android:id="@+id/title2"
@@ -30,13 +30,13 @@
             android:maxLines="5"
             android:ellipsize="end"
             android:gravity="start"
-            style="?textSubColorSettingTheme"/>
+            style="?textSubColorSettingTheme" />
 
         <TextView
             android:id="@+id/value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="?textTitleColorSettingTheme"/>
+            style="?textTitleColorSettingTheme" />
 
     </LinearLayout>
 

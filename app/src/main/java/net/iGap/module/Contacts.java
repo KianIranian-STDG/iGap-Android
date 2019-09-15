@@ -1,18 +1,17 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.module;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -122,6 +121,7 @@ public class Contacts {
             e1.printStackTrace();
         }
     }
+
     /*
     private static void getPhoneContactForServer() { //get List Of Contact
         if (!HelperPermission.grantedContactPermission()) {
@@ -305,8 +305,8 @@ public class Contacts {
         }
     }
 
-    private static void getAllPhoneContactForServer(){
-        Log.i("fetch_contact","start" );
+    private static void getAllPhoneContactForServer() {
+        Log.i("fetch_contact", "start");
 
         if (!HelperPermission.grantedContactPermission()) {
             return;
@@ -329,11 +329,11 @@ public class Contacts {
         ArrayList<StructListOfContact> contactList = new ArrayList<>();
         ContentResolver cr = G.context.getContentResolver();
 
-        try{
-            Cursor pCur = null ;
+        try {
+            Cursor pCur = null;
             pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projectionPhones, null, null, null);
 
-            if (pCur != null){
+            if (pCur != null) {
                 int count = pCur.getCount();
 
                 if (count > PHONE_CONTACT_MAX_COUNT_LIMIT) {
@@ -342,36 +342,36 @@ public class Contacts {
                     //return;
                 }
 
-                if (count > 0){
-                    StructListOfContact contact = null ;
+                if (count > 0) {
+                    StructListOfContact contact = null;
                     String displayName;
                     String number;
 
-                    while (pCur.moveToNext()){
+                    while (pCur.moveToNext()) {
                         number = pCur.getString(1);
                         displayName = pCur.getString(4);
                         // Log.i("fetch_contact" , number + " --- " + displayName);
                         contact = new StructListOfContact();
-                        checkContactsData(displayName , number , contact , contactList);
+                        checkContactsData(displayName, number, contact, contactList);
                     }
                 }
                 pCur.close();
-                Log.i("fetch_contact",contactList.size() + "" );
-                Log.i("import_contact",contactList.size() + "" );
+                Log.i("fetch_contact", contactList.size() + "");
+                Log.i("import_contact", contactList.size() + "");
             }
 
             if (G.onContactFetchForServer != null) {
                 G.onContactFetchForServer.onFetch(contactList, true);
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             //nothing
         }
-        Log.i("fetch_contact","end" );
+        Log.i("fetch_contact", "end");
 
     }
 
-    private static void checkContactsData(String name , String phone , StructListOfContact itemContact , List<StructListOfContact> list ){
+    private static void checkContactsData(String name, String phone, StructListOfContact itemContact, List<StructListOfContact> list) {
 
         try {
             if (phone != null && name != null) {
@@ -400,7 +400,7 @@ public class Contacts {
 
                 list.add(itemContact);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             //nothing
         }
     }

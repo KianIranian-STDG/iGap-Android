@@ -1,10 +1,6 @@
 package net.iGap.fragments.emoji;
 
-import android.os.Handler;
-import android.util.Log;
-
 import net.iGap.G;
-import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.interfaces.OnStickerDownloaded;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;

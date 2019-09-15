@@ -2,10 +2,11 @@ package net.iGap.adapter.items.poll;
 
 import android.content.Context;
 import android.content.res.Resources;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.data.BarEntry;
 
@@ -59,8 +60,8 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ArrayList<BarEntry> barValue = new ArrayList<>();
         boolean userPolledBefore = false;
         int i = 0;
-        for (PollItem pollItem: getData()) {
-            for (PollItemField pollItemField: pollItem.pollItemFields) {
+        for (PollItem pollItem : getData()) {
+            for (PollItemField pollItemField : pollItem.pollItemFields) {
                 if (pollItemField.clicked) {
                     userPolledBefore = true;
                 }

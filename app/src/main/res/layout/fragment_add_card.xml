@@ -22,7 +22,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-          android:id="@+id/rootCardView"
+            android:id="@+id/rootCardView"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
                     android:id="@+id/image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="8dp"/>
+                    android:padding="8dp" />
 
             </androidx.cardview.widget.CardView>
 
@@ -57,7 +57,7 @@
                 android:text="@string/enter_your_card_number"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="-8dp"/>
+                android:layout_marginBottom="-8dp" />
 
             <EditText
                 android:id="@+id/card_number"
@@ -71,7 +71,7 @@
                 android:paddingRight="16dp"
                 android:layout_margin="16dp"
                 android:imeOptions="actionNext"
-                android:layoutDirection="ltr"/>
+                android:layoutDirection="ltr" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -90,7 +90,7 @@
                     android:textSize="16sp"
                     android:text="@string/month"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"/>
+                    android:layout_marginRight="8dp" />
 
                 <TextView
                     android:id="@+id/year_title"
@@ -127,7 +127,7 @@
                     android:imeOptions="actionNext"
                     android:nextFocusForward="@id/year"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"/>
+                    android:layout_marginRight="8dp" />
 
                 <EditText
                     android:id="@+id/year"
@@ -146,7 +146,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#e3f2fd"/>
+                android:background="#e3f2fd" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -162,7 +162,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
-                    android:text="@string/default_card"/>
+                    android:text="@string/default_card" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/default_card_switch"
@@ -174,7 +174,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#e3f2fd"/>
+                android:background="#e3f2fd" />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -190,14 +190,14 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
                     android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp"/>
+                    android:layout_marginRight="24dp" />
 
                 <ProgressBar
                     android:id="@+id/progress"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </FrameLayout>
 

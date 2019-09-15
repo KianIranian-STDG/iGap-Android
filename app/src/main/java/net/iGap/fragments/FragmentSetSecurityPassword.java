@@ -3,14 +3,15 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -92,16 +93,16 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
             }
         });
 
-        rootEnterPassword       = (ViewGroup) view.findViewById(R.id.rootEnterPassword);
-        rootReEnterPassword     = (ViewGroup) view.findViewById(R.id.rootReEnterPassword);
-        rootHintPassword        = (ViewGroup) view.findViewById(R.id.rootHintPassword);
-        rootQuestionPassword    = (ViewGroup) view.findViewById(R.id.rootQuestionPassword);
-        rootEmail               = (ViewGroup) view.findViewById(R.id.rootEmail);
-        rootConfirmEmail        = (ViewGroup) view.findViewById(R.id.rootConfirmEmail);
+        rootEnterPassword = view.findViewById(R.id.rootEnterPassword);
+        rootReEnterPassword = view.findViewById(R.id.rootReEnterPassword);
+        rootHintPassword = view.findViewById(R.id.rootHintPassword);
+        rootQuestionPassword = view.findViewById(R.id.rootQuestionPassword);
+        rootEmail = view.findViewById(R.id.rootEmail);
+        rootConfirmEmail = view.findViewById(R.id.rootConfirmEmail);
 
-        TextView txtSkipConfirmEmail = (TextView) view.findViewById(R.id.txtSkipConfirmEmail);
-        TextView txtResendConfirmEmail = (TextView) view.findViewById(R.id.txtResendConfirmEmail);
-        TextView txtSkipSetEmail = (TextView) view.findViewById(R.id.txtSkipSetEmail);
+        TextView txtSkipConfirmEmail = view.findViewById(R.id.txtSkipConfirmEmail);
+        TextView txtResendConfirmEmail = view.findViewById(R.id.txtResendConfirmEmail);
+        TextView txtSkipSetEmail = view.findViewById(R.id.txtSkipSetEmail);
         txtResendConfirmEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,17 +142,17 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
         });
 
         //
-        edtSetPassword = (EditText) view.findViewById(R.id.setPassword_edtSetPassword);
+        edtSetPassword = view.findViewById(R.id.setPassword_edtSetPassword);
         edtSetPassword.requestFocus();
         openKeyboard(edtSetPassword);
-        edtSetRePassword = (EditText) view.findViewById(R.id.setPassword_edtSetRePassword);
-        edtSetHintPassword = (EditText) view.findViewById(R.id.edtSetHintPassword);
-        edtSetQuestionPassOne = (EditText) view.findViewById(R.id.edtSetQuestionPassOne);
-        edtSetAnswerPassOne = (EditText) view.findViewById(R.id.edtSetAnswerPassOne);
-        edtSetQuestionPassTwo = (EditText) view.findViewById(R.id.edtSetQuestionPassTwo);
-        edtSetAnswerPassTwo = (EditText) view.findViewById(R.id.edtSetAnswerPassTwo);
-        edtSetEmail = (EditText) view.findViewById(R.id.edtSetEmail);
-        edtSetConfirmEmail = (EditText) view.findViewById(R.id.edtSetConfirmEmail);
+        edtSetRePassword = view.findViewById(R.id.setPassword_edtSetRePassword);
+        edtSetHintPassword = view.findViewById(R.id.edtSetHintPassword);
+        edtSetQuestionPassOne = view.findViewById(R.id.edtSetQuestionPassOne);
+        edtSetAnswerPassOne = view.findViewById(R.id.edtSetAnswerPassOne);
+        edtSetQuestionPassTwo = view.findViewById(R.id.edtSetQuestionPassTwo);
+        edtSetAnswerPassTwo = view.findViewById(R.id.edtSetAnswerPassTwo);
+        edtSetEmail = view.findViewById(R.id.edtSetEmail);
+        edtSetConfirmEmail = view.findViewById(R.id.edtSetConfirmEmail);
 
     }
 

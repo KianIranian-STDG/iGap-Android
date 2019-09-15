@@ -10,14 +10,9 @@
 
 package net.iGap.response;
 
-import android.util.Log;
-
-import net.iGap.G;
 import net.iGap.interfaces.OnUserProfileSetRepresentative;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserProfileRepresentative;
-
-import static com.nostra13.universalimageloader.core.ImageLoader.TAG;
 
 public class UserProfileSetRepresentativeResponse extends MessageHandler {
 

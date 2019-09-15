@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:clickable="true"
-  android:layoutDirection="locale"
-  android:orientation="horizontal"
-  android:paddingLeft="@dimen/dp4"
-  android:paddingRight="@dimen/dp4">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:layoutDirection="locale"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/dp4"
+    android:paddingRight="@dimen/dp4">
 
-  <TextView
-    android:id="@+id/cslcs_btn_call_strip"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:padding="@dimen/dp4"
-      android:layout_marginLeft="@dimen/dp10"
-    android:text="@string/tab_to_return_to_call"
-    android:textColor="@color/toolbar_player_base_color"
-    android:textSize="@dimen/dp14" />
+    <TextView
+        android:id="@+id/cslcs_btn_call_strip"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="@dimen/dp4"
+        android:layout_marginLeft="@dimen/dp10"
+        android:text="@string/tab_to_return_to_call"
+        android:textColor="@color/toolbar_player_base_color"
+        android:textSize="@dimen/dp14" />
 
 
-  <TextView
-    android:id="@+id/cslcs_txt_timer"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/dp4"
-      android:layout_marginRight="@dimen/dp10"
-    android:text=""
-    android:textColor="@color/toolbar_player_base_color"
-    android:textSize="@dimen/dp14" />
+    <TextView
+        android:id="@+id/cslcs_txt_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp4"
+        android:layout_marginRight="@dimen/dp10"
+        android:text=""
+        android:textColor="@color/toolbar_player_base_color"
+        android:textSize="@dimen/dp14" />
 </LinearLayout>

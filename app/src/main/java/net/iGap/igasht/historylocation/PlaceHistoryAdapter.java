@@ -1,11 +1,12 @@
 package net.iGap.igasht.historylocation;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.dialog.BottomSheetItemClickCallback;
@@ -36,7 +37,7 @@ public class PlaceHistoryAdapter extends RecyclerView.Adapter<PlaceHistoryAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.itemView.setOnClickListener(v -> clickCallback.onClick(viewHolder.getAdapterPosition()));
-        viewHolder.date.setText(HelperCalander.getClocktime((long) items.get(i).getTicketInfo().getCreated(),false));
+        viewHolder.date.setText(HelperCalander.getClocktime((long) items.get(i).getTicketInfo().getCreated(), false));
         viewHolder.detail.setText(items.get(i).getTicketInfo().getLocationNameWithLanguage());
     }
 

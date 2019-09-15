@@ -287,4 +287,5 @@
     <color name="kuknos_WH_itembg">#F1F1F1</color>
     <color name="news_red">#B60000</color>
     <color name="news_gray">#D9616161</color>
+    <color name="chat_bottom_bg">#EEEEEE</color>
 </resources>

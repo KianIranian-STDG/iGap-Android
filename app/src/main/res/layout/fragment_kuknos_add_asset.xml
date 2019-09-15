@@ -1,9 +1,10 @@
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="net.iGap.G" />
+
         <variable
             name="viewmodel"
             type="net.iGap.kuknos.viewmodel.KuknosAddAssetVM" />
@@ -54,7 +55,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintHeight_percent="0.3"/>
+                    app:layout_constraintHeight_percent="0.3" />
 
                 <View
                     android:id="@+id/seperatorView"
@@ -67,7 +68,7 @@
                     android:layout_marginRight="@dimen/dp32"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosAddATitle"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <TextView
                     style="?textTitleColorSettingTheme"
@@ -83,7 +84,7 @@
                     android:layout_margin="@dimen/dp4"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosAddARecyclerAdv"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/fragKuknosAddARecycler"
@@ -93,7 +94,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosAddATitle"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
                 <ProgressBar
                     android:id="@+id/fragKuknosAddAProgressV"
@@ -106,7 +107,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/fragKuknosAddARecycler"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosAddARecycler"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintHeight_percent="0.08"/>
+                    app:layout_constraintHeight_percent="0.08" />
 
                 <ProgressBar
                     android:id="@+id/fragKuknosAddAProgressVAdv"
@@ -119,7 +120,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/fragKuknosAddARecyclerAdv"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosAddARecyclerAdv"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintHeight_percent="0.08"/>
+                    app:layout_constraintHeight_percent="0.08" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
@@ -137,7 +138,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintWidth_percent="0.8"/>
+            app:layout_constraintWidth_percent="0.8" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

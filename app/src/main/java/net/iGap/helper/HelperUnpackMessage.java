@@ -10,8 +10,6 @@
 
 package net.iGap.helper;
 
-import android.util.Log;
-
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.proto.ProtoError;
@@ -20,8 +18,6 @@ import net.iGap.proto.ProtoResponse;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestWrapper;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

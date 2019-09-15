@@ -93,6 +93,11 @@ public class HelperMessageResponse {
                         }
 
                         if (!roomMessage.getAuthor().getHash().equals(authorHash)) {
+
+                            if (room.getFirstUnreadMessage() == null) {
+                                room.setFirstUnreadMessage(realmRoomMessage);
+                            }
+
                             if (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN && RealmNotificationRoomMessage.canShowNotif(realm, roomMessage.getMessageId(), roomId)) {
                                 RealmNotificationRoomMessage.putToDataBase(realm, roomMessage.getMessageId(), roomId);
                                 HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType, room, realm);

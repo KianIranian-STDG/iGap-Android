@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.helper;
 
@@ -270,20 +270,20 @@ public class HelperSaveFile {
         }
     }
 
-    public static String saveInPrivateDirectory(Activity activity,String filePath) throws IOException{
+    public static String saveInPrivateDirectory(Activity activity, String filePath) throws IOException {
         File fileWithinMyDir = getPrivateDirectory(activity);
-        FileUtils.copyFile(filePath,fileWithinMyDir.getPath());
+        FileUtils.copyFile(filePath, fileWithinMyDir.getPath());
         return fileWithinMyDir.getPath();
     }
 
-    public static void removeFromPrivateDirectory(Activity activity){
+    public static void removeFromPrivateDirectory(Activity activity) {
         File fileWithinMyDir = getPrivateDirectory(activity);
         if (fileWithinMyDir.exists()) {
             fileWithinMyDir.delete();
         }
     }
 
-    private static File getPrivateDirectory(Activity activity){
+    private static File getPrivateDirectory(Activity activity) {
         return new File(new ContextWrapper(activity).getDir("ChatBackground", Context.MODE_PRIVATE), "kb24");
     }
 

@@ -3,13 +3,9 @@
 
     <item>
         <shape android:shape="rectangle">
-            <gradient
-                android:endColor="#757575"
-                android:angle="270"/>
+            <gradient android:endColor="#757575" android:angle="270" />
 
-            <corners
-                android:bottomLeftRadius="@dimen/ivand_profile_toolbar_bottom_radius"
-                android:bottomRightRadius="@dimen/ivand_profile_toolbar_bottom_radius"/>
+            <corners android:bottomLeftRadius="@dimen/ivand_profile_toolbar_bottom_radius" android:bottomRightRadius="@dimen/ivand_profile_toolbar_bottom_radius" />
 
         </shape>
     </item>

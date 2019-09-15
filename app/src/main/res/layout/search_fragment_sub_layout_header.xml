@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-    android:id="@+id/sfslh_header_layout"
-  android:clickable="true"
-  android:orientation="vertical">
-
-  <TextView
-    android:id="@+id/sfslh_txt_header_text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal"
-      style="?backgroundColorSettingTheme_2"
-      android:padding="@dimen/dp4"
-    android:text="@string/contacts"
-      android:gravity="center"
-    android:textAppearance="?android:attr/textAppearanceLarge"
-    android:textSize="@dimen/dp18" />
+    android:id="@+id/sfslh_header_layout"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/sfslh_txt_header_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        style="?backgroundColorSettingTheme_2"
+        android:padding="@dimen/dp4"
+        android:text="@string/contacts"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="@dimen/dp18" />
 </LinearLayout>

@@ -5,14 +5,8 @@
 
         <shape android:shape="rectangle">
 
-            <gradient
-                android:startColor="#D3D8D8D8"
-                android:endColor="@android:color/transparent"
-                android:angle="90"
-                />
-            <corners
-                android:bottomLeftRadius="@dimen/dp10"
-                android:bottomRightRadius="@dimen/dp10"/>
+            <gradient android:startColor="#D3D8D8D8" android:endColor="@android:color/transparent" android:angle="90" />
+            <corners android:bottomLeftRadius="@dimen/dp10" android:bottomRightRadius="@dimen/dp10" />
 
         </shape>
 

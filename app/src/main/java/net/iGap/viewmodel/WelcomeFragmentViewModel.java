@@ -1,7 +1,8 @@
 package net.iGap.viewmodel;
 
-import androidx.lifecycle.ViewModel;
 import android.os.Handler;
+
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.module.SingleLiveEvent;
 

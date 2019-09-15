@@ -33,7 +33,7 @@
             android:textSize="19sp"
             android:text="@string/paygear_balance"
             android:paddingLeft="8dp"
-            android:paddingRight="8dp"/>
+            android:paddingRight="8dp" />
 
         <ImageView
             android:id="@+id/reload"
@@ -45,14 +45,14 @@
             android:layout_marginLeft="2dp"
             android:src="@drawable/ic_refresh_pec"
             android:tint="@color/green"
-            android:padding="8dp"/>
+            android:padding="8dp" />
 
         <ImageView
             android:id="@+id/history"
             android:layout_width="40dp"
             android:layout_height="40dp"
             app:srcCompat="@drawable/ic_action_history"
-            android:padding="4dp"/>
+            android:padding="4dp" />
 
     </LinearLayout>
 
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:textSize="16sp"
-            android:text="@string/rial"/>
+            android:text="@string/rial" />
 
     </LinearLayout>
 
@@ -114,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="#1e96ff"
                 android:textSize="14sp"
-                android:text="@string/cashable"/>
+                android:text="@string/cashable" />
 
         </LinearLayout>
 
@@ -124,7 +124,7 @@
             android:layout_height="wrap_content"
             android:textColor="#b3000000"
             android:textSize="16sp"
-            android:text="+"/>
+            android:text="+" />
 
         <LinearLayout
             android:id="@+id/gift_bal_layout"
@@ -147,7 +147,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="#1e96ff"
                 android:textSize="14sp"
-                android:text="@string/gift"/>
+                android:text="@string/gift" />
 
         </LinearLayout>
 
@@ -177,7 +177,7 @@
                 android:drawablePadding="4dp"
                 android:textSize="16sp"
                 android:textColor="@android:color/white"
-                android:text="@string/cash_out_paygear"/>
+                android:text="@string/cash_out_paygear" />
 
         </FrameLayout>
 

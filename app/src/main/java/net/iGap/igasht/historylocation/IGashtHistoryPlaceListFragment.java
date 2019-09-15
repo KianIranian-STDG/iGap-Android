@@ -1,17 +1,18 @@
 package net.iGap.igasht.historylocation;
 
-import androidx.lifecycle.ViewModelProviders;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtHistoryPlaceBinding;
@@ -65,7 +66,7 @@ public class IGashtHistoryPlaceListFragment extends IGashtBaseView {
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (recyclerView.getLayoutManager() != null) {
-                    ((IGashtHistoryPlaceViewModel)viewModel).loadMoreItems(recyclerView.getLayoutManager().getItemCount(), ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition());
+                    ((IGashtHistoryPlaceViewModel) viewModel).loadMoreItems(recyclerView.getLayoutManager().getItemCount(), ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition());
                 }
             }
         });

@@ -1,10 +1,11 @@
 package net.iGap.kuknos.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableField;
 import android.os.Handler;
 import android.util.Log;
+
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.kuknos.service.model.ErrorM;
@@ -42,7 +43,7 @@ public class KuknosChangePassVM extends ViewModel {
                 progressState.setValue(false);
 
                 //success
-                error.setValue(new ErrorM(false, "change success", "3", R.string.kuknos_changePIN_successM));;
+                error.setValue(new ErrorM(false, "change success", "3", R.string.kuknos_changePIN_successM));
                 //error
                 //error.setValue(new ErrorM(true, "failed success", "3", R.string.kuknos_changePIN_failM));
             }

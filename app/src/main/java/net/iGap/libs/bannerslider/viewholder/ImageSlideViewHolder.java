@@ -1,9 +1,10 @@
 package net.iGap.libs.bannerslider.viewholder;
 
-import androidx.annotation.DrawableRes;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.annotation.DrawableRes;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.libs.bannerslider.BannerSlider;
 

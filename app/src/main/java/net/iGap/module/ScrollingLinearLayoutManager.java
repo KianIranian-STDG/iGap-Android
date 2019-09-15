@@ -2,10 +2,11 @@ package net.iGap.module;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.view.View;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.View;
 
 public class ScrollingLinearLayoutManager extends LinearLayoutManager {
     private final int duration;

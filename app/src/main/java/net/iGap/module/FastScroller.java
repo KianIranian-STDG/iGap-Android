@@ -6,6 +6,11 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Build;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.widget.LinearLayout;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -13,10 +18,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.widget.LinearLayout;
 
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IItem;
@@ -130,14 +131,14 @@ public class FastScroller extends LinearLayout {
             int targetPos = getValueInRange(0, recyclerView.getAdapter().getItemCount() - 1, (int) (proportion * (float) recyclerView.getAdapter().getItemCount()));
             if (recyclerView.getAdapter() instanceof RegisteredContactsFragment.ContactListAdapter) {
                 handle.setText(((RegisteredContactsFragment.ContactListAdapter) recyclerView.getAdapter()).getBubbleText(((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()));
-            }else if (recyclerView.getAdapter() instanceof FastAdapter){
+            } else if (recyclerView.getAdapter() instanceof FastAdapter) {
                 IItem iItem = ((FastAdapter) recyclerView.getAdapter()).getItem(((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition());
-                if (iItem instanceof ContactItemGroup){
+                if (iItem instanceof ContactItemGroup) {
                     handle.setText(((ContactItemGroup) iItem).getBubbleText());
                 }
-            }else if (recyclerView.getAdapter() instanceof FragmentBlockedUser.BlockListAdapter){
+            } else if (recyclerView.getAdapter() instanceof FragmentBlockedUser.BlockListAdapter) {
                 handle.setText(((FragmentBlockedUser.BlockListAdapter) recyclerView.getAdapter()).getBubbleText(((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()));
-            } else if(recyclerView.getAdapter() instanceof FragmentSyncRegisteredContacts.ContactListAdapter2) {
+            } else if (recyclerView.getAdapter() instanceof FragmentSyncRegisteredContacts.ContactListAdapter2) {
                 handle.setText(((FragmentSyncRegisteredContacts.ContactListAdapter2) recyclerView.getAdapter()).getBubbleText(((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()));
             }
 

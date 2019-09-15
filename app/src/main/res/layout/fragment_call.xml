@@ -179,7 +179,7 @@
         android:id="@+id/empty_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:constraint_referenced_ids="textEmptyCal,img_icCall"/>
+        app:constraint_referenced_ids="textEmptyCal,img_icCall" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fc_recycler_view_call"

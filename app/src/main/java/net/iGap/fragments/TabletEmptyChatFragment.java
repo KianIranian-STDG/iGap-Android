@@ -5,13 +5,14 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.fragment.app.Fragment;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -44,7 +45,7 @@ public class TabletEmptyChatFragment extends Fragment {
             }
         });
 
-        String backGroundPath =  getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
+        String backGroundPath = getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
         AppCompatImageView imgBackGround = view.findViewById(R.id.backgroundView);
         if (backGroundPath.length() > 0) {
             File f = new File(backGroundPath);
@@ -65,11 +66,10 @@ public class TabletEmptyChatFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-        } else{
+        } else {
             if (G.themeColor == Theme.DARK) {
                 imgBackGround.setImageResource(R.drawable.chat_bg_dark);
-            }
-            else{
+            } else {
                 //todo: fixed load default background in light mode
             }
         }

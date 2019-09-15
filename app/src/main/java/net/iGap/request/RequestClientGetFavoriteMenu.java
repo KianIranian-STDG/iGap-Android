@@ -18,7 +18,7 @@ public class RequestClientGetFavoriteMenu {
 
     public void clientGetFavoriteMenu(OnGetFavoriteMenu onGetFavoriteMenu) {
         ProtoClientGetFavoriteMenu.ClientGetFavoriteMenu.Builder builder = ProtoClientGetFavoriteMenu.ClientGetFavoriteMenu.newBuilder();
-        RequestWrapper requestWrapper = new RequestWrapper(619, builder , onGetFavoriteMenu);
+        RequestWrapper requestWrapper = new RequestWrapper(619, builder, onGetFavoriteMenu);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

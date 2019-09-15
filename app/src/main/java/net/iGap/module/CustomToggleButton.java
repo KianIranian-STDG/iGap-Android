@@ -2,9 +2,10 @@ package net.iGap.module;
 
 import android.content.Context;
 import android.os.Build;
-import androidx.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.widget.ToggleButton;
+
+import androidx.annotation.RequiresApi;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -23,19 +24,19 @@ public class CustomToggleButton extends ToggleButton {
     }
 
     public CustomToggleButton(Context context, AttributeSet attrs) {
-        this(context,attrs,0);
+        this(context, attrs, 0);
     }
 
     public CustomToggleButton(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
-    private void init(){
+    private void init() {
         setTextOff("");
         setTextOn("");
-        if (G.isDarkTheme){
+        if (G.isDarkTheme) {
             setButtonDrawable(getContext().getResources().getDrawable(R.drawable.st_switch_button_dark));
-        }else {
+        } else {
             setButtonDrawable(getContext().getResources().getDrawable(R.drawable.st_switch_button));
         }
     }

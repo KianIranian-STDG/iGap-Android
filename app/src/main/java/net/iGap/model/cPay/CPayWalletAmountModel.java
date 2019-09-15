@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class CPayWalletAmountModel {
 
     @SerializedName("account_inventory")
-    private String amount ;
+    private String amount;
 
     public CPayWalletAmountModel() {
     }

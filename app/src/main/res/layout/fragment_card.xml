@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:minHeight="@dimen/toolbar_height"/>
+        android:minHeight="@dimen/toolbar_height" />
 
     <TextView
         android:id="@+id/payment_price"
@@ -27,7 +27,7 @@
         android:background="#1e96ff"
         android:padding="16dp"
         android:layout_marginTop="8dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -57,11 +57,11 @@
                 android:text="موجودی : *"
                 android:gravity="center"
                 android:textSize="16sp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
 
             <LinearLayout
-              android:id="@+id/rootCardView"
+                android:id="@+id/rootCardView"
                 android:orientation="vertical"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
@@ -84,7 +84,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
-                        android:text="@string/default_card"/>
+                        android:text="@string/default_card" />
 
                     <ProgressBar
                         android:id="@+id/default_card_progress"
@@ -92,7 +92,7 @@
                         android:layout_height="24dp"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/default_card_switch"
@@ -104,7 +104,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#e3f2fd"/>
+                    android:background="#e3f2fd" />
 
                 <LinearLayout
                     android:id="@+id/pin_layout"
@@ -130,7 +130,7 @@
                             android:textSize="16sp"
                             android:text="@string/internet_pin_2"
                             android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"/>
+                            android:layout_marginRight="8dp" />
 
                         <TextView
                             android:id="@+id/cvv2_title"
@@ -166,7 +166,7 @@
                             android:paddingLeft="16dp"
                             android:paddingRight="16dp"
                             android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"/>
+                            android:layout_marginRight="8dp" />
 
                         <EditText
                             android:id="@+id/cvv2"
@@ -192,7 +192,7 @@
                     android:textSize="14sp"
                     android:text="@string/available_merchants"
                     android:background="@color/transparent"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
 
                 <FrameLayout
@@ -209,14 +209,14 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
                         android:layout_marginLeft="24dp"
-                        android:layout_marginRight="24dp"/>
+                        android:layout_marginRight="24dp" />
 
                     <ProgressBar
                         android:id="@+id/progress"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                 </FrameLayout>
 

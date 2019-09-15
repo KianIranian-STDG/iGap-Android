@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:src="@color/color_default_discovery_cards"
-            android:adjustViewBounds="true"/>
+            android:adjustViewBounds="true" />
 
     </androidx.cardview.widget.CardView>
 

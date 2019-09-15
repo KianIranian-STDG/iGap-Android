@@ -9,13 +9,14 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import androidx.annotation.NonNull;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -111,9 +112,9 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
 
         View view1 = dialog.getCustomView();
         assert view1 != null;
-        final ColorPicker picker = (ColorPicker) view1.findViewById(R.id.picker);
-        SVBar svBar = (SVBar) view1.findViewById(R.id.svbar);
-        OpacityBar opacityBar = (OpacityBar) view1.findViewById(R.id.opacitybar);
+        final ColorPicker picker = view1.findViewById(R.id.picker);
+        SVBar svBar = view1.findViewById(R.id.svbar);
+        OpacityBar opacityBar = view1.findViewById(R.id.opacitybar);
         picker.addSVBar(svBar);
         picker.addOpacityBar(opacityBar);
 

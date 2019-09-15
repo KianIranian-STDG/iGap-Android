@@ -1,7 +1,5 @@
 package net.iGap.kuknos.service.model;
 
-import java.util.Objects;
-
 public class KuknosPassM {
 
     private String pinCode;

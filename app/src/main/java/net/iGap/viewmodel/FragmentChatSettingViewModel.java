@@ -1,338 +1,233 @@
 package net.iGap.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import android.content.SharedPreferences;
+
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
-import android.view.View;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentSetting;
 import net.iGap.helper.HelperCalander;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
 
-import static android.content.Context.MODE_PRIVATE;
+import org.jetbrains.annotations.NotNull;
 
 
 public class FragmentChatSettingViewModel extends ViewModel {
 
+    private final int MAX_TEXT_SIZE = 30;
+    private final int MIN_TEXT_SIZE = 11;
+
+    private ObservableBoolean isTime = new ObservableBoolean(false);
+    private ObservableBoolean isShowVote = new ObservableBoolean(false);
+    private ObservableBoolean isSenderNameGroup = new ObservableBoolean(false);
+    private ObservableBoolean isSendEnter = new ObservableBoolean(false);
+    private ObservableBoolean isSoundPlayInChat = new ObservableBoolean(false);
+    private ObservableBoolean isInAppBrowser = new ObservableBoolean(false);
+    private ObservableBoolean isCompress = new ObservableBoolean(false);
+    private ObservableBoolean isTrim = new ObservableBoolean(false);
+    private ObservableBoolean isDefaultPlayer = new ObservableBoolean(false);
+    private ObservableBoolean isCrop = new ObservableBoolean(false);
+    private ObservableBoolean isCameraButtonSheet = new ObservableBoolean(true);
+    private ObservableField<String> textSizeValue = new ObservableField<>("14");
+    private ObservableInt dateType = new ObservableInt(R.string.miladi);
+    private ObservableInt textSize = new ObservableInt(14 - MIN_TEXT_SIZE);
+    private ObservableInt textSizeMax = new ObservableInt(MAX_TEXT_SIZE - MIN_TEXT_SIZE);
+    private MutableLiveData<Boolean> goToChatBackgroundPage = new MutableLiveData<>();
+    private MutableLiveData<Boolean> goToDateFragment = new MutableLiveData<>();
 
     private SharedPreferences sharedPreferences;
 
-    public MutableLiveData<String> callbackTextSize = new MutableLiveData<>();
-    public MutableLiveData<Boolean> goToChatBackgroundPage = new MutableLiveData<>();
-    public MutableLiveData<Boolean> goToDateFragment = new MutableLiveData<>();
-    public ObservableBoolean isShowVote = new ObservableBoolean();
-    public ObservableBoolean isSenderNameGroup = new ObservableBoolean();
-    public ObservableBoolean isSendEnter = new ObservableBoolean();
-    public ObservableBoolean isSoundPlayInChat = new ObservableBoolean();
-    public ObservableBoolean isInAppBrowser = new ObservableBoolean();
-    public ObservableBoolean isCompress = new ObservableBoolean();
-    public ObservableBoolean isTrim = new ObservableBoolean();
-    public ObservableBoolean isDefaultPlayer = new ObservableBoolean();
-    public ObservableBoolean isCrop = new ObservableBoolean();
-    public ObservableBoolean isCameraButtonSheet = new ObservableBoolean(true);
-    public ObservableField<Boolean> isTime = new ObservableField<>(false);
-    public ObservableField<String> callbackDataShams = new ObservableField<>("Miladi");
+    public FragmentChatSettingViewModel(@NotNull SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
 
-    public FragmentChatSettingViewModel() {
-        getInfo();
+        isCrop.set(sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1) != 0);
+        isCameraButtonSheet.set(sharedPreferences.getBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, true));
+        isShowVote.set(sharedPreferences.getInt(SHP_SETTING.KEY_VOTE, 1) != 0);
+        isSenderNameGroup.set(sharedPreferences.getInt(SHP_SETTING.KEY_SHOW_SENDER_NEME_IN_GROUP, 0) != 0);
+        isCompress.set(sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) != 0);
+        isSendEnter.set(sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0) != 0);
+        isSoundPlayInChat.set(sharedPreferences.getInt(SHP_SETTING.KEY_PLAY_SOUND_IN_CHAT, 1) != 0);
+        isInAppBrowser.set(sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1) != 0);
+        isTrim.set(sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) != 0);
+        isDefaultPlayer.set(sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1) != 0);
+        isTime.set(sharedPreferences.getBoolean(SHP_SETTING.KEY_WHOLE_TIME, false));
+
+        textSize.set(sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14) - MIN_TEXT_SIZE);
+        setTextSizeValue(sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14));
+        dateIsChange();
     }
 
-    private void getInfo() {
-
-        sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-
-        int checkedEnableCrop = sharedPreferences.getInt(SHP_SETTING.KEY_CROP, 1);
-        isCrop.set(getBoolean(checkedEnableCrop));
-
-        boolean checkCameraButtonSheet = sharedPreferences.getBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, true);
-        isCameraButtonSheet.set(checkCameraButtonSheet);
-
-        int checkedEnableVote = sharedPreferences.getInt(SHP_SETTING.KEY_VOTE, 1);
-        isShowVote.set(getBoolean(checkedEnableVote));
-
-        int checkedEnablShowSenderInGroup = sharedPreferences.getInt(SHP_SETTING.KEY_SHOW_SENDER_NEME_IN_GROUP, 0);
-        isSenderNameGroup.set(getBoolean(checkedEnablShowSenderInGroup));
-
-        int checkedEnableCompress = sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1);
-        isCompress.set(getBoolean(checkedEnableCompress));
-
-
-        String textSize = "" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14);
-        callbackTextSize.setValue(textSize);
-
-        if (HelperCalander.isPersianUnicode) {
-            callbackTextSize.setValue(HelperCalander.convertToUnicodeFarsiNumber(callbackTextSize.getValue()));
-        }
-
-        int checkedSendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
-        isSendEnter.set(getBoolean(checkedSendByEnter));
-
-        int checkPlaySoundInChat = sharedPreferences.getInt(SHP_SETTING.KEY_PLAY_SOUND_IN_CHAT, 1);
-        isSoundPlayInChat.set(getBoolean(checkPlaySoundInChat));
-
-        int checkedInAppBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
-        isInAppBrowser.set(getBoolean(checkedInAppBrowser));
-
-        int checkedEnableTrim = sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1);
-        isTrim.set(getBoolean(checkedEnableTrim));
-
-        int checkedEnableDefaultPlayer = sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1);
-        isDefaultPlayer.set(getBoolean(checkedEnableDefaultPlayer));
-
-        boolean checkedEnableTime = sharedPreferences.getBoolean(SHP_SETTING.KEY_WHOLE_TIME, false);
-        isTime.set(checkedEnableTime);
-
-
-        int typeData = sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 0);
-        switch (typeData) {
-            case 0:
-                callbackDataShams.set(G.fragmentActivity.getResources().getString(R.string.miladi));
-                break;
-            case 1:
-                callbackDataShams.set(G.fragmentActivity.getResources().getString(R.string.shamsi));
-                break;
-            case 2:
-                callbackDataShams.set(G.fragmentActivity.getResources().getString(R.string.ghamari));
-                break;
-        }
-
-        FragmentSetting.dateType = new FragmentSetting.DateType() {
-            @Override
-            public void dataName(String type) {
-                callbackDataShams.set(type);
-            }
-        };
+    public ObservableBoolean getIsTime() {
+        return isTime;
     }
 
-    public void onDateClick(View view) {
+    public ObservableBoolean getIsShowVote() {
+        return isShowVote;
+    }
 
+    public ObservableBoolean getIsSenderNameGroup() {
+        return isSenderNameGroup;
+    }
+
+    public ObservableBoolean getIsSendEnter() {
+        return isSendEnter;
+    }
+
+    public ObservableBoolean getIsSoundPlayInChat() {
+        return isSoundPlayInChat;
+    }
+
+    public ObservableBoolean getIsInAppBrowser() {
+        return isInAppBrowser;
+    }
+
+    public ObservableBoolean getIsCompress() {
+        return isCompress;
+    }
+
+    public ObservableBoolean getIsTrim() {
+        return isTrim;
+    }
+
+    public ObservableBoolean getIsDefaultPlayer() {
+        return isDefaultPlayer;
+    }
+
+    public ObservableBoolean getIsCrop() {
+        return isCrop;
+    }
+
+    public ObservableBoolean getIsCameraButtonSheet() {
+        return isCameraButtonSheet;
+    }
+
+    public ObservableField<String> getTextSizeValue() {
+        return textSizeValue;
+    }
+
+    public ObservableInt getDateType() {
+        return dateType;
+    }
+
+    public ObservableInt getTextSizeMax() {
+        return textSizeMax;
+    }
+
+    public ObservableInt getTextSize() {
+        return textSize;
+    }
+
+    public MutableLiveData<Boolean> getGoToChatBackgroundPage() {
+        return goToChatBackgroundPage;
+    }
+
+    public MutableLiveData<Boolean> getGoToDateFragment() {
+        return goToDateFragment;
+    }
+
+    public void onDateClick() {
         goToDateFragment.postValue(true);
-
     }
 
-    public void onClickCompress(View view) {
+    public void onClickCompress() {
         isCompress.set(!isCompress.get());
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_COMPRESS, isCompress.get() ? 1 : 0).apply();
     }
 
-    public void onCheckedChangedCompress(boolean isChecked) {
-
-        isCompress.set(isChecked);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        if (isChecked) {
-            editor.putInt(SHP_SETTING.KEY_COMPRESS, 1);
-            editor.apply();
-        } else {
-            editor.putInt(SHP_SETTING.KEY_COMPRESS, 0);
-            editor.apply();
-        }
-
-    }
-
-    public void onClickTime(View view) {
+    public void onClickTime() {
         isTime.set(!isTime.get());
-    }
-
-    public void onCheckedChangedTime(boolean isChecked) {
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-
-        if (isChecked) {
-            G.isTimeWhole = true;
-            editor.putBoolean(SHP_SETTING.KEY_WHOLE_TIME, true);
-            editor.apply();
-        } else {
-            G.isTimeWhole = false;
-            editor.putBoolean(SHP_SETTING.KEY_WHOLE_TIME, false);
-            editor.apply();
-        }
+        sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_WHOLE_TIME, isTime.get()).apply();
+        G.isTimeWhole = isTime.get();
         if (G.onNotifyTime != null) {
             G.onNotifyTime.notifyTime();
         }
     }
 
-    public void onClickTrim(View view) {
+    public void onClickTrim() {
         isTrim.set(!isTrim.get());
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_TRIM, isTime.get() ? 1 : 0).apply();
     }
 
-    public void onCheckedChangedTrim(boolean isChecked) {
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        isTrim.set(isChecked);
-        if (isChecked) {
-            editor.putInt(SHP_SETTING.KEY_TRIM, 1);
-            editor.apply();
-        } else {
-            editor.putInt(SHP_SETTING.KEY_TRIM, 0);
-            editor.apply();
-        }
-
-    }
-
-    public void onClickDefaultVideo(View view) {
+    public void onClickDefaultVideo() {
         isDefaultPlayer.set(!isDefaultPlayer.get());
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_DEFAULT_PLAYER, isDefaultPlayer.get() ? 1 : 0).apply();
     }
 
-    public void onCheckedDefaultVideo(boolean isChecked) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        isDefaultPlayer.set(isChecked);
-        if (isChecked) {
-            editor.putInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1);
-            editor.apply();
-        } else {
-            editor.putInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 0);
-            editor.apply();
-        }
-    }
-
-    public void onClickCrop(View view) {
+    public void onClickCrop() {
         isCrop.set(!isCrop.get());
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_CROP, isCrop.get() ? 1 : 0).apply();
     }
 
-    public void onCheckedChangedCrop(boolean isChecked) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        isCrop.set(isChecked);
-        if (isChecked) {
-            editor.putInt(SHP_SETTING.KEY_CROP, 1);
-            editor.apply();
-        } else {
-            editor.putInt(SHP_SETTING.KEY_CROP, 0);
-            editor.apply();
-        }
-
-    }
-
-    public void onClickCameraButtonSheet(View v) {
+    public void onClickCameraButtonSheet() {
         isCameraButtonSheet.set(!isCameraButtonSheet.get());
+        sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, isCameraButtonSheet.get()).apply();
     }
 
-    public void onCheckedChangedCameraButtonSheet(boolean isChecked) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        isCameraButtonSheet.set(isChecked);
-        if (isChecked) {
-            editor.putBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, true);
-            editor.apply();
-        } else {
-            editor.putBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, false);
-            editor.apply();
-        }
-
-    }
-
-    public void onClickChatBackground(View view) {
+    public void onClickChatBackground() {
         goToChatBackgroundPage.setValue(true);
     }
 
-    public void onClickSenderNameGroup(View view) {
-
+    public void onClickSenderNameGroup() {
         isSenderNameGroup.set(!isSenderNameGroup.get());
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_SHOW_SENDER_NEME_IN_GROUP, isSenderNameGroup.get() ? 1 : 0).apply();
+        G.showSenderNameInGroup = isSenderNameGroup.get();
     }
 
-    public void onCheckedChangedSenderNameGroup(boolean isChecked) {
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        isSenderNameGroup.set(isChecked);
-        if (isChecked) {
-            editor.putInt(SHP_SETTING.KEY_SHOW_SENDER_NEME_IN_GROUP, 1);
-            editor.apply();
-            G.showSenderNameInGroup = true;
-        } else {
-            editor.putInt(SHP_SETTING.KEY_SHOW_SENDER_NEME_IN_GROUP, 0);
-            editor.apply();
-            G.showSenderNameInGroup = false;
-        }
-
-    }
-
-    public void onClickSendEnter(View view) {
-
+    public void onClickSendEnter() {
         isSendEnter.set(!isSendEnter.get());
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_SEND_BT_ENTER, isSendEnter.get() ? 1 : 0).apply();
     }
 
-    public void onPlaySoundClick(View view) {
+    public void onPlaySoundClick() {
         isSoundPlayInChat.set(!isSoundPlayInChat.get());
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_PLAY_SOUND_IN_CHAT, isSoundPlayInChat.get() ? 1 : 0).apply();
     }
 
-    public void onCheckedChangedSendEnter(boolean isChecked) {
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        isSendEnter.set(isChecked);
-        if (isChecked) {
-            editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 1);
-        } else {
-            editor.putInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0);
-        }
-        editor.apply();
-    }
-
-    public void onCheckedChangedPlaySound(boolean isChecked) {
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        isSoundPlayInChat.set(isChecked);
-        if (isChecked) {
-            editor.putInt(SHP_SETTING.KEY_PLAY_SOUND_IN_CHAT, 1);
-        } else {
-            editor.putInt(SHP_SETTING.KEY_PLAY_SOUND_IN_CHAT, 0);
-        }
-        editor.apply();
-    }
-
-    public void onClickAppBrowser(View view) {
-
+    public void onClickAppBrowser() {
         isInAppBrowser.set(!isInAppBrowser.get());
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_IN_APP_BROWSER, isInAppBrowser.get() ? 1 : 0).apply();
     }
 
-    public void onCheckedAppBrowser(boolean isChecked) {
-
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        isInAppBrowser.set(isChecked);
-        if (isChecked) {
-            editor.putInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
-        } else {
-            editor.putInt(SHP_SETTING.KEY_IN_APP_BROWSER, 0);
-        }
-        editor.apply();
-
-    }
-
-    public void onClickShowVote(View view) {
+    public void onClickShowVote() {
         isShowVote.set(!isShowVote.get());
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_VOTE, isShowVote.get() ? 1 : 0).apply();
+        G.showVoteChannelLayout = isShowVote.get();
     }
 
-    public void onCheckedChangedShowVote(boolean isChecked) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        isShowVote.set(isChecked);
-        if (isChecked) {
-            editor.putInt(SHP_SETTING.KEY_VOTE, 1);
-            editor.apply();
-            G.showVoteChannelLayout = true;
+    public void onProgressChangedTextSize(int progress,boolean fromUser){
+        if (fromUser){
+            sharedPreferences.edit().putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, progress + MIN_TEXT_SIZE).apply();
+            StartupActions.textSizeDetection(progress + MIN_TEXT_SIZE);
+            setTextSizeValue((progress + MIN_TEXT_SIZE));
+        }
+    }
+
+    public void dateIsChange() {
+        int dateTypeResId;
+        switch (sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 0)) {
+            case 1:
+                dateTypeResId = R.string.shamsi;
+                break;
+            case 2:
+                dateTypeResId = R.string.ghamari;
+                break;
+            default:
+                dateTypeResId = R.string.miladi;
+        }
+        dateType.set(dateTypeResId);
+    }
+
+    private void setTextSizeValue(int size){
+        String tmp = String.valueOf(size);
+        if (HelperCalander.isPersianUnicode) {
+            textSizeValue.set(HelperCalander.convertToUnicodeFarsiNumber(tmp));
         } else {
-            editor.putInt(SHP_SETTING.KEY_VOTE, 0);
-            editor.apply();
-            G.showVoteChannelLayout = false;
+            textSizeValue.set(tmp);
         }
-    }
-
-    private boolean getBoolean(int num) {
-        if (num == 0) {
-            return false;
-        }
-        return true;
-    }
-
-    public void setTextSizeToPref(int size){
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
-        editor.apply();
-
-        StartupActions.textSizeDetection(sharedPreferences);
-
     }
 }

@@ -1227,6 +1227,7 @@ Want to get it?</string>
     <string name="do_not_send">Don\'t Send</string>
     <string name="save_data_in_sd_card">Save data in sd card</string>
     <string name="are_you_sure">Are you sure</string>
+    <string name="are_you_sure_edit_contact">Are you sure to edit contact?</string>
     <string name="change_storage_place">Change storage place</string>
     <string name="other_files">Other Files</string>
     <string name="title_import_contact_limit">Warning: Import contact list</string>
@@ -2238,5 +2239,7 @@ Want to get it?</string>
     <string name="kuknos_Entry_RTSeedKey_str">Retrieve With Seed Key</string>
     <string name="kuknos_SignupInfo_friendlyTial">*igap.net</string>
     <string name="kuknos_RecoverySK_CheckPIN">I want to set a PIN code for extra security.</string>
+    <string name="user_edited">User Edited</string>
+    <string name="edit_contact">Edit Contact</string>
 
 </resources>

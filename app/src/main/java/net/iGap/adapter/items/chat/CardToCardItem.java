@@ -11,13 +11,14 @@
 package net.iGap.adapter.items.chat;
 
 import android.graphics.Typeface;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -114,7 +115,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             innerLayout.setId(R.id.cardToCard_innerLayout);
 
 //            if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.LOLLIPOP_MR1){
-                innerLayout.setPadding(LayoutCreator.dp(4), LayoutCreator.dp(25), LayoutCreator.dp(4), LayoutCreator.dp(4));
+            innerLayout.setPadding(LayoutCreator.dp(4), LayoutCreator.dp(25), LayoutCreator.dp(4), LayoutCreator.dp(4));
 //            } else{
 //                innerLayout.setPadding(LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4));
 //            }

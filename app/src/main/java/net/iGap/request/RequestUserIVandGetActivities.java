@@ -20,6 +20,7 @@ public class RequestUserIVandGetActivities {
 
     public interface OnGetActivities {
         void onGetActivitiesReady(ProtoGlobal.Pagination pagination, ArrayList<ProtoGlobal.IVandActivity> discoveryArrayList);
+
         void onError(ProtoGlobal.Pagination pagination);
     }
 

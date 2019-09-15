@@ -1,8 +1,8 @@
 package net.iGap.kuknos.viewmodel;
 
+import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableField;
 
 import net.iGap.R;
 import net.iGap.api.apiService.ApiResponse;
@@ -50,8 +50,7 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
         if (pinCheck.get()) {
             nextPage.setValue(true);
             progressState.setValue(false);
-        }
-        else {
+        } else {
             userRepo.setPIN("-1");
             try {
                 userRepo.generateKeyPairWithMnemonic();

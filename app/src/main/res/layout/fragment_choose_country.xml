@@ -9,17 +9,17 @@
     android:orientation="vertical"
     tools:context="net.iGap.fragments.FragmentChooseCountry">
 
-  <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/rcvChooseCountry"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      style="?backgroundColorSettingTheme"
-      android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvChooseCountry"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="?backgroundColorSettingTheme"
+        android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar" />
 
-  <LinearLayout
-      android:id="@+id/fcc_layout_toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/toolbar_height_root_with_search"
-      android:orientation="horizontal"/>
+    <LinearLayout
+        android:id="@+id/fcc_layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height_root_with_search"
+        android:orientation="horizontal" />
 
 </RelativeLayout>

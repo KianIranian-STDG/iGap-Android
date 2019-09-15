@@ -96,9 +96,9 @@ public class IGashtLocationService {
         }
     }
 
-    public IGashtServiceAmount getPersianTicket(){
-        for (int i = 0; i < amounts.size();i++){
-            if (amounts.get(i).getVoucherTypeId() == 3){
+    public IGashtServiceAmount getPersianTicket() {
+        for (int i = 0; i < amounts.size(); i++) {
+            if (amounts.get(i).getVoucherTypeId() == 3) {
                 return amounts.get(i);
             }
         }

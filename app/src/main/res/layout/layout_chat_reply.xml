@@ -65,6 +65,6 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp2"
         android:layout_marginRight="@dimen/dp2"
-        android:text="@string/close_icon"/>
+        android:text="@string/close_icon" />
 
 </LinearLayout>

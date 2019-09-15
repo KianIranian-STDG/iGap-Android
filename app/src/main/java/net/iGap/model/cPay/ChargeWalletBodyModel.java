@@ -5,10 +5,10 @@ import com.google.gson.annotations.SerializedName;
 public class ChargeWalletBodyModel {
 
     @SerializedName("plate")
-    private String plaque ;
+    private String plaque;
 
     @SerializedName("amount")
-    private long amount ;
+    private long amount;
 
     public ChargeWalletBodyModel() {
     }

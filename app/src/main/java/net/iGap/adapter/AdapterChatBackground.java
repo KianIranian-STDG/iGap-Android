@@ -10,12 +10,13 @@
 
 package net.iGap.adapter;
 
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -51,7 +52,6 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
         this.mList = List;
         this.onImageClick = onImageClick;
 
-        ;
     }
 
     @Override
@@ -123,7 +123,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             if (new File(bigImagePath).exists()) {
                 holder2.messageProgress.setVisibility(View.GONE);
 
-                        holder2.mPath = bigImagePath;
+                holder2.mPath = bigImagePath;
 
             } else {
                 holder2.mPath = "";
@@ -204,7 +204,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
         public ViewHolderImage(View itemView) {
             super(itemView);
 
-            imageView = (ImageView) itemView.findViewById(R.id.imgBackgroundImage);
+            imageView = itemView.findViewById(R.id.imgBackgroundImage);
 
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -246,9 +246,9 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
         ViewHolderItem(View itemView) {
             super(itemView);
 
-            img = (ImageView) itemView.findViewById(R.id.imgBackground);
+            img = itemView.findViewById(R.id.imgBackground);
 
-            messageProgress = (MessageProgress) itemView.findViewById(R.id.progress);
+            messageProgress = itemView.findViewById(R.id.progress);
             AppUtils.setProgresColor(messageProgress.progressBar);
 
             messageProgress.withDrawable(R.drawable.ic_download, true);

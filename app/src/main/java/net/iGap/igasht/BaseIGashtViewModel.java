@@ -1,10 +1,10 @@
 package net.iGap.igasht;
 
-import androidx.lifecycle.LiveData;
+import android.view.View;
+
+import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableInt;
-import android.view.View;
 
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.api.errorhandler.ResponseCallback;

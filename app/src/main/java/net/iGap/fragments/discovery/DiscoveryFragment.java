@@ -4,17 +4,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -62,7 +63,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         return discoveryFragment;
     }
 
-    public void setNeedToCrawl(boolean needToCrawl){
+    public void setNeedToCrawl(boolean needToCrawl) {
         this.needToCrawl = needToCrawl;
     }
 
@@ -119,7 +120,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                     .setFragmentActivity(getActivity())
                     .setPassCodeVisibility(true, R.string.unlock_icon)
                     .setScannerVisibility(true, R.string.scan_qr_code_icon)
-                  //  .setSearchBoxShown(true, false)
+                    //  .setSearchBoxShown(true, false)
                     .setListener(this);
         }
 
@@ -188,7 +189,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             tryToUpdateOrFetchRecycleViewData(0);
         }
 
-        if (needToReload){
+        if (needToReload) {
             updateOrFetchRecycleViewData();
         }
     }
@@ -258,7 +259,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             @Override
             public void onError() {
                 G.handler.post(() -> {
-                    if (!listLoaded){
+                    if (!listLoaded) {
                         updateOrFetchRecycleViewData();
                         listLoaded = true;
                         return;
@@ -393,10 +394,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         }
 
         public void setCurrentPageId(int currentPageId) {
-            if (currentPageId == pages.get(pages.size() - 1))
-                workDone = true;
-            else
-                workDone = false;
+            workDone = currentPageId == pages.get(pages.size() - 1);
             this.currentPageId = currentPageId;
         }
 

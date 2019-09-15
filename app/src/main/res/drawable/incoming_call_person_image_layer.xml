@@ -7,5 +7,5 @@
         android:centerY="30%p"
         android:gradientRadius="85%p"
         android:startColor="@color/incomingCallUserImageLayerStart"
-        android:endColor="@color/incomingCallUserImageLayerEnd"/>
+        android:endColor="@color/incomingCallUserImageLayerEnd" />
 </shape>

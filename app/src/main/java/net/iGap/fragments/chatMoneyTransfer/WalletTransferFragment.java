@@ -2,10 +2,6 @@ package net.iGap.fragments.chatMoneyTransfer;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,6 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -312,7 +313,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
                     HelperError.showSnackMessage(getResources().getString(R.string.trace_number)
                             + String.valueOf(paymentResult.traceNumber)
                             + getResources().getString(R.string.amount_2)
-                            + String.valueOf(paymentResult.amount), false);
+                            + paymentResult.amount, false);
                     EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedSuccess);
                 } else {
                     HelperError.showSnackMessage(getResources().getString(R.string.not_success), false);

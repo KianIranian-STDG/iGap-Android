@@ -8,9 +8,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowManager;
 
 import com.downloader.PRDownloader;
 import com.downloader.PRDownloaderConfig;
@@ -25,7 +23,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.WebSocketClient;
-import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDataUsage;
@@ -180,8 +177,8 @@ public final class StartupActions {
     /**
      * detect and  initialize text size
      */
-    public static void textSizeDetection(SharedPreferences sharedPreferences) {
-        userTextSize = sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14);
+    public static void textSizeDetection(int size) {
+        userTextSize = size;
 
         if (!G.context.getResources().getBoolean(R.bool.isTablet)) {
 
@@ -236,6 +233,7 @@ public final class StartupActions {
             new File(DIR_TEMP).mkdirs();
             new File(DIR_CHAT_BACKGROUND + "/" + file).createNewFile();
             new File(DIR_IMAGE_USER + "/" + file).createNewFile();
+            new File(DIR_STICKER + "/" + file).createNewFile();
             new File(DIR_TEMP + "/" + file).createNewFile();
 
             IMAGE_NEW_GROUP = new File(G.DIR_IMAGE_USER, "image_new_group.jpg");
@@ -424,7 +422,7 @@ public final class StartupActions {
         int checkedSaveToGallery = preferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
         isSaveToGallery = checkedSaveToGallery == 1;
 
-        textSizeDetection(preferences);
+        textSizeDetection(preferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14));
         languageDetection(preferences);
     }
 

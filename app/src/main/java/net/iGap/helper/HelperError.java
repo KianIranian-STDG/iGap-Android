@@ -10,8 +10,9 @@
 
 package net.iGap.helper;
 
-import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -632,7 +633,7 @@ public class HelperError {
                 error = G.fragmentActivity.getResources().getString(R.string.E_10168);
 
                 break;
-                
+
             case 99999: // client errors
                 error = "Offset is negative";
             case -1: // client errors

@@ -91,7 +91,7 @@ public class HelperPublicMethod {
     }
 
 
-    public static void goToChatRoomWithMessage(final long peerId,String message, final OnComplete onComplete, final OnError onError) {
+    public static void goToChatRoomWithMessage(final long peerId, String message, final OnComplete onComplete, final OnError onError) {
         try (Realm realm = Realm.getDefaultInstance()) {
             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
 
@@ -101,7 +101,7 @@ public class HelperPublicMethod {
                     onComplete.complete();
                 }
 
-                goToRoomWithTextMessage(realmRoom.getId(),message,realmRoom.getType(), -1);
+                goToRoomWithTextMessage(realmRoom.getId(), message, realmRoom.getType(), -1);
 
             } else {
                 G.onChatGetRoom = new OnChatGetRoom() {
@@ -115,7 +115,7 @@ public class HelperPublicMethod {
                             realm.executeTransaction(realm1 -> {
                                 RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
                                 room1.setDeleted(true);
-                                goToRoomWithTextMessage(room1.getId(),message,room1.getType(), -1);
+                                goToRoomWithTextMessage(room1.getId(), message, room1.getType(), -1);
                             });
                         }
                         getUserInfo(peerId, room.getId(), onComplete, onError);

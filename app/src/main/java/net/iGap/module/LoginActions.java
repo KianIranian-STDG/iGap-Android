@@ -3,6 +3,7 @@ package net.iGap.module;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+
 import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
@@ -127,7 +128,7 @@ public class LoginActions {
 
     private static void getUserInfo() {
         final long userId;
-        try (final Realm realm = Realm.getDefaultInstance()) {
+        try (Realm realm = Realm.getDefaultInstance()) {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo == null) {
                 throw new Exception("Empty Exception");
@@ -211,15 +212,15 @@ public class LoginActions {
             // Create MD5 Hash
             MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
             digest.update(s.getBytes());
-            byte messageDigest[] = digest.digest();
+            byte[] messageDigest = digest.digest();
 
             // Create Hex String
             StringBuffer hexString = new StringBuffer();
-            for (int i=0; i<messageDigest.length; i++)
+            for (int i = 0; i < messageDigest.length; i++)
                 hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
 
             return hexString.toString();
-        }catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return "";

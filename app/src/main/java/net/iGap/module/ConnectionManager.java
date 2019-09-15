@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.downloader.PRDownloader;
 import com.neovisionaries.ws.client.WebSocket;
 
 import net.iGap.BuildConfig;
@@ -107,12 +104,12 @@ public class ConnectionManager {
                                     G.handler.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                           // Toast.makeText(G.context, "Connection HeartBeat TimeOut", Toast.LENGTH_SHORT).show();
+                                            // Toast.makeText(G.context, "Connection HeartBeat TimeOut", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
                             } else {
-                               // Log.i("HHH", "Connection Not Time Out HeartBeat");
+                                // Log.i("HHH", "Connection Not Time Out HeartBeat");
                             }
                         }
                     }

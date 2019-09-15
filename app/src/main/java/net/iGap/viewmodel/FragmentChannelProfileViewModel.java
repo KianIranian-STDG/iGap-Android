@@ -9,17 +9,17 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableBoolean;
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
-import androidx.appcompat.widget.PopupMenu;
-
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+
+import androidx.appcompat.widget.PopupMenu;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -465,13 +465,13 @@ public class FragmentChannelProfileViewModel extends ViewModel
                             setToModerator(info.peerId);
                             return true;
                         case R.id.menu_remove_admin:
-                            ((FragmentChannelProfile) fragment).kickAdmin(info.peerId);
+                            fragment.kickAdmin(info.peerId);
                             return true;
                         case R.id.menu_remove_moderator:
-                            ((FragmentChannelProfile) fragment).kickModerator(info.peerId);
+                            fragment.kickModerator(info.peerId);
                             return true;
                         case R.id.menu_kick:
-                            ((FragmentChannelProfile) fragment).kickMember(info.peerId);
+                            fragment.kickMember(info.peerId);
                             return true;
                         default:
                             return false;

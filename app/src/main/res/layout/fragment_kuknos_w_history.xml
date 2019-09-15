@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewmodel"
             type="net.iGap.kuknos.viewmodel.KuknosWHistoryVM" />
@@ -53,7 +53,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
-                android:textColor="@color/buttonTextColor"/>
+                android:textColor="@color/buttonTextColor" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
@@ -66,7 +66,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
-                android:textColor="@color/buttonTextColor"/>
+                android:textColor="@color/buttonTextColor" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
@@ -79,7 +79,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
-                android:textColor="@color/buttonTextColor"/>
+                android:textColor="@color/buttonTextColor" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 style="?textTitleColorSettingTheme"
@@ -92,7 +92,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_gravity="center_vertical"
-                android:textColor="@color/buttonTextColor"/>
+                android:textColor="@color/buttonTextColor" />
 
         </LinearLayout>
 
@@ -104,7 +104,7 @@
             app:layout_constraintTop_toBottomOf="@+id/kuknos_wHistory_header"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <ProgressBar
             android:id="@+id/kuknos_wHistory_ProgressV"
@@ -117,7 +117,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHeight_percent="0.08"/>
+            app:layout_constraintHeight_percent="0.08" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

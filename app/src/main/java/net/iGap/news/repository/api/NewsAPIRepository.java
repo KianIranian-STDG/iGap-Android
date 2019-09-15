@@ -15,11 +15,11 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.PUT;
 
 public class NewsAPIRepository {
 
     public enum NewsType {LATEST, HITS, FEATURED}
+
     private NewsApi apiService = ApiServiceProvider.getNewsClient();
 
     public void getMainPageNews(int numOfNewsPerSource, ApiResponse<List<NewsFPList>> apiResponse) {
@@ -57,7 +57,7 @@ public class NewsAPIRepository {
     }
 
     public void getNewsList(NewsType type, int start, int display, ApiResponse<NewsList> apiResponse) {
-        switch (type){
+        switch (type) {
             case LATEST:
                 getLatestNews(start, display, apiResponse);
                 break;

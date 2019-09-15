@@ -1,18 +1,19 @@
 package net.iGap.fragments;
 
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -41,8 +42,6 @@ import static android.content.Context.MODE_PRIVATE;
  * A simple {@link Fragment} subclass.
  */
 public class FragmentSetting extends BaseFragment {
-
-    public static DateType dateType;
 
     private FragmentSettingBinding binding;
     private FragmentSettingViewModel viewModel;
@@ -240,10 +239,5 @@ public class FragmentSetting extends BaseFragment {
 
             txtCancel.setOnClickListener(v12 -> inDialog.dismiss());
         }
-    }
-
-    public interface DateType {
-
-        void dataName(String type);
     }
 }

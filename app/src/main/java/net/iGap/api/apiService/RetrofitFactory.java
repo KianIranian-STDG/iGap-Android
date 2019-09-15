@@ -103,7 +103,7 @@ public class RetrofitFactory {
                 .build();
     }
 
-    public CharityApi getCharityRetrofit(){
+    public CharityApi getCharityRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.CHARITY_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -121,7 +121,7 @@ public class RetrofitFactory {
 
     private OkHttpClient.Builder enableTls12OnPreLollipop(OkHttpClient.Builder client) {
         if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
-            Log.wtf(this.getClass().getName(),"enableTls12OnPreLollipop");
+            Log.wtf(this.getClass().getName(), "enableTls12OnPreLollipop");
             try {
                 SSLContext sc = SSLContext.getInstance("TLSv1.2");
                 sc.init(null, null, null);
@@ -137,7 +137,7 @@ public class RetrofitFactory {
                 specs.add(ConnectionSpec.CLEARTEXT);
 
                 client.connectionSpecs(specs);
-                Log.wtf(this.getClass().getName(),"enableTls12OnPreLollipop");
+                Log.wtf(this.getClass().getName(), "enableTls12OnPreLollipop");
             } catch (Exception exc) {
                 exc.printStackTrace();
                 Log.e("OkHttpTLSCompat", "Error while setting TLS 1.2", exc);

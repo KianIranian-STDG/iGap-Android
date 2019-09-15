@@ -1,11 +1,12 @@
 package net.iGap.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
+import android.view.View;
+import android.view.WindowManager;
+
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
-import android.view.View;
-import android.view.WindowManager;
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
 import net.iGap.R;

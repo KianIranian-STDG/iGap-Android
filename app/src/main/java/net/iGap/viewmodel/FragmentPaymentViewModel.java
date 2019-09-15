@@ -7,7 +7,7 @@ package net.iGap.viewmodel;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -46,7 +46,7 @@ public class FragmentPaymentViewModel extends ViewModel {
         goToPaymentInquiryPage.setValue(false);
     }
 
-    public void onClickBuyInternetPackage(){
+    public void onClickBuyInternetPackage() {
         goToButInternetPackage.setValue(true);
     }
 

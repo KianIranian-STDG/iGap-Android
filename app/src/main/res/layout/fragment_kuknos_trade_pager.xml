@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="net.iGap.G" />
     </data>
 
@@ -23,8 +23,7 @@
             android:background="@color/sky_blue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent"></LinearLayout>
 
         <com.google.android.material.tabs.TabLayout
             style="?backgroundColorSettingTheme"
@@ -36,7 +35,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/kuknos_trade_pager_Toolbar"
-            app:tabMode="fixed"/>
+            app:tabMode="fixed" />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/kuknos_trade_pager"

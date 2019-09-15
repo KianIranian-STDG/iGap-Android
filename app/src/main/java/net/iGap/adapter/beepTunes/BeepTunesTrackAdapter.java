@@ -2,8 +2,6 @@ package net.iGap.adapter.beepTunes;
 
 import android.graphics.PorterDuff;
 import android.media.MediaPlayer;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +9,9 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -202,7 +203,7 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
         }
 
         private void playPrw(Track track) {
-            if (mediaPlayer == null){
+            if (mediaPlayer == null) {
                 mediaPlayer = new MediaPlayer();
 
                 try {
@@ -214,7 +215,7 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }else{
+            } else {
                 mediaPlayer.reset();
                 try {
                     mediaPlayer.setDataSource(track.getPreviewUrl());

@@ -1,13 +1,15 @@
 package net.iGap.dialog.payment.charity;
 
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentBottomSheetCharityPaymentBinding;

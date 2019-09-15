@@ -6,8 +6,7 @@ import net.iGap.api.apiService.ApiResponse;
 import net.iGap.kuknos.service.mnemonic.Wallet;
 import net.iGap.kuknos.service.mnemonic.WalletException;
 import net.iGap.kuknos.service.model.KuknosInfoM;
-import net.iGap.kuknos.service.model.KuknosLoginM;
-import net.iGap.kuknos.service.model.KuknosRealmM;
+import net.iGap.kuknos.service.model.RealmKuknos;
 import net.iGap.kuknos.service.model.KuknosSubmitM;
 import net.iGap.kuknos.service.model.KuknoscheckUserM;
 import net.iGap.realm.RealmUserInfo;
@@ -21,7 +20,7 @@ public class UserRepo {
 
     private Realm realm;
     private RealmUserInfo userInfo;
-    private KuknosRealmM kuknosRealmM;
+    private RealmKuknos realmKuknos;
     private KuknosAPIRepository kuknosAPIRepository = new KuknosAPIRepository();
 
     public UserRepo() {
@@ -44,7 +43,7 @@ public class UserRepo {
 
     // generate key pair
 
-    public void generateMnemonic(){
+    public void generateMnemonic() {
         try {
             char[] mnemonicTemp = Wallet.generate12WordMnemonic();
             /*String[] mnemonic = String.valueOf(mnemonicTemp).split(" ");
@@ -52,66 +51,65 @@ public class UserRepo {
             for (String temp : mnemonic) {
                 mnemonicS = mnemonicS.concat(temp + " ");
             }*/
-            kuknosRealmM.updateMnemonic(String.valueOf(mnemonicTemp));
-            Log.d("amini", "generateMnemonic: " + kuknosRealmM.getKuknosMnemonic());
-        }
-        catch (Exception e) {
-            kuknosRealmM.updateMnemonic("-1");
+            RealmKuknos.updateMnemonic(String.valueOf(mnemonicTemp));
+            Log.d("amini", "generateMnemonic: " + realmKuknos.getKuknosMnemonic());
+        } catch (Exception e) {
+            RealmKuknos.updateMnemonic("-1");
         }
     }
 
     public void generateKeyPair() {
         KeyPair pair = KeyPair.random();
-        kuknosRealmM.updateKey(new String(pair.getSecretSeed()), pair.getAccountId());
+        RealmKuknos.updateKey(new String(pair.getSecretSeed()), pair.getAccountId());
     }
 
     public void generateKeyPairWithMnemonic() throws WalletException {
-        Log.d("amini", "generateKeyPairWithMnemonic: " + kuknosRealmM.getKuknosMnemonic());
-        KeyPair pair = Wallet.createKeyPair(kuknosRealmM.getKuknosMnemonic().toCharArray(), null,0);
-        kuknosRealmM.updateKey(new String(pair.getSecretSeed()), pair.getAccountId());
+        Log.d("amini", "generateKeyPairWithMnemonic: " + realmKuknos.getKuknosMnemonic());
+        KeyPair pair = Wallet.createKeyPair(realmKuknos.getKuknosMnemonic().toCharArray(), null, 0);
+        RealmKuknos.updateKey(new String(pair.getSecretSeed()), pair.getAccountId());
         Log.d("amini", "generateKeyPairWithMnemonic: seed :" + new String(pair.getSecretSeed()));
         Log.d("amini", "generateKeyPairWithMnemonic: public :" + pair.getAccountId());
     }
 
     public void generateKeyPairWithMnemonicAndPIN() throws WalletException {
-        KeyPair pair = Wallet.createKeyPair(kuknosRealmM.getKuknosMnemonic().toCharArray(), kuknosRealmM.getKuknosPIN().toCharArray(),0);
-        kuknosRealmM.updateKey(new String(pair.getSecretSeed()), pair.getAccountId());
+        KeyPair pair = Wallet.createKeyPair(realmKuknos.getKuknosMnemonic().toCharArray(), realmKuknos.getKuknosPIN().toCharArray(), 0);
+        RealmKuknos.updateKey(new String(pair.getSecretSeed()), pair.getAccountId());
     }
 
     public void generateKeyPairWithSeed() {
-        KeyPair pair = KeyPair.fromSecretSeed(kuknosRealmM.getKuknosSeedKey());
-        kuknosRealmM.updateKey(new String(pair.getSecretSeed()), pair.getAccountId());
+        KeyPair pair = KeyPair.fromSecretSeed(realmKuknos.getKuknosSeedKey());
+        RealmKuknos.updateKey(new String(pair.getSecretSeed()), pair.getAccountId());
     }
 
     // setter and gettter
 
     public String getMnemonic() {
-        return kuknosRealmM.getKuknosMnemonic();
+        return realmKuknos.getKuknosMnemonic();
     }
 
     public void setMnemonic(String mnemonic) {
-        kuknosRealmM.updateMnemonic(mnemonic);
+        RealmKuknos.updateMnemonic(mnemonic);
     }
 
     public String getSeedKey() {
         // if -1 it's sign out. if null it's first time
-        return kuknosRealmM.getKuknosSeedKey();
+        return realmKuknos.getKuknosSeedKey();
     }
 
     public void setSeedKey(String seed) {
-        kuknosRealmM.updateSeedKey(seed);
+        RealmKuknos.updateSeedKey(seed);
     }
 
     public String getAccountID() {
-        return kuknosRealmM.getKuknosPublicKey();
+        return realmKuknos.getKuknosPublicKey();
     }
 
     public void setPIN(String pin) {
-        kuknosRealmM.updatePIN(pin);
+        RealmKuknos.updatePIN(pin);
     }
 
     public String getPIN() {
-        return kuknosRealmM.getKuknosPIN();
+        return realmKuknos.getKuknosPIN();
     }
 
     public String getUserNum() {
@@ -130,8 +128,8 @@ public class UserRepo {
         return userInfo.getEmail();
     }
 
-    public KuknosRealmM getKuknosRealmM() {
-        return kuknosRealmM;
+    public RealmKuknos getRealmKuknos() {
+        return realmKuknos;
     }
 
     // Realm and Data
@@ -144,8 +142,8 @@ public class UserRepo {
         userInfo = getRealm().where(RealmUserInfo.class).findFirst();
         closeRealm();
 
-        kuknosRealmM = userInfo.getKuknosM();
-        if (kuknosRealmM == null) {
+        realmKuknos = userInfo.getKuknosM();
+        if (realmKuknos == null) {
             userInfo.createKuknos();
             updateUserInfo();
             return;

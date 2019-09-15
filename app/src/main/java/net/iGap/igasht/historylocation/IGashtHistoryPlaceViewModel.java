@@ -1,9 +1,9 @@
 package net.iGap.igasht.historylocation;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.databinding.ObservableInt;
-
 import android.view.View;
+
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.igasht.BaseIGashtViewModel;
 import net.iGap.igasht.IGashtRepository;

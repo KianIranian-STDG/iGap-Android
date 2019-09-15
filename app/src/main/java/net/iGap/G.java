@@ -12,7 +12,6 @@ package net.iGap;
 
 import android.accounts.Account;
 import android.app.Application;
-import androidx.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -24,12 +23,14 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import androidx.multidex.MultiDex;
-import androidx.fragment.app.FragmentActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.MutableLiveData;
+import androidx.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
@@ -66,6 +67,7 @@ import javax.crypto.spec.SecretKeySpec;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
+import ir.metrix.sdk.Metrix;
 import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.web.WebBase;
 
@@ -411,7 +413,7 @@ public class G extends Application {
     public static boolean appChangeRinggerMode = false;
     public static LocationListener locationListener;
     public static boolean isLocationFromBot = false;
-    public static boolean isNeedToCheckProfileWallpaper = false ;
+    public static boolean isNeedToCheckProfileWallpaper = false;
 
     public static MutableLiveData<ConnectionState> connectionStateMutableLiveData = new MutableLiveData<>();
 
@@ -494,6 +496,20 @@ public class G extends Application {
         RaadApp.onCreate(getApplicationContext());
         LooperThreadHelper.getInstance();
 
+        Metrix.initialize(this, "jpbnabzrmeqvxme");
+
+        // dont remove below line please
+        if (!BuildConfig.DEBUG && BuildConfig.Token.length() > 1) {
+            Metrix.getInstance().setDefaultTracker(BuildConfig.Token);
+        }
+
+        Metrix.getInstance().enableLogging(true);
+//        Metrix.getInstance().setLogLevel(Log.DEBUG);
+        Metrix.getInstance().setEventUploadPeriodMillis(30000);
+
+        // not exist in dashboard
+        Metrix.getInstance().setScreenFlowsAutoFill(true);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -546,7 +562,7 @@ public class G extends Application {
         updateResources(getBaseContext());
     }
 
-    public static void showToast(String message){
+    public static void showToast(String message) {
         G.handler.post(() -> Toast.makeText(G.context, message, Toast.LENGTH_SHORT).show());
     }
 }

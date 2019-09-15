@@ -29,16 +29,15 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.core.content.FileProvider;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -123,7 +122,7 @@ public class AttachFile {
                 location.getLatitude();
                 location.getLongitude();
 
-                String position = String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude());
+                String position = location.getLatitude() + "," + location.getLongitude();
 
                 if (complete != null) complete.complete(true, position, "");
             }
@@ -208,57 +207,57 @@ public class AttachFile {
             return null;
         }
 
-            try {
-                String name = AttachFile.getFileName(uri.getPath());
-                if (name == null || name.length() == 0) {
-                    name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                }
-
-                try{
-                    String substring = name.substring(name.lastIndexOf("."));
-
-                }catch (StringIndexOutOfBoundsException e){
-
-                    if (type !=null){
-                        String ex =type.substring(type.lastIndexOf("/") + 1);
-                        name += "." + ex;
-                    }
-                }
-
-                String destinationPath = "";
-
-                switch (fileType) {
-
-                    case video:
-                        destinationPath = G.DIR_VIDEOS;
-                        break;
-                    case audio:
-                        destinationPath = G.DIR_AUDIOS;
-                        break;
-                    case image:
-                        destinationPath = G.DIR_IMAGES;
-                        break;
-                    default:
-                        destinationPath = G.DIR_DOCUMENT;
-                        break;
-                }
-
-                destinationPath += File.separator + name;
-
-                if (FileProvider.getUriForFile(G.context, G.context.getApplicationContext().getPackageName() + ".provider", new File(destinationPath)).equals(uri)) {
-                    // shared from igap to igap
-                } else {
-                    InputStream input = G.context.getContentResolver().openInputStream(uri);
-
-                    AndroidUtils.copyFile(input, new File(destinationPath));
-                }
-
-                return destinationPath;
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            String name = AttachFile.getFileName(uri.getPath());
+            if (name == null || name.length() == 0) {
+                name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             }
+
+            try {
+                String substring = name.substring(name.lastIndexOf("."));
+
+            } catch (StringIndexOutOfBoundsException e) {
+
+                if (type != null) {
+                    String ex = type.substring(type.lastIndexOf("/") + 1);
+                    name += "." + ex;
+                }
+            }
+
+            String destinationPath = "";
+
+            switch (fileType) {
+
+                case video:
+                    destinationPath = G.DIR_VIDEOS;
+                    break;
+                case audio:
+                    destinationPath = G.DIR_AUDIOS;
+                    break;
+                case image:
+                    destinationPath = G.DIR_IMAGES;
+                    break;
+                default:
+                    destinationPath = G.DIR_DOCUMENT;
+                    break;
+            }
+
+            destinationPath += File.separator + name;
+
+            if (FileProvider.getUriForFile(G.context, G.context.getApplicationContext().getPackageName() + ".provider", new File(destinationPath)).equals(uri)) {
+                // shared from igap to igap
+            } else {
+                InputStream input = G.context.getContentResolver().openInputStream(uri);
+
+                AndroidUtils.copyFile(input, new File(destinationPath));
+            }
+
+            return destinationPath;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         return null;
@@ -641,9 +640,9 @@ public class AttachFile {
             public void Allow() {
                 FragmentExplorer fragment = new FragmentExplorer();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("Listener",listener);
+                bundle.putSerializable("Listener", listener);
                 fragment.setArguments(bundle);
-                new HelperFragment(context.getSupportFragmentManager(),fragment).setReplace(false).load();
+                new HelperFragment(context.getSupportFragmentManager(), fragment).setReplace(false).load();
             }
 
             @Override
@@ -667,7 +666,7 @@ public class AttachFile {
 
                 FragmentExplorer fragment = new FragmentExplorer();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("Listener", (Serializable) listener);
+                bundle.putSerializable("Listener", listener);
                 bundle.putString("Mode", "documnet");
                 fragment.setArguments(bundle);
 
@@ -765,7 +764,7 @@ public class AttachFile {
                     location.getLatitude();
                     location.getLongitude();
 
-                    String position = String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude());
+                    String position = location.getLatitude() + "," + location.getLongitude();
 
                     if (complete != null) complete.complete(true, position, "");
                 } else {

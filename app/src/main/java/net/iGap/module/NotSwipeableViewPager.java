@@ -2,15 +2,16 @@ package net.iGap.module;
 
 
 import android.content.Context;
-import androidx.viewpager.widget.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import androidx.viewpager.widget.ViewPager;
+
 /**
  * @author Alireza Nazari
+ * @version 1.0.0
  * @address http://alirezanazari.ir
  * @since 1396/5/10
- * @version 1.0.0
  */
 public class NotSwipeableViewPager extends ViewPager {
 

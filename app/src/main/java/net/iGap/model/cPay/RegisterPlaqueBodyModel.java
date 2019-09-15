@@ -5,19 +5,19 @@ import com.google.gson.annotations.SerializedName;
 public class RegisterPlaqueBodyModel {
 
     @SerializedName("first_name")
-    private String firstName ;
+    private String firstName;
 
     @SerializedName("last_name")
-    private String lastName ;
+    private String lastName;
 
     @SerializedName("national_id")
-    private String nationalId ;
+    private String nationalId;
 
     @SerializedName("plate")
-    private String plaque ;
+    private String plaque;
 
     @SerializedName("mobile")
-    private String mobile ;
+    private String mobile;
 
     public String getFirstName() {
         return firstName;

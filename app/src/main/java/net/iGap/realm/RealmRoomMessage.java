@@ -12,8 +12,9 @@ package net.iGap.realm;
 
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.Nullable;
 import android.text.format.DateUtils;
+
+import androidx.annotation.Nullable;
 
 import com.vanniktech.emoji.EmojiUtils;
 
@@ -194,7 +195,7 @@ public class RealmRoomMessage extends RealmObject {
         return isImageOrVideo;
     }
 
-    public static long findCustomMessageId(long roomId,int count) {
+    public static long findCustomMessageId(long roomId, int count) {
         long messageId = 0;
         try (Realm realm = Realm.getDefaultInstance()) {
             if (count == 0) {
@@ -432,22 +433,17 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public static void ClearAllMessage(Realm realm) {
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmQuery<RealmRoomMessage> roomRealmQuery = realm.where(RealmRoomMessage.class);
-                for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
-                    if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getForwardMessage() == null && realmRoom.getLastMessage().getReplyTo() == null) {
-                        roomRealmQuery.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessage().getMessageId());
-                    }
-
-                    if (realmRoom.getFirstUnreadMessage() != null && realmRoom.getFirstUnreadMessage().getForwardMessage() == null && realmRoom.getFirstUnreadMessage().getReplyTo() == null) {
-                        roomRealmQuery.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getFirstUnreadMessage().getMessageId());
-                    }
-                }
-                roomRealmQuery.findAll().deleteAllFromRealm();
+        RealmQuery<RealmRoomMessage> roomRealmQuery = realm.where(RealmRoomMessage.class);
+        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+            if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getForwardMessage() == null && realmRoom.getLastMessage().getReplyTo() == null) {
+                roomRealmQuery.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessage().getMessageId());
             }
-        });
+
+            if (realmRoom.getFirstUnreadMessage() != null && realmRoom.getFirstUnreadMessage().getForwardMessage() == null && realmRoom.getFirstUnreadMessage().getReplyTo() == null) {
+                roomRealmQuery.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getFirstUnreadMessage().getMessageId());
+            }
+        }
+        roomRealmQuery.findAll().deleteAllFromRealm();
     }
 
     public static void ClearAllMessageRoomAsync(Realm realm, final long roomId, Realm.Transaction.OnSuccess onSuccess) {
@@ -465,7 +461,7 @@ public class RealmRoomMessage extends RealmObject {
                     }
                 }
             }
-        } , onSuccess);
+        }, onSuccess);
     }
 
     public static void addTimeIfNeed(RealmRoomMessage message, Realm realm) {
@@ -505,11 +501,7 @@ public class RealmRoomMessage extends RealmObject {
         Calendar date2 = Calendar.getInstance();
         date2.setTimeInMillis(nextTime);
 
-        if (date1.get(Calendar.YEAR) == date2.get(Calendar.YEAR) && date1.get(Calendar.DAY_OF_YEAR) == date2.get(Calendar.DAY_OF_YEAR)) {
-            return false;
-        } else {
-            return true;
-        }
+        return date1.get(Calendar.YEAR) != date2.get(Calendar.YEAR) || date1.get(Calendar.DAY_OF_YEAR) != date2.get(Calendar.DAY_OF_YEAR);
     }
 
     public static void isEmojiInText(RealmRoomMessage roomMessage, String message) {

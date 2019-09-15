@@ -6,12 +6,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -23,6 +17,13 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.hanks.library.AnimateCheckBox;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -212,7 +213,7 @@ public class FragmentEditImage extends BaseFragment {
 
         channelOrGroupProfileSetTv.setOnClickListener(v -> {
 
-            if (onProfileImageEdited !=null){
+            if (onProfileImageEdited != null) {
                 onProfileImageEdited.profileImageAdd(itemGalleryList.get(0).getPath());
             }
 
@@ -226,8 +227,8 @@ public class FragmentEditImage extends BaseFragment {
         imvSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getActivity()!=null) {
-                    new HelperFragment(getActivity().getSupportFragmentManager(),FragmentEditImage.this).remove();
+                if (getActivity() != null) {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
                 }
 
                 if (textImageList.size() == 0) {
@@ -270,9 +271,9 @@ public class FragmentEditImage extends BaseFragment {
             @Override
             public void onClick(View v) {
                 AndroidUtils.closeKeyboard(v);
-                if (getActivity()!=null) {
+                if (getActivity() != null) {
                     if (!isNicknamePage) {
-                        new HelperFragment(getActivity().getSupportFragmentManager(),FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path)).setReplace(false).load();
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path)).setReplace(false).load();
                     } else {
                         FragmentFilterImage fragment = FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path);
                         getActivity().getSupportFragmentManager().beginTransaction().add(R.id.registrationFrame, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
@@ -530,9 +531,9 @@ public class FragmentEditImage extends BaseFragment {
         getView().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK&&getActivity()!=null) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK && getActivity() != null) {
                     AndroidUtils.closeKeyboard(v);
-                    new HelperFragment(getActivity().getSupportFragmentManager(),FragmentEditImage.this).remove();
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
                     if (G.openBottomSheetItem != null && isChatPage)
                         G.openBottomSheetItem.openBottomSheet(false);
                     return true;
@@ -569,8 +570,8 @@ public class FragmentEditImage extends BaseFragment {
         public Object instantiateItem(ViewGroup container, final int position) {
 
             LayoutInflater inflater = LayoutInflater.from(G.fragmentActivity);
-            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.adapter_viewpager_edittext, (ViewGroup) container, false);
-            final ImageView imgPlay = (ImageView) layout.findViewById(R.id.img_editImage);
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.adapter_viewpager_edittext, container, false);
+            final ImageView imgPlay = layout.findViewById(R.id.img_editImage);
             if (itemGalleryList.get(position).path != null) {
                 G.imageLoader.displayImage(suitablePath(itemGalleryList.get(position).path), imgPlay);
             }
@@ -581,7 +582,7 @@ public class FragmentEditImage extends BaseFragment {
                     if (isMultiItem) setValueCheckBox(position);
                 }
             });
-            ((ViewGroup) container).addView(layout);
+            container.addView(layout);
             return layout;
         }
 
@@ -637,14 +638,14 @@ public class FragmentEditImage extends BaseFragment {
         imvSendButton = (MaterialDesignTextView) view.findViewById(R.id.pu_txt_sendImage);
 
         //imgEditImage = (ImageView) view.findViewById(R.id.imgEditImage);
-        iconOk = (TextView) view.findViewById(R.id.chl_imv_ok_message);
-        rootSend = (ViewGroup) view.findViewById(R.id.pu_layout_cancel_crop);
-        txtEditImage = (TextView) view.findViewById(R.id.txtEditImage);
+        iconOk = view.findViewById(R.id.chl_imv_ok_message);
+        rootSend = view.findViewById(R.id.pu_layout_cancel_crop);
+        txtEditImage = view.findViewById(R.id.txtEditImage);
         edtChat = (EmojiEditTextE) view.findViewById(R.id.chl_edt_chat);
         edtChat.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH)});
         txtCountImage = view.findViewById(R.id.stfaq_txt_countImageEditText);
         viewPager = view.findViewById(R.id.viewPagerEditText);
-        checkBox = (AnimateCheckBox) view.findViewById(R.id.checkBox_editImage);
+        checkBox = view.findViewById(R.id.checkBox_editImage);
         imvSmileButton = (MaterialDesignTextView) view.findViewById(R.id.chl_imv_smile_button);
         setUpEmojiPopup(view);
     }
@@ -655,7 +656,7 @@ public class FragmentEditImage extends BaseFragment {
             return;
         }
         String newPath = "file://" + itemGalleryList.get(viewPager.getCurrentItem()).path;
-        if (newPath.lastIndexOf(".") <= 0){
+        if (newPath.lastIndexOf(".") <= 0) {
             return;
         }
 
@@ -762,7 +763,7 @@ public class FragmentEditImage extends BaseFragment {
     }
 
     @FunctionalInterface
-    public interface OnImageEdited{
+    public interface OnImageEdited {
         void profileImageAdd(String path);
     }
 

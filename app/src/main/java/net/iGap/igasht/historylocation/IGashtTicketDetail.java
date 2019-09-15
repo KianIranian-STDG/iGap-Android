@@ -2,9 +2,6 @@ package net.iGap.igasht.historylocation;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.security.Timestamp;
-import java.util.List;
-
 public class IGashtTicketDetail {
 
     @SerializedName("status")

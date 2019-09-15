@@ -1,4 +1,3 @@
-
 package net.iGap.module.api.beepTunes;
 
 import com.google.gson.annotations.Expose;

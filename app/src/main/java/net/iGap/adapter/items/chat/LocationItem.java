@@ -10,9 +10,10 @@
 
 package net.iGap.adapter.items.chat;
 
-import androidx.fragment.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.fragment.app.FragmentActivity;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -41,7 +42,7 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
     private FragmentActivity activity;
 
-    public LocationItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener,FragmentActivity activity) {
+    public LocationItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener, FragmentActivity activity) {
         super(mAdapter, true, type, messageClickListener);
         this.activity = activity;
     }
@@ -106,7 +107,7 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                             G.handler.post(() -> {
                                 FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition,
                                         RealmRoom.detectType(mMessage.roomId).getNumber(), mMessage.roomId, mMessage.senderID);
-                                new HelperFragment(activity.getSupportFragmentManager(),fragment).setReplace(false).load();
+                                new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
                             });
                         }
 

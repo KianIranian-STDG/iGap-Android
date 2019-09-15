@@ -24,7 +24,6 @@ import com.downloader.Progress;
 import com.downloader.utils.Utils;
 
 import net.iGap.G;
-import net.iGap.api.apiService.ApiStatic;
 import net.iGap.interfaces.OnFileDownloadResponse;
 import net.iGap.interfaces.OnSongDownload;
 import net.iGap.module.AndroidUtils;
@@ -411,17 +410,13 @@ public class HelperDownloadFile {
                                 boolean connectivityType = true;
                                 if (HelperCheckInternetConnection.currentConnectivityType != null) {
 
-                                    if (HelperCheckInternetConnection.currentConnectivityType == HelperCheckInternetConnection.ConnectivityType.WIFI)
-                                        connectivityType = true;
-                                    else
-                                        connectivityType = false;
+                                    connectivityType = HelperCheckInternetConnection.currentConnectivityType == HelperCheckInternetConnection.ConnectivityType.WIFI;
                                 }
                                 if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
                                     HelperDataUsage.progressDownload(connectivityType, downloadByte, item.type);
                                 }
                             } catch (Exception e) {
                             }
-                            ;
                         }
                     }
                 })

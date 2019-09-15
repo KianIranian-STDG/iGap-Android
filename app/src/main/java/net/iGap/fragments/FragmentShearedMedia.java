@@ -24,14 +24,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.FileProvider;
-import androidx.collection.ArrayMap;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -44,6 +36,15 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.collection.ArrayMap;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -291,7 +292,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         toolbarLayout.addView(mHelperToolbar.getView());
 
 
-        progressBar = (ProgressBar) view.findViewById(R.id.asm_progress_bar_waiting);
+        progressBar = view.findViewById(R.id.asm_progress_bar_waiting);
         AppUtils.setProgresColler(progressBar);
 
         mediaTypesLayout = view.findViewById(R.id.asm_ll_media_types_buttons);
@@ -313,7 +314,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             }
         };
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.asm_recycler_view_sheared_media);
+        recyclerView = view.findViewById(R.id.asm_recycler_view_sheared_media);
         recyclerView.setItemViewCacheSize(400);
         recyclerView.setItemAnimator(null);
 
@@ -384,7 +385,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     }
 
     private void initAppbarSelected(View view) {
-        RippleView rippleCloseAppBarSelected = (RippleView) view.findViewById(R.id.asm_ripple_close_layout);
+        RippleView rippleCloseAppBarSelected = view.findViewById(R.id.asm_ripple_close_layout);
         rippleCloseAppBarSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -426,7 +427,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             }
         });
 
-        RippleView rippleDeleteSelected = (RippleView) view.findViewById(R.id.asm_riple_delete_selected);
+        RippleView rippleDeleteSelected = view.findViewById(R.id.asm_riple_delete_selected);
 
         if (roomType == ProtoGlobal.Room.Type.CHANNEL)
             rippleDeleteSelected.setVisibility(View.GONE);
@@ -456,7 +457,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                             if (realmRoom != null) {
                                 ArrayList<Long> selectedListForDel = new ArrayList<>();
 
-                                for (StructShearedMedia item : SelectedList){
+                                for (StructShearedMedia item : SelectedList) {
                                     selectedListForDel.add(item.messageId);
                                 }
                                 RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, selectedListForDel, bothDeleteMessageId, roomType);
@@ -472,10 +473,10 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                             bothDeleteMessageId = null;
                             if (realmRoom != null) {
                                 //TODO:// optimize code
-                                ArrayList<Long> selectedListForDel = new ArrayList<>() ;
+                                ArrayList<Long> selectedListForDel = new ArrayList<>();
 
 
-                                for (StructShearedMedia item : SelectedList){
+                                for (StructShearedMedia item : SelectedList) {
                                     selectedListForDel.add(item.messageId);
                                 }
                                 RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, selectedListForDel, bothDeleteMessageId, roomType);
@@ -487,9 +488,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             }
         });
 
-        txtNumberOfSelected = (TextView) view.findViewById(R.id.asm_txt_number_of_selected);
+        txtNumberOfSelected = view.findViewById(R.id.asm_txt_number_of_selected);
 
-        ll_AppBarSelected = (LinearLayout) view.findViewById(R.id.asm_ll_appbar_selelected);
+        ll_AppBarSelected = view.findViewById(R.id.asm_ll_appbar_selelected);
     }
 
     private void resetItems() {
@@ -567,7 +568,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         TextView textView = new TextView(getContext());
         textView.setText(mSharedTypesList.get(pos));
-        Utils.setTextSize(textView,R.dimen.smallTextSize);
+        Utils.setTextSize(textView, R.dimen.smallTextSize);
         textView.setTypeface(G.typeface_IRANSansMobile);
         textView.setSingleLine(true);
 
@@ -1172,7 +1173,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         @Override
         public boolean equals(@Nullable Object obj) {
-            if (obj instanceof StructShearedMedia){
+            if (obj instanceof StructShearedMedia) {
                 return this.messageId == ((StructShearedMedia) obj).messageId;
             }
             return super.equals(obj);

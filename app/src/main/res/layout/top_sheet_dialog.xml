@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="net.iGap.G" />
+
         <variable
             name="topSheetViewModel"
             type="net.iGap.dialog.topsheet.TopSheetViewModel" />

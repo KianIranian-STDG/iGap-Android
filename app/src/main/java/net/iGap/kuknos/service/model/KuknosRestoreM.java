@@ -20,9 +20,6 @@ public class KuknosRestoreM {
     }
 
     public boolean isValid() {
-        if (keys.length() < 3)
-            return false;
-        else
-            return true;
+        return keys.length() >= 3;
     }
 }

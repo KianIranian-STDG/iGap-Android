@@ -1,12 +1,14 @@
 package net.iGap.igasht.locationdetail.subdetail;
 
-import androidx.databinding.ObservableInt;
 import android.view.View;
+
+import androidx.databinding.ObservableInt;
 
 import net.iGap.R;
 import net.iGap.igasht.BaseIGashtViewModel;
 import net.iGap.igasht.IGashtRepository;
 import net.iGap.igasht.locationlist.ExtraDetail;
+
 public class IGashtLocationSubDetailViewModel extends BaseIGashtViewModel {
     private IGashtRepository repository;
     private ObservableInt noDetail = new ObservableInt(View.GONE);

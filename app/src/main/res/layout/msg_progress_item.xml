@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <net.iGap.messageprogress.MessageProgress xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/progress"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:layout_gravity="center"
-  android:clickable="true">
+    android:id="@+id/progress"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:clickable="true">
 
 </net.iGap.messageprogress.MessageProgress>

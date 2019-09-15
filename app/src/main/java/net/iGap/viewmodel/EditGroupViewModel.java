@@ -1,10 +1,11 @@
 package net.iGap.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
 import android.view.View;
 import android.view.WindowManager;
+
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -261,7 +262,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
 
     public void setData(String newGroupName, String newGroupDescription) {
         //ToDo:Add this code to repository
-        new RequestGroupEdit().groupEdit(roomId, newGroupName, newGroupDescription,new OnGroupEdit() {
+        new RequestGroupEdit().groupEdit(roomId, newGroupName, newGroupDescription, new OnGroupEdit() {
             @Override
             public void onGroupEdit(long roomId, String name, String description) {
                 G.handler.post(() -> {
@@ -280,7 +281,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                G.handler.post(()-> showLoading.setValue(false));
+                G.handler.post(() -> showLoading.setValue(false));
             }
 
             @Override

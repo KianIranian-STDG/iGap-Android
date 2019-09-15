@@ -1,21 +1,22 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.adapter.items;
 
 import android.net.Uri;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.items.AbstractItem;
 
@@ -65,10 +66,10 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         //holder.checkBoxSelect.setChecked(true);
         holder.topLine.setVisibility(View.GONE);
 
-        if (G.selectedLanguage.equals("en")){
+        if (G.selectedLanguage.equals("en")) {
             holder.subtitle.setGravity(Gravity.LEFT);
             holder.title.setGravity(Gravity.LEFT);
-        }else {
+        } else {
             holder.subtitle.setGravity(Gravity.RIGHT);
             holder.title.setGravity(Gravity.RIGHT);
         }
@@ -103,12 +104,13 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
     }
 
     public String getBubbleText() {
-        if (mContact == null )
+        if (mContact == null)
             return "-";
         else {
             return mContact.displayName.toLowerCase().substring(0, 1).toUpperCase();
         }
     }
+
     public interface OnClickAdapter {
         void onclick(long peerId, Uri uri, String displayName, boolean checked);
     }
@@ -127,8 +129,8 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
             image = (CircleImageView) view.findViewById(R.id.imageView);
             title = (CustomTextViewMedium) view.findViewById(R.id.title);
             subtitle = (CustomTextViewMedium) view.findViewById(R.id.subtitle);
-            topLine = (View) view.findViewById(R.id.topLine);
-            checkBoxSelect =  view.findViewById(R.id.cig_checkBox_select_user);
+            topLine = view.findViewById(R.id.topLine);
+            checkBoxSelect = view.findViewById(R.id.cig_checkBox_select_user);
 
         }
 

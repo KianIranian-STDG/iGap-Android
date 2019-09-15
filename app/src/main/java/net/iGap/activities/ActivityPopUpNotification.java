@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.activities;
 
@@ -19,11 +19,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
@@ -36,6 +31,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
@@ -199,7 +199,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     private void setImageAndTextAppBar(int position) {
 
-        if (mList.size() != 0){
+        if (mList.size() != 0) {
             initialize = mList.get(position).initialize;
             color = mList.get(position).color;
             txtName.setText(mList.get(position).name);
@@ -322,7 +322,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 micMainText.setTextColor(getResources().getColor(R.color.white));
                 micTime1.setTextColor(getResources().getColor(R.color.white));
                 micTime2.setTextColor(getResources().getColor(R.color.white));
-            }else {
+            } else {
                 viewAttachFile.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root));
                 layoutMicBottom.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root));
                 micMainText.setTextColor(getResources().getColor(R.color.black));
@@ -399,7 +399,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             viewPager = (ViewPager) findViewById(R.id.apn_view_pager);
             /** Hint : always read count of view pager with "listSize", for avoid from view pager get count error */
             listSize = mList.size();
-            if (viewPager != null && mAdapter != null){
+            if (viewPager != null && mAdapter != null) {
                 mAdapter.notifyDataSetChanged();
             } else {
                 mAdapter = new AdapterViewPagerClass();
@@ -538,7 +538,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 }
             });
 
-            if (G.isDarkTheme){
+            if (G.isDarkTheme) {
                 btnSend.setTextColor(getResources().getColor(R.color.white));
                 btnMic.setTextColor(getResources().getColor(R.color.white));
                 btnSmileButton.setTextColor(getResources().getColor(R.color.white));
@@ -567,9 +567,9 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
             LayoutInflater inflater = LayoutInflater.from(ActivityPopUpNotification.this);
-            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.sub_layout_activity_popup_notification, (ViewGroup) container, false);
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.sub_layout_activity_popup_notification, container, false);
 
-            TextView txtMessage = (TextView) layout.findViewById(R.id.slapn_txt_message);
+            TextView txtMessage = layout.findViewById(R.id.slapn_txt_message);
             txtMessage.setText(mList.get(position).message);
 
             layout.setOnClickListener(new View.OnClickListener() {
@@ -579,7 +579,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 }
             });
 
-            ((ViewGroup) container).addView(layout);
+            container.addView(layout);
 
             return layout;
         }

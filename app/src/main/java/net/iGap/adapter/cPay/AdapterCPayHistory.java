@@ -1,11 +1,12 @@
 package net.iGap.adapter.cPay;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.model.cPay.CPayHistoryModel;
@@ -16,7 +17,7 @@ import java.util.List;
 public class AdapterCPayHistory extends RecyclerView.Adapter<AdapterCPayHistory.CPayHistoryViewHolder> {
 
     private List<CPayHistoryModel> items = new ArrayList<>();
-    private LayoutInflater inflater ;
+    private LayoutInflater inflater;
 
     public AdapterCPayHistory(Context context) {
         this.inflater = LayoutInflater.from(context);
@@ -30,7 +31,7 @@ public class AdapterCPayHistory extends RecyclerView.Adapter<AdapterCPayHistory.
     @NonNull
     @Override
     public CPayHistoryViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = inflater.inflate(R.layout.row_cpay_history , viewGroup , false);
+        View view = inflater.inflate(R.layout.row_cpay_history, viewGroup, false);
         return new CPayHistoryViewHolder(view);
     }
 
@@ -44,13 +45,13 @@ public class AdapterCPayHistory extends RecyclerView.Adapter<AdapterCPayHistory.
         return items.size();
     }
 
-    class CPayHistoryViewHolder extends RecyclerView.ViewHolder{
+    class CPayHistoryViewHolder extends RecyclerView.ViewHolder {
 
         public CPayHistoryViewHolder(@NonNull View itemView) {
             super(itemView);
         }
 
-        public void bind(CPayHistoryModel item){
+        public void bind(CPayHistoryModel item) {
 
         }
     }

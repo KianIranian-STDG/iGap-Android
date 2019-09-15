@@ -2,14 +2,15 @@ package net.iGap.fragments;
 
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -185,23 +186,23 @@ public class FragmentSecurityRecovery extends BaseFragment {
             }
         });
 
-        rootRecoveryEmail = (ViewGroup) view.findViewById(R.id.rootRecoveryEmailPassword);
-        rootRecoveryQuestionPassword = (ViewGroup) view.findViewById(R.id.rootRecoveryQuestionPassword);
+        rootRecoveryEmail = view.findViewById(R.id.rootRecoveryEmailPassword);
+        rootRecoveryQuestionPassword = view.findViewById(R.id.rootRecoveryQuestionPassword);
 
-        txtSetRecoveryByQuestion = (TextView) view.findViewById(R.id.txtSetRecoveryByQuestion);
-        txtSetRecoveryByEmail = (TextView) view.findViewById(R.id.txtSetRecoveryByEmail);
+        txtSetRecoveryByQuestion = view.findViewById(R.id.txtSetRecoveryByQuestion);
+        txtSetRecoveryByEmail = view.findViewById(R.id.txtSetRecoveryByEmail);
 
         if (!isConfirmedRecoveryEmail) {
             txtSetRecoveryByEmail.setVisibility(View.GONE);
         }
 
-        txtSetRecoveryQuestionPassOne = (TextView) view.findViewById(R.id.txtSetRecoveryQuestionPassOne);
-        txtSetRecoveryQuestionPassTwo = (TextView) view.findViewById(R.id.txtSetRecoveryQuestionPassTwo);
+        txtSetRecoveryQuestionPassOne = view.findViewById(R.id.txtSetRecoveryQuestionPassOne);
+        txtSetRecoveryQuestionPassTwo = view.findViewById(R.id.txtSetRecoveryQuestionPassTwo);
 
         txtSetRecoveryQuestionPassOne.setText(questionOne);
         txtSetRecoveryQuestionPassTwo.setText(questionTwo);
 
-        TextView txtResendConfirmEmail = (TextView) view.findViewById(R.id.txtResendConfirmEmail);
+        TextView txtResendConfirmEmail = view.findViewById(R.id.txtResendConfirmEmail);
         txtResendConfirmEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,9 +213,9 @@ public class FragmentSecurityRecovery extends BaseFragment {
             }
         });
 
-        edtSetRecoveryAnswerPassOne = (EditText) view.findViewById(R.id.edtSetRecoveryAnswerPassOne);
-        edtSetRecoveryAnswerPassTwo = (EditText) view.findViewById(R.id.edtSetRecoveryAnswerPassTwo);
-        edtSetRecoveryEmail = (EditText) view.findViewById(R.id.edtSetRecoveryEmail);
+        edtSetRecoveryAnswerPassOne = view.findViewById(R.id.edtSetRecoveryAnswerPassOne);
+        edtSetRecoveryAnswerPassTwo = view.findViewById(R.id.edtSetRecoveryAnswerPassTwo);
+        edtSetRecoveryEmail = view.findViewById(R.id.edtSetRecoveryEmail);
         edtSetRecoveryEmail.setHint("");
 
         if (page == Security.REGISTER) {

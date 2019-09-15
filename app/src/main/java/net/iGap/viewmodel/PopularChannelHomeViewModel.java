@@ -1,10 +1,11 @@
 package net.iGap.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
-import androidx.fragment.app.FragmentTransaction;
 import android.view.View;
+
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -64,7 +65,7 @@ public class PopularChannelHomeViewModel extends BaseViewModel {
                         }
                         emptyViewMutableLiveData.postValue(View.VISIBLE);
                     }
-                }else {
+                } else {
                     emptyViewMutableLiveData.postValue(View.VISIBLE);
                 }
 

@@ -2,7 +2,6 @@ package net.iGap.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableField;
 
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.OnUserIVandGetScore;
@@ -33,14 +32,14 @@ public class UserScoreViewModel extends ViewModel {
     }
 
     public MutableLiveData<String> getUserRank() {
-        if (userRank.getValue() == null){
+        if (userRank.getValue() == null) {
             userRank.setValue(checkPersianNumber("0"));
         }
         return userRank;
     }
 
     public MutableLiveData<String> getUserScore() {
-        if (userScore.getValue() == null){
+        if (userScore.getValue() == null) {
             userScore.setValue(checkPersianNumber("0"));
         }
         return userScore;
@@ -58,10 +57,10 @@ public class UserScoreViewModel extends ViewModel {
         return userRankPointer;
     }
 
-    private String checkPersianNumber(String text){
-        if (HelperCalander.isPersianUnicode){
+    private String checkPersianNumber(String text) {
+        if (HelperCalander.isPersianUnicode) {
             return HelperCalander.convertToUnicodeFarsiNumber(text);
-        }else {
+        } else {
             return text;
         }
     }

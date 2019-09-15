@@ -9,16 +9,17 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import androidx.lifecycle.ViewModel;
 import android.content.Context;
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
 import android.os.CountDownTimer;
-import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.ViewModel;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -632,7 +633,7 @@ public class FragmentSecurityViewModel extends ViewModel {
 
         View v = dialogWait.getCustomView();
 
-        final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
+        final TextView remindTime = v.findViewById(R.id.remindTime);
         CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {

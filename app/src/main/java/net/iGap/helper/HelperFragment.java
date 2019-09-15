@@ -2,14 +2,16 @@ package net.iGap.helper;
 
 import android.content.res.Configuration;
 import android.os.SystemClock;
+import android.util.Log;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.EditChannelFragment;
 import net.iGap.fragments.EditGroupFragment;
 import net.iGap.fragments.FragmentChannelProfile;
@@ -20,7 +22,6 @@ import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
-import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.ShowCustomList;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.payment.PaymentCallBack;
@@ -267,10 +268,7 @@ public class HelperFragment {
                 return true;
             }
 
-            if (G.iTowPanModDesinLayout != null && G.iTowPanModDesinLayout.getBackChatVisibility()) {
-                return true;
-            }
-            return false;
+            return G.iTowPanModDesinLayout != null && G.iTowPanModDesinLayout.getBackChatVisibility();
         } else {
             return true;
         }

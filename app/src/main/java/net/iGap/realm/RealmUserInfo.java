@@ -1,18 +1,18 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.realm;
 
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperString;
-import net.iGap.kuknos.service.model.KuknosRealmM;
+import net.iGap.kuknos.service.model.RealmKuknos;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientRegisterDevice;
 
@@ -36,7 +36,7 @@ public class RealmUserInfo extends RealmObject {
     private boolean importContactLimit;
     private String pushNotificationToken;
     private String representPhoneNumber;
-    private KuknosRealmM kuknosM;
+    private RealmKuknos kuknosM;
     private String accessToken;
 
     public static RealmUserInfo getRealmUserInfo(Realm realm) {
@@ -333,10 +333,7 @@ public class RealmUserInfo extends RealmObject {
     }
 
     public boolean isAuthorMe(String author) {
-        if (author.equals(authorHash)) {
-            return true;
-        }
-        return false;
+        return author.equals(authorHash);
     }
 
     public boolean isImportContactLimit() {
@@ -376,7 +373,7 @@ public class RealmUserInfo extends RealmObject {
         setRepresentPhoneNumber(realm, realmUserInfo, representPhoneNumber);
     }
 
-    public static void setRepresentPhoneNumber(Realm realm, RealmUserInfo realmUserInfo , String representPhoneNumber) {
+    public static void setRepresentPhoneNumber(Realm realm, RealmUserInfo realmUserInfo, String representPhoneNumber) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -390,51 +387,51 @@ public class RealmUserInfo extends RealmObject {
     // Kuknos seed key save and get process
 
 
-    public KuknosRealmM getKuknosM() {
+    public RealmKuknos getKuknosM() {
         return kuknosM;
     }
 
-    public void setKuknosM(KuknosRealmM kuknosM) {
+    public void setKuknosM(RealmKuknos kuknosM) {
         this.kuknosM = kuknosM;
     }
 
-    public static void updateKuknos(KuknosRealmM kuknosM) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setKuknosM(kuknosM);
+    public static void updateKuknos(RealmKuknos kuknosM) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.setKuknosM(kuknosM);
+                    }
                 }
-            }
-        });
-        realm.close();
+            });
+        }
     }
 
     public void createKuknos() {
         if (kuknosM == null) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    setKuknosM(realm.createObject(KuknosRealmM.class));
-                }
-            });
-            realm.close();
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        setKuknosM(realm.createObject(RealmKuknos.class));
+                    }
+                });
+            }
         }
     }
 
     public void deleteKuknos() {
         if (kuknosM != null) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    kuknosM.deleteFromRealm();
-                }
-            });
-            realm.close();
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        kuknosM.deleteFromRealm();
+                    }
+                });
+            }
         }
     }
 

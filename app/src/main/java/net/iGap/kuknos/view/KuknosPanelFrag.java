@@ -1,18 +1,8 @@
 package net.iGap.kuknos.view;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.DialogInterface;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +10,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -205,13 +206,13 @@ public class KuknosPanelFrag extends BaseFragment {
             @Override
             public void onChanged(@Nullable ErrorM errorM) {
                 if (errorM.getState() == true) {
-                    if (errorM.getMessage().equals("0")){
+                    if (errorM.getMessage().equals("0")) {
                         binding.fragKuknosPError.setVisibility(View.VISIBLE);
                         binding.fragKuknosPSend.setEnabled(false);
                         binding.fragKuknosPHistory.setEnabled(false);
                         binding.fragKuknosPTrading.setEnabled(false);
                     }
-                    if (errorM.getMessage().equals("1")){
+                    if (errorM.getMessage().equals("1")) {
                         Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
                         snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
                             @Override
@@ -304,8 +305,7 @@ public class KuknosPanelFrag extends BaseFragment {
                     binding.fragKuknosPSend.setEnabled(false);
                     binding.fragKuknosPHistory.setEnabled(false);
                     binding.fragKuknosPBalanceHolder.setEnabled(false);
-                }
-                else {
+                } else {
                     binding.fragKuknosPProgressV.setVisibility(View.GONE);
                     binding.fragKuknosPRecieve.setEnabled(true);
                     binding.fragKuknosPSend.setEnabled(true);
@@ -346,8 +346,7 @@ public class KuknosPanelFrag extends BaseFragment {
             String temp = getString(R.string.kuknos_setting_fileContent) + kuknosPanelVM.getPrivateKeyData();
             fos.write(temp.getBytes());
             fos.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             showDialog(4, R.string.kuknos_setting_copySFailTitle, R.string.kuknos_setting_copySFailWriteFile, R.string.kuknos_setting_copySFailBtn);
             return;
         }
@@ -357,20 +356,14 @@ public class KuknosPanelFrag extends BaseFragment {
     /* Checks if external storage is available for read and write */
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     /* Checks if external storage is available to at least read */
     public boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
     }
 
     public File getDownloadStorageDir(String fileName) {

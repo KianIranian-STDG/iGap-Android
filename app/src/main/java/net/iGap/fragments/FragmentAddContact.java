@@ -14,9 +14,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -25,7 +22,12 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -37,15 +39,18 @@ import com.vicmikhailau.maskededittext.MaskedEditText;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperAddContact;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnCountryCallBack;
+import net.iGap.interfaces.OnUserContactEdit;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.CountryReader;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserContactImport;
+import net.iGap.request.RequestUserContactsEdit;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -56,21 +61,49 @@ import java.util.List;
 import static net.iGap.G.context;
 import static net.iGap.module.Contacts.showLimitDialog;
 
-public class FragmentAddContact extends BaseFragment implements ToolbarListener {
+public class FragmentAddContact extends BaseFragment implements ToolbarListener, OnUserContactEdit {
 
     public static final String NAME = "name";
     public static final String PHONE = "PHONE";
+    private static final String CONTACT_MODE = "MODE";
+    private static final String CONTACT_ID = "CONTACT_ID";
+    private static final String CONTACT_NAME = "NAME";
+    private static final String CONTACT_FAMILY = "FAMILY";
 
     public static OnCountryCallBack onCountryCallBack;
+    private OnContactUpdate onContactUpdate;
     private EditText edtFirstName;
     private EditText edtLastName;
     private MaskedEditText edtPhoneNumber;
     private ViewGroup parent;
     private EditText txtCodeCountry;
     private HelperToolbar mHelperToolbar;
+    private long mContactId = 0;
+    private long mContactPhone = 0;
+    private String mContactName = "", mContactFamily = "";
+    private ContactMode pageMode;
+    private ProgressBar loader;
 
-    public static FragmentAddContact newInstance() {
-        return new FragmentAddContact();
+    public static FragmentAddContact newInstance(String phone, ContactMode mode) {
+        FragmentAddContact fragment = new FragmentAddContact();
+        Bundle bundle = new Bundle();
+        bundle.putString(CONTACT_MODE, mode.name());
+        bundle.putString(PHONE, phone);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static FragmentAddContact newInstance(long contactId, String phone, String name, String lastName, ContactMode mode, OnContactUpdate onContactUpdate) {
+        FragmentAddContact fragment = new FragmentAddContact();
+        fragment.onContactUpdate = onContactUpdate;
+        Bundle bundle = new Bundle();
+        bundle.putLong(CONTACT_ID, contactId);
+        bundle.putString(CONTACT_MODE, mode.name());
+        bundle.putString(CONTACT_NAME, name);
+        bundle.putString(CONTACT_FAMILY, lastName);
+        bundle.putString(PHONE, phone);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Nullable
@@ -88,11 +121,26 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
         edtPhoneNumber = view.findViewById(R.id.ac_edt_phoneNumber);
         txtCodeCountry = view.findViewById(R.id.ac_txt_codeCountry);
         parent = view.findViewById(R.id.ac_layoutParent);
+        loader = view.findViewById(R.id.loader);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            String contactName = bundle.getString(NAME);
+            pageMode = ContactMode.valueOf(bundle.getString(CONTACT_MODE, ContactMode.ADD.name()));
+
+            String contactName = bundle.getString(NAME, "");
             edtFirstName.setText(contactName);
+
+            if (pageMode == ContactMode.EDIT) {
+                mContactId = bundle.getLong(CONTACT_ID, 0);
+                mContactName = bundle.getString(CONTACT_NAME, "");
+                mContactFamily = bundle.getString(CONTACT_FAMILY, "");
+                mContactPhone = Long.valueOf(bundle.getString(PHONE, "+0").substring(1));
+
+                edtFirstName.setText(mContactName);
+                edtLastName.setText(mContactFamily);
+                edtPhoneNumber.setEnabled(false);
+                txtCodeCountry.setEnabled(false);
+            }
         }
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -118,7 +166,6 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
                         countryCode = numberProto.getCountryCode() + "";
                     } catch (NumberParseException e) {
                         phoneFromUrl = phoneFromUrl.substring(1);
-                        ;
                     }
                 } else if (phoneFromUrl.startsWith("0")) {
                     phoneFromUrl = phoneFromUrl.substring(1);
@@ -219,10 +266,10 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
             txtCodeCountry.setText("+" + countryCode);
             CountryReader countryReade = new CountryReader();
             StringBuilder fileListBuilder = countryReade.readFromAssetsTextFile("country.txt", G.fragmentActivity);
-            String listArray[] = fileListBuilder.toString().split("\\r?\\n");
+            String[] listArray = fileListBuilder.toString().split("\\r?\\n");
 
             for (String aListArray : listArray) {
-                String listItem[] = aListArray.split(";");
+                String[] listItem = aListArray.split(";");
                 if (countryCode.equals(listItem[0])) {
                     txtCodeCountry.setText(listItem[2]);
                     if (listItem.length > 3) {
@@ -238,13 +285,15 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
 
     private void setupToolbar(View view) {
 
+        String toolbarTitle = pageMode == ContactMode.ADD ? getString(R.string.menu_add_contact) : getString(R.string.edit_contact);
+
         ViewGroup toolbarLayout = view.findViewById(R.id.frg_add_contact_toolbar);
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setRightIcons(R.string.check_icon)
-                .setDefaultTitle(getString(R.string.menu_add_contact))
+                .setDefaultTitle(toolbarTitle)
                 .setLogoShown(true)
                 .setListener(this);
 
@@ -282,7 +331,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
         String saveNumber;
 
         if (edtPhoneNumber.getText().toString().startsWith("0")) {
-            saveNumber = codeCountry + _phone.substring(1, _phone.length());
+            saveNumber = codeCountry + _phone.substring(1);
         } else {
             saveNumber = codeCountry + _phone;
         }
@@ -307,9 +356,18 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
                 final String lastName = edtLastName.getText().toString();
                 final String codeNumber = txtCodeCountry.getText().toString();
                 String displayName = firstName + " " + lastName;
-                HelperAddContact.addContact(displayName, codeNumber, phone);
 
-                changePage(view);
+
+                if (pageMode == ContactMode.ADD) {
+                    changePage(view);
+                    HelperAddContact.addContact(displayName, codeNumber, phone);
+                } else if (pageMode == ContactMode.EDIT) {
+                    closeKeyboard(view);
+                    loader.setVisibility(View.VISIBLE);
+                    G.onUserContactEdit = this;
+                    new RequestUserContactsEdit().contactsEdit(mContactId, mContactPhone, firstName, lastName);
+                }
+
             } else {
                 Toast.makeText(G.context, R.string.please_enter_phone_number, Toast.LENGTH_SHORT).show();
             }
@@ -327,27 +385,57 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
 
     @Override
     public void onRightIconClickListener(View view) {
+        if (pageMode == ContactMode.ADD) {
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.add_to_list_contact).content(R.string.text_add_to_list_contact).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                addContactToServer();
-                final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
-                if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
-                    try {
-                        HelperPermission.getContactPermision(G.fragmentActivity, null);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.add_to_list_contact).content(R.string.text_add_to_list_contact).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    addContactToServer();
+                    final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
+                    if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
+                        try {
+                            HelperPermission.getContactPermision(G.fragmentActivity, null);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        addToContactList(view);
                     }
-                } else {
-                    addToContactList(view);
                 }
-            }
-        }).negativeText(R.string.no).onNegative((dialog, which) -> {
-            addContactToServer();
-            dialog.dismiss();
-            G.fragmentActivity.onBackPressed();
-        }).show();
+            }).negativeText(R.string.no).onNegative((dialog, which) -> {
+                addContactToServer();
+                dialog.dismiss();
+                G.fragmentActivity.onBackPressed();
+            }).show();
+
+        } else if (pageMode == ContactMode.EDIT) {
+            new MaterialDialog.Builder(G.fragmentActivity)
+                    .title(R.string.edit_contact)
+                    .content(R.string.are_you_sure_edit_contact)
+                    .positiveText(R.string.yes)
+                    .negativeText(R.string.no)
+                    .onNegative((dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .onPositive((dialog, which) -> {
+                        final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
+                        if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
+                            try {
+                                HelperPermission.getContactPermision(G.fragmentActivity, null);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            addToContactList(view);
+                        }
+                        editContactByApi();
+                        dialog.dismiss();
+                    })
+                    .show();
+        }
+    }
+
+    private void editContactByApi() {
     }
 
     public EditText getEdtFirstName() {
@@ -361,4 +449,42 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
     public MaskedEditText getEdtPhoneNumber() {
         return edtPhoneNumber;
     }
+
+    @Override
+    public void onContactEdit(String firstName, String lastName, String initials) {
+        G.handler.postDelayed(() -> {
+            loader.setVisibility(View.GONE);
+            //HelperError.showSnackMessage(getString(R.string.user_edited), false);
+            if (onContactUpdate != null)
+                onContactUpdate.updateContact(firstName , lastName);
+            popBackStackFragment();
+        },100);
+    }
+
+    @Override
+    public void onContactEditTimeOut() {
+        G.handler.post(() -> {
+            loader.setVisibility(View.GONE);
+            HelperError.showSnackMessage(getString(R.string.server_do_not_response), false);
+        });
+    }
+
+    @Override
+    public void onContactEditError(int majorCode, int minorCode) {
+        G.handler.post(() -> {
+            loader.setVisibility(View.GONE);
+            HelperError.showSnackMessage(getString(R.string.server_error), false);
+        });
+    }
+
+    public enum ContactMode {
+        ADD, EDIT
+    }
+
+
+    @FunctionalInterface
+    public interface OnContactUpdate {
+        void updateContact(String name , String family);
+    }
+
 }

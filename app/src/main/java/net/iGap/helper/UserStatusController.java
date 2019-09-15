@@ -1,7 +1,5 @@
 package net.iGap.helper;
 
-import android.util.Log;
-
 import net.iGap.proto.ProtoUserUpdateStatus;
 import net.iGap.request.RequestUserUpdateStatus;
 

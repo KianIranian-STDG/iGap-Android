@@ -7,7 +7,7 @@ package net.iGap.module;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
 import android.content.Context;
 import android.graphics.Canvas;

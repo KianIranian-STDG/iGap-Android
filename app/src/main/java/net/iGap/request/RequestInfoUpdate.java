@@ -28,7 +28,7 @@ public class RequestInfoUpdate {
     }
 
     public interface updateInfoCallback {
-        void onSuccess(int lastVersion,String Body);
+        void onSuccess(int lastVersion, String Body);
 
         void onError(int major, int minor);
     }

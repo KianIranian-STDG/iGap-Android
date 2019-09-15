@@ -10,17 +10,17 @@ package net.iGap.viewmodel;
  */
 
 import android.annotation.TargetApi;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableInt;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
-import androidx.annotation.NonNull;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -190,16 +190,16 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
         goBack.setValue(true);
     }
 
-    public void forgetPassword(){
+    public void forgetPassword() {
         G.isPassCode = false;
         hideKeyword.setValue(true);
         new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
             @Override
             public void onUserSessionLogout() {
                 /*goBack.setValue(false);*/
-                Log.wtf(this.getClass().getName(),"onUserSessionLogout");
+                Log.wtf(this.getClass().getName(), "onUserSessionLogout");
                 HelperLogout.logout();
-                Log.wtf(this.getClass().getName(),"onUserSessionLogout");
+                Log.wtf(this.getClass().getName(), "onUserSessionLogout");
             }
 
             @Override

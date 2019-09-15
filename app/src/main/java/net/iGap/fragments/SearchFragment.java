@@ -12,12 +12,6 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.core.widget.ContentLoadingProgressBar;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +19,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.core.widget.ContentLoadingProgressBar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -116,7 +116,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
         edtSearch = toolbar.getEditTextSearch();
 
-        toolbar.resizeSearchBoxWithAnimation(true , true);
+        toolbar.resizeSearchBoxWithAnimation(true, true);
 
         loadingProgressBar = view.findViewById(R.id.sfl_progress_loading);
         imvNothingFound = view.findViewById(R.id.sfl_imv_nothing_found);

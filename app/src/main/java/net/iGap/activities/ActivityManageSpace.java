@@ -1,11 +1,12 @@
 package net.iGap.activities;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
-import net.iGap.fragments.DataStoreageFragment;
+import net.iGap.fragments.DataStorageFragment;
 import net.iGap.viewmodel.ActivityManageSpaceViewModel;
 
 public class ActivityManageSpace extends ActivityEnhanced {
@@ -24,14 +25,10 @@ public class ActivityManageSpace extends ActivityEnhanced {
         viewModel.getLoadFirstPage().observe(this, isFirst -> {
             if (isFirst != null) {
                 if (isFirst) {
-                    getSupportFragmentManager().beginTransaction()
-                            .addToBackStack(DataStoreageFragment.class.getName())
-                            .replace(R.id.dataUsageContainer, new DataStoreageFragment(), DataStoreageFragment.class.getName())
-                            .commit();
+                    loadFragment(new DataStorageFragment());
                 } else {
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.dataUsageContainer);
                     getSupportFragmentManager().beginTransaction()
-                            .addToBackStack(fragment.getClass().getName())
                             .replace(R.id.dataUsageContainer, fragment, fragment.getClass().getName())
                             .commit();
                 }

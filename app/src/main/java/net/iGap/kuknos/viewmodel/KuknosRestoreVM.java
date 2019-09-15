@@ -1,10 +1,10 @@
 package net.iGap.kuknos.viewmodel;
 
+import android.text.TextUtils;
+
+import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.databinding.ObservableField;
-
-import android.text.TextUtils;
 
 import net.iGap.R;
 import net.iGap.api.apiService.ApiResponse;
@@ -35,11 +35,9 @@ public class KuknosRestoreVM extends ViewModel {
     public void onNext() {
         if (TextUtils.isEmpty(keys.get())) {
             error.setValue(new ErrorM(true, "Empty Entry", "0", R.string.kuknos_Restore_Error_empty_str));
-        }
-        else if (keys.get().split(" ").length < 12) {
+        } else if (keys.get().split(" ").length < 12) {
             error.setValue(new ErrorM(true, "Invalid Entry", "0", R.string.kuknos_Restore_Error_invalid_str));
-        }
-        else {
+        } else {
             if (pinCheck.getValue())
                 nextPage.setValue(1);
             else

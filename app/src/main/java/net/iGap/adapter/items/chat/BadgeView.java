@@ -12,7 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import net.iGap.R;
-import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
 import static net.iGap.libs.bottomNavigation.Util.Utils.setTextSize;

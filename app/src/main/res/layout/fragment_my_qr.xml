@@ -21,23 +21,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="2dp">
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="216dp"
-        android:layout_height="216dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="32dp"
-        android:padding="8dp"/>
 
-    <TextView
-        android:id="@+id/hint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="#2196f3"
-        android:gravity="center_horizontal"
-        android:text="@string/my_qr_hint"
-        android:padding="16dp"/>
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="216dp"
+            android:layout_height="216dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="32dp"
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="#2196f3"
+            android:gravity="center_horizontal"
+            android:text="@string/my_qr_hint"
+            android:padding="16dp" />
 
     </LinearLayout>
 

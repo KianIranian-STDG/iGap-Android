@@ -1,16 +1,16 @@
 package net.iGap.fragments;
 
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.activities.ActivityRegistration;
@@ -29,8 +29,8 @@ public class WelcomeFragment extends BaseFragment {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                long userId=0;
-                if (getArguments() != null){
+                long userId = 0;
+                if (getArguments() != null) {
                     userId = getArguments().getLong("userId");
                 }
                 return (T) new WelcomeFragmentViewModel(userId);
@@ -51,8 +51,8 @@ public class WelcomeFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel.getGoToRegistrationNicknamePage().observe(getViewLifecycleOwner(),userId->{
-            if (getActivity() instanceof ActivityRegistration && userId != null){
+        viewModel.getGoToRegistrationNicknamePage().observe(getViewLifecycleOwner(), userId -> {
+            if (getActivity() instanceof ActivityRegistration && userId != null) {
                 FragmentRegistrationNickname fragment = new FragmentRegistrationNickname();
                 Bundle bundle = new Bundle();
                 bundle.putLong(FragmentRegistrationNickname.ARG_USER_ID, userId);

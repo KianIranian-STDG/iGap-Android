@@ -113,16 +113,16 @@ public class CPayRepository {
 
     }
 
-    public void getWalletAmount(PlaqueBodyModel body , ResponseCallback<CPayWalletAmountModel> callback){
+    public void getWalletAmount(PlaqueBodyModel body, ResponseCallback<CPayWalletAmountModel> callback) {
 
         api.getCPayWalletAmount(body).enqueue(new Callback<CPayWalletAmountModel>() {
             @Override
             public void onResponse(Call<CPayWalletAmountModel> call, Response<CPayWalletAmountModel> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     callback.onSuccess(response.body());
-                }else {
+                } else {
                     try {
-                        callback.onError(new ErrorHandler().getError(response.code() , response.errorBody().string()));
+                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -136,7 +136,7 @@ public class CPayRepository {
         });
     }
 
-    public void getChargeWallet(ChargeWalletBodyModel body , ResponseCallback<ChargeWalletModel> callback){
+    public void getChargeWallet(ChargeWalletBodyModel body, ResponseCallback<ChargeWalletModel> callback) {
 
         api.getChargeWallet(body).enqueue(new Callback<ChargeWalletModel>() {
             @Override

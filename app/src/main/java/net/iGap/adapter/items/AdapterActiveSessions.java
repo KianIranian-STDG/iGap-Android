@@ -1,19 +1,20 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.adapter.items;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.items.AbstractItem;
 
@@ -103,14 +104,14 @@ public class AdapterActiveSessions extends AbstractItem<AdapterActiveSessions, A
 
         public ViewHolder(View view) {
             super(view);
-            vgRootLayout = (ViewGroup) view.findViewById(adp_rootLayout);
-            txtCurrentSession = (TextView) view.findViewById(adp_currentSession);
-            txtDevice = (TextView) view.findViewById(R.id.adp_device);
-            txtPlatform = (TextView) view.findViewById(R.id.adp_platform);
-            txtCountry = (TextView) view.findViewById(R.id.adp_country);
-            txtIp = (TextView) view.findViewById(R.id.adp_ip);
-            txtCreateTime = (TextView) view.findViewById(R.id.adp_create_time);
-            txtTerminate = (TextView) view.findViewById(R.id.adp_terminate);
+            vgRootLayout = view.findViewById(adp_rootLayout);
+            txtCurrentSession = view.findViewById(adp_currentSession);
+            txtDevice = view.findViewById(R.id.adp_device);
+            txtPlatform = view.findViewById(R.id.adp_platform);
+            txtCountry = view.findViewById(R.id.adp_country);
+            txtIp = view.findViewById(R.id.adp_ip);
+            txtCreateTime = view.findViewById(R.id.adp_create_time);
+            txtTerminate = view.findViewById(R.id.adp_terminate);
             line = view.findViewById(R.id.adp_line);
         }
     }

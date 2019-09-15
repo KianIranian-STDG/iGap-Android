@@ -1,16 +1,17 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.helper;
 
 import android.os.AsyncTask;
+
 import androidx.collection.ArrayMap;
 
 import net.iGap.G;
@@ -67,7 +68,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
         onFileUpload = this;
     }
 
-    private static void startUpload(ProtoGlobal.RoomMessageType type,FileUploadStructure uploadStructure, String identity, UpdateListener listener, ProtoGlobal.Room.Type chatType, boolean FromChat) {
+    private static void startUpload(ProtoGlobal.RoomMessageType type, FileUploadStructure uploadStructure, String identity, UpdateListener listener, ProtoGlobal.Room.Type chatType, boolean FromChat) {
 
         StructUpload structUpload = null;
 
@@ -82,7 +83,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
                 structUpload.listener1 = listener;
             }
 
-            structUpload.type=type;
+            structUpload.type = type;
             structUpload.fileUploadStructure = uploadStructure;
             structUpload.chatType = chatType;
             structUpload.identity = identity;
@@ -182,9 +183,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
 
         if (list == null) return false;
 
-        if (list.containsKey(identity)) return true;
-
-        return false;
+        return list.containsKey(identity);
     }
 
     public static int getUploadProgress(String identity) {
@@ -232,8 +231,8 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
             action = SENDING_LOCATION;
         } else if (type == CONTACT) {
             action = CHOOSING_CONTACT;
-        }else if(type==STICKER){
-            action = SENDING_IMAGE ;
+        } else if (type == STICKER) {
+            action = SENDING_IMAGE;
         }
 
         return action;
@@ -291,7 +290,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
             try {
                 byte[] bytes = AndroidUtils.getNBytesFromOffset(fileUploadStructure, (int) offset, limit);
                 // make third request for first time
-                new RequestFileUpload().fileUpload(token, offset, bytes, new RequestFileUpload.IdentityFileUpload(fileUploadStructure.messageType,identity));
+                new RequestFileUpload().fileUpload(token, offset, bytes, new RequestFileUpload.IdentityFileUpload(fileUploadStructure.messageType, identity));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -328,7 +327,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
                 byte[] bytes = AndroidUtils.getNBytesFromOffset(fileUploadStructure, (int) nextOffset, nextLimit);
 
                 // make request till uploading has finished
-                new RequestFileUpload().fileUpload(fileUploadStructure.token, nextOffset, bytes, new RequestFileUpload.IdentityFileUpload(fileUploadStructure.messageType,identity));
+                new RequestFileUpload().fileUpload(fileUploadStructure.token, nextOffset, bytes, new RequestFileUpload.IdentityFileUpload(fileUploadStructure.messageType, identity));
             } else {
                 onFileUploadComplete(identity, response);
             }
@@ -407,7 +406,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
             if (list.containsKey(identity)) {
                 StructUpload spl = list.get(identity);
                 list.remove(identity);
-                startUpload(spl.type,spl.fileUploadStructure, spl.identity, null, spl.chatType, false);
+                startUpload(spl.type, spl.fileUploadStructure, spl.identity, null, spl.chatType, false);
             }
         }
     }
@@ -504,7 +503,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
 
             if (result != null) {
                 if (!list.containsKey(result.messageId)) {
-                    startUpload(result.messageType,result, Long.toString(result.messageId), listener, chatType, true);
+                    startUpload(result.messageType, result, Long.toString(result.messageId), listener, chatType, true);
                     HelperSetAction.setActionFiles(roomID, result.messageId, getAction(result.messageType), chatType);
                 }
             }
@@ -550,7 +549,7 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
             super.onPostExecute(result);
 
             if (result != null) {
-                startUpload(result.messageType,result, result.messageId + "", listener, null, false);
+                startUpload(result.messageType, result, result.messageId + "", listener, null, false);
             }
         }
     }

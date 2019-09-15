@@ -1,9 +1,10 @@
 package net.iGap.adapter.items.poll.holder;
 
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -14,7 +15,7 @@ public class TypeUnknownViewHolder extends BaseViewHolder {
     private TextView txt0;
     private CardView card0;
 
-    public TypeUnknownViewHolder(PollAdapter pollAdapter,  @NonNull View itemView) {
+    public TypeUnknownViewHolder(PollAdapter pollAdapter, @NonNull View itemView) {
         super(pollAdapter, itemView);
         txt0 = itemView.findViewById(R.id.unknown_text);
         card0 = itemView.findViewById(R.id.unknown_card);

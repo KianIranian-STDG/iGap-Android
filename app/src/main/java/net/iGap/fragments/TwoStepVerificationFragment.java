@@ -1,15 +1,16 @@
 package net.iGap.fragments;
 
-import androidx.lifecycle.ViewModelProviders;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -139,7 +140,7 @@ public class TwoStepVerificationFragment extends BaseFragment {
                 bundle.putBoolean("IS_EMAIL", data.isEmail());
                 bundle.putBoolean("IS_CONFIRM_EMAIL", data.isConfirmEmail());
                 fragmentSecurityRecovery.setArguments(bundle);
-                ((ActivityRegistration) getActivity()).loadFragment(fragmentSecurityRecovery,true);
+                ((ActivityRegistration) getActivity()).loadFragment(fragmentSecurityRecovery, true);
             }
         });
     }

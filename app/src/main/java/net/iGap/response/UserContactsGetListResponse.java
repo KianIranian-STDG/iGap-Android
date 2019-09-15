@@ -10,9 +10,6 @@
 
 package net.iGap.response;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import net.iGap.G;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.proto.ProtoGlobal;

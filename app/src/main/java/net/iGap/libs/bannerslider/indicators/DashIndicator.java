@@ -1,8 +1,9 @@
 package net.iGap.libs.bannerslider.indicators;
 
 import android.content.Context;
-import androidx.core.content.res.ResourcesCompat;
 import android.widget.LinearLayout;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.R;
 

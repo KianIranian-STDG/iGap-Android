@@ -5,11 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatTextView;
-
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +13,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -362,11 +362,11 @@ public class BotInit implements MakeButtons.OnClickListener {
             return;
         }
 
-        String spiltList[] = message.split("\n");
+        String[] spiltList = message.split("\n");
 
         for (String line : spiltList) {
             if (line.startsWith("/")) {
-                String lineSplit[] = line.split("-");
+                String[] lineSplit = line.split("-");
                 if (lineSplit.length == 2) {
                     StructRowBotAction _row = new StructRowBotAction();
                     _row.action = lineSplit[0];
@@ -539,7 +539,7 @@ public class BotInit implements MakeButtons.OnClickListener {
         try (Realm realm = Realm.getDefaultInstance()) {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
                 //TODO: fixed this and do not use G.currentActivity
-                HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity,((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
+                HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
             } else if (v.getId() == ButtonActionType.BOT_ACTION) {
                 try {
                     Long identity = System.currentTimeMillis();
@@ -556,7 +556,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                 } catch (Exception e) {
                 }
             } else if (v.getId() == ButtonActionType.JOIN_LINK) {
-                HelperUrl.checkAndJoinToRoom(G.currentActivity,((ArrayList<String>) v.getTag()).get(0).substring(14));
+                HelperUrl.checkAndJoinToRoom(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(14));
             } else if (v.getId() == ButtonActionType.WEB_LINK) {
                 HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0));
             } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {

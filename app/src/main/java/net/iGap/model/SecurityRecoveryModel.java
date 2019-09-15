@@ -2,7 +2,7 @@ package net.iGap.model;
 
 import net.iGap.module.enums.Security;
 
-public class SecurityRecoveryModel{
+public class SecurityRecoveryModel {
 
     private Security security;
     private String questionOne;

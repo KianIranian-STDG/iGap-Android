@@ -59,7 +59,7 @@ public class UserTwoStepVerificationGetPasswordDetailResponse extends MessageHan
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        if (identity instanceof TwoStepVerificationGetPasswordDetail){
+        if (identity instanceof TwoStepVerificationGetPasswordDetail) {
             ((TwoStepVerificationGetPasswordDetail) identity).errorGetPasswordDetail(majorCode, minorCode);
         } else {
             throw new ClassCastException("identity must be : " + TwoStepVerificationGetPasswordDetail.class.getName());

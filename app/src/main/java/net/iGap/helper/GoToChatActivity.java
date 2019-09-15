@@ -1,9 +1,10 @@
 package net.iGap.helper;
 
 import android.os.Bundle;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
-import android.util.Log;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -99,7 +100,7 @@ public class GoToChatActivity {
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     FragmentChat fragmentChat = new FragmentChat();
                     fragmentChat.setArguments(getBundle());
-                    new HelperFragment(activity.getSupportFragmentManager(),fragmentChat).setReplace(false).load();
+                    new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(false).load();
                 }
             }).onNegative(new MaterialDialog.SingleButtonCallback() {
                 @Override
@@ -146,28 +147,27 @@ public class GoToChatActivity {
     }
 
     private void disableForwardMessage(FragmentActivity activity) {
-        if (activity instanceof ActivityMain){
+        if (activity instanceof ActivityMain) {
             ((ActivityMain) activity).setForwardMessage(false);
         }
     }
 
-    private void loadChatFragment(FragmentActivity activity){
-        Log.wtf(this.getClass().getName(),"loadChatFragment");
+    private void loadChatFragment(FragmentActivity activity) {
+        Log.wtf(this.getClass().getName(), "loadChatFragment");
         FragmentChat fragmentChat = new FragmentChat();
         fragmentChat.setArguments(getBundle());
-        if (G.twoPaneMode){
-            Log.wtf(this.getClass().getName(),"loadChatFragment");
-            if (activity instanceof ActivityMain){
+        if (G.twoPaneMode) {
+            Log.wtf(this.getClass().getName(), "loadChatFragment");
+            if (activity instanceof ActivityMain) {
                 ((ActivityMain) activity).goToChatPage(fragmentChat);
+            } else {
+                Log.wtf(this.getClass().getName(), "loadChatFragment");
             }
-            else{
-                Log.wtf(this.getClass().getName(),"loadChatFragment");
-            }
-        }else{
-            if (activity.getSupportFragmentManager() != null){
-                new HelperFragment(activity.getSupportFragmentManager(),fragmentChat).setReplace(false).load();
-                Log.e(TAG, "loadChatFragment: activity.getSupportFragmentManager() != null" );
-            }else
+        } else {
+            if (activity.getSupportFragmentManager() != null) {
+                new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(false).load();
+                Log.e(TAG, "loadChatFragment: activity.getSupportFragmentManager() != null");
+            } else
                 Log.e(TAG, "loadChatFragment: activity.getSupportFragmentManager() == null");
         }
     }

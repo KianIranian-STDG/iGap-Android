@@ -81,7 +81,7 @@ public class RealmCallLog extends RealmObject {
                 public void execute(Realm realm) {
                     try {
                         realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.LOG_ID, logId).findFirst().deleteFromRealm();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

@@ -1,15 +1,16 @@
 package net.iGap.fragments.cPay;
 
 
-import androidx.lifecycle.ViewModelProviders;
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import net.iGap.R;
 import net.iGap.adapter.cPay.AdapterCPayHistory;
@@ -21,9 +22,9 @@ import net.iGap.viewmodel.FragmentCPayHistoryViewModel;
 
 public class FragmentCPayHistory extends BaseFragment implements ToolbarListener {
 
-    private FragmentCPayHistoryViewModel viewModel ;
-    private FragmentCpayHistoryBinding binding ;
-    private AdapterCPayHistory mAdapter ;
+    private FragmentCPayHistoryViewModel viewModel;
+    private FragmentCpayHistoryBinding binding;
+    private AdapterCPayHistory mAdapter;
 
     public FragmentCPayHistory() {
     }
@@ -36,7 +37,7 @@ public class FragmentCPayHistory extends BaseFragment implements ToolbarListener
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater , R.layout.fragment_cpay_history, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cpay_history, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
@@ -52,18 +53,18 @@ public class FragmentCPayHistory extends BaseFragment implements ToolbarListener
 
     private void setupListeners() {
 
-        viewModel.getOnFiltersButtonStateChangeListener().observe(getViewLifecycleOwner() , state -> {
-            if (state == null ) return;
-            switch (state){
+        viewModel.getOnFiltersButtonStateChangeListener().observe(getViewLifecycleOwner(), state -> {
+            if (state == null) return;
+            switch (state) {
                 case 1:
 
                     break;
 
-                case 2 :
+                case 2:
 
                     break;
 
-                case 3 :
+                case 3:
 
                     break;
             }

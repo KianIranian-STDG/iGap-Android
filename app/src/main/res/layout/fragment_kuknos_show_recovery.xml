@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewmodel"
             type="net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeySVM" />
@@ -16,118 +16,118 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <!-- TODO clean min height-->
+        <!-- TODO clean min height-->
 
-    <LinearLayout
-        android:id="@+id/fragKuknosSRToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:minHeight="48dp"
-        android:background="@color/sky_blue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </LinearLayout>
-
-    <ScrollView
-        style="?backgroundColorSettingTheme"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRToolbar">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:id="@+id/fragKuknosSRToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:paddingBottom="@dimen/dp20">
+            android:orientation="horizontal"
+            android:minHeight="48dp"
+            android:background="@color/sky_blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
-                android:id="@+id/fragKuknosSRMessage"
-                android:layout_width="0dp"
+        </LinearLayout>
+
+        <ScrollView
+            style="?backgroundColorSettingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRToolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:text="@string/kuknos_RecoverySK_Title"
-                android:textStyle="bold"
-                android:textSize="@dimen/dp18"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.7" />
+                android:layout_marginBottom="50dp"
+                android:paddingBottom="@dimen/dp20">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
-                android:id="@+id/fragKuknosSRDescription"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/kuknos_RecoverySK_Message"
-                android:textSize="@dimen/dp16"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRMessage"
-                app:layout_constraintWidth_percent="0.7" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosSRMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:text="@string/kuknos_RecoverySK_Title"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/dp18"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.7" />
 
-            <androidx.appcompat.widget.AppCompatEditText
-                style="?textTitleColorSettingTheme"
-                android:id="@+id/fragKuknosSRkeysET"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:minHeight="200dp"
-                android:maxHeight="200dp"
-                android:scrollbars="vertical"
-                android:background="@drawable/background_cancel_money_action"
-                android:ems="10"
-                android:hint="@string/kuknos_RecoverySK_Hint"
-                android:text="@={viewmodel.keys}"
-                android:textSize="@dimen/dp18"
-                android:padding="8dp"
-                android:gravity="top"
-                android:inputType="textMultiLine"
-                android:scrollHorizontally="false"
-                android:minLines="3"
-                android:enabled="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRDescription"
-                app:layout_constraintWidth_percent="0.8" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosSRDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/kuknos_RecoverySK_Message"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRMessage"
+                    app:layout_constraintWidth_percent="0.7" />
 
-            <com.google.android.material.button.MaterialButton
-                style="?iGapButton"
-                android:id="@+id/fragKuknosIdSubmit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:minHeight="58dp"
-                android:text="@string/kuknos_RecoverySK_Btn"
-                android:textSize="@dimen/dp16"
-                android:onClick="@{()->viewmodel.onNext()}"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRkeysET"
-                app:layout_constraintWidth_percent="0.7" />
+                <androidx.appcompat.widget.AppCompatEditText
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosSRkeysET"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:minHeight="200dp"
+                    android:maxHeight="200dp"
+                    android:scrollbars="vertical"
+                    android:background="@drawable/background_cancel_money_action"
+                    android:ems="10"
+                    android:hint="@string/kuknos_RecoverySK_Hint"
+                    android:text="@={viewmodel.keys}"
+                    android:textSize="@dimen/dp18"
+                    android:padding="8dp"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:scrollHorizontally="false"
+                    android:minLines="3"
+                    android:enabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRDescription"
+                    app:layout_constraintWidth_percent="0.8" />
 
-            <ProgressBar
-                android:id="@+id/fragKuknosSRProgressV"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:elevation="2dp"
-                android:visibility="gone"
-                app:layout_constraintTop_toTopOf="@+id/fragKuknosIdSubmit"
-                app:layout_constraintStart_toStartOf="@+id/fragKuknosIdSubmit"
-                app:layout_constraintEnd_toEndOf="@+id/fragKuknosIdSubmit"
-                app:layout_constraintBottom_toBottomOf="@+id/fragKuknosIdSubmit"
-                app:layout_constraintHorizontal_bias="0.05"
-                app:layout_constraintHeight_percent="0.08"/>
+                <com.google.android.material.button.MaterialButton
+                    style="?iGapButton"
+                    android:id="@+id/fragKuknosIdSubmit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:minHeight="58dp"
+                    android:text="@string/kuknos_RecoverySK_Btn"
+                    android:textSize="@dimen/dp16"
+                    android:onClick="@{()->viewmodel.onNext()}"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosSRkeysET"
+                    app:layout_constraintWidth_percent="0.7" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+                <ProgressBar
+                    android:id="@+id/fragKuknosSRProgressV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:elevation="2dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosIdSubmit"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosIdSubmit"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosIdSubmit"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosIdSubmit"
+                    app:layout_constraintHorizontal_bias="0.05"
+                    app:layout_constraintHeight_percent="0.08" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

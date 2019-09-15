@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.helper;
 
@@ -31,17 +31,11 @@ public class HelperGetAction {
     public static String getAction(long roomId, ProtoGlobal.Room.Type type, ProtoGlobal.ClientAction clientAction) {
         if (type == ProtoGlobal.Room.Type.CHAT) {
             String action = convertActionEnum(clientAction);
-            if (action != null) {
-                return action;
-            }
-            return null;
+            return action;
         } else if (type == ProtoGlobal.Room.Type.GROUP) {
 
             final String actionText = HelperGetAction.getMultipleAction(roomId);
-            if (actionText != null) {
-                return actionText;
-            }
-            return null;
+            return actionText;
         }
         return null;
     }

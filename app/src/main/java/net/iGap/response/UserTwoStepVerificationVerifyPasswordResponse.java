@@ -10,7 +10,6 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
 import net.iGap.interfaces.TwoStepVerificationVerifyPassword;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserTwoStepVerificationVerifyPassword;
@@ -56,8 +55,8 @@ public class UserTwoStepVerificationVerifyPasswordResponse extends MessageHandle
         int minorCode = errorResponse.getMinorCode();
         int getWait = errorResponse.getWait();
 
-        if (identity instanceof TwoStepVerificationVerifyPassword){
-            ((TwoStepVerificationVerifyPassword) identity).errorVerifyPassword(majorCode,minorCode,getWait);
+        if (identity instanceof TwoStepVerificationVerifyPassword) {
+            ((TwoStepVerificationVerifyPassword) identity).errorVerifyPassword(majorCode, minorCode, getWait);
         } else {
             throw new ClassCastException("identity must be: " + TwoStepVerificationVerifyPassword.class.getName());
         }

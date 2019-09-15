@@ -1,20 +1,13 @@
 package net.iGap.fragments;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import androidx.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
@@ -32,8 +25,16 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.textfield.TextInputLayout;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -64,7 +65,9 @@ import net.iGap.request.RequestGroupKickMember;
 import net.iGap.request.RequestGroupKickModerator;
 import net.iGap.request.RequestGroupUpdateUsername;
 import net.iGap.viewmodel.FragmentGroupProfileViewModel;
+
 import org.jetbrains.annotations.NotNull;
+
 import static android.content.Context.CLIPBOARD_SERVICE;
 
 
@@ -254,7 +257,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 popBackStackFragment();
             }
         });
-        
+
         binding.description.setMovementMethod(LinkMovementMethod.getInstance());
 
         viewModel.groupDescription.observe(getViewLifecycleOwner(), groupDescription -> {
@@ -331,7 +334,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
             }
         });
 
-        viewModel.showDialogLeaveGroup.observe(getViewLifecycleOwner(),isShow->{
+        viewModel.showDialogLeaveGroup.observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null && isShow) {
                 groupLeft();
             }
@@ -411,8 +414,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
     private void groupLeft() {
         String text;
         int title;
-            text = G.fragmentActivity.getResources().getString(R.string.do_you_want_to_leave_this_group);
-            title = R.string.left_group;
+        text = G.fragmentActivity.getResources().getString(R.string.do_you_want_to_leave_this_group);
+        title = R.string.left_group;
 
         new MaterialDialog.Builder(G.fragmentActivity).title(title).content(text).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
@@ -447,7 +450,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
         showAvatar();
     }
-
 
 
     private void showAvatar() {

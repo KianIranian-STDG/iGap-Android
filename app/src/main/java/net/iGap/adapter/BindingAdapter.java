@@ -1,10 +1,11 @@
 package net.iGap.adapter;
 
-import androidx.annotation.StringRes;
-import com.google.android.material.textfield.TextInputLayout;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.annotation.StringRes;
+
+import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
@@ -61,7 +62,13 @@ public class BindingAdapter {
 
     @androidx.databinding.BindingAdapter("errorText")
     public static void setErrorMessage(TextInputLayout view, @StringRes int errorMessage) {
-        view.setError(view.getContext().getString(errorMessage));
+        if (errorMessage != 0) {
+            view.setErrorEnabled(true);
+            view.setError(view.getContext().getString(errorMessage));
+        }else{
+            view.setError("");
+            view.setErrorEnabled(false);
+        }
     }
 
     @androidx.databinding.BindingAdapter("setSelected")

@@ -1,12 +1,6 @@
 package net.iGap.realm;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-
 import net.iGap.module.AppUtils;
-import net.iGap.module.structs.StructWebView;
 import net.iGap.proto.ProtoGlobal;
 
 import org.parceler.Parcel;
@@ -30,7 +24,7 @@ public class RealmAdditional extends RealmObject {
     }
 
     public static RealmAdditional put(Realm realm, String additionalData, int additionalType) {
-        RealmAdditional realmAdditional = realm.createObject(RealmAdditional.class ,  AppUtils.makeRandomId());
+        RealmAdditional realmAdditional = realm.createObject(RealmAdditional.class, AppUtils.makeRandomId());
         realmAdditional.setAdditionalType(additionalType);
         realmAdditional.setAdditionalData(additionalData);
 

@@ -53,8 +53,7 @@ public class KuknosTradeHistoryVM extends ViewModel {
                     progressState.setValue(visibility);
                 }
             });
-        }
-        else {
+        } else {
             tradeRepo.getTradesList(new ApiResponse<Page<OfferResponse>>() {
                 @Override
                 public void onResponse(Page<OfferResponse> offerResponsePage) {

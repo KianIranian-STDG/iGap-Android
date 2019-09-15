@@ -3,7 +3,6 @@
     <gradient
         android:endColor="@color/colorToolbarBackgroundStart"
         android:startColor="@color/colorToolbarBackgroundEnd"
-        android:angle="90"/>
-    <corners
-        android:radius="@dimen/dp12"/>
+        android:angle="90" />
+    <corners android:radius="@dimen/dp12" />
 </shape>

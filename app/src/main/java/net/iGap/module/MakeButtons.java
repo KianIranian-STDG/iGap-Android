@@ -3,16 +3,16 @@ package net.iGap.module;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.cardview.widget.CardView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.cardview.widget.CardView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -86,11 +86,11 @@ public class MakeButtons {
     }
 
     @FunctionalInterface
-    public interface OnClickListener{
-        void onClick(View view , ButtonEntity buttonEntity);
+    public interface OnClickListener {
+        void onClick(View view, ButtonEntity buttonEntity);
     }
 
-    public static LinearLayout addButtons(ButtonEntity entity,OnClickListener onClickListener, int culmn, float wightSum, int btnId, LinearLayout mainLayout, Integer additionalType) {
+    public static LinearLayout addButtons(ButtonEntity entity, OnClickListener onClickListener, int culmn, float wightSum, int btnId, LinearLayout mainLayout, Integer additionalType) {
         float weight = wightSum / culmn;
         float weightSum = 0;
         float textWeight = 0f;
@@ -157,9 +157,6 @@ public class MakeButtons {
         }*/
 
 
-
-
-
         LinearLayout linearLayout_529 = new LinearLayout(G.context);
         LinearLayout.LayoutParams layout_941 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp36));
 
@@ -184,9 +181,6 @@ public class MakeButtons {
             layout_738.weight = imageWeight;
             layout_738.setMargins(0, i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp10), i_Dp(R.dimen.dp2));
             layout_738.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
-
-
-
 
 
             img1.setLayoutParams(layout_738);
@@ -235,10 +229,10 @@ public class MakeButtons {
 
         card.setId(entity.getActionType());
 /** add this section to make inside effect
-            /*    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && additionalType != AdditionalType.UNDER_KEYBOARD_BUTTON) {
-                  StateListAnimator stateListAnimator = AnimatorInflater
-                  .loadStateListAnimator(G.context, R.animator.lift_on_touch);
-                  card.setStateListAnimator(stateListAnimator);
+ /*    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && additionalType != AdditionalType.UNDER_KEYBOARD_BUTTON) {
+ StateListAnimator stateListAnimator = AnimatorInflater
+ .loadStateListAnimator(G.context, R.animator.lift_on_touch);
+ card.setStateListAnimator(stateListAnimator);
  }*/
 
         //    card.setLongClickable(false);
@@ -269,7 +263,7 @@ public class MakeButtons {
                                 }
         );
         card.setOnClickListener(v -> {
-            onClickListener.onClick(v,entity);
+            onClickListener.onClick(v, entity);
         });
         mainLayout.addView(card);
         return mainLayout;

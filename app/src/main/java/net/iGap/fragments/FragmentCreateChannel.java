@@ -10,62 +10,93 @@
 
 package net.iGap.fragments;
 
-import androidx.databinding.DataBindingUtil;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import net.iGap.G;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
 import net.iGap.R;
 import net.iGap.databinding.FragmentCreateChannelBinding;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.viewmodel.FragmentCreateChannelViewModel;
 
-public class FragmentCreateChannel extends BaseFragment implements ToolbarListener {
+import org.jetbrains.annotations.NotNull;
 
-    public static OnRemoveFragment onRemoveFragment;
+import static android.content.Context.CLIPBOARD_SERVICE;
 
-    private FragmentCreateChannelViewModel fragmentCreateChannelViewModel;
-    private FragmentCreateChannelBinding fragmentCreateChannelBinding;
-    private HelperToolbar mHelperToolbar;
+public class FragmentCreateChannel extends BaseFragment {
 
-    public FragmentCreateChannel() {
-        // Required empty public constructor
+    private FragmentCreateChannelViewModel viewModel;
+    private FragmentCreateChannelBinding binding;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                long roomId = 0;
+                String inviteLink = null;
+                String token = null;
+                if (getArguments() != null) {
+                    roomId = getArguments().getLong("ROOMID");
+                    inviteLink = "https://" + getArguments().getString("INVITE_LINK");
+                    token = getArguments().getString("TOKEN");
+                }
+                return (T) new FragmentCreateChannelViewModel(roomId, inviteLink, token);
+            }
+        }).get(FragmentCreateChannelViewModel.class);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        fragmentCreateChannelBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_channel, container, false);
-        return attachToSwipeBack(fragmentCreateChannelBinding.getRoot());
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_channel, container, false);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+        return attachToSwipeBack(binding.getRoot());
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initDataBinding();
-        initComponents(view);
-        ProgressBar prgWaiting = fragmentCreateChannelBinding.fchPrgWaitingAddContact;
-        AppUtils.setProgresColler(prgWaiting);
+        binding.fchLayoutToolbar.addView(HelperToolbar.create()
+                .setContext(getContext())
+                .setLogoShown(true)
+                .setRightIcons(R.string.check_icon)
+                .setLeftIcon(R.string.back_icon)
+                .setDefaultTitle(getString(R.string.new_channel))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null) {
+                            getActivity().onBackPressed();
+                        }
+                    }
 
-        onRemoveFragment = new OnRemoveFragment() {
-            @Override
-            public void remove() {
-                popBackStackFragment();
-            }
-        };
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        viewModel.onClickFinish();
+                    }
+                }).getView());
 
-        fragmentCreateChannelViewModel.getRoom.observe(this, roomId -> {
+        viewModel.getRoom.observe(getViewLifecycleOwner(), roomId -> {
             if (getActivity() != null && roomId != null) {
                 Fragment fragment = ContactGroupFragment.newInstance();
                 Bundle bundle = new Bundle();
@@ -73,56 +104,23 @@ public class FragmentCreateChannel extends BaseFragment implements ToolbarListen
                 bundle.putString("TYPE", ProtoGlobal.Room.Type.CHANNEL.toString());
                 bundle.putBoolean("NewRoom", true);
                 fragment.setArguments(bundle);
-
-                /*if (FragmentCreateChannel.onRemoveFragment != null) {
-                    FragmentCreateChannel.onRemoveFragment.remove();
-                }*/
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
-    }
 
-    private void initComponents(View view) {
+        viewModel.getShowErrorMessage().observe(getViewLifecycleOwner(), errorMessageId -> {
+            if (errorMessageId != null) {
+                HelperError.showSnackMessage(getString(errorMessageId), false);
+            }
+        });
 
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLogoShown(true)
-                .setRightIcons(R.string.check_icon)
-                .setLeftIcon(R.string.back_icon)
-                .setDefaultTitle(G.context.getResources().getString(R.string.new_channel))
-                .setListener(this);
-
-        LinearLayout layoutToolbar = fragmentCreateChannelBinding.fchLayoutToolbar;
-        layoutToolbar.addView(mHelperToolbar.getView());
-
-        //mHelperToolbar.getTextViewLogo().setText(G.context.getString(R.string.new_channel));
-
-    }
-
-    private void initDataBinding() {
-
-        fragmentCreateChannelViewModel = new FragmentCreateChannelViewModel(getArguments(), fragmentCreateChannelBinding);
-        fragmentCreateChannelBinding.setFragmentCreateChannelViewModel(fragmentCreateChannelViewModel);
-    }
-
-    @Override
-    public void onDetach() {
-
-        fragmentCreateChannelViewModel.onDetach();
-        super.onDetach();
-    }
-
-    public interface OnRemoveFragment {
-        void remove();
-    }
-
-    @Override
-    public void onRightIconClickListener(View view) {
-        fragmentCreateChannelViewModel.onClickFinish(view);
-    }
-
-    @Override
-    public void onLeftIconClickListener(View view) {
-        fragmentCreateChannelViewModel.onClickCancel(view);
+        viewModel.getCopyChannelLink().observe(getViewLifecycleOwner(), channelLink -> {
+            if (getActivity() != null && channelLink != null) {
+                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("LINK_CHANNEL", channelLink);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getActivity(), R.string.copy_link_title, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

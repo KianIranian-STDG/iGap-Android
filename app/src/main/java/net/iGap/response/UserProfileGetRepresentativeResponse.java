@@ -32,7 +32,7 @@ public class UserProfileGetRepresentativeResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        numberOfPendingRequest --;
+        numberOfPendingRequest--;
 
         ProtoUserProfileGetRepresentative.UserProfileGetRepresentativeResponse.Builder builder = (ProtoUserProfileGetRepresentative.UserProfileGetRepresentativeResponse.Builder) message;
         ((RequestUserProfileGetRepresentative.OnRepresentReady) this.identity).onRepresent(builder.getPhoneNumber());
@@ -46,7 +46,7 @@ public class UserProfileGetRepresentativeResponse extends MessageHandler {
 
     @Override
     public void error() {
-        numberOfPendingRequest --;
+        numberOfPendingRequest--;
         super.error();
         ((RequestUserProfileGetRepresentative.OnRepresentReady) this.identity).onFailed();
     }

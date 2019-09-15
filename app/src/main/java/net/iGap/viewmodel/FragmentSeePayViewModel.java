@@ -50,7 +50,7 @@ public class FragmentSeePayViewModel extends BaseCPayViewModel<UserPlaquesModel>
         onInquiryClickListener.postValue(true);
     }
 
-    public void onChargeClicked(){
+    public void onChargeClicked() {
         onChargeClickListener.setValue(true);
     }
 

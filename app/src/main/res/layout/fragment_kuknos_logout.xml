@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewmodel"
             type="net.iGap.kuknos.viewmodel.KuknosLogoutVM" />
@@ -14,124 +14,125 @@
         android:layout_height="match_parent"
         style="?backgroundColorSettingTheme">
 
-    <!-- TODO clean min height-->
+        <!-- TODO clean min height-->
 
-    <LinearLayout
-        android:id="@+id/fragKuknosLogoutToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:minHeight="48dp"
-        android:background="@color/sky_blue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </LinearLayout>
-
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragKuknosLogoutToolbar">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:id="@+id/fragKuknosLogoutToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:paddingBottom="@dimen/dp20">
+            android:orientation="horizontal"
+            android:minHeight="48dp"
+            android:background="@color/sky_blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
-                android:id="@+id/fragKuknosLogoutTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:text="@string/kuknos_logout_title"
-                android:textStyle="bold"
-                android:textSize="@dimen/dp18"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.7" />
+        </LinearLayout>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
-                android:id="@+id/fragKuknosLogoutMessage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/kuknos_logout_message"
-                android:textSize="@dimen/dp16"
-                android:justificationMode="inter_word"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragKuknosLogoutTitle"
-                app:layout_constraintWidth_percent="0.7" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="?textTitleColorSettingTheme"
-                android:id="@+id/fragKuknosLogoutPassHolder"
-                android:layout_width="0dp"
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragKuknosLogoutToolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:minHeight="48dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragKuknosLogoutMessage"
-                app:layout_constraintWidth_percent="0.7">
-                <androidx.appcompat.widget.AppCompatEditText
+                android:layout_marginBottom="50dp"
+                android:paddingBottom="@dimen/dp20">
+
+                <androidx.appcompat.widget.AppCompatTextView
                     style="?textTitleColorSettingTheme"
-                    android:id="@+id/fragKuknosLogoutPass"
-                    android:layout_width="match_parent"
+                    android:id="@+id/fragKuknosLogoutTitle"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:minHeight="48dp"
-                    android:ems="10"
-                    android:enabled="false"
-                    android:hint="@string/kuknos_logout_pin"
-                    android:text="@={viewmodel.PIN}"
+                    android:layout_marginTop="50dp"
+                    android:text="@string/kuknos_logout_title"
+                    android:textStyle="bold"
                     android:textSize="@dimen/dp18"
-                    android:gravity="center"
-                    android:inputType="numberPassword"
-                    android:imeOptions="actionDone"
-                    android:digits="0123456789"
-                    android:maxLength="4"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.7" />
 
-            <com.google.android.material.button.MaterialButton
-                style="?iGapKuknosLogout"
-                android:id="@+id/fragKuknosLogoutSubmit"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:minHeight="58dp"
-                android:text="@string/kuknos_logout_btn"
-                android:textSize="@dimen/dp16"
-                android:onClick="@{()->viewmodel.onSubmitBtn()}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragKuknosLogoutPassHolder"
-                app:layout_constraintWidth_percent="0.6"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosLogoutMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/kuknos_logout_message"
+                    android:textSize="@dimen/dp16"
+                    android:justificationMode="inter_word"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosLogoutTitle"
+                    app:layout_constraintWidth_percent="0.7" />
 
-            <ProgressBar
-                android:id="@+id/fragKuknosLogoutProgressV"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:elevation="2dp"
-                android:visibility="visible"
-                app:layout_constraintTop_toTopOf="@+id/fragKuknosLogoutSubmit"
-                app:layout_constraintStart_toStartOf="@+id/fragKuknosLogoutSubmit"
-                app:layout_constraintEnd_toEndOf="@+id/fragKuknosLogoutSubmit"
-                app:layout_constraintBottom_toBottomOf="@+id/fragKuknosLogoutSubmit"
-                app:layout_constraintHorizontal_bias="0.05"
-                app:layout_constraintHeight_percent="0.08"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/fragKuknosLogoutPassHolder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:minHeight="48dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosLogoutMessage"
+                    app:layout_constraintWidth_percent="0.7">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+                    <androidx.appcompat.widget.AppCompatEditText
+                        style="?textTitleColorSettingTheme"
+                        android:id="@+id/fragKuknosLogoutPass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:minHeight="48dp"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:hint="@string/kuknos_logout_pin"
+                        android:text="@={viewmodel.PIN}"
+                        android:textSize="@dimen/dp18"
+                        android:gravity="center"
+                        android:inputType="numberPassword"
+                        android:imeOptions="actionDone"
+                        android:digits="0123456789"
+                        android:maxLength="4" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    style="?iGapKuknosLogout"
+                    android:id="@+id/fragKuknosLogoutSubmit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:minHeight="58dp"
+                    android:text="@string/kuknos_logout_btn"
+                    android:textSize="@dimen/dp16"
+                    android:onClick="@{()->viewmodel.onSubmitBtn()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosLogoutPassHolder"
+                    app:layout_constraintWidth_percent="0.6" />
+
+                <ProgressBar
+                    android:id="@+id/fragKuknosLogoutProgressV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:elevation="2dp"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosLogoutSubmit"
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosLogoutSubmit"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosLogoutSubmit"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosLogoutSubmit"
+                    app:layout_constraintHorizontal_bias="0.05"
+                    app:layout_constraintHeight_percent="0.08" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

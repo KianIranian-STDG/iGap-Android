@@ -1,8 +1,9 @@
 package net.iGap.kuknos.viewmodel;
 
+import android.os.Handler;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import android.os.Handler;
 
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.service.model.KuknosTradeHistoryM;
@@ -30,7 +31,7 @@ public class KuknosTradeActiveVM extends ViewModel {
     }
 
     private void initModel() {
-        KuknosTradeHistoryM temp = new KuknosTradeHistoryM("20.010","10.020","1.010","2019/05/01");
+        KuknosTradeHistoryM temp = new KuknosTradeHistoryM("20.010", "10.020", "1.010", "2019/05/01");
         List<KuknosTradeHistoryM> listTemp = new ArrayList<>();
         listTemp.add(temp);
         listTemp.add(temp);

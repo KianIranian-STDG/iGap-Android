@@ -10,11 +10,12 @@
 
 package net.iGap.realm;
 
+import net.iGap.kuknos.service.model.RealmKuknos;
+
 import io.realm.DynamicRealm;
 import io.realm.FieldAttribute;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
-import io.realm.annotations.PrimaryKey;
 
 import static net.iGap.Config.REALM_LATEST_MIGRATION_VERSION;
 
@@ -413,7 +414,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("approved", boolean.class, FieldAttribute.REQUIRED)
                     .addField("isFavorite", boolean.class, FieldAttribute.REQUIRED)
                     .addField("sort", int.class, FieldAttribute.REQUIRED)
-                    .addRealmListField("realmStickersDetails",realmStickerDetails);
+                    .addRealmListField("realmStickersDetails", realmStickerDetails);
 
             oldVersion++;
         }
@@ -604,11 +605,28 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 37
+        if (oldVersion == 37) {
 
             RealmObjectSchema realmWallpaper = schema.get(RealmWallpaper.class.getSimpleName());
             if (realmWallpaper != null) {
                 realmWallpaper.addField("type", int.class, FieldAttribute.REQUIRED);
+            }
+
+            oldVersion++;
+        }
+
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 38
+
+            RealmObjectSchema realmKuknos = schema.create(RealmKuknos.class.getSimpleName())
+                    .addField("kuknosSeedKey", String.class)
+                    .addField("kuknosPublicKey", String.class)
+                    .addField("kuknosPIN", String.class)
+                    .addField("kuknosMnemonic", String.class);
+
+            RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
+            if (realmUserInfo != null) {
+                realmUserInfo.addRealmObjectField("kuknosM", realmKuknos);
             }
 
             oldVersion++;

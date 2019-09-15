@@ -35,7 +35,7 @@
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
         <com.google.android.material.button.MaterialButton
@@ -48,9 +48,7 @@
             android:layout_marginEnd="32dp"
             android:textStyle="bold"
             android:textSize="14sp"
-            android:text="@string/show_receipt"/>
-
-
+            android:text="@string/show_receipt" />
 
 
     </LinearLayout>

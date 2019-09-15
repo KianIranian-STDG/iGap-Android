@@ -2,6 +2,7 @@ package net.iGap.libs.ripplesoundplayer.renderer;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+
 import androidx.annotation.ColorInt;
 
 import java.util.Random;

@@ -60,6 +60,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="allowBackup,supportsRtl">
+        <receiver
+            android:name="ir.metrix.sdk.MetrixReferrerReceiver"
+            android:permission="android.permission.INSTALL_PACKAGES"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:name=".module.CustomButtonListener"
@@ -79,7 +87,7 @@
         <activity
             android:name=".activities.ActivityEnterPassCode"
             android:configChanges="keyboard|orientation|screenSize|locale"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
         <activity
             android:name=".activities.ActivityPopUpNotification"
@@ -232,8 +240,7 @@
             </intent-filter>
             <!-- this part add app logo to list of share -->
         </activity>
-        <activity
-            android:name=".activities.ActivityRegistration" />
+        <activity android:name=".activities.ActivityRegistration" />
 
         <receiver
             android:name=".module.ReceiverBootPhone"

@@ -1,10 +1,11 @@
 package net.iGap.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
+import android.view.View;
+
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
-import android.view.View;
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -26,15 +27,15 @@ public class FragmentCPayChargeViewModel extends BaseCPayViewModel<CPayWalletAmo
     private MutableLiveData<String> chargePaymentStateListener = new MutableLiveData<>();
 
     private long mChargeAmount = 0;
-    private String mPlaque ;
+    private String mPlaque;
 
     public FragmentCPayChargeViewModel() {
         isDark.set(G.isDarkTheme);
     }
 
-    public void getRequestAmountFromServer(){
+    public void getRequestAmountFromServer() {
         getLoaderListener().setValue(true);
-        CPayRepository.getInstance().getWalletAmount(new PlaqueBodyModel(mPlaque) , this);
+        CPayRepository.getInstance().getWalletAmount(new PlaqueBodyModel(mPlaque), this);
     }
 
     @Override
@@ -43,9 +44,9 @@ public class FragmentCPayChargeViewModel extends BaseCPayViewModel<CPayWalletAmo
         getLoaderListener().setValue(false);
     }
 
-    public void onPaymentClicked(){
+    public void onPaymentClicked() {
 
-        if (mChargeAmount < 20000){
+        if (mChargeAmount < 20000) {
             getMessageToUser().setValue(R.string.amount_not_valid);
             return;
         }
@@ -78,40 +79,40 @@ public class FragmentCPayChargeViewModel extends BaseCPayViewModel<CPayWalletAmo
 
     }
 
-    public void onSpinnerItemSelected(int position){
+    public void onSpinnerItemSelected(int position) {
 
         editTextVisibilityListener.setValue(position == 6);
 
-        switch (position){
+        switch (position) {
 
-            case 0 :
-            case 6 :
-                mChargeAmount = 0 ;
+            case 0:
+            case 6:
+                mChargeAmount = 0;
                 break;
 
             case 1:
-                mChargeAmount = 50000 ;
+                mChargeAmount = 50000;
                 break;
 
-            case 2 :
+            case 2:
                 mChargeAmount = 100000;
                 break;
 
-            case 3 :
+            case 3:
                 mChargeAmount = 200000;
                 break;
 
-            case 4 :
-                mChargeAmount = 500000 ;
+            case 4:
+                mChargeAmount = 500000;
                 break;
 
             case 5:
-                mChargeAmount = 1000000 ;
+                mChargeAmount = 1000000;
                 break;
         }
     }
 
-    public void onEditTextChangeListener(String amount){
+    public void onEditTextChangeListener(String amount) {
         mChargeAmount = Integer.valueOf(amount);
     }
 

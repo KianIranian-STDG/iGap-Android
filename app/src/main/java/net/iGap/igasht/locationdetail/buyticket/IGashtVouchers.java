@@ -29,7 +29,7 @@ public class IGashtVouchers {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (obj instanceof IGashtVouchers){
+        if (obj instanceof IGashtVouchers) {
             return voucherId == ((IGashtVouchers) obj).getVoucherId();
         }
         return super.equals(obj);

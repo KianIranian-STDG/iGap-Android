@@ -9,15 +9,15 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.net.Uri;
+import android.view.View;
+
+import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
-import android.net.Uri;
-
-import androidx.core.text.HtmlCompat;
-import android.view.View;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.google.protobuf.ByteString;
 

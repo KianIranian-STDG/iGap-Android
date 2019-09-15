@@ -2,16 +2,17 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -175,22 +176,8 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     }
 
     @Override
-    public void onChange() {
-
-        int unReadCount = RealmRoom.getAllUnreadCount();
-
-        bottomNavigation.setOnBottomNavigationBadge(new OnBottomNavigationBadge() {
-            @Override
-            public int callCount() {
-                return 0;
-            }
-
-            @Override
-            public int messageCount() {
-                return unReadCount;
-            }
-        });
-
+    public void onChange(int unreadTotal) {
+        bottomNavigation.setOnBottomNavigationBadge(unreadTotal, 0);
     }
 
     public void goToUserProfile() {
@@ -251,15 +238,15 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     }
 
 
-    public void autoLinkCrawler(String uri , DiscoveryFragment.CrawlerStruct.OnDeepValidLink onDeepLinkValid) {
-        if (uri.equals("")){
+    public void autoLinkCrawler(String uri, DiscoveryFragment.CrawlerStruct.OnDeepValidLink onDeepLinkValid) {
+        if (uri.equals("")) {
             onDeepLinkValid.linkInvalid(uri);
             return;
         }
 
         String[] address = uri.toLowerCase().trim().split("/");
 
-        if (address.length == 0){
+        if (address.length == 0) {
             onDeepLinkValid.linkInvalid(uri);
             return;
         }
@@ -278,10 +265,10 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                             onDeepLinkValid.linkValid(address[i]);
                         setCrawlerMap(DISCOVERY_FRAGMENT, discoveryUri);
                     } else {
-                        if (discoveryUri[0].equals(DEEP_LINK_DISCOVERY)){
+                        if (discoveryUri[0].equals(DEEP_LINK_DISCOVERY)) {
                             onDeepLinkValid.linkValid(address[i]);
                             setCrawlerMap(DISCOVERY_FRAGMENT, discoveryUri);
-                        }else {
+                        } else {
                             onDeepLinkValid.linkInvalid(discoveryUri[i]);
                             return;
                         }
@@ -395,5 +382,13 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
     public DiscoveryFragment.CrawlerStruct getCrawlerStruct() {
         return crawlerStruct;
+    }
+
+    public void updateContacts() {
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(RegisteredContactsFragment.class.getName());
+
+        if (fragment instanceof RegisteredContactsFragment) {
+            ((RegisteredContactsFragment) fragment).loadContacts();
+        }
     }
 }

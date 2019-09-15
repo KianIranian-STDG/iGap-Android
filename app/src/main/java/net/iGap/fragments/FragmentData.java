@@ -1,19 +1,30 @@
 package net.iGap.fragments;
 
 
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentDataBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.FragmentDataViewModel;
+
+import org.jetbrains.annotations.NotNull;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -21,29 +32,34 @@ import net.iGap.viewmodel.FragmentDataViewModel;
  */
 public class FragmentData extends BaseFragment {
 
-    public static OnFragmentRemoveData onFragmentRemoveData;
-    private FragmentDataViewModel fragmentDataViewModel;
-    private FragmentDataBinding fragmentDataBinding;
-
-    public FragmentData() {
-        // Required empty public constructor
-    }
-
+    private FragmentDataViewModel viewModel;
+    private FragmentDataBinding binding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-        fragmentDataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_data, container, false);
-        return attachToSwipeBack(fragmentDataBinding.getRoot());
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new FragmentDataViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE));
+            }
+        }).get(FragmentDataViewModel.class);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_data, container, false);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+        return attachToSwipeBack(binding.getRoot());
+    }
+
+    @Override
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initDataBinding();
 
-        HelperToolbar toolbar = HelperToolbar.create()
+        binding.fdLayoutToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.date))
@@ -53,25 +69,17 @@ public class FragmentData extends BaseFragment {
                     public void onLeftIconClickListener(View view) {
                         popBackStackFragment();
                     }
-                });
+                }).getView());
 
-        fragmentDataBinding.fdLayoutToolbar.addView(toolbar.getView());
-
-        onFragmentRemoveData = new OnFragmentRemoveData() {
-            @Override
-            public void removeFragment() {
-                removeFromBaseFragment(FragmentData.this);
+        viewModel.getDateChanged().observe(getViewLifecycleOwner(), isChanged -> {
+            if (getActivity() instanceof ActivityMain && isChanged != null && isChanged) {
+                Fragment fragment = ((ActivityMain) getActivity()).getFragment(FragmentChatSettings.class.getName());
+                if (fragment instanceof FragmentChatSettings) {
+                    ((FragmentChatSettings) fragment).dateIsChanged();
+                }
+                popBackStackFragment();
             }
-        };
-    }
-
-    private void initDataBinding() {
-        fragmentDataViewModel = new FragmentDataViewModel();
-        fragmentDataBinding.setFragmentDataViewModel(fragmentDataViewModel);
-    }
-
-    public interface OnFragmentRemoveData {
-        void removeFragment();
+        });
     }
 
 }

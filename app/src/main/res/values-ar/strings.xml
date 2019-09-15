@@ -2138,6 +2138,7 @@
     <string name="do_not_send">لا ترسل</string>
     <string name="save_data_in_sd_card">حفظ المعلومات على البطاقة الجانبية</string>
     <string name="are_you_sure">هل أنت متأكد؟</string>
+    <string name="are_you_sure_edit_contact">هل أنت متأكد من تحرير الاتصال؟</string>
     <string name="change_storage_place">تغيير موقع التخزين</string>
     <string name="other_files">ملفات اخرى</string>
     <string name="title_import_contact_limit">دخول قائمة الاتصال</string>
@@ -2653,8 +2654,12 @@
     </array>
 
     <array name="onboard_descriptions">
-        <item>تجعلك المحفظة بمثابة حساب افتراضي يتصل برقم جوال ولم يعد عليك حمل محفظة أو نقود أو بطاقة مصرفية معك.</item>
-        <item>يمكنك استخدام زر المسح الضوئي لجعل التسوق أكثر متعة في المتاجر أو في سيارات الأجرة أو في أي مكان.</item>
+        <item>تجعلك المحفظة بمثابة حساب افتراضي يتصل برقم جوال ولم يعد عليك حمل محفظة أو نقود أو
+            بطاقة مصرفية معك.
+        </item>
+        <item>يمكنك استخدام زر المسح الضوئي لجعل التسوق أكثر متعة في المتاجر أو في سيارات الأجرة أو
+            في أي مكان.
+        </item>
     </array>
 
     <string name="top_company">شرکت تجارت الکترونیک پارسیان</string>
@@ -2969,4 +2974,6 @@
     <string name="coffeeShop_textView">کافی شاپ</string>
     <string name="wheelchair_textView">ویلچر</string>
     <string name="prayerRoom_textView">نمازخانه</string>
+    <string name="user_edited">تعديل المستخدم</string>
+    <string name="edit_contact">تحرير الاتصال</string>
 </resources>
