@@ -3,17 +3,17 @@ package net.iGap.kuknos.service.model;
 import io.realm.Realm;
 import io.realm.RealmObject;
 
-public class KuknosRealmM extends RealmObject {
+public class RealmKuknos extends RealmObject {
 
     private String kuknosSeedKey;
     private String kuknosPublicKey;
     private String kuknosPIN;
     private String kuknosMnemonic;
 
-    public KuknosRealmM() {
+    public RealmKuknos() {
     }
 
-    public KuknosRealmM(String kuknosSeedKey, String kuknosPublicKey, String kuknosPIN, String kuknosMnemonic) {
+    public RealmKuknos(String kuknosSeedKey, String kuknosPublicKey, String kuknosPIN, String kuknosMnemonic) {
         this.kuknosSeedKey = kuknosSeedKey;
         this.kuknosPublicKey = kuknosPublicKey;
         this.kuknosPIN = kuknosPIN;
@@ -57,7 +57,7 @@ public class KuknosRealmM extends RealmObject {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    KuknosRealmM realmUserInfo = realm.where(KuknosRealmM.class).findFirst();
+                    RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
                     if (realmUserInfo != null) {
                         realmUserInfo.setKuknosMnemonic(kuknosMnemonic);
                     }
@@ -71,7 +71,7 @@ public class KuknosRealmM extends RealmObject {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    KuknosRealmM realmUserInfo = realm.where(KuknosRealmM.class).findFirst();
+                    RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
                     if (realmUserInfo != null) {
                         realmUserInfo.setKuknosPIN(kuknosPin);
                     }
@@ -85,7 +85,7 @@ public class KuknosRealmM extends RealmObject {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    KuknosRealmM realmUserInfo = realm.where(KuknosRealmM.class).findFirst();
+                    RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
                     if (realmUserInfo != null) {
                         realmUserInfo.setKuknosSeedKey(kuknosSeed);
                         realmUserInfo.setKuknosPublicKey(publicKey);
@@ -100,7 +100,7 @@ public class KuknosRealmM extends RealmObject {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    KuknosRealmM realmUserInfo = realm.where(KuknosRealmM.class).findFirst();
+                    RealmKuknos realmUserInfo = realm.where(RealmKuknos.class).findFirst();
                     if (realmUserInfo != null) {
                         realmUserInfo.setKuknosSeedKey(kuknosSeed);
                     }
