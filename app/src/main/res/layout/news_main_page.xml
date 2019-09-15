@@ -6,7 +6,7 @@
         <import type="net.iGap.G" />
         <variable
             name="viewmodel"
-            type="net.iGap.news.viewmodel.NewsGroupListVM" />
+            type="net.iGap.news.viewmodel.NewsMainVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +18,7 @@
         <!-- TODO clean min height-->
 
         <LinearLayout
-            android:id="@+id/toolbar"
+            android:id="@+id/Toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -37,20 +37,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            app:layout_constraintTop_toBottomOf="@+id/Toolbar">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rcGroup"
-                android:paddingLeft="@dimen/dp4"
-                android:paddingRight="@dimen/dp4"
-                android:paddingBottom="@dimen/dp4"
-                android:paddingTop="@dimen/dp14"
+                android:id="@+id/rcMain"
+                android:paddingBottom="@dimen/dp8"
+                android:paddingTop="@dimen/dp4"
                 android:clipToPadding="false"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
         <ProgressBar
             android:id="@+id/ProgressV"

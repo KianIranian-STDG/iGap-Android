@@ -30,7 +30,7 @@ public class NewsList {
         this.news = news;
     }
 
-    private class News {
+    public class News {
         @SerializedName("id")
         private String id;
         @SerializedName("title")

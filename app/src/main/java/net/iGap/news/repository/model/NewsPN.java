@@ -2,16 +2,13 @@ package net.iGap.news.repository.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
-public class NewsGroup {
-
+public class NewsPN {
     @SerializedName("Ids")
     private String IDs;
     @SerializedName("content")
-    private List<Groups> groups;
+    private News news;
 
-    public NewsGroup() {
+    public NewsPN() {
     }
 
     public String getIDs() {
@@ -22,28 +19,25 @@ public class NewsGroup {
         this.IDs = IDs;
     }
 
-    public List<Groups> getGroups() {
-        return groups;
+    public News getNews() {
+        return news;
     }
 
-    public void setGroups(List<Groups> groups) {
-        this.groups = groups;
+    public void setNews(News news) {
+        this.news = news;
     }
 
-    public class Groups {
-
+    private class News {
         @SerializedName("id")
         private String id;
         @SerializedName("title")
         private String title;
-        @SerializedName("alias")
-        private String alias;
-        @SerializedName("description")
-        private String description;
+        @SerializedName("originalSource")
+        private String source;
         @SerializedName("image")
         private String image;
 
-        public Groups() {
+        public News() {
         }
 
         public String getId() {
@@ -62,20 +56,12 @@ public class NewsGroup {
             this.title = title;
         }
 
-        public String getAlias() {
-            return alias;
+        public String getSource() {
+            return source;
         }
 
-        public void setAlias(String alias) {
-            this.alias = alias;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
+        public void setSource(String source) {
+            this.source = source;
         }
 
         public String getImage() {

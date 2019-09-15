@@ -6,31 +6,30 @@ import androidx.lifecycle.ViewModel;
 import net.iGap.api.apiService.ApiResponse;
 import net.iGap.news.repository.MainRepo;
 import net.iGap.news.repository.model.NewsError;
-import net.iGap.news.repository.model.NewsFirstPage;
 import net.iGap.news.repository.model.NewsGroup;
-import net.iGap.news.repository.model.NewsList;
+import net.iGap.news.repository.model.NewsPublisher;
 
 import java.util.List;
 
-public class NewsGroupListVM extends ViewModel {
+public class NewsPublisherListVM extends ViewModel {
 
-    private MutableLiveData<NewsGroup> mGroups;
+    private MutableLiveData<List<NewsPublisher>> mData;
     private MutableLiveData<NewsError> error;
     private MutableLiveData<Boolean> progressState;
     private MainRepo repo;
 
-    public NewsGroupListVM() {
-        mGroups = new MutableLiveData<>();
+    public NewsPublisherListVM() {
+        mData = new MutableLiveData<>();
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
         repo = new MainRepo();
     }
 
     public void getData() {
-        repo.getNewsGroups(new ApiResponse<NewsGroup>() {
+        repo.getNewsPublishers(0, 50, new ApiResponse<List<NewsPublisher>>() {
             @Override
-            public void onResponse(NewsGroup newsGroup) {
-                mGroups.setValue(newsGroup);
+            public void onResponse(List<NewsPublisher> newsPublishers) {
+                mData.setValue(newsPublishers);
             }
 
             @Override
@@ -45,12 +44,12 @@ public class NewsGroupListVM extends ViewModel {
         });
     }
 
-    public MutableLiveData<NewsGroup> getmGroups() {
-        return mGroups;
+    public MutableLiveData<List<NewsPublisher>> getmData() {
+        return mData;
     }
 
-    public void setmGroups(MutableLiveData<NewsGroup> mGroups) {
-        this.mGroups = mGroups;
+    public void setmData(MutableLiveData<List<NewsPublisher>> mData) {
+        this.mData = mData;
     }
 
     public MutableLiveData<NewsError> getError() {

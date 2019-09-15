@@ -6,7 +6,7 @@
         <import type="net.iGap.G" />
         <variable
             name="viewmodel"
-            type="net.iGap.news.viewmodel.NewsGroupListVM" />
+            type="net.iGap.news.viewmodel.NewsPublisherListVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

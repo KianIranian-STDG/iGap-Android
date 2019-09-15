@@ -16,38 +16,41 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
-import net.iGap.databinding.NewsGrouplistFragBinding;
+import net.iGap.databinding.NewsPublisherlistFragBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
-import net.iGap.news.repository.model.NewsGroup;
+import net.iGap.news.repository.model.NewsPublisher;
 import net.iGap.news.view.Adapter.NewsGroupAdapter;
-import net.iGap.news.viewmodel.NewsGroupListVM;
+import net.iGap.news.view.Adapter.NewsPublisherAdapter;
+import net.iGap.news.viewmodel.NewsPublisherListVM;
 
-public class NewsGroupListFrag extends BaseFragment {
+import java.util.List;
 
-    private NewsGrouplistFragBinding binding;
-    private NewsGroupListVM newsVM;
+public class NewsPublisherListFrag extends BaseFragment {
+
+    private NewsPublisherlistFragBinding binding;
+    private NewsPublisherListVM newsVM;
     private HelperToolbar mHelperToolbar;
 
 
-    public static NewsGroupListFrag newInstance() {
-        NewsGroupListFrag kuknosLoginFrag = new NewsGroupListFrag();
+    public static NewsPublisherListFrag newInstance() {
+        NewsPublisherListFrag kuknosLoginFrag = new NewsPublisherListFrag();
         return kuknosLoginFrag;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        newsVM = ViewModelProviders.of(this).get(NewsGroupListVM.class);
+        newsVM = ViewModelProviders.of(this).get(NewsPublisherListVM.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.news_grouplist_frag, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.news_publisherlist_frag, container, false);
         binding.setViewmodel(newsVM);
         binding.setLifecycleOwner(this);
 
@@ -110,11 +113,11 @@ public class NewsGroupListFrag extends BaseFragment {
     }
 
     private void onDataChanged() {
-        newsVM.getmGroups().observe(getViewLifecycleOwner(), newsGroup -> initMainRecycler(newsGroup));
+        newsVM.getmData().observe(getViewLifecycleOwner(), newsGroup -> initMainRecycler(newsGroup));
     }
 
-    private void initMainRecycler(NewsGroup data) {
-        NewsGroupAdapter adapter = new NewsGroupAdapter(data);
+    private void initMainRecycler(List<NewsPublisher> data) {
+        NewsPublisherAdapter adapter = new NewsPublisherAdapter(data);
         binding.rcGroup.setAdapter(adapter);
     }
 
