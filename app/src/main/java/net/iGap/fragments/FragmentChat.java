@@ -2114,10 +2114,17 @@ public class FragmentChat extends BaseFragment
                                         G.handler.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                resetMessagingValue();
-                                                savedScrollMessageId = pinMessageId;
-                                                firstVisiblePositionOffset = 0;
-                                                setGapAndGetMessage(pinMessageId);
+                                                getRealmChat().executeTransactionAsync(new Realm.Transaction() {
+                                                    @Override
+                                                    public void execute(Realm realm) {
+                                                        RealmRoomMessage.setGapInTransaction(realm, messageId);
+                                                    }
+                                                }, () -> {
+                                                    resetMessagingValue();
+                                                    savedScrollMessageId = pinMessageId;
+                                                    firstVisiblePositionOffset = 0;
+                                                    getMessages();
+                                                });
                                             }
                                         });
                                     }
@@ -8080,16 +8087,6 @@ public class FragmentChat extends BaseFragment
         if (unreadCount > 0)
             recyclerView.scrollToPosition(0);
 
-    }
-
-    /**
-     * first set gap for room message for correctly load message and after than call {@link #getMessages()}
-     *
-     * @param messageId set gap for this message id
-     */
-    private void setGapAndGetMessage(long messageId) {
-        RealmRoomMessage.setGap(messageId);
-        getMessages();
     }
 
     /**

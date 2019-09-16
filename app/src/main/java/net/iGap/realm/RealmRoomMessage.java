@@ -927,13 +927,17 @@ public class RealmRoomMessage extends RealmObject {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                    if (realmRoomMessage != null) {
-                        realmRoomMessage.setPreviousMessageId(messageId);
-                        realmRoomMessage.setFutureMessageId(messageId);
-                    }
+                    setGapInTransaction(realm, messageId);
                 }
             });
+        }
+    }
+
+    public static void setGapInTransaction(Realm realm, final long messageId) {
+        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        if (realmRoomMessage != null) {
+            realmRoomMessage.setPreviousMessageId(messageId);
+            realmRoomMessage.setFutureMessageId(messageId);
         }
     }
 
