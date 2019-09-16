@@ -63,12 +63,6 @@
 
     <!--=======================custom theme=====================-->
 
-    <attr name="iGapButtonGray" format="reference" />
-    <attr name="greenTextIconColor" format="reference" />
-    <attr name="iGapKuknosLogout" format="reference" />
-
-    <!--=======================custom new theme=====================-->
-
     <attr name="rootBackgroundColor" format="color" />
     <attr name="iGapTitleTextColor" format="color" />
     <attr name="iGapSubtitleTextColor" format="color" />
@@ -77,6 +71,8 @@
     <attr name="iGapHintTextColor" format="color" />
     <attr name="iGapButtonColor" format="color" />
     <attr name="iGapButtonTextColor" format="color" />
+    <attr name="iGapPrimaryIconTextColor" format="color" />
+    <attr name="iGapLogoutButtonColor" format="color" />
 
     <!--=======================custom theme=====================-->
 

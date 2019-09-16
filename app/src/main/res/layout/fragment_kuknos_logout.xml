@@ -105,7 +105,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/fragKuknosLogoutSubmit"
-                    style="?iGapKuknosLogout"
+                    style="@style/BaseIGapButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -113,6 +113,7 @@
                     android:onClick="@{()->viewmodel.onSubmitBtn()}"
                     android:text="@string/kuknos_logout_btn"
                     android:textSize="@dimen/dp16"
+                    app:backgroundTint="?iGapLogoutButtonColor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosLogoutPassHolder"

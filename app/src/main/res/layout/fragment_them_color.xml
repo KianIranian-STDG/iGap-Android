@@ -130,7 +130,6 @@
                         android:gravity="center"
                         android:minWidth="@dimen/dp32"
                         android:text="@string/md_settings_cogwheel_button"
-                        android:textAppearance="@style/TextIconAppearance.menu"
                         android:textSize="@dimen/dp16" />
 
                     <ImageView
@@ -236,7 +235,6 @@
                         android:gravity="center"
                         android:minWidth="@dimen/dp32"
                         android:text="@string/md_settings_cogwheel_button"
-                        android:textAppearance="@style/TextIconAppearance.menu"
                         android:textSize="@dimen/dp16" />
 
                     <ImageView

@@ -133,92 +133,13 @@
 
     <!--custom theme-->
 
-    <!--==================================Black==================================-->
-
-    <!--setting-->
-    <style name="background_setting_dark">
-        <item name="android:background">@color/background_setting_dark</item>
-    </style>
-
     <style name="dialog_dark">
         <item name="md_dark_theme">true</item>
     </style>
 
-
-    <!--==================================Light==================================-->
-
     <style name="iGapEditTextStyle">
         <item name="android:textColorHint">?iGapHintTextColor</item>
         <item name="android:textColor">?iGapTitleTextColor</item>
-    </style>
-
-    <style name="iGapButtonStrokeLight" parent="BaseIGapStrokeButtonStyle">
-        <item name="textColor">@color/buttonColor</item>
-        <item name="strokeColor">@color/buttonColor</item>
-    </style>
-
-    <style name="iGapButtonStrokeDark" parent="BaseIGapStrokeButtonStyle">
-        <item name="android:textColor">@color/white</item>
-        <item name="strokeColor">@color/players_dark_background</item>
-    </style>
-
-    <style name="iGapButtonGrayLight" parent="BaseIGapGrayButtonStyle">
-        <item name="backgroundTint">@color/buttonColor</item>
-    </style>
-
-    <style name="iGapKuknosLogoutLight" parent="BaseIGapButtonStyle">
-        <item name="backgroundTint">@color/not_now_button_selected</item>
-    </style>
-
-    <style name="iGapKuknosLogoutDark" parent="BaseIGapButtonStyle">
-        <item name="backgroundTint">@color/players_dark_background</item>
-    </style>
-
-    <style name="iGapButtonGrayDark" parent="BaseIGapGrayButtonStyle">
-        <item name="backgroundTint">@color/unread_status</item>
-    </style>
-
-
-    <!--==================================Blue grey complete==================================-->
-
-    <style name="page_background_BlueGreyComplete">
-        <item name="android:background">#CFD8DC</item>
-    </style>
-
-    <style name="text_title_style_setting_BlueGreyComplete">
-        <item name="android:textColor">#0d0d0d</item>
-    </style>
-
-    <style name="hint_style_setting_black">
-        <item name="android:textColorHint">#757575</item>
-        <item name="android:textColor">#212121</item>
-    </style>
-
-
-    <!--==================================indigo complete==================================-->
-
-    <style name="page_background_indigoComplete">
-        <item name="android:background">#C5CAE9</item>
-    </style>
-
-
-    <!--==================================Brown complete==================================-->
-
-    <style name="page_background_BrownComplete">
-        <item name="android:background">#D7CCC8</item>
-    </style>
-
-    <!--==================================Teal complete==================================-->
-
-    <style name="page_background_TealComplete">
-        <item name="android:background">#B2DFDB</item>
-    </style>
-
-
-    <!--==================================Grey complete==================================-->
-
-    <style name="page_background_GreyComplete">
-        <item name="android:background">#f5f5f5</item>
     </style>
 
     <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
@@ -305,10 +226,6 @@
         <item name="android:textColor">?iGapTitleTextColor</item>
     </style>
 
-    <style name="greenIconTextViewStyle" parent="baseFontIcon">
-        <item name="android:textColor">?greenTextIconColor</item>
-    </style>
-
     <style name="myIconTextViewStyleGray" parent="baseFontIcon">
         <item name="android:textColor">?iGapSubtitleTextColor</item>
     </style>
@@ -359,6 +276,15 @@
 
     <style name="iGapButton" parent="BaseIGapButtonStyle">
         <item name="backgroundTint">?iGapButtonColor</item>
+    </style>
+
+    <style name="iGapButtonStroke" parent="BaseIGapStrokeButtonStyle">
+        <item name="android:textColor">?iGapButtonTextColor</item>
+        <item name="strokeColor">?iGapButtonColor</item>
+    </style>
+
+    <style name="greenIconTextViewStyle" parent="baseFontIcon">
+        <item name="android:textColor">?iGapPrimaryIconTextColor</item>
     </style>
 
 </resources>
