@@ -241,7 +241,7 @@
     <string name="show_all_media" >Afficher tous les mdias</string>
     <string name="save_to_gallery" >Sauvegarder dans la gallrie</string>
     <string name="delete_from_gallery" >Supprimer de la galerie</string>
-    <string name="select_room" >Slectionner un discussion</string>
+    <string name="select_room" >Sélectionner un discussion</string>
     <string name="edited" >       modifi </string>
     <string name="today" >Aujourd\'hui</string>
     <string name="yesterday" >Hier</string>
@@ -419,7 +419,7 @@
     <string name="E_713_1" >Charge utile incorrecte: signe n\'est pas correct</string>
     <string name="E_713_2" >Charge utile incorrecte: ID de chambre de discussion n\'est pas correct</string>
     <string name="E_713_3" >Charge utile incorrecte: plafond de limite maximal  n\'est pas correct</string>
-    <string name="E_713_4" >Charge utile incorrecte: slectionneur  n\'est pas correct</string>
+    <string name="E_713_4" >Charge utile incorrecte: sélectionneur  n\'est pas correct</string>
     <string name="E_713_5" >Charge utile incorrecte: Offset  n\'est pas correct</string>
     <string name="E_714" >Erreçur Interne du Serveur</string>
     <string name="E_715" >ce fichier n\'a pas été retrouv</string>
@@ -1184,7 +1184,7 @@
     <string name="sync_contact" > synchronisation des contacts</string>
     <string name="satellite_view" >Vue satellite</string>
     <string name="default_view" >Vue par défaut</string>
-    <string name="send_location_text" >Envoyer l\'emplacement slectionn</string>
+    <string name="send_location_text" >Envoyer l\'emplacement sélectionné</string>
     <string name="map_distance" >distance en mtre</string>
     <string name="get_location_data" >rceptions des informations en charge</string>
     <string name="calculation" >calculions en cours</string>
@@ -1274,7 +1274,7 @@
     <string name="ignore" >ignorer</string>
     <string name="hashtag" >hashtag,</string>
     <string name="igap_update" >mis   jour</string>
-    <string name="permission_auto_start" >veuillez slectionner et activer iGap dans le menu pour recevoir des messages lorsque méme l\'application n\'est pas active en arrire-plan</string>
+    <string name="permission_auto_start" >veuillez sélectionner et activer iGap dans le menu pour recevoir des messages lorsque méme l\'application n\'est pas active en arrire-plan</string>
     <string name="dont_show_again" >ne plus afficher</string>
     <string name="invitation_message" >Bonjour! tu peux nous rejoinre sur IGAP par le lien suivant ; on été\'attend \n     https://www.igap.net \nnuméro de personne qui vous recommande</string>
     <string name="namma_per_uh" ></string>
@@ -1594,7 +1594,7 @@
     <string name="refound" >veuillez choisir un  fichier</string>
     <string name="Recently_Sticker" >récemment</string>
     <string name="Favorite_Sticker" >favoris</string>
-    <string name="item_selected" >slectionn</string>
+    <string name="item_selected" >sélectionné</string>
     <string name="terms_and_condition" >j\'accepte</string>
     <string name="terms_and_condition_clickable" >les rglements</string>
     <string name="charity_confirm" >vous avez envisag la somme s% Rial pour faire les dons de charité</string>
@@ -1754,7 +1754,7 @@
     <string name="buy_internet_package_year_filter_title" >anne %of</string>
     <string name="buy_internet_package_volume_filter_gb_title" >%.0f GB</string>
     <string name="buy_internet_package_volume_filter_mb_title" >%.0f MB</string>
-    <string name="buy_internet_package_choose_title" >slectionnez</string>
+    <string name="buy_internet_package_choose_title" >sélectionnez</string>
     <string name="beeptunes_purchase_song" >chansons achetes</string>
     <string name="beeptunes_sync_song" >chansons téléchargées</string>
     <string name="beeptunesـfavorite_song" >chansons prfres</string>
