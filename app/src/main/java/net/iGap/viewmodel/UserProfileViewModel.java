@@ -211,7 +211,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         isDarkMode.set(G.isDarkTheme);
 
         //set user info text gravity
-        if (G.selectedLanguage.equals("en")) {
+        if (G.selectedLanguage.equals("en") || G.selectedLanguage.equals("fr")) {
             textsGravity.set(Gravity.LEFT);
         } else {
             textsGravity.set(Gravity.RIGHT);
