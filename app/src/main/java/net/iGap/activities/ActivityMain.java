@@ -1348,9 +1348,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             } else {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                    if (getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment) {
-                        ((PaymentFragment) getSupportFragmentManager().findFragmentById(R.id.mainFrame)).onBackPressed();
-                    } else {
+                    if (!(getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment)) {
                         super.onBackPressed();
                     }
                 } else {
@@ -1933,7 +1931,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    public Fragment getFragment(String fragmentTag){
+    public Fragment getFragment(String fragmentTag) {
         return getSupportFragmentManager().findFragmentByTag(fragmentTag);
     }
 }

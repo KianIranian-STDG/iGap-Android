@@ -1,6 +1,7 @@
 package net.iGap.internetpackage;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,6 +97,7 @@ public class BuyInternetPackageFragment extends BaseFragment {
         viewModel.getGoToPaymentPage().observe(getViewLifecycleOwner(), token -> {
             if (getActivity() != null && token != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_internet_package_title), token, result -> {
+                    Log.wtf(this.getClass().getName(), "on back pressed : " + result.isSuccess());
                     if (getActivity() != null && result.isSuccess()) {
                         getActivity().onBackPressed();
                     }
