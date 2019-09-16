@@ -795,7 +795,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
             public void bindData(final StructContactInfo data) {
 
-                if (G.selectedLanguage.equals("en")) {
+                if (G.selectedLanguage.equals("en") || G.selectedLanguage.equals("fr")) {
                     txtName.setGravity(Gravity.LEFT);
                     txtPhone.setGravity(Gravity.LEFT);
                 } else {
