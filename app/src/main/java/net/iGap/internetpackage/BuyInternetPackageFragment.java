@@ -97,7 +97,6 @@ public class BuyInternetPackageFragment extends BaseFragment {
         viewModel.getGoToPaymentPage().observe(getViewLifecycleOwner(), token -> {
             if (getActivity() != null && token != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.buy_internet_package_title), token, result -> {
-                    Log.wtf(this.getClass().getName(), "on back pressed : " + result.isSuccess());
                     if (getActivity() != null && result.isSuccess()) {
                         getActivity().onBackPressed();
                     }
