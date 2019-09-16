@@ -778,27 +778,42 @@ public class RealmRoom extends RealmObject {
         }
     }
 
+    public static void setPrivateInTransaction(Realm realm, final long roomId) {
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null) {
+            if (realmRoom.getType() == GROUP) {
+                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                if (realmGroupRoom != null) {
+                    realmGroupRoom.setPrivate(true);
+                }
+            } else {
+                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                if (realmChannelRoom != null) {
+                    realmChannelRoom.setPrivate(true);
+                }
+            }
+        }
+    }
+
     public static void setPrivate(final long roomId) {
         try (Realm realm = Realm.getDefaultInstance()) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                    if (realmRoom != null) {
-                        if (realmRoom.getType() == GROUP) {
-                            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                            if (realmGroupRoom != null) {
-                                realmGroupRoom.setPrivate(true);
-                            }
-                        } else {
-                            RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                            if (realmChannelRoom != null) {
-                                realmChannelRoom.setPrivate(true);
-                            }
-                        }
-                    }
+                    setPrivateInTransaction(realm, roomId);
                 }
             });
+        }
+    }
+
+    public static void setPrivate(final long roomId, Realm.Transaction.OnSuccess onSuccess) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    setPrivateInTransaction(realm, roomId);
+                }
+            }, onSuccess);
         }
     }
 

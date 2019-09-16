@@ -554,13 +554,14 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
             @Override
             public void onChannelRemoveUsername(final long roomId) {
                 G.handler.post(() -> {
-                    viewModel.setPrivate(true);
-                    if (viewModel.inviteLink == null || viewModel.inviteLink.isEmpty() || viewModel.inviteLink.equals("https://")) {
-                        new RequestChannelRevokeLink().channelRevokeLink(roomId);
-                    } else {
-                        /*setTextChannelLik();*/
-                    }
-                    RealmRoom.setPrivate(roomId);
+                    RealmRoom.setPrivate(roomId, () -> {
+                        viewModel.setPrivate(true);
+                        if (viewModel.inviteLink == null || viewModel.inviteLink.isEmpty() || viewModel.inviteLink.equals("https://")) {
+                            new RequestChannelRevokeLink().channelRevokeLink(roomId);
+                        } else {
+                            /*setTextChannelLik();*/
+                        }
+                    });
                 });
             }
 

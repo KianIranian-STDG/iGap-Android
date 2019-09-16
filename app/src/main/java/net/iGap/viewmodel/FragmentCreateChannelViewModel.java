@@ -124,9 +124,10 @@ public class FragmentCreateChannelViewModel extends ViewModel implements OnChann
         if ((channelType == R.id.privateChannel || channelLink.get().length() > 0) && roomId > 0) {
             showLoading.set(View.VISIBLE);
             if (channelType == R.id.privateChannel) {
-                RealmRoom.setPrivate(roomId);
-                showLoading.set(View.GONE);
-                getRoom.setValue(roomId);
+                RealmRoom.setPrivate(roomId, () -> {
+                    showLoading.set(View.GONE);
+                    getRoom.setValue(roomId);
+                });
             } else {
                 new RequestChannelUpdateUsername().channelUpdateUsername(roomId, channelLink.get().replace(Config.IGAP_LINK_PREFIX, ""));
             }
