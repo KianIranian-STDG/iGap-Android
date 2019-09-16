@@ -279,32 +279,35 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) activity.
                 getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
 
-        if (bottomNavigationFragment != null) {
-            for (int i = 0; i < discoveryArrayList.size(); i++) {
-                ArrayList<DiscoveryItemField> discoveryFields = discoveryArrayList.get(i).discoveryFields;
-                for (int j = 0; j < discoveryFields.size(); j++) {
-                    if (discoveryFields.get(j).id == bottomNavigationFragment.getCrawlerStruct().getPages()
-                            .get(bottomNavigationFragment.getCrawlerStruct().getCurrentPage())) {
-                        if (bottomNavigationFragment.getCrawlerStruct().getPageSum() > 0) {
+        try {
+            if (bottomNavigationFragment != null) {
+                for (int i = 0; i < discoveryArrayList.size(); i++) {
+                    ArrayList<DiscoveryItemField> discoveryFields = discoveryArrayList.get(i).discoveryFields;
+                    for (int j = 0; j < discoveryFields.size(); j++) {
+                        if (discoveryFields.get(j).id == bottomNavigationFragment.getCrawlerStruct().getPages()
+                                .get(bottomNavigationFragment.getCrawlerStruct().getCurrentPage())) {
 
-                            int currentPage = bottomNavigationFragment.getCrawlerStruct().getCurrentPage();
-                            currentPage++;
+                            if (bottomNavigationFragment.getCrawlerStruct().getPageSum() > 0) {
 
-                            bottomNavigationFragment.getCrawlerStruct().setCurrentPage(currentPage);
-                            bottomNavigationFragment.getCrawlerStruct().setCurrentPageId(discoveryFields.get(j).id);
-                            BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryFields.get(j), getActivity(),
-                                    bottomNavigationFragment.getCrawlerStruct().getPageSum() > 1);
+                                int currentPage = bottomNavigationFragment.getCrawlerStruct().getCurrentPage();
+                                currentPage++;
 
-                        } else
-                            BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryFields.get(j), getActivity(), false);
+                                bottomNavigationFragment.getCrawlerStruct().setCurrentPage(currentPage);
+                                bottomNavigationFragment.getCrawlerStruct().setCurrentPageId(discoveryFields.get(j).id);
+                                BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryFields.get(j), getActivity(), bottomNavigationFragment.getCrawlerStruct().getHaveNext());
 
-                        needToCrawl = false;
-                        return;
+                            } else
+                                BaseViewHolder.handleDiscoveryFieldsClickStatic(discoveryFields.get(j), getActivity(), false);
+
+                            needToCrawl = false;
+                            return;
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+            HelperError.showSnackMessage(getResources().getString(R.string.link_not_valid), false);
         }
-
     }
 
     private void setAdapterData(ArrayList<DiscoveryItem> discoveryArrayList, String title) {
@@ -360,6 +363,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         private int currentPage;
         private int currentPageId;
         private boolean workDone = false;
+        private boolean haveNext = false;
         private List<Integer> pages;
 
         public interface OnDeepValidLink {
@@ -395,6 +399,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
 
         public void setCurrentPageId(int currentPageId) {
             workDone = currentPageId == pages.get(pages.size() - 1);
+            haveNext = currentPageId != pages.get(pages.size() - 1);
             this.currentPageId = currentPageId;
         }
 
@@ -402,8 +407,8 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             return workDone;
         }
 
-        public void setWorkDone(boolean workDone) {
-            this.workDone = workDone;
+        public boolean getHaveNext() {
+            return haveNext;
         }
     }
 }

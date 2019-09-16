@@ -364,7 +364,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
                     return;
                 }
 
-                if (G.selectedLanguage.equals("en")) {
+                if (G.selectedLanguage.equals("en")  || G.selectedLanguage.equals("fr")) {
                     holder.arrow.setRotation(270);
                 } else {
                     holder.arrow.setRotation(90);

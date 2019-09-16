@@ -181,7 +181,7 @@ public class FileListerAdapter extends RecyclerView.Adapter<FileListerAdapter.Fi
     public void onBindViewHolder(FileListHolder holder, int position) {
         File f = data.get(position);
 
-        if (G.selectedLanguage.equals("en")) {
+        if (G.selectedLanguage.equals("en") || G.selectedLanguage.equals("fr")) {
             holder.name.setGravity(Gravity.LEFT);
         } else {
             holder.name.setGravity(Gravity.RIGHT);

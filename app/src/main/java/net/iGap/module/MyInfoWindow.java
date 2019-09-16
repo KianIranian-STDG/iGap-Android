@@ -130,7 +130,7 @@ public class MyInfoWindow extends InfoWindow {
         txtName.setText(displayName);
         txtName.setTypeface(G.typeface_IRANSansMobile_Bold, Typeface.BOLD);
 
-        if (G.selectedLanguage.equals("en")) {
+        if (G.selectedLanguage.equals("en") || G.selectedLanguage.equals("fr")) {
             txtComment.setGravity(Gravity.RIGHT);
             txtOpenComment.setRotation(90);
         } else {
