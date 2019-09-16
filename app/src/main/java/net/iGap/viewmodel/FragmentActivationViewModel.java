@@ -79,9 +79,7 @@ public class FragmentActivationViewModel extends ViewModel {
 
     public void resentActivationCodeClick() {
         enabledResendCodeButton.set(false);
-        cancelTimer();
         requestRegister();
-        counterTimer();
     }
 
     public void loginButtonOnClick(String enteredCode) {
@@ -141,8 +139,10 @@ public class FragmentActivationViewModel extends ViewModel {
         repository.registration(new RegisterRepository.RepositoryCallbackWithError<ErrorWithWaitTime>() {
             @Override
             public void onSuccess() {
-                cancelTimer();
-                counterTimer();
+                G.handler.post(()->{
+                    cancelTimer();
+                    counterTimer();
+                });
             }
 
             @Override
