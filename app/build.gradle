@@ -54,17 +54,18 @@ android {
     }
 
     buildTypes {
+
         release {
             minifyEnabled true
             shrinkResources true
-            buildConfigField "String", "Token", "\"\""
+            buildConfigField "String", "Store", "\"release\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
         debug {
             debuggable true
             jniDebuggable true
-            buildConfigField "String", "Token", "\"\""
+            buildConfigField "String", "Store", "\"debug\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -73,7 +74,7 @@ android {
 
             minifyEnabled true
             shrinkResources true
-            buildConfigField "String", "Token", "\"qkvtld\""
+            buildConfigField "String", "Store", "\"MyKet\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -82,7 +83,7 @@ android {
 
             minifyEnabled true
             shrinkResources true
-            buildConfigField "String", "Token", "\"d11rrq\""
+            buildConfigField "String", "Store", "\"IranMarket\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -91,7 +92,7 @@ android {
 
             minifyEnabled true
             shrinkResources true
-            buildConfigField "String", "Token", "\"fd0txl\""
+            buildConfigField "String", "Store", "\"WEB\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -100,7 +101,25 @@ android {
 
             minifyEnabled true
             shrinkResources true
-            buildConfigField "String", "Token", "\"u2cuct\""
+            buildConfigField "String", "Store", "\"CharKhone\""
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_GooglePlay {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"GooglePlay\""
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Bazaar {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Bazaar\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
