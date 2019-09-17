@@ -532,6 +532,7 @@
     <string name="E_116">"خطایی از سمت کلاینت: نوع جنسیت اشتباه است."</string>
     <string name="E_117">"خطای درونی سرور"</string>
     <string name="E_118">اخطار: تعداد مخاطبین از محدودیت تعداد سمت سرور فراتر است.</string>
+    <string name="E_118_5">اخطار: تعداد پکیج انتقال مخاطبین از محدودیت تعداد سمت سرور فراتر است.</string>
     <string name="list_admin">فهرست مدیران</string>
     <string name="list_modereator">فهرست ناظران</string>
     <string name="desc">توضیحات</string>

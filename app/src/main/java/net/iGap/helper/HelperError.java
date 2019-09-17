@@ -20,6 +20,7 @@ import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
+import net.iGap.module.SHP_SETTING;
 
 public class HelperError {
 
@@ -91,6 +92,9 @@ public class HelperError {
                 error = G.fragmentActivity.getResources().getString(R.string.E_116);
                 break;
             case 118:
+                if (minorCode == 5) {
+                    error = G.fragmentActivity.getResources().getString(R.string.E_118_5);
+                }
                 if (minorCode == 7)
                     error = G.fragmentActivity.getResources().getString(R.string.E_118);
                 break;

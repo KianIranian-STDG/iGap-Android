@@ -22,6 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmContacts;
@@ -101,7 +102,7 @@ public class Contacts {
 
 
     public static void showLimitDialog() {
-        if (hasExceedDialogStatusShown())
+        if (HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_DIALOG))
             return;
         try {
             if (G.currentActivity != null && !G.currentActivity.isFinishing()) {
@@ -113,7 +114,7 @@ public class Contacts {
                                     .title(R.string.title_import_contact_limit)
                                     .content(R.string.content_import_contact_limit)
                                     .positiveText(G.context.getResources().getString(R.string.B_ok)).show();
-                            ExceedDialogStatusShowed();
+                            HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_DIALOG, true);
                         }
                     }
                 });
@@ -124,17 +125,6 @@ public class Contacts {
         } catch (Exception e1) {
             e1.printStackTrace();
         }
-    }
-
-    private static boolean hasExceedDialogStatusShown() {
-        SharedPreferences pref = G.context.getSharedPreferences("ExceedDialogStatus", 0);
-        return pref.getBoolean("status", false);
-    }
-
-    private static void ExceedDialogStatusShowed() {
-        SharedPreferences pref = G.context.getSharedPreferences("ExceedDialogStatus", 0);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean("status", true);
     }
 
     /*
@@ -327,7 +317,7 @@ public class Contacts {
             return;
         }
 
-        if (RealmUserInfo.isLimitImportContacts()) {
+        if (HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_NUMBER)) {
             showLimitDialog();
             return;
         }
