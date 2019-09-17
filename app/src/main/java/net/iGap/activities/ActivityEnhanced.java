@@ -84,7 +84,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
         Log.wtf("ActivityEnhanced","super.onCreate start");*/
         super.onCreate(savedInstanceState);
         /*Log.wtf("ActivityEnhanced","super.onCreate end");*/
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             /*Log.wtf("ActivityEnhanced","AvatarHandler start");*/
             avatarHandler = new AvatarHandler();
             /*Log.wtf("ActivityEnhanced","AvatarHandler end");*/
@@ -250,7 +250,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             if (!G.isAppInFg) {
                 G.isAppInFg = true;
                 G.isChangeScrFg = false;
@@ -281,7 +281,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             avatarHandler.unregisterChangeFromOtherAvatarHandler();
 
             if (!G.isScrInFg || !G.isChangeScrFg) {
@@ -382,7 +382,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             unregisterReceiver(myBroadcast);
         }
     }
