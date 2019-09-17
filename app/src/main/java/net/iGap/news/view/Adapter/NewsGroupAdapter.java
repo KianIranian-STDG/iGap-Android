@@ -1,7 +1,5 @@
 package net.iGap.news.view.Adapter;
 
-import android.graphics.Point;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.news.repository.model.NewsGroup;
 
@@ -78,5 +75,13 @@ public class NewsGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public interface onClickListener {
         void onNewsGroupClick(NewsGroup.Groups news);
+    }
+
+    public onClickListener getCallBack() {
+        return callBack;
+    }
+
+    public void setCallBack(onClickListener callBack) {
+        this.callBack = callBack;
     }
 }

@@ -3,6 +3,7 @@ package net.iGap.news.repository.api;
 import net.iGap.api.NewsApi;
 import net.iGap.api.apiService.ApiResponse;
 import net.iGap.api.apiService.ApiServiceProvider;
+import net.iGap.news.repository.model.NewsApiArg;
 import net.iGap.news.repository.model.NewsDetail;
 import net.iGap.news.repository.model.NewsFPList;
 import net.iGap.news.repository.model.NewsGroup;
@@ -15,6 +16,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import yogesh.firzen.mukkiasevaigal.P;
 
 public class NewsAPIRepository {
 
@@ -56,16 +58,25 @@ public class NewsAPIRepository {
         });
     }
 
-    public void getNewsList(NewsType type, int start, int display, ApiResponse<NewsList> apiResponse) {
-        switch (type) {
-            case LATEST:
-                getLatestNews(start, display, apiResponse);
+    public void getNewsList(NewsApiArg arg, ApiResponse<NewsList> apiResponse) {
+        switch (arg.getmType()) {
+            case Latest:
+                getLatestNews(arg.getStart(), arg.getDisplay(), apiResponse);
                 break;
-            case HITS:
-                getHitNews(start, display, apiResponse);
+            case MOST_HITS:
+                getHitNews(arg.getStart(), arg.getDisplay(), apiResponse);
                 break;
-            case FEATURED:
-                getFeaturedNews(start, display, apiResponse);
+            case FEATURED_NEWS:
+                getFeaturedNews(arg.getStart(), arg.getDisplay(), apiResponse);
+                break;
+            case GROUP_NEWS:
+                getGroupsNews(arg.getGroupID(), arg.getStart(), arg.getDisplay(), apiResponse);
+                break;
+            case FEATURED_GROUP:
+                getFeaturedNewsForGroup(arg.getGroupID(), arg.getStart(), arg.getDisplay(), apiResponse);
+                break;
+            case ERGENT_GROUP:
+                getErgentNewsForGroup(arg.getGroupID(), arg.getStart(), arg.getDisplay(), apiResponse);
                 break;
         }
     }

@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.news.viewmodel.NewsGroupListVM" />
+            type="net.iGap.news.viewmodel.NewsListVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,21 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         style="?backgroundColorSettingTheme">
-
-        <!-- TODO clean min height-->
-
-        <LinearLayout
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:minHeight="48dp"
-            android:background="@color/sky_blue"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </LinearLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/pullToRefresh"

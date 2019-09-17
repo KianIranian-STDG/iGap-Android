@@ -2,6 +2,7 @@ package net.iGap.news.repository.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewsList {
@@ -37,8 +38,17 @@ public class NewsList {
         private String title;
         @SerializedName("image")
         private String image;
+        @SerializedName("type")
+        private int type;
 
         public News() {
+        }
+
+        public News(String id, String title, String image, int type) {
+            this.id = id;
+            this.title = title;
+            this.image = image;
+            this.type = type;
         }
 
         public String getId() {
@@ -64,5 +74,24 @@ public class NewsList {
         public void setImage(String image) {
             this.image = image;
         }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
+    }
+
+
+    public List<News> getFake() {
+        List<News> groups = new ArrayList<>();
+        groups.add(new News("101", "temp", "", 0));
+        groups.add(new News("101", "temp", "", 1));
+        groups.add(new News("101", "temp", "", 0));
+        groups.add(new News("101", "temp", "", 0));
+        groups.add(new News("101", "temp", "", 1));
+        return groups;
     }
 }

@@ -63,7 +63,7 @@ public class NewsMainVM extends ViewModel {
 
             @Override
             public void onFailed(String error) {
-
+                addTree4(null);
             }
 
             @Override
@@ -86,7 +86,7 @@ public class NewsMainVM extends ViewModel {
     }
 
     private void addTree4(List<NewsFPList> newsFPList) {
-        if (newsFPList.size() == 0) {
+        if (newsFPList == null || newsFPList.size() == 0) {
             mainList.setValue(temp);
             return;
         }
@@ -137,11 +137,13 @@ public class NewsMainVM extends ViewModel {
         NewsFirstPage nfp1 = new NewsFirstPage(null, tempBtn, null, 2);
         this.temp.add(nfp1);
 
-        List<NewsFPList> tempList = new ArrayList<>();
-        for (int i=0;i<6;i++)
-            tempList.add(newsFPList.get(0));
-        NewsFirstPage nfp = new NewsFirstPage(null, null, tempList, 5);
-        this.temp.add(nfp);
+        if (newsFPList != null) {
+            List<NewsFPList> tempList = new ArrayList<>();
+            for (int i = 0; i < 6; i++)
+                tempList.add(newsFPList.get(0));
+            NewsFirstPage nfp = new NewsFirstPage(null, null, tempList, 5);
+            this.temp.add(nfp);
+        }
 
         NewsMainBTN btn2 = new NewsMainBTN(102, "گروه های خبری",0);
         NewsMainBTN btn3 = new NewsMainBTN(103, "منابع خبری",0);

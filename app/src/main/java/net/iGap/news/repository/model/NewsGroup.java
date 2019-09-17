@@ -2,6 +2,7 @@ package net.iGap.news.repository.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewsGroup {
@@ -46,6 +47,14 @@ public class NewsGroup {
         public Groups() {
         }
 
+        public Groups(String id, String title, String alias, String description, String image) {
+            this.id = id;
+            this.title = title;
+            this.alias = alias;
+            this.description = description;
+            this.image = image;
+        }
+
         public String getId() {
             return id;
         }
@@ -85,5 +94,14 @@ public class NewsGroup {
         public void setImage(String image) {
             this.image = image;
         }
+    }
+
+    public List<Groups> getFake() {
+        List<Groups> groups = new ArrayList<>();
+        groups.add(new Groups("101", "temp", "", "", ""));
+        groups.add(new Groups("101", "temp", "", "", ""));
+        groups.add(new Groups("101", "temp", "", "", ""));
+        groups.add(new Groups("101", "temp", "", "", ""));
+        return groups;
     }
 }

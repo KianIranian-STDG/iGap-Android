@@ -1,6 +1,5 @@
 package net.iGap.news.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +12,17 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
 import net.iGap.databinding.NewsGrouplistFragBinding;
+import net.iGap.databinding.NewsListFragBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -28,32 +30,34 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.news.repository.model.NewsApiArg;
 import net.iGap.news.repository.model.NewsGroup;
+import net.iGap.news.repository.model.NewsList;
 import net.iGap.news.view.Adapter.NewsGroupAdapter;
+import net.iGap.news.view.Adapter.NewsListAdapter;
 import net.iGap.news.viewmodel.NewsGroupListVM;
+import net.iGap.news.viewmodel.NewsListVM;
 
-public class NewsGroupListFrag extends BaseFragment {
+public class NewsListFrag extends BaseFragment {
 
-    private NewsGrouplistFragBinding binding;
-    private NewsGroupListVM newsVM;
-    private HelperToolbar mHelperToolbar;
+    private NewsListFragBinding binding;
+    private NewsListVM newsVM;
+    private NewsApiArg apiArg;
 
-
-    public static NewsGroupListFrag newInstance() {
-        NewsGroupListFrag kuknosLoginFrag = new NewsGroupListFrag();
+    public static NewsListFrag newInstance() {
+        NewsListFrag kuknosLoginFrag = new NewsListFrag();
         return kuknosLoginFrag;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        newsVM = ViewModelProviders.of(this).get(NewsGroupListVM.class);
+        newsVM = ViewModelProviders.of(this).get(NewsListVM.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.news_grouplist_frag, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.news_list_frag, container, false);
         binding.setViewmodel(newsVM);
         binding.setLifecycleOwner(this);
 
@@ -67,27 +71,11 @@ public class NewsGroupListFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLeftIcon(R.string.back_icon)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-                    }
-                })
-                .setLogoShown(true);
-
-        LinearLayout toolbarLayout = binding.toolbar;
-        Utils.darkModeHandler(toolbarLayout);
-        toolbarLayout.addView(mHelperToolbar.getView());
-
         binding.rcGroup.setHasFixedSize(true);
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         binding.rcGroup.setLayoutManager(layoutManager);
 
-        newsVM.getData();
+        newsVM.getData(apiArg);
         onErrorObserver();
         onDataChanged();
         onProgress();
@@ -116,25 +104,32 @@ public class NewsGroupListFrag extends BaseFragment {
     }
 
     private void onDataChanged() {
-        newsVM.getmGroups().observe(getViewLifecycleOwner(), newsGroup -> initMainRecycler(newsGroup));
+        newsVM.getmData().observe(getViewLifecycleOwner(), newsList -> initMainRecycler(newsList));
     }
 
-    private void initMainRecycler(NewsGroup data) {
-        NewsGroupAdapter adapter = new NewsGroupAdapter(data);
-        adapter.setCallBack(news -> {
-            FragmentManager fragmentManager = getChildFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            Fragment fragment = fragmentManager.findFragmentByTag(NewsGroupPagerFrag.class.getName());
+    private void initMainRecycler(NewsList data) {
+        NewsListAdapter adapter = new NewsListAdapter(data);
+        adapter.setCallback(new NewsListAdapter.onClickListener() {
+            @Override
+            public void onNewsGroupClick(NewsList.News slide) {
+                /*FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(NewsGroupPagerFrag.class.getName());
                 if (fragment == null) {
                     fragment = NewsGroupPagerFrag.newInstance();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-            Bundle args = new Bundle();
-            args.putString("GroupID", news.getId());
-            fragment.setArguments(args);
-            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();*/
+            }
         });
         binding.rcGroup.setAdapter(adapter);
     }
 
+    public NewsApiArg getApiArg() {
+        return apiArg;
+    }
+
+    public void setApiArg(NewsApiArg apiArg) {
+        this.apiArg = apiArg;
+    }
 }

@@ -28,13 +28,13 @@ public interface NewsApi {
     @GET("news/title/featured") //checked
     Call<NewsList> getFeaturedNews(@Query("start") int start, @Query("display") int display);
 
-    @GET("news/title/category/{groupID}/featured")
+    @GET("news/title/category/{groupID}/featured") //checked
     Call<NewsList> getFeaturedNewsForGroup(@Path("groupID") int groupID, @Query("start") int start, @Query("display") int display);
 
-    @GET("news/title/category/{groupID}/urgent")
+    @GET("news/title/category/{groupID}/urgent") //checked
     Call<NewsList> getErgentNewsForGroup(@Path("groupID") int groupID, @Query("start") int start, @Query("display") int display);
 
-    @GET("news/group/category/{groupID}/list")
+    @GET("news/group/category/{groupID}/list") //checked
     Call<NewsList> getGroupNews(@Path("groupID") int groupID, @Query("start") int start, @Query("display") int display);
 
     @GET("news/article/{newsID}")
