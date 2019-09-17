@@ -405,11 +405,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                     @Override
                     public void onError(int majorCode, int minorCode) {
                         if (majorCode == 5 && minorCode == 1) {
-                            showError.setValue(R.string.connection_error);
+                            showError.postValue(R.string.connection_error);
                             G.handler.post(() -> showLoading.set(View.GONE));
                         } else {
-                            G.handler.post(() -> showLoading.set(View.GONE));
                             showError.postValue(R.string.error);
+                            G.handler.post(() -> showLoading.set(View.GONE));
                         }
                     }
                 });
