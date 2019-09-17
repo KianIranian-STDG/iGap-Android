@@ -139,7 +139,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private final Drawable SEND_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_sent_bg_light);
     private final Drawable RECEIVED_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_receive_bg_light);
 
-
     /**
      * add this prt for video player
      */
@@ -499,7 +498,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                         holder.itemView.performLongClick();
                                         return;
                                     }
-                                    onBotBtnClick(view, buttonEntity);
+                                    mAdapter.onBotButtonClicked(() -> onBotBtnClick(view, buttonEntity));
                                 }, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -2033,4 +2032,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * */
     }
 
+    @FunctionalInterface
+    public interface OnAllowBotCommand {
+        void allow();
+    }
 }
