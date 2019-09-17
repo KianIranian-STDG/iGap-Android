@@ -11,6 +11,7 @@
 package net.iGap.module;
 
 import android.content.ContentResolver;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
@@ -100,6 +101,8 @@ public class Contacts {
 
 
     public static void showLimitDialog() {
+        if (hasExceedDialogStatusShown())
+            return;
         try {
             if (G.currentActivity != null && !G.currentActivity.isFinishing()) {
                 G.currentActivity.runOnUiThread(new Runnable() {
@@ -110,6 +113,7 @@ public class Contacts {
                                     .title(R.string.title_import_contact_limit)
                                     .content(R.string.content_import_contact_limit)
                                     .positiveText(G.context.getResources().getString(R.string.B_ok)).show();
+                            ExceedDialogStatusShowed();
                         }
                     }
                 });
@@ -120,6 +124,17 @@ public class Contacts {
         } catch (Exception e1) {
             e1.printStackTrace();
         }
+    }
+
+    private static boolean hasExceedDialogStatusShown() {
+        SharedPreferences pref = G.context.getSharedPreferences("ExceedDialogStatus", 0);
+        return pref.getBoolean("status", false);
+    }
+
+    private static void ExceedDialogStatusShowed() {
+        SharedPreferences pref = G.context.getSharedPreferences("ExceedDialogStatus", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean("status", true);
     }
 
     /*
@@ -336,12 +351,6 @@ public class Contacts {
             if (pCur != null) {
                 int count = pCur.getCount();
 
-                if (count > PHONE_CONTACT_MAX_COUNT_LIMIT) {
-                    //pCur.close();
-                    showLimitDialog();
-                    //return;
-                }
-
                 if (count > 0) {
                     StructListOfContact contact = null;
                     String displayName;
@@ -368,7 +377,6 @@ public class Contacts {
             //nothing
         }
         Log.i("fetch_contact", "end");
-
     }
 
     private static void checkContactsData(String name, String phone, StructListOfContact itemContact, List<StructListOfContact> list) {

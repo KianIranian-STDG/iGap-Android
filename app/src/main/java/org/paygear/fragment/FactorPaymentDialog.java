@@ -294,6 +294,7 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
                         intent.setData(Uri.parse(newPayment.paymentAuth.IPGUrl));
                         startActivity(intent);
                     } else {
+                        getActivity().onBackPressed();
                         ((NavigationBarActivity) getActivity()).replaceFragment(
                                 CardsFragment.newInstance(newPayment), "CardsFragment", true);
                         dismiss();
