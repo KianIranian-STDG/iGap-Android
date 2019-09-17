@@ -108,6 +108,7 @@
     <item name="cv_chatCell_badge" type="id" />
     <item name="v_chatCell_bottomView" type="id" />
     <item name="v_chatCell_pin" type="id" />
+    <item name="tv_chatCell_lastMessage" type="id" />
 
     <item name="bottomIcon" type="id" />
 
