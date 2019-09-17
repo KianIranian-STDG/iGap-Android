@@ -42,11 +42,13 @@ import net.iGap.helper.HelperAddContact;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnCountryCallBack;
 import net.iGap.interfaces.OnUserContactEdit;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.CountryReader;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserContactImport;
@@ -320,7 +322,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
      */
     private void addContactToServer() {
 
-        if (RealmUserInfo.isLimitImportContacts()) {
+        if (HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_DIALOG)) {
             showLimitDialog();
             return;
         }

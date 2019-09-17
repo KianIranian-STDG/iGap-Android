@@ -544,6 +544,7 @@
     <string name="E_115">Internal Server Error</string>
     <string name="E_116">Bad payload: Invalid gender</string>
     <string name="E_118">Warning: Number of Contacts has exceeded the server restrictions.</string>
+    <string name="E_118_5">Warning: Number of Contacts Chunk has exceeded the server restrictions.</string>
     <string name="E_154_1">Bad payload: get token</string>
     <string name="E_154_2">Bad payload: get reason</string>
     <string name="E_155">USER_DELETE INTERNAL SERVER ERROR</string>

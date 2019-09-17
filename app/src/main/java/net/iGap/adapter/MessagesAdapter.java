@@ -42,6 +42,8 @@ import net.iGap.proto.ProtoGlobal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item> implements OnLongClickListener<Item> {
     // contain sender id
@@ -52,6 +54,10 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private IMessageItem iMessageItem;
     private OnChatMessageRemove onChatMessageRemove;
     public AvatarHandler avatarHandler;
+
+    private boolean allowAction = true;
+    private Timer timer;
+
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
         @Override
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
@@ -119,6 +125,8 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                 return false;
             }
         });
+
+        timer = new Timer();
     }
 
     public int findPositionByMessageId(long messageId) {
@@ -445,6 +453,24 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             } catch (NullPointerException e) {
                 // some item can have no messageID
             }
+        }
+    }
+
+    private void runTimer() {
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                allowAction = true;
+            }
+        }, 1000);
+
+    }
+
+    public void onBotButtonClicked(AbstractMessage.OnAllowBotCommand onAllowBotCommand) {
+        if (allowAction) {
+            allowAction = false;
+            runTimer();
+            onAllowBotCommand.allow();
         }
     }
 }

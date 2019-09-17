@@ -50,7 +50,7 @@ public class LoginActions {
      * try login to server and do common actions
      */
     public static void login() {
-        if (!G.ISOK) {
+        if (!G.ISRealmOK) {
             return;
         }
 

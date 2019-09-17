@@ -278,7 +278,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             mRealm.close();
 
             if (G.imageLoader != null) {
@@ -394,7 +394,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         detectDeviceType();
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             mRealm = Realm.getDefaultInstance();
             try (Realm realm = Realm.getDefaultInstance()) {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -1193,7 +1193,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onStart() {
         super.onStart();
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             if (!G.isFirstPassCode) {
                 openActivityPassCode();
             }
@@ -1276,7 +1276,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             if (G.onBackPressedWebView != null) {
                 if (G.onBackPressedWebView.onBack()) {
                     return;
@@ -1373,7 +1373,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onResume() {
         Log.wtf(this.getClass().getName(), "onResume");
         super.onResume();
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             resume();
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
@@ -1461,7 +1461,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onPause() {
         Log.wtf(this.getClass().getName(), "onPause");
         super.onPause();
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             if (isNeedToRegister) {
                 return;
             }
