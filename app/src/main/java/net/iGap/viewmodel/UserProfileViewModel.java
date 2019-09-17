@@ -211,7 +211,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         isDarkMode.set(G.isDarkTheme);
 
         //set user info text gravity
-        if (G.selectedLanguage.equals("en")) {
+        if (G.selectedLanguage.equals("en") || G.selectedLanguage.equals("fr")) {
             textsGravity.set(Gravity.LEFT);
         } else {
             textsGravity.set(Gravity.RIGHT);
@@ -708,7 +708,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             sendRequestSetEmail();
         } else if (currentGender != gender.get()) {
             sendRequestSetGender();
-        } else if (!referralNumberObservableField.get().equals("")) {
+        } else if (!referralNumberObservableField.get().equals("") && referralEnableLiveData.getValue()) {
+            Log.wtf(this.getClass().getName(),"setReferral");
             setReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replace(" ", ""));
         } else {
             showLoading.set(View.GONE);

@@ -138,5 +138,42 @@
             app:layout_constraintBottom_toBottomOf="@id/arabicLanguage"
             app:layout_constraintEnd_toEndOf="@id/arabicLanguage"
             app:layout_constraintTop_toTopOf="@id/arabicLanguage" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/franceLanguage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp16"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="@{()->viewModel.onClickFrance()}"
+            app:layout_constraintBottom_toBottomOf="@id/txtLanguageFr"
+            app:layout_constraintEnd_toEndOf="@id/persianLanguage"
+            app:layout_constraintStart_toStartOf="@id/persianLanguage"
+            app:layout_constraintTop_toBottomOf="@id/arabicLanguage" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtLanguageFr"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp8"
+            android:text="Français"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@id/franceLanguage"
+            app:layout_constraintTop_toTopOf="@id/franceLanguage" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/st_icon_fr"
+            style="@style/baseFontIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/check_icon"
+            android:textColor="@color/green"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="@{viewModel.isFrance}"
+            app:layout_constraintBottom_toBottomOf="@id/franceLanguage"
+            app:layout_constraintEnd_toEndOf="@id/franceLanguage"
+            app:layout_constraintTop_toTopOf="@id/franceLanguage" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

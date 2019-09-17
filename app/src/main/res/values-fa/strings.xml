@@ -532,6 +532,7 @@
     <string name="E_116">"خطایی از سمت کلاینت: نوع جنسیت اشتباه است."</string>
     <string name="E_117">"خطای درونی سرور"</string>
     <string name="E_118">اخطار: تعداد مخاطبین از محدودیت تعداد سمت سرور فراتر است.</string>
+    <string name="E_118_5">اخطار: تعداد پکیج انتقال مخاطبین از محدودیت تعداد سمت سرور فراتر است.</string>
     <string name="list_admin">فهرست مدیران</string>
     <string name="list_modereator">فهرست ناظران</string>
     <string name="desc">توضیحات</string>
@@ -720,8 +721,7 @@
     <string name="enter_the_code_here">کد را اینجا وارد کنید.</string>
     <string name="transfer_to">انتقال به</string>
     <string name="transfer_to_wallet">انتقال به کیف پول</string>
-    <string name="gift_message">اعتبار هدیه به مبلغ *.
-مایل به دریافت آن هستید؟</string>
+    <string name="gift_message">اعتبار هدیه به مبلغ *.مایل به دریافت آن هستید؟</string>
     <string name="toast_success_gift">برای اعمال اعتبار هدیه چند لحظه صبر کنید.</string>
     <string name="amount_to_pay_factor">مبلغ قابل پرداخت فاکتور (ریال) :</string>
     <string name="price">قیمت</string>
@@ -756,7 +756,7 @@
     <string name="new_channel">"کانال جدید"</string>
     <string name="channel_left">"ترک کانال"</string>
     <string name="please_enter_channel_description">"لطفاً توضیح مختصری برای کانال وارد کنید."</string>
-    <string name="txt_you">"شما: "</string>
+    <string name="txt_you">"شما"</string>
     <string name="you">"شما"</string>
     <string name="farvardin">فروردین</string>
     <string name="ordibehst">اردیبهشت</string>
@@ -1117,8 +1117,7 @@
     <string name="Fingerprint_not_recognized">اثر انگشت شما شناسایی و تأیید نشد. لطفاً مجدداً تلاش کنید</string>
     <string name="Auto_lock_description">بعد از هریک از زمان های انتخابی از میان لیست، برنامه قفل شده و برای ورود به برنامه باید رمز یا کد قفل گشا را وارد کنید.</string>
     <string name="Allow_Screen_Capture_description">در صورتیکه این گزینه فعال شود، می توانید از هر قسمت در برنامه اسکرین شات بگیرید، اما فراموش نکنید که حتی با فعال بودن قابلیت قفل برنامه، سیستم همچنان چت های شما را در قسمت برنامه های در حال اجرا در بک گراند نمایش می دهد. شاید برای فعالسازی این قابلیت مجبور شوید یک بار برنامه را بسته و مجدداً باز کنید.</string>
-    <string name="set_pass_code_description">با فعالسازی قفل ورود به برنامه، آیکن قفل در بالای صفحۀ اصلی چت ها پدیدار می شود که با استفاده از آن می توان برنامه را قفل یا قفل آن را باز کرد.
-    \nتوجه: برای تعیین رمز می توانید بدون محدودیت از اعداد یا ترکیب اعداد و حروف استفاده کنید. همچنین در صورت فراموشی آن کافی است یک بار از برنامه خارج شده و بار دیگر وارد شوید تا قفل ورود غیرفعال شود.</string>
+    <string name="set_pass_code_description">با فعالسازی قفل ورود به برنامه، آیکن قفل در بالای صفحۀ اصلی چت ها پدیدار می شود که با استفاده از آن می توان برنامه را قفل یا قفل آن را باز کرد.\nتوجه: برای تعیین رمز می توانید بدون محدودیت از اعداد یا ترکیب اعداد و حروف استفاده کنید. همچنین در صورت فراموشی آن کافی است یک بار از برنامه خارج شده و بار دیگر وارد شوید تا قفل ورود غیرفعال شود.</string>
 
 
     <string name="forgot_pin_desc">در صورتیکه رمز خود را فرامش کرده اید تنها می توانید یک بار از برنامه خارج شده و بار دیگر وارد شوید. آیا مایل به ادامه این کار هستید؟</string>
@@ -1418,10 +1417,7 @@
     <string name="igap_update">بروزرسانی</string>
     <string name="permission_auto_start"> لطفا برای رسیدن پیام ها حتی در زمانی که آیگپ در پس زمینه فعال نیست آیگپ را از منو انتخاب و فعال نمایید</string>
     <string name="dont_show_again"> مجددا نمایش نده</string>
-    <string name="invitation_message">سلام!
-از طریق لینک زیر میتونی تو آیگپ عضو بشی، منتظرتیم
-     https://www.igap.net \n
-    شماره معرف :</string>
+    <string name="invitation_message">سلام!از طریق لینک زیر میتونی تو آیگپ عضو بشی، منتظرتیم https://www.igap.net \nشماره معرف :</string>
 
     <string name="namma_per_uh">FileLister</string>
     <string name="Please_enter_valid_folder_name">لطفا نام پوشه را وارد کنید</string>
@@ -1702,20 +1698,6 @@
     <string name="logout_prompt">آیا میخواهید از حساب خود خارج شوید؟</string>
     <string name="logout">خروج</string>
 
-    <array name="onboard_titles">
-        <item>کیف پول موبایلی</item>
-        <item>خرید با QR</item>
-    </array>
-
-    <array name="onboard_descriptions">
-        <item>کیف پول یه حساب مجازی براتون می‌سازه که به شماره موبایل وصل می‌شه و دیگه لازم نیست کیف
-            پول یا پول نقد یا کارت‌بانکی با خودتون ببرید.
-        </item>
-        <item>توی مغازه‌ها، توی تاکسی یا هر جایی که پذیرنده کیف پول هستند می‌تونید از دکمه اسکن
-            استفاده کنید و خریدتونو لذت‌بخش‌تر کنید.
-        </item>
-    </array>
-
     <string name="top_company">شرکت تجارت الکترونیک پارسیان</string>
 
     <string name="bank_parsian">بانک پارسیان</string>
@@ -1756,8 +1738,7 @@
     <string name="paygear_card">کیف پول</string>
     <string name="set_password">ثبت رمز عبور</string>
     <string name="change_password">تغییر رمز عبور کیف پول</string>
-    <string name="text_forgot">رمز عبور کیف پول برای شما ارسال شد.
-( رمز ارسال شده بعد از ۲ دقیقه منقضی می شود لطفاً بعد از دریافت مجدد آن را تغییر دهید )</string>
+    <string name="text_forgot">رمز عبور کیف پول برای شما ارسال شد.( رمز ارسال شده بعد از ۲ دقیقه منقضی می شود لطفاً بعد از دریافت مجدد آن را تغییر دهید )</string>
     <string name="text_forgot_title">ارسال مجدد رمز</string>
     <string name="Forgot_Passwords">بازیابی رمز عبور کیف پول</string>
     <string name="cashier">مالی</string>
@@ -1992,7 +1973,6 @@
     <string name="igasht_count_title">تعداد</string>
     <string name="igasht_service_title">سرویس</string>
 
-    <!-- kuknos -->
     <string name="kuknos_login_messge_str">لطفا کد ملی خود را وارد نمایید.</string>
     <string name="kuknos_login_id_str">کد ملی</string>
     <string name="kuknos_login_tel_str">تلفن</string>
@@ -2113,10 +2093,7 @@
     <string name="kuknos_buyP_btn">خرید</string>
     <string name="kuknos_buyP_btn_server">بررسی...</string>
     <string name="kuknos_buyP_btn_server2">انتقال به بانک</string>
-    <string name="kuknos_buyP_desc">- سنجش (پیمانه) ارزشگذاری سایر دارایی­ های شبکه ققنوس و تعیین ضریب تبدیل آنها به یکدیگر \n
-- به دلیل بهره گیری از پشتوانه طلا (هر پیمان دارای پشتوانه ۳۰ سوت طلای ۲۴ عیار) نوسان ارزش آن بسیارناچیز است و لذا در معاملات بازار می تواند به عنوان یک دارایی ثابت از آن استفاده نمود. \n
-- پرداخت هزینه های تراکنش های شبکه ققنوس \n
-- معیاری جهت کنترل حداقل مانده موجودی حساب ها \n </string>
+    <string name="kuknos_buyP_desc">- سنجش (پیمانه) ارزشگذاری سایر دارایی­ های شبکه ققنوس و تعیین ضریب تبدیل آنها به یکدیگر \n- به دلیل بهره گیری از پشتوانه طلا (هر پیمان دارای پشتوانه ۳۰ سوت طلای ۲۴ عیار) نوسان ارزش آن بسیارناچیز است و لذا در معاملات بازار می تواند به عنوان یک دارایی ثابت از آن استفاده نمود. \n- پرداخت هزینه های تراکنش های شبکه ققنوس \n- معیاری جهت کنترل حداقل مانده موجودی حساب ها \n </string>
     <string name="kuknos_buyP_sumTitle">جمع پرداختی:</string>
     <string name="kuknos_buyP_sumCurrency">ریال</string>
     <string name="kuknos_buyP_emptyAmount">تعداد پیمان درخواستی خود را وارد نمایید.</string>
@@ -2148,8 +2125,7 @@
     <string name="kuknos_setting_copySeedKey">کپی کلید مخفی</string>
     <string name="kuknos_setting_Directory">آیگپ - ققنوس</string>
     <string name="kuknos_setting_fileName">Kuknos_Seed_Key.txt</string>
-    <string name="kuknos_setting_fileContent">Please be notified: this is the only key that you can use to access your account later.
-        Do NOT share it with others.\n Seed Key: 2552SD4546854212313845JHJKHGGFGDGDETGJKLKMBBVGCGHFF</string>
+    <string name="kuknos_setting_fileContent">Please be notified: this is the only key that you can use to access your account later.Do NOT share it with others.\n Seed Key: 2552SD4546854212313845JHJKHGGFGDGDETGJKLKMBBVGCGHFF</string>
     <string name="kuknos_setting_copySKeyTitel">ذخیره کلید مخفی</string>
     <string name="kuknos_setting_copySKeyMessage">جهت آگاهی: \n - این کلید تنها راه ورود مجدد و مدیریت حساب شما میباشد. \n - در نگهداری از این کلید کوشا باشید. \n - از به اشتراک گذاری این کلید با دیگران پرهیز کنید. \n این کلید در فولدر دانلود های شما ذخیره خواهد شد.</string>
     <string name="kuknos_setting_copySKeyBtn">ذخیره</string>
@@ -2185,11 +2161,7 @@
     <string name="kuknos_wHistory_creatAccount">ایجاد حساب کاربری</string>
     <string name="kuknos_AddAsset_Title">آیگپی</string>
     <string name="kuknos_AddAsset_SubTitle">آیگپ</string>
-    <string name="kuknos_AddAsset_Desc">Far far away, behind the word mountains, far from the
-        countries Vokalia and Consonantia, there live the blind texts. Separated they live in
-        Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river
-        named Duden flows by their place and supplies it with the necessary regelialia. It is a
-        paradisematic country, in which roasted parts of sentences fly into your mouth. </string>
+    <string name="kuknos_AddAsset_Desc">Far far away, behind the word mountains, far from thecountries Vokalia and Consonantia, there live the blind texts. Separated they live inBookmarksgrove right at the coast of the Semantics, a large language ocean. A small rivernamed Duden flows by their place and supplies it with the necessary regelialia. It is aparadisematic country, in which roasted parts of sentences fly into your mouth. </string>
     <string name="kuknos_AddAsset_AddBTN">تمامی دارایی ها</string>
     <string name="kuknos_AddAsset_title">دارایی های فعلی</string>
     <string name="kuknos_trade_noItem">هیچ موردی یافت نشد.</string>
@@ -2238,4 +2210,16 @@
     <string name="prayerRoom_textView">نمازخانه</string>
     <string name="user_edited">کاربر ویرایش شد.</string>
     <string name="edit_contact">ویرایش مخاطب</string>
+
+
+    <array name="onboard_titles">
+        <item>کیف پول موبایلی</item>
+        <item>خرید با QR</item>
+    </array>
+
+    <array name="onboard_descriptions">
+        <item>کیف پول یه حساب مجازی براتون می‌سازه که به شماره موبایل وصل می‌شه و دیگه لازم نیست کیف پول یا پول نقد یا کارت‌بانکی با خودتون ببرید.</item>
+        <item>توی مغازه‌ها، توی تاکسی یا هر جایی که پذیرنده کیف پول هستند می‌تونید از دکمه اسکن استفاده کنید و خریدتونو لذت‌بخش‌تر کنید.</item>
+    </array>
+
 </resources>

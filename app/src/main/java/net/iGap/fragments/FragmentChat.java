@@ -259,7 +259,6 @@ import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.enums.ProgressState;
 import net.iGap.module.enums.SendingStep;
-import net.iGap.module.structs.StructBackGroundSeen;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.module.structs.StructBottomSheetForward;
 import net.iGap.module.structs.StructChannelExtra;
@@ -283,11 +282,9 @@ import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmClientCondition;
-import net.iGap.realm.RealmClientConditionFields;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmGroupRoom;
-import net.iGap.realm.RealmOfflineSeen;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomDraft;
@@ -1547,7 +1544,7 @@ public class FragmentChat extends BaseFragment
         //set layout direction to views
 
         //todo : set gravity right for arabic and persian
-        if (G.selectedLanguage.equals("en")) {
+        if (G.selectedLanguage.equals("en") || G.selectedLanguage.equals("fr")) {
             txtName.setGravity(Gravity.LEFT);
             txtLastSeen.setGravity(Gravity.LEFT);
         } else {
@@ -1584,6 +1581,7 @@ public class FragmentChat extends BaseFragment
                                     if (!isChatReadOnly) {
                                         edtChat.setText("/Start");
                                         imvSendButton.performClick();
+                                        removeStartButton();
                                     }
                                 }
                             });
@@ -1701,6 +1699,23 @@ public class FragmentChat extends BaseFragment
         }
         checkToolbarNameSize();
         manageExtraLayout();
+    }
+
+    private void removeStartButton() {
+        try {
+            if (isShowStartButton) {
+                if (rootView != null) {
+                    rootView.post(() -> {
+                        rootView.findViewById(R.id.chl_ll_channel_footer).setVisibility(View.GONE);
+                        if (webViewChatPage == null)
+                            rootView.findViewById(R.id.layout_attach_file).setVisibility(View.VISIBLE);
+                    });
+                }
+                isShowStartButton = false;
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
     }
 
     private void goneCallButtons() {

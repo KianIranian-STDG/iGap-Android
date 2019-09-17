@@ -86,8 +86,7 @@ public class PaymentFragment extends Fragment {
 
         viewModel.getGoBack().observe(getViewLifecycleOwner(), paymentResult -> {
             if (getActivity() != null && paymentResult != null) {
-                //todo: set callback for cancel payment
-                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
                 callBack.onPaymentFinished(paymentResult);
             }
         });
@@ -136,9 +135,5 @@ public class PaymentFragment extends Fragment {
                     .positiveText(R.string.ok).onPositive((dialog, which) -> dialog.dismiss())
                     .show();
         }
-    }
-
-    public void onBackPressed() {
-        viewModel.onCloseClick();
     }
 }

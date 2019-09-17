@@ -433,9 +433,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             };
 
-            if (G.isFirstPassCode) {
+            /*if (G.isFirstPassCode) {
                 openActivityPassCode();
-            }
+            }*/
 
             initTabStrip(getIntent());
             IntentFilter intentFilter = new IntentFilter();
@@ -1086,9 +1086,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void checkGoogleUpdate() {
-        Log.wtf(this.getClass().getName(), "installIfNeeded");
-        ProviderInstaller.installIfNeededAsync(this, this);
-        Log.wtf(this.getClass().getName(), "installIfNeeded");
+        if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
+            Log.wtf(this.getClass().getName(), "installIfNeeded");
+            ProviderInstaller.installIfNeededAsync(this, this);
+            Log.wtf(this.getClass().getName(), "installIfNeeded");
+        }
     }
 
     //*******************************************************************************************************************************************
@@ -1348,9 +1350,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             } else {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                    if (getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment) {
-                        ((PaymentFragment) getSupportFragmentManager().findFragmentById(R.id.mainFrame)).onBackPressed();
-                    } else {
+                    if (!(getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment)) {
                         super.onBackPressed();
                     }
                 } else {
@@ -1933,7 +1933,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    public Fragment getFragment(String fragmentTag){
+    public Fragment getFragment(String fragmentTag) {
         return getSupportFragmentManager().findFragmentByTag(fragmentTag);
     }
 }

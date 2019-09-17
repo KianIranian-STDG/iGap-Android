@@ -13,7 +13,9 @@ package net.iGap.response;
 import android.util.Log;
 
 import net.iGap.G;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.module.Contacts;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserContactsImport;
 import net.iGap.realm.RealmUserInfo;
@@ -83,7 +85,10 @@ public class UserContactsImportResponse extends MessageHandler {
         int minorCode = errorResponse.getMinorCode();
         if (majorCode == 118) {
             if (minorCode == 5) {
-                RealmUserInfo.updateImportContactLimit();
+                HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_CHUNK, true);
+            }
+            if (minorCode == 7) {
+                HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_NUMBER, true);
             }
         }
 
