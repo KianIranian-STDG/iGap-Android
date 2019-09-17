@@ -243,7 +243,7 @@ public class ChatCell extends ConstraintLayout {
         lastMessage.setSingleLine(true);
         setTypeFace(lastMessage);
         setTextSize(lastMessage, R.dimen.dp12);
-        lastMessage.setEmojiSize(i_Dp(R.dimen.dp14));
+        lastMessage.setEmojiSize(i_Dp(R.dimen.dp15));
 
 
         /**
