@@ -478,7 +478,7 @@ public class G extends Application {
             configuration.locale = locale;
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
             baseContext = baseContext.createConfigurationContext(configuration);
         } else {
             res.updateConfiguration(configuration, res.getDisplayMetrics());

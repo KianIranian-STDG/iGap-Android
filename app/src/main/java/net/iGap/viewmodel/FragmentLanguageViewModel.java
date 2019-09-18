@@ -22,6 +22,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperTracker;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SingleLiveEvent;
 
 import java.util.Locale;
 
@@ -33,8 +34,8 @@ public class FragmentLanguageViewModel extends ViewModel {
     private ObservableInt isEnglish = new ObservableInt(View.GONE);
     private ObservableInt isArabic = new ObservableInt(View.GONE);
     private ObservableInt isFrance = new ObservableInt(View.GONE);
-    private MutableLiveData<String> refreshActivityForChangeLanguage = new MutableLiveData<>();
-    private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
+    private SingleLiveEvent<String> refreshActivityForChangeLanguage = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> goBack = new SingleLiveEvent<>();
 
     public FragmentLanguageViewModel(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
@@ -73,20 +74,18 @@ public class FragmentLanguageViewModel extends ViewModel {
         return isFrance;
     }
 
-    public MutableLiveData<String> getRefreshActivityForChangeLanguage() {
+    public SingleLiveEvent<String> getRefreshActivityForChangeLanguage() {
         return refreshActivityForChangeLanguage;
     }
 
-    public MutableLiveData<Boolean> getGoBack() {
+    public SingleLiveEvent<Boolean> getGoBack() {
         return goBack;
     }
 
     public void onClickEnglish() {
         if (!G.selectedLanguage.equals("en")) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(SHP_SETTING.KEY_LANGUAGE, "English");
-            editor.apply();
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "English").apply();
             G.selectedLanguage = "en";
             HelperCalander.isPersianUnicode = false;
             HelperCalander.isLanguagePersian = false;
@@ -97,8 +96,9 @@ public class FragmentLanguageViewModel extends ViewModel {
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }
+        } else {
+            goBack.setValue(true);
         }
-        goBack.setValue(true);
     }
 
     public void onClickFrance() {
@@ -117,8 +117,9 @@ public class FragmentLanguageViewModel extends ViewModel {
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }
+        } else {
+            goBack.setValue(true);
         }
-        goBack.setValue(true);
     }
 
     public void onClickFarsi() {
@@ -128,7 +129,6 @@ public class FragmentLanguageViewModel extends ViewModel {
             editor.putString(SHP_SETTING.KEY_LANGUAGE, "فارسی");
             editor.apply();
             G.selectedLanguage = "fa";
-            G.updateResources(G.currentActivity.getBaseContext());
             HelperCalander.isPersianUnicode = true;
             HelperCalander.isLanguagePersian = true;
             HelperCalander.isLanguageArabic = false;
@@ -138,18 +138,16 @@ public class FragmentLanguageViewModel extends ViewModel {
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }
+        } else {
+            goBack.setValue(true);
         }
-        goBack.setValue(true);
     }
 
     public void onClickArabic() {
         if (!G.selectedLanguage.equals("ar")) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(SHP_SETTING.KEY_LANGUAGE, "العربی");
-            editor.apply();
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "العربی").apply();
             G.selectedLanguage = "ar";
-            G.updateResources(G.currentActivity.getBaseContext());
             HelperCalander.isPersianUnicode = true;
             HelperCalander.isLanguagePersian = false;
             HelperCalander.isLanguageArabic = true;
@@ -159,8 +157,9 @@ public class FragmentLanguageViewModel extends ViewModel {
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }
+        } else {
+            goBack.setValue(true);
         }
-        goBack.setValue(true);
     }
 
 }
