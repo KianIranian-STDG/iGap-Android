@@ -197,6 +197,10 @@ public class SHP_SETTING {
         public static final int KEY_AUTOPLAY_GIFS = 1;
     }
 
+    public static final String EXCEED_CONTACTS_DIALOG = "EXCEED_CONTACTS_DIALOG";
+    public static final String EXCEED_CONTACTS_CHUNK = "EXCEED_CONTACTS_CHUNK";
+    public static final String EXCEED_CONTACTS_NUMBER = "EXCEED_CONTACTS_NUMBER";
+
 }
 
 

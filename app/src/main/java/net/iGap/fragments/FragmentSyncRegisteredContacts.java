@@ -281,6 +281,9 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         G.onUserContactdelete = null;
         G.onContactsGetList = null;
 
+        if (results != null)
+            results.removeAllChangeListeners();
+
         realm.close();
     }
 

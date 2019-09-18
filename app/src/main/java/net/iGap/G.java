@@ -87,7 +87,7 @@ public class G extends Application {
     public static final String IMAGE_USER = "/.image_user";
     public static final String STICKER = "/.sticker";
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
-    public static boolean ISOK = true;
+    public static boolean ISRealmOK = true;
     public static Context context;
     public static Handler handler;
     public static boolean isCalling = false;
@@ -499,16 +499,10 @@ public class G extends Application {
         Metrix.initialize(this, "jpbnabzrmeqvxme");
 
         // dont remove below line please
-        if (!BuildConfig.DEBUG && BuildConfig.Token.length() > 1) {
-            Metrix.getInstance().setDefaultTracker(BuildConfig.Token);
+        if (!BuildConfig.DEBUG && BuildConfig.Store.length() > 1) {
+            Metrix.getInstance().setStore(BuildConfig.Store);
+            Metrix.getInstance().setAppSecret(1,1728320174, 43612053, 1626881868, 580653578);
         }
-
-        Metrix.getInstance().enableLogging(true);
-//        Metrix.getInstance().setLogLevel(Log.DEBUG);
-        Metrix.getInstance().setEventUploadPeriodMillis(30000);
-
-        // not exist in dashboard
-        Metrix.getInstance().setScreenFlowsAutoFill(true);
 
         new Thread(new Runnable() {
             @Override

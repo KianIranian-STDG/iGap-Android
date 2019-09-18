@@ -48,11 +48,13 @@ import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.DialogAnimation;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.proto.ProtoUserReport;
 import net.iGap.realm.RealmRoomMessage;
@@ -845,7 +847,7 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
      */
     private void addContactToServer() {
 
-        if (RealmUserInfo.isLimitImportContacts()) {
+        if (HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_DIALOG)) {
             showLimitDialog();
             return;
         }

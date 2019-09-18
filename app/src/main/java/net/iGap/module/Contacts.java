@@ -11,6 +11,7 @@
 package net.iGap.module;
 
 import android.content.ContentResolver;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
@@ -21,6 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmContacts;
@@ -100,6 +102,8 @@ public class Contacts {
 
 
     public static void showLimitDialog() {
+        if (HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_DIALOG))
+            return;
         try {
             if (G.currentActivity != null && !G.currentActivity.isFinishing()) {
                 G.currentActivity.runOnUiThread(new Runnable() {
@@ -110,6 +114,7 @@ public class Contacts {
                                     .title(R.string.title_import_contact_limit)
                                     .content(R.string.content_import_contact_limit)
                                     .positiveText(G.context.getResources().getString(R.string.B_ok)).show();
+                            HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_DIALOG, true);
                         }
                     }
                 });
@@ -312,7 +317,7 @@ public class Contacts {
             return;
         }
 
-        if (RealmUserInfo.isLimitImportContacts()) {
+        if (HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_NUMBER)) {
             showLimitDialog();
             return;
         }
@@ -335,12 +340,6 @@ public class Contacts {
 
             if (pCur != null) {
                 int count = pCur.getCount();
-
-                if (count > PHONE_CONTACT_MAX_COUNT_LIMIT) {
-                    //pCur.close();
-                    showLimitDialog();
-                    //return;
-                }
 
                 if (count > 0) {
                     StructListOfContact contact = null;
@@ -368,7 +367,6 @@ public class Contacts {
             //nothing
         }
         Log.i("fetch_contact", "end");
-
     }
 
     private static void checkContactsData(String name, String phone, StructListOfContact itemContact, List<StructListOfContact> list) {
