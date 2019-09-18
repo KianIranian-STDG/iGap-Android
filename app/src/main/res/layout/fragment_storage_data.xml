@@ -343,7 +343,7 @@
 
                 <net.iGap.module.CustomToggleButton
                     android:id="@+id/useSdk"
-                    android:layout_width="@dimen/toggles_height"
+                    android:layout_width="@dimen/toggles_width"
                     android:layout_height="@dimen/toggles_height"
                     android:checked="@{viewModel.isSdkEnable}"
                     android:textSize="@dimen/smallTextSize"
