@@ -104,9 +104,7 @@ public class FragmentLanguageViewModel extends ViewModel {
     public void onClickFrance() {
         if (!G.selectedLanguage.equals("fr")) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(SHP_SETTING.KEY_LANGUAGE, "Français");
-            editor.apply();
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "Français").apply();
             G.selectedLanguage = "fr";
             HelperCalander.isPersianUnicode = false;
             HelperCalander.isLanguagePersian = false;
@@ -125,9 +123,7 @@ public class FragmentLanguageViewModel extends ViewModel {
     public void onClickFarsi() {
         if (!G.selectedLanguage.equals("fa")) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(SHP_SETTING.KEY_LANGUAGE, "فارسی");
-            editor.apply();
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "فارسی").apply();
             G.selectedLanguage = "fa";
             HelperCalander.isPersianUnicode = true;
             HelperCalander.isLanguagePersian = true;

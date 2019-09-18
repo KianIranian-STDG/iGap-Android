@@ -12,7 +12,6 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +34,6 @@ import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.chat.AbstractMessage;
-import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.adapter.items.chat.ChatCell;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
@@ -67,8 +65,6 @@ import net.iGap.libs.MyRealmRecyclerViewAdapter;
 import net.iGap.libs.Tuple;
 import net.iGap.module.AppUtils;
 import net.iGap.module.BotInit;
-import net.iGap.module.CircleImageView;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FontIconTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyDialog;
@@ -1166,17 +1162,17 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             }
 
             if (isChatMultiSelectEnable) {
-                holder.selectedRoomCB.setVisibility(View.VISIBLE);
+                holder.getRootView().getCellCb().setVisibility(View.VISIBLE);
 
                 if (isItemAvailableOnSelectedList(mInfo)) {
-                    holder.selectedRoomCB.setChecked(true);
+                    holder.getRootView().getCellCb().setChecked(true);
                 } else {
-                    holder.selectedRoomCB.setChecked(false);
+                    holder.getRootView().getCellCb().setChecked(false);
                 }
 
             } else {
-                holder.selectedRoomCB.setVisibility(View.GONE);
-                holder.selectedRoomCB.setChecked(false);
+                holder.getRootView().getCellCb().setVisibility(View.GONE);
+                holder.getRootView().getCellCb().setChecked(false);
             }
             final boolean isMyCloud;
 
@@ -1185,36 +1181,36 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             if (mInfo.isValid()) {
 
                 setLastMessage(mInfo, holder);
-                getLastMessage(mInfo, holder.lastMessage);
+                getLastMessage(mInfo, holder.getRootView().getLastMessage());
 
                 if (isMyCloud) {
-                    avatarHandler.removeImageViewFromHandler(holder.avatarIv);
-                    holder.avatarIv.setImageResource(R.drawable.ic_cloud_space_blue);
+                    avatarHandler.removeImageViewFromHandler(holder.getRootView().getAvatarImageView());
+                    holder.getRootView().getAvatarImageView().setImageResource(R.drawable.ic_cloud_space_blue);
 
                 } else {
-                    if (holder.avatarIv.getVisibility() == View.GONE) {
-                        holder.avatarIv.setVisibility(View.VISIBLE);
+                    if (holder.getRootView().getAvatarImageView().getVisibility() == View.GONE) {
+                        holder.getRootView().getAvatarImageView().setVisibility(View.VISIBLE);
                     }
                     setAvatar(mInfo, holder);
                 }
 
-                setChatIcon(mInfo, holder.chatIconTv);
-                setMuteIcon(mInfo, holder.muteRoomTv);
+                setChatIcon(mInfo, holder.getRootView().getChatIconTv());
+                setMuteIcon(mInfo, holder.getRootView().getMuteIconTv());
 
-                holder.roomNameTv.setText(mInfo.getTitle());
+                holder.getRootView().getRoomNameTv().setText(mInfo.getTitle());
 
                 if ((mInfo.getType() == CHAT) && mInfo.getChatRoom().isVerified()) {
-                    holder.verifyRoomTv.setVisibility(View.VISIBLE);
+                    holder.getRootView().getVerifyIconTv().setVisibility(View.VISIBLE);
                 } else if ((mInfo.getType() == CHANNEL) && mInfo.getChannelRoom().isVerified()) {
-                    holder.verifyRoomTv.setVisibility(View.VISIBLE);
+                    holder.getRootView().getVerifyIconTv().setVisibility(View.VISIBLE);
                 } else {
-                    holder.verifyRoomTv.setVisibility(View.INVISIBLE);
+                    holder.getRootView().getVerifyIconTv().setVisibility(View.INVISIBLE);
                 }
 
                 if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateOrCreateTime() != 0) {
-                    holder.lastMessageDataTv.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
+                    holder.getRootView().getLastMessageDate().setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
                 } else {
-                    holder.lastMessageDataTv.setVisibility(View.GONE);
+                    holder.getRootView().getLastMessageDate().setVisibility(View.GONE);
                 }
 
                 /**
@@ -1223,51 +1219,40 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
                 if (mInfo.isPinned()) {
                     if (mInfo.isFromPromote()) {
-                        holder.pinView.setVisibility(View.GONE);
+                        holder.getRootView().getPinView().setVisibility(View.GONE);
                     } else {
-                        holder.pinView.setVisibility(View.VISIBLE);
+                        holder.getRootView().getPinView().setVisibility(View.VISIBLE);
                     }
 
                 } else {
-                    holder.pinView.setVisibility(View.GONE);
+                    holder.getRootView().getPinView().setVisibility(View.GONE);
                 }
 
                 if (mInfo.getUnreadCount() < 1) {
-
-                    holder.badgeView.setVisibility(View.GONE);
-
+                    holder.getRootView().getBadgeView().setVisibility(View.GONE);
                 } else {
-                    holder.badgeView.setVisibility(View.VISIBLE);
-                    holder.badgeView.getTextView().setText(mInfo.getUnreadCount() > 999 ? "+999" : String.valueOf(mInfo.getUnreadCount()));
-
+                    holder.getRootView().getBadgeView().setVisibility(View.VISIBLE);
+                    holder.getRootView().getBadgeView().setText(mInfo.getUnreadCount() > 999 ? "+999" : String.valueOf(mInfo.getUnreadCount()));
                     if (mInfo.getMute()) {
-                        holder.badgeView.setBadgeColor(getResources().getColor(R.color.gray_9d));
+                        holder.getRootView().getBadgeView().setBadgeColor(getResources().getColor(R.color.gray_9d));
                     } else {
                         if (G.isDarkTheme) {
-                            holder.badgeView.setBadgeColor(getResources().getColor(R.color.md_blue_500));
+                            holder.getRootView().getBadgeView().setBadgeColor(getResources().getColor(R.color.md_blue_500));
                         } else {
-                            holder.badgeView.setBadgeColor(getResources().getColor(R.color.notification_badge));
+                            holder.getRootView().getBadgeView().setBadgeColor(getResources().getColor(R.color.notification_badge));
                         }
                     }
                 }
 
 
             }
-
-            /**
-             * for change english number to persian number
-             */
-            if (HelperCalander.isPersianUnicode) {
-                holder.badgeView.getTextView().setText(HelperCalander.convertToUnicodeFarsiNumber(holder.badgeView.getTextView().getText().toString()));
-            }
-
         }
 
         private void setMuteIcon(RealmRoom mInfo, FontIconTextView muteTv) {
             if (mInfo.getMute())
                 muteTv.setVisibility(View.VISIBLE);
             else
-                muteTv.setVisibility(View.INVISIBLE);
+                muteTv.setVisibility(View.GONE);
         }
 
 
@@ -1289,11 +1274,11 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         //*******************************************************************************************
         private void setLastMessage(RealmRoom mInfo, ViewHolder holder) {
-            holder.lastMessageStatusTv.setVisibility(View.INVISIBLE);
+            holder.getRootView().getLastMessageStatusTv().setVisibility(View.INVISIBLE);
             if (mInfo.getLastMessage() != null) {
-                holder.lastMessageDataTv.setVisibility(View.VISIBLE);
+                holder.getRootView().getLastMessageDate().setVisibility(View.VISIBLE);
                 if (mInfo.getLastMessage().isAuthorMe()) {
-                    holder.lastMessageStatusTv.setVisibility(View.VISIBLE);
+                    holder.getRootView().getLastMessageStatusTv().setVisibility(View.VISIBLE);
                     ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.UNRECOGNIZED;
                     if (mInfo.getLastMessage().getStatus() != null) {
                         try {
@@ -1302,10 +1287,10 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                             e.printStackTrace();
                         }
                     }
-                    AppUtils.rightMessageStatus(holder.lastMessageStatusTv, status, mInfo.getLastMessage().isAuthorMe());
+                    AppUtils.rightMessageStatus(holder.getRootView().getLastMessageStatusTv(), status, mInfo.getLastMessage().isAuthorMe());
                 }
             } else {
-                holder.lastMessageDataTv.setVisibility(View.GONE);
+                holder.getRootView().getLastMessageDate().setVisibility(View.GONE);
             }
         }
 
@@ -1366,7 +1351,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
 
                         if (room.getType() == GROUP) {
-                            if (lastMessage.isAuthorMe()) {
+                            if (lastMessage.isAuthorMe() && lastMessage.getMessageType() != ProtoGlobal.RoomMessageType.LOG) {
                                 senderNameTag = getResources().getString(R.string.txt_you);
                                 senderNameSpannable = new SpannableString(senderNameTag);
                             } else {
@@ -1520,7 +1505,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             }
 
             Bitmap init = HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), mInfo.getInitials(), mInfo.getColor());
-            avatarHandler.getAvatar(new ParamWithInitBitmap(holder.avatarIv, idForGetAvatar).initBitmap(init));
+            avatarHandler.getAvatar(new ParamWithInitBitmap(holder.getRootView().getAvatarImageView(), idForGetAvatar).initBitmap(init));
         }
 
         /**
@@ -1545,85 +1530,16 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         //*******************************************************************************************
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-
-            private CircleImageView avatarIv;
-            private EmojiTextViewE roomNameTv;
-            private FontIconTextView muteRoomTv;
             private RealmRoom mInfo;
-            private FontIconTextView chatIconTv;
-            private TextView lastMessageDataTv;
-            private View pinView;
-            private FontIconTextView verifyRoomTv;
-            private BadgeView badgeView;
-            private FontIconTextView lastMessageStatusTv;
-            private CheckBox selectedRoomCB;
-            private EmojiTextView lastMessage;
             private ChatCell rootView;
-
 
             public ViewHolder(View view) {
                 super(view);
-
                 rootView = (ChatCell) view;
-                /**
-                 * user avatar avatarIv
-                 * */
-                avatarIv = view.findViewById(R.id.iv_chatCell_userAvatar);
-
-                /**
-                 * multi select room list
-                 * */
-                selectedRoomCB = view.findViewById(R.id.iv_itemContactChat_checkBox);
-
-                /**
-                 * user roomNameTv
-                 * */
-                roomNameTv = view.findViewById(R.id.tv_chatCell_roomName);
-                roomNameTv.setTypeface(G.typeface_IRANSansMobile_Bold);
-
-                /**
-                 * channel or group icon
-                 * */
-                chatIconTv = view.findViewById(R.id.tv_chatCell_chatIcon);
-
-                /**
-                 * sended message time
-                 * */
-                lastMessageDataTv = view.findViewById(R.id.tv_chatCell_messageData);
-                lastMessageDataTv.setTypeface(G.typeface_IRANSansMobile);
-
-                /**
-                 * pin icon
-                 * */
-                pinView = view.findViewById(R.id.iv_iv_chatCell_pin);
-
-                /**
-                 * verify imageView
-                 * */
-                verifyRoomTv = view.findViewById(R.id.tv_chatCell_verify);
-
-                /**
-                 * unread text counter
-                 * */
-                badgeView = view.findViewById(R.id.iv_chatCell_messageCount);
-                badgeView.getTextView().setTypeface(G.typeface_IRANSansMobile);
-
-                /**
-                 * muteRoomTv icon
-                 * */
-                muteRoomTv = view.findViewById(R.id.iv_chatCell_mute);
-
-                lastMessageStatusTv = view.findViewById(R.id.iv_chatCell_messageStatus);
-
-                lastMessage = rootView.getLastMessage();
 
                 rootView.setOnClickListener(v -> {
-
                     if (isChatMultiSelectEnable) {
-
-                        onChatCellClickedInEditMode.onClicked(selectedRoomCB, mInfo, getAdapterPosition(), selectedRoomCB.isChecked());
-
-
+                        onChatCellClickedInEditMode.onClicked(rootView.getCellCb(), mInfo, getAdapterPosition(), rootView.getCellCb().isChecked());
                     } else {
 
                         if (ActivityMain.isMenuButtonAddShown) {
