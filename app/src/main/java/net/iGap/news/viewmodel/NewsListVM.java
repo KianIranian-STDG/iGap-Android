@@ -32,9 +32,10 @@ public class NewsListVM extends ViewModel {
         repo.getNewsList(arg, new ApiResponse<NewsList>() {
             @Override
             public void onResponse(NewsList newsList) {
-                if (newsList == null)
-                    addFakeData();
-                mData.setValue(newsList);
+                if (newsList.getNews() == null)
+                    mData.setValue(addFakeData());
+                else
+                    mData.setValue(newsList);
             }
 
             @Override

@@ -43,10 +43,10 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case advType:
                 View doubleVH = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_adv_item, parent, false);
                 viewHolder = new AdvViewHolder(doubleVH);
-
+/*
                 display.getSize(size);
                 viewHolder.itemView.getLayoutParams().width = (int) (size.x * 0.48);
-                viewHolder.itemView.getLayoutParams().height = (int) (size.y *0.35);
+                viewHolder.itemView.getLayoutParams().height = (int) (size.y *0.35);*/
                 break;
             default:
                 break;
@@ -71,6 +71,8 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
+        if (mData.getNews() == null)
+            return 0;
         return mData.getNews().size();
     }
 
