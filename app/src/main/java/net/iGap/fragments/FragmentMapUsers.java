@@ -39,6 +39,7 @@ import io.realm.RealmResults;
 
 import static net.iGap.G.context;
 import static net.iGap.G.inflater;
+import static net.iGap.G.isAppRtl;
 import static net.iGap.fragments.FragmentiGapMap.btnBack;
 import static net.iGap.fragments.FragmentiGapMap.isBackPress;
 import static net.iGap.fragments.FragmentiGapMap.pageUserList;
@@ -364,7 +365,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
                     return;
                 }
 
-                if (G.selectedLanguage.equals("en")  || G.selectedLanguage.equals("fr")) {
+                if (!G.isAppRtl) {
                     holder.arrow.setRotation(270);
                 } else {
                     holder.arrow.setRotation(90);
