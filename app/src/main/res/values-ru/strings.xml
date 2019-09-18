@@ -608,11 +608,11 @@
 
 <string name="do_you_want_to_set_modereator_role_to_member" >Вы уверены, что хотите наблюдать за этим участником?</string>
 
-<string name="waiting_for_network" >Ожидание подключения к интернету</string>
+<string name="waiting_for_network" >в ожидании сети</string>
 
-<string name="connecting" >Идет процесс подключения</string>
+<string name="connecting" >соединительный</string>
 
-<string name="updating" >Идет процесс обновления</string>
+<string name="updating" >обновление</string>
 
 <string name="last_seen_recently" >Прямо сейчас</string>
 
