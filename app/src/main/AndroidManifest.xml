@@ -59,7 +59,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="allowBackup,supportsRtl">
+        tools:replace="allowBackup,supportsRtl,android:name">
         <receiver
             android:name="ir.metrix.sdk.MetrixReferrerReceiver"
             android:permission="android.permission.INSTALL_PACKAGES"
