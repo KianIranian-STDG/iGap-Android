@@ -7,7 +7,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatImageView;
@@ -30,7 +29,7 @@ import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 public class ChatCell extends ConstraintLayout {
 
-    private EmojiTextViewE lastMessage;
+    private EmojiTextView lastMessage;
     public static final int DRAFT_COLOR = Color.RED;
     public static final int TYPING_COLOR = Color.parseColor("#1DA1F2");
     public static final int SENDER_COLOR = attachmentColor();
@@ -136,57 +135,6 @@ public class ChatCell extends ConstraintLayout {
 
 
         /**
-         * init last message sender roomNameTv
-         * drafts
-         * you
-         *
-         * */
-        EmojiTextViewE firstTextView = new EmojiTextViewE(G.context);
-        firstTextView.setId(R.id.tv_chatCell_firstTextView);
-        firstTextView.setSingleLine(true);
-        setTypeFace(firstTextView);
-        setTextSize(firstTextView, R.dimen.dp12);
-        firstTextView.setEmojiSize(i_Dp(R.dimen.dp14));
-//        addView(firstTextView);
-
-
-        /**
-         * init last message content
-         * is typing
-         * message content
-         * Voice Call Cancelled
-         *
-         * */
-        EmojiTextViewE secondTextView = new EmojiTextViewE(G.context);
-        secondTextView.setId(R.id.tv_chatCell_secondTextView);
-        secondTextView.setEllipsize(TextUtils.TruncateAt.END);
-        secondTextView.setSingleLine(true);
-        setTypeFace(secondTextView);
-        secondTextView.setTextColor(isDarkTheme ? getContext().getResources().getColor(R.color.gray_f2) : Color.parseColor("#FF616161"));
-        setTextSize(secondTextView, G.twoPaneMode ? R.dimen.dp16 : R.dimen.dp12);
-        secondTextView.setEmojiSize(i_Dp(R.dimen.dp14));
-//        addView(secondTextView);
-
-
-        /**
-         * init last message content type (userAvatarIv,file,voice)
-         * sticker
-         * photo caption
-         * gif caption
-         * video caption
-         * */
-        EmojiTextViewE thirdTextView = new EmojiTextViewE(G.context);
-        thirdTextView.setId(R.id.tv_chatCell_thirdTextView);
-        thirdTextView.setEllipsize(TextUtils.TruncateAt.END);
-        thirdTextView.setSingleLine(true);
-        setTypeFace(thirdTextView);
-        thirdTextView.setTextColor(isDarkTheme ? getContext().getResources().getColor(R.color.gray_f2) : Color.parseColor("#FF616161"));
-        setTextSize(thirdTextView, R.dimen.dp12);
-        thirdTextView.setEmojiSize(i_Dp(R.dimen.dp14));
-//        addView(thirdTextView);
-
-
-        /**
          * init room notification
          * */
         FontIconTextView mute = new FontIconTextView(G.context);
@@ -236,12 +184,7 @@ public class ChatCell extends ConstraintLayout {
         bottomView.setBackgroundColor(isDarkTheme ? getResources().getColor(R.color.gray_6c) : getResources().getColor(R.color.gray_300));
         addView(bottomView);
 
-        LinearLayout linearLayout = new LinearLayout(getContext());
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        linearLayout.setId(R.id.ll_chatCell_messageBox);
-        linearLayout.setVisibility(GONE);
-
-        lastMessage = new EmojiTextViewE(getContext());
+        lastMessage = new EmojiTextView(getContext());
         lastMessage.setId(R.id.tv_chatCell_lastMessage);
         lastMessage.setEllipsize(TextUtils.TruncateAt.END);
         lastMessage.setGravity(Gravity.CENTER_VERTICAL);
@@ -255,15 +198,10 @@ public class ChatCell extends ConstraintLayout {
          * force gravity in message preview because we use constraint layout chain
          * */
         if (isRtl) {
-            firstTextView.setGravity(Gravity.RIGHT);
-            secondTextView.setGravity(Gravity.RIGHT);
-            thirdTextView.setGravity(Gravity.RIGHT);
             roomName.setGravity(Gravity.RIGHT);
             lastMessage.setGravity(Gravity.RIGHT);
         } else {
-            firstTextView.setGravity(Gravity.LEFT);
-            secondTextView.setGravity(Gravity.LEFT);
-            thirdTextView.setGravity(Gravity.LEFT);
+
             roomName.setGravity(Gravity.LEFT);
             lastMessage.setGravity(Gravity.LEFT);
         }
@@ -314,27 +252,8 @@ public class ChatCell extends ConstraintLayout {
         set.connect(messageData.getId(), ConstraintSet.TOP, roomName.getId(), ConstraintSet.TOP);
         set.connect(messageData.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
 
-
-//        set.constrainHeight(firstTextView.getId(), ConstraintSet.WRAP_CONTENT);
-//        set.constrainWidth(firstTextView.getId(), ConstraintSet.WRAP_CONTENT);
-//
-//        set.constrainHeight(secondTextView.getId(), ConstraintSet.WRAP_CONTENT);
-//        set.constrainWidth(secondTextView.getId(), ConstraintSet.MATCH_CONSTRAINT);
-//
-//        set.constrainHeight(thirdTextView.getId(), ConstraintSet.WRAP_CONTENT);
-//        set.constrainWidth(thirdTextView.getId(), ConstraintSet.MATCH_CONSTRAINT);
-
         set.constrainHeight(messageStatus.getId(), i_Dp(R.dimen.dp24));
         set.constrainWidth(messageStatus.getId(), i_Dp(R.dimen.dp24));
-
-//        set.connect(firstTextView.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
-//        set.connect(firstTextView.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
-//
-//        set.connect(thirdTextView.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
-//        set.connect(thirdTextView.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
-//
-//        set.connect(secondTextView.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
-//        set.connect(secondTextView.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
 
         set.connect(lastMessage.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
         set.connect(lastMessage.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
@@ -373,11 +292,6 @@ public class ChatCell extends ConstraintLayout {
 
             set.connect(lastMessage.getId(), ConstraintSet.END, mute.getId(), ConstraintSet.END);
             set.connect(lastMessage.getId(), ConstraintSet.START, avatarImageView.getId(), ConstraintSet.END);
-
-            linearLayout.addView(firstTextView, 0, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
-            linearLayout.addView(secondTextView, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
-            linearLayout.addView(thirdTextView, 2, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
-            addView(linearLayout);
             addView(lastMessage);
 
 
@@ -412,15 +326,6 @@ public class ChatCell extends ConstraintLayout {
 
             set.connect(lastMessage.getId(), ConstraintSet.RIGHT, mute.getId(), ConstraintSet.RIGHT);
             set.connect(lastMessage.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.RIGHT);
-
-            thirdTextView.setGravity(Gravity.RIGHT);
-            firstTextView.setGravity(Gravity.RIGHT);
-            secondTextView.setGravity(Gravity.RIGHT);
-
-            linearLayout.addView(firstTextView, 0, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
-            linearLayout.addView(secondTextView, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
-            linearLayout.addView(thirdTextView, 2, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
-            addView(linearLayout);
             addView(lastMessage);
         }
 
