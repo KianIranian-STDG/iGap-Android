@@ -66,7 +66,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         //holder.checkBoxSelect.setChecked(true);
         holder.topLine.setVisibility(View.GONE);
 
-        if (G.selectedLanguage.equals("en") || G.selectedLanguage.equals("fr")) {
+        if (!G.isAppRtl) {
             holder.subtitle.setGravity(Gravity.LEFT);
             holder.title.setGravity(Gravity.LEFT);
         } else {

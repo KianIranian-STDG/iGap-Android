@@ -33,6 +33,7 @@ public class FragmentLanguageViewModel extends ViewModel {
     private ObservableInt isEnglish = new ObservableInt(View.GONE);
     private ObservableInt isArabic = new ObservableInt(View.GONE);
     private ObservableInt isFrance = new ObservableInt(View.GONE);
+    private ObservableInt isRussian = new ObservableInt(View.GONE);
     private MutableLiveData<String> refreshActivityForChangeLanguage = new MutableLiveData<>();
     private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
 
@@ -53,6 +54,9 @@ public class FragmentLanguageViewModel extends ViewModel {
                 case "Français":
                     isFrance.set(View.VISIBLE);
                     break;
+                case "Russian":
+                    isRussian.set(View.VISIBLE);
+                    break;
             }
         }
     }
@@ -71,6 +75,10 @@ public class FragmentLanguageViewModel extends ViewModel {
 
     public ObservableInt getIsFrance() {
         return isFrance;
+    }
+
+    public ObservableInt getIsRussian() {
+        return isRussian;
     }
 
     public MutableLiveData<String> getRefreshActivityForChangeLanguage() {
@@ -94,6 +102,26 @@ public class FragmentLanguageViewModel extends ViewModel {
             G.isAppRtl = false;
             FragmentLanguage.languageChanged = true;
             refreshActivityForChangeLanguage.setValue("en");
+            if (MusicPlayer.updateName != null) {
+                MusicPlayer.updateName.rename();
+            }
+        }
+        goBack.setValue(true);
+    }
+
+    public void onClickRussian() {
+        if (!G.selectedLanguage.equals("ru")) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(SHP_SETTING.KEY_LANGUAGE, "Russian");
+            editor.apply();
+            G.selectedLanguage = "ru";
+            HelperCalander.isPersianUnicode = false;
+            HelperCalander.isLanguagePersian = false;
+            HelperCalander.isLanguageArabic = false;
+            G.isAppRtl = false;
+            FragmentLanguage.languageChanged = true;
+            refreshActivityForChangeLanguage.setValue("ru");
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }
