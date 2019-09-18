@@ -5972,6 +5972,7 @@ public class FragmentChat extends BaseFragment
                 isSendVisibilityAnimInProcess = false;
                 imvSendButton.clearAnimation();
                 layoutAttachBottom.clearAnimation();
+                edtChat.requestLayout();
 
             }
 
@@ -6018,6 +6019,7 @@ public class FragmentChat extends BaseFragment
                 isAttachVisibilityAnimInProcess = false ;
                 imvSendButton.clearAnimation();
                 layoutAttachBottom.clearAnimation();
+                edtChat.requestLayout();
 
             }
 

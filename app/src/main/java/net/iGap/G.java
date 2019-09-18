@@ -32,6 +32,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.multidex.MultiDex;
 
+import com.caspian.otpsdk.context.ApplicationContext;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -73,7 +74,7 @@ import ir.radsense.raadcore.web.WebBase;
 
 import static net.iGap.Config.DEFAULT_BOTH_CHAT_DELETE_TIME;
 
-public class G extends Application {
+public class G extends ApplicationContext {
 
     public static final String IGAP = "/iGap";
     public static final String IMAGES = "/iGap Images";
