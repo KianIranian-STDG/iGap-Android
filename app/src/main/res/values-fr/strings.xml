@@ -681,7 +681,7 @@
     <string name="new_channel" >nouveau canal</string>
     <string name="channel_left" >quitter canal</string>
     <string name="please_enter_channel_description" >veuillez entrer explication courte sur canal</string>
-    <string name="txt_you" >vous:</string>
+    <string name="txt_you">vous</string>
     <string name="you" >vous</string>
     <string name="farvardin" >1 mars - 20 avril  Farvardin</string>
     <string name="ordibehst" >21 avril - 21 mai Ordibešhet</string>
