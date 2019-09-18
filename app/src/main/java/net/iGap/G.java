@@ -87,7 +87,7 @@ public class G extends Application {
     public static final String IMAGE_USER = "/.image_user";
     public static final String STICKER = "/.sticker";
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
-    public static boolean ISOK = true;
+    public static boolean ISRealmOK = true;
     public static Context context;
     public static Handler handler;
     public static boolean isCalling = false;

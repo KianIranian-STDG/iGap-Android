@@ -1137,6 +1137,8 @@ public class FragmentChat extends BaseFragment
     public void onDestroyView() {
         super.onDestroyView();
         mAttachmentPopup = null;
+        FragmentEditImage.itemGalleryList.clear();
+        FragmentEditImage.textImageList.clear();
         realmChat.close();
         EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
         mHelperToolbar.unRegisterTimerBroadcast();

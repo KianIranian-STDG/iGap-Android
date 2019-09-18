@@ -150,7 +150,7 @@ public class FragmentChatSettingViewModel extends ViewModel {
 
     public void onClickTrim() {
         isTrim.set(!isTrim.get());
-        sharedPreferences.edit().putInt(SHP_SETTING.KEY_TRIM, isTime.get() ? 1 : 0).apply();
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_TRIM, isTrim.get() ? 1 : 0).apply();
     }
 
     public void onClickDefaultVideo() {

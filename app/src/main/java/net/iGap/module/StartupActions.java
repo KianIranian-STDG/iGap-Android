@@ -574,10 +574,10 @@ public final class StartupActions {
         try {
             Realm.init(context);
         } catch (Exception e) {
-            G.ISOK = false;
+            G.ISRealmOK = false;
             return false;
         } catch (Error e) {
-            G.ISOK = false;
+            G.ISRealmOK = false;
             return false;
         }
 

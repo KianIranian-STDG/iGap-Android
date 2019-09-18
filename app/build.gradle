@@ -239,6 +239,8 @@ dependencies {
     release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protoMain12'
     release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain12'
     release_CharImplementation 'com.github.KianIranian-STDG:Proto:protoMain12'
+    release_GooglePlayImplementation 'com.github.KianIranian-STDG:Proto:protoMain12'
+    release_BazaarImplementation 'com.github.KianIranian-STDG:Proto:protoMain12'
     debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta12'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'

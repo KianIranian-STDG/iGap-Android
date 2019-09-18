@@ -48,16 +48,6 @@
                     app:layout_constraintRight_toRightOf="@id/groupAvatar"
                     app:layout_constraintTop_toTopOf="@id/groupAvatar" />
 
-                <ProgressBar
-                    android:id="@+id/loading"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="@{ viewModel.showLoading ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <View
                     android:id="@+id/line"
                     style="?lineColorSettingTheme"
@@ -72,7 +62,7 @@
                     style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="@dimen/dp16"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/groupDescriptionEditText"
@@ -103,7 +93,7 @@
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/groupDescriptionEditText"
                     style="?hintColorSettingTheme"
-                    android:layout_width="261dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:background="@null"
@@ -133,7 +123,6 @@
                     style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
                     android:onClick="@{()->viewModel.onChatHistoryStatusClick()}"
                     android:padding="8dp"
                     android:text="@{viewModel.chatHistoryForNewMemberStatus}"
@@ -272,9 +261,9 @@
                     android:layout_marginTop="32dp"
                     android:onClick="@{()->viewModel.chooseImage()}"
                     app:avatarImage="@{viewModel.avatarImage}"
+                    app:layout_constraintEnd_toStartOf="@id/groupNameEditText"
                     app:layout_constraintHorizontal_bias="0.531"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/groupNameEditText"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <net.iGap.module.EmojiEditTextE
@@ -284,7 +273,6 @@
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:gravity="bottom"
-                    app:layout_constraintStart_toEndOf="@id/groupAvatar"
                     android:hint="@string/group_name"
                     android:imeOptions="flagNoExtractUi"
                     android:maxLines="1"
@@ -292,6 +280,7 @@
                     android:textSize="@dimen/largeTextSize"
                     app:emojiSize="@dimen/largeTextSize"
                     app:layout_constraintEnd_toStartOf="@+id/emojiButton"
+                    app:layout_constraintStart_toEndOf="@id/groupAvatar"
                     app:layout_constraintTop_toTopOf="@+id/groupAvatar" />
 
                 <net.iGap.module.MaterialDesignTextView
@@ -312,6 +301,16 @@
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/groupNameEditText"
                     app:layout_constraintEnd_toEndOf="parent" />
+
+                <ProgressBar
+                    android:id="@+id/loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{ viewModel.showLoading ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
