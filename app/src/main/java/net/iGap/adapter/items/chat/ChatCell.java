@@ -32,10 +32,8 @@ public class ChatCell extends ConstraintLayout {
 
     private EmojiTextViewE lastMessage;
     public static final int DRAFT_COLOR = Color.RED;
-    public static final int MESSAGE_COLOR = Color.parseColor(G.isDarkTheme ? "#AAAAAA" : "#616161");
     public static final int TYPING_COLOR = Color.parseColor("#1DA1F2");
-    public static final int ATTACHMENT_COLOR = Color.parseColor(G.isDarkTheme ? "#667B42" : "#9DC756");
-    public static final int SENDER_COLOR = ATTACHMENT_COLOR;
+    public static final int SENDER_COLOR = attachmentColor();
     public static final int DELETED_COLOR = Color.GRAY;
 
     public static final int FILE = 0x1F4CE;
@@ -45,11 +43,18 @@ public class ChatCell extends ConstraintLayout {
     public static final int GIF = 0x1F308;
     public static final int WALLET = 0x1F4B3;
 
+    public static int messageColor() {
+        return Color.parseColor(G.isDarkTheme ? "#E0E0E0" : "#616161");
+    }
+
+    public static int attachmentColor() {
+        return Color.parseColor(G.isDarkTheme ? "#667B42" : "#9DC756");
+    }
+
     public ChatCell(Context context) {
         super(context);
         init();
     }
-
 
     private void init() {
 

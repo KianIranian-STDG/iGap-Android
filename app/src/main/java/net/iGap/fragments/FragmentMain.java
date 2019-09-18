@@ -1453,14 +1453,14 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 builder.append(typingSpannableString);
 
             } else if (room.getDraft() != null && !TextUtils.isEmpty(room.getDraft().getMessage())) {
-                String draft = getResources().getString(R.string.txt_draft);
+                String draft = getResources().getString(R.string.txt_draft) + " ";
 
                 SpannableString redSpannable = new SpannableString(draft);
                 redSpannable.setSpan(new ForegroundColorSpan(ChatCell.DRAFT_COLOR), 0, draft.length(), 0);
 
                 String draftMessage = room.getDraft().getMessage();
                 SpannableString message = new SpannableString(draftMessage);
-                message.setSpan(new ForegroundColorSpan(ChatCell.MESSAGE_COLOR), 0, message.length(), 0);
+                message.setSpan(new ForegroundColorSpan(ChatCell.messageColor()), 0, message.length(), 0);
 
                 builder.append(redSpannable);
                 builder.append(message);
@@ -1607,7 +1607,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
                         if (attachmentSpannable != null) {
                             haveAttachment = true;
-                            attachmentSpannable.setSpan(new ForegroundColorSpan(ChatCell.ATTACHMENT_COLOR), 0, attachmentTag.length(), 0);
+                            attachmentSpannable.setSpan(new ForegroundColorSpan(ChatCell.attachmentColor()), 0, attachmentTag.length(), 0);
                         }
 
                         if (haveSenderName) {
@@ -1621,7 +1621,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                             m = lastMessage.getMessage();
 
                         lastMessageSpannable = new SpannableString(subStringInternal(m));
-                        lastMessageSpannable.setSpan(new ForegroundColorSpan(ChatCell.MESSAGE_COLOR), 0, lastMessageSpannable.length(), 0);
+                        lastMessageSpannable.setSpan(new ForegroundColorSpan(ChatCell.messageColor()), 0, lastMessageSpannable.length(), 0);
 
                         if (haveSenderName) {
                             if (haveAttachment) {
