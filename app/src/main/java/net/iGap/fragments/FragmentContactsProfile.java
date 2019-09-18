@@ -48,11 +48,13 @@ import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.DialogAnimation;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.proto.ProtoUserReport;
 import net.iGap.realm.RealmRoomMessage;
@@ -232,6 +234,7 @@ public class FragmentContactsProfile extends BaseFragment {
 
             if (viewModel.phone.get().equals("0")) {
                 binding.toolbarTxtTelExpanded.setVisibility(View.GONE);
+                viewModel.menuVisibility.setValue(View.GONE);
             } else {
                 binding.toolbarTxtTelExpanded.setText(viewModel.phone.get());
                 binding.toolbarTxtTelExpanded.setOnClickListener(v -> viewModel.onPhoneNumberClick());
@@ -610,6 +613,23 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
             }
         });
 
+        viewModel.editContactListener.observe(getViewLifecycleOwner() , aBoolean -> {
+            if (aBoolean == null) return;
+            FragmentAddContact fragment = FragmentAddContact.newInstance(
+                    viewModel.userId,viewModel.phoneNumber , viewModel.firstName, viewModel.lastName, FragmentAddContact.ContactMode.EDIT, (name, family) -> {
+                        viewModel.contactName.setValue(name + " " + family);
+                        viewModel.firstName = name ;
+                        viewModel.lastName = family ;
+                        if (getActivity() != null){
+                            ((ActivityMain) getActivity()).onUpdateContacts();
+                        }
+                    }
+            );
+            if (getActivity() != null)
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+
+        });
+
     }
 
     private void checkViewsState() {
@@ -827,7 +847,7 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
      */
     private void addContactToServer() {
 
-        if (RealmUserInfo.isLimitImportContacts()) {
+        if (HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_DIALOG)) {
             showLimitDialog();
             return;
         }

@@ -278,7 +278,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             mRealm.close();
 
             if (G.imageLoader != null) {
@@ -394,7 +394,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         detectDeviceType();
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             mRealm = Realm.getDefaultInstance();
             try (Realm realm = Realm.getDefaultInstance()) {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -433,9 +433,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             };
 
-            if (G.isFirstPassCode) {
+            /*if (G.isFirstPassCode) {
                 openActivityPassCode();
-            }
+            }*/
 
             initTabStrip(getIntent());
             IntentFilter intentFilter = new IntentFilter();
@@ -1086,9 +1086,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void checkGoogleUpdate() {
-        Log.wtf(this.getClass().getName(), "installIfNeeded");
-        ProviderInstaller.installIfNeededAsync(this, this);
-        Log.wtf(this.getClass().getName(), "installIfNeeded");
+        if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
+            Log.wtf(this.getClass().getName(), "installIfNeeded");
+            ProviderInstaller.installIfNeededAsync(this, this);
+            Log.wtf(this.getClass().getName(), "installIfNeeded");
+        }
     }
 
     //*******************************************************************************************************************************************
@@ -1191,7 +1193,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onStart() {
         super.onStart();
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             if (!G.isFirstPassCode) {
                 openActivityPassCode();
             }
@@ -1274,7 +1276,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             if (G.onBackPressedWebView != null) {
                 if (G.onBackPressedWebView.onBack()) {
                     return;
@@ -1348,9 +1350,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             } else {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                    if (getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment) {
-                        ((PaymentFragment) getSupportFragmentManager().findFragmentById(R.id.mainFrame)).onBackPressed();
-                    } else {
+                    if (!(getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment)) {
                         super.onBackPressed();
                     }
                 } else {
@@ -1373,7 +1373,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onResume() {
         Log.wtf(this.getClass().getName(), "onResume");
         super.onResume();
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             resume();
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
@@ -1461,7 +1461,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onPause() {
         Log.wtf(this.getClass().getName(), "onPause");
         super.onPause();
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             if (isNeedToRegister) {
                 return;
             }
@@ -1544,7 +1544,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                          */
                         if (room.getUnreadCount() <= 1) {
                             realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
-                            room.setFirstUnreadMessage(realmRoomMessage);
                         }
                     }
                 }
@@ -1556,6 +1555,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
          */
         if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != userId) {
             // user has received the message, so I make a new delivered update status request
+            // todo:please check in group and channel that user is joined
+
             if (roomType == ProtoGlobal.Room.Type.CHAT) {
                 G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
             } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
@@ -1846,6 +1847,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     }
 
+    public void onUpdateContacts() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragment).updateContacts();
+        }
+    }
+
     public enum MainAction {
         downScrool, clinetCondition
     }
@@ -1925,7 +1933,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    public Fragment getFragment(String fragmentTag){
+    public Fragment getFragment(String fragmentTag) {
         return getSupportFragmentManager().findFragmentByTag(fragmentTag);
     }
 }

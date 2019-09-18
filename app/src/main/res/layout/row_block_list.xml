@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp70"
     android:orientation="vertical"
+    android:layoutDirection="locale"
     android:paddingLeft="@dimen/dp20"
     android:paddingTop="@dimen/dp10"
     android:paddingRight="@dimen/dp20"

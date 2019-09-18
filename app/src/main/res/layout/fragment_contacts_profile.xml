@@ -44,7 +44,7 @@
                     android:minHeight="@dimen/toolbar_height"
                     app:layout_collapseMode="pin" />
 
-                <RelativeLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/toolbar_collapsed"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/toolbar_height"
@@ -59,79 +59,80 @@
                         style="@style/myIconToolbarStyle"
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
                         android:layout_marginStart="@dimen/dp4"
                         android:layout_marginLeft="@dimen/dp4"
-                        android:text="@string/back_icon" />
+                        android:text="@string/back_icon"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <Space
                         android:id="@+id/toolbar_avatar_collapsed_target"
                         android:layout_width="@dimen/toolbar_profile_avatar_size_collapsed"
                         android:layout_height="@dimen/toolbar_profile_avatar_size_collapsed"
-                        android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/dp6"
                         android:layout_marginRight="@dimen/dp6"
-                        android:layout_toEndOf="@id/toolbar_back"
-                        android:layout_toRightOf="@id/toolbar_back" />
+                        app:layout_constraintLeft_toRightOf="@id/toolbar_back"
+                        app:layout_constraintTop_toTopOf="@id/toolbar_back"
+                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back"/>
 
                     <net.iGap.module.EmojiTextViewE
                         android:id="@+id/toolbar_txt_name_collapsed"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:layout_marginStart="@dimen/dp8"
                         android:layout_marginLeft="@dimen/dp8"
                         android:layout_marginEnd="@dimen/dp8"
                         android:layout_marginRight="@dimen/dp8"
-                        android:layout_toStartOf="@id/toolbar_voiceCall"
-                        android:layout_toLeftOf="@id/toolbar_voiceCall"
-                        android:layout_toEndOf="@id/toolbar_avatar_collapsed_target"
-                        android:layout_toRightOf="@id/toolbar_avatar_collapsed_target"
                         android:fontFamily="@font/main_font"
                         android:gravity="left|center_vertical"
                         android:singleLine="true"
                         android:textColor="@color/white"
                         android:textSize="@dimen/standardTextSize"
                         android:visibility="gone"
-                        app:emojiSize="@dimen/standardTextSize" />
+                        app:emojiSize="@dimen/standardTextSize"
+                        app:layout_constraintLeft_toRightOf="@id/toolbar_avatar_collapsed_target"
+                        app:layout_constraintRight_toLeftOf="@id/toolbar_videoCall"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <TextView
                         android:id="@+id/toolbar_more"
                         style="@style/myIconToolbarStyle"
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/dp4"
                         android:layout_marginRight="@dimen/dp4"
+                        app:layout_goneMarginRight="@dimen/dp4"
                         android:text="@string/more_icon"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/toolbar_back"
+                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back"/>
 
                     <TextView
                         android:id="@+id/toolbar_videoCall"
                         style="@style/myIconToolbarStyle"
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
-                        android:layout_centerVertical="true"
-                        android:layout_toStartOf="@id/toolbar_more"
-                        android:layout_toLeftOf="@id/toolbar_more"
                         android:text="@string/video_call_icon"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="@id/toolbar_back"
+                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back"
+                        app:layout_constraintRight_toLeftOf="@id/toolbar_more"/>
 
                     <TextView
                         android:id="@+id/toolbar_voiceCall"
                         style="@style/myIconToolbarStyle"
                         android:layout_width="@dimen/toolbar_icon_size"
                         android:layout_height="@dimen/toolbar_icon_size"
-                        android:layout_centerVertical="true"
-                        android:layout_toStartOf="@id/toolbar_videoCall"
-                        android:layout_toLeftOf="@id/toolbar_videoCall"
                         android:text="@string/voice_call_icon"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="@id/toolbar_back"
+                        app:layout_constraintBottom_toBottomOf="@id/toolbar_back"
+                        app:layout_constraintRight_toLeftOf="@id/toolbar_videoCall"/>
 
-                </RelativeLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -279,7 +280,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedPhotoCount)}"
-                    android:textColor="@color/setting_items_value_color"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedPhotoVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/photo"
@@ -307,7 +308,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedVideoCount)}"
-                    android:textColor="@color/setting_items_value_color"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedVideoVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/video"
@@ -335,7 +336,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedAudioCount)}"
-                    android:textColor="@color/setting_items_value_color"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedAudioVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/audioFiles"
@@ -363,7 +364,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedVoiceCount)}"
-                    android:textColor="@color/setting_items_value_color"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedVoiceVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/voiceMessage"
@@ -391,7 +392,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedGifCount)}"
-                    android:textColor="@color/setting_items_value_color"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedGifVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/gif"
@@ -419,7 +420,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedFileCount)}"
-                    android:textColor="@color/setting_items_value_color"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedFileVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/files"
@@ -447,7 +448,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedLinkCount)}"
-                    android:textColor="@color/setting_items_value_color"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedLinkVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/links"
@@ -497,7 +498,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    android:textColor="@color/setting_items_value_color"
+                    android:textColor="?attr/colorPrimary"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/commonGroup"
                     app:layout_constraintEnd_toEndOf="@id/sharedContentTitle"
@@ -704,7 +705,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp20"
             android:onClick="@{()->viewModel.onClickGoToChat()}"
-            app:backgroundTint="@color/setting_items_value_color"
+            app:backgroundTint="?attr/colorPrimary"
             app:fabSize="mini"
             app:layout_anchor="@id/toolbar_background"
             app:layout_anchorGravity="end|bottom"

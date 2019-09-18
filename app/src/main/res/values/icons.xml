@@ -259,7 +259,7 @@
     <string name="icon_beeptunes_like">\ue954</string>
     <string name="horizontal_more_icon">\ue9b8</string>
 
-    <string name="error_icon">.</string>
+    <string name="error_icon">\ue938</string>
     <string name="valid_icon">ß</string>
     <string name="valid_wallet">4</string>
     <string name="download_ic">ï</string>

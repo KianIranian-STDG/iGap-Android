@@ -285,7 +285,7 @@
     <color name="kuknos_smooth_white_spinner">#9e9e9e</color>
     <color name="kuknos_gray">#99999797</color>
     <color name="kuknos_WH_itembg">#F1F1F1</color>
-    
+
     <color name="tealBackground">#B2DFDB</color>
     <color name="indigoBackground">#C5CAE9</color>
     <color name="blueGreyBackground">#CFD8DC</color>
@@ -296,4 +296,5 @@
     <color name="brownDividerLine">#bcaaa4</color>
     <color name="tealDividerLine">#80cbc4</color>
     <color name="grayDividerLine">#e0e0e0</color>
+    <color name="chat_bottom_bg">#EEEEEE</color>
 </resources>

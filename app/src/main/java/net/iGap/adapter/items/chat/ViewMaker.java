@@ -198,7 +198,7 @@ public class ViewMaker {
         return cslr_replay_layout;
     }
 
-    static View getViewForward() {
+    static View getViewForward(Context context) {
         LinearLayout cslr_ll_forward = new LinearLayout(context);
         cslr_ll_forward.setId(R.id.cslr_ll_forward);
         cslr_ll_forward.setClickable(true);

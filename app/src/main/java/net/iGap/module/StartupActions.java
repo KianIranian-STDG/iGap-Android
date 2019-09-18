@@ -233,6 +233,7 @@ public final class StartupActions {
             new File(DIR_TEMP).mkdirs();
             new File(DIR_CHAT_BACKGROUND + "/" + file).createNewFile();
             new File(DIR_IMAGE_USER + "/" + file).createNewFile();
+            new File(DIR_STICKER + "/" + file).createNewFile();
             new File(DIR_TEMP + "/" + file).createNewFile();
 
             IMAGE_NEW_GROUP = new File(G.DIR_IMAGE_USER, "image_new_group.jpg");
@@ -506,6 +507,13 @@ public final class StartupActions {
                 Raad.language = selectedLanguage;
                 Raad.isFA = false;
                 break;
+            case "Français":
+                selectedLanguage = "fr";
+                HelperCalander.isPersianUnicode = false;
+                G.isAppRtl = false;
+                Raad.language = selectedLanguage;
+                Raad.isFA = false;
+                break;
             case "العربی":
                 selectedLanguage = "ar";
                 HelperCalander.isPersianUnicode = true;
@@ -566,10 +574,10 @@ public final class StartupActions {
         try {
             Realm.init(context);
         } catch (Exception e) {
-            G.ISOK = false;
+            G.ISRealmOK = false;
             return false;
         } catch (Error e) {
-            G.ISOK = false;
+            G.ISRealmOK = false;
             return false;
         }
 

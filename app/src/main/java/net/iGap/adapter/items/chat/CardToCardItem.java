@@ -122,11 +122,11 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
 
             if (G.isDarkTheme) {
                 innerLayout.setBackground(getDrawable(R.drawable.background_item_card_to_card_dark));
-                payButton.setBackground(getDrawable(R.drawable.background_button_card_to_card_dark));
+                payButton.setBackgroundResource(R.drawable.background_button_card_to_card_dark);
                 cardIcon.setBackground(getDrawable(R.drawable.background_card_to_card_icon_dark));
             } else {
                 innerLayout.setBackground(getDrawable(R.drawable.background_item_card_to_card));
-                payButton.setBackground(getDrawable(R.drawable.background_button_card_to_card));
+                payButton.setBackgroundResource(R.drawable.background_button_card_to_card);
                 cardIcon.setBackground(getDrawable(R.drawable.background_card_to_card_icon));
             }
 

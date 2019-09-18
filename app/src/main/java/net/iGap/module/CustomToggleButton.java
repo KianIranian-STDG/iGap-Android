@@ -35,9 +35,9 @@ public class CustomToggleButton extends ToggleButton {
         setTextOff("");
         setTextOn("");
         if (G.isDarkTheme) {
-            setButtonDrawable(getContext().getResources().getDrawable(R.drawable.st_switch_button_dark));
+            setButtonDrawable(R.drawable.st_switch_button_dark);
         } else {
-            setButtonDrawable(getContext().getResources().getDrawable(R.drawable.st_switch_button));
+            setButtonDrawable(R.drawable.st_switch_button);
         }
     }
 

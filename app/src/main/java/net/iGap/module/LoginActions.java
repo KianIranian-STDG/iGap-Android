@@ -50,7 +50,7 @@ public class LoginActions {
      * try login to server and do common actions
      */
     public static void login() {
-        if (!G.ISOK) {
+        if (!G.ISRealmOK) {
             return;
         }
 
@@ -128,7 +128,7 @@ public class LoginActions {
 
     private static void getUserInfo() {
         final long userId;
-        try (final Realm realm = Realm.getDefaultInstance()) {
+        try (Realm realm = Realm.getDefaultInstance()) {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo == null) {
                 throw new Exception("Empty Exception");

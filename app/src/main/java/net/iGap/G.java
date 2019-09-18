@@ -67,6 +67,7 @@ import javax.crypto.spec.SecretKeySpec;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
+import ir.metrix.sdk.Metrix;
 import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.web.WebBase;
 
@@ -86,7 +87,7 @@ public class G extends Application {
     public static final String IMAGE_USER = "/.image_user";
     public static final String STICKER = "/.sticker";
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
-    public static boolean ISOK = true;
+    public static boolean ISRealmOK = true;
     public static Context context;
     public static Handler handler;
     public static boolean isCalling = false;
@@ -494,6 +495,14 @@ public class G extends Application {
         super.onCreate();
         RaadApp.onCreate(getApplicationContext());
         LooperThreadHelper.getInstance();
+
+        Metrix.initialize(this, "jpbnabzrmeqvxme");
+
+        // dont remove below line please
+        if (!BuildConfig.DEBUG && BuildConfig.Store.length() > 1) {
+            Metrix.getInstance().setStore(BuildConfig.Store);
+            Metrix.getInstance().setAppSecret(1,1728320174, 43612053, 1626881868, 580653578);
+        }
 
         new Thread(new Runnable() {
             @Override

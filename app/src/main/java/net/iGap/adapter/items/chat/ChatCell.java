@@ -15,6 +15,8 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.vanniktech.emoji.EmojiTextView;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -27,6 +29,21 @@ import net.iGap.module.FontIconTextView;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 public class ChatCell extends ConstraintLayout {
+
+    private EmojiTextViewE lastMessage;
+    public static final int DRAFT_COLOR = Color.RED;
+    public static final int MESSAGE_COLOR = Color.parseColor(G.isDarkTheme ? "#AAAAAA" : "#616161");
+    public static final int TYPING_COLOR = Color.parseColor("#1DA1F2");
+    public static final int ATTACHMENT_COLOR = Color.parseColor(G.isDarkTheme ? "#667B42" : "#9DC756");
+    public static final int SENDER_COLOR = ATTACHMENT_COLOR;
+    public static final int DELETED_COLOR = Color.GRAY;
+
+    public static final int FILE = 0x1F4CE;
+    public static final int VIDEO = 0x1F4F9;
+    public static final int MUSIC = 0x1F3A7;
+    public static final int IMAGE = 0x1F30C;
+    public static final int GIF = 0x1F308;
+    public static final int WALLET = 0x1F4B3;
 
     public ChatCell(Context context) {
         super(context);
@@ -81,7 +98,7 @@ public class ChatCell extends ConstraintLayout {
         /**
          * init chat icon(channel,group,pv,muteRoomTv and unMute)
          * */
-        FontIconTextView chatIcon = new FontIconTextView(G.context);
+        FontIconTextView chatIcon = new FontIconTextView(getContext());
         chatIcon.setId(R.id.tv_chatCell_chatIcon);
         chatIcon.setTextColor(isDarkTheme ? Color.parseColor(G.textTitleTheme) : Color.parseColor("#333333"));
         setTextSize(chatIcon, R.dimen.standardTextSize);
@@ -91,7 +108,7 @@ public class ChatCell extends ConstraintLayout {
         /**
          * init room roomNameTv
          * */
-        EmojiTextViewE roomName = new EmojiTextViewE(G.context);
+        EmojiTextViewE roomName = new EmojiTextViewE(getContext());
         roomName.setId(R.id.tv_chatCell_roomName);
         setTypeFace(roomName);
         setTextSize(roomName, R.dimen.standardTextSize);
@@ -105,7 +122,7 @@ public class ChatCell extends ConstraintLayout {
         /**
          * init verify room
          * */
-        FontIconTextView verify = new FontIconTextView(G.context);
+        FontIconTextView verify = new FontIconTextView(getContext());
         verify.setId(R.id.tv_chatCell_verify);
         verify.setTextColor(getContext().getResources().getColor(R.color.verify_color));
         verify.setText(R.string.verify_icon);
@@ -119,7 +136,7 @@ public class ChatCell extends ConstraintLayout {
          * you
          *
          * */
-        EmojiTextViewE firstTextView = new EmojiTextViewE(G.context);
+        EmojiTextViewE firstTextView = new EmojiTextViewE(getContext());
         firstTextView.setId(R.id.tv_chatCell_firstTextView);
         firstTextView.setSingleLine(true);
         setTypeFace(firstTextView);
@@ -135,7 +152,7 @@ public class ChatCell extends ConstraintLayout {
          * Voice Call Cancelled
          *
          * */
-        EmojiTextViewE secondTextView = new EmojiTextViewE(G.context);
+        EmojiTextViewE secondTextView = new EmojiTextViewE(getContext());
         secondTextView.setId(R.id.tv_chatCell_secondTextView);
         secondTextView.setEllipsize(TextUtils.TruncateAt.END);
         secondTextView.setSingleLine(true);
@@ -153,7 +170,7 @@ public class ChatCell extends ConstraintLayout {
          * gif caption
          * video caption
          * */
-        EmojiTextViewE thirdTextView = new EmojiTextViewE(G.context);
+        EmojiTextViewE thirdTextView = new EmojiTextViewE(getContext());
         thirdTextView.setId(R.id.tv_chatCell_thirdTextView);
         thirdTextView.setEllipsize(TextUtils.TruncateAt.END);
         thirdTextView.setSingleLine(true);
@@ -167,7 +184,7 @@ public class ChatCell extends ConstraintLayout {
         /**
          * init room notification
          * */
-        FontIconTextView mute = new FontIconTextView(G.context);
+        FontIconTextView mute = new FontIconTextView(getContext());
         mute.setId(R.id.iv_chatCell_mute);
         mute.setText(R.string.mute_icon);
         mute.setTextColor(Color.parseColor(G.textTitleTheme));
@@ -178,7 +195,7 @@ public class ChatCell extends ConstraintLayout {
         /**
          * init last message status(read ,send , failed)
          * */
-        FontIconTextView messageStatus = new FontIconTextView(G.context);
+        FontIconTextView messageStatus = new FontIconTextView(getContext());
         messageStatus.setId(R.id.iv_chatCell_messageStatus);
         messageStatus.setTextSize(20);
         setTextSize(messageStatus, R.dimen.standardTextSize);
@@ -188,7 +205,7 @@ public class ChatCell extends ConstraintLayout {
         /**
          * init last message send data and time
          * */
-        AppCompatTextView messageData = new AppCompatTextView(G.context);
+        AppCompatTextView messageData = new AppCompatTextView(getContext());
         messageData.setId(R.id.tv_chatCell_messageData);
         messageData.setSingleLine(true);
         messageData.setTextColor(Color.parseColor(G.textTitleTheme));
@@ -200,7 +217,7 @@ public class ChatCell extends ConstraintLayout {
         /**
          * init room unRead message count
          * */
-        BadgeView badgeView = new BadgeView(G.context);
+        BadgeView badgeView = new BadgeView(getContext());
         badgeView.setId(R.id.iv_chatCell_messageCount);
         setTypeFace(badgeView.getTextView());
         addView(badgeView);
@@ -217,6 +234,16 @@ public class ChatCell extends ConstraintLayout {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.setId(R.id.ll_chatCell_messageBox);
+        linearLayout.setVisibility(GONE);
+
+        lastMessage = new EmojiTextViewE(getContext());
+        lastMessage.setId(R.id.tv_chatCell_lastMessage);
+        lastMessage.setEllipsize(TextUtils.TruncateAt.END);
+        lastMessage.setGravity(Gravity.CENTER_VERTICAL);
+        lastMessage.setSingleLine(true);
+        setTypeFace(lastMessage);
+        setTextSize(lastMessage, R.dimen.dp12);
+        lastMessage.setEmojiSize(i_Dp(R.dimen.dp15));
 
 
         /**
@@ -227,11 +254,13 @@ public class ChatCell extends ConstraintLayout {
             secondTextView.setGravity(Gravity.RIGHT);
             thirdTextView.setGravity(Gravity.RIGHT);
             roomName.setGravity(Gravity.RIGHT);
+            lastMessage.setGravity(Gravity.RIGHT);
         } else {
             firstTextView.setGravity(Gravity.LEFT);
             secondTextView.setGravity(Gravity.LEFT);
             thirdTextView.setGravity(Gravity.LEFT);
             roomName.setGravity(Gravity.LEFT);
+            lastMessage.setGravity(Gravity.LEFT);
         }
 
         /**
@@ -302,12 +331,11 @@ public class ChatCell extends ConstraintLayout {
 //        set.connect(secondTextView.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
 //        set.connect(secondTextView.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
 
-        set.connect(linearLayout.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
-        set.connect(linearLayout.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
+        set.connect(lastMessage.getId(), ConstraintSet.TOP, messageStatus.getId(), ConstraintSet.TOP);
+        set.connect(lastMessage.getId(), ConstraintSet.BOTTOM, messageStatus.getId(), ConstraintSet.BOTTOM);
 
         set.constrainHeight(bottomView.getId(), i_Dp(R.dimen.dp1));
         set.constrainWidth(bottomView.getId(), ConstraintSet.MATCH_CONSTRAINT);
-
 
         if (isRtl) {
 
@@ -338,13 +366,15 @@ public class ChatCell extends ConstraintLayout {
             set.connect(mute.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
             set.connect(mute.getId(), ConstraintSet.LEFT, messageData.getId(), ConstraintSet.RIGHT, LayoutCreator.dp(4));
 
-            set.connect(linearLayout.getId(), ConstraintSet.END, mute.getId(), ConstraintSet.END);
-            set.connect(linearLayout.getId(), ConstraintSet.START, avatarImageView.getId(), ConstraintSet.END);
+            set.connect(lastMessage.getId(), ConstraintSet.END, mute.getId(), ConstraintSet.END);
+            set.connect(lastMessage.getId(), ConstraintSet.START, avatarImageView.getId(), ConstraintSet.END);
 
             linearLayout.addView(firstTextView, 0, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
             linearLayout.addView(secondTextView, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
             linearLayout.addView(thirdTextView, 2, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
             addView(linearLayout);
+            addView(lastMessage);
+
 
         } else {
 
@@ -375,8 +405,8 @@ public class ChatCell extends ConstraintLayout {
             set.connect(mute.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
             set.connect(mute.getId(), ConstraintSet.RIGHT, messageData.getId(), ConstraintSet.LEFT, LayoutCreator.dp(4));
 
-            set.connect(linearLayout.getId(), ConstraintSet.RIGHT, mute.getId(), ConstraintSet.RIGHT);
-            set.connect(linearLayout.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.RIGHT);
+            set.connect(lastMessage.getId(), ConstraintSet.RIGHT, mute.getId(), ConstraintSet.RIGHT);
+            set.connect(lastMessage.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.RIGHT);
 
             thirdTextView.setGravity(Gravity.RIGHT);
             firstTextView.setGravity(Gravity.RIGHT);
@@ -386,6 +416,7 @@ public class ChatCell extends ConstraintLayout {
             linearLayout.addView(secondTextView, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
             linearLayout.addView(thirdTextView, 2, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
             addView(linearLayout);
+            addView(lastMessage);
         }
 
 
@@ -405,4 +436,7 @@ public class ChatCell extends ConstraintLayout {
         v.setTypeface(G.typeface_IRANSansMobile);
     }
 
+    public EmojiTextView getLastMessage() {
+        return lastMessage;
+    }
 }

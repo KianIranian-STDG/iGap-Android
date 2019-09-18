@@ -62,7 +62,8 @@
     </declare-styleable>
 
     <!--=======================custom theme=====================-->
-
+    <attr name="colorPrimaryLight" format="color" />
+    <attr name="colorAccentDark" format="color" />
     <attr name="rootBackgroundColor" format="color" />
     <attr name="iGapTitleTextColor" format="color" />
     <attr name="iGapSubtitleTextColor" format="color" />
@@ -73,6 +74,7 @@
     <attr name="iGapButtonTextColor" format="color" />
     <attr name="iGapPrimaryIconTextColor" format="color" />
     <attr name="iGapLogoutButtonColor" format="color" />
+    <attr name="iGapSendMessageBubbleColor" format="color" />
 
     <!--=======================custom theme=====================-->
 

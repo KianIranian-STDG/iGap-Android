@@ -1,12 +1,17 @@
 package net.iGap.fragments;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.vanniktech.emoji.EmojiTextView;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -43,6 +49,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
+import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
@@ -519,7 +526,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void pinToTop(final long roomId, final boolean isPinned) {
-        //+Realm realm = Realm.getDefaultInstance();
 
         new RequestClientPinRoom().pinRoom(roomId, !isPinned);
         if (!isPinned) {
@@ -1106,9 +1112,20 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         @Override
         protected OrderedRealmCollectionChangeListener createListener() {
-            return new OrderedRealmCollectionChangeListener() {
+
+            return new OrderedRealmCollectionChangeListener<RealmResults<RealmRoom>>() {
                 @Override
-                public void onChange(Object collection, OrderedCollectionChangeSet changeSet) {
+                public void onChange(RealmResults<RealmRoom> collection, OrderedCollectionChangeSet changeSet) {
+                    if (G.onUnreadChange != null) {
+                        int unreadCount = 0;
+                        for (RealmRoom room : collection) {
+                            if (!room.getMute() && !room.isDeleted() && room.getUnreadCount() > 0) {
+                                unreadCount += room.getUnreadCount();
+                            }
+                        }
+                        G.onUnreadChange.onChange(unreadCount);
+                    }
+
                     if (getData() != null && getData().size() > 0) {
                         emptyView.setVisibility(View.GONE);
                     } else {
@@ -1173,6 +1190,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             if (mInfo.isValid()) {
 
                 setLastMessage(mInfo, holder, isMyCloud);
+                getLastMessage(mInfo, holder.lastMessage);
 
                 if (isMyCloud) {
                     avatarHandler.removeImageViewFromHandler(holder.avatarIv);
@@ -1233,7 +1251,13 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                         if (G.isDarkTheme) {
                             holder.badgeView.setBadgeColor(getResources().getColor(R.color.md_blue_500));
                         } else {
-                            holder.badgeView.setBadgeColor(getResources().getColor(R.color.notification_badge));
+                            TypedValue typedValue = new TypedValue();
+
+                            TypedArray a = getContext().obtainStyledAttributes(typedValue.data, new int[] { R.attr.colorAccent });
+                            int color = a.getColor(0, 0);
+
+                            a.recycle();
+                            holder.badgeView.setBadgeColor(color);
                         }
                     }
                 }
@@ -1416,26 +1440,212 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                         } else {
                             holder.LastMessageTv.setText(subStringInternal(lastMessage));
                         }
-
-                        if (mInfo.getType() == GROUP &&
-                                mInfo.getLastMessage().getReplyTo() == null
-                                && mInfo.getLastMessage().getMessageType() != ProtoGlobal.RoomMessageType.TEXT
-                                && mInfo.getLastMessage().getMessageType() != ProtoGlobal.RoomMessageType.LOG
-                                && mInfo.getLastMessage().getMessageType() != ProtoGlobal.RoomMessageType.VOICE
-                                || mInfo.getLastMessage().getForwardMessage() != null
-                                && mInfo.getLastMessage().getForwardMessage().getMessageType() == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
-                            holder.LastMessageTv.setVisibility(View.GONE);
-                        } else {
-                            holder.LastMessageTv.setVisibility(View.VISIBLE);
-                        }
                     }
 
                 } else {
-
                     holder.lastMessageSender.setVisibility(View.GONE);
                     holder.lastMessageTv.setVisibility(View.GONE);
                 }
             }
+        }
+
+        private void getLastMessage(RealmRoom room, EmojiTextView lastMessageTv) {
+            SpannableStringBuilder builder = new SpannableStringBuilder();
+
+            if (room.getActionState() != null && room.getActionStateUserId() != userId) {
+
+                SpannableString typingSpannableString = new SpannableString(room.getActionState());
+                typingSpannableString.setSpan(new ForegroundColorSpan(ChatCell.TYPING_COLOR), 0, room.getActionState().length(), 0);
+
+                builder.append(typingSpannableString);
+
+            } else if (room.getDraft() != null && !TextUtils.isEmpty(room.getDraft().getMessage())) {
+                String draft = getResources().getString(R.string.txt_draft);
+
+                SpannableString redSpannable = new SpannableString(draft);
+                redSpannable.setSpan(new ForegroundColorSpan(ChatCell.DRAFT_COLOR), 0, draft.length(), 0);
+
+                String draftMessage = room.getDraft().getMessage();
+                SpannableString message = new SpannableString(draftMessage);
+                message.setSpan(new ForegroundColorSpan(ChatCell.MESSAGE_COLOR), 0, message.length(), 0);
+
+                builder.append(redSpannable);
+                builder.append(message);
+
+            } else {
+                boolean haveAttachment = false;
+                boolean haveSenderName = false;
+                boolean appIsRtl = G.isAppRtl;
+                boolean nameIsPersian = false;
+
+
+                RealmRoomMessage lastMessage;
+                if (room.getLastMessage() != null) {
+                    if (room.getLastMessage().getForwardMessage() != null) {
+                        lastMessage = room.getLastMessage().getForwardMessage();
+                    } else {
+                        lastMessage = room.getLastMessage();
+                    }
+
+                    if (lastMessage.isDeleted()) {
+                        String deletedMessage = getResources().getString(R.string.deleted_message);
+                        SpannableString deletedSpannable = new SpannableString(deletedMessage);
+                        deletedSpannable.setSpan(new ForegroundColorSpan(ChatCell.DELETED_COLOR), 0, deletedMessage.length(), 0);
+                        builder.append(deletedSpannable);
+                        lastMessageTv.setText(builder, TextView.BufferType.SPANNABLE);
+                        return;
+                    }
+
+                    if (lastMessage.getMessage() != null) {
+                        String attachmentTag = null;
+                        String senderNameTag = null;
+                        SpannableString attachmentSpannable = null;
+                        SpannableString senderNameSpannable = null;
+                        SpannableString lastMessageSpannable;
+                        SpannableString senderNameQuoteSpannable = null;
+
+
+                        if (room.getType() == GROUP) {
+                            if (lastMessage.isAuthorMe()) {
+                                senderNameTag = getResources().getString(R.string.txt_you);
+                                senderNameSpannable = new SpannableString(senderNameTag);
+                            } else {
+                                if (lastMessage.getMessageType() != ProtoGlobal.RoomMessageType.LOG) {
+                                    RealmRegisteredInfo realmRegisteredInfo;
+                                    if (room.getLastMessage().getForwardMessage() != null)
+                                        realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmFragmentMain(), room.getLastMessage().getUserId());
+                                    else
+                                        realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmFragmentMain(), lastMessage.getUserId());
+
+                                    if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
+                                        senderNameTag = realmRegisteredInfo.getDisplayName();
+                                        senderNameSpannable = new SpannableString(senderNameTag);
+                                        nameIsPersian = Character.getDirectionality(realmRegisteredInfo.getDisplayName().charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
+                                    }
+                                }
+                            }
+
+                            if (senderNameSpannable != null) {
+                                haveSenderName = true;
+                                senderNameSpannable.setSpan(new ForegroundColorSpan(ChatCell.SENDER_COLOR), 0, senderNameTag.length(), 0);
+                            }
+                        }
+
+                        switch (lastMessage.getMessageType()) {
+                            case IMAGE_TEXT:
+                                attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.IMAGE);
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                            case GIF_TEXT:
+                                attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.GIF);
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                            case FILE_TEXT:
+                                attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.FILE);
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                            case VIDEO_TEXT:
+                                attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.VIDEO);
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                            case AUDIO_TEXT:
+                                attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.MUSIC);
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                            case GIF:
+                                attachmentTag = getResources().getString(R.string.gif_message);
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                            case VOICE:
+                                attachmentTag = getResources().getString(R.string.voice_message);
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                            case LOG:
+                                attachmentTag = HelperLogMessage.deserializeLog(lastMessage.getLogs(), false).toString();
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                            case AUDIO:
+                                attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.MUSIC) + lastMessage.getAttachment().getName();
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                            case FILE:
+                                attachmentTag = getResources().getString(R.string.file_message);
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                            case IMAGE:
+                                attachmentTag = getResources().getString(R.string.image_message);
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                            case VIDEO:
+                                attachmentTag = getResources().getString(R.string.video_message);
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                            case WALLET:
+                                builder.append(AppUtils.getEmojiByUnicode(ChatCell.WALLET));
+                                if (lastMessage.getRoomMessageWallet() != null) {
+                                    String type = lastMessage.getRoomMessageWallet().getType();
+                                    if (type.equals(CARD_TO_CARD.toString())) {
+                                        attachmentTag = getResources().getString(R.string.card_to_card_message);
+                                    } else if (type.equals(PAYMENT.toString())) {
+                                        attachmentTag = getResources().getString(R.string.payment_message);
+                                    } else if (type.equals(MONEY_TRANSFER.toString())) {
+                                        attachmentTag = getResources().getString(R.string.wallet_message);
+                                    } else {
+                                        attachmentTag = getResources().getString(R.string.unknown_message);
+                                    }
+                                } else
+                                    attachmentTag = getResources().getString(R.string.wallet_message);
+
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                            case CONTACT:
+                                attachmentTag = getResources().getString(R.string.contact_message);
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                            case STICKER:
+                                attachmentTag = getResources().getString(R.string.sticker_message);
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                            case LOCATION:
+                                attachmentTag = getResources().getString(R.string.location_message);
+                                attachmentSpannable = new SpannableString(attachmentTag);
+                                break;
+                        }
+
+                        if (attachmentSpannable != null) {
+                            haveAttachment = true;
+                            attachmentSpannable.setSpan(new ForegroundColorSpan(ChatCell.ATTACHMENT_COLOR), 0, attachmentTag.length(), 0);
+                        }
+
+                        if (haveSenderName) {
+                            senderNameQuoteSpannable = new SpannableString(haveAttachment ? ":" : nameIsPersian ? ": " : ": ");
+                            senderNameQuoteSpannable.setSpan(new ForegroundColorSpan(ChatCell.SENDER_COLOR), 0, senderNameQuoteSpannable.length(), 0);
+                        }
+                        String m;
+                        if (lastMessage.getMessage().length() > 70) {
+                            m = lastMessage.getMessage().substring(0, 70) + "...";
+                        } else
+                            m = lastMessage.getMessage();
+
+                        lastMessageSpannable = new SpannableString(subStringInternal(m));
+                        lastMessageSpannable.setSpan(new ForegroundColorSpan(ChatCell.MESSAGE_COLOR), 0, lastMessageSpannable.length(), 0);
+
+                        if (haveSenderName) {
+                            if (haveAttachment) {
+                                builder.append(senderNameSpannable).append(senderNameQuoteSpannable).append(attachmentSpannable).append(lastMessageSpannable);
+                            } else
+                                builder.append(senderNameSpannable).append(senderNameQuoteSpannable).append(lastMessageSpannable);
+                        } else {
+                            if (haveAttachment) {
+                                builder.append(attachmentSpannable).append(lastMessageSpannable);
+                            } else
+                                builder.append(lastMessageSpannable);
+                        }
+
+                    }
+                }
+            }
+            lastMessageTv.setText(builder, TextView.BufferType.SPANNABLE);
         }
 
         private void setSenderName(ViewHolder holder, String _name) {
@@ -1507,14 +1717,14 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             private BadgeView badgeView;
             private EmojiTextViewE lastMessageSender;
             private FontIconTextView lastMessageStatusTv;
-            private View root;
             private CheckBox selectedRoomCB;
+            private EmojiTextView lastMessage;
 
 
             public ViewHolder(View view) {
                 super(view);
 
-                root = view;
+                ChatCell root = (ChatCell) view;
                 /**
                  * user avatar avatarIv
                  * */
@@ -1578,6 +1788,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                  * */
                 lastMessageStatusTv = view.findViewById(R.id.iv_chatCell_messageStatus);
 
+                lastMessage = root.getLastMessage();
 
                 root.setOnClickListener(v -> {
 

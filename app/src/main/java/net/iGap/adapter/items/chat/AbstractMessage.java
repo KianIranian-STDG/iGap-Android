@@ -13,6 +13,7 @@ package net.iGap.adapter.items.chat;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -25,6 +26,7 @@ import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -138,7 +140,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private MessagesAdapter<AbstractMessage> mAdapter;
     private final Drawable SEND_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_sent_bg_light);
     private final Drawable RECEIVED_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_receive_bg_light);
-
 
     /**
      * add this prt for video player
@@ -499,7 +500,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                         holder.itemView.performLongClick();
                                         return;
                                     }
-                                    onBotBtnClick(view, buttonEntity);
+                                    mAdapter.onBotButtonClicked(() -> onBotBtnClick(view, buttonEntity));
                                 }, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -905,7 +906,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             setThemeColor(viewHolder.getSignatureTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
         } else {
-            viewHolder.getChatBloke().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND, ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_light))));
+            TypedValue typedValue = new TypedValue();
+            TypedArray a = viewHolder.getContext().obtainStyledAttributes(typedValue.data, new int[] { R.attr.colorPrimaryLight });
+            int color = a.getColor(0, 0);
+
+            a.recycle();
+            viewHolder.getChatBloke().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND, ColorStateList.valueOf(color)));
             setThemeColor(viewHolder.getViewsLabelTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getEyeIconTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getVoteUpTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
@@ -978,7 +984,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND, ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_dark))));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.send_message_time_dark));
         } else {
-            viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND, ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_light))));
+            TypedValue typedValue = new TypedValue();
+            TypedArray a = viewHolder.getContext().obtainStyledAttributes(typedValue.data, new int[] { R.attr.iGapSendMessageBubbleColor });
+            int color = a.getColor(0, 0);
+
+            a.recycle();
+            Log.wtf(this.getClass().getName(), "color background: " + color);
+            viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND, ColorStateList.valueOf(color)));
+            /*viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND, ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_light))));*/
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.send_message_time_light));
         }
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp36);
@@ -1119,7 +1132,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (mMessage.forwardedFrom != null) {
 
-            View forwardView = ViewMaker.getViewForward();
+            View forwardView = ViewMaker.getViewForward(((NewChatItemHolder) holder).getContext());
             forwardView.setOnLongClickListener(getLongClickPerform(holder));
 
             forwardView.setOnClickListener(new View.OnClickListener() {
@@ -1156,11 +1169,17 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 txtForwardFrom.setText(info.getDisplayName());
                 mMessage.username = info.getUsername();
-                if (mMessage.isSenderMe()) {
+                TypedValue typedValue = new TypedValue();
+                TypedArray a = txtForwardFrom.getContext().obtainStyledAttributes(typedValue.data, new int[] { R.attr.colorAccentDark });
+                int color = a.getColor(0, 0);
+
+                a.recycle();
+                txtForwardFrom.setTextColor(color);
+                /*if (mMessage.isSenderMe()) {
                     txtForwardFrom.setTextColor(G.context.getResources().getColor(R.color.iGapColor));
                 } else {
                     txtForwardFrom.setTextColor(G.context.getResources().getColor(R.color.iGapColor));
-                }
+                }*/
             } else if (mMessage.forwardedFrom.getUserId() != 0) {
 
                 if (RealmRegisteredInfo.needUpdateUser(mMessage.forwardedFrom.getUserId(), null)) {
@@ -2033,4 +2052,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * */
     }
 
+    @FunctionalInterface
+    public interface OnAllowBotCommand {
+        void allow();
+    }
 }

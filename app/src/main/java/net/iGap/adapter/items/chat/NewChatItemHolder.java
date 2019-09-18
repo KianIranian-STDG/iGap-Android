@@ -60,40 +60,41 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     public NewChatItemHolder(@NonNull View itemView) {
         super(itemView);
 
+        context = itemView.getContext();
         ConstraintSet set = new ConstraintSet();
-        itemContainer = new LinearLayout(getContext());
+        itemContainer = new LinearLayout(itemView.getContext());
 
-        channelForwardIv = new AppCompatImageView(getContext());
-        forwardContainer = new FrameLayout(getContext());
+        channelForwardIv = new AppCompatImageView(itemView.getContext());
+        forwardContainer = new FrameLayout(itemView.getContext());
 
-        voteContainer = new LinearLayout(getContext());
+        voteContainer = new LinearLayout(itemView.getContext());
         voteContainer.setId(R.id.ll_chatItem_vote);
         voteContainer.setOrientation(LinearLayout.HORIZONTAL);
         voteContainer.setGravity(Gravity.CENTER);
 
-        viewContainer = new LinearLayout(getContext());
+        viewContainer = new LinearLayout(itemView.getContext());
         viewContainer.setId(R.id.ll_chatItem_view);
         viewContainer.setGravity(Gravity.CENTER);
 
-        voteUpContainer = new LinearLayout(getContext());
+        voteUpContainer = new LinearLayout(itemView.getContext());
         voteUpContainer.setOrientation(LinearLayout.HORIZONTAL);
         voteUpContainer.setGravity(Gravity.CENTER);
 
-        voteDownContainer = new LinearLayout(getContext());
+        voteDownContainer = new LinearLayout(itemView.getContext());
         voteDownContainer.setOrientation(LinearLayout.HORIZONTAL);
         voteDownContainer.setGravity(Gravity.CENTER);
 
-        chatBloke = new ConstraintLayout(getContext());
+        chatBloke = new ConstraintLayout(itemView.getContext());
         chatBloke.setId(R.id.ll_chatItem_chatBloke);
 
-        contentBloke = new LinearLayout(getContext());
+        contentBloke = new LinearLayout(itemView.getContext());
         contentBloke.setId(R.id.ll_chatItem_contentBloke);
         contentBloke.setOrientation(LinearLayout.VERTICAL);
 
-        voteDownTv = new AppCompatTextView(getContext());
-        voteUpTv = new AppCompatTextView(getContext());
+        voteDownTv = new AppCompatTextView(itemView.getContext());
+        voteUpTv = new AppCompatTextView(itemView.getContext());
 
-        signatureTv = new AppCompatTextView(getContext());
+        signatureTv = new AppCompatTextView(itemView.getContext());
         signatureTv.setId(R.id.tv_chatItem_signature);
         setTextSize(signatureTv, R.dimen.verySmallTextSize);
         signatureTv.setEllipsize(TextUtils.TruncateAt.END);
@@ -102,23 +103,23 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         signatureTv.setSingleLine(true);
         signatureTv.setGravity(CENTER_VERTICAL);
 
-        viewsLabelTv = new TextView(getContext());
+        viewsLabelTv = new TextView(itemView.getContext());
         viewsLabelTv.setId(R.id.tv_chatItem_viewLabel);
         viewsLabelTv.setSingleLine(true);
         setTypeFace(viewsLabelTv);
         setTextSize(viewsLabelTv, R.dimen.verySmallTextSize);
 
-        eyeIconTv = new FontIconTextView(getContext());
+        eyeIconTv = new FontIconTextView(itemView.getContext());
         eyeIconTv.setId(R.id.ll_chatItem_viewIcon);
         eyeIconTv.setText(R.string.eye_icon);
         setTextSize(eyeIconTv, R.dimen.standardTextSize);
 
-        messageStatusTv = new FontIconTextView(getContext());
+        messageStatusTv = new FontIconTextView(itemView.getContext());
         messageStatusTv.setId(R.id.tv_chatItem_status);
         setTextSize(messageStatusTv, R.dimen.largeTextSize);
-        cslm_view_left_dis = new View(getContext());
+        cslm_view_left_dis = new View(itemView.getContext());
 
-        messageTimeTv = new AppCompatTextView(getContext());
+        messageTimeTv = new AppCompatTextView(itemView.getContext());
         messageTimeTv.setId(R.id.tv_chatItem_time);
         setTextSize(messageTimeTv, R.dimen.verySmallTextSize);
 
@@ -142,12 +143,12 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         setTypeFace(messageTimeTv);
 
 
-        voteUpIv = new FontIconTextView(context);
+        voteUpIv = new FontIconTextView(itemView.getContext());
         voteUpIv.setText(R.string.heart_icon);
         voteUpIv.setGravity(BOTTOM);
         setTextSize(voteUpIv, R.dimen.standardTextSize);
 
-        voteDownIv = new FontIconTextView(context);
+        voteDownIv = new FontIconTextView(itemView.getContext());
         voteDownIv.setText(R.string.dislike_icon);
         voteDownIv.setGravity(BOTTOM);
         voteDownIv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
@@ -290,7 +291,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     }
 
     public Context getContext() {
-        context = G.context;
         return context;
     }
 
@@ -355,7 +355,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     }
 
     public Resources getResources() {
-        return getContext().getResources();
+        return context.getResources();
     }
 
     public int getColor(int color) {

@@ -580,6 +580,26 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         }
     }
 
+    private void showDialogContactLongClicked(long id, long phone, String name, String family) {
+        if (getFragmentManager() != null) {
+            List<String> items = new ArrayList<>();
+            items.add(getString(R.string.edit));
+            items.add(getString(R.string.delete));
+
+            new BottomSheetFragment().setData(items, -1, position -> {
+                if (position == 0) {
+                    FragmentAddContact fragment = FragmentAddContact.newInstance(
+                            id, "+" + phone, name, family, FragmentAddContact.ContactMode.EDIT, (name1, family1) -> loadContacts()
+                    );
+                    if (getActivity() != null)
+                        new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                } else {
+                    new RequestUserContactsDelete().contactsDelete("" + phone);
+                }
+            }).show(getFragmentManager(), "contactLongClicked");
+        }
+    }
+
     private void setMultiSelectState(boolean state) {
 
         if (state) {
@@ -623,10 +643,9 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
             mActionMode.finish();
         }
         if (getActivity() != null) {
-            FragmentAddContact fragment = FragmentAddContact.newInstance();
-            Bundle bundle = new Bundle();
-            bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
-            fragment.setArguments(bundle);
+            FragmentAddContact fragment = FragmentAddContact.newInstance(
+                    null, FragmentAddContact.ContactMode.ADD
+            );
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         }
     }
@@ -657,7 +676,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         }
     }
 
-    private void loadContacts() {
+    public void loadContacts() {
         results = getRealm().copyFromRealm(getRealm().where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
         if (realmRecyclerView.getAdapter() != null)
             ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
@@ -874,6 +893,13 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     subtitle.setGravity(Gravity.LEFT);
                 }
 
+                root.setOnLongClickListener(v -> {
+                    if (!isMultiSelect) {
+                        showDialogContactLongClicked(realmContacts.getId(), realmContacts.getPhone(), realmContacts.getFirst_name(), realmContacts.getLast_name());
+                    }
+                    return true;
+                });
+
                 root.setOnClickListener(v -> {
 
                     if (!isMultiSelect) {
@@ -978,6 +1004,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                             onClickRecyclerView.onClick(v, getAdapterPosition());
                     }
                 });
+
             }
         }
 

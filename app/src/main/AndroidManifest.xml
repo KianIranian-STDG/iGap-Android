@@ -60,6 +60,14 @@
         android:theme="@style/BaseTheme"
         android:usesCleartextTraffic="true"
         tools:replace="allowBackup,supportsRtl">
+        <receiver
+            android:name="ir.metrix.sdk.MetrixReferrerReceiver"
+            android:permission="android.permission.INSTALL_PACKAGES"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:name=".module.CustomButtonListener"
@@ -232,7 +240,9 @@
             </intent-filter>
             <!-- this part add app logo to list of share -->
         </activity>
-        <activity android:name=".activities.ActivityRegistration" />
+        <activity
+            android:name=".activities.ActivityRegistration"
+            android:launchMode="singleTask" />
 
         <receiver
             android:name=".module.ReceiverBootPhone"

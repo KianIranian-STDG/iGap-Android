@@ -4,8 +4,8 @@
 
     <gradient
         android:angle="45"
-        android:endColor="@color/toolbar_search_box_dark_bg"
-        android:startColor="@color/chat_bubble_color_dark" />
+        android:endColor="?attr/colorPrimaryDark"
+        android:startColor="?attr/colorPrimary" />
 
     <corners android:radius="8dp" />
 </shape>

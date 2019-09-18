@@ -334,7 +334,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     private void setEnableButton(TextView enable, TextView disable, TextView disable2, TextView disable3, TextView disable4) {
 
         //use revert for dark theme : disable drawable is light and enable drawable is dark
-        if (G.isDarkTheme) {
+        /*if (G.isDarkTheme) {
             enable.setBackground(getResources().getDrawable(R.drawable.round_button_disabled_bg));
             disable.setBackground(getResources().getDrawable(R.drawable.round_button_enabled_bg));
             disable2.setBackground(getResources().getDrawable(R.drawable.round_button_enabled_bg));
@@ -359,7 +359,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
             disable2.setTextColor(getResources().getColor(R.color.black));
             disable3.setTextColor(getResources().getColor(R.color.black));
             disable4.setTextColor(getResources().getColor(R.color.black));
-        }
+        }*/
     }
 
     private RealmResults<RealmCallLog> getRealmResult(ProtoSignalingGetLog.SignalingGetLog.Filter status, Realm realm) {

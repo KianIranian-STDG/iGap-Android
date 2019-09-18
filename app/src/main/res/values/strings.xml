@@ -544,7 +544,7 @@
     <string name="E_115">Internal Server Error</string>
     <string name="E_116">Bad payload: Invalid gender</string>
     <string name="E_118">Warning: Number of Contacts has exceeded the server restrictions.</string>
-    <string name="E_117">Internal Server Error</string>
+    <string name="E_118_5">Warning: Number of Contacts Chunk has exceeded the server restrictions.</string>
     <string name="E_154_1">Bad payload: get token</string>
     <string name="E_154_2">Bad payload: get reason</string>
     <string name="E_155">USER_DELETE INTERNAL SERVER ERROR</string>
@@ -763,7 +763,7 @@ Want to get it?</string>
     <string name="please_enter_channel_description">Please Enter Channel Description</string>
     <string name="delete_and_leave_channel">Delete and Leave Channel</string>
     <string name="txt_draft">Draft: </string>
-    <string name="txt_you">You: </string>
+    <string name="txt_you">You</string>
     <string name="you">You</string>
     <string name="st_data_shams">Persian Date</string>
     <string name="do_you_want_left_this">"Are you sure you want to leave this room?"</string>
@@ -1227,6 +1227,7 @@ Want to get it?</string>
     <string name="do_not_send">Don\'t Send</string>
     <string name="save_data_in_sd_card">Save data in sd card</string>
     <string name="are_you_sure">Are you sure</string>
+    <string name="are_you_sure_edit_contact">Are you sure to edit contact?</string>
     <string name="change_storage_place">Change storage place</string>
     <string name="other_files">Other Files</string>
     <string name="title_import_contact_limit">Warning: Import contact list</string>
@@ -2238,5 +2239,7 @@ Want to get it?</string>
     <string name="kuknos_Entry_RTSeedKey_str">Retrieve With Seed Key</string>
     <string name="kuknos_SignupInfo_friendlyTial">*igap.net</string>
     <string name="kuknos_RecoverySK_CheckPIN">I want to set a PIN code for extra security.</string>
+    <string name="user_edited">User Edited</string>
+    <string name="edit_contact">Edit Contact</string>
 
 </resources>

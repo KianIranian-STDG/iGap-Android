@@ -106,4 +106,14 @@
         app:layout_constraintTop_toBottomOf="@id/ac_edt_lastName"
         app:mask="###-###-####" />
 
+    <ProgressBar
+        android:id="@+id/loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/ac_edt_phoneNumber"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/dp24"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

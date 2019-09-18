@@ -101,6 +101,7 @@
 
                     <net.iGap.module.MaterialDesignTextView
                         android:id="@+id/ac_txt_down_navigation"
+                        style="@style/myIconToolbarStyle"
                         android:layout_width="@dimen/dp44"
                         android:layout_height="@dimen/dp44"
                         android:layout_gravity="center_horizontal"
@@ -108,7 +109,6 @@
                         android:background="@drawable/circle_mic"
                         android:gravity="center"
                         android:text="@string/md_downwards_arrow"
-                        style="@style/myIconToolbarStyle"
                         android:textColor="@color/white" />
 
                 </FrameLayout>
@@ -146,6 +146,8 @@
                     android:id="@+id/ac_txt_file_neme_for_sending"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp8"
                     android:layout_weight="1"
                     android:singleLine="true"
                     android:text="New Text"
@@ -184,7 +186,6 @@
 
                 <TextView
                     android:id="@+id/ac_txt_hash_counter"
-                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -192,6 +193,7 @@
                     android:padding="@dimen/dp8"
                     android:singleLine="true"
                     android:text="0 of 0"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/dp16" />
 
 
@@ -213,11 +215,11 @@
 
                     <net.iGap.module.MaterialDesignTextView
                         android:id="@+id/ac_btn_hash_close"
+                        style="@style/myIconTextViewStyle"
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
-                        style="@style/myIconTextViewStyle"
                         android:text="@string/md_close_button"
                         android:textColor="#dededd" />
 
@@ -312,8 +314,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ac_toolbars_container"
-                android:background="@drawable/shape_multi_select_bg"
                 android:layout_marginTop="-14dp"
+                android:background="@drawable/shape_multi_select_bg"
                 android:paddingTop="@dimen/dp10">
 
                 <RelativeLayout
@@ -465,11 +467,11 @@
 
                         <net.iGap.module.MaterialDesignTextView
                             android:id="@+id/ac_btn_clear_message_search"
+                            style="@style/myIconToolbarStyle"
                             android:layout_width="@dimen/toolbar_icon_size"
                             android:layout_height="match_parent"
                             android:background="@null"
-                            android:text="@string/md_close_button"
-                            style="@style/myIconToolbarStyle" />
+                            android:text="@string/md_close_button" />
                     </net.iGap.libs.rippleeffect.RippleView>
 
                 </LinearLayout>
@@ -489,8 +491,8 @@
             android:id="@+id/cardFloatingTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_below="@id/fc_layout_top"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp6"
             android:visibility="gone"
             app:cardCornerRadius="5dp">

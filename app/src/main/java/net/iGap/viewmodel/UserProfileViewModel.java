@@ -211,7 +211,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         isDarkMode.set(G.isDarkTheme);
 
         //set user info text gravity
-        if (G.selectedLanguage.equals("en")) {
+        if (G.selectedLanguage.equals("en") || G.selectedLanguage.equals("fr")) {
             textsGravity.set(Gravity.LEFT);
         } else {
             textsGravity.set(Gravity.RIGHT);
@@ -405,11 +405,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                     @Override
                     public void onError(int majorCode, int minorCode) {
                         if (majorCode == 5 && minorCode == 1) {
-                            showError.setValue(R.string.connection_error);
+                            showError.postValue(R.string.connection_error);
                             G.handler.post(() -> showLoading.set(View.GONE));
                         } else {
-                            G.handler.post(() -> showLoading.set(View.GONE));
                             showError.postValue(R.string.error);
+                            G.handler.post(() -> showLoading.set(View.GONE));
                         }
                     }
                 });
@@ -708,7 +708,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             sendRequestSetEmail();
         } else if (currentGender != gender.get()) {
             sendRequestSetGender();
-        } else if (!referralNumberObservableField.get().equals("")) {
+        } else if (!referralNumberObservableField.get().equals("") && referralEnableLiveData.getValue()) {
+            Log.wtf(this.getClass().getName(),"setReferral");
             setReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replace(" ", ""));
         } else {
             showLoading.set(View.GONE);
@@ -911,22 +912,22 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
             G.isNeedToCheckProfileWallpaper = false;
 
-            Realm realm = Realm.getDefaultInstance();
-            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
+            try (Realm realm = Realm.getDefaultInstance()) {
+                RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
 
-            if (realmWallpaper != null) {
+                if (realmWallpaper != null) {
 
-                if (realmWallpaper.getWallPaperList().get(0).getFile().getToken().equals(list.get(0).getFile().getToken())) {
-                    getProfileWallpaper(realm);
+                    if (realmWallpaper.getWallPaperList().get(0).getFile().getToken().equals(list.get(0).getFile().getToken())) {
+                        getProfileWallpaper(realm);
+                    } else {
+                        RealmWallpaper.updateWallpaper(list);
+                        getProfileWallpaper(realm);
+                    }
                 } else {
-                    RealmWallpaper.updateWallpaper(list);
+                    RealmWallpaper.updateField(list, "", ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE);
                     getProfileWallpaper(realm);
                 }
-            } else {
-                RealmWallpaper.updateField(list, "", ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE);
-                getProfileWallpaper(realm);
             }
-            realm.close();
         };
 
         new RequestInfoWallpaper().infoWallpaper(ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER);

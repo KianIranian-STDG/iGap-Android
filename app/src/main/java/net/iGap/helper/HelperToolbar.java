@@ -842,6 +842,8 @@ public class HelperToolbar {
         } else {
             mTxtLogo.setTypeface(tfMain);
         }
+
+        mTxtLogo.requestLayout();
     }
 
     private void toolBarTitleHandler() {
@@ -1294,6 +1296,35 @@ public class HelperToolbar {
 
                 //endregion main constraint
 
+                //region logo
+                if (isLogoShown) {
+
+                    logo = new TextView(getContext());
+
+                    logo.setId(R.id.view_toolbar_logo);
+                    logo.setText(R.string.app_name);
+                    logo.setGravity(Gravity.CENTER);
+                    Utils.setTextSize(logo, R.dimen.standardTextSize);
+                    logo.setTextColor(getContext().getResources().getColor(R.color.white));
+                    logo.setTypeface(tfFontIcon);
+                    logo.setPadding(0, 0, 0, i_Dp(R.dimen.dp4));
+                    InputFilter[] fArray = new InputFilter[1];
+                    fArray[0] = new InputFilter.LengthFilter(31);
+                    logo.setFilters(fArray);
+                    logo.setSingleLine(true);
+
+                    mainConstraint.addView(logo);
+
+                    set.constrainHeight(logo.getId(), WRAP_CONTENT);
+                    set.constrainWidth(logo.getId(), MATCH_CONSTRAINT);
+                    set.connect(logo.getId(), START, PARENT_ID, START);
+                    set.connect(logo.getId(), END, PARENT_ID, END);
+                    set.connect(logo.getId(), TOP, PARENT_ID, TOP);
+                    set.connect(logo.getId(), BOTTOM, PARENT_ID, BOTTOM);
+
+                }
+                //endregion logo
+
                 //region small avatar
                 if (isRightSmallAvatarShown) {
                     smallAvatar = new CircleImageView(getContext());
@@ -1385,35 +1416,6 @@ public class HelperToolbar {
 
                 }
                 //endregion right icons
-
-                //region logo
-                if (isLogoShown) {
-
-                    logo = new TextView(getContext());
-
-                    logo.setId(R.id.view_toolbar_logo);
-                    logo.setText(R.string.app_name);
-                    logo.setGravity(Gravity.CENTER);
-                    Utils.setTextSize(logo, R.dimen.standardTextSize);
-                    logo.setTextColor(getContext().getResources().getColor(R.color.white));
-                    logo.setTypeface(tfFontIcon);
-                    logo.setPadding(0, 0, 0, i_Dp(R.dimen.dp4));
-                    InputFilter[] fArray = new InputFilter[1];
-                    fArray[0] = new InputFilter.LengthFilter(31);
-                    logo.setFilters(fArray);
-                    logo.setSingleLine(true);
-
-                    mainConstraint.addView(logo);
-
-                    set.constrainHeight(logo.getId(), WRAP_CONTENT);
-                    set.constrainWidth(logo.getId(), WRAP_CONTENT);
-                    set.connect(logo.getId(), START, PARENT_ID, START);
-                    set.connect(logo.getId(), END, PARENT_ID, END);
-                    set.connect(logo.getId(), TOP, PARENT_ID, TOP);
-                    set.connect(logo.getId(), BOTTOM, PARENT_ID, BOTTOM);
-
-                }
-                //endregion logo
 
                 //region search box
 

@@ -103,7 +103,7 @@ public class Theme {
     public static String default_dark_background = "#2f2f2f";
 
     public static String default_red_appBarColor = "#F44336";
-    public static String default_Pink_appBarColor = "#E91E63";
+    public static String default_Pink_appBarColor = "#f68787";
     public static String default_purple_appBarColor = "#9C27B0";
     public static String default_deepPurple_appBarColor = "#673AB7";
     public static String default_indigo_appBarColor = "#3F51B5";
