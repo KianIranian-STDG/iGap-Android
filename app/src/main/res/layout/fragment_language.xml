@@ -213,5 +213,42 @@
             app:layout_constraintEnd_toEndOf="@id/russianLanguage"
             app:layout_constraintTop_toTopOf="@id/russianLanguage" />
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/kurdiLanguage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp16"
+            android:background="?attr/selectableItemBackground"
+            android:onClick="@{()->viewModel.onClickKurdi()}"
+            app:layout_constraintBottom_toBottomOf="@id/txtLanguageKu"
+            app:layout_constraintEnd_toEndOf="@id/persianLanguage"
+            app:layout_constraintStart_toStartOf="@id/persianLanguage"
+            app:layout_constraintTop_toBottomOf="@id/russianLanguage" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtLanguageKu"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp8"
+            android:text="کوردی"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@id/kurdiLanguage"
+            app:layout_constraintTop_toTopOf="@id/kurdiLanguage" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/st_icon_ku"
+            style="@style/baseFontIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/check_icon"
+            android:textColor="@color/green"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="@{viewModel.isKurdi}"
+            app:layout_constraintBottom_toBottomOf="@id/kurdiLanguage"
+            app:layout_constraintEnd_toEndOf="@id/kurdiLanguage"
+            app:layout_constraintTop_toTopOf="@id/kurdiLanguage" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

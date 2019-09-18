@@ -528,6 +528,15 @@ public final class StartupActions {
                 Raad.language = selectedLanguage;
                 Raad.isFA = true;
                 break;
+
+                //کوردی لوکال از چپ به راست است و برای استفاده از این گویش از زبان های راست به چپ جایگزین استفاده شده است
+            case "کوردی":
+                selectedLanguage = "dv";
+                HelperCalander.isPersianUnicode = true;
+                G.isAppRtl = true;
+                Raad.language = selectedLanguage;
+                Raad.isFA = true;
+                break;
         }
 
         ViewPump.init(ViewPump.builder()

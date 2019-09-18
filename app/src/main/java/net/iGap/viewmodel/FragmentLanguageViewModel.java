@@ -34,6 +34,7 @@ public class FragmentLanguageViewModel extends ViewModel {
     private ObservableInt isArabic = new ObservableInt(View.GONE);
     private ObservableInt isFrance = new ObservableInt(View.GONE);
     private ObservableInt isRussian = new ObservableInt(View.GONE);
+    private ObservableInt isKurdi = new ObservableInt(View.GONE);
     private MutableLiveData<String> refreshActivityForChangeLanguage = new MutableLiveData<>();
     private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
 
@@ -57,6 +58,9 @@ public class FragmentLanguageViewModel extends ViewModel {
                 case "Russian":
                     isRussian.set(View.VISIBLE);
                     break;
+                case "کوردی":
+                    isKurdi.set(View.VISIBLE);
+                    break;
             }
         }
     }
@@ -79,6 +83,10 @@ public class FragmentLanguageViewModel extends ViewModel {
 
     public ObservableInt getIsRussian() {
         return isRussian;
+    }
+
+    public ObservableInt getIsKurdi() {
+        return isKurdi;
     }
 
     public MutableLiveData<String> getRefreshActivityForChangeLanguage() {
@@ -184,6 +192,28 @@ public class FragmentLanguageViewModel extends ViewModel {
             G.isAppRtl = true;
             FragmentLanguage.languageChanged = true;
             refreshActivityForChangeLanguage.setValue("ar");
+            if (MusicPlayer.updateName != null) {
+                MusicPlayer.updateName.rename();
+            }
+        }
+        goBack.setValue(true);
+    }
+
+    //کوردی لوکال از چپ به راست است و برای استفاده از این گویش از زبان های راست به چپ جایگزین استفاده شده است
+    public void onClickKurdi() {
+        if (!G.selectedLanguage.equals("dv")) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(SHP_SETTING.KEY_LANGUAGE, "کوردی");
+            editor.apply();
+            G.selectedLanguage = "dv";
+            G.updateResources(G.currentActivity.getBaseContext());
+            HelperCalander.isPersianUnicode = true;
+            HelperCalander.isLanguagePersian = true;
+            HelperCalander.isLanguageArabic = false;
+            G.isAppRtl = true;
+            FragmentLanguage.languageChanged = true;
+            refreshActivityForChangeLanguage.setValue("dv");
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }
