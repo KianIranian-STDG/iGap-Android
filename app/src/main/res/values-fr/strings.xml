@@ -1786,4 +1786,5 @@
     <string name="view_profile" >regarder le profil</string>
     <string name="link_not_valid" >lien invalide</string>
     <string name="popular_channel" >des canaux intressants</string>
+    <string name="edit_contact">modifier le contact</string>
 </resources>
