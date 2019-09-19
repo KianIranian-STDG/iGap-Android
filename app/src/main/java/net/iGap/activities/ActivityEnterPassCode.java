@@ -215,12 +215,6 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         finish();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        viewModel.onStart();
-    }
-
     private void hideKeyboard() {
         View view = getCurrentFocus();
         if (view != null) {

@@ -174,7 +174,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static boolean isMenuButtonAddShown = false;
     public static boolean isOpenChatBeforeSheare = false;
     public static boolean isLock = false;
-    public static boolean isActivityEnterPassCode = false;
     public static FinishActivity finishActivity;
     public static boolean disableSwipe = false;
     public static OnBackPressedListener onBackPressedListener;
@@ -319,6 +318,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
             handleDeepLink(intent);
         }
+
+        if (G.isFirstPassCode) {
+            openActivityPassCode();
+        }
     }
 
     private void handleDeepLink(Intent intent) {
@@ -433,9 +436,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             };
 
-            /*if (G.isFirstPassCode) {
+            if (G.isFirstPassCode) {
                 openActivityPassCode();
-            }*/
+            }
 
             initTabStrip(getIntent());
             IntentFilter intentFilter = new IntentFilter();
@@ -1213,9 +1216,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
         }
 
-        if (!isActivityEnterPassCode && G.isPassCode && isLock && !G.isRestartActivity && !isUseCamera) {
+        if (G.isPassCode && isLock && !G.isRestartActivity && !isUseCamera) {
             enterPassword();
-        } else if (!isActivityEnterPassCode && !G.isRestartActivity) {
+        } else if (!G.isRestartActivity) {
             long currentTime = System.currentTimeMillis();
             long timeLock = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
             long calculatorTimeLock = currentTime - oldTime;
