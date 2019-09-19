@@ -1595,7 +1595,7 @@
     <string name="Recently_Sticker" >récemment</string>
     <string name="Favorite_Sticker" >favoris</string>
     <string name="item_selected" >sélectionné</string>
-    <string name="terms_and_condition" >j\'accepte</string>
+    <string name="terms_and_condition" >j\'accepte %s</string>
     <string name="terms_and_condition_clickable" >les rglements</string>
     <string name="charity_confirm" >vous avez envisag la somme s% Rial pour faire les dons de charité</string>
     <string name="new_channel_hint" >vous pouvez  rdiger des explications facultatives pour votre canal</string>
