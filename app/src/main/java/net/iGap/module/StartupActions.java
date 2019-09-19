@@ -531,7 +531,7 @@ public final class StartupActions {
 
                 //کوردی لوکال از چپ به راست است و برای استفاده از این گویش از زبان های راست به چپ جایگزین استفاده شده است
             case "کوردی":
-                selectedLanguage = "dv";
+                selectedLanguage = "ur";
                 HelperCalander.isPersianUnicode = true;
                 G.isAppRtl = true;
                 Raad.language = selectedLanguage;
