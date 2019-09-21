@@ -1100,6 +1100,9 @@ public class FragmentChat extends BaseFragment
         }
 
         registerListener();
+
+        //enable attachment popup camera if was visible
+        if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.enableCamera();
     }
 
     private void checkToolbarNameSize() {
@@ -1131,6 +1134,10 @@ public class FragmentChat extends BaseFragment
         iUpdateLogItem = null;
 
         unRegisterListener();
+
+        //disable attachment popup camera
+        if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.disableCamera();
+
     }
 
     @Override

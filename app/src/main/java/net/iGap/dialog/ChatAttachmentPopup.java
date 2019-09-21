@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,7 @@ public class ChatAttachmentPopup {
     private final long POPUP_ANIMATION_DURATION = 160;
     private final String TAG = "ChatAttachmentPopup";
 
+    public boolean isShowing = false ;
     private Context mContext;
     private View mRootView;
     private ChatPopupListener mPopupListener;
@@ -148,7 +150,8 @@ public class ChatAttachmentPopup {
 
         mPopup.setOnDismissListener(() -> {
             isNewBottomSheet = true;
-            disableCamera(rcvBottomSheet);
+            isShowing = false ;
+            disableCamera();
         });
 
         return this;
@@ -160,6 +163,7 @@ public class ChatAttachmentPopup {
 
     public void show() {
 
+        isShowing = true ;
         setupContentView();
         setupAdapterRecyclerImagesAndShowPopup();
     }
@@ -365,6 +369,35 @@ public class ChatAttachmentPopup {
         rcvBottomSheet.setItemViewCacheSize(100);
         rcvBottomSheet.setAdapter(fastItemAdapter);
 
+        //disable and enable camera when user scroll on recycler view
+        rcvBottomSheet.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(final View view) {
+                if (isPermissionCamera) {
+
+                    if (rcvBottomSheet.getChildAdapterPosition(view) == 0) {
+                        isCameraAttached = true;
+                    }
+                    if (isCameraAttached) {
+                        enableCamera();
+                    }
+                }
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(final View view) {
+
+                if (isPermissionCamera) {
+                    if (rcvBottomSheet.getChildAdapterPosition(view) == 0) {
+                        isCameraAttached = false;
+                    }
+                    if (!isCameraAttached) {
+                        disableCamera();
+                    }
+                }
+            }
+        });
+
 
        /* rcvBottomSheet.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
             @Override
@@ -393,73 +426,20 @@ public class ChatAttachmentPopup {
 
     }
 
-    private void enableCamera(View view) {
+    public void enableCamera() {
 
-        G.handler.postDelayed(() -> {
+        if (isCameraStart || !isPermissionCamera) return;
+        if (fotoapparatSwitcher == null) buildCameraSwitcher();
+        setCameraState(true);
 
-            if (!isPermissionCamera) return;
-            //   if (!isCameraAttached) return;
-
-            if (fotoapparatSwitcher != null) {
-                if (!isCameraStart) {
-                    isCameraStart = true;
-                    try {
-                        G.handler.postDelayed(() -> fotoapparatSwitcher.start(), 50);
-                    } catch (Exception e) {
-                        e.getMessage();
-                    }
-                }
-            } else {
-                if (!isCameraStart) {
-                    isCameraStart = true;
-                    try {
-                        fotoapparatSwitcher = Fotoapparat.with(mFrgActivity).into(view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                .lensPosition(back())       // we want back camera
-                                .build();
-
-                        fotoapparatSwitcher.start();
-                    } catch (IllegalStateException e) {
-                        e.getMessage();
-                    }
-                }
-            }
-        }, 100);
     }
 
-    private void disableCamera(View view) {
+    public void disableCamera() {
 
-        G.handler.postDelayed(() -> {
+        if (!isCameraStart || !isPermissionCamera) return;
+        if (fotoapparatSwitcher == null) buildCameraSwitcher();
+        setCameraState(false);
 
-            if (!isPermissionCamera) return;
-            // if (isCameraAttached) return;
-
-            if (fotoapparatSwitcher != null) {
-                if (isCameraStart) {
-
-                    try {
-                        fotoapparatSwitcher.stop();
-                        isCameraStart = false;
-                    } catch (Exception e) {
-                        e.getMessage();
-                    }
-                }
-            } else {
-                if (!isCameraStart) {
-                    isCameraStart = false;
-                    try {
-                        fotoapparatSwitcher = Fotoapparat.with(mFrgActivity).into(view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                .lensPosition(back())       // we want back camera
-                                .build();
-
-                        fotoapparatSwitcher.stop();
-                    } catch (IllegalStateException e) {
-                        e.getMessage();
-                    }
-                }
-            }
-        }, 50);
     }
 
     public void dismiss() {
@@ -467,6 +447,7 @@ public class ChatAttachmentPopup {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             hideViewWithCircularReveal(contentView);
         } else {
+            isShowing = false ;
             mPopup.dismiss();
         }
     }
@@ -577,7 +558,7 @@ public class ChatAttachmentPopup {
                 lblSend.setText(mFrgActivity.getResources().getString(R.string.navigation_drawer_close));
         }
 
-        enableCamera(rcvBottomSheet);
+        enableCamera();
 
 
         if (HelperPermission.grantedUseStorage()) {
@@ -713,16 +694,17 @@ public class ChatAttachmentPopup {
         animation.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                isCameraStart = false;
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                isShowing = false ;
                 mPopup.dismiss();
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
+                isShowing = false ;
                 mPopup.dismiss();
             }
 
@@ -732,6 +714,31 @@ public class ChatAttachmentPopup {
             }
         });
 
+    }
+
+    private void buildCameraSwitcher(){
+
+        fotoapparatSwitcher = Fotoapparat.with(mFrgActivity).into(rcvBottomSheet.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                .photoSize(biggestSize())   // we want to have the biggest photo possible
+                .lensPosition(back())       // we want back camera
+                .build();
+
+    }
+
+    private void setCameraState(boolean state) {
+        isCameraStart = state;
+        try {
+            G.handler.postDelayed(() -> {
+
+                if (state)
+                    fotoapparatSwitcher.start();
+                else
+                    fotoapparatSwitcher.stop();
+
+            }, 50);
+        } catch (Exception e) {
+            e.getMessage();
+        }
     }
 
     public interface ChatPopupListener {
