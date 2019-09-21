@@ -327,8 +327,33 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
             if (privacyListener != null) {
                 realmPrivacy.addChangeListener(privacyListener);
             }
+        }else {
+            fillPrivacyDatabaseWithDefaultValues();
+            if (privacyListener != null) {
+                realmPrivacy.addChangeListener(privacyListener);
+            }
+
         }
         updatePrivacyUI(realmPrivacy);
+    }
+
+    /**
+     * this method call just once , when realm was null
+     * filled db with default value and changed when server response updated
+     */
+    private void fillPrivacyDatabaseWithDefaultValues() {
+
+        RealmPrivacy.updatePrivacy(
+                ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString() ,
+                ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString() ,
+                ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString() ,
+                ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString() ,
+                ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString() ,
+                ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString()
+        );
+
+        realmPrivacy = realm.where(RealmPrivacy.class).findFirst();
+
     }
 
     @Override
