@@ -997,6 +997,11 @@ public class HelperToolbar {
             HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, true);
         }
 
+        //main fragment onResume not called cause of usage algorithm , we get min activity and update button
+        if (mFragmentActivity instanceof ActivityMain){
+            ((ActivityMain) mFragmentActivity).updatePassCodeState();
+        }
+
     }
 
     private void onScannerClickListener() {
