@@ -323,16 +323,12 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
             setTextSelfDestructs();
         }
 
-        if (realmPrivacy != null) {
-            if (privacyListener != null) {
-                realmPrivacy.addChangeListener(privacyListener);
-            }
-        }else {
+        if (realmPrivacy == null) {
             fillPrivacyDatabaseWithDefaultValues();
-            if (privacyListener != null) {
-                realmPrivacy.addChangeListener(privacyListener);
-            }
-
+        }
+        
+        if (privacyListener != null) {
+            realmPrivacy.addChangeListener(privacyListener);
         }
         updatePrivacyUI(realmPrivacy);
     }
