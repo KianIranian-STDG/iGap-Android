@@ -809,6 +809,7 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/countryCode"
                 android:layout_width="wrap_content"
+                style="?textTitleColorSettingTheme"
                 android:layout_height="0dp"
                 android:gravity="bottom"
                 android:onClick="@{() -> viewModel.onCountryCodeClick()}"

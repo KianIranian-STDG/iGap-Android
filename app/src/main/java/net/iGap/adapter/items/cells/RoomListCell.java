@@ -16,7 +16,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperImageBackColor;
-import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.module.CircleImageView;
@@ -195,6 +194,6 @@ public class RoomListCell extends FrameLayout {
     }
 
     private int dpToPx(int dp) {
-        return LayoutCreator.dpToPx(dp);
+        return /*LayoutCreator.dpToPx(dp)*/ dp;
     }
 }
