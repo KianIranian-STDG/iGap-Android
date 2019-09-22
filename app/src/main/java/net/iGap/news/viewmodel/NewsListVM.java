@@ -3,6 +3,7 @@ package net.iGap.news.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.R;
 import net.iGap.api.apiService.ApiResponse;
 import net.iGap.news.repository.MainRepo;
 import net.iGap.news.repository.model.NewsApiArg;
@@ -39,8 +40,9 @@ public class NewsListVM extends ViewModel {
             }
 
             @Override
-            public void onFailed(String error) {
+            public void onFailed(String errorM) {
                 mData.setValue(addFakeData());
+//                error.setValue(new NewsError(true, "", "", R.string.news_serverError));
             }
 
             @Override

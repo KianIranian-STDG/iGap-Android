@@ -29,8 +29,7 @@ public class NewsListFrag extends BaseFragment {
     private NewsApiArg apiArg;
 
     public static NewsListFrag newInstance() {
-        NewsListFrag kuknosLoginFrag = new NewsListFrag();
-        return kuknosLoginFrag;
+        return new NewsListFrag();
     }
 
     @Override
@@ -44,7 +43,7 @@ public class NewsListFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.news_list_frag, container, false);
-        binding.setViewmodel(newsVM);
+//        binding.setViewmodel(newsVM);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
@@ -61,6 +60,11 @@ public class NewsListFrag extends BaseFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         binding.rcGroup.setLayoutManager(layoutManager);
 
+        binding.pullToRefresh.setOnRefreshListener(() -> {
+            newsVM.getData(apiArg);
+            binding.noItemInListError.setVisibility(View.GONE);
+        });
+
         newsVM.getData(apiArg);
         onErrorObserver();
         onDataChanged();
@@ -70,27 +74,23 @@ public class NewsListFrag extends BaseFragment {
 
     private void onErrorObserver() {
         newsVM.getError().observe(getViewLifecycleOwner(), newsError -> {
-            if (newsError.getState() == true) {
-                Snackbar snackbar = Snackbar.make(binding.Container, getString(newsError.getResID()), Snackbar.LENGTH_LONG);
+            if (newsError.getState()) {
+                //show the related text
+                binding.noItemInListError.setVisibility(View.VISIBLE);
+                // show error
+                /*Snackbar snackbar = Snackbar.make(binding.Container, getString(newsError.getResID()), Snackbar.LENGTH_LONG);
                 snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
-                snackbar.show();
+                snackbar.show();*/
             }
         });
     }
 
     private void onProgress() {
-        newsVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
-                binding.ProgressV.setVisibility(View.VISIBLE);
-            }
-            else {
-                binding.ProgressV.setVisibility(View.GONE);
-            }
-        });
+        newsVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> binding.pullToRefresh.setRefreshing(aBoolean));
     }
 
     private void onDataChanged() {
-        newsVM.getmData().observe(getViewLifecycleOwner(), newsList -> initMainRecycler(newsList));
+        newsVM.getmData().observe(getViewLifecycleOwner(), this::initMainRecycler);
     }
 
     private void initMainRecycler(NewsList data) {
@@ -111,11 +111,7 @@ public class NewsListFrag extends BaseFragment {
         binding.rcGroup.setAdapter(adapter);
     }
 
-    public NewsApiArg getApiArg() {
-        return apiArg;
-    }
-
-    public void setApiArg(NewsApiArg apiArg) {
+    void setApiArg(NewsApiArg apiArg) {
         this.apiArg = apiArg;
     }
 }

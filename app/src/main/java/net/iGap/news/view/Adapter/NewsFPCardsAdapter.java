@@ -49,7 +49,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
                 display.getSize(size);
                 viewHolder.itemView.getLayoutParams().width = (int) (size.x * 0.48);
-                viewHolder.itemView.getLayoutParams().height = (int) (size.y *0.35);
+                viewHolder.itemView.getLayoutParams().height = (int) ((size.x * 0.48) *1);
                 break;
             case newsTriple:
                 View tripleVH = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_triple_news_item, parent, false);

@@ -14,33 +14,28 @@ import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.FragmentKuknosTradePagerBinding;
 import net.iGap.databinding.NewsGrouptabFragBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.view.KuknosTradeActiveFrag;
-import net.iGap.kuknos.view.KuknosTradeFrag;
-import net.iGap.kuknos.view.KuknosTradeHistoryFrag;
 import net.iGap.kuknos.view.adapter.TabAdapter;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.news.repository.model.NewsApiArg;
 
+import java.util.Objects;
+
 public class NewsGroupPagerFrag extends BaseFragment {
 
     private NewsGrouptabFragBinding binding;
-    private HelperToolbar mHelperToolbar;
-    private TabAdapter adapter;
     private TabLayout tabLayout;
-    private ViewPager viewPager;
 
 
     public static NewsGroupPagerFrag newInstance() {
-        NewsGroupPagerFrag Frag = new NewsGroupPagerFrag();
-        return Frag;
+        return new NewsGroupPagerFrag();
     }
 
     @Override
@@ -65,7 +60,10 @@ public class NewsGroupPagerFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        Bundle arg = getArguments();
+        String groupID = arg.getString("GroupID");
+
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
@@ -74,18 +72,22 @@ public class NewsGroupPagerFrag extends BaseFragment {
                         popBackStackFragment();
                     }
                 })
+                .setDefaultTitle(arg.getString("GroupTitle"))
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.Toolbar;
         Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        viewPager = binding.secondaryLayout.viewPager;
-        tabLayout = binding.secondaryLayout.pagerTabLayout;
-        adapter = new TabAdapter(getFragmentManager());
+        Picasso.get()
+                .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
+//                .load(arg.getString("GroupPic"))
+                .placeholder(R.mipmap.logo)
+                .into(binding.groupImage);
 
-        Bundle arg = getArguments();
-        String groupID = arg.getString("GroupID");
+        ViewPager viewPager = binding.secondaryLayout.viewPager;
+        tabLayout = binding.secondaryLayout.pagerTabLayout;
+        TabAdapter adapter = new TabAdapter(getFragmentManager());
 
         NewsListFrag frag = new NewsListFrag();
         frag.setApiArg(new NewsApiArg(0, 50, Integer.parseInt(groupID), NewsApiArg.NewsType.GROUP_NEWS));
@@ -112,7 +114,7 @@ public class NewsGroupPagerFrag extends BaseFragment {
             }
 
             TextView tv = new TextView(getContext());
-            tv.setText(tabLayout.getTabAt(i).getText());
+            tv.setText(Objects.requireNonNull(tabLayout.getTabAt(i)).getText());
             tv.setGravity(Gravity.CENTER);
             tv.setTypeface(G.typeface_IRANSansMobile);
 
@@ -121,7 +123,7 @@ public class NewsGroupPagerFrag extends BaseFragment {
             } else {
                 tv.setTextColor(G.context.getResources().getColor(R.color.black));
             }
-            tabLayout.getTabAt(i).setCustomView(tv);
+            Objects.requireNonNull(tabLayout.getTabAt(i)).setCustomView(tv);
         }
     }
 

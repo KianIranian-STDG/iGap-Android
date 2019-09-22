@@ -27,6 +27,7 @@
                 app:title="@string/igap">
 
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/groupImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fitsSystemWindows="true"

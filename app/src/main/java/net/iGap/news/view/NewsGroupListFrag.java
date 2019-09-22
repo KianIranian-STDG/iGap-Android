@@ -131,6 +131,8 @@ public class NewsGroupListFrag extends BaseFragment {
                 }
             Bundle args = new Bundle();
             args.putString("GroupID", news.getId());
+            args.putString("GroupTitle", news.getTitle());
+            args.putString("GroupPic", news.getImage());
             fragment.setArguments(args);
             new HelperFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), fragment).setReplace(false).load();
         });

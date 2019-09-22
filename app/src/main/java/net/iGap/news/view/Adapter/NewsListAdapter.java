@@ -1,7 +1,6 @@
 package net.iGap.news.view.Adapter;
 
-import android.graphics.Point;
-import android.view.Display;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +32,6 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
-        Display display = G.currentActivity.getWindowManager().getDefaultDisplay();
-        Point size = new Point();
         switch (viewType) {
             case newsType:
                 View singleVH = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item, parent, false);
@@ -43,10 +40,6 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case advType:
                 View doubleVH = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_adv_item, parent, false);
                 viewHolder = new AdvViewHolder(doubleVH);
-/*
-                display.getSize(size);
-                viewHolder.itemView.getLayoutParams().width = (int) (size.x * 0.48);
-                viewHolder.itemView.getLayoutParams().height = (int) (size.y *0.35);*/
                 break;
             default:
                 break;
@@ -110,6 +103,23 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .placeholder(R.mipmap.logo)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position)));
+            setColor();
+        }
+
+        private void setColor() {
+            if (G.isDarkTheme) {
+                changeToDark();
+                return;
+            }
+            source.setTextColor(G.context.getResources().getColor(R.color.news_red));
+            title.setTextColor(Color.BLACK);
+            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
+        }
+
+        private void changeToDark() {
+            source.setTextColor(Color.WHITE);
+            title.setTextColor(Color.WHITE);
+            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
         }
 
     }

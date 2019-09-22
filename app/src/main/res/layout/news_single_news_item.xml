@@ -7,7 +7,8 @@
         <import type="net.iGap.G" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.cardview.widget.CardView
@@ -25,6 +26,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHeight_percent="0.2"
+            app:layout_constraintDimensionRatio="3:1"
             app:cardCornerRadius="6dp"
             app:cardUseCompatPadding="true"
             app:cardBackgroundColor="@color/kuknos_WH_itembg">

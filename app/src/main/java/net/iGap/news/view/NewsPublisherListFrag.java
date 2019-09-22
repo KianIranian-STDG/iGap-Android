@@ -22,7 +22,6 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.news.repository.model.NewsPublisher;
-import net.iGap.news.view.Adapter.NewsGroupAdapter;
 import net.iGap.news.view.Adapter.NewsPublisherAdapter;
 import net.iGap.news.viewmodel.NewsPublisherListVM;
 
@@ -32,12 +31,10 @@ public class NewsPublisherListFrag extends BaseFragment {
 
     private NewsPublisherlistFragBinding binding;
     private NewsPublisherListVM newsVM;
-    private HelperToolbar mHelperToolbar;
 
 
     public static NewsPublisherListFrag newInstance() {
-        NewsPublisherListFrag kuknosLoginFrag = new NewsPublisherListFrag();
-        return kuknosLoginFrag;
+        return new NewsPublisherListFrag();
     }
 
     @Override
@@ -51,7 +48,7 @@ public class NewsPublisherListFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.news_publisherlist_frag, container, false);
-        binding.setViewmodel(newsVM);
+//        binding.setViewmodel(newsVM);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
@@ -64,7 +61,7 @@ public class NewsPublisherListFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
@@ -78,6 +75,11 @@ public class NewsPublisherListFrag extends BaseFragment {
         LinearLayout toolbarLayout = binding.toolbar;
         Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
+
+        binding.pullToRefresh.setOnRefreshListener(() -> {
+            newsVM.getData();
+            binding.noItemInListError.setVisibility(View.GONE);
+        });
 
         binding.rcGroup.setHasFixedSize(true);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
@@ -93,7 +95,10 @@ public class NewsPublisherListFrag extends BaseFragment {
 
     private void onErrorObserver() {
         newsVM.getError().observe(getViewLifecycleOwner(), newsError -> {
-            if (newsError.getState() == true) {
+            if (newsError.getState()) {
+                //show the related text
+                binding.noItemInListError.setVisibility(View.VISIBLE);
+                // show error
                 Snackbar snackbar = Snackbar.make(binding.Container, getString(newsError.getResID()), Snackbar.LENGTH_LONG);
                 snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
                 snackbar.show();
@@ -102,18 +107,11 @@ public class NewsPublisherListFrag extends BaseFragment {
     }
 
     private void onProgress() {
-        newsVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
-                binding.ProgressV.setVisibility(View.VISIBLE);
-            }
-            else {
-                binding.ProgressV.setVisibility(View.GONE);
-            }
-        });
+        newsVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> binding.pullToRefresh.setRefreshing(aBoolean));
     }
 
     private void onDataChanged() {
-        newsVM.getmData().observe(getViewLifecycleOwner(), newsGroup -> initMainRecycler(newsGroup));
+        newsVM.getmData().observe(getViewLifecycleOwner(), this::initMainRecycler);
     }
 
     private void initMainRecycler(List<NewsPublisher> data) {
