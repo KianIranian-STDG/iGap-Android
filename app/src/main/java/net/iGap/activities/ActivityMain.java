@@ -39,6 +39,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -971,10 +972,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (availability.isUserResolvableError(errorCode)) {
             // Recoverable error. Show a dialog prompting the user to
             // install/update/enable Google Play services.
-            availability.showErrorDialogFragment(this, errorCode, ERROR_DIALOG_REQUEST_CODE, dialog -> {
-                // The user chose not to take the recovery action
-                onProviderInstallerNotAvailable();
-            });
+            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                availability.showErrorDialogFragment(this, errorCode, ERROR_DIALOG_REQUEST_CODE, dialog -> {
+                    // The user chose not to take the recovery action
+                    onProviderInstallerNotAvailable();
+                });
+            }
         } else {
             // Google Play services is not available.
             onProviderInstallerNotAvailable();
