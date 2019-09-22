@@ -1118,7 +1118,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onCountryCodeClick() {
-        showDialogSelectCountry.setValue(true);
+        if (showReferralErrorLiveData.getValue() != null && showReferralErrorLiveData.getValue()) {
+            showDialogSelectCountry.setValue(true);
+        }
     }
 
 
@@ -1134,7 +1136,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             @Override
             public void onErrorSetRepresentative(int majorCode, int minorCode) {
                 showReferralErrorLiveData.postValue(true);
-
+                showLoading.set(View.GONE);
                 switch (majorCode) {
                     case 10177:
                         if (minorCode == 2) {
@@ -1192,16 +1194,19 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         new RequestUserProfileGetRepresentative().userProfileGetRepresentative(new RequestUserProfileGetRepresentative.OnRepresentReady() {
             @Override
             public void onRepresent(String phoneNumber) {
-                referralNumberObservableField.set(phoneNumber);
+                G.handler.postDelayed(() -> {
+                    referralNumberObservableField.set(phoneNumber);
 
-                if (phoneNumber.equals("")) {
-                    referralEnableLiveData.postValue(true);
-                    countryReader();
-                    sendReferral = true;
-                } else {
-                    referralEnableLiveData.postValue(false);
-                    sendReferral = false;
-                }
+                    if (phoneNumber.equals("")) {
+                        referralEnableLiveData.postValue(true);
+                        countryReader();
+                        sendReferral = true;
+                    } else {
+                        referralCountryCodeObservableField.set("");
+                        referralEnableLiveData.postValue(false);
+                        sendReferral = false;
+                    }
+                }, 500);
             }
 
             @Override
