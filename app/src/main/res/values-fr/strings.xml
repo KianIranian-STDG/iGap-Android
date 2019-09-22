@@ -681,7 +681,7 @@
     <string name="new_channel" >nouveau canal</string>
     <string name="channel_left" >quitter canal</string>
     <string name="please_enter_channel_description" >veuillez entrer explication courte sur canal</string>
-    <string name="txt_you" >vous:</string>
+    <string name="txt_you">vous</string>
     <string name="you" >vous</string>
     <string name="farvardin" >1 mars - 20 avril  Farvardin</string>
     <string name="ordibehst" >21 avril - 21 mai Ordibešhet</string>
@@ -1595,7 +1595,7 @@
     <string name="Recently_Sticker" >récemment</string>
     <string name="Favorite_Sticker" >favoris</string>
     <string name="item_selected" >sélectionné</string>
-    <string name="terms_and_condition" >j\'accepte</string>
+    <string name="terms_and_condition" >j\'accepte %s</string>
     <string name="terms_and_condition_clickable" >les rglements</string>
     <string name="charity_confirm" >vous avez envisag la somme s% Rial pour faire les dons de charité</string>
     <string name="new_channel_hint" >vous pouvez  rdiger des explications facultatives pour votre canal</string>
@@ -1786,4 +1786,5 @@
     <string name="view_profile" >regarder le profil</string>
     <string name="link_not_valid" >lien invalide</string>
     <string name="popular_channel" >des canaux intressants</string>
+    <string name="edit_contact">modifier le contact</string>
 </resources>

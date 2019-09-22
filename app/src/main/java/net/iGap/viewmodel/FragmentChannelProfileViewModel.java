@@ -200,7 +200,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
             showLeaveChannel.set(View.VISIBLE);
         }
 
-        if (G.selectedLanguage.equals("en") || G.selectedLanguage.equals("fr")) {
+        if (!G.isAppRtl) {
             textGravity.set(Gravity.LEFT);
         } else {
             textGravity.set(Gravity.RIGHT);

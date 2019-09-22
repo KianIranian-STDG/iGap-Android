@@ -26,8 +26,6 @@ import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnUnreadChange;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
-import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
-import net.iGap.realm.RealmRoom;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -310,14 +308,18 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
     private void setCrawlerMap(int position, String[] uri) {
 
-        if (uri != null && uri.length > 0) {
-            if (!uri[0].equals(DEEP_LINK_DISCOVERY) && position == DISCOVERY_FRAGMENT) {
-                List<Integer> pages = new ArrayList<>();
-                for (String s : uri) {
-                    pages.add(Integer.valueOf(s));
+        try {
+            if (uri != null && uri.length > 0) {
+                if (!uri[0].equals(DEEP_LINK_DISCOVERY) && position == DISCOVERY_FRAGMENT) {
+                    List<Integer> pages = new ArrayList<>();
+                    for (String s : uri) {
+                        pages.add(Integer.valueOf(s));
+                    }
+                    this.crawlerStruct = new DiscoveryFragment.CrawlerStruct(0, pages);
                 }
-                this.crawlerStruct = new DiscoveryFragment.CrawlerStruct(0, pages);
             }
+        } catch (Exception e) {
+            HelperError.showSnackMessage(getResources().getString(R.string.link_not_valid), false);
         }
 
         if (position == bottomNavigation.getCurrentTab()) {

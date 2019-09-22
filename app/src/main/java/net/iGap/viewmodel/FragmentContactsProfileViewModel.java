@@ -454,7 +454,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             menuVisibility.setValue(View.GONE);
         }
 
-        if (G.selectedLanguage.equals("en") || G.selectedLanguage.equals("fr")) {
+        if (!G.isAppRtl) {
             textsGravity.set(Gravity.LEFT);
         } else {
             textsGravity.set(Gravity.RIGHT);

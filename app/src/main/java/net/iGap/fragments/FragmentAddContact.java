@@ -287,7 +287,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
 
     private void setupToolbar(View view) {
 
-        String toolbarTitle = pageMode == ContactMode.ADD ? getString(R.string.menu_add_contact) : getString(R.string.edit_contact);
+        String toolbarTitle = pageMode == ContactMode.ADD ? getString(R.string.menu_add_contact) : getString(R.string.edit);
 
         ViewGroup toolbarLayout = view.findViewById(R.id.frg_add_contact_toolbar);
 

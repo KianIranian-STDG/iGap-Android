@@ -744,7 +744,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
 
                 }
-                isVisible = true;
+                isVisible = false;
                 successfulDialog.dismiss();
             }
         });
