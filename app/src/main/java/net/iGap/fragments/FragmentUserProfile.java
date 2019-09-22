@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -481,6 +482,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             Dialog dialogChooseCountry = new Dialog(getActivity());
             dialogChooseCountry.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialogChooseCountry.setContentView(R.layout.rg_dialog);
+
             dialogChooseCountry.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             int setWidth = (int) (getResources().getDisplayMetrics().widthPixels * 0.9);
@@ -489,6 +491,12 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             //
             final TextView txtTitle = dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
             SearchView edtSearchView = dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
+            LinearLayout rootView = dialogChooseCountry.findViewById(R.id.country_root);
+            if (G.isDarkTheme) {
+                rootView.setBackground(getResources().getDrawable(R.drawable.dialog_background_dark));
+            } else {
+                rootView.setBackground(getResources().getDrawable(R.drawable.dialog_background));
+            }
 
             txtTitle.setOnClickListener(view -> {
                 edtSearchView.setIconified(false);

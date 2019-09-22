@@ -1350,12 +1350,15 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                         SpannableString senderNameQuoteSpannable = null;
 
 
-                        if (room.getType() == GROUP) {
-                            if (lastMessage.isAuthorMe() && lastMessage.getMessageType() != ProtoGlobal.RoomMessageType.LOG) {
+                        if (room.getType() == GROUP && lastMessage.getMessageType() != ProtoGlobal.RoomMessageType.LOG) {
+                            if (lastMessage.isAuthorMe() && room.getLastMessage().getForwardMessage() == null) {
                                 senderNameTag = getResources().getString(R.string.txt_you);
                                 senderNameSpannable = new SpannableString(senderNameTag);
                             } else {
-                                if (lastMessage.getMessageType() != ProtoGlobal.RoomMessageType.LOG) {
+                                if (room.getLastMessage().isAuthorMe()) {
+                                    senderNameTag = getResources().getString(R.string.txt_you);
+                                    senderNameSpannable = new SpannableString(senderNameTag);
+                                } else {
                                     RealmRegisteredInfo realmRegisteredInfo;
                                     if (room.getLastMessage().getForwardMessage() != null)
                                         realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmFragmentMain(), room.getLastMessage().getUserId());

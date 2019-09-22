@@ -58,7 +58,6 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.proto.ProtoUserReport;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsBlock;
@@ -95,6 +94,7 @@ public class FragmentContactsProfile extends BaseFragment {
     private FragmentContactsProfileViewModel viewModel;
     private CircleImageView userAvatarImageView;
     private boolean isCollapsed;
+    private long userId;
 
     public static FragmentContactsProfile newInstance(long roomId, long peerId, String enterFrom) {
         Bundle args = new Bundle();
@@ -118,7 +118,7 @@ public class FragmentContactsProfile extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contacts_profile, container, false);
         binding.setLifecycleOwner(this);
         binding.setViewModel(viewModel);
-        long userId = 0;
+        userId = 0;
         long roomId = 0;
         String enterFrom = "";
         if (getArguments() != null) {
@@ -142,8 +142,7 @@ public class FragmentContactsProfile extends BaseFragment {
 
         binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
         binding.toolbarMore.setOnClickListener(v -> viewModel.onMoreButtonClick());
-        binding.toolbarVideoCall.setOnClickListener(v -> viewModel.onVideoCallClick());
-        binding.toolbarVoiceCall.setOnClickListener(v -> viewModel.onVoiceCallButtonClick());
+        binding.toolbarCall.setOnClickListener(v -> onCallButtonClick());
 
         viewModel.copyUserNameToClipBoard.observe(getViewLifecycleOwner(), userName -> {
 
@@ -180,12 +179,8 @@ public class FragmentContactsProfile extends BaseFragment {
             if (visible != null) binding.toolbarMore.setVisibility(visible);
         });
 
-        viewModel.callVisibility.observe(this, visible -> {
-            if (visible != null) binding.toolbarVoiceCall.setVisibility(visible);
-        });
-
         viewModel.videoCallVisibility.observe(this, visible -> {
-            if (visible != null) binding.toolbarVideoCall.setVisibility(visible);
+            if (visible != null) binding.toolbarCall.setVisibility(visible);
         });
 
         //todo: fixed it and move to viewModel
@@ -613,14 +608,14 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
             }
         });
 
-        viewModel.editContactListener.observe(getViewLifecycleOwner() , aBoolean -> {
+        viewModel.editContactListener.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean == null) return;
             FragmentAddContact fragment = FragmentAddContact.newInstance(
-                    viewModel.userId,viewModel.phoneNumber , viewModel.firstName, viewModel.lastName, FragmentAddContact.ContactMode.EDIT, (name, family) -> {
+                    viewModel.userId, viewModel.phoneNumber, viewModel.firstName, viewModel.lastName, FragmentAddContact.ContactMode.EDIT, (name, family) -> {
                         viewModel.contactName.setValue(name + " " + family);
-                        viewModel.firstName = name ;
-                        viewModel.lastName = family ;
-                        if (getActivity() != null){
+                        viewModel.firstName = name;
+                        viewModel.lastName = family;
+                        if (getActivity() != null) {
                             ((ActivityMain) getActivity()).onUpdateContacts();
                         }
                     }
@@ -630,6 +625,12 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
 
         });
 
+    }
+
+    private void onCallButtonClick() {
+        CallSelectFragment selectFragment = CallSelectFragment.getInstance(userId, false, null);
+        if (getFragmentManager() != null)
+            selectFragment.show(getFragmentManager(), null);
     }
 
     private void checkViewsState() {
