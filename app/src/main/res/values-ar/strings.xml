@@ -2976,4 +2976,6 @@
     <string name="prayerRoom_textView">نمازخانه</string>
     <string name="user_edited">تعديل المستخدم</string>
     <string name="edit_contact">تحرير الاتصال</string>
+
+    <string name="error_ivand_limit_gift">لسوء الحظ ، فإن الهدايا مجموعة قد انتهت.</string>
 </resources>

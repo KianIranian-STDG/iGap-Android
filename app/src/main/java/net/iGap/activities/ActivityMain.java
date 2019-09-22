@@ -252,6 +252,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         String message = G.context.getString(R.string.error_submit_qr_code);
                         if (majorCode == 10183 && minorCode == 2) {
                             message = G.context.getString(R.string.E_10183);
+                        } else if (majorCode == 10184 && minorCode == 1) {
+                            message = G.context.getString(R.string.error_ivand_limit_gift);
                         }
 
                         SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, false);
