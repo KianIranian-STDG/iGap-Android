@@ -498,20 +498,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 userPhoneNumber = userInfo.getUserInfo().getPhoneNumber();
             }
 
-
-            if (!G.userLogin) {
-                /**
-                 * set true mFirstRun for get room history after logout and login again
-                 */
-                new Thread(() -> {
-                    boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
-                    if (deleteFolderBackground) {
-                        deleteContentFolderChatBackground();
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
-                        editor.apply();
-                    }
-                }).start();
+            boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
+            if (deleteFolderBackground) {
+                deleteContentFolderChatBackground();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
+                editor.apply();
             }
 
             if (G.twoPaneMode) {
