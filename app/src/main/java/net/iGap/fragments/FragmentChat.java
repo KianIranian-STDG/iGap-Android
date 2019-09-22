@@ -274,7 +274,6 @@ import net.iGap.proto.ProtoClientRoomReport;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
-import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAttachmentFields;
@@ -1520,7 +1519,7 @@ public class FragmentChat extends BaseFragment
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(G.twoPaneMode ? R.string.close_icon : R.string.back_icon)
-                .setRightIcons(R.string.more_icon, R.string.voice_call_icon, R.string.video_call_icon)
+                .setRightIcons(R.string.more_icon, R.string.voice_call_icon)
                 .setLogoShown(false)
                 .setChatRoom(true)
                 .setPlayerEnable(true)
@@ -1672,7 +1671,6 @@ public class FragmentChat extends BaseFragment
         isChatReadOnly = realmRoom.getReadOnly();
         //gone video , voice button call then if status was ok visible them
         mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
-        mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
 
         if (isChatReadOnly) {
             viewAttachFile.setVisibility(View.GONE);
@@ -1686,13 +1684,6 @@ public class FragmentChat extends BaseFragment
 
                 } else {
                     mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
-                }
-
-                if (callConfig.isVideo_calling()) {
-                    mHelperToolbar.getThirdRightButton().setVisibility(View.VISIBLE);
-
-                } else {
-                    mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
                 }
 
             } else {
@@ -1721,7 +1712,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void goneCallButtons() {
-        mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
         mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
     }
 
@@ -8853,12 +8843,9 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onSecondRightIconClickListener(View view) {
-        CallSelectFragment.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-    }
-
-    @Override
-    public void onThirdRightIconClickListener(View view) {
-        CallSelectFragment.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+        CallSelectFragment selectFragment = CallSelectFragment.getInstance(chatPeerId, false, null);
+        if (getFragmentManager() != null)
+            selectFragment.show(getFragmentManager(), null);
     }
 
     @Override
