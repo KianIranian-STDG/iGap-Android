@@ -142,10 +142,21 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         private void changeToNormal() {
+            if (G.isDarkTheme) {
+                changeToNormalDark();
+                return;
+            }
             category.setTextColor(G.context.getResources().getColor(R.color.news_red));
             source.setTextColor(G.context.getResources().getColor(R.color.black_register));
             title.setTextColor(Color.BLACK);
             container.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
+        }
+
+        private void changeToNormalDark() {
+            category.setTextColor(Color.WHITE);
+            source.setTextColor(Color.WHITE);
+            title.setTextColor(Color.WHITE);
+            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
         }
     }
 
@@ -195,10 +206,21 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         private void changeToNormal() {
+            if (G.isDarkTheme) {
+                changeToNormalDark();
+                return;
+            }
             category.setTextColor(G.context.getResources().getColor(R.color.news_red));
             source.setTextColor(G.context.getResources().getColor(R.color.black_register));
             title.setTextColor(Color.BLACK);
             container.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
+        }
+
+        private void changeToNormalDark() {
+            category.setTextColor(Color.WHITE);
+            source.setTextColor(Color.WHITE);
+            title.setTextColor(Color.WHITE);
+            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
         }
     }
 
@@ -239,8 +261,17 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         private void changeToNormal() {
+            if (G.isDarkTheme) {
+                changeToNormalDark();
+                return;
+            }
             category.setTextColor(G.context.getResources().getColor(R.color.news_red));
             container.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
+        }
+
+        private void changeToNormalDark() {
+            category.setTextColor(Color.WHITE);
+            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
         }
     }
 

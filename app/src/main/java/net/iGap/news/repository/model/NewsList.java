@@ -32,6 +32,7 @@ public class NewsList {
     }
 
     public class News {
+
         @SerializedName("id")
         private String id;
         @SerializedName("title")
@@ -40,6 +41,14 @@ public class NewsList {
         private String image;
         @SerializedName("type")
         private int type;
+        @SerializedName("originalSource")
+        private String source;
+        @SerializedName("rootTitle")
+        private String rootTitle;
+        @SerializedName("date")
+        private String date;
+        @SerializedName("views")
+        private String viewNum;
 
         public News() {
         }
@@ -81,6 +90,38 @@ public class NewsList {
 
         public void setType(int type) {
             this.type = type;
+        }
+
+        public String getSource() {
+            return source;
+        }
+
+        public void setSource(String source) {
+            this.source = source;
+        }
+
+        public String getRootTitle() {
+            return rootTitle;
+        }
+
+        public void setRootTitle(String rootTitle) {
+            this.rootTitle = rootTitle;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public String getViewNum() {
+            return viewNum;
+        }
+
+        public void setViewNum(String viewNum) {
+            this.viewNum = viewNum;
         }
     }
 

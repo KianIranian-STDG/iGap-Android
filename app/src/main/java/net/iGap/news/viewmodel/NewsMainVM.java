@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.R;
 import net.iGap.api.apiService.ApiResponse;
 import net.iGap.news.repository.MainRepo;
 import net.iGap.news.repository.model.NewsError;
@@ -34,7 +35,7 @@ public class NewsMainVM extends ViewModel {
     }
 
     public void getData() {
-        repo.getSlideNews(1, 3, new ApiResponse<NewsList>() {
+        repo.getSlideNews(1, 5, new ApiResponse<NewsList>() {
             @Override
             public void onResponse(NewsList newsList) {
                 addSlider(newsList);
@@ -42,7 +43,7 @@ public class NewsMainVM extends ViewModel {
             }
 
             @Override
-            public void onFailed(String error) {
+            public void onFailed(String errorM) {
                 getNews();
             }
 
@@ -62,8 +63,10 @@ public class NewsMainVM extends ViewModel {
             }
 
             @Override
-            public void onFailed(String error) {
+            public void onFailed(String errorM) {
+                addFakeData(null);
                 addTree4(null);
+//                error.setValue(new NewsError(true, "", "", R.string.news_serverError));
             }
 
             @Override
@@ -131,6 +134,8 @@ public class NewsMainVM extends ViewModel {
 
     private void addFakeData(List<NewsFPList> newsFPList) {
 
+        //TODO remove this code from here for final release
+
         NewsMainBTN btn = new NewsMainBTN(101, "آرشیو اخبار",0);
         List<NewsMainBTN> tempBtn = new ArrayList<>();
         tempBtn.add(btn);
@@ -143,6 +148,17 @@ public class NewsMainVM extends ViewModel {
                 tempList.add(newsFPList.get(0));
             NewsFirstPage nfp = new NewsFirstPage(null, null, tempList, 5);
             this.temp.add(nfp);
+        }
+        else {
+            List<NewsFPList> tempList = new ArrayList<>();
+            for (int i = 0; i < 6; i++)
+                tempList.add(new NewsFPList().addFakeData());
+            NewsFirstPage nfp = new NewsFirstPage(null, null, tempList, 5);
+            NewsFirstPage nfp2 = new NewsFirstPage(null, null, tempList, 4);
+            NewsFirstPage nfp3 = new NewsFirstPage(null, null, tempList, 3);
+            this.temp.add(nfp);
+            this.temp.add(nfp2);
+            this.temp.add(nfp3);
         }
 
         NewsMainBTN btn2 = new NewsMainBTN(102, "گروه های خبری",0);

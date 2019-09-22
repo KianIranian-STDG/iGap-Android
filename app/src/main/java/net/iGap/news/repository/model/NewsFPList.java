@@ -2,6 +2,7 @@ package net.iGap.news.repository.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewsFPList {
@@ -16,6 +17,23 @@ public class NewsFPList {
     private int color;
 
     public NewsFPList() {
+    }
+
+    public NewsFPList(String category, String catID, List<News> news, int color) {
+        this.category = category;
+        this.catID = catID;
+        this.news = news;
+        this.color = color;
+    }
+
+    public NewsFPList addFakeData() {
+        List<NewsContent> tempContent = new ArrayList<>();
+        tempContent.add(new NewsContent("101", "Root Title", "Title", "Lead",
+                null, "10/10/1993", "11/10/1993", "www.google.com", "www.google.com"));
+        List<News> tempNews = new ArrayList<>();
+        tempNews.add(new News("bbc", tempContent));
+        NewsFPList news = new NewsFPList("sport", "101", tempNews, 0);
+        return news;
     }
 
     public String getCategory() {
@@ -49,6 +67,11 @@ public class NewsFPList {
         private List<NewsContent> contents;
 
         public News() {
+        }
+
+        public News(String source, List<NewsContent> contents) {
+            this.source = source;
+            this.contents = contents;
         }
 
         public String getSource() {
@@ -89,6 +112,19 @@ public class NewsFPList {
         private String externalLink;
 
         public NewsContent() {
+        }
+
+        public NewsContent(String id, String rootTitle, String title, String lead, List<Image> image,
+                           String originalDate, String publishedDate, String internalLink, String externalLink) {
+            this.id = id;
+            this.rootTitle = rootTitle;
+            this.title = title;
+            this.lead = lead;
+            this.image = image;
+            this.originalDate = originalDate;
+            this.publishedDate = publishedDate;
+            this.internalLink = internalLink;
+            this.externalLink = externalLink;
         }
 
         public String getId() {

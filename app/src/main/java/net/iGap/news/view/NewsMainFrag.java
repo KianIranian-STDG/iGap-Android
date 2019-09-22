@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -43,8 +44,7 @@ public class NewsMainFrag extends BaseFragment {
     private HelperToolbar mHelperToolbar;
 
     public static NewsMainFrag newInstance() {
-        NewsMainFrag kuknosLoginFrag = new NewsMainFrag();
-        return kuknosLoginFrag;
+        return new NewsMainFrag();
     }
 
     @Override
@@ -79,6 +79,7 @@ public class NewsMainFrag extends BaseFragment {
                         popBackStackFragment();
                     }
                 })
+                .setDefaultTitle(getResources().getString(R.string.news_mainTitle))
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.Toolbar;
@@ -90,6 +91,14 @@ public class NewsMainFrag extends BaseFragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         binding.rcMain.setLayoutManager(layoutManager);
 
+        binding.pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                newsMainVM.getData();
+                binding.noItemInListError.setVisibility(View.GONE);
+            }
+        });
+
         newsMainVM.getData();
         onErrorObserver();
         onDataChanged();
@@ -99,6 +108,9 @@ public class NewsMainFrag extends BaseFragment {
     private void onErrorObserver() {
         newsMainVM.getError().observe(getViewLifecycleOwner(), newsError -> {
             if (newsError.getState() == true) {
+                //show the related text
+                binding.noItemInListError.setVisibility(View.VISIBLE);
+                // show error
                 Snackbar snackbar = Snackbar.make(binding.Container, getString(newsError.getResID()), Snackbar.LENGTH_LONG);
                 snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
                 snackbar.show();
@@ -108,12 +120,7 @@ public class NewsMainFrag extends BaseFragment {
 
     private void onProgress() {
         newsMainVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
-                binding.ProgressV.setVisibility(View.VISIBLE);
-            }
-            else {
-                binding.ProgressV.setVisibility(View.GONE);
-            }
+            binding.pullToRefresh.setRefreshing(aBoolean);
         });
     }
 
