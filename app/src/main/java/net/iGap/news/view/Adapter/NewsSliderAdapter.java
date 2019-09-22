@@ -41,14 +41,14 @@ public class NewsSliderAdapter extends SliderViewAdapter {
         TextView textViewTitle;
         TextView textViewDescription;
 
-        public SliderVH(View itemView) {
+        SliderVH(View itemView) {
             super(itemView);
             imageViewBackground = itemView.findViewById(R.id.sliderImage);
             textViewTitle = itemView.findViewById(R.id.sliderTitle);
             textViewDescription = itemView.findViewById(R.id.sliderDesc);
         }
 
-        public void initView(int position) {
+        void initView(int position) {
             textViewTitle.setText("" + data.get(position).getTitle());
             textViewDescription.setText("" + data.get(position).getDesc());
             imageViewBackground.setOnClickListener(v -> callBack.onSliderClick(data.get(position)));

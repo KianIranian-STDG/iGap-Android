@@ -168,7 +168,7 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter{
 
         private Button btn1;
 
-        public SingleBtnHolder(@NonNull View itemView) {
+        SingleBtnHolder(@NonNull View itemView) {
             super(itemView);
             btn1 = itemView.findViewById(R.id.btn1);
         }

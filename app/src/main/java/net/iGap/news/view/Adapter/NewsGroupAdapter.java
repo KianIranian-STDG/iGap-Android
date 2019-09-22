@@ -28,7 +28,6 @@ public class NewsGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View singleVH = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_group_item, parent, false);
-        GroupViewHolder groupViewHolder = new GroupViewHolder(singleVH);
 
        /* Display display = G.currentActivity.getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -36,7 +35,7 @@ public class NewsGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         groupViewHolder.itemView.getLayoutParams().height = (int) (size.x *0.45);
         groupViewHolder.itemView.getLayoutParams().width = (int) (size.x *0.45);*/
 
-        return groupViewHolder;
+        return new GroupViewHolder(singleVH);
     }
 
     @Override
@@ -55,14 +54,14 @@ public class NewsGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private ImageView image;
         private CardView container;
 
-        public GroupViewHolder(@NonNull View itemView) {
+        GroupViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.title);
             image = itemView.findViewById(R.id.image);
             container = itemView.findViewById(R.id.container);
         }
 
-        public void initView(int position) {
+        void initView(int position) {
             title.setText("" + mData.getGroups().get(position).getTitle());
             Picasso.get()
                     .load("https://images-eu.ssl-images-amazon.com/images/I/71T0kQ9FJPL.jpg")

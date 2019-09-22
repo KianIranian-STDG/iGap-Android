@@ -129,7 +129,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private ImageView image;
         private CardView container;
 
-        public AdvViewHolder(@NonNull View itemView) {
+        AdvViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
             container = itemView.findViewById(R.id.container);

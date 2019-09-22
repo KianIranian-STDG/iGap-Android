@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
-import net.iGap.news.repository.model.NewsGroup;
 import net.iGap.news.repository.model.NewsPublisher;
 
 import java.util.List;
@@ -31,7 +30,6 @@ public class NewsPublisherAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View singleVH = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_group_item, parent, false);
-        GroupViewHolder groupViewHolder = new GroupViewHolder(singleVH);
 
        /* Display display = G.currentActivity.getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -39,7 +37,7 @@ public class NewsPublisherAdapter extends RecyclerView.Adapter<RecyclerView.View
         groupViewHolder.itemView.getLayoutParams().height = (int) (size.x *0.45);
         groupViewHolder.itemView.getLayoutParams().width = (int) (size.x *0.45);*/
 
-        return groupViewHolder;
+        return new GroupViewHolder(singleVH);
     }
 
     @Override
@@ -58,14 +56,14 @@ public class NewsPublisherAdapter extends RecyclerView.Adapter<RecyclerView.View
         private ImageView image;
         private CardView container;
 
-        public GroupViewHolder(@NonNull View itemView) {
+        GroupViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.title);
             image = itemView.findViewById(R.id.image);
             container = itemView.findViewById(R.id.container);
         }
 
-        public void initView(int position) {
+        void initView(int position) {
             title.setText("" + mData.get(position).getName());
             Picasso.get()
                     .load("https://images-eu.ssl-images-amazon.com/images/I/71T0kQ9FJPL.jpg")
