@@ -38,6 +38,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/groupAvatar"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="@dimen/dp32"
+                    android:onClick="@{()->viewModel.chooseImage()}"
+                    app:avatarImage="@{viewModel.avatarImage}"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toStartOf="@id/groupNameEditText"
+                    app:layout_constraintHorizontal_bias="0.531"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent=".2" />
+
                 <ProgressBar
                     android:id="@+id/imageLoading"
                     android:layout_width="35dp"
@@ -48,6 +62,37 @@
                     app:layout_constraintRight_toRightOf="@id/groupAvatar"
                     app:layout_constraintTop_toTopOf="@id/groupAvatar" />
 
+                <net.iGap.module.EmojiEditTextE
+                    android:id="@+id/groupNameEditText"
+                    style="?emojiChat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="bottom"
+                    android:hint="@string/group_name"
+                    android:imeOptions="flagNoExtractUi"
+                    android:maxLines="1"
+                    android:text="@={viewModel.groupName}"
+                    android:textSize="@dimen/largeTextSize"
+                    app:emojiSize="@dimen/largeTextSize"
+                    app:layout_constraintEnd_toStartOf="@+id/emojiButton"
+                    app:layout_constraintStart_toEndOf="@id/groupAvatar"
+                    app:layout_constraintTop_toTopOf="@+id/groupAvatar" />
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/emojiButton"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="@dimen/dp40"
+                    android:layout_height="@dimen/dp40"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="@{()->viewModel.onEmojiClickListener()}"
+                    android:text="@string/md_emoticon_with_happy_face"
+                    android:textSize="@dimen/standardIconSize"
+                    app:layout_constraintBottom_toBottomOf="@+id/groupNameEditText"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
                 <View
                     android:id="@+id/line"
                     style="?lineColorSettingTheme"
@@ -56,39 +101,6 @@
                     app:layout_constraintEnd_toEndOf="@+id/emojiButton"
                     app:layout_constraintStart_toStartOf="@+id/groupNameEditText"
                     app:layout_constraintTop_toBottomOf="@+id/groupNameEditText" />
-
-                <View
-                    android:id="@+id/line2"
-                    style="?lineColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/dp16"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/groupDescriptionEditText"
-                    app:layout_constraintWidth_percent=".95" />
-
-                <View
-                    android:id="@+id/line3"
-                    style="?lineColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/dp16"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/chatHistoryStatus"
-                    app:layout_constraintWidth_percent=".95" />
-
-                <View
-                    android:id="@+id/line4"
-                    style="?lineColorSettingTheme"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/dp16"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/members"
-                    app:layout_constraintWidth_percent=".95" />
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/groupDescriptionEditText"
@@ -104,6 +116,25 @@
                     app:layout_constraintEnd_toEndOf="@+id/emojiButton"
                     app:layout_constraintStart_toStartOf="@+id/groupNameEditText"
                     app:layout_constraintTop_toBottomOf="@+id/line" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/divider"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="groupDescriptionEditText,groupAvatar" />
+
+                <View
+                    android:id="@+id/line2"
+                    style="?lineColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider"
+                    app:layout_constraintWidth_percent=".95" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/chatHistoryTitle"
@@ -129,6 +160,17 @@
                     app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
                     app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/chatHistoryTitle" />
+
+                <View
+                    android:id="@+id/line3"
+                    style="?lineColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/chatHistoryStatus"
+                    app:layout_constraintWidth_percent=".95" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/permission"
@@ -211,7 +253,6 @@
                     app:layout_constraintStart_toEndOf="@id/moderator"
                     app:layout_constraintTop_toTopOf="@id/moderator" />
 
-
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/members"
                     style="?textTitleColorSettingTheme"
@@ -224,6 +265,17 @@
                     app:layout_constraintEnd_toStartOf="@id/membersCount"
                     app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/moderator" />
+
+                <View
+                    android:id="@+id/line4"
+                    style="?lineColorSettingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/members"
+                    app:layout_constraintWidth_percent=".95" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/membersCount"
@@ -252,55 +304,6 @@
                     app:layout_constraintLeft_toLeftOf="@id/chatHistoryTitle"
                     app:layout_constraintRight_toRightOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/line4" />
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/groupAvatar"
-                    android:layout_width="@dimen/dp70"
-                    android:layout_height="@dimen/dp70"
-                    android:layout_margin="@dimen/dp32"
-                    android:layout_marginTop="32dp"
-                    android:onClick="@{()->viewModel.chooseImage()}"
-                    app:avatarImage="@{viewModel.avatarImage}"
-                    app:layout_constraintEnd_toStartOf="@id/groupNameEditText"
-                    app:layout_constraintHorizontal_bias="0.531"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <net.iGap.module.EmojiEditTextE
-                    android:id="@+id/groupNameEditText"
-                    style="?emojiChat"
-                    android:layout_width="235dp"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:gravity="bottom"
-                    android:hint="@string/group_name"
-                    android:imeOptions="flagNoExtractUi"
-                    android:maxLines="1"
-                    android:text="@={viewModel.groupName}"
-                    android:textSize="@dimen/largeTextSize"
-                    app:emojiSize="@dimen/largeTextSize"
-                    app:layout_constraintEnd_toStartOf="@+id/emojiButton"
-                    app:layout_constraintStart_toEndOf="@id/groupAvatar"
-                    app:layout_constraintTop_toTopOf="@+id/groupAvatar" />
-
-                <net.iGap.module.MaterialDesignTextView
-                    android:id="@+id/emojiButton"
-                    style="?emojiChat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:gravity="bottom"
-                    android:onClick="@{()->viewModel.onEmojiClickListener()}"
-                    android:paddingLeft="@dimen/dp8"
-                    android:paddingRight="@dimen/dp8"
-                    android:paddingBottom="@dimen/dp8"
-                    android:text="@string/md_emoticon_with_happy_face"
-                    android:textAppearance="@style/TextIconAppearance.all"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/groupNameEditText"
-                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <ProgressBar
                     android:id="@+id/loading"
