@@ -474,7 +474,7 @@
     <string name="please_wait" >veuillez patienter</string>
     <string name="New_Chat" >nouvelle discussion </string>
     <string name="Invite_Friends" >inviter des amis</string>
-    <string name="iGap_FAQ" >questions frquentes d\'iGap</string>
+    <string name="iGap_FAQ" >questions fréquentes d\'iGap</string>
     <string name="Documents" >documents</string>
     <string name="remove_admin" >limination de dirigeant</string>
     <string name="remove_moderator" >limination de surveillant</string>
@@ -579,7 +579,7 @@
     <string name="members" >membres</string>
     <string name="skip" >ignorer</string>
     <string name="settings" >réglage</string>
-    <string name="iGap_settings" >rgalage du compte d\'iGap</string>
+    <string name="iGap_settings" >régalage du compte d\'iGap</string>
     <string name="please_write_your_message" >veuillez écrire votre message!</string>
     <string name="share_audio_file" >partager le fichier d\'audio</string>
     <string name="share_image" >partager l\'image</string>
@@ -774,7 +774,7 @@
     <string name="text_is_empty" >le message est vide</string>
     <string name="please_try_again" >veuillez essayer de nouveau</string>
     <string name="room_not_exist" >aucune page associe  cet ID n\'a pas été trouvée</string>
-    <string name="app_theme" >la couleur de thme</string>
+    <string name="app_theme" >la couleur de théme</string>
     <string name="app_notif_color" >couleur des notifications sur iGap</string>
     <string name="theme" >colorage</string>
     <string name="is" >est</string>
@@ -789,7 +789,7 @@
     <string name="who_can_invite_you_to_group_s" >Qui pourrait m\'inviter au group?</string>
     <string name="no_body" >personne</string>
     <string name="my_contacts" >mes contacts</string>
-    <string name="privacy_setting" >mes rgalages privs</string>
+    <string name="privacy_setting" >mes régalages privs</string>
     <string name="igap_search" >trouver et dcouvrir</string>
     <string name="set_color_to_default" >réinitialiser les couleur au défaut</string>
     <string name="empty_message" >veuillez entrer les cinq caractres d\'ID</string>
@@ -1055,7 +1055,7 @@
     <string name="zighade" >Dhou al qi`da</string>
     <string name="zihaje" >Dhou al-hijja</string>
     <string name="st_multi_tab" >multi tabes</string>
-    <string name="st_dark_theme" >thme fonc</string>
+    <string name="st_dark_theme" >théme fonc</string>
     <string name="dont_ask_again" >j\'ai compris</string>
     <string name="attention" >Notice</string>
     <string name="content_attention_dialog" >Remarque: Les personnes sur la carte seront affiches avec une erreçur de 500 mtres. Donc pas de soucis</string>
@@ -1080,7 +1080,7 @@
     <string name="can_not_open_file" >Ce fichier ne peut pas être ouvert</string>
     <string name="st_24_Clock" >modifier</string>
     <string name="pin_messages_content" >\"Voulez-vous% s ce message?\"</string>
-    <string name="unpin" > Dtacher</string>
+    <string name="unpin" > Détacher</string>
     <string name="pin_message" >Epingle</string>
     <string name="pined_message" >pingle</string>
     <string name="all_member" >tous les membres</string>
@@ -1091,7 +1091,7 @@
     <string name="to_theme" >De:</string>
     <string name="automatic" >Jusqu\' ce que:</string>
     <string name="automatic_description_theme" >Automatique</string>
-    <string name="setting_dark_theme" >rgalage du thme fonc</string>
+    <string name="setting_dark_theme" >régalage du théme fonc</string>
     <string name="Select_Time" >choix du temps</string>
     <string name="financial_services" >services financires</string>
     <string name="install_app" >installer l\'application</string>
@@ -1236,10 +1236,10 @@
     <string name="E_163" >USER_PROFILE_CHECK_USERNAME_INTERNAL_SERVER_ERROR</string>
     <string name="channel_name_notification" >notifications d\'iGap</string>
     <string name="keep_media_6month" >6 mois</string>
-    <string name="minutes_ago" >il y a       minutes</string>
+    <string name="minutes_ago" >il y a  minutes</string>
     <string name="IP_blocked" >votre IP a été bloqué suite aux tentatives plus que la limite autorisée</string>
-    <string name="export_chat" >dtacher des messages</string>
-    <string name="export_message" >impossible de dtacher les messages</string>
+    <string name="export_chat" >détacher des messages</string>
+    <string name="export_message" >impossible de détacher les messages</string>
     <string name="wifi_data_usage" >utiliser le Wi-Fi</string>
     <string name="mobile_data_usage" >utiliser données cellulaires</string>
     <string name="sent" >envoyé</string>
@@ -1254,8 +1254,8 @@
     <string name="new_pattern_passCode" >créer nouveau modle</string>
     <string name="repeat_pattern_passCode" >rpter le modle</string>
     <string name="repeat_pattern_pattern" >modle comme mot de passe</string>
-    <string name="solid_colors" >les couleurs de thme</string>
-    <string name="wallpapers" >les images de thme</string>
+    <string name="solid_colors" >les couleurs de théme</string>
+    <string name="wallpapers" >les images de théme</string>
     <string name="verify_register_sms" >envoyer SMS</string>
     <string name="verify_register_call" >contact</string>
     <string name="way_receive_register_code" >comment recevoir le code</string>
@@ -1514,7 +1514,7 @@
     <string name="terms_condition" >reglements et conditions</string>
     <string name="terms_and_conditions" >mode d\'emploi</string>
     <string name="contact_us" >contatcez-nous</string>
-    <string name="faq" >questions frquentes</string>
+    <string name="faq" >questions fréquentes</string>
     <string name="logout_from_account" >déconnecter</string>
     <string name="logout_prompt" >voulez-vous vous déconnecter?</string>
     <string name="logout" >sortir</string>
@@ -1641,7 +1641,7 @@
     <string name="make_as_read" >lu</string>
     <string name="read_all" >tous sont lus</string>
     <string name="financial_report" >reportage fiancier</string>
-    <string name="fag" >questions frquentes</string>
+    <string name="fag" >questions fréquentes</string>
     <string name="wallet_message" >message de portefuille</string>
     <string name="unknown_message" >ce message n\'est pas affichables</string>
     <string name="card_to_card_message" >message de virement part carte bancaire</string>
