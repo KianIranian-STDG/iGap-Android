@@ -11,8 +11,6 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.ActivityMediaPlayerLandBindingImpl;
-import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -24,7 +22,6 @@ import net.iGap.model.GoToSharedMediaModel;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmCallConfig;
@@ -145,14 +142,6 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
     private void getUserInfo() {
         new RequestUserInfo().userInfo(userId);
-    }
-
-    public void onVideoCallClick() {
-        CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
-    }
-
-    public void onVoiceCallButtonClick() {
-        CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
     }
 
     public void onNotificationCheckChange(boolean isChecked) {
