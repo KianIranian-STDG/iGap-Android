@@ -1,6 +1,5 @@
 package net.iGap.news.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,21 +25,20 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
-import net.iGap.news.repository.model.NewsApiArg;
 import net.iGap.news.repository.model.NewsGroup;
 import net.iGap.news.view.Adapter.NewsGroupAdapter;
 import net.iGap.news.viewmodel.NewsGroupListVM;
+
+import java.util.Objects;
 
 public class NewsGroupListFrag extends BaseFragment {
 
     private NewsGrouplistFragBinding binding;
     private NewsGroupListVM newsVM;
-    private HelperToolbar mHelperToolbar;
 
 
     public static NewsGroupListFrag newInstance() {
-        NewsGroupListFrag kuknosLoginFrag = new NewsGroupListFrag();
-        return kuknosLoginFrag;
+        return new NewsGroupListFrag();
     }
 
     @Override
@@ -54,7 +52,7 @@ public class NewsGroupListFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.news_grouplist_frag, container, false);
-        binding.setViewmodel(newsVM);
+//        binding.setViewmodel(newsVM);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
@@ -67,7 +65,7 @@ public class NewsGroupListFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
@@ -76,6 +74,7 @@ public class NewsGroupListFrag extends BaseFragment {
                         popBackStackFragment();
                     }
                 })
+                .setDefaultTitle(getResources().getString(R.string.news_groupTitle))
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.toolbar;
@@ -87,6 +86,11 @@ public class NewsGroupListFrag extends BaseFragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         binding.rcGroup.setLayoutManager(layoutManager);
 
+        binding.pullToRefresh.setOnRefreshListener(() -> {
+            newsVM.getData();
+            binding.noItemInListError.setVisibility(View.GONE);
+        });
+
         newsVM.getData();
         onErrorObserver();
         onDataChanged();
@@ -96,7 +100,10 @@ public class NewsGroupListFrag extends BaseFragment {
 
     private void onErrorObserver() {
         newsVM.getError().observe(getViewLifecycleOwner(), newsError -> {
-            if (newsError.getState() == true) {
+            if (newsError.getState()) {
+                //show the related text
+                binding.noItemInListError.setVisibility(View.VISIBLE);
+                // show error
                 Snackbar snackbar = Snackbar.make(binding.Container, getString(newsError.getResID()), Snackbar.LENGTH_LONG);
                 snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
                 snackbar.show();
@@ -105,18 +112,11 @@ public class NewsGroupListFrag extends BaseFragment {
     }
 
     private void onProgress() {
-        newsVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
-                binding.ProgressV.setVisibility(View.VISIBLE);
-            }
-            else {
-                binding.ProgressV.setVisibility(View.GONE);
-            }
-        });
+        newsVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> binding.pullToRefresh.setRefreshing(aBoolean));
     }
 
     private void onDataChanged() {
-        newsVM.getmGroups().observe(getViewLifecycleOwner(), newsGroup -> initMainRecycler(newsGroup));
+        newsVM.getmGroups().observe(getViewLifecycleOwner(), this::initMainRecycler);
     }
 
     private void initMainRecycler(NewsGroup data) {
@@ -132,7 +132,7 @@ public class NewsGroupListFrag extends BaseFragment {
             Bundle args = new Bundle();
             args.putString("GroupID", news.getId());
             fragment.setArguments(args);
-            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            new HelperFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), fragment).setReplace(false).load();
         });
         binding.rcGroup.setAdapter(adapter);
     }

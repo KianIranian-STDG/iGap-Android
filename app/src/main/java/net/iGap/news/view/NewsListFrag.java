@@ -4,36 +4,22 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
-import net.iGap.databinding.NewsGrouplistFragBinding;
 import net.iGap.databinding.NewsListFragBinding;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.news.repository.model.NewsApiArg;
-import net.iGap.news.repository.model.NewsGroup;
 import net.iGap.news.repository.model.NewsList;
-import net.iGap.news.view.Adapter.NewsGroupAdapter;
 import net.iGap.news.view.Adapter.NewsListAdapter;
-import net.iGap.news.viewmodel.NewsGroupListVM;
 import net.iGap.news.viewmodel.NewsListVM;
 
 public class NewsListFrag extends BaseFragment {

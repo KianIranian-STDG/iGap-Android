@@ -1,14 +1,5 @@
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <data>
-        <import type="net.iGap.G" />
-        <variable
-            name="viewmodel"
-            type="net.iGap.news.viewmodel.NewsMainVM" />
-    </data>
-
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Container"
         android:layout_width="match_parent"
@@ -71,7 +62,6 @@
             </LinearLayout>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
         <ProgressBar
             android:id="@+id/ProgressV"

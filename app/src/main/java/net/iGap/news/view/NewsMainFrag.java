@@ -36,12 +36,12 @@ import net.iGap.news.viewmodel.NewsMainVM;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class NewsMainFrag extends BaseFragment {
 
     private NewsMainPageBinding binding;
     private NewsMainVM newsMainVM;
-    private HelperToolbar mHelperToolbar;
 
     public static NewsMainFrag newInstance() {
         return new NewsMainFrag();
@@ -58,7 +58,7 @@ public class NewsMainFrag extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.news_main_page, container, false);
-        binding.setViewmodel(newsMainVM);
+//        binding.setViewmodel(newsMainVM);
         binding.setLifecycleOwner(this);
 
         return binding.getRoot();
@@ -70,7 +70,7 @@ public class NewsMainFrag extends BaseFragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        mHelperToolbar = HelperToolbar.create()
+        HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setListener(new ToolbarListener() {
@@ -91,12 +91,9 @@ public class NewsMainFrag extends BaseFragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         binding.rcMain.setLayoutManager(layoutManager);
 
-        binding.pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                newsMainVM.getData();
-                binding.noItemInListError.setVisibility(View.GONE);
-            }
+        binding.pullToRefresh.setOnRefreshListener(() -> {
+            newsMainVM.getData();
+            binding.noItemInListError.setVisibility(View.GONE);
         });
 
         newsMainVM.getData();
@@ -107,7 +104,7 @@ public class NewsMainFrag extends BaseFragment {
 
     private void onErrorObserver() {
         newsMainVM.getError().observe(getViewLifecycleOwner(), newsError -> {
-            if (newsError.getState() == true) {
+            if (newsError.getState()) {
                 //show the related text
                 binding.noItemInListError.setVisibility(View.VISIBLE);
                 // show error
@@ -119,18 +116,11 @@ public class NewsMainFrag extends BaseFragment {
     }
 
     private void onProgress() {
-        newsMainVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
-            binding.pullToRefresh.setRefreshing(aBoolean);
-        });
+        newsMainVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> binding.pullToRefresh.setRefreshing(aBoolean));
     }
 
     private void onDataChanged() {
-        newsMainVM.getMainList().observe(getViewLifecycleOwner(), new Observer<List<NewsFirstPage>>() {
-            @Override
-            public void onChanged(List<NewsFirstPage> newsFirstPages) {
-                initMainRecycler(newsFirstPages);
-            }
-        });
+        newsMainVM.getMainList().observe(getViewLifecycleOwner(), this::initMainRecycler);
     }
 
     private void initMainRecycler(List<NewsFirstPage> data) {
@@ -160,7 +150,7 @@ public class NewsMainFrag extends BaseFragment {
                         }
                         break;
                 }
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                new HelperFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), fragment).setReplace(false).load();
             }
 
             @Override

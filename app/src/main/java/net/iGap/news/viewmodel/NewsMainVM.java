@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import net.iGap.R;
 import net.iGap.api.apiService.ApiResponse;
 import net.iGap.news.repository.MainRepo;
 import net.iGap.news.repository.model.NewsError;
@@ -49,7 +48,8 @@ public class NewsMainVM extends ViewModel {
 
             @Override
             public void setProgressIndicator(boolean visibility) {
-                progressState.setValue(visibility);
+                if (visibility)
+                    progressState.setValue(visibility);
             }
         });
     }
@@ -58,7 +58,7 @@ public class NewsMainVM extends ViewModel {
         repo.getLastGroupNews(new ApiResponse<List<NewsFPList>>() {
             @Override
             public void onResponse(List<NewsFPList> newsFPList) {
-                addFakeData(newsFPList);
+//                addFakeData(newsFPList);
                 addTree4(newsFPList);
             }
 

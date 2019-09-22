@@ -2248,4 +2248,5 @@ Want to get it?</string>
     <string name="news_emptyList">There is no item to show. \n Pull down to refresh.</string>
     <string name="news_mainTitle">IGap News</string>
     <string name="news_serverError">Something went wrong. Please try again.</string>
+    <string name="news_groupTitle">News Group</string>
 </resources>
