@@ -1786,4 +1786,5 @@
     <string name="popular_channel" >des canaux intressants</string>
     <string name="edit_contact">modifier le contact</string>
     <string name="error_ivand_limit_gift">Malheureusement, les cadeaux ont pris fin.</string>
+    <string name="referral_error_yourself">Il n\'est pas possible d\'enregistrer votre numéro comme référence.</string>
 </resources>

@@ -1139,7 +1139,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
                 switch (majorCode) {
                     case 10177:
-                        referralError.set(R.string.phone_number_is_not_valid);
+                        if (minorCode == 2) {
+                            referralError.set(R.string.referral_error_yourself);
+                        } else {
+                            referralError.set(R.string.phone_number_is_not_valid);
+                        }
                         break;
                     case 10178:
                         if (minorCode == 2)
