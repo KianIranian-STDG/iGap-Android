@@ -926,8 +926,6 @@
 
     <string name="E_116">Ошибка клиента: неверный тип пола.</string>
 
-    <string name="E_117">Внутренняя ошибка сервера</string>
-
     <string name="E_118">Внимание: количество контактов превышает ограничение сервера</string>
 
     <string name="list_admin">Список менеджеров</string>
@@ -3447,8 +3445,6 @@
     <string name="detail_title">Подробнее</string>
 
     <string name="igasht_place_of_visit_title">Место посещений</string>
-
-    <string name="igasht_add_new_place_title">Добавить новые места посещений</string>
 
     <string name="igasht_ticket_type_title">Укажите тип билета</string>
 

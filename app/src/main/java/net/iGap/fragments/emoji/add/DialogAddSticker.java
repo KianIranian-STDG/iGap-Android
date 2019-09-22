@@ -118,7 +118,7 @@ public class DialogAddSticker extends DialogFragment {
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.add_icon)
+                .setRightIcons(R.string.add_icon_without_circle_font)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.add_sticker))
                 .setListener(new ToolbarListener() {
