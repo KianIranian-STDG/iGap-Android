@@ -46,18 +46,18 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case newsDouble:
                 View doubleVH = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_double_news_item, parent, false);
                 viewHolder = new DoubleViewHolder(doubleVH);
-
+/*
                 display.getSize(size);
                 viewHolder.itemView.getLayoutParams().width = (int) (size.x * 0.48);
-                viewHolder.itemView.getLayoutParams().height = (int) ((size.x * 0.48) *1);
+                viewHolder.itemView.getLayoutParams().height = (int) ((size.x * 0.48) *1);*/
                 break;
             case newsTriple:
                 View tripleVH = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_triple_news_item, parent, false);
                 viewHolder = new TripleViewHolder(tripleVH);
-
+/*
                 display.getSize(size);
                 viewHolder.itemView.getLayoutParams().height = (int) (size.x *0.32);
-                viewHolder.itemView.getLayoutParams().width = (int) (size.x *0.32);
+                viewHolder.itemView.getLayoutParams().width = (int) (size.x *0.32);*/
 
                 break;
             default:
@@ -86,7 +86,16 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return mData.getmNews().size();
+        switch (mData.getmType()) {
+            case newsSingle:
+                return mData.getmNews().size();
+            case newsDouble:
+                return mData.getmNews().size()/2;
+            case newsTriple:
+                return mData.getmNews().size()/3;
+            default:
+                return 0;
+        }
     }
 
     @Override
@@ -166,6 +175,10 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         private ImageView image;
         private CardView container;
 
+        private TextView category1, source1, rootTitle1, title1;
+        private ImageView image1;
+        private CardView container1;
+
         public DoubleViewHolder(@NonNull View itemView) {
             super(itemView);
             category = itemView.findViewById(R.id.category);
@@ -174,21 +187,52 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             title = itemView.findViewById(R.id.title);
             image = itemView.findViewById(R.id.image);
             container = itemView.findViewById(R.id.container);
+
+            category1 = itemView.findViewById(R.id.category1);
+            source1 = itemView.findViewById(R.id.source1);
+            rootTitle1 = itemView.findViewById(R.id.rootTitle1);
+            title1 = itemView.findViewById(R.id.title1);
+            image1 = itemView.findViewById(R.id.image1);
+            container1 = itemView.findViewById(R.id.container1);
         }
 
         void initDoubleVH(int position) {
-            category.setText("" + mData.getmNews().get(position).getCategory());
-            source.setText("" + mData.getmNews().get(position).getNews().get(0).getSource());
-            rootTitle.setText("" + mData.getmNews().get(position).getNews().get(0).getContents().get(0).getRootTitle());
-            title.setText("" + mData.getmNews().get(position).getNews().get(0).getContents().get(0).getTitle());
+            if (position*2 >= mData.getmNews().size())
+                return;
+            category.setText("" + mData.getmNews().get(position*2).getCategory());
+            source.setText("" + mData.getmNews().get(position*2).getNews().get(0).getSource());
+            rootTitle.setText("" + mData.getmNews().get(position*2).getNews().get(0).getContents().get(0).getRootTitle());
+            title.setText("" + mData.getmNews().get(position*2).getNews().get(0).getContents().get(0).getTitle());
             Picasso.get()
                     .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
 //                    .load(mData.getmNews().get(position).getNews().get(0).getContents().get(0).getImage().get(0).getOriginal())
                     .placeholder(R.mipmap.logo)
                     .into(image);
-            container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position)));
+            container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*2)));
 
-            if (mData.getmNews().get(position).getColor() == 0) {
+            if (mData.getmNews().get(position*2).getColor() == 0) {
+                // Normal
+                changeToNormal();
+            }
+            else {
+                // Red
+                changeToRed();
+            }
+
+            if ((position*2+1) >= mData.getmNews().size())
+                return;
+            category1.setText("" + mData.getmNews().get(position*2+1).getCategory());
+            source1.setText("" + mData.getmNews().get(position*2+1).getNews().get(0).getSource());
+            rootTitle1.setText("" + mData.getmNews().get(position*2+1).getNews().get(0).getContents().get(0).getRootTitle());
+            title1.setText("" + mData.getmNews().get(position*2+1).getNews().get(0).getContents().get(0).getTitle());
+            Picasso.get()
+                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
+//                    .load(mData.getmNews().get(position).getNews().get(0).getContents().get(0).getImage().get(0).getOriginal())
+                    .placeholder(R.mipmap.logo)
+                    .into(image1);
+            container1.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*2+1)));
+
+            if (mData.getmNews().get(position*2+1).getColor() == 0) {
                 // Normal
                 changeToNormal();
             }
@@ -230,23 +274,79 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         private ImageView image;
         private CardView container;
 
+        private TextView category1;
+        private ImageView image1;
+        private CardView container1;
+
+        private TextView category2;
+        private ImageView image2;
+        private CardView container2;
+
         public TripleViewHolder(@NonNull View itemView) {
             super(itemView);
             category = itemView.findViewById(R.id.category);
             image = itemView.findViewById(R.id.image);
             container = itemView.findViewById(R.id.container);
+
+            category1 = itemView.findViewById(R.id.category1);
+            image1 = itemView.findViewById(R.id.image1);
+            container1 = itemView.findViewById(R.id.container1);
+
+            category2 = itemView.findViewById(R.id.category2);
+            image2 = itemView.findViewById(R.id.image2);
+            container2 = itemView.findViewById(R.id.container2);
         }
 
         void initTripleVH(int position) {
-            category.setText("" + mData.getmNews().get(position).getCategory());
+            if (position*3>mData.getmNews().size())
+                return;
+            category.setText("" + mData.getmNews().get(position*3).getCategory());
             Picasso.get()
                     .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     //.load(mData.getmNews().get(position).getNews().get(0).getContents().get(0).getImage().get(0).getOriginal())
                     .placeholder(R.mipmap.logo)
                     .into(image);
-            container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position)));
+            container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*3)));
 
-            if (mData.getmNews().get(position).getColor() == 0) {
+            if (mData.getmNews().get(position*3).getColor() == 0) {
+                // Normal
+                changeToNormal();
+            }
+            else {
+                // Red
+                changeToRed();
+            }
+
+            if (position*3+1>mData.getmNews().size())
+                return;
+            category.setText("" + mData.getmNews().get(position*3+1).getCategory());
+            Picasso.get()
+                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
+                    //.load(mData.getmNews().get(position).getNews().get(0).getContents().get(0).getImage().get(0).getOriginal())
+                    .placeholder(R.mipmap.logo)
+                    .into(image);
+            container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*3+1)));
+
+            if (mData.getmNews().get(position*3+1).getColor() == 0) {
+                // Normal
+                changeToNormal();
+            }
+            else {
+                // Red
+                changeToRed();
+            }
+
+            if (position*3+2>mData.getmNews().size())
+                return;
+            category.setText("" + mData.getmNews().get(position*3+2).getCategory());
+            Picasso.get()
+                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
+                    //.load(mData.getmNews().get(position).getNews().get(0).getContents().get(0).getImage().get(0).getOriginal())
+                    .placeholder(R.mipmap.logo)
+                    .into(image);
+            container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*3+2)));
+
+            if (mData.getmNews().get(position*3+2).getColor() == 0) {
                 // Normal
                 changeToNormal();
             }
