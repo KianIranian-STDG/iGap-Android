@@ -14,6 +14,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/gray_4c</item>
         <item name="iGapHintTextColor">@color/hint_edit_text</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">@color/players_dark_background</item>
         <item name="iGapButtonTextColor">@color/white</item>
         <item name="iGapPrimaryIconTextColor">@color/white</item>
@@ -34,6 +35,7 @@
         <item name="iGapPrimaryTextColor">@color/gray_4c</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">@color/hint_edit_text</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">@color/buttonColor</item>
         <item name="iGapButtonTextColor">@color/buttonColor</item>
         <item name="iGapPrimaryIconTextColor">@color/green</item>
@@ -42,8 +44,8 @@
     </style>
 
     <style name="iGapBlueGrayTheme" parent="BaseTheme">
-        <item name="colorAccent">#607D8B</item>
-        <item name="colorPrimary">#607D8B</item>
+        <item name="colorAccent">@color/blueGray</item>
+        <item name="colorPrimary">@color/blueGray</item>
         <item name="colorPrimaryDark">#455A64</item>
 
         <item name="md_background_color">@color/blueGreyBackground</item>
@@ -54,6 +56,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/blueGrayDividerLine</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#607D8B</item>
         <item name="iGapButtonTextColor">#607D8B</item>
         <item name="iGapPrimaryIconTextColor">#607D8B</item>
@@ -75,6 +78,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/indigoDividerLine</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#3F51B5</item>
         <item name="iGapButtonTextColor">#3F51B5</item>
         <item name="iGapPrimaryIconTextColor">#3F51B5</item>
@@ -83,8 +87,8 @@
     </style>
 
     <style name="iGapBrownTheme" parent="BaseTheme">
-        <item name="colorAccent">#795548</item>
-        <item name="colorPrimary">#795548</item>
+        <item name="colorAccent">@color/brown</item>
+        <item name="colorPrimary">@color/brown</item>
         <item name="colorPrimaryDark">#5D4037</item>
 
         <item name="md_background_color">#d7ccc8</item>
@@ -95,6 +99,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/brownDividerLine</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#795548</item>
         <item name="iGapButtonTextColor">#795548</item>
         <item name="iGapPrimaryIconTextColor">#795548</item>
@@ -115,6 +120,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/tealDividerLine</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#009688</item>
         <item name="iGapButtonTextColor">#009688</item>
         <item name="iGapPrimaryIconTextColor">#009688</item>
@@ -134,6 +140,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/grayDividerLine</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#616161</item>
         <item name="iGapButtonTextColor">#616161</item>
         <item name="iGapPrimaryIconTextColor">#616161</item>
@@ -153,6 +160,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#F44336</item>
         <item name="iGapButtonTextColor">#F44336</item>
         <item name="iGapPrimaryIconTextColor">#F44336</item>
@@ -173,6 +181,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#fe9191</item>
         <item name="iGapButtonTextColor">#fe9191</item>
         <item name="iGapPrimaryIconTextColor">#fe9191</item>
@@ -191,6 +200,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#9C27B0</item>
         <item name="iGapButtonTextColor">#9C27B0</item>
         <item name="iGapPrimaryIconTextColor">#9C27B0</item>
@@ -209,6 +219,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#673AB7</item>
         <item name="iGapButtonTextColor">#673AB7</item>
         <item name="iGapPrimaryIconTextColor">#673AB7</item>
@@ -217,8 +228,8 @@
     </style>
 
     <style name="iGapBlueTheme" parent="BaseTheme">
-        <item name="colorAccent">#2196F3</item>
-        <item name="colorPrimary">#2196F3</item>
+        <item name="colorAccent">@color/blue</item>
+        <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryDark">#1976D2</item>
 
         <item name="rootBackgroundColor">#E3F2FD</item>
@@ -227,6 +238,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#2196F3</item>
         <item name="iGapButtonTextColor">#2196F3</item>
         <item name="iGapPrimaryIconTextColor">#2196F3</item>
@@ -245,6 +257,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#03A9F4</item>
         <item name="iGapButtonTextColor">#03A9F4</item>
         <item name="iGapPrimaryIconTextColor">#03A9F4</item>
@@ -253,8 +266,8 @@
     </style>
 
     <style name="iGapCyanTheme" parent="BaseTheme">
-        <item name="colorAccent">#00BCD4</item>
-        <item name="colorPrimary">#00BCD4</item>
+        <item name="colorAccent">@color/cyan</item>
+        <item name="colorPrimary">@color/cyan</item>
         <item name="colorPrimaryDark">#0097A7</item>
 
         <item name="rootBackgroundColor">#E0F7FA</item>
@@ -263,6 +276,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#00BCD4</item>
         <item name="iGapButtonTextColor">#00BCD4</item>
         <item name="iGapPrimaryIconTextColor">#00BCD4</item>
@@ -280,6 +294,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#4CAF50</item>
         <item name="iGapButtonTextColor">#4CAF50</item>
         <item name="iGapPrimaryIconTextColor">#4CAF50</item>
@@ -297,6 +312,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#8BC34A</item>
         <item name="iGapButtonTextColor">#8BC34A</item>
         <item name="iGapPrimaryIconTextColor">#8BC34A</item>
@@ -314,6 +330,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#CDDC39</item>
         <item name="iGapPrimaryIconTextColor">#CDDC39</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
@@ -330,14 +347,15 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#FFEB3B</item>
         <item name="iGapPrimaryIconTextColor">#FFEB3B</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
     </style>
 
     <style name="iGapAmberTheme" parent="BaseTheme">
-        <item name="colorAccent">#FFC107</item>
-        <item name="colorPrimary">#FFC107</item>
+        <item name="colorAccent">@color/amber</item>
+        <item name="colorPrimary">@color/amber</item>
         <item name="colorPrimaryDark">#FFA000</item>
 
         <item name="rootBackgroundColor">@color/white</item>
@@ -346,6 +364,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#FFC107</item>
         <item name="iGapPrimaryIconTextColor">#FFC107</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
@@ -362,6 +381,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#FF9800</item>
         <item name="iGapPrimaryIconTextColor">#FF9800</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
@@ -377,6 +397,7 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapMessageTextColor">#5F5F5F</item>
         <item name="iGapButtonColor">#FF5722</item>
         <item name="iGapPrimaryIconTextColor">#FF5722</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>

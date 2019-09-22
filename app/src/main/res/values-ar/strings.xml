@@ -2977,4 +2977,5 @@
     <string name="user_edited">تعديل المستخدم</string>
     <string name="edit_contact">تحرير الاتصال</string>
     <string name="charity_confirm">شما مبلغ %s ریال جهت کمک به خیریه %s در نظر گرفته اید.</string>
+    <string name="default_theme_title">السمة الافتراضية</string>
 </resources>

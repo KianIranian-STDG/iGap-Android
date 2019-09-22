@@ -81,6 +81,146 @@
                     app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
                     app:layout_constraintTop_toTopOf="@id/st_seekbar_messageTextSize" />
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/receivedChatItem"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:background="@drawable/chat_item_receive_bg_light"
+                    android:padding="@dimen/dp8"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/st_seekbar_messageTextSize"
+                    app:layout_constraintWidth_percent=".7">
+
+                    <androidx.constraintlayout.widget.Group
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/rectangle_reply_sender_round_color"
+                        android:padding="@dimen/dp8"
+                        app:layout_constraintBottom_toBottomOf="@id/replayMessage"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/replayUserName" />
+
+                    <View
+                        android:id="@+id/divider0"
+                        android:layout_width="@dimen/dp2"
+                        android:layout_height="0dp"
+                        android:layout_marginLeft="@dimen/dp8"
+                        android:layout_marginTop="@dimen/dp4"
+                        android:layout_marginRight="@dimen/dp8"
+                        android:layout_marginBottom="@dimen/dp4"
+                        android:background="?attr/colorAccentDark"
+                        app:layout_constraintBottom_toBottomOf="@id/replayMessage"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/replayUserName" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/replayUserName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/dp4"
+                        android:text="ehsan kb"
+                        android:textColor="?iGapPrimaryTextColor"
+                        app:layout_constraintLeft_toRightOf="@id/divider0"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/replayMessage"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/dp4"
+                        android:singleLine="true"
+                        android:text="i use iGap and it is so good"
+                        android:textColor="?iGapMessageTextColor"
+                        app:layout_constraintLeft_toLeftOf="@id/replayUserName"
+                        app:layout_constraintRight_toRightOf="@id/replayUserName"
+                        app:layout_constraintTop_toBottomOf="@id/replayUserName" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/message"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp4"
+                        android:padding="@dimen/dp4"
+                        android:text="really ?!"
+                        android:textColor="?iGapMessageTextColor"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/replayMessage" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/edited"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/edited"
+                        android:textColor="?iGapSubtitleTextColor"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/message" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/receivedTime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="10:36 AM"
+                        android:textColor="?iGapSubtitleTextColor"
+                        app:layout_constraintBottom_toBottomOf="@id/edited"
+                        app:layout_constraintLeft_toRightOf="@id/edited"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/edited" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/sendChatItem"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:background="@drawable/chat_item_sent_bg_light"
+                    android:padding="@dimen/dp8"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/receivedChatItem"
+                    app:layout_constraintWidth_percent=".7">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/senderMessage"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/dp4"
+                        android:text="yes it is"
+                        android:textColor="?iGapMessageTextColor"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/seenIcon"
+                        style="@style/greenIconTextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp4"
+                        android:text="@string/delivery_icon"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/senderMessage" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/sendTime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:padding="@dimen/dp4"
+                        android:text="10:36 AM"
+                        android:textColor="?iGapSubtitleTextColor"
+                        app:layout_constraintBottom_toBottomOf="@id/seenIcon"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@id/seenIcon"
+                        app:layout_constraintTop_toTopOf="@id/seenIcon" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/chatBackground"
                     android:layout_width="0dp"
@@ -94,7 +234,27 @@
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
-                    app:layout_constraintTop_toBottomOf="@id/st_seekbar_messageTextSize" />
+                    app:layout_constraintTop_toBottomOf="@id/sendChatItem" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/themeColorTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:padding="@dimen/dp8"
+                    android:text="@string/theme"
+                    android:textColor="?iGapTitleTextColor"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/chatBackground" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/themeColorList"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
+                    app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/themeColorTitle" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/dateTitle"
@@ -107,14 +267,14 @@
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@id/date"
                     app:layout_constraintStart_toStartOf="@id/messageSizeTitle"
-                    app:layout_constraintTop_toBottomOf="@id/chatBackground" />
+                    app:layout_constraintTop_toBottomOf="@id/themeColorList" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{viewModel.dateType}"
-                    android:textColor="@color/setting_items_value_color"
+                    android:textColor="?colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     app:layout_constraintBottom_toBottomOf="@id/dateTitle"
                     app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"

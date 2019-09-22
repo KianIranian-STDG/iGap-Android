@@ -65,6 +65,7 @@
     <attr name="colorPrimaryLight" format="color" />
     <attr name="colorAccentDark" format="color" />
     <attr name="rootBackgroundColor" format="color" />
+    <attr name="iGapMessageTextColor" format="color" />
     <attr name="iGapTitleTextColor" format="color" />
     <attr name="iGapSubtitleTextColor" format="color" />
     <attr name="iGapPrimaryTextColor" format="color" />

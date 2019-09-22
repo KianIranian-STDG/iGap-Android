@@ -2210,7 +2210,8 @@
     <string name="prayerRoom_textView">نمازخانه</string>
     <string name="user_edited">کاربر ویرایش شد.</string>
     <string name="edit_contact">ویرایش مخاطب</string>
-
+    <string name="default_theme_title">رنگ پیش فرض</string>
+    <string name="dark_theme_title">رنگ پیش فرض</string>
 
     <array name="onboard_titles">
         <item>کیف پول موبایلی</item>

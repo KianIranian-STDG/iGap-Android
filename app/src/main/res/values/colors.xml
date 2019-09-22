@@ -297,4 +297,10 @@
     <color name="tealDividerLine">#80cbc4</color>
     <color name="grayDividerLine">#e0e0e0</color>
     <color name="chat_bottom_bg">#EEEEEE</color>
+    <color name="amber">#FFC107</color>
+    <color name="blue">#2196F3</color>
+    <color name="blueGray">#607D8B</color>
+    <color name="brown">#795548</color>
+    <color name="cyan">#00BCD4</color>
+    <color name="deepOrange">#FF5722</color>
 </resources>

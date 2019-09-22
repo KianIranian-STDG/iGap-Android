@@ -1786,4 +1786,6 @@
     <string name="view_profile" >regarder le profil</string>
     <string name="link_not_valid" >lien invalide</string>
     <string name="popular_channel" >des canaux intressants</string>
+    <string name="default_theme_title">thème par défaut</string>
+    <string name="dark_theme_title">Thème sombre</string>
 </resources>

@@ -989,7 +989,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             int color = a.getColor(0, 0);
 
             a.recycle();
-            Log.wtf(this.getClass().getName(), "color background: " + color);
             viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND, ColorStateList.valueOf(color)));
             /*viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND, ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_light))));*/
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.send_message_time_light));
@@ -1073,9 +1072,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
 
                     replayView.setBackgroundResource(R.drawable.rectangle_reply_sender_round_color);
-//
-                    GradientDrawable circleDarkColor = (GradientDrawable) replayView.getBackground();
-                    circleDarkColor.setColor(Color.parseColor(G.backgroundTheme_2));
+                    /*GradientDrawable circleDarkColor = (GradientDrawable) replayView.getBackground();
+                    circleDarkColor.setColor(Color.parseColor(G.backgroundTheme_2));*/
 
                     replyFrom.setTextColor(Color.parseColor(G.textBubble));
                     replayMessage.setTextColor(Color.parseColor(G.textBubble));
@@ -1084,8 +1082,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                     replayView.setBackgroundResource(R.drawable.rectangle_reply_recive_round_color);
 
-                    GradientDrawable circleDarkColor = (GradientDrawable) replayView.getBackground();
-                    circleDarkColor.setColor(Color.parseColor(G.backgroundTheme_2));
+                    /*GradientDrawable circleDarkColor = (GradientDrawable) replayView.getBackground();
+                    circleDarkColor.setColor(Color.parseColor(G.backgroundTheme_2));*/
 
                     replyFrom.setTextColor(Color.parseColor(G.textBubble));
                     replayMessage.setTextColor(Color.parseColor(G.textBubble));

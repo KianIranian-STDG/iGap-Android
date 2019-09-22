@@ -10,11 +10,16 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.helper.HelperCalander;
+import net.iGap.model.ThemeModel;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class FragmentChatSettingViewModel extends ViewModel {
@@ -39,6 +44,9 @@ public class FragmentChatSettingViewModel extends ViewModel {
     private ObservableInt textSizeMax = new ObservableInt(MAX_TEXT_SIZE - MIN_TEXT_SIZE);
     private MutableLiveData<Boolean> goToChatBackgroundPage = new MutableLiveData<>();
     private MutableLiveData<Boolean> goToDateFragment = new MutableLiveData<>();
+    private MutableLiveData<List<ThemeModel>> themeList = new MutableLiveData<>();
+
+    private List<ThemeModel> themeModelList;
 
     private SharedPreferences sharedPreferences;
 
@@ -60,6 +68,30 @@ public class FragmentChatSettingViewModel extends ViewModel {
         textSize.set(sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14) - MIN_TEXT_SIZE);
         setTextSizeValue(sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14));
         dateIsChange();
+
+        themeModelList = new ArrayList<>();
+        themeModelList.add(new ThemeModel(Theme.DEFAULT, R.string.default_theme_title));
+        themeModelList.add(new ThemeModel(Theme.DARK, R.string.dark_theme_title));
+        themeModelList.add(new ThemeModel(Theme.RED, R.string.red_theme_title));
+        themeModelList.add(new ThemeModel(Theme.PINK, R.string.pink_theme_title));
+        themeModelList.add(new ThemeModel(Theme.PURPLE, R.string.purple_theme_title));
+        themeModelList.add(new ThemeModel(Theme.DEEPPURPLE, R.string.deep_purple_theme_title));
+        themeModelList.add(new ThemeModel(Theme.INDIGO, R.string.indigo_theme_title));
+        themeModelList.add(new ThemeModel(Theme.BLUE, R.string.blue_theme_title));
+        themeModelList.add(new ThemeModel(Theme.LIGHT_BLUE, R.string.lightBlue_theme_title));
+        themeModelList.add(new ThemeModel(Theme.CYAN, R.string.cyan_theme_title));
+        themeModelList.add(new ThemeModel(Theme.TEAL, R.string.teal_theme_title));
+        themeModelList.add(new ThemeModel(Theme.GREEN, R.string.green_theme_title));
+        themeModelList.add(new ThemeModel(Theme.LIGHT_GREEN, R.string.lightGreen_theme_title));
+        themeModelList.add(new ThemeModel(Theme.LIME, R.string.lime_theme_title));
+        themeModelList.add(new ThemeModel(Theme.YELLLOW, R.string.yellow_theme_title));
+        themeModelList.add(new ThemeModel(Theme.AMBER, R.string.amber_theme_title));
+        themeModelList.add(new ThemeModel(Theme.ORANGE, R.string.orange_theme_title));
+        themeModelList.add(new ThemeModel(Theme.DEEP_ORANGE, R.string.deepOrange_theme_title));
+        themeModelList.add(new ThemeModel(Theme.BROWN, R.string.brown_theme_title));
+        themeModelList.add(new ThemeModel(Theme.GREY, R.string.gray_theme_title));
+        themeModelList.add(new ThemeModel(Theme.BLUE_GREY, R.string.blueGray_theme_title));
+        themeList.setValue(themeModelList);
     }
 
     public ObservableBoolean getIsTime() {
@@ -128,6 +160,10 @@ public class FragmentChatSettingViewModel extends ViewModel {
 
     public MutableLiveData<Boolean> getGoToDateFragment() {
         return goToDateFragment;
+    }
+
+    public MutableLiveData<List<ThemeModel>> getThemeList() {
+        return themeList;
     }
 
     public void onDateClick() {
