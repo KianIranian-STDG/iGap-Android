@@ -35,6 +35,7 @@ import net.iGap.fragments.FragmentUserScore;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentWebView;
 import net.iGap.fragments.FragmentiGapMap;
+import net.iGap.fragments.LocalContactFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
@@ -342,6 +343,9 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                break;
+            case INVITE_FRIEND:
+                new HelperFragment(activity.getSupportFragmentManager(), new LocalContactFragment()).setReplace(false).load(true);
                 break;
 
         }

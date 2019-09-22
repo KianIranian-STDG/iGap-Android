@@ -176,7 +176,9 @@
 
     <!--New Font Icon-->
     <string name="cloud_icon">\ue91a</string>
-    <string name="add_icon">\ue903</string>
+    <string name="add_icon_without_circle_font">\ue903</string>
+    <string name="add_icon_font">\ue904</string>
+    <string name="delete_icon_font">\ue924</string>
     <string name="wallet_icon">\ue941</string>
     <string name="score_star_icon">\ue93d</string>
     <string name="invite_icon">\ue900</string>

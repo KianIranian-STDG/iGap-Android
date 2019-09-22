@@ -464,7 +464,6 @@
     <string name="E_114" >Charge utile incorrecte :  code n\'est pas correct</string>
     <string name="E_115" >Erreçur Interne du Serveur</string>
     <string name="E_116" >Charge utile incorrecte :  code n\'est pas correct</string>
-    <string name="E_117" >Erreçur Interne du Serveur</string>
     <string name="E_118" >Alerte: nombre des contacts est passé de limite fixe par serveur</string>
     <string name="list_admin" >liste des dirigeants </string>
     <string name="list_modereator" >liste des surveillants</string>
@@ -1720,7 +1719,6 @@
     <string name="igasht_buy_ticket_title" >acheter billet</string>
     <string name="detail_title" >les dtailles</string>
     <string name="igasht_place_of_visit_title" >lieu de visite</string>
-<!--    <string name="igasht_add_new_place_title" >ajouter au nouveau visite</string>-->
     <string name="igasht_ticket_type_title" >veuillez choisir le type de billet</string>
     <string name="igasht_enter_ticket_count_title" >veuillez entrer le nombre des visiteurs</string>
     <string name="igasht_add_ticket_count_button_title" >enregistrer</string>
@@ -1787,4 +1785,6 @@
     <string name="link_not_valid" >lien invalide</string>
     <string name="popular_channel" >des canaux intressants</string>
     <string name="edit_contact">modifier le contact</string>
+    <string name="error_ivand_limit_gift">Malheureusement, les cadeaux ont pris fin.</string>
+    <string name="referral_error_yourself">Il n\'est pas possible d\'enregistrer votre numéro comme référence.</string>
 </resources>

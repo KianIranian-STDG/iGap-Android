@@ -2241,5 +2241,7 @@ Want to get it?</string>
     <string name="kuknos_RecoverySK_CheckPIN">I want to set a PIN code for extra security.</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
+    <string name="error_ivand_limit_gift">Unfortunately, the set gifts have come to an end.</string>
+    <string name="referral_error_yourself">It is not possible to register your number as a referral.</string>
 
 </resources>

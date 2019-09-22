@@ -39,6 +39,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -251,6 +252,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         String message = G.context.getString(R.string.error_submit_qr_code);
                         if (majorCode == 10183 && minorCode == 2) {
                             message = G.context.getString(R.string.E_10183);
+                        } else if (majorCode == 10184 && minorCode == 1) {
+                            message = G.context.getString(R.string.error_ivand_limit_gift);
                         }
 
                         SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, false);
@@ -497,20 +500,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 userPhoneNumber = userInfo.getUserInfo().getPhoneNumber();
             }
 
-
-            if (!G.userLogin) {
-                /**
-                 * set true mFirstRun for get room history after logout and login again
-                 */
-                new Thread(() -> {
-                    boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
-                    if (deleteFolderBackground) {
-                        deleteContentFolderChatBackground();
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
-                        editor.apply();
-                    }
-                }).start();
+            boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
+            if (deleteFolderBackground) {
+                deleteContentFolderChatBackground();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
+                editor.apply();
             }
 
             if (G.twoPaneMode) {
@@ -971,10 +966,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (availability.isUserResolvableError(errorCode)) {
             // Recoverable error. Show a dialog prompting the user to
             // install/update/enable Google Play services.
-            availability.showErrorDialogFragment(this, errorCode, ERROR_DIALOG_REQUEST_CODE, dialog -> {
-                // The user chose not to take the recovery action
-                onProviderInstallerNotAvailable();
-            });
+            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                availability.showErrorDialogFragment(this, errorCode, ERROR_DIALOG_REQUEST_CODE, dialog -> {
+                    // The user chose not to take the recovery action
+                    onProviderInstallerNotAvailable();
+                });
+            }
         } else {
             // Google Play services is not available.
             onProviderInstallerNotAvailable();
