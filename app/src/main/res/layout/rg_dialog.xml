@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/country_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/dialog_background"
     android:clickable="true"
     android:layoutDirection="ltr"
     android:orientation="vertical">
@@ -83,6 +83,7 @@
             android:id="@+id/rg_txt_okDialog"
             android:layout_width="@dimen/dp60"
             android:layout_height="@dimen/dp36"
+            style="?textSubColorSettingTheme"
             android:layout_marginLeft="@dimen/dp8"
             android:layout_marginRight="@dimen/dp8"
             android:background="@android:color/transparent"
