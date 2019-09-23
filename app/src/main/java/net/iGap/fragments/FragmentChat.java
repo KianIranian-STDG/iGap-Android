@@ -3208,6 +3208,7 @@ public class FragmentChat extends BaseFragment
                 .setFragment(FragmentChat.this)
                 .setFragmentActivity(G.fragmentActivity)
                 .setSharedPref(sharedPreferences)
+                .setChatBoxHeight(viewAttachFile.getMeasuredHeight())
                 .setListener(FragmentChat.this)
                 .build();
 
