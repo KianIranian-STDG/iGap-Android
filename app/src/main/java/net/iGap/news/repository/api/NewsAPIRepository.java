@@ -30,7 +30,7 @@ public class NewsAPIRepository {
             @Override
             public void onResponse(Call<List<NewsFPList>> call, Response<List<NewsFPList>> response) {
                 if (!response.isSuccessful()) {
-                    apiResponse.onFailed("" + response.code());
+                    onFailure(call, new Exception("" + response.code()));
                     return;
                 }
                 apiResponse.onResponse(response.body());
@@ -51,7 +51,7 @@ public class NewsAPIRepository {
             @Override
             public void onResponse(Call<NewsGroup> call, Response<NewsGroup> response) {
                 if (!response.isSuccessful()) {
-                    apiResponse.onFailed("" + response.code());
+                    onFailure(call, new Exception("" + response.code()));
                     return;
                 }
                 apiResponse.onResponse(response.body());
@@ -101,7 +101,7 @@ public class NewsAPIRepository {
             @Override
             public void onResponse(Call<NewsList> call, Response<NewsList> response) {
                 if (!response.isSuccessful()) {
-                    apiResponse.onFailed("" + response.code());
+                    onFailure(call, new Exception("" + response.code()));
                     return;
                 }
                 apiResponse.onResponse(response.body());
@@ -122,7 +122,7 @@ public class NewsAPIRepository {
             @Override
             public void onResponse(Call<NewsList> call, Response<NewsList> response) {
                 if (!response.isSuccessful()) {
-                    apiResponse.onFailed("" + response.code());
+                    onFailure(call, new Exception("" + response.code()));
                     return;
                 }
                 apiResponse.onResponse(response.body());
@@ -143,7 +143,7 @@ public class NewsAPIRepository {
             @Override
             public void onResponse(Call<NewsList> call, Response<NewsList> response) {
                 if (!response.isSuccessful()) {
-                    apiResponse.onFailed("" + response.code());
+                    onFailure(call, new Exception("" + response.code()));
                     return;
                 }
                 apiResponse.onResponse(response.body());
@@ -164,7 +164,7 @@ public class NewsAPIRepository {
             @Override
             public void onResponse(Call<NewsList> call, Response<NewsList> response) {
                 if (!response.isSuccessful()) {
-                    apiResponse.onFailed("" + response.code());
+                    onFailure(call, new Exception("" + response.code()));
                     return;
                 }
                 apiResponse.onResponse(response.body());
@@ -185,7 +185,7 @@ public class NewsAPIRepository {
             @Override
             public void onResponse(Call<NewsList> call, Response<NewsList> response) {
                 if (!response.isSuccessful()) {
-                    apiResponse.onFailed("" + response.code());
+                    onFailure(call, new Exception("" + response.code()));
                     return;
                 }
                 apiResponse.onResponse(response.body());
@@ -206,7 +206,7 @@ public class NewsAPIRepository {
             @Override
             public void onResponse(Call<NewsList> call, Response<NewsList> response) {
                 if (!response.isSuccessful()) {
-                    apiResponse.onFailed("" + response.code());
+                    onFailure(call, new Exception("" + response.code()));
                     return;
                 }
                 apiResponse.onResponse(response.body());
@@ -227,7 +227,7 @@ public class NewsAPIRepository {
             @Override
             public void onResponse(Call<NewsList> call, Response<NewsList> response) {
                 if (!response.isSuccessful()) {
-                    apiResponse.onFailed("" + response.code());
+                    onFailure(call, new Exception("" + response.code()));
                     return;
                 }
                 apiResponse.onResponse(response.body());
@@ -248,7 +248,7 @@ public class NewsAPIRepository {
             @Override
             public void onResponse(Call<NewsList> call, Response<NewsList> response) {
                 if (!response.isSuccessful()) {
-                    apiResponse.onFailed("" + response.code());
+                    onFailure(call, new Exception("" + response.code()));
                     return;
                 }
                 apiResponse.onResponse(response.body());
@@ -269,7 +269,7 @@ public class NewsAPIRepository {
             @Override
             public void onResponse(Call<NewsDetail> call, Response<NewsDetail> response) {
                 if (!response.isSuccessful()) {
-                    apiResponse.onFailed("" + response.code());
+                    onFailure(call, new Exception("" + response.code()));
                     return;
                 }
                 apiResponse.onResponse(response.body());
@@ -290,7 +290,7 @@ public class NewsAPIRepository {
             @Override
             public void onResponse(Call<NewsDetail> call, Response<NewsDetail> response) {
                 if (!response.isSuccessful()) {
-                    apiResponse.onFailed("" + response.code());
+                    onFailure(call, new Exception("" + response.code()));
                     return;
                 }
                 apiResponse.onResponse(response.body());
@@ -311,7 +311,7 @@ public class NewsAPIRepository {
             @Override
             public void onResponse(Call<NewsDetail> call, Response<NewsDetail> response) {
                 if (!response.isSuccessful()) {
-                    apiResponse.onFailed("" + response.code());
+                    onFailure(call, new Exception("" + response.code()));
                     return;
                 }
                 apiResponse.onResponse(response.body());
@@ -332,7 +332,7 @@ public class NewsAPIRepository {
             @Override
             public void onResponse(Call<List<NewsPublisher>> call, Response<List<NewsPublisher>> response) {
                 if (!response.isSuccessful()) {
-                    apiResponse.onFailed("" + response.code());
+                    onFailure(call, new Exception("" + response.code()));
                     return;
                 }
                 apiResponse.onResponse(response.body());
@@ -353,7 +353,7 @@ public class NewsAPIRepository {
             @Override
             public void onResponse(Call<NewsPN> call, Response<NewsPN> response) {
                 if (!response.isSuccessful()) {
-                    apiResponse.onFailed("" + response.code());
+                    onFailure(call, new Exception("" + response.code()));
                     return;
                 }
                 apiResponse.onResponse(response.body());

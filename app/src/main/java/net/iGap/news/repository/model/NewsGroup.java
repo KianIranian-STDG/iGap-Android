@@ -98,10 +98,10 @@ public class NewsGroup {
 
     public List<Groups> getFake() {
         List<Groups> groups = new ArrayList<>();
-        groups.add(new Groups("101", "temp", "", "", ""));
-        groups.add(new Groups("101", "temp", "", "", ""));
-        groups.add(new Groups("101", "temp", "", "", ""));
-        groups.add(new Groups("101", "temp", "", "", ""));
+        groups.add(new Groups("101", "temp", "", "", null));
+        groups.add(new Groups("101", "temp", "", "", null));
+        groups.add(new Groups("101", "temp", "", "", null));
+        groups.add(new Groups("101", "temp", "", "", null));
         return groups;
     }
 }

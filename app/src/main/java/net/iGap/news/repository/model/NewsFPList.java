@@ -27,9 +27,11 @@ public class NewsFPList {
     }
 
     public NewsFPList addFakeData() {
+        List<Image> imageTemp = new ArrayList<>();
+        imageTemp.add(new Image(null, null, null, null));
         List<NewsContent> tempContent = new ArrayList<>();
         tempContent.add(new NewsContent("101", "Root Title", "Title", "Lead",
-                null, "10/10/1993", "11/10/1993", "www.google.com", "www.google.com"));
+                imageTemp, "10/10/1993", "11/10/1993", "www.google.com", "www.google.com"));
         List<News> tempNews = new ArrayList<>();
         tempNews.add(new News("bbc", tempContent));
         NewsFPList news = new NewsFPList("sport", "101", tempNews, 0);
@@ -211,6 +213,13 @@ public class NewsFPList {
         private String tmb512;
 
         public Image() {
+        }
+
+        public Image(String original, String tmb128, String tmb256, String tmb512) {
+            this.original = original;
+            this.tmb128 = tmb128;
+            this.tmb256 = tmb256;
+            this.tmb512 = tmb512;
         }
 
         public String getOriginal() {

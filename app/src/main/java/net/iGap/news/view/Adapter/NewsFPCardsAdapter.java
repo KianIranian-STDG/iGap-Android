@@ -247,6 +247,11 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             source.setTextColor(Color.WHITE);
             title.setTextColor(Color.WHITE);
             container.setCardBackgroundColor(G.context.getResources().getColor(R.color.news_red));
+
+            category1.setTextColor(Color.WHITE);
+            source1.setTextColor(Color.WHITE);
+            title1.setTextColor(Color.WHITE);
+            container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.news_red));
         }
 
         private void changeToNormal() {
@@ -258,6 +263,11 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             source.setTextColor(G.context.getResources().getColor(R.color.black_register));
             title.setTextColor(Color.BLACK);
             container.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
+
+            category1.setTextColor(G.context.getResources().getColor(R.color.news_red));
+            source1.setTextColor(G.context.getResources().getColor(R.color.black_register));
+            title1.setTextColor(Color.BLACK);
+            container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
         }
 
         private void changeToNormalDark() {
@@ -265,6 +275,11 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             source.setTextColor(Color.WHITE);
             title.setTextColor(Color.WHITE);
             container.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
+
+            category1.setTextColor(Color.WHITE);
+            source1.setTextColor(Color.WHITE);
+            title1.setTextColor(Color.WHITE);
+            container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
         }
     }
 
@@ -358,6 +373,12 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         private void changeToRed() {
             category.setTextColor(Color.WHITE);
             container.setCardBackgroundColor(G.context.getResources().getColor(R.color.news_red));
+
+            category1.setTextColor(Color.WHITE);
+            container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.news_red));
+
+            category2.setTextColor(Color.WHITE);
+            container2.setCardBackgroundColor(G.context.getResources().getColor(R.color.news_red));
         }
 
         private void changeToNormal() {
@@ -367,11 +388,23 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
             category.setTextColor(G.context.getResources().getColor(R.color.news_red));
             container.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
+
+            category1.setTextColor(G.context.getResources().getColor(R.color.news_red));
+            container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
+
+            category2.setTextColor(G.context.getResources().getColor(R.color.news_red));
+            container2.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
         }
 
         private void changeToNormalDark() {
             category.setTextColor(Color.WHITE);
             container.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
+
+            category1.setTextColor(Color.WHITE);
+            container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
+
+            category2.setTextColor(Color.WHITE);
+            container2.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
         }
     }
 

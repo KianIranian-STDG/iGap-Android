@@ -35,13 +35,13 @@ public interface NewsApi {
     Call<NewsList> getFeaturedNews(@Query("page") int page, @Query("perpage") int display);
 
     @GET("getFeaturedNewsList/igap/") // ?
-    Call<NewsList> getFeaturedNewsForGroup(@Path("serviceId") int groupID, @Query("page") int page, @Query("perpage") int display);
+    Call<NewsList> getFeaturedNewsForGroup(@Query("serviceId") int groupID, @Query("page") int page, @Query("perpage") int display);
 
     @GET("getUrgentNewsList/igap/")
     Call<NewsList> getErgentNews(@Query("page") int page, @Query("perpage") int display);
 
     @GET("getUrgentNewsList/igap/")
-    Call<NewsList> getErgentNewsForGroup(@Path("serviceId") int groupID, @Query("page") int page, @Query("perpage") int display);
+    Call<NewsList> getErgentNewsForGroup(@Query("serviceId") int groupID, @Query("page") int page, @Query("perpage") int display);
 
     @GET("getNewsList/igap/")
     Call<NewsList> getGroupNews(@Query("serviceId") int groupID, @Query("page") int page, @Query("perpage") int display);
