@@ -17,6 +17,8 @@ import net.iGap.Theme;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.model.ThemeModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,17 +33,13 @@ public class ThemeColorListAdapter extends RecyclerView.Adapter<ThemeColorListAd
         this.callback = callback;
     }
 
-    public void setData(List<ThemeModel> newItem, int selectedPosition) {
+    public void setData(List<ThemeModel> newItem) {
         items.addAll(newItem);
-        selectedThemePosition = selectedPosition;
         notifyDataSetChanged();
     }
 
     public void setSelectedTheme(int selectedTheme) {
-        int tmp = selectedThemePosition;
         selectedThemePosition = selectedTheme;
-        notifyItemChanged(tmp);
-        notifyItemChanged(selectedThemePosition);
     }
 
     @NonNull
@@ -58,7 +56,7 @@ public class ThemeColorListAdapter extends RecyclerView.Adapter<ThemeColorListAd
             holder.checkTheme.setText(R.string.empty_error_message);
         }
 
-        setChatReceivedChatBubble(holder.themeColor, getColor(items.get(position).getThemeId()));
+        setChatReceivedChatBubble(holder.themeColor, new Theme().getColor(items.get(position).getThemeId()));
         holder.themeName.setText(items.get(position).getThemeNameRes());
         holder.itemView.setOnClickListener(v -> callback.onClick(holder.getAdapterPosition()));
     }
@@ -82,33 +80,13 @@ public class ThemeColorListAdapter extends RecyclerView.Adapter<ThemeColorListAd
         }
     }
 
-    private int getColor(int themeId) {
-        switch (themeId) {
-            case Theme.AMBER:
-                return R.color.amber;
-            case Theme.BLUE:
-                return R.color.blue;
-            case Theme.BLUE_GREY:
-                return R.color.blueGray;
-            case Theme.BROWN:
-                return R.color.brown;
-            case Theme.CYAN:
-                return R.color.cyan;
-            case Theme.DEEP_ORANGE:
-                return R.color.deepOrange;
-            default:
-                return R.color.green;
-
-        }
-    }
-
-    public Drawable tintDrawable(Drawable drawable, ColorStateList colors) {
+    private Drawable tintDrawable(Drawable drawable, ColorStateList colors) {
         final Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
         DrawableCompat.setTintList(wrappedDrawable, colors);
         return wrappedDrawable;
     }
 
-    public void setChatReceivedChatBubble(View view, int color) {
+    private void setChatReceivedChatBubble(@NotNull View view, int color) {
         view.setBackground(tintDrawable(view.getBackground(), ColorStateList.valueOf(ContextCompat.getColor(view.getContext(), color))));
     }
 }

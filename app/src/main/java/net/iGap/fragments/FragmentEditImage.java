@@ -454,11 +454,11 @@ public class FragmentEditImage extends BaseFragment {
 
     private void setUpEmojiPopup(View view) {
         switch (G.themeColor) {
-            case Theme.BLUE_GREY_COMPLETE:
+            /*case Theme.BLUE_GREY_COMPLETE:
             case Theme.INDIGO_COMPLETE:
             case Theme.BROWN_COMPLETE:
             case Theme.GREY_COMPLETE:
-            case Theme.TEAL_COMPLETE:
+            case Theme.TEAL_COMPLETE:*/
             case Theme.DARK:
 
                 setEmojiColor(view, G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);

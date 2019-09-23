@@ -2245,20 +2245,9 @@ Want to get it?</string>
     <string name="red_theme_title">Red</string>
     <string name="pink_theme_title">Pink</string>
     <string name="purple_theme_title">Purple</string>
-    <string name="deep_purple_theme_title">Deep Purple</string>
-    <string name="indigo_theme_title">Indigo</string>
     <string name="blue_theme_title">Blue</string>
-    <string name="lightBlue_theme_title">Light Blue</string>
-    <string name="cyan_theme_title">Cyan</string>
-    <string name="teal_theme_title">Teal</string>
     <string name="green_theme_title">Green</string>
-    <string name="lightGreen_theme_title">Light Green</string>
-    <string name="lime_theme_title">Lime</string>
-    <string name="yellow_theme_title">Yellow</string>
     <string name="amber_theme_title">Amber</string>
     <string name="orange_theme_title">Orange</string>
-    <string name="deepOrange_theme_title">Deep Orange</string>
-    <string name="brown_theme_title">Brown</string>
     <string name="gray_theme_title">Gray</string>
-    <string name="blueGray_theme_title">Blue Gray</string>
 </resources>

@@ -645,11 +645,11 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
 
     private void setUpEmojiPopup() {
         switch (G.themeColor) {
-            case Theme.BLUE_GREY_COMPLETE:
+            /*case Theme.BLUE_GREY_COMPLETE:
             case Theme.INDIGO_COMPLETE:
             case Theme.BROWN_COMPLETE:
             case Theme.GREY_COMPLETE:
-            case Theme.TEAL_COMPLETE:
+            case Theme.TEAL_COMPLETE:*/
             case Theme.DARK:
                 setEmojiColor(G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);
                 break;

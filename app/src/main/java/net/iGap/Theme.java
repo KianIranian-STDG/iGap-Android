@@ -1,8 +1,15 @@
 package net.iGap;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
+import net.iGap.model.ThemeModel;
 import net.iGap.module.SHP_SETTING;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.appBarColor;
@@ -23,33 +30,33 @@ import static net.iGap.G.toggleButtonColor;
  */
 public class Theme {
 
-    public static final int CUSTOM = 0;
+    /*public static final int CUSTOM = 0;*/
     public static final int DEFAULT = 1;
     public static final int DARK = 2;
     public static final int RED = 3;
     public static final int PINK = 4;
     public static final int PURPLE = 5;
-    public static final int DEEPPURPLE = 6;
-    public static final int INDIGO = 7;
+    /*public static final int DEEPPURPLE = 6;*/
+    /*public static final int INDIGO = 7;*/
     public static final int BLUE = 8;
-    public static final int LIGHT_BLUE = 9;
-    public static final int CYAN = 10;
-    public static final int TEAL = 11;
+    /*public static final int LIGHT_BLUE = 9;*/
+    /*public static final int CYAN = 10;
+    public static final int TEAL = 11;*/
     public static final int GREEN = 12;
-    public static final int LIGHT_GREEN = 13;
-    public static final int LIME = 14;
-    public static final int YELLLOW = 15;
+    /*public static final int LIGHT_GREEN = 13;*/
+    /*public static final int LIME = 14;*/
+    /*public static final int YELLLOW = 15;*/
     public static final int AMBER = 16;
     public static final int ORANGE = 17;
-    public static final int DEEP_ORANGE = 18;
-    public static final int BROWN = 19;
+    /*public static final int DEEP_ORANGE = 18;*/
+    /*public static final int BROWN = 19;*/
     public static final int GREY = 20;
-    public static final int BLUE_GREY = 21;
-    public static final int BLUE_GREY_COMPLETE = 22;
+    /*public static final int BLUE_GREY = 21;*/
+    /*public static final int BLUE_GREY_COMPLETE = 22;
     public static final int INDIGO_COMPLETE = 23;
     public static final int BROWN_COMPLETE = 24;
     public static final int TEAL_COMPLETE = 25;
-    public static final int GREY_COMPLETE = 26;
+    public static final int GREY_COMPLETE = 26;*/
 
 
     public static String default_appBarColor = "#45B321";
@@ -140,7 +147,7 @@ public class Theme {
         }*/
 
         switch (G.themeColor) {
-            case CUSTOM:
+            /*case CUSTOM:
                 setColor(false,
                         preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, default_appBarColor),
                         preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, default_notificationColor),
@@ -170,7 +177,7 @@ public class Theme {
 
                 );
 
-                break;
+                break;*/
             case DEFAULT:
                 setColor(false,
                         default_appBarColor,
@@ -318,7 +325,7 @@ public class Theme {
                         default_purple_appBarColor
                 );
                 break;
-            case DEEPPURPLE:
+            /*case DEEPPURPLE:
                 setColor(false,
                         default_deepPurple_appBarColor,
                         default_deepPurple_appBarColor,
@@ -346,8 +353,8 @@ public class Theme {
                         "#FF616161", //roomSenderTextColor
                         default_deepPurple_appBarColor
                 );
-                break;
-            case INDIGO:
+                break;*/
+            /*case INDIGO:
                 setColor(false,
                         default_indigo_appBarColor,
                         default_indigo_appBarColor,
@@ -375,7 +382,7 @@ public class Theme {
                         "#FF616161", //roomSenderTextColor
                         default_indigo_appBarColor
                 );
-                break;
+                break;*/
             case BLUE:
                 setColor(false,
                         default_blue_appBarColor,
@@ -406,7 +413,7 @@ public class Theme {
                 );
                 break;
 
-            case LIGHT_BLUE:
+            /*case LIGHT_BLUE:
                 setColor(false,
                         default_lightBlue_appBarColor,
                         default_lightBlue_appBarColor,
@@ -434,9 +441,9 @@ public class Theme {
                         "#FF616161", //roomSenderTextColor
                         default_lightBlue_appBarColor
                 );
-                break;
+                break;*/
 
-            case CYAN:
+            /*case CYAN:
                 setColor(false,
                         default_cyan_appBarColor,
                         default_cyan_appBarColor,
@@ -464,8 +471,8 @@ public class Theme {
                         "#FF616161", //roomSenderTextColor
                         default_cyan_appBarColor
                 );
-                break;
-            case TEAL:
+                break;*/
+            /*case TEAL:
                 setColor(false,
                         default_teal_appBarColor,
                         default_teal_appBarColor,
@@ -493,7 +500,7 @@ public class Theme {
                         "#FF616161", //roomSenderTextColor
                         default_teal_appBarColor
                 );
-                break;
+                break;*/
             case GREEN:
                 setColor(false,
                         default_green_appBarColor,
@@ -523,7 +530,7 @@ public class Theme {
                         default_green_appBarColor
                 );
                 break;
-            case LIGHT_GREEN:
+            /*case LIGHT_GREEN:
                 setColor(false,
                         default_lightGreen_appBarColor,
                         default_lightGreen_appBarColor,
@@ -551,8 +558,8 @@ public class Theme {
                         "#FF616161", //roomSenderTextColor
                         default_lightGreen_appBarColor
                 );
-                break;
-            case LIME:
+                break;*/
+            /*case LIME:
                 setColor(false,
                         default_lime_appBarColor,
                         default_lime_appBarColor,
@@ -580,9 +587,9 @@ public class Theme {
                         "#FF616161", //roomSenderTextColor
                         default_lime_appBarColor
                 );
-                break;
+                break;*/
 
-            case YELLLOW:
+            /*case YELLLOW:
                 setColor(false,
                         default_yellow_appBarColor,
                         default_yellow_appBarColor,
@@ -610,7 +617,7 @@ public class Theme {
                         "#FF616161", //roomSenderTextColor
                         default_yellow_appBarColor
                 );
-                break;
+                break;*/
             case AMBER:
                 setColor(false,
                         default_amber_appBarColor,
@@ -670,7 +677,7 @@ public class Theme {
                 );
                 break;
 
-            case DEEP_ORANGE:
+            /*case DEEP_ORANGE:
                 setColor(false,
                         default_deepOrange_appBarColor,
                         default_deepOrange_appBarColor,
@@ -699,9 +706,9 @@ public class Theme {
                         default_deepOrange_appBarColor
 
                 );
-                break;
+                break;*/
 
-            case BROWN:
+            /*case BROWN:
                 setColor(false,
                         default_brown_appBarColor,
                         default_brown_appBarColor,
@@ -729,7 +736,7 @@ public class Theme {
                         "#FF616161", //roomSenderTextColor
                         default_brown_appBarColor
                 );
-                break;
+                break;*/
             case GREY:
                 setColor(false,
                         default_grey_appBarColor,
@@ -760,7 +767,7 @@ public class Theme {
 
                 );
                 break;
-            case BLUE_GREY:
+            /*case BLUE_GREY:
                 setColor(false,
                         default_blueGrey_appBarColor,
                         default_blueGrey_appBarColor,
@@ -788,8 +795,8 @@ public class Theme {
                         "#FF616161", //roomSenderTextColor
                         default_blueGrey_appBarColor
                 );
-                break;
-            case BLUE_GREY_COMPLETE:
+                break;*/
+            /*case BLUE_GREY_COMPLETE:
                 setColor(false,
                         default_blueGrey_appBarColor,
                         default_blueGrey_appBarColor,
@@ -817,9 +824,9 @@ public class Theme {
                         "#FF616161", //roomSenderTextColor
                         default_blueGrey_appBarColor
                 );
-                break;
+                break;*/
 
-            case INDIGO_COMPLETE:
+            /*case INDIGO_COMPLETE:
                 setColor(false,
                         default_indigo_appBarColor,
                         default_indigo_appBarColor,
@@ -848,8 +855,8 @@ public class Theme {
                         default_indigo_appBarColor
 
                 );
-                break;
-            case BROWN_COMPLETE:
+                break;*/
+            /*case BROWN_COMPLETE:
                 setColor(false,
                         default_brown_appBarColor,
                         default_brown_appBarColor,
@@ -877,8 +884,8 @@ public class Theme {
                         "#FF616161", //roomSenderTextColor
                         default_brown_appBarColor
                 );
-                break;
-            case TEAL_COMPLETE:
+                break;*/
+            /*case TEAL_COMPLETE:
                 setColor(false,
                         default_teal_appBarColor,
                         default_teal_appBarColor,
@@ -906,9 +913,9 @@ public class Theme {
                         "#FF616161", //roomSenderTextColor
                         default_teal_appBarColor
                 );
-                break;
+                break;*/
 
-            case GREY_COMPLETE:
+            /*case GREY_COMPLETE:
                 setColor(false,
                         default_grey_appBarColor,
                         default_grey_appBarColor,
@@ -936,7 +943,7 @@ public class Theme {
                         "#FF616161", //roomSenderTextColor
                         default_grey_appBarColor
                 );
-                break;
+                break;*/
         }
     }
 
@@ -971,6 +978,99 @@ public class Theme {
         G.roomSenderTextColor = color[23];
         G.SeenTickColor = color[24];
 
+    }
+
+    public int getTheme(@NotNull Context context) {
+        switch (context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT)) {
+            case DARK:
+                return R.style.iGapDarkTheme;
+            case RED:
+                return R.style.iGapRedTheme;
+            case PINK:
+                return R.style.iGapPinkTheme;
+            case PURPLE:
+                return R.style.iGapPurpleTheme;
+            /*case DEEPPURPLE:
+                return R.style.iGapDeepPurpleThem;*/
+            /*case INDIGO:
+            case INDIGO_COMPLETE:
+                return R.style.iGapIndigoTheme;*/
+            case BLUE:
+                return R.style.iGapBlueTheme;
+            /*case LIGHT_BLUE:
+                return R.style.iGapLightBlueTheme;*/
+            /*case CYAN:
+                return R.style.iGapCyanTheme;*/
+            /*case TEAL:
+            case TEAL_COMPLETE:
+                return R.style.iGapTealTheme;*/
+            case GREEN:
+                return R.style.iGapGreenTheme;
+            /*case LIGHT_GREEN:
+                return R.style.iGapLightGreenTheme;*/
+            /*case LIME:
+                return R.style.iGapLimeTheme;*/
+            /*case YELLLOW:
+                return R.style.iGapYellowTheme;*/
+            case AMBER:
+                return R.style.iGapAmberTheme;
+            case ORANGE:
+                return R.style.iGapOrangeTheme;
+            /*case DEEP_ORANGE:
+                return R.style.iGapDeepOrangeTheme;*/
+            /*case BROWN:
+            case BROWN_COMPLETE:
+                return R.style.iGapBrownTheme;*/
+            case GREY:
+            /*case GREY_COMPLETE:*/
+                return R.style.iGapGrayTheme;
+            /*case BLUE_GREY:
+            case BLUE_GREY_COMPLETE:
+                return R.style.iGapBlueGrayTheme;*/
+            default:
+                return R.style.iGapLightTheme;
+        }
+    }
+
+    public int getColor(int themeId) {
+        switch (themeId) {
+            case AMBER:
+                return R.color.amber;
+            case BLUE:
+                return R.color.blue;
+            case DARK:
+                return R.color.navigation_dark_mode_bg;
+            case RED:
+                return R.color.red;
+            case PINK:
+                return R.color.pink;
+            case PURPLE:
+                return R.color.purple;
+            case GREEN:
+                return R.color.green;
+            case ORANGE:
+                return R.color.orange;
+            case GREY:
+                return R.color.gray;
+            case DEFAULT:
+            default:
+                return R.color.green;
+        }
+    }
+
+    public List<ThemeModel> getThemeList(){
+        List<ThemeModel> themeModelList = new ArrayList<>();
+        themeModelList.add(new ThemeModel(Theme.DEFAULT, R.string.default_theme_title));
+        themeModelList.add(new ThemeModel(Theme.DARK, R.string.dark_theme_title));
+        themeModelList.add(new ThemeModel(Theme.RED, R.string.red_theme_title));
+        themeModelList.add(new ThemeModel(Theme.PINK, R.string.pink_theme_title));
+        themeModelList.add(new ThemeModel(Theme.PURPLE, R.string.purple_theme_title));
+        themeModelList.add(new ThemeModel(Theme.BLUE, R.string.blue_theme_title));
+        themeModelList.add(new ThemeModel(Theme.GREEN, R.string.green_theme_title));
+        themeModelList.add(new ThemeModel(Theme.AMBER, R.string.amber_theme_title));
+        themeModelList.add(new ThemeModel(Theme.ORANGE, R.string.orange_theme_title));
+        themeModelList.add(new ThemeModel(Theme.GREY, R.string.gray_theme_title));
+        return themeModelList;
     }
 
 }

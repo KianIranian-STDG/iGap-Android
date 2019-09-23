@@ -154,9 +154,9 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         voteDownIv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         setTextSize(voteDownIv, R.dimen.standardTextSize);
 
-        if (G.isDarkTheme)
+        /*if (G.isDarkTheme)
             channelForwardIv.setImageResource(R.drawable.ic_channel_forward_dark);
-        else
+        else*/
             channelForwardIv.setImageResource(R.drawable.ic_channel_forward_light);
 
         forwardContainer.addView(channelForwardIv, LayoutCreator.createFrame(26, 26, Gravity.BOTTOM, 4, 4, 8, 4));

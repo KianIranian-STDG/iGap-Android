@@ -3,8 +3,8 @@ package net.iGap.fragments;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -22,13 +24,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.ThemeColorListAdapter;
 import net.iGap.databinding.FragmentChatSettingsBinding;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.StatusBarUtil;
 import net.iGap.viewmodel.FragmentChatSettingViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +42,7 @@ public class FragmentChatSettings extends BaseFragment {
 
     private FragmentChatSettingViewModel viewModel;
     private FragmentChatSettingsBinding binding;
+    private ThemeColorListAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,10 +54,12 @@ public class FragmentChatSettings extends BaseFragment {
                 return (T) new FragmentChatSettingViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE));
             }
         }).get(FragmentChatSettingViewModel.class);
+        adapter = new ThemeColorListAdapter(position -> viewModel.setTheme(position));
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setTheme();
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_chat_settings, container, false);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
@@ -77,12 +83,9 @@ public class FragmentChatSettings extends BaseFragment {
                 }).getView());
 
         binding.themeColorList.setLayoutManager(new LinearLayoutManager(binding.themeColorList.getContext(), RecyclerView.HORIZONTAL, G.isAppRtl));
-        binding.themeColorList.setAdapter(new ThemeColorListAdapter(new BottomSheetItemClickCallback() {
-            @Override
-            public void onClick(int position) {
-                Log.wtf(this.getClass().getName(), "position: " + position);
-            }
-        }));
+        binding.themeColorList.hasFixedSize();
+        binding.themeColorList.setNestedScrollingEnabled(false);
+        binding.themeColorList.setAdapter(adapter);
 
         TypedValue typedValue = new TypedValue();
         TypedArray a = getContext().obtainStyledAttributes(typedValue.data, new int[]{R.attr.colorPrimaryLight});
@@ -94,6 +97,14 @@ public class FragmentChatSettings extends BaseFragment {
         color = a.getColor(0, 0);
         a.recycle();
         setChatSendBubble(color);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            TypedValue tV = new TypedValue();
+            TypedArray aa = getContext().obtainStyledAttributes(tV.data, new int[]{R.attr.colorPrimaryDark});
+            int clr = aa.getColor(0, 0);
+            aa.recycle();
+            StatusBarUtil.setColor(getActivity(), clr, 50);
+        }
 
         viewModel.getGoToChatBackgroundPage().observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
@@ -108,7 +119,35 @@ public class FragmentChatSettings extends BaseFragment {
 
         viewModel.getThemeList().observe(getViewLifecycleOwner(), themeList -> {
             if (themeList != null && binding.themeColorList.getAdapter() instanceof ThemeColorListAdapter) {
-                ((ThemeColorListAdapter) binding.themeColorList.getAdapter()).setData(themeList, 0);
+                ((ThemeColorListAdapter) binding.themeColorList.getAdapter()).setData(themeList);
+            }
+        });
+
+        viewModel.getSelectedThemePosition().observe(getViewLifecycleOwner(), selectedPosition -> {
+            if (selectedPosition != null && binding.themeColorList.getAdapter() instanceof ThemeColorListAdapter) {
+                ((ThemeColorListAdapter) binding.themeColorList.getAdapter()).setSelectedTheme(selectedPosition);
+            }
+        });
+
+        viewModel.getUpdateNewTheme().observe(getViewLifecycleOwner(), isUpdate -> {
+            if (getActivity() != null && isUpdate != null && isUpdate) {
+                Fragment frg;
+                frg = getActivity().getSupportFragmentManager().findFragmentByTag(FragmentChatSettings.class.getName());
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.detach(frg);
+                ft.attach(frg);
+                ft.commit();
+            }
+        });
+
+        viewModel.getUpdateTwoPaneView().observe(getViewLifecycleOwner(), isUpdate -> {
+            if (getActivity() != null && isUpdate != null && isUpdate) {
+                Fragment frg;
+                frg = getActivity().getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.detach(frg);
+                ft.attach(frg);
+                ft.commit();
             }
         });
     }
@@ -129,5 +168,11 @@ public class FragmentChatSettings extends BaseFragment {
 
     private void setChatSendBubble(int color) {
         binding.sendChatItem.setBackground(tintDrawable(binding.sendChatItem.getBackground(), ColorStateList.valueOf(color)));
+    }
+
+    private void setTheme() {
+        if (getContext()!= null) {
+            getContext().getTheme().applyStyle(new Theme().getTheme(getContext()), true);
+        }
     }
 }

@@ -3,8 +3,10 @@
 
     <style name="iGapDarkTheme" parent="BaseTheme">
         <item name="colorAccent">@color/navigation_dark_mode_bg</item>
+        <item name="colorAccentDark">#da6463</item>
         <item name="colorPrimary">@color/navigation_dark_mode_bg</item>
         <item name="colorPrimaryDark">@color/background_setting_dark</item>
+        <item name="colorPrimaryLight">#ffcbca</item>
 
         <item name="md_dark_theme">true</item>
 
@@ -24,8 +26,10 @@
 
     <style name="iGapLightTheme" parent="BaseTheme">
         <item name="colorAccent">@color/green</item>
+        <item name="colorAccentDark">#da6463</item>
         <item name="colorPrimary">@color/colorToolbarBackgroundStart</item>
         <item name="colorPrimaryDark">@color/colorToolbarBackgroundEnd</item>
+        <item name="colorPrimaryLight">#ffcbca</item>
 
         <item name="md_dark_theme">false</item>
 
@@ -44,13 +48,15 @@
     </style>
 
     <style name="iGapBlueGrayTheme" parent="BaseTheme">
-        <item name="colorAccent">@color/blueGray</item>
-        <item name="colorPrimary">@color/blueGray</item>
+        <item name="colorAccent">#607D8B</item>
+        <item name="colorAccentDark">#da6463</item>
+        <item name="colorPrimary">#607D8B</item>
         <item name="colorPrimaryDark">#455A64</item>
+        <item name="colorPrimaryLight">#ffcbca</item>
 
         <item name="md_background_color">@color/blueGreyBackground</item>
         <!--<item name="colorAccent">@color/white</item>-->
-        <item name="rootBackgroundColor">@color/blueGreyBackground</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -67,12 +73,14 @@
 
     <style name="iGapIndigoTheme" parent="BaseTheme">
         <item name="colorAccent">#3F51B5</item>
+        <item name="colorAccentDark">#da6463</item>
         <item name="colorPrimary">#3F51B5</item>
         <item name="colorPrimaryDark">#303F9F</item>
+        <item name="colorPrimaryLight">#ffcbca</item>
 
         <item name="md_background_color">@color/indigoBackground</item>
         <!--<item name="colorAccent">@color/white</item>-->
-        <item name="rootBackgroundColor">@color/indigoBackground</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -87,13 +95,15 @@
     </style>
 
     <style name="iGapBrownTheme" parent="BaseTheme">
-        <item name="colorAccent">@color/brown</item>
-        <item name="colorPrimary">@color/brown</item>
+        <item name="colorAccent">#795548</item>
+        <item name="colorAccentDark">#da6463</item>
+        <item name="colorPrimary">#795548</item>
         <item name="colorPrimaryDark">#5D4037</item>
+        <item name="colorPrimaryLight">#ffcbca</item>
 
         <item name="md_background_color">#d7ccc8</item>
         <!--<item name="colorAccent">@color/white</item>-->
-        <item name="rootBackgroundColor">#D7CCC8</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -109,12 +119,14 @@
 
     <style name="iGapTealTheme" parent="BaseTheme">
         <item name="colorAccent">#009688</item>
+        <item name="colorAccentDark">#da6463</item>
         <item name="colorPrimary">#009688</item>
         <item name="colorPrimaryDark">#00796B</item>
+        <item name="colorPrimaryLight">#ffcbca</item>
 
         <item name="md_background_color">@color/tealBackground</item>
         <!--<item name="colorAccent">@color/white</item>-->
-        <item name="rootBackgroundColor">@color/tealBackground</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -129,12 +141,15 @@
     </style>
 
     <style name="iGapGrayTheme" parent="BaseTheme">
-        <item name="colorAccent">#616161</item>
-        <item name="colorPrimary">#616161</item>
+        <item name="colorAccent">#4e698a</item>
+        <item name="colorAccentDark">#182d44</item>
+        <item name="colorPrimary">#4e698a</item>
+        <item name="colorPrimaryDark">#2d4059</item>
+        <item name="colorPrimaryLight">#7495b5</item>
 
         <item name="md_background_color">@color/white</item>
         <!--<item name="colorAccent">@color/white</item>-->
-        <item name="rootBackgroundColor">#f5f5f5</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -150,11 +165,13 @@
 
 
     <style name="iGapRedTheme" parent="BaseTheme">
-        <item name="colorAccent">#F44336</item>
-        <item name="colorPrimary">#F44336</item>
-        <item name="colorPrimaryDark">#D32F2F</item>
+        <item name="colorAccent">#c82121</item>
+        <item name="colorAccentDark">#720505</item>
+        <item name="colorPrimary">#c82121</item>
+        <item name="colorPrimaryDark">#9e1010</item>
+        <item name="colorPrimaryLight">#dd6f6f</item>
 
-        <item name="rootBackgroundColor">#ffebee</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -169,7 +186,7 @@
     </style>
 
     <style name="iGapPinkTheme" parent="BaseTheme">
-        <item name="colorAccent">#fe9191</item>
+        <item name="colorAccent">#ffb5b5</item>
         <item name="colorAccentDark">#da6463</item>
         <item name="colorPrimary">#ffb5b5</item>
         <item name="colorPrimaryDark">#f68787</item>
@@ -190,11 +207,13 @@
     </style>
 
     <style name="iGapPurpleTheme" parent="BaseTheme">
-        <item name="colorAccent">#9C27B0</item>
-        <item name="colorPrimary">#9C27B0</item>
-        <item name="colorPrimaryDark">#7B1FA2</item>
+        <item name="colorAccent">#aa5c9f</item>
+        <item name="colorAccentDark">#68265b</item>
+        <item name="colorPrimary">#aa5c9f</item>
+        <item name="colorPrimaryDark">#854777</item>
+        <item name="colorPrimaryLight">#cc96ca</item>
 
-        <item name="rootBackgroundColor">#F3E5F5</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -210,10 +229,12 @@
 
     <style name="iGapDeepPurpleThem" parent="BaseTheme">
         <item name="colorAccent">#673AB7</item>
+        <item name="colorAccentDark">#da6463</item>
         <item name="colorPrimary">#673AB7</item>
         <item name="colorPrimaryDark">#512DA8</item>
+        <item name="colorPrimaryLight">#ffcbca</item>
 
-        <item name="rootBackgroundColor">#EDE7F6</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -228,11 +249,13 @@
     </style>
 
     <style name="iGapBlueTheme" parent="BaseTheme">
-        <item name="colorAccent">@color/blue</item>
-        <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryDark">#1976D2</item>
+        <item name="colorAccent">#207dff</item>
+        <item name="colorAccentDark">#07439b</item>
+        <item name="colorPrimary">#207dff</item>
+        <item name="colorPrimaryDark">#064acb</item>
+        <item name="colorPrimaryLight">#66b3ff</item>
 
-        <item name="rootBackgroundColor">#E3F2FD</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -248,10 +271,12 @@
 
     <style name="iGapLightBlueTheme" parent="BaseTheme">
         <item name="colorAccent">#03A9F4</item>
+        <item name="colorAccentDark">#da6463</item>
         <item name="colorPrimary">#03A9F4</item>
         <item name="colorPrimaryDark">#0288D1</item>
+        <item name="colorPrimaryLight">#ffcbca</item>
 
-        <item name="rootBackgroundColor">#E1F5FE</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -266,11 +291,13 @@
     </style>
 
     <style name="iGapCyanTheme" parent="BaseTheme">
-        <item name="colorAccent">@color/cyan</item>
-        <item name="colorPrimary">@color/cyan</item>
+        <item name="colorAccent">#00BCD4</item>
+        <item name="colorAccentDark">#da6463</item>
+        <item name="colorPrimary">#00BCD4</item>
         <item name="colorPrimaryDark">#0097A7</item>
+        <item name="colorPrimaryLight">#ffcbca</item>
 
-        <item name="rootBackgroundColor">#E0F7FA</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -281,14 +308,17 @@
         <item name="iGapButtonTextColor">#00BCD4</item>
         <item name="iGapPrimaryIconTextColor">#00BCD4</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
     </style>
 
     <style name="iGapGreenTheme" parent="BaseTheme">
-        <item name="colorAccent">#4CAF50</item>
-        <item name="colorPrimary">#4CAF50</item>
-        <item name="colorPrimaryDark">#388E3C</item>
+        <item name="colorAccent">#b5e663</item>
+        <item name="colorAccentDark">#8cb238</item>
+        <item name="colorPrimary">#b5e663</item>
+        <item name="colorPrimaryDark">#9dc756</item>
+        <item name="colorPrimaryLight">#d0e59e</item>
 
-        <item name="rootBackgroundColor">#E8F5E9</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -299,14 +329,17 @@
         <item name="iGapButtonTextColor">#4CAF50</item>
         <item name="iGapPrimaryIconTextColor">#4CAF50</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
     </style>
 
     <style name="iGapLightGreenTheme" parent="BaseTheme">
         <item name="colorAccent">#8BC34A</item>
+        <item name="colorAccentDark">#da6463</item>
         <item name="colorPrimary">#8BC34A</item>
         <item name="colorPrimaryDark">#689F38</item>
+        <item name="colorPrimaryLight">#ffcbca</item>
 
-        <item name="rootBackgroundColor">#F1F8E9</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -317,14 +350,17 @@
         <item name="iGapButtonTextColor">#8BC34A</item>
         <item name="iGapPrimaryIconTextColor">#8BC34A</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
     </style>
 
     <style name="iGapLimeTheme" parent="BaseTheme">
         <item name="colorAccent">#CDDC39</item>
+        <item name="colorAccentDark">#da6463</item>
         <item name="colorPrimary">#CDDC39</item>
         <item name="colorPrimaryDark">#AFB42B</item>
+        <item name="colorPrimaryLight">#ffcbca</item>
 
-        <item name="rootBackgroundColor">#F9FBE7</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -334,14 +370,17 @@
         <item name="iGapButtonColor">#CDDC39</item>
         <item name="iGapPrimaryIconTextColor">#CDDC39</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
     </style>
 
     <style name="iGapYellowTheme" parent="BaseTheme">
         <item name="colorAccent">#FFEB3B</item>
+        <item name="colorAccentDark">#da6463</item>
         <item name="colorPrimary">#FFEB3B</item>
         <item name="colorPrimaryDark">#FBC02D</item>
+        <item name="colorPrimaryLight">#ffcbca</item>
 
-        <item name="rootBackgroundColor">#FFFDE7</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -351,12 +390,15 @@
         <item name="iGapButtonColor">#FFEB3B</item>
         <item name="iGapPrimaryIconTextColor">#FFEB3B</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
     </style>
 
     <style name="iGapAmberTheme" parent="BaseTheme">
-        <item name="colorAccent">@color/amber</item>
-        <item name="colorPrimary">@color/amber</item>
-        <item name="colorPrimaryDark">#FFA000</item>
+        <item name="colorAccent">#f6d365</item>
+        <item name="colorAccentDark">#dd9f07</item>
+        <item name="colorPrimary">#f6d365</item>
+        <item name="colorPrimaryDark">#f7be16</item>
+        <item name="colorPrimaryLight">#ffe292</item>
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
@@ -368,14 +410,17 @@
         <item name="iGapButtonColor">#FFC107</item>
         <item name="iGapPrimaryIconTextColor">#FFC107</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
     </style>
 
     <style name="iGapOrangeTheme" parent="BaseTheme">
-        <item name="colorAccent">#FF9800</item>
-        <item name="colorPrimary">#FF9800</item>
-        <item name="colorPrimaryDark">#F57C00</item>
+        <item name="colorAccent">#ff9d00</item>
+        <item name="colorAccentDark">#ff6700</item>
+        <item name="colorPrimary">#ff9d00</item>
+        <item name="colorPrimaryDark">#ff8000</item>
+        <item name="colorPrimaryLight">#ffb85a</item>
 
-        <item name="rootBackgroundColor">#FFF8E1</item>
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -385,13 +430,17 @@
         <item name="iGapButtonColor">#FF9800</item>
         <item name="iGapPrimaryIconTextColor">#FF9800</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
     </style>
 
     <style name="iGapDeepOrangeTheme" parent="BaseTheme">
         <item name="colorPrimary">#FF5722</item>
+        <item name="colorAccentDark">#da6463</item>
         <item name="colorPrimaryDark">#E64A19</item>
         <item name="colorAccent">#FF5722</item>
-        <item name="rootBackgroundColor">#FBE9E7</item>
+        <item name="colorPrimaryLight">#ffcbca</item>
+
+        <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
@@ -401,6 +450,7 @@
         <item name="iGapButtonColor">#FF5722</item>
         <item name="iGapPrimaryIconTextColor">#FF5722</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
     </style>
 
     <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">

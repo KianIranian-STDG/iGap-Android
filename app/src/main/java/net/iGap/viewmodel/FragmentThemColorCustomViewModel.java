@@ -61,7 +61,7 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
         } else {
             editor = sharedPreferences.edit();
         }
-        editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.CUSTOM);
+        /*editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.CUSTOM);*/
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, false);
         editor.apply();
         resetApp.setValue(true);

@@ -22,6 +22,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 
 import com.daimajia.swipe.SwipeLayout;
@@ -47,19 +48,18 @@ import static net.iGap.R.dimen.messageContainerPadding;
 
 public class ViewMaker {
 
-    public static View getUnreadMessageItemView() {
-        TextView cslum_txt_unread_message = new AppCompatTextView(G.context);
+    public static View getUnreadMessageItemView(Context context) {
+        TextView cslum_txt_unread_message = new AppCompatTextView(context);
         cslum_txt_unread_message.setId(R.id.cslum_txt_unread_message);
         cslum_txt_unread_message.setPadding(0, dpToPixel(2), 0, dpToPixel(2));
-        cslum_txt_unread_message.setBackgroundColor(G.context.getResources().getColor(R.color.green));
+        /*cslum_txt_unread_message.setBackgroundColor(G.context.getResources().getColor(R.color.green));*/
         setTextSize(cslum_txt_unread_message, R.dimen.dp12);
-        setTypeFace(cslum_txt_unread_message);
+        /*setTypeFace(cslum_txt_unread_message);*/
         cslum_txt_unread_message.setGravity(CENTER);
         cslum_txt_unread_message.setText(G.fragmentActivity.getResources().getString(R.string.unread_message));
-        cslum_txt_unread_message.setTextColor(G.context.getResources().getColor(R.color.white));
+        cslum_txt_unread_message.setTextColor(ContextCompat.getColor(context, R.color.white));
         LinearLayout.LayoutParams layout_692 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layout_692.bottomMargin = i_Dp(R.dimen.dp8);
-        layout_692.topMargin = i_Dp(R.dimen.dp8);
+        layout_692.setMargins(i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8));
         cslum_txt_unread_message.setLayoutParams(layout_692);
 
         return cslum_txt_unread_message;

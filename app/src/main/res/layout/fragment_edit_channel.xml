@@ -263,7 +263,7 @@
                     android:onClick="@{()->viewModel.onAdministratorClick()}"
                     android:padding="8dp"
                     android:text="@{viewModel.administratorsCount}"
-                    android:textColor="@color/green"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     app:layout_constraintBottom_toBottomOf="@id/administrators"
                     app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"

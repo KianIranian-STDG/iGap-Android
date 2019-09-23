@@ -761,7 +761,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         Utils.darkModeHandlerGray(mHolder.getViewsLabelTv());
         Utils.darkModeHandlerGray(mHolder.getSignatureTv());
         Utils.darkModeHandlerGray(mHolder.getEyeIconTv());
-        Utils.darkModeHandlerGray(mHolder.getMessageStatusTv());
+        /*Utils.darkModeHandlerGray(mHolder.getMessageStatusTv());*/
         Utils.darkModeHandlerGray(mHolder.getVoteUpIv());
         Utils.darkModeHandlerGray(mHolder.getVoteDownTv());
         Utils.darkModeHandlerGray(mHolder.getMessageTimeTv());
@@ -895,7 +895,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
 
-        if (G.isDarkTheme) {
+        /*if (G.isDarkTheme) {
             viewHolder.getChatBloke().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND, ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_receive_dark))));
             setThemeColor(viewHolder.getViewsLabelTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getEyeIconTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
@@ -905,7 +905,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             setThemeColor(viewHolder.getVoteDownIv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getSignatureTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.receive_message_time_dark));
-        } else {
+        } else {*/
             TypedValue typedValue = new TypedValue();
             TypedArray a = viewHolder.getContext().obtainStyledAttributes(typedValue.data, new int[] { R.attr.colorPrimaryLight });
             int color = a.getColor(0, 0);
@@ -920,7 +920,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             setThemeColor(viewHolder.getVoteDownIv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getSignatureTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
             setThemeColor(viewHolder.getMessageTimeTv(), G.context.getResources().getColor(R.color.receive_message_time_light));
-        }
+        /*}*/
 
         /**
          * add main layout margin to prevent getting match parent completely

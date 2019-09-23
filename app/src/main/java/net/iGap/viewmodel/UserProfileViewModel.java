@@ -485,12 +485,12 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         if (isCheck != isDarkMode.get()) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             if (isCheck) {
-                int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.CUSTOM);
+                int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT/*CUSTOM*/);
                 editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DARK);
                 editor.putInt(SHP_SETTING.KEY_OLD_THEME_COLOR, themeColor);
                 editor.apply();
             } else {
-                int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_OLD_THEME_COLOR, Theme.CUSTOM);
+                int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_OLD_THEME_COLOR, Theme.DEFAULT/*CUSTOM*/);
                 editor.putInt(SHP_SETTING.KEY_THEME_COLOR, themeColor);
                 editor.apply();
             }

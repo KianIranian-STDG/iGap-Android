@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
@@ -369,7 +370,7 @@ public final class AppUtils {
      *
      * @param iconTextView TextView message status
      */
-    public static void rightMessageStatus(FontIconTextView iconTextView, ProtoGlobal.RoomMessageStatus status
+    public static void rightMessageStatus(TextView iconTextView, ProtoGlobal.RoomMessageStatus status
             , ProtoGlobal.RoomMessageType messageType, boolean isSenderMe) {
         boolean isDarkTheme = G.isDarkTheme;
         if (iconTextView == null) {
@@ -395,7 +396,11 @@ public final class AppUtils {
             case LISTENED:
             case SEEN:
                 iconTextView.setText(R.string.delivery_icon);
-                iconTextView.setTextColor(context.getResources().getColor(R.color.read_status));
+                TypedValue typedValue = new TypedValue();
+                TypedArray a = iconTextView.getContext().obtainStyledAttributes(typedValue.data, new int[]{R.attr.iGapPrimaryIconTextColor});
+                int color = a.getColor(0, 0);
+                a.recycle();
+                iconTextView.setTextColor(color);
                 break;
             case SENDING:
                 iconTextView.setText(R.string.history_icon);

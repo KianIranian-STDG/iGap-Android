@@ -707,12 +707,12 @@ public class FragmentChat extends BaseFragment
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
 
         if (G.isDarkTheme) {
-            imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.green));
+            /*imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.green));*/
             edtChat.setBackground(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext_dark));
             edtChat.setHintTextColor(ContextCompat.getColor(inflater.getContext(), R.color.white));
             edtChat.setTextColor(inflater.getContext().getResources().getColor(R.color.white));
         } else {
-            imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.md_green_700));
+            /*imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.md_green_700));*/
             edtChat.setBackground(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext));
             edtChat.setHintTextColor(ContextCompat.getColor(inflater.getContext(), R.color.gray_4c));
         }
@@ -5620,11 +5620,11 @@ public class FragmentChat extends BaseFragment
      */
     private void setUpEmojiPopup() {
         switch (G.themeColor) {
-            case Theme.BLUE_GREY_COMPLETE:
+            /*case Theme.BLUE_GREY_COMPLETE:
             case Theme.INDIGO_COMPLETE:
             case Theme.BROWN_COMPLETE:
             case Theme.GREY_COMPLETE:
-            case Theme.TEAL_COMPLETE:
+            case Theme.TEAL_COMPLETE:*/
             case Theme.DARK:
 
                 setEmojiColor(G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);

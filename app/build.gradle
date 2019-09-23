@@ -27,7 +27,7 @@ android {
 
     defaultConfig {
         applicationId "net.iGap"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 28
         multiDexEnabled true
         versionCode 136
