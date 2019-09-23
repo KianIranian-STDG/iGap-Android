@@ -3200,8 +3200,10 @@ public class FragmentChat extends BaseFragment
 
     private void initPopupAttachment() {
 
+        if (getActivity() == null ) return;
+
         mAttachmentPopup = ChatAttachmentPopup.create()
-                .setContext(getContext())
+                .setContext(getActivity())
                 .setRootView(rootView)
                 .setFragment(FragmentChat.this)
                 .setFragmentActivity(G.fragmentActivity)
