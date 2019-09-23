@@ -664,7 +664,7 @@
                 android:hint="@string/name"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/versionTitle"
+                app:layout_constraintTop_toBottomOf="@id/versionChange"
                 app:layout_constraintWidth_percent=".9">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -815,7 +815,6 @@
                 android:onClick="@{() -> viewModel.onCountryCodeClick()}"
                 android:paddingBottom="6dp"
                 android:text="@{viewModel.referralCountryCodeObservableField}"
-                android:visibility="@{viewModel.countryCodeVisibility}"
                 app:layout_constraintBottom_toBottomOf="@id/referralView"
                 app:layout_constraintStart_toStartOf="@id/name"
                 app:layout_constraintTop_toTopOf="@id/referralView" />
@@ -886,7 +885,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:visibility="gone"
-                app:constraint_referenced_ids="referralView,addAvatar,name,userName,bio,email,gender,genderValue" />
+                app:constraint_referenced_ids="countryCode,referralView,addAvatar,name,userName,bio,email,gender,genderValue" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -141,7 +141,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private ObservableField<String> referralNumberObservableField = new ObservableField<>("");
     public ObservableField<String> referralCountryCodeObservableField = new ObservableField<>("+98");
     public ObservableField<Integer> referralError = new ObservableField<>(R.string.already_registered);
-    public ObservableField<Integer> countryCodeVisibility = new ObservableField<>(View.GONE);
     private int phoneMax = 10;
     private boolean sendReferral = false;
 
@@ -1119,7 +1118,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onCountryCodeClick() {
-        showDialogSelectCountry.setValue(true);
+        if (showReferralErrorLiveData.getValue() != null && showReferralErrorLiveData.getValue()) {
+            showDialogSelectCountry.setValue(true);
+        }
     }
 
 
@@ -1129,14 +1130,13 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             public void onSetRepresentative(String phone) {
                 referralEnableLiveData.postValue(false);
                 referralNumberObservableField.set("");
-                countryCodeVisibility.set(View.GONE);
                 G.handler.post(() -> submitData());
             }
 
             @Override
             public void onErrorSetRepresentative(int majorCode, int minorCode) {
                 showReferralErrorLiveData.postValue(true);
-
+                showLoading.set(View.GONE);
                 switch (majorCode) {
                     case 10177:
                         if (minorCode == 2) {
@@ -1194,18 +1194,19 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         new RequestUserProfileGetRepresentative().userProfileGetRepresentative(new RequestUserProfileGetRepresentative.OnRepresentReady() {
             @Override
             public void onRepresent(String phoneNumber) {
-                referralNumberObservableField.set(phoneNumber);
+                G.handler.postDelayed(() -> {
+                    referralNumberObservableField.set(phoneNumber);
 
-                if (phoneNumber.equals("")) {
-                    referralEnableLiveData.postValue(true);
-                    countryCodeVisibility.set(View.VISIBLE);
-                    countryReader();
-                    sendReferral = true;
-                } else {
-                    referralEnableLiveData.postValue(false);
-                    countryCodeVisibility.set(View.GONE);
-                    sendReferral = false;
-                }
+                    if (phoneNumber.equals("")) {
+                        referralEnableLiveData.postValue(true);
+                        countryReader();
+                        sendReferral = true;
+                    } else {
+                        referralCountryCodeObservableField.set("");
+                        referralEnableLiveData.postValue(false);
+                        sendReferral = false;
+                    }
+                }, 500);
             }
 
             @Override
