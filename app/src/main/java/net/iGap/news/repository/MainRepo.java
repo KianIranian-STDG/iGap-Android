@@ -15,10 +15,10 @@ public class MainRepo {
     private NewsAPIRepository repository = new NewsAPIRepository();
 
     public void getSlideNews(int start, int display, ApiResponse<NewsList> apiResponse) {
-        repository.getNewsList(new NewsApiArg(start, display, -1, NewsApiArg.NewsType.Latest), apiResponse);
+        repository.getNewsList(new NewsApiArg(start, display, -1, NewsApiArg.NewsType.ERGENT), apiResponse);
     }
 
-    public void getLastGroupNews(ApiResponse<List<NewsFPList>> apiResponse) {
+    public void getMainPage(ApiResponse<List<NewsFPList>> apiResponse) {
         repository.getMainPageNews(1, apiResponse);
     }
 

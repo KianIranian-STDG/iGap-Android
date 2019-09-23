@@ -1,7 +1,5 @@
 package net.iGap.news.viewmodel;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -10,12 +8,8 @@ import net.iGap.news.repository.MainRepo;
 import net.iGap.news.repository.model.NewsDetail;
 import net.iGap.news.repository.model.NewsError;
 import net.iGap.news.repository.model.NewsFPList;
-import net.iGap.news.repository.model.NewsFirstPage;
 import net.iGap.news.repository.model.NewsList;
-import net.iGap.news.repository.model.NewsMainBTN;
-import net.iGap.news.repository.model.NewsSlider;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class NewsDetailVM extends ViewModel {
@@ -53,7 +47,7 @@ public class NewsDetailVM extends ViewModel {
     }
 
     private void getNews() {
-        repo.getLastGroupNews(new ApiResponse<List<NewsFPList>>() {
+        repo.getMainPage(new ApiResponse<List<NewsFPList>>() {
             @Override
             public void onResponse(List<NewsFPList> newsFPList) {
 //                addFakeData(newsFPList);

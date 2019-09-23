@@ -80,8 +80,8 @@ public class NewsGroupPagerFrag extends BaseFragment {
         toolbarLayout.addView(mHelperToolbar.getView());
 
         Picasso.get()
-                .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-//                .load(arg.getString("GroupPic"))
+//                .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
+                .load(arg.getString("GroupPic"))
                 .placeholder(R.mipmap.news_temp_banner)
                 .into(binding.groupImage);
 

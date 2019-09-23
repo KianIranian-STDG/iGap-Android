@@ -9,6 +9,8 @@ public class NewsPublisher {
     private String name;
     @SerializedName("mainAddress")
     private String address;
+    @SerializedName("image")
+    private String image;
 
     public NewsPublisher() {
     }
@@ -35,5 +37,13 @@ public class NewsPublisher {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

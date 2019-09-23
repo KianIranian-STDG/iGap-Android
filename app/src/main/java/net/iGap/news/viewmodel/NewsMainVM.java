@@ -55,7 +55,7 @@ public class NewsMainVM extends ViewModel {
     }
 
     private void getNews() {
-        repo.getLastGroupNews(new ApiResponse<List<NewsFPList>>() {
+        repo.getMainPage(new ApiResponse<List<NewsFPList>>() {
             @Override
             public void onResponse(List<NewsFPList> newsFPList) {
 //                addFakeData(newsFPList);

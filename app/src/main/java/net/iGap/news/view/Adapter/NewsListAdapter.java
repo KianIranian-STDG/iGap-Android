@@ -98,8 +98,8 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 rootTitle.setVisibility(View.GONE);
             title.setText("" + mData.getNews().get(position).getTitle());
             Picasso.get()
-                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-//                    .load(mData.getNews().get(position).getImage())
+//                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
+                    .load(mData.getNews().get(position).getImage())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position)));
@@ -137,8 +137,8 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         void initVH(int position) {
             Picasso.get()
-                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-//                    .load(mData.getNews().get(position).getImage())
+//                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
+                    .load(mData.getNews().get(position).getImage())
                     .placeholder(R.mipmap.news_temp_banner)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position)));

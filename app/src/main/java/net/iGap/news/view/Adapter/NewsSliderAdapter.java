@@ -53,8 +53,8 @@ public class NewsSliderAdapter extends SliderViewAdapter {
             textViewDescription.setText("" + data.get(position).getDesc());
             imageViewBackground.setOnClickListener(v -> callBack.onSliderClick(data.get(position)));
             Picasso.get()
-                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-//                    .load(data.get(position).getImage())
+//                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
+                    .load(data.get(position).getImage())
                     .placeholder(R.mipmap.news_temp_banner)
                     .into(imageViewBackground);
         }
