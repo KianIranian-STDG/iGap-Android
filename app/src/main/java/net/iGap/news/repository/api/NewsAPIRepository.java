@@ -43,7 +43,7 @@ public class NewsAPIRepository {
 
     public void getNewsGroup(ApiResponse<NewsGroup> apiResponse) {
         apiResponse.setProgressIndicator(true);
-        apiService.getNewsGroups().enqueue(new Callback<NewsGroup>() {
+        apiService.getNewsGroups(0,0).enqueue(new Callback<NewsGroup>() {
             @Override
             public void onResponse(Call<NewsGroup> call, Response<NewsGroup> response) {
                 apiResponse.onResponse(response.body());

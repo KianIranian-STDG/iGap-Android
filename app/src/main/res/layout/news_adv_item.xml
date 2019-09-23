@@ -27,7 +27,7 @@
                 android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:src="@mipmap/logo"
+                android:src="@mipmap/news_temp_banner"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
                 app:layout_constraintRight_toRightOf="parent"

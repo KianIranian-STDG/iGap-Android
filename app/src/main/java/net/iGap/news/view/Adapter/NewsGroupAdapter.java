@@ -66,7 +66,7 @@ public class NewsGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             Picasso.get()
                     .load("https://images-eu.ssl-images-amazon.com/images/I/71T0kQ9FJPL.jpg")
 //                    .load(mData.getGroups().get(position).getImage())
-                    .placeholder(R.mipmap.logo)
+                    .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getGroups().get(position)));
         }

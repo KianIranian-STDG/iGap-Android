@@ -129,7 +129,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Picasso.get()
                     .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
 //                    .load(mData.getmNews().get(position).getNews().get(0).getContents().get(0).getImage().get(0).getOriginal())
-                    .placeholder(R.mipmap.logo)
+                    .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position)));
 
@@ -206,7 +206,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Picasso.get()
                     .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
 //                    .load(mData.getmNews().get(position).getNews().get(0).getContents().get(0).getImage().get(0).getOriginal())
-                    .placeholder(R.mipmap.logo)
+                    .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*2)));
 
@@ -228,7 +228,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Picasso.get()
                     .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
 //                    .load(mData.getmNews().get(position).getNews().get(0).getContents().get(0).getImage().get(0).getOriginal())
-                    .placeholder(R.mipmap.logo)
+                    .placeholder(R.mipmap.news_temp_icon)
                     .into(image1);
             container1.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*2+1)));
 
@@ -304,7 +304,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Picasso.get()
                     .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     //.load(mData.getmNews().get(position).getNews().get(0).getContents().get(0).getImage().get(0).getOriginal())
-                    .placeholder(R.mipmap.logo)
+                    .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*3)));
 
@@ -323,7 +323,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Picasso.get()
                     .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     //.load(mData.getmNews().get(position).getNews().get(0).getContents().get(0).getImage().get(0).getOriginal())
-                    .placeholder(R.mipmap.logo)
+                    .placeholder(R.mipmap.news_temp_icon)
                     .into(image1);
             container1.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*3+1)));
 
@@ -342,7 +342,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Picasso.get()
                     .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     //.load(mData.getmNews().get(position).getNews().get(0).getContents().get(0).getImage().get(0).getOriginal())
-                    .placeholder(R.mipmap.logo)
+                    .placeholder(R.mipmap.news_temp_icon)
                     .into(image2);
             container2.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*3+2)));
 

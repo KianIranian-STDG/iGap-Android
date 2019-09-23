@@ -68,7 +68,7 @@ public class NewsPublisherAdapter extends RecyclerView.Adapter<RecyclerView.View
             Picasso.get()
                     .load("https://images-eu.ssl-images-amazon.com/images/I/71T0kQ9FJPL.jpg")
 //                    .load(mData.get(position).getAddress()) They dont have image icons.
-                    .placeholder(R.mipmap.logo)
+                    .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.get(position)));
         }

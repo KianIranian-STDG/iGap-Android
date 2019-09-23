@@ -16,8 +16,8 @@ import retrofit2.http.Query;
 
 public interface NewsApi {
 
-    @GET("news/group/list") //checked
-    Call<NewsGroup> getNewsGroups();
+    @GET("getServices/igap/") //checked
+    Call<NewsGroup> getNewsGroups(@Query("page") int page, @Query("perpage") int display);
 
     @GET("news/title/latest") //checked
     Call<NewsList> getLatestNews(@Query("start") int start, @Query("display") int display);

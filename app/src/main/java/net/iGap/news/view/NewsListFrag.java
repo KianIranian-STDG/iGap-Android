@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar;
 import net.iGap.R;
 import net.iGap.databinding.NewsListFragBinding;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperFragment;
 import net.iGap.news.repository.model.NewsApiArg;
 import net.iGap.news.repository.model.NewsList;
 import net.iGap.news.view.Adapter.NewsListAdapter;
@@ -95,18 +99,15 @@ public class NewsListFrag extends BaseFragment {
 
     private void initMainRecycler(NewsList data) {
         NewsListAdapter adapter = new NewsListAdapter(data);
-        adapter.setCallback(new NewsListAdapter.onClickListener() {
-            @Override
-            public void onNewsGroupClick(NewsList.News slide) {
-                /*FragmentManager fragmentManager = getChildFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Fragment fragment = fragmentManager.findFragmentByTag(NewsGroupPagerFrag.class.getName());
-                if (fragment == null) {
-                    fragment = NewsGroupPagerFrag.newInstance();
-                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                }
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();*/
+        adapter.setCallback(slide -> {
+            FragmentManager fragmentManager = getChildFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Fragment fragment = fragmentManager.findFragmentByTag(NewsDetailFrag.class.getName());
+            if (fragment == null) {
+                fragment = NewsDetailFrag.newInstance();
+                fragmentTransaction.addToBackStack(fragment.getClass().getName());
             }
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         });
         binding.rcGroup.setAdapter(adapter);
     }
