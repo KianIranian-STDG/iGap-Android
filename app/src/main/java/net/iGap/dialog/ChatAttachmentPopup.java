@@ -184,7 +184,17 @@ public class ChatAttachmentPopup {
 
     private void setupContentView() {
         contentView = viewRoot.findViewById(R.id.content);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) contentView.setElevation(0);
+
+        contentView.setOnClickListener(v -> {
+            //nothing
+        });
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            setPopupBackground(R.color.navigation_dark_mode_bg , R.color.chat_bottom_bg);
+            return;
+        }else {
+            contentView.setElevation(0);
+        }
 
 
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) contentView.getLayoutParams();
@@ -197,7 +207,7 @@ public class ChatAttachmentPopup {
         if (height == 0){
             height = ViewGroup.LayoutParams.WRAP_CONTENT;
             setPopupBackground(R.drawable.popup_background_dark , R.drawable.popup_background);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) contentView.setElevation(4);
+            contentView.setElevation(4);
 
             if ((contentView.getMeasuredHeight() + mChatBoxHeight ) >= getDeviceScreenHeight()){
                 lp.height =  getDeviceScreenHeight() - mChatBoxHeight - 16;
@@ -225,12 +235,13 @@ public class ChatAttachmentPopup {
         }
         contentView.setLayoutParams(lp);
 
-        contentView.setOnClickListener(v -> {
-            //nothing
-        });
+
     }
 
     public void updateHeight(){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return;
+        }
 
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) contentView.getLayoutParams();
 
