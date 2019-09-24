@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -83,6 +85,8 @@ public class ChatAttachmentPopup {
     private boolean isCameraStart;
     private Animator animation;
     private View contentView;
+    private int mChatBoxHeight;
+    private int mMessagesLayoutHeight;
 
     private ChatAttachmentPopup() {
     }
@@ -116,6 +120,16 @@ public class ChatAttachmentPopup {
         return this;
     }
 
+    public ChatAttachmentPopup setChatBoxHeight(int measuredHeight) {
+        this.mChatBoxHeight = measuredHeight ;
+        return this;
+    }
+
+    public ChatAttachmentPopup setMessagesLayoutHeight(int measuredHeight) {
+        this.mMessagesLayoutHeight = measuredHeight ;
+        return this ;
+    }
+    
     public ChatAttachmentPopup setFragment(Fragment frg) {
         this.mFragment = frg;
         return this;
@@ -171,46 +185,96 @@ public class ChatAttachmentPopup {
     private void setupContentView() {
         contentView = viewRoot.findViewById(R.id.content);
 
+        contentView.setOnClickListener(v -> {
+            //nothing
+        });
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            setPopupBackground(R.color.navigation_dark_mode_bg , R.color.chat_bottom_bg);
+            return;
+        }else {
+            contentView.setElevation(0);
+        }
+
+
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) contentView.getLayoutParams();
+        lp.bottomMargin = 0;
+        lp.leftMargin = 0 ;
+        lp.rightMargin = 0 ;
+
         //get height of keyboard if it was gone set wrap content to popup
         int height = getKeyboardHeight();
         if (height == 0){
             height = ViewGroup.LayoutParams.WRAP_CONTENT;
             setPopupBackground(R.drawable.popup_background_dark , R.drawable.popup_background);
+            contentView.setElevation(4);
+
+            if ((contentView.getMeasuredHeight() + mChatBoxHeight ) >= getDeviceScreenHeight()){
+                lp.height =  getDeviceScreenHeight() - mChatBoxHeight - 16;
+
+            }else {
+                lp.height = height ;
+            }
+
+            lp.leftMargin = 10 ;
+            lp.rightMargin = 10 ;
+            lp.bottomMargin = mChatBoxHeight + 10;
+
         }else {
             setPopupBackground(R.color.navigation_dark_mode_bg , R.color.chat_bottom_bg);
-        }
 
-        if (height != ViewGroup.LayoutParams.WRAP_CONTENT){
             if (contentView.getHeight() >= height){
                 contentView.setMinimumHeight(height);
             }else {
-                ViewGroup.LayoutParams lp = contentView.getLayoutParams();
                 lp.height = height;
-                contentView.setLayoutParams(lp);
             }
-        }
 
-        contentView.setOnClickListener(v -> {
-            //nothing
-        });
+            lp.bottomMargin = 0;
+            lp.leftMargin = 0 ;
+            lp.rightMargin = 0 ;
+        }
+        contentView.setLayoutParams(lp);
+
+
     }
 
     public void updateHeight(){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return;
+        }
+
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) contentView.getLayoutParams();
+
+        //get height of keyboard if it was gone set wrap content to popup
         int height = getKeyboardHeight();
         if (height == 0){
             height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        }
 
-        if (height != ViewGroup.LayoutParams.WRAP_CONTENT){
+            if ((contentView.getMeasuredHeight() + mChatBoxHeight ) >= getDeviceScreenHeight()){
+                lp.height =  getDeviceScreenHeight() - mChatBoxHeight - 16;
+            }else {
+                lp.height = height ;
+            }
+
+        }else {
             if (contentView.getHeight() >= height){
                 contentView.setMinimumHeight(height);
             }else {
-                ViewGroup.LayoutParams lp = contentView.getLayoutParams();
                 lp.height = height;
-                contentView.setLayoutParams(lp);
             }
+
         }
 
+        G.handler.postDelayed( ()->{
+            contentView.setLayoutParams(lp);
+        } , 60);
+
+    }
+
+    private int getDeviceScreenHeight(){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        mFrgActivity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.heightPixels;
     }
 
     private void setPopupBackground(int dark, int light) {
