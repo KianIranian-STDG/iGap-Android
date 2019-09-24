@@ -2221,5 +2221,15 @@
         <item>کیف پول یه حساب مجازی براتون می‌سازه که به شماره موبایل وصل می‌شه و دیگه لازم نیست کیف پول یا پول نقد یا کارت‌بانکی با خودتون ببرید.</item>
         <item>توی مغازه‌ها، توی تاکسی یا هر جایی که پذیرنده کیف پول هستند می‌تونید از دکمه اسکن استفاده کنید و خریدتونو لذت‌بخش‌تر کنید.</item>
     </array>
+    <string name="news_MHits">پربازدیدترین</string>
+    <string name="news_comment">نظرات</string>
+    <string name="news_emptyList">هیچ موردی برای نمایش موجود نیست.</string>
+    <string name="news_ergent">پربحث ترین</string>
+    <string name="news_groupTitle">گروه های خبری</string>
+    <string name="news_latest">آخرین خبرها</string>
+    <string name="news_mainTitle">اخبار آیگپ</string>
+    <string name="news_related_news">اخبار مرتبط</string>
+    <string name="news_share">اشتراک گذاری خبر</string>
+    <string name="news_write_comment">نظر شما چیست؟</string>
 
 </resources>

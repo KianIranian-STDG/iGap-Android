@@ -1,5 +1,6 @@
 package net.iGap.api;
 
+import net.iGap.news.repository.model.NewsComment;
 import net.iGap.news.repository.model.NewsDetail;
 import net.iGap.news.repository.model.NewsFPList;
 import net.iGap.news.repository.model.NewsGroup;
@@ -50,7 +51,7 @@ public interface NewsApi {
     Call<NewsDetail> getNewsDetail(@Query("articleId") int newsID);
 
     @GET("getNewsComments/igap/")
-    Call<NewsDetail> getNewsComment(@Query("articleId") int newsID, @Query("page") int page, @Query("perpage") int display);
+    Call<NewsComment> getNewsComment(@Query("articleId") int newsID, @Query("page") int page, @Query("perpage") int display);
 
     @FormUrlEncoded
     @POST("setComment/igap/")

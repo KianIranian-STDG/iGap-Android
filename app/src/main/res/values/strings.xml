@@ -2242,11 +2242,27 @@ Want to get it?</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
 
-    <string name="news_latest">Latest</string>
+    <!--<string name="news_latest">Latest</string>
     <string name="news_MHits">Most-Watched</string>
     <string name="news_ergent">Most_Read</string>
     <string name="news_emptyList">There is no item to show. \n Pull down to refresh.</string>
     <string name="news_mainTitle">IGap News</string>
     <string name="news_serverError">Something went wrong. Please try again.</string>
     <string name="news_groupTitle">News Group</string>
+    <string name="news_share">Share this news with your friends.</string>
+    <string name="news_comment">Comments</string>
+    <string name="news_write_comment">Write comment</string>
+    <string name="news_related_news">Related News</string>-->
+
+    <string name="news_MHits">پربازدیدترین</string>
+    <string name="news_comment">نظرات</string>
+    <string name="news_emptyList">هیچ موردی برای نمایش موجود نیست. \n برای بارگزاری مجدد صفحه را به سمت پایین بکشید.</string>
+    <string name="news_ergent">پربحث ترین</string>
+    <string name="news_groupTitle">گروه های خبری</string>
+    <string name="news_latest">آخرین خبرها</string>
+    <string name="news_mainTitle">اخبار آیگپ</string>
+    <string name="news_related_news">اخبار مرتبط</string>
+    <string name="news_share">اشتراک گذاری خبر</string>
+    <string name="news_write_comment">نظر شما چیست؟</string>
+    <string name="news_serverError">Something went wrong. Please try again.</string>
 </resources>

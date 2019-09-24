@@ -65,6 +65,8 @@ public class NewsPN {
         }
 
         public String getImage() {
+            if (image == null || image.isEmpty())
+                return null;
             return image;
         }
 

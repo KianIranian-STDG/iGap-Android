@@ -107,6 +107,9 @@ public class NewsListFrag extends BaseFragment {
                 fragment = NewsDetailFrag.newInstance();
                 fragmentTransaction.addToBackStack(fragment.getClass().getName());
             }
+            Bundle args = new Bundle();
+            args.putString("NewsID", slide.getId());
+            fragment.setArguments(args);
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         });
         binding.rcGroup.setAdapter(adapter);

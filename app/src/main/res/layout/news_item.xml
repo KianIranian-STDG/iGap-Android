@@ -69,7 +69,7 @@
                     app:layout_constraintTop_toTopOf="@+id/image"
                     app:layout_constraintRight_toLeftOf="@+id/image"
                     app:layout_constraintBottom_toTopOf="@+id/rootTitle"
-                    app:layout_constraintVertical_chainStyle="packed"/>
+                    app:layout_constraintVertical_chainStyle="spread"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     style="?textTitleColorSettingTheme"
@@ -121,9 +121,40 @@
                     android:gravity="center|right"
                     android:layout_marginTop="@dimen/dp4"
                     app:layout_constraintRight_toRightOf="@+id/source"
-                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/view"
                     app:layout_constraintTop_toBottomOf="@+id/rootTitle"
                     app:layout_constraintBottom_toBottomOf="@+id/image"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="?textTitleColorSettingTheme"
+                    android:id="@+id/view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/dp24"
+                    android:text="123"
+                    android:textSize="@dimen/dp12"
+                    android:justificationMode="inter_word"
+                    android:gravity="center"
+                    app:layout_constraintTop_toTopOf="@+id/title"
+                    app:layout_constraintBottom_toBottomOf="@+id/title"
+                    app:layout_constraintLeft_toRightOf="@+id/view_icon"
+                    app:layout_constraintRight_toLeftOf="@+id/title"
+                    app:layout_constraintVertical_chainStyle="packed"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/myIconTextViewStyleGray"
+                    android:id="@+id/view_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/dp24"
+                    android:text="@string/eye_icon"
+                    android:textSize="@dimen/dp20"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/dp8"
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/view"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

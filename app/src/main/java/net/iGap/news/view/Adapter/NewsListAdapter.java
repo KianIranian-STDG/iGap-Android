@@ -1,6 +1,7 @@
 package net.iGap.news.view.Adapter;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +77,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public class NewsViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView time, source, rootTitle, title;
+        private TextView time, source, rootTitle, title, view, view_icon;
         private ImageView image;
         private CardView container;
 
@@ -87,16 +88,29 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             rootTitle = itemView.findViewById(R.id.rootTitle);
             title = itemView.findViewById(R.id.title);
             image = itemView.findViewById(R.id.image);
+            view = itemView.findViewById(R.id.view);
+            view_icon = itemView.findViewById(R.id.view_icon);
             container = itemView.findViewById(R.id.container);
         }
 
         void initVH(int position) {
-            time.setText("27 اردیبهشت 1397");
-            source.setText("همشهری");
-            rootTitle.setText("اگه این روتیتر نبود چی میشد؟");
-            if (rootTitle.getText().equals(""))
+            time.setText(mData.getNews().get(position).getDate());
+            source.setText(mData.getNews().get(position).getSource());
+            title.setText(mData.getNews().get(position).getTitle());
+
+            String tempView = mData.getNews().get(position).getViewNum();
+            if (tempView == null || tempView.equals("0")) {
+                view.setVisibility(View.GONE);
+                view_icon.setVisibility(View.GONE);
+            }
+            else
+                view.setText(tempView);
+
+            String tempRoot = mData.getNews().get(position).getRootTitle();
+            if (tempRoot == null || tempRoot.equals(""))
                 rootTitle.setVisibility(View.GONE);
-            title.setText("" + mData.getNews().get(position).getTitle());
+            else
+                rootTitle.setText(tempRoot);
             Picasso.get()
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     .load(mData.getNews().get(position).getImage())

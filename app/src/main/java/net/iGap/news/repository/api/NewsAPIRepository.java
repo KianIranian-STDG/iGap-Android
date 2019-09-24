@@ -2,10 +2,12 @@ package net.iGap.news.repository.api;
 
 import android.util.Log;
 
+import net.iGap.G;
 import net.iGap.api.NewsApi;
 import net.iGap.api.apiService.ApiResponse;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.news.repository.model.NewsApiArg;
+import net.iGap.news.repository.model.NewsComment;
 import net.iGap.news.repository.model.NewsDetail;
 import net.iGap.news.repository.model.NewsFPList;
 import net.iGap.news.repository.model.NewsGroup;
@@ -284,11 +286,11 @@ public class NewsAPIRepository {
         });
     }
 
-    public void getNewsComment(int newsID, int start, int display, ApiResponse<NewsDetail> apiResponse) {
+    public void getNewsComment(int newsID, int start, int display, ApiResponse<NewsComment> apiResponse) {
         apiResponse.setProgressIndicator(true);
-        apiService.getNewsComment(newsID, start, display).enqueue(new Callback<NewsDetail>() {
+        apiService.getNewsComment(newsID, start, display).enqueue(new Callback<NewsComment>() {
             @Override
-            public void onResponse(Call<NewsDetail> call, Response<NewsDetail> response) {
+            public void onResponse(Call<NewsComment> call, Response<NewsComment> response) {
                 if (!response.isSuccessful()) {
                     onFailure(call, new Exception("" + response.code()));
                     return;
@@ -298,7 +300,7 @@ public class NewsAPIRepository {
             }
 
             @Override
-            public void onFailure(Call<NewsDetail> call, Throwable t) {
+            public void onFailure(Call<NewsComment> call, Throwable t) {
                 apiResponse.onFailed(t.getMessage());
                 apiResponse.setProgressIndicator(false);
             }

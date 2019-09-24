@@ -27,8 +27,8 @@ public class NewsFPList {
     }
 
     public NewsFPList addFakeData() {
-        List<Image> imageTemp = new ArrayList<>();
-        imageTemp.add(new Image(null, null, null, null));
+        List<NewsImage> imageTemp = new ArrayList<>();
+        imageTemp.add(new NewsImage(null, null, null, null));
         List<NewsContent> tempContent = new ArrayList<>();
         tempContent.add(new NewsContent("101", "Root Title", "Title", "Lead",
                 imageTemp, "10/10/1993", "11/10/1993", "www.google.com", "www.google.com"));
@@ -103,7 +103,7 @@ public class NewsFPList {
         @SerializedName("lead")
         private String lead;
         @SerializedName("image")
-        private List<Image> image;
+        private List<NewsImage> image;
         @SerializedName("originalDate")
         private String originalDate;
         @SerializedName("publishedDate")
@@ -116,7 +116,7 @@ public class NewsFPList {
         public NewsContent() {
         }
 
-        public NewsContent(String id, String rootTitle, String title, String lead, List<Image> image,
+        public NewsContent(String id, String rootTitle, String title, String lead, List<NewsImage> image,
                            String originalDate, String publishedDate, String internalLink, String externalLink) {
             this.id = id;
             this.rootTitle = rootTitle;
@@ -193,65 +193,12 @@ public class NewsFPList {
             this.externalLink = externalLink;
         }
 
-        public List<Image> getImage() {
+        public List<NewsImage> getImage() {
             return image;
         }
 
-        public void setImage(List<Image> image) {
+        public void setImage(List<NewsImage> image) {
             this.image = image;
-        }
-    }
-
-    public class Image {
-        @SerializedName("Original")
-        private String original;
-        @SerializedName("thumb128")
-        private String tmb128;
-        @SerializedName("thumb256")
-        private String tmb256;
-        @SerializedName("thumb512")
-        private String tmb512;
-
-        public Image() {
-        }
-
-        public Image(String original, String tmb128, String tmb256, String tmb512) {
-            this.original = original;
-            this.tmb128 = tmb128;
-            this.tmb256 = tmb256;
-            this.tmb512 = tmb512;
-        }
-
-        public String getOriginal() {
-            return original;
-        }
-
-        public void setOriginal(String original) {
-            this.original = original;
-        }
-
-        public String getTmb128() {
-            return tmb128;
-        }
-
-        public void setTmb128(String tmb128) {
-            this.tmb128 = tmb128;
-        }
-
-        public String getTmb256() {
-            return tmb256;
-        }
-
-        public void setTmb256(String tmb256) {
-            this.tmb256 = tmb256;
-        }
-
-        public String getTmb512() {
-            return tmb512;
-        }
-
-        public void setTmb512(String tmb512) {
-            this.tmb512 = tmb512;
         }
     }
 
