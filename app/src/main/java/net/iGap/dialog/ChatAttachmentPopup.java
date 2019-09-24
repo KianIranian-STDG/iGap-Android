@@ -86,6 +86,7 @@ public class ChatAttachmentPopup {
     private Animator animation;
     private View contentView;
     private int mChatBoxHeight;
+    private int mMessagesLayoutHeight;
 
     private ChatAttachmentPopup() {
     }
@@ -124,6 +125,11 @@ public class ChatAttachmentPopup {
         return this;
     }
 
+    public ChatAttachmentPopup setMessagesLayoutHeight(int measuredHeight) {
+        this.mMessagesLayoutHeight = measuredHeight ;
+        return this ;
+    }
+    
     public ChatAttachmentPopup setFragment(Fragment frg) {
         this.mFragment = frg;
         return this;
@@ -193,20 +199,29 @@ public class ChatAttachmentPopup {
             setPopupBackground(R.drawable.popup_background_dark , R.drawable.popup_background);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) contentView.setElevation(4);
 
+            if ((contentView.getMeasuredHeight() + mChatBoxHeight ) >= getDeviceScreenHeight()){
+                lp.height =  getDeviceScreenHeight() - mChatBoxHeight - 16;
+
+            }else {
+                lp.height = height ;
+            }
+
             lp.leftMargin = 10 ;
             lp.rightMargin = 10 ;
             lp.bottomMargin = mChatBoxHeight + 10;
 
         }else {
             setPopupBackground(R.color.navigation_dark_mode_bg , R.color.chat_bottom_bg);
-        }
 
-        if (height != ViewGroup.LayoutParams.WRAP_CONTENT){
             if (contentView.getHeight() >= height){
                 contentView.setMinimumHeight(height);
             }else {
                 lp.height = height;
             }
+
+            lp.bottomMargin = 0;
+            lp.leftMargin = 0 ;
+            lp.rightMargin = 0 ;
         }
         contentView.setLayoutParams(lp);
 
@@ -224,18 +239,31 @@ public class ChatAttachmentPopup {
         if (height == 0){
             height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
-        }
+            if ((contentView.getMeasuredHeight() + mChatBoxHeight ) >= getDeviceScreenHeight()){
+                lp.height =  getDeviceScreenHeight() - mChatBoxHeight - 16;
+            }else {
+                lp.height = height ;
+            }
 
-        if (height != ViewGroup.LayoutParams.WRAP_CONTENT){
+        }else {
             if (contentView.getHeight() >= height){
                 contentView.setMinimumHeight(height);
             }else {
                 lp.height = height;
             }
+
         }
-        contentView.setLayoutParams(lp);
 
+        G.handler.postDelayed( ()->{
+            contentView.setLayoutParams(lp);
+        } , 60);
 
+    }
+
+    private int getDeviceScreenHeight(){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        mFrgActivity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.heightPixels;
     }
 
     private void setPopupBackground(int dark, int light) {

@@ -3077,6 +3077,7 @@ public class FragmentChat extends BaseFragment
 
         imvAttachFileButton.setOnClickListener(view -> {
             if (mAttachmentPopup == null) initPopupAttachment();
+            mAttachmentPopup.setMessagesLayoutHeight(recyclerView.getMeasuredHeight());
             mAttachmentPopup.show();
         });
 
@@ -3208,6 +3209,7 @@ public class FragmentChat extends BaseFragment
                 .setFragment(FragmentChat.this)
                 .setFragmentActivity(G.fragmentActivity)
                 .setSharedPref(sharedPreferences)
+                .setMessagesLayoutHeight(recyclerView.getMeasuredHeight())
                 .setChatBoxHeight(viewAttachFile.getMeasuredHeight())
                 .setListener(FragmentChat.this)
                 .build();
@@ -5587,7 +5589,6 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
 
-        if (mAttachmentPopup != null) mAttachmentPopup.updateHeight();
 
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -5608,6 +5609,9 @@ public class FragmentChat extends BaseFragment
         }, 300);
 
         super.onConfigurationChanged(newConfig);
+
+        if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.updateHeight();
+
     }
 
     /**
