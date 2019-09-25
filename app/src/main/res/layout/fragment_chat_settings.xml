@@ -104,7 +104,7 @@
 
                     <View
                         android:id="@+id/divider0"
-                        android:layout_width="@dimen/dp2"
+                        android:layout_width="3dp"
                         android:layout_height="0dp"
                         android:layout_marginLeft="@dimen/dp8"
                         android:layout_marginTop="@dimen/dp4"
@@ -133,7 +133,7 @@
                         android:padding="@dimen/dp4"
                         android:singleLine="true"
                         android:text="i use iGap and it is so good"
-                        android:textColor="?iGapMessageTextColor"
+                        android:textColor="?attr/iGapReceivedMessageTextColor"
                         app:layout_constraintLeft_toLeftOf="@id/replayUserName"
                         app:layout_constraintRight_toRightOf="@id/replayUserName"
                         app:layout_constraintTop_toBottomOf="@id/replayUserName" />
@@ -145,7 +145,7 @@
                         android:layout_marginTop="@dimen/dp4"
                         android:padding="@dimen/dp4"
                         android:text="really ?!"
-                        android:textColor="?iGapMessageTextColor"
+                        android:textColor="?attr/iGapReceivedMessageTextColor"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/replayMessage" />
@@ -155,7 +155,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/edited"
-                        android:textColor="?iGapSubtitleTextColor"
+                        android:textColor="?iGapReceivedOtherTextColor"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/message" />
@@ -166,7 +166,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="right"
                         android:text="10:36 AM"
-                        android:textColor="?iGapSubtitleTextColor"
+                        android:textColor="?iGapReceivedOtherTextColor"
                         app:layout_constraintBottom_toBottomOf="@id/edited"
                         app:layout_constraintLeft_toRightOf="@id/edited"
                         app:layout_constraintRight_toRightOf="parent"
@@ -191,14 +191,14 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp4"
                         android:text="yes it is"
-                        android:textColor="?iGapMessageTextColor"
+                        android:textColor="?iGapSendMessageTextColor"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/seenIcon"
-                        style="@style/greenIconTextViewStyle"
+                        style="@style/primaryIconTextViewStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp4"
@@ -213,7 +213,7 @@
                         android:gravity="right"
                         android:padding="@dimen/dp4"
                         android:text="10:36 AM"
-                        android:textColor="?iGapSubtitleTextColor"
+                        android:textColor="?iGapSendMessageOtherTextColor"
                         app:layout_constraintBottom_toBottomOf="@id/seenIcon"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toLeftOf="@id/seenIcon"

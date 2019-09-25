@@ -2,6 +2,8 @@ package net.iGap;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
+import android.util.TypedValue;
 
 import net.iGap.model.ThemeModel;
 import net.iGap.module.SHP_SETTING;
@@ -1022,7 +1024,7 @@ public class Theme {
             case BROWN_COMPLETE:
                 return R.style.iGapBrownTheme;*/
             case GREY:
-            /*case GREY_COMPLETE:*/
+                /*case GREY_COMPLETE:*/
                 return R.style.iGapGrayTheme;
             /*case BLUE_GREY:
             case BLUE_GREY_COMPLETE:
@@ -1041,24 +1043,24 @@ public class Theme {
             case DARK:
                 return R.color.navigation_dark_mode_bg;
             case RED:
-                return R.color.red;
+                return R.color.redTheme;
             case PINK:
                 return R.color.pink;
             case PURPLE:
                 return R.color.purple;
             case GREEN:
-                return R.color.green;
+                return R.color.greenThem;
             case ORANGE:
                 return R.color.orange;
             case GREY:
-                return R.color.gray;
+                return R.color.grayTheme;
             case DEFAULT:
             default:
                 return R.color.green;
         }
     }
 
-    public List<ThemeModel> getThemeList(){
+    public List<ThemeModel> getThemeList() {
         List<ThemeModel> themeModelList = new ArrayList<>();
         themeModelList.add(new ThemeModel(Theme.DEFAULT, R.string.default_theme_title));
         themeModelList.add(new ThemeModel(Theme.DARK, R.string.dark_theme_title));
@@ -1071,6 +1073,58 @@ public class Theme {
         themeModelList.add(new ThemeModel(Theme.ORANGE, R.string.orange_theme_title));
         themeModelList.add(new ThemeModel(Theme.GREY, R.string.gray_theme_title));
         return themeModelList;
+    }
+
+    public int getReceivedMessageColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapReceivedMessageTextColor);
+    }
+
+    public int getReceivedMessageBackgroundColor(Context context) {
+        return getColorFromAttr(context, R.attr.colorPrimaryLight);
+    }
+
+    public int getReceivedMessageOtherTextColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapReceivedOtherTextColor);
+    }
+
+    public int getSendChatBubbleColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapSendMessageBubbleColor);
+    }
+
+    public int getReceivedChatBubbleColor(Context context) {
+        return getColorFromAttr(context, R.attr.colorPrimaryLight);
+    }
+
+    public int getPrimaryTextIconColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapPrimaryIconTextColor);
+    }
+
+    public int getSendMessageOtherTextColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapSendMessageOtherTextColor);
+    }
+
+    public int getSendMessageTextColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapSendMessageTextColor);
+    }
+
+    public int getMessageVerticalLineColor(Context context) {
+        return getColorFromAttr(context, R.attr.colorAccentDark);
+    }
+
+    public int getPrimaryTextColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapPrimaryTextColor);
+    }
+
+    public int getForwardFromTextColor(Context context) {
+        return getColorFromAttr(context, R.attr.colorAccentDark);
+    }
+
+    private int getColorFromAttr(@NotNull Context context, int attrResId) {
+        TypedValue typedValue = new TypedValue();
+        TypedArray a = context.obtainStyledAttributes(typedValue.data, new int[]{attrResId});
+        int color = a.getColor(0, 0);
+        a.recycle();
+        return color;
     }
 
 }

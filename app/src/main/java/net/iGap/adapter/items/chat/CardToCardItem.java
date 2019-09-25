@@ -10,9 +10,7 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.content.res.TypedArray;
 import android.graphics.Typeface;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -21,13 +19,14 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.CardToCardValue;
 import net.iGap.module.FontIconTextView;
 import net.iGap.proto.ProtoGlobal;
@@ -88,7 +87,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             cardToCardAmountTv = new TextView(view.getContext());
             cardIcon = new FontIconTextView(view.getContext());
 
-            messageTv.setTextColor(Utils.darkModeHandler(view.getContext()));
+            messageTv.setTextColor(new Theme().getReceivedMessageColor(messageTv.getContext()));
             setTextSize(messageTv, R.dimen.smallTextSize);
             setTypeFace(messageTv);
 
@@ -99,7 +98,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             payButton.setTextColor(getColor(R.color.white));
 
 
-            cardToCardAmountTv.setTextColor(Utils.darkModeHandler(getContext()));
+            cardToCardAmountTv.setTextColor(new Theme().getReceivedMessageColor(cardToCardAmountTv.getContext()));
             cardToCardAmountTv.setGravity(Gravity.CENTER);
             setTextSize(cardToCardAmountTv, R.dimen.standardTextSize);
             setTypeFace(cardToCardAmountTv, Typeface.BOLD);
@@ -107,11 +106,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             cardIcon.setId(R.id.cardToCard_icon);
             cardIcon.setText(getResources().getString(R.string.icon_card_to_card));
             setTextSize(cardIcon, R.dimen.dp32);
-            TypedValue typedValue = new TypedValue();
-            TypedArray a = cardIcon.getContext().obtainStyledAttributes(typedValue.data, new int[]{R.attr.iGapPrimaryIconTextColor});
-            int color = a.getColor(0, 0);
-            a.recycle();
-            cardIcon.setTextColor(color);
+            cardIcon.setTextColor(ContextCompat.getColor(cardIcon.getContext(), R.color.white));
 
             lineView = new View(getContext());
             lineView.setBackgroundColor(getColor(R.color.gray_9d));

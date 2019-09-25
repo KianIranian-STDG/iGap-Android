@@ -1,5 +1,6 @@
 package net.iGap.module;
 
+import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -76,8 +78,8 @@ public class MakeButtons {
         return buttonList;
     }
 
-    public static LinearLayout createLayout() {
-        LinearLayout linearLayout_179 = new LinearLayout(G.context);
+    public static LinearLayout createLayout(Context context) {
+        LinearLayout linearLayout_179 = new LinearLayout(context);
         linearLayout_179.setOrientation(HORIZONTAL);
         LinearLayout.LayoutParams layout_937 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layout_937.topMargin = 4;
@@ -132,7 +134,7 @@ public class MakeButtons {
                 textWeight = 4f;
             }
         }
-        CardView card = new CardView(G.context);
+        CardView card = new CardView(mainLayout.getContext());
 
         // Set the CardView layoutParams
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -202,8 +204,8 @@ public class MakeButtons {
                 btn1.setText(entity.getLable());
             }
             btn1.setTextSize(16);
-            card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
-            btn1.setTextColor(Color.parseColor("#000000"));
+            card.setBackgroundResource(R.drawable.background_button_card_to_card);
+            btn1.setTextColor(ContextCompat.getColor(btn1.getContext(), R.color.white));
 
             LinearLayout.LayoutParams layout_844 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
 

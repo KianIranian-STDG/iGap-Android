@@ -3,7 +3,6 @@ package net.iGap.adapter.items.chat;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -15,20 +14,18 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
-
-import com.daimajia.swipe.SwipeLayout;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.CircleImageView;
@@ -36,7 +33,6 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 
 import static android.view.Gravity.CENTER;
-import static android.view.Gravity.CENTER_VERTICAL;
 import static android.view.Gravity.LEFT;
 import static android.widget.LinearLayout.HORIZONTAL;
 import static android.widget.LinearLayout.VERTICAL;
@@ -103,10 +99,10 @@ public class ViewMaker {
         return text;
     }
 
-    static View getViewReplay() {
+    static View getViewReplay(Context context) {
         LinearLayout cslr_replay_layout = new LinearLayout(context);
         cslr_replay_layout.setId(R.id.cslr_replay_layout);
-        cslr_replay_layout.setBackgroundColor(context.getResources().getColor(R.color.messageBox_replyBoxBackgroundSend));
+        /*cslr_replay_layout.setBackgroundColor(context.getResources().getColor(R.color.messageBox_replyBoxBackgroundSend));*/
         cslr_replay_layout.setClickable(true);
         cslr_replay_layout.setOrientation(HORIZONTAL);
         cslr_replay_layout.setPadding(i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(R.dimen.messageContainerPaddingLeftRight), i_Dp(R.dimen.messageContainerPaddingLeftRight));
@@ -121,7 +117,7 @@ public class ViewMaker {
 
         View verticalLine = new View(context);
         verticalLine.setId(R.id.verticalLine);
-        verticalLine.setBackgroundColor(Color.parseColor("#f7ab07"));
+        verticalLine.setBackgroundColor(new Theme().getMessageVerticalLineColor(verticalLine.getContext()));
         LinearLayout.LayoutParams layout_81 = new LinearLayout.LayoutParams(dpToPixel(3), ViewGroup.LayoutParams.MATCH_PARENT);
 
         if (HelperCalander.isPersianUnicode) {
@@ -160,9 +156,7 @@ public class ViewMaker {
         chslr_txt_replay_from.setSingleLine(true);
         chslr_txt_replay_from.setPadding(0, 0, 0, 0);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            chslr_txt_replay_from.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
-        }
+        chslr_txt_replay_from.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
 
         chslr_txt_replay_from.setText("");
 
@@ -182,10 +176,8 @@ public class ViewMaker {
         chslr_txt_replay_message.setPadding(0, 0, 0, 0);
         chslr_txt_replay_message.setText("");
 
-        chslr_txt_replay_message.setTextColor(Color.WHITE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            chslr_txt_replay_message.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
-        }
+        chslr_txt_replay_message.setTextColor(new Theme().getPrimaryTextColor(chslr_txt_replay_message.getContext()));
+        chslr_txt_replay_message.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
 
         chslr_txt_replay_message.setTextAppearance(context, R.style.ChatMessages_EmojiTextView);
         setTextSize(chslr_txt_replay_message, R.dimen.dp12);
@@ -213,7 +205,7 @@ public class ViewMaker {
         cslr_ll_forward.setLayoutParams(layout_687);
 
         View View_997 = new View(context);
-        View_997.setBackgroundColor(Color.parseColor(G.textBubble));
+        View_997.setBackgroundColor(new Theme().getMessageVerticalLineColor(View_997.getContext()));
         LinearLayout.LayoutParams layout_547 = new LinearLayout.LayoutParams(dpToPixel(2), ViewGroup.LayoutParams.MATCH_PARENT);
         layout_547.rightMargin = dpToPixel(3);
         View_997.setLayoutParams(layout_547);
@@ -223,7 +215,7 @@ public class ViewMaker {
         TextView cslr_txt_prefix_forward = new AppCompatTextView(context);
         cslr_txt_prefix_forward.setId(R.id.cslr_txt_prefix_forward);
         cslr_txt_prefix_forward.setText(context.getResources().getString(R.string.forwarded_from));
-        cslr_txt_prefix_forward.setTextColor(Color.parseColor(G.textBubble));
+        cslr_txt_prefix_forward.setTextColor(new Theme().getSendMessageTextColor(cslr_txt_prefix_forward.getContext()));
         setTextSize(cslr_txt_prefix_forward, R.dimen.dp12);
         cslr_txt_prefix_forward.setSingleLine(true);
         cslr_txt_prefix_forward.setTypeface(G.typeface_IRANSansMobile_Bold);
@@ -237,14 +229,13 @@ public class ViewMaker {
         cslr_txt_forward_from.setId(R.id.cslr_txt_forward_from);
         cslr_txt_forward_from.setMinimumWidth(i_Dp(R.dimen.dp100));
         cslr_txt_forward_from.setMaxWidth(i_Dp(R.dimen.dp140));
-        cslr_txt_forward_from.setTextColor(Color.parseColor(G.textBubble));
+        cslr_txt_forward_from.setTextColor(new Theme().getForwardFromTextColor(cslr_txt_forward_from.getContext()));
         setTextSize(cslr_txt_forward_from, R.dimen.dp12);
         cslr_txt_forward_from.setSingleLine(true);
         cslr_txt_forward_from.setTypeface(G.typeface_IRANSansMobile_Bold);
         LinearLayout.LayoutParams layout_119 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         cslr_txt_forward_from.setLayoutParams(layout_119);
         cslr_ll_forward.addView(cslr_txt_forward_from);
-
 
         return cslr_ll_forward;
     }
@@ -355,8 +346,7 @@ public class ViewMaker {
     public static float pixelsToDp(float px, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        float dp = px / ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-        return dp;
+        return px / ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
     public static int i_Dp(int dpSrc) {
@@ -375,18 +365,17 @@ public class ViewMaker {
     }
 
     public static void setTypeFace(TextView v) {
-        v.setTypeface(G.typeface_IRANSansMobile);
+        v.setTypeface(ResourcesCompat.getFont(v.getContext(), R.font.main_font));
     }
 
     public static void setLayoutDirection(View view, int direction) {
-
         ViewCompat.setLayoutDirection(view, direction);
     }
 
     //*******************************************************************************************
 
 
-    public static View getNewItemRoom() {
+    /*public static View getNewItemRoom() {
 
         boolean isRtl = HelperCalander.isPersianUnicode;
         boolean isDarkTheme = G.isDarkTheme;
@@ -396,17 +385,17 @@ public class ViewMaker {
         root.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
 
-        /**
-         * init avatar image
-         * */
+        *//**
+     * init avatar image
+     * *//*
 
         CircleImageView avatarImageView = new CircleImageView(G.context);
         avatarImageView.setId(R.id.iv_chatCell_userAvatar);
 
 
-        /**
-         * init chat icon(channel,group,pv,mute and unMute)
-         * */
+        *//**
+     * init chat icon(channel,group,pv,mute and unMute)
+     * *//*
 
         MaterialDesignTextView chatIcon = new MaterialDesignTextView(G.context);
         chatIcon.setId(R.id.tv_chatCell_chatIcon);
@@ -414,9 +403,9 @@ public class ViewMaker {
         chatIcon.setTextSize(R.dimen.dp14);
 
 
-        /**
-         * init room name
-         * */
+        *//**
+     * init room name
+     * *//*
 
         EmojiTextViewE roomName = new EmojiTextViewE(G.context);
         roomName.setId(R.id.tv_chatCell_roomName);
@@ -427,18 +416,18 @@ public class ViewMaker {
         roomName.setTextColor(isDarkTheme ? Color.parseColor(G.textTitleTheme) : G.context.getResources().getColor(R.color.black90));
 
 
-        /**
-         * init verify room
-         * */
+        *//**
+     * init verify room
+     * *//*
 
         AppCompatImageView verify = new AppCompatImageView(G.context);
         verify.setId(R.id.tv_chatCell_verify);
         verify.setImageResource(R.drawable.ic_verify);
 
 
-        /**
-         * init last message sender name
-         * */
+        *//**
+     * init last message sender name
+     * *//*
 
         EmojiTextViewE lastMessageSender = new EmojiTextViewE(G.context);
         lastMessageSender.setId(R.id.tv_chatCell_firstTextView);
@@ -449,9 +438,9 @@ public class ViewMaker {
         lastMessageSender.setEmojiSize(i_Dp(R.dimen.dp14));
 
 
-        /**
-         * init last message content
-         * */
+        *//**
+     * init last message content
+     * *//*
 
         EmojiTextViewE lastMessage = new EmojiTextViewE(G.context);
         lastMessage.setId(R.id.tv_chatCell_secondTextView);
@@ -463,9 +452,9 @@ public class ViewMaker {
         lastMessage.setEmojiSize(i_Dp(R.dimen.dp13));
 
 
-        /**
-         * init last message content type (image,file,voice)
-         * */
+        *//**
+     * init last message content type (image,file,voice)
+     * *//*
 
         EmojiTextViewE lastMessageType = new EmojiTextViewE(G.context);
         lastMessageType.setId(R.id.tv_chatCell_thirdTextView);
@@ -477,9 +466,9 @@ public class ViewMaker {
         lastMessageType.setEmojiSize(i_Dp(R.dimen.dp13));
 
 
-        /**
-         * init room notification
-         * */
+        *//**
+     * init room notification
+     * *//*
 
         MaterialDesignTextView mute = new MaterialDesignTextView(G.context);
         mute.setId(R.id.iv_chatCell_mute);
@@ -488,18 +477,18 @@ public class ViewMaker {
         setTextSize(mute, R.dimen.dp13);
 
 
-        /**
-         * init last message status(read ,send , failed)
-         * */
+        *//**
+     * init last message status(read ,send , failed)
+     * *//*
 
         AppCompatImageView messageStatus = new AppCompatImageView(G.context);
         messageStatus.setId(R.id.iv_chatCell_messageStatus);
         messageStatus.setColorFilter(Color.parseColor(G.tintImage), PorterDuff.Mode.SRC_IN);
 
 
-        /**
-         * init last message send data and time
-         * */
+        *//**
+     * init last message send data and time
+     * *//*
 
         AppCompatTextView messageData = new AppCompatTextView(G.context);
         messageData.setId(R.id.tv_chatCell_messageData);
@@ -509,9 +498,9 @@ public class ViewMaker {
         setTypeFace(messageData);
 
 
-        /**
-         * init room unRead message count
-         * */
+        *//**
+     * init room unRead message count
+     * *//*
 
         BadgeView badgeView = new BadgeView(G.context);
         badgeView.getTextView().setId(R.id.iv_chatCell_messageCount);
@@ -519,9 +508,9 @@ public class ViewMaker {
         setTypeFace(badgeView.getTextView());
 
 
-        /**
-         * init pinned room on top
-         * */
+        *//**
+     * init pinned room on top
+     * *//*
 
         MaterialDesignTextView pinnedMessage = new MaterialDesignTextView(G.context);
         pinnedMessage.setId(R.id.iv_chatCell_pinnedMessage);
@@ -532,9 +521,11 @@ public class ViewMaker {
         setTextSize(pinnedMessage, R.dimen.dp20);
 
 
-        /**
-         * set views dependency
-         * */
+        */
+
+    /**
+     * set views dependency
+     *//*
 
 
         root.addView(avatarImageView);
@@ -551,10 +542,10 @@ public class ViewMaker {
         root.addView(pinnedMessage);
 
         return root;
-    }
+    }*/
 
 
-    public static View getViewItemRoom() {
+    /*public static View getViewItemRoom() {
 
         LinearLayout root_chat_sub_layout = new LinearLayout(G.context);
         root_chat_sub_layout.setId(R.id.root_chat_sub_layout);
@@ -883,8 +874,7 @@ public class ViewMaker {
         root_chat_sub_layout.addView(linearLayout_849);
 
         return root_chat_sub_layout;
-    }
-
+    }*/
     public static View getViewItemCall() {
 
         LinearLayout linearLayout_205 = new LinearLayout(G.context);
@@ -1019,7 +1009,7 @@ public class ViewMaker {
         return linearLayout_205;
     }
 
-    public static View getViewRegisteredContacts() {
+    /*public static View getViewRegisteredContacts() {
 
         LinearLayout linearLayout_main = new LinearLayout(G.context);
         linearLayout_main.setBackgroundColor(Color.parseColor(G.backgroundTheme));
@@ -1178,10 +1168,10 @@ public class ViewMaker {
         // animateCheckBoxParams.rightMargin=i_Dp(R.dimen.dp24);
         // animateCheckBoxParams.leftMargin=i_Dp(R.dimen.dp24);
         animateCheckBox.setLayoutParams(animateCheckBoxParams);
-     /*   animateCheckBoxParams.gravity = Gravity.BOTTOM;
+     *//*   animateCheckBoxParams.gravity = Gravity.BOTTOM;
         animateCheckBoxParams.gravity = Gravity.LEFT;
 
-        animateCheckBoxParams.gravity = Gravity.START;*/
+        animateCheckBoxParams.gravity = Gravity.START;*//*
 
         // animateCheckBoxParams.leftMargin=90;
 
@@ -1199,8 +1189,8 @@ public class ViewMaker {
 
         if (HelperCalander.isPersianUnicode) {
             layout_445.rightMargin = i_Dp(R.dimen.dp8);
-         /*   title.setPadding(i_Dp(R.dimen.dp48), 0, 0, 0);
-            subtitle.setPadding(i_Dp(R.dimen.dp48), 0, 0, 0);*/
+         *//*   title.setPadding(i_Dp(R.dimen.dp48), 0, 0, 0);
+            subtitle.setPadding(i_Dp(R.dimen.dp48), 0, 0, 0);*//*
         } else {
             layout_445.leftMargin = i_Dp(R.dimen.dp8);
         }
@@ -1239,5 +1229,5 @@ public class ViewMaker {
 
 
         return linearLayout_main;
-    }
+    }*/
 }

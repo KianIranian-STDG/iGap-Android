@@ -86,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="@drawable/round_button_selected_bg"
+                    android:background="@drawable/button_selector"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -95,7 +95,7 @@
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
                     android:text="@string/all"
-                    android:textColor="@color/white"
+                    android:textColor="@color/button_text_color_selector"
                     android:textSize="@dimen/smallTextSize" />
 
                 <TextView
@@ -103,7 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="@drawable/round_button_disabled_bg"
+                    android:background="@drawable/button_selector"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -112,7 +112,7 @@
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
                     android:text="@string/missed"
-                    android:textColor="@color/gray_4c"
+                    android:textColor="@color/button_text_color_selector"
                     android:textSize="@dimen/smallTextSize" />
 
 
@@ -121,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="@drawable/round_button_disabled_bg"
+                    android:background="@drawable/button_selector"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -130,7 +130,7 @@
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
                     android:text="@string/incoming"
-                    android:textColor="@color/gray_4c"
+                    android:textColor="@color/button_text_color_selector"
                     android:textSize="@dimen/smallTextSize" />
 
                 <TextView
@@ -138,7 +138,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="@drawable/round_button_disabled_bg"
+                    android:background="@drawable/button_selector"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -147,7 +147,7 @@
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
                     android:text="@string/un_answered"
-                    android:textColor="@color/gray_4c"
+                    android:textColor="@color/button_text_color_selector"
                     android:textSize="@dimen/smallTextSize" />
 
 
@@ -156,7 +156,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="@drawable/round_button_disabled_bg"
+                    android:background="@drawable/button_selector"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -165,7 +165,7 @@
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
                     android:text="@string/outgoing"
-                    android:textColor="@color/gray_4c"
+                    android:textColor="@color/button_text_color_selector"
                     android:textSize="@dimen/smallTextSize" />
 
             </LinearLayout>

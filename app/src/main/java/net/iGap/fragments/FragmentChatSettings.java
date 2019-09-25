@@ -87,16 +87,8 @@ public class FragmentChatSettings extends BaseFragment {
         binding.themeColorList.setNestedScrollingEnabled(false);
         binding.themeColorList.setAdapter(adapter);
 
-        TypedValue typedValue = new TypedValue();
-        TypedArray a = getContext().obtainStyledAttributes(typedValue.data, new int[]{R.attr.colorPrimaryLight});
-        int color = a.getColor(0, 0);
-        a.recycle();
-        setChatReceivedChatBubble(color);
-
-        a = getContext().obtainStyledAttributes(typedValue.data, new int[]{R.attr.iGapSendMessageBubbleColor});
-        color = a.getColor(0, 0);
-        a.recycle();
-        setChatSendBubble(color);
+        setChatReceivedChatBubble(new Theme().getReceivedChatBubbleColor(getContext()));
+        setChatSendBubble(new Theme().getSendChatBubbleColor(getContext()));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             TypedValue tV = new TypedValue();
@@ -150,6 +142,13 @@ public class FragmentChatSettings extends BaseFragment {
                 ft.commit();
             }
         });
+
+        viewModel.getUpdateTextSizeSampleView().observe(getViewLifecycleOwner(), textSize -> {
+            if (textSize != null) {
+                binding.message.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
+                binding.senderMessage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
+            }
+        });
     }
 
     public void dateIsChanged() {
@@ -171,7 +170,7 @@ public class FragmentChatSettings extends BaseFragment {
     }
 
     private void setTheme() {
-        if (getContext()!= null) {
+        if (getContext() != null) {
             getContext().getTheme().applyStyle(new Theme().getTheme(getContext()), true);
         }
     }

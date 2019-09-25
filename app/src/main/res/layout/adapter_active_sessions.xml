@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/dp8"
         android:text="@string/current_session"
-        android:textColor="@color/setting_items_value_color"
+        android:textColor="?attr/colorPrimary"
         android:textSize="@dimen/largeTextSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,13 +55,14 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/country"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp8"
         android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toBottomOf="@id/countryTitle"
         app:layout_constraintEnd_toStartOf="@id/terminate"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/countryTitle"
         app:layout_constraintTop_toTopOf="@id/countryTitle" />
 
@@ -91,13 +92,14 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/createTime"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp8"
         android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toBottomOf="@id/createTimeTitle"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/createTimeTitle"
         app:layout_constraintTop_toTopOf="@id/createTimeTitle" />
 

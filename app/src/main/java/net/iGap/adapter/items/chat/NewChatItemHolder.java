@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Util.Utils;
@@ -59,8 +60,9 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
     public NewChatItemHolder(@NonNull View itemView) {
         super(itemView);
-
         context = itemView.getContext();
+
+        int otherColor = new Theme().getReceivedMessageOtherTextColor(itemView.getContext());
         ConstraintSet set = new ConstraintSet();
         itemContainer = new LinearLayout(itemView.getContext());
 
@@ -102,16 +104,19 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         setTypeFace(signatureTv);
         signatureTv.setSingleLine(true);
         signatureTv.setGravity(CENTER_VERTICAL);
+        signatureTv.setTextColor(otherColor);
 
         viewsLabelTv = new TextView(itemView.getContext());
         viewsLabelTv.setId(R.id.tv_chatItem_viewLabel);
         viewsLabelTv.setSingleLine(true);
+        viewsLabelTv.setTextColor(otherColor);
         setTypeFace(viewsLabelTv);
         setTextSize(viewsLabelTv, R.dimen.verySmallTextSize);
 
         eyeIconTv = new FontIconTextView(itemView.getContext());
         eyeIconTv.setId(R.id.ll_chatItem_viewIcon);
         eyeIconTv.setText(R.string.eye_icon);
+        eyeIconTv.setTextColor(otherColor);
         setTextSize(eyeIconTv, R.dimen.standardTextSize);
 
         messageStatusTv = new FontIconTextView(itemView.getContext());
@@ -122,12 +127,18 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         messageTimeTv = new AppCompatTextView(itemView.getContext());
         messageTimeTv.setId(R.id.tv_chatItem_time);
         setTextSize(messageTimeTv, R.dimen.verySmallTextSize);
+        messageTimeTv.setPadding(dpToPx(2), 0, dpToPx(2), 0);
+        messageTimeTv.setSingleLine(true);
+        messageTimeTv.setTextColor(otherColor);
+        setTypeFace(messageTimeTv);
 
         voteUpTv.setSingleLine(true);
+        voteUpTv.setTextColor(otherColor);
         setTextSize(voteUpTv, R.dimen.verySmallTextSize);
         setTypeFace(voteUpTv);
 
         voteDownTv.setSingleLine(true);
+        voteDownTv.setTextColor(otherColor);
         setTypeFace(voteDownTv);
         setTextSize(voteDownTv, R.dimen.verySmallTextSize);
 
@@ -138,26 +149,20 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
         chatBloke.setPadding(dpToPx(4), dpToPx(4), dpToPx(4), dpToPx(4));
 
-        messageTimeTv.setPadding(dpToPx(2), 0, dpToPx(2), 0);
-        messageTimeTv.setSingleLine(true);
-        setTypeFace(messageTimeTv);
-
-
         voteUpIv = new FontIconTextView(itemView.getContext());
         voteUpIv.setText(R.string.heart_icon);
         voteUpIv.setGravity(BOTTOM);
+        voteUpIv.setTextColor(otherColor);
         setTextSize(voteUpIv, R.dimen.standardTextSize);
 
         voteDownIv = new FontIconTextView(itemView.getContext());
         voteDownIv.setText(R.string.dislike_icon);
         voteDownIv.setGravity(BOTTOM);
         voteDownIv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        voteDownIv.setTextColor(otherColor);
         setTextSize(voteDownIv, R.dimen.standardTextSize);
 
-        /*if (G.isDarkTheme)
-            channelForwardIv.setImageResource(R.drawable.ic_channel_forward_dark);
-        else*/
-            channelForwardIv.setImageResource(R.drawable.ic_channel_forward_light);
+        channelForwardIv.setImageResource(R.drawable.ic_channel_forward_light);
 
         forwardContainer.addView(channelForwardIv, LayoutCreator.createFrame(26, 26, Gravity.BOTTOM, 4, 4, 8, 4));
         forwardContainer.setVisibility(View.GONE);

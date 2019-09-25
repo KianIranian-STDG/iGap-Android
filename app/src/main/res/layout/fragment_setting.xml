@@ -40,10 +40,10 @@
 
         <View
             android:id="@+id/line2"
-            android:background="?iGapDividerLine"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
+            android:background="?iGapDividerLine"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/chatSetting"
@@ -51,7 +51,6 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/notification"
-            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp18"
@@ -62,6 +61,7 @@
             android:paddingRight="@dimen/dp18"
             android:paddingBottom="@dimen/dp10"
             android:text="@string/notificaion_and_sound"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +69,6 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/privacyAndSecurity"
-            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
@@ -79,6 +78,7 @@
             android:paddingRight="@dimen/dp18"
             android:paddingBottom="@dimen/dp10"
             android:text="@string/st_title_Privacy_Security"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintEnd_toEndOf="@id/notification"
             app:layout_constraintStart_toStartOf="@id/notification"
@@ -86,7 +86,6 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/dataAndStorage"
-            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
@@ -96,6 +95,7 @@
             android:paddingRight="@dimen/dp18"
             android:paddingBottom="@dimen/dp10"
             android:text="@string/data_storage"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintEnd_toEndOf="@id/notification"
             app:layout_constraintStart_toStartOf="@id/notification"
@@ -103,7 +103,6 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/chatSetting"
-            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
@@ -113,6 +112,7 @@
             android:paddingRight="@dimen/dp18"
             android:paddingBottom="@dimen/dp10"
             android:text="@string/chat_setting_title"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintEnd_toEndOf="@id/notification"
             app:layout_constraintStart_toStartOf="@id/notification"
@@ -120,7 +120,6 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/languageTitle"
-            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -130,6 +129,7 @@
             android:paddingRight="@dimen/dp18"
             android:paddingBottom="@dimen/dp10"
             android:text="@string/language"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@id/language"
@@ -147,7 +147,7 @@
             android:paddingRight="@dimen/dp18"
             android:paddingBottom="@dimen/dp10"
             android:text="@{viewModel.currentLanguage}"
-            android:textColor="@color/ivand_green_text_color"
+            android:textColor="?attr/colorPrimary"
             android:textSize="@dimen/smallTextSize"
             app:layout_constraintBottom_toBottomOf="@id/languageTitle"
             app:layout_constraintEnd_toEndOf="@id/notification"
@@ -172,7 +172,6 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/logout"
-            android:textColor="?iGapTitleTextColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -183,6 +182,7 @@
             android:paddingRight="@dimen/dp18"
             android:paddingBottom="@dimen/dp10"
             android:text="@string/logout"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintEnd_toEndOf="@id/notification"
             app:layout_constraintStart_toStartOf="@id/notification"

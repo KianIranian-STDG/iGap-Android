@@ -47,6 +47,7 @@ public class FragmentChatSettingViewModel extends ViewModel {
     private MutableLiveData<Boolean> goToDateFragment = new MutableLiveData<>();
     private MutableLiveData<Integer> selectedThemePosition = new MutableLiveData<>();
     private MutableLiveData<List<ThemeModel>> themeList = new SingleLiveEvent<>();
+    private MutableLiveData<Integer> updateTextSizeSampleView = new MutableLiveData<>();
     private SingleLiveEvent<Boolean> updateNewTheme = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
 
@@ -72,6 +73,7 @@ public class FragmentChatSettingViewModel extends ViewModel {
         dateIsChange();
 
         themeList.setValue(new Theme().getThemeList());
+        selectedThemePosition.setValue(themeList.getValue().indexOf(new ThemeModel(sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT),0)));
     }
 
     public ObservableBoolean getIsTime() {
@@ -148,6 +150,10 @@ public class FragmentChatSettingViewModel extends ViewModel {
 
     public MutableLiveData<List<ThemeModel>> getThemeList() {
         return themeList;
+    }
+
+    public MutableLiveData<Integer> getUpdateTextSizeSampleView() {
+        return updateTextSizeSampleView;
     }
 
     public SingleLiveEvent<Boolean> getUpdateNewTheme() {
@@ -273,5 +279,6 @@ public class FragmentChatSettingViewModel extends ViewModel {
         } else {
             textSizeValue.set(tmp);
         }
+        updateTextSizeSampleView.setValue(size);
     }
 }

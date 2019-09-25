@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
+import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Editable;
@@ -1009,20 +1010,42 @@ public class HelperToolbar {
                 }
             }
         } else {
+            TypedValue typedValue = new TypedValue();
+            TypedArray a = mContext.obtainStyledAttributes(typedValue.data, new int[]{
+                    R.attr.colorPrimaryLight,
+                    R.attr.colorPrimary,
+                    R.attr.colorPrimaryDark,
+                    R.attr.colorAccentDark,
+                    R.attr.colorAccent,
+                    R.attr.rootBackgroundColor,
+                    R.attr.iGapDividerLine,
+                    R.attr.iGapTitleTextColor,
+                    R.attr.iGapSubtitleTextColor
+            });
+            int primaryLight = a.getColor(0, 0);
+            int primary = a.getColor(1, 0);
+            int primaryDark = a.getColor(2, 0);
+            int accentDark = a.getColor(3, 0);
+            int accent = a.getColor(4, 0);
+            int backgroundColor = a.getColor(5, 0);
+            int divider = a.getColor(6, 0);
+            int textTitle = a.getColor(7, 0);
+            int textSubTitle = a.getColor(8, 0);
+            a.recycle();
             Intent intent = new Intent(mContext, WalletActivity.class);
             intent.putExtra("Language", "fa");
             intent.putExtra("Mobile", "0" + ActivityMain.userPhoneNumber.substring(2));
-            intent.putExtra("PrimaryColor", G.appBarColor);
-            intent.putExtra("DarkPrimaryColor", G.appBarColor);
-            intent.putExtra("AccentColor", G.appBarColor);
+            intent.putExtra("PrimaryColor", String.format("#%06X", 0xFFFFFF & primary));
+            intent.putExtra("DarkPrimaryColor", String.format("#%06X", 0xFFFFFF & primaryDark));
+            intent.putExtra("AccentColor", String.format("#%06X", 0xFFFFFF & accent));
             intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
             intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-            intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-            intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-            intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-            intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
-            intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-            intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+            intent.putExtra(WalletActivity.PROGRESSBAR, String.format("#%06X", 0xFFFFFF & accent));
+            intent.putExtra(WalletActivity.LINE_BORDER, String.format("#%06X", 0xFFFFFF & divider));
+            intent.putExtra(WalletActivity.BACKGROUND, String.format("#%06X", 0xFFFFFF & backgroundColor));
+            intent.putExtra(WalletActivity.BACKGROUND_2, String.format("#%06X", 0xFFFFFF & backgroundColor));
+            intent.putExtra(WalletActivity.TEXT_TITLE, String.format("#%06X", 0xFFFFFF & textTitle));
+            intent.putExtra(WalletActivity.TEXT_SUB_TITLE, String.format("#%06X", 0xFFFFFF & textSubTitle));
             intent.putExtra("isScan", true);
             G.fragmentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
         }
@@ -1280,12 +1303,12 @@ public class HelperToolbar {
                     /*if (isDark)
                         mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_dark);
                     else*/
-                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background);
+                    mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background);
                 } else {
                     /*if (isDark)
                         mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_rect_dark);
                     else*/
-                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_rect);
+                    mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_rect);
                 }
                 setRoot.constrainHeight(mainConstraint.getId(), i_Dp(R.dimen.toolbar_height));
                 setRoot.constrainWidth(mainConstraint.getId(), MATCH_CONSTRAINT);

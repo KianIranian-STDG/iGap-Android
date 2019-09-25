@@ -329,7 +329,7 @@
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
                         android:text="@{fragmentPassCodeViewModel.autoLockText }"
-                        android:textColor="@color/toolbar_background"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 

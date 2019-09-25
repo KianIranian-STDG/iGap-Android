@@ -64,8 +64,8 @@
     <!--=======================custom theme=====================-->
     <attr name="colorPrimaryLight" format="color" />
     <attr name="colorAccentDark" format="color" />
+    <!--general color-->
     <attr name="rootBackgroundColor" format="color" />
-    <attr name="iGapMessageTextColor" format="color" />
     <attr name="iGapTitleTextColor" format="color" />
     <attr name="iGapSubtitleTextColor" format="color" />
     <attr name="iGapPrimaryTextColor" format="color" />
@@ -75,7 +75,15 @@
     <attr name="iGapButtonTextColor" format="color" />
     <attr name="iGapPrimaryIconTextColor" format="color" />
     <attr name="iGapLogoutButtonColor" format="color" />
+    <!--chat item color-->
+    <attr name="iGapReceivedMessageTextColor" format="color" />
+    <attr name="iGapReceivedOtherTextColor" format="color" />
+    <attr name="iGapSendMessageTextColor" format="color" />
+    <attr name="iGapSendMessageOtherTextColor" format="color" />
     <attr name="iGapSendMessageBubbleColor" format="color" />
+    <!--bottom navigation item icon color-->
+    <attr name="iGapBottomNavigationIconStart" format="color" />
+    <attr name="iGapBottomNavigationIconEnd" format="color" />
 
     <!--=======================custom theme=====================-->
 

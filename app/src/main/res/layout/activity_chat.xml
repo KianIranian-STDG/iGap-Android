@@ -101,7 +101,7 @@
 
                     <net.iGap.module.MaterialDesignTextView
                         android:id="@+id/ac_txt_down_navigation"
-                        style="@style/myIconToolbarStyle"
+                        style="@style/baseFontIcon"
                         android:layout_width="@dimen/dp44"
                         android:layout_height="@dimen/dp44"
                         android:layout_gravity="center_horizontal"

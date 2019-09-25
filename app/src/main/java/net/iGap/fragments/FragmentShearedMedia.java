@@ -40,6 +40,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -572,13 +573,15 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         textView.setTypeface(G.typeface_IRANSansMobile);
         textView.setSingleLine(true);
 
-        if (G.isDarkTheme) {
+        textView.setBackgroundResource(R.drawable.button_selector);
+        textView.setTextColor(ContextCompat.getColor(textView.getContext(),R.color.button_text_color_selector));
+        /*if (G.isDarkTheme) {
             textView.setBackground(getContext().getResources().getDrawable(R.drawable.round_button_enabled_bg));
             textView.setTextColor(getContext().getResources().getColor(R.color.gray_4c));
         } else {
             textView.setBackground(getContext().getResources().getDrawable(R.drawable.round_button_disabled_bg));
             textView.setTextColor(getContext().getResources().getColor(R.color.white));
-        }
+        }*/
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         if (pos == 0 || pos == mSharedTypesList.size() + 1) {
@@ -606,8 +609,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     private void checkSharedButtonsBackgrounds() {
 
         for (int i = 0; i < mSharedTypeButtonsList.size(); i++) {
-            if (G.isDarkTheme) {
-                if (mCurrentSharedMediaType == mSharedTypeButtonsList.get(i).getId()) {
+            mSharedTypeButtonsList.get(i).getButton().setSelected(mCurrentSharedMediaType == mSharedTypeButtonsList.get(i).getId());
+            /*if (G.isDarkTheme) {
+                if () {
                     mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.round_button_enabled_bg));
                     mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.white));
                 } else {
@@ -622,7 +626,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.round_button_selected_bg));
                     mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.white));
                 }
-            }
+            }*/
         }
     }
 

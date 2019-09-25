@@ -39,6 +39,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperError;
@@ -396,11 +397,8 @@ public final class AppUtils {
             case LISTENED:
             case SEEN:
                 iconTextView.setText(R.string.delivery_icon);
-                TypedValue typedValue = new TypedValue();
-                TypedArray a = iconTextView.getContext().obtainStyledAttributes(typedValue.data, new int[]{R.attr.iGapPrimaryIconTextColor});
-                int color = a.getColor(0, 0);
-                a.recycle();
-                iconTextView.setTextColor(color);
+
+                iconTextView.setTextColor(new Theme().getPrimaryTextIconColor(iconTextView.getContext()));
                 break;
             case SENDING:
                 iconTextView.setText(R.string.history_icon);

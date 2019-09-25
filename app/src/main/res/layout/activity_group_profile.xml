@@ -6,8 +6,6 @@
 
         <import type="android.view.View" />
 
-        <import type="net.iGap.G" />
-
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.FragmentGroupProfileViewModel" />
@@ -22,7 +20,7 @@
             android:id="@+id/toolbar_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@{G.isDarkTheme ? @drawable/shape_toolbar_background_dark : @drawable/shape_toolbar_background , default=@drawable/shape_toolbar_background}"
+            android:background="@drawable/shape_toolbar_background"
             android:layoutDirection="ltr"
             app:elevation="0dp">
 
@@ -339,7 +337,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedPhotoCount)}"
-                    android:textColor="@color/green"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedPhotoVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/photo"
@@ -367,7 +365,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedVideoCount)}"
-                    android:textColor="@color/green"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedVideoVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/video"
@@ -395,7 +393,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedAudioCount)}"
-                    android:textColor="@color/green"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedAudioVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/audioFiles"
@@ -423,7 +421,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedVoiceCount)}"
-                    android:textColor="@color/green"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedVoiceVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/voiceMessage"
@@ -451,7 +449,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedGifCount)}"
-                    android:textColor="@color/green"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedGifVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/gif"
@@ -479,7 +477,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedFileCount)}"
-                    android:textColor="@color/green"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedFileVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/files"
@@ -507,7 +505,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedLinkCount)}"
-                    android:textColor="@color/green"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedLinkVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/links"

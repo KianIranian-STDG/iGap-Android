@@ -281,7 +281,7 @@
         <item name="strokeColor">?iGapButtonColor</item>
     </style>
 
-    <style name="greenIconTextViewStyle" parent="baseFontIcon">
+    <style name="primaryIconTextViewStyle" parent="baseFontIcon">
         <item name="android:textColor">?iGapPrimaryIconTextColor</item>
     </style>
 

@@ -26,66 +26,6 @@
             android:layout_height="@dimen/toolbar_height"
             android:orientation="horizontal" />
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/stps_backgroundToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-
-            <androidx.appcompat.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp60"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-                android:layoutDirection="ltr"
-                android:padding="0dp"
-                app:contentInsetLeft="0dp"
-                app:contentInsetStart="0dp"
-                tools:ignore="MissingPrefix">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        fontPath="fonts/IRANSansMobile_Bold.ttf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentTop="true"
-                        android:layout_toEndOf="@+id/stps_ripple_back"
-                        android:layout_toRightOf="@+id/stps_ripple_back"
-                        android:gravity="center"
-                        android:text="@string/st_title_Privacy_Security"
-                        android:textColor="@color/whit_background"
-                        android:textSize="@dimen/dp18"
-                        android:visibility="visible" />
-
-                    <net.iGap.libs.rippleeffect.RippleView
-                        android:id="@+id/stps_ripple_back"
-                        rv_centered="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:rv_alpha="200"
-                        app:rv_centered="true"
-                        app:rv_rippleDuration="0"
-                        app:rv_ripplePadding="5dp">
-
-                        <net.iGap.module.MaterialDesignTextView
-                            android:layout_width="@dimen/dp52"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentLeft="true"
-                            android:gravity="center"
-                            android:text="@string/md_back_arrow"
-                            android:textAppearance="@style/TextIconAppearance_toolbar"
-                            android:textColor="@color/whit_background" />
-
-                    </net.iGap.libs.rippleeffect.RippleView>
-                </RelativeLayout>
-            </androidx.appcompat.widget.Toolbar>
-        </com.google.android.material.appbar.AppBarLayout>
-
 
         <ScrollView
             android:layout_width="match_parent"
@@ -273,7 +213,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSeeMyAvatar , default=@string/everybody}"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
                     </LinearLayout>
@@ -311,7 +251,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackInviteChannel , default=@string/everybody}"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
                     </LinearLayout>
@@ -347,7 +287,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackInviteGroup , default=@string/everybody}"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
                     </LinearLayout>
@@ -382,7 +322,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackVoiceCall , default=@string/everybody}"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
                     </LinearLayout>
@@ -417,7 +357,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackVideoCall , default=@string/everybody}"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
                     </LinearLayout>
@@ -452,7 +392,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSeeLastSeen , default=@string/everybody}"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
                     </LinearLayout>
@@ -624,7 +564,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSelfDestruction , default=@string/year_1}"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
                     </LinearLayout>

@@ -707,12 +707,10 @@ public class FragmentChat extends BaseFragment
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
 
         if (G.isDarkTheme) {
-            /*imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.green));*/
             edtChat.setBackground(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext_dark));
             edtChat.setHintTextColor(ContextCompat.getColor(inflater.getContext(), R.color.white));
             edtChat.setTextColor(inflater.getContext().getResources().getColor(R.color.white));
         } else {
-            /*imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.md_green_700));*/
             edtChat.setBackground(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext));
             edtChat.setHintTextColor(ContextCompat.getColor(inflater.getContext(), R.color.gray_4c));
         }
@@ -2797,7 +2795,7 @@ public class FragmentChat extends BaseFragment
         });
 
         MaterialDesignTextView txtNavigationLayout = rootView.findViewById(R.id.ac_txt_down_navigation);
-        AndroidUtils.setBackgroundShapeColor(txtNavigationLayout, Color.parseColor(G.appBarColor));
+        /*AndroidUtils.setBackgroundShapeColor(txtNavigationLayout, Color.parseColor(G.appBarColor));*/
 
         llScrollNavigate.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -258,7 +258,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:text="@{FragmentNotificationAndSoundViewModel.callbackVibrateMessage , default=@string/array_Default}"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
 
@@ -292,7 +292,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:text="@{FragmentNotificationAndSoundViewModel.callbackPopUpNotificationMessage , default=@string/st_sound}"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
 
@@ -325,7 +325,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:text="@{FragmentNotificationAndSoundViewModel.callbackSoundMessage , default = @string/st_sound}"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
 
@@ -496,7 +496,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:text="@{FragmentNotificationAndSoundViewModel.callbackVibrateGroup , default=@string/array_Default}"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
 
@@ -529,7 +529,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:text="@{FragmentNotificationAndSoundViewModel.callbackPopUpNotificationGroup,default = @string/st_sound}"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
 
@@ -562,11 +562,9 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:text="@{FragmentNotificationAndSoundViewModel.callBackSoundGroup , default =@string/st_sound}"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/dp13"
-                            android:textStyle="normal"
-
-                            />
+                            android:textStyle="normal" />
 
                     </RelativeLayout>
 

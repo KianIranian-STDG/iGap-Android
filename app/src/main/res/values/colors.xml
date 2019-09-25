@@ -297,9 +297,12 @@
     <color name="tealDividerLine">#80cbc4</color>
     <color name="grayDividerLine">#e0e0e0</color>
     <color name="chat_bottom_bg">#EEEEEE</color>
-    <color name="amber">#FFC107</color>
-    <color name="blue">#2196F3</color>
-    <color name="pink">#fe9191</color>
-    <color name="purple">#9C27B0</color>
-    <color name="orange">#FF9800</color>
+    <color name="amber">#f6d365</color>
+    <color name="blue">#207dff</color>
+    <color name="pink">#ffb5b5</color>
+    <color name="purple">#aa5c9f</color>
+    <color name="orange">#ff9d00</color>
+    <color name="grayTheme">#4e698a</color>
+    <color name="greenThem">#b5e663</color>
+    <color name="redTheme">#c82121</color>
 </resources>

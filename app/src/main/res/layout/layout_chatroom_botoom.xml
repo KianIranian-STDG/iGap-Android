@@ -51,7 +51,7 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/btn_chatRoom_send"
-        style="@style/myIconTextViewStyle"
+        style="@style/primaryIconTextViewStyle"
         android:layout_width="@dimen/dp48"
         android:layout_height="@dimen/dp48"
         android:gravity="center"

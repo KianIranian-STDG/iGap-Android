@@ -11,6 +11,7 @@
 package net.iGap.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,7 +107,6 @@ public class FragmentActiveSessions extends BaseFragment {
         rcvContent = view.findViewById(R.id.stas_rcvContent);
         rcvContent.setLayoutManager(new LinearLayoutManager(rcvContent.getContext()));
         rcvContent.setItemAnimator(new DefaultItemAnimator());
-        rcvContent.addItemDecoration(new DividerItemDecoration(rcvContent.getContext(),LinearLayoutManager.VERTICAL),2);
         rcvContent.setAdapter(fastItemAdapter);
 
         G.onUserSessionGetActiveList = new OnUserSessionGetActiveList() {
@@ -258,7 +258,7 @@ public class FragmentActiveSessions extends BaseFragment {
                 fastItemAdapter.add(new AdapterActiveSessions(s).withIdentifier(s.getSessionId()));
             }
         }
-
+        rcvContent.addItemDecoration(new DividerItemDecoration(rcvContent.getContext(), LinearLayoutManager.VERTICAL), /*fastItemAdapter.getAdapterItemCount() > 2 ? 2 :*/ 0);
         prgWaiting.setVisibility(View.GONE);
     }
 }
