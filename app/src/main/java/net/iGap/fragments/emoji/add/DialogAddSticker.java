@@ -138,9 +138,9 @@ public class DialogAddSticker extends DialogFragment {
                                     RealmStickers.updateFavorite(groupId, true);
                                     if (FragmentChat.onUpdateSticker != null) {
                                         FragmentChat.onUpdateSticker.update();
-                                        getDialog().dismiss();
+                                        DialogAddSticker.this.dismiss();
 
-                                        HelperError.showSnackMessage(getResources().getString(R.string.Sticker_added_successfully), false);
+                                        HelperError.showSnackMessage(G.context.getResources().getString(R.string.Sticker_added_successfully), false);
                                     }
                                 }
                             }
