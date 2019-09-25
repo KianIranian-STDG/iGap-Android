@@ -1005,18 +1005,32 @@ public class HelperToolbar {
     }
 
     private void onScannerClickListener() {
-        if (!G.isWalletRegister) {
-            try (Realm realm = Realm.getDefaultInstance()) {
-                RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (userInfo != null) {
-                    String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
-                    new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
-                }
+
+        String phoneNumber = "0";
+
+        try {
+            Realm realm = Realm.getDefaultInstance();
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (userInfo != null) {
+                phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
+            }else {
+                phoneNumber = ActivityMain.userPhoneNumber.substring(2) ;
             }
+        }catch (Exception e){
+            //maybe exception was for realm substring
+            try{
+                phoneNumber = ActivityMain.userPhoneNumber.substring(2);
+            }catch (Exception ex){
+                //nothing
+            }
+        }
+
+        if (!G.isWalletRegister) {
+            new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
         } else {
             Intent intent = new Intent(mContext, WalletActivity.class);
             intent.putExtra("Language", "fa");
-            intent.putExtra("Mobile", "0" + ActivityMain.userPhoneNumber.substring(2));
+            intent.putExtra("Mobile", "0" + phoneNumber);
             intent.putExtra("PrimaryColor", G.appBarColor);
             intent.putExtra("DarkPrimaryColor", G.appBarColor);
             intent.putExtra("AccentColor", G.appBarColor);
