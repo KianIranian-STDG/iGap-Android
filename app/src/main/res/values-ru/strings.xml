@@ -2548,7 +2548,7 @@
 
     <string name="dont_show_again">Больше не покзывать</string>
 
-    <string name="invitation_message">Привет! Мы можем подождать, пока вы присоединитесь к в  iGap, по ссылке ниже.https://www.igap.net \nСсылочный номер:</string>
+    <string name="invitation_message">Привет! Мы можем подождать, пока вы присоединитесь к в  iGap, по ссылке ниже. http://d.igap.net/iGap \nСсылочный номер:</string>
 
     <string name="namma_per_uh">FileLister</string>
 

@@ -1275,7 +1275,7 @@
     <string name="igap_update" >mis   jour</string>
     <string name="permission_auto_start" >veuillez sélectionner et activer iGap dans le menu pour recevoir des messages lorsque méme l\'application n\'est pas active en arrire-plan</string>
     <string name="dont_show_again" >ne plus afficher</string>
-    <string name="invitation_message" >Bonjour! tu peux nous rejoinre sur iGap par le lien suivant ; on été\'attend \n     https://www.igap.net \nnuméro de personne qui vous recommande</string>
+    <string name="invitation_message" >Bonjour! tu peux nous rejoinre sur iGap par le lien suivant ; on été\'attend \n     http://d.igap.net/iGap \nnuméro de personne qui vous recommande</string>
     <string name="Please_enter_valid_folder_name" >veuillez entrer le nom de dossier</string>
     <string name="This_folder_already_exists" >il existe autre dossier   ce nom , veuillez choisir autre nom</string>
     <string name="Select_directory" >choisissez un dossier</string>
