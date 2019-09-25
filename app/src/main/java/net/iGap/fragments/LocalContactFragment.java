@@ -142,7 +142,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         fastItemAdapter.filter(text.toLowerCase());
 
         for (int i = 0; i < phoneContactsList.size(); i++) {
-            if (phoneContactsList.get(i).displayName.contains(text))
+            if (phoneContactsList.get(i).displayName.toLowerCase().contains(text.toLowerCase()))
                 searchContact.add(phoneContactsList.get(i));
         }
         if (text.trim().equals("")){
