@@ -1416,7 +1416,7 @@
     <string name="igap_update">بروزرسانی</string>
     <string name="permission_auto_start"> لطفا برای رسیدن پیام ها حتی در زمانی که آیگپ در پس زمینه فعال نیست آیگپ را از منو انتخاب و فعال نمایید</string>
     <string name="dont_show_again"> مجددا نمایش نده</string>
-    <string name="invitation_message">سلام!از طریق لینک زیر میتونی تو آیگپ عضو بشی، منتظرتیم  http://d.igap.net/iGap \nشماره معرف :</string>
+    <string name="invitation_message">سلام!از طریق لینک زیر میتونی تو آیگپ عضو بشی، منتظرتیم  http://d.igap.net/invite \nشماره معرف :</string>
 
     <string name="namma_per_uh">FileLister</string>
     <string name="Please_enter_valid_folder_name">لطفا نام پوشه را وارد کنید</string>

@@ -241,7 +241,7 @@ public class Contacts {
         String startContactId = ">=" + localPhoneContactId;
         String selection = ContactsContract.Contacts._ID + startContactId;
 
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, selection, null, null);//ContactsContract.Contacts.DISPLAY_NAME + " ASC"
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, selection, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");//ContactsContract.Contacts.DISPLAY_NAME + " ASC"
 
         if (cur != null) {
             if (cur.getCount() > 0) {
