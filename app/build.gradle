@@ -30,8 +30,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 136
-        versionName "2.0.4"
+        versionCode 137
+        versionName "2.0.5"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
@@ -174,7 +174,7 @@ dependencies {
     implementation 'com.mikepenz:fastadapter-extensions-expandable:3.2.5'
     implementation 'com.mikepenz:fastadapter-extensions:3.2.5'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
@@ -234,14 +234,14 @@ dependencies {
     }
     implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
     implementation 'com.github.KianIranian-STDG:MessageProgress:1.0.1'
-    releaseImplementation 'com.github.KianIranian-STDG:Proto:protoMain12'
-    release_IranImplementation 'com.github.KianIranian-STDG:Proto:protoMain12'
-    release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protoMain12'
-    release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain12'
-    release_CharImplementation 'com.github.KianIranian-STDG:Proto:protoMain12'
-    release_GooglePlayImplementation 'com.github.KianIranian-STDG:Proto:protoMain12'
-    release_BazaarImplementation 'com.github.KianIranian-STDG:Proto:protoMain12'
-    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta12'
+    releaseImplementation 'com.github.KianIranian-STDG:Proto:protoMain13'
+    release_IranImplementation 'com.github.KianIranian-STDG:Proto:protoMain13'
+    release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protoMain13'
+    release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain13'
+    release_CharImplementation 'com.github.KianIranian-STDG:Proto:protoMain13'
+    release_GooglePlayImplementation 'com.github.KianIranian-STDG:Proto:protoMain13'
+    release_BazaarImplementation 'com.github.KianIranian-STDG:Proto:protoMain13'
+    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta13'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
@@ -261,6 +261,7 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation project(':paygearcore')
     implementation project(':pecpayment-release')
+    implementation project(':Ref')
 
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'com.github.bumptech.glide:okhttp3-integration:4.9.0'

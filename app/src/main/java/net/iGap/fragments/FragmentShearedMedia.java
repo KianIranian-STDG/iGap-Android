@@ -2323,7 +2323,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 vh.txtFileInfo.setText(AndroidUtils.humanReadableByteCount(at.getSize(), true));
 
                 //do not change else , cause of layout that not support language change direction
-                if (G.selectedLanguage.equals("en") || G.selectedLanguage.equals("fr")) {
+                if (!G.isAppRtl) {
                     vh.txtFileName.setGravity(Gravity.LEFT);
                 } else {
                     vh.txtFileName.setGravity(Gravity.RIGHT);

@@ -139,16 +139,26 @@ public class FragmentUserScore extends BaseFragment {
 
         private class ViewHolder extends RecyclerView.ViewHolder {
 
-            AppCompatTextView title, count;
+            AppCompatTextView title, count, addIcon;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
 
                 title = itemView.findViewById(R.id.row_score_txt_title);
                 count = itemView.findViewById(R.id.row_score_txt_score_count);
+                addIcon = itemView.findViewById(R.id.addIcon);
             }
 
             private void bindView(ProtoUserIVandGetScore.UserIVandGetScoreResponse.IVandScore iVandScore) {
+                if (iVandScore.getScore() >= 0) {
+                    addIcon.setText(R.string.add_icon_font);
+                    addIcon.setTextColor(getContext().getResources().getColor(R.color.green));
+                    count.setTextColor(getContext().getResources().getColor(R.color.green));
+                } else {
+                    addIcon.setText(R.string.delete_icon_font);
+                    addIcon.setTextColor(getContext().getResources().getColor(R.color.red));
+                    count.setTextColor(getContext().getResources().getColor(R.color.red));
+                }
 
                 if (G.selectedLanguage.equals("fa")) {
                     title.setText(iVandScore.getFaName());
@@ -156,7 +166,7 @@ public class FragmentUserScore extends BaseFragment {
                     title.setText(iVandScore.getEnName());
                 }
 
-                count.setText(checkPersianNumber(String.valueOf(iVandScore.getScore())) + " " + getString(R.string.point));
+                count.setText(checkPersianNumber(String.valueOf(Math.abs(iVandScore.getScore()))) + " " + getString(R.string.point));
             }
 
             private String checkPersianNumber(String text) {

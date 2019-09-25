@@ -142,11 +142,14 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         fastItemAdapter.filter(text.toLowerCase());
 
         for (int i = 0; i < phoneContactsList.size(); i++) {
-            if (text.equals(phoneContactsList.get(i).displayName))
+            if (phoneContactsList.get(i).displayName.contains(text))
                 searchContact.add(phoneContactsList.get(i));
         }
-        recyclerView.setAdapter(new AdapterListContact(searchContact, getContext()));
-
+        if (text.trim().equals("")){
+            recyclerView.setAdapter(adapterListContact);
+        }else {
+            recyclerView.setAdapter(new AdapterListContact(searchContact, getContext()));
+        }
     }
 
     @Override

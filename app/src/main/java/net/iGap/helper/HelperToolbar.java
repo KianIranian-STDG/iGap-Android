@@ -998,17 +998,35 @@ public class HelperToolbar {
             HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, true);
         }
 
+        //main fragment onResume not called cause of usage algorithm , we get min activity and update button
+        if (mFragmentActivity instanceof ActivityMain){
+            ((ActivityMain) mFragmentActivity).updatePassCodeState();
+        }
+
     }
 
     private void onScannerClickListener() {
-        if (!G.isWalletRegister) {
-            try (Realm realm = Realm.getDefaultInstance()) {
-                RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (userInfo != null) {
-                    String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
-                    new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
-                }
+        String phoneNumber = "0";
+
+        try {
+            Realm realm = Realm.getDefaultInstance();
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (userInfo != null) {
+                phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
+            }else {
+                phoneNumber = ActivityMain.userPhoneNumber.substring(2) ;
             }
+        }catch (Exception e){
+            //maybe exception was for realm substring
+            try{
+                phoneNumber = ActivityMain.userPhoneNumber.substring(2);
+            }catch (Exception ex){
+                //nothing
+            }
+        }
+
+        if (!G.isWalletRegister) {
+            new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
         } else {
             TypedValue typedValue = new TypedValue();
             TypedArray a = mContext.obtainStyledAttributes(typedValue.data, new int[]{
@@ -1034,7 +1052,7 @@ public class HelperToolbar {
             a.recycle();
             Intent intent = new Intent(mContext, WalletActivity.class);
             intent.putExtra("Language", "fa");
-            intent.putExtra("Mobile", "0" + ActivityMain.userPhoneNumber.substring(2));
+            intent.putExtra("Mobile", "0" + phoneNumber);
             intent.putExtra("PrimaryColor", String.format("#%06X", 0xFFFFFF & primary));
             intent.putExtra("DarkPrimaryColor", String.format("#%06X", 0xFFFFFF & primaryDark));
             intent.putExtra("AccentColor", String.format("#%06X", 0xFFFFFF & accent));

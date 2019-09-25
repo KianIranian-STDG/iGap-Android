@@ -274,7 +274,6 @@ import net.iGap.proto.ProtoClientRoomReport;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
-import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAttachmentFields;
@@ -1098,6 +1097,9 @@ public class FragmentChat extends BaseFragment
         }
 
         registerListener();
+
+        //enable attachment popup camera if was visible
+        if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.enableCamera();
     }
 
     private void checkToolbarNameSize() {
@@ -1129,12 +1131,18 @@ public class FragmentChat extends BaseFragment
         iUpdateLogItem = null;
 
         unRegisterListener();
+
+        //disable attachment popup camera
+        if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.disableCamera();
+
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mAttachmentPopup = null;
+        FragmentEditImage.itemGalleryList.clear();
+        FragmentEditImage.textImageList.clear();
         realmChat.close();
         EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
         mHelperToolbar.unRegisterTimerBroadcast();
@@ -1516,7 +1524,7 @@ public class FragmentChat extends BaseFragment
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(G.twoPaneMode ? R.string.close_icon : R.string.back_icon)
-                .setRightIcons(R.string.more_icon, R.string.voice_call_icon, R.string.video_call_icon)
+                .setRightIcons(R.string.more_icon, R.string.voice_call_icon)
                 .setLogoShown(false)
                 .setChatRoom(true)
                 .setPlayerEnable(true)
@@ -1542,7 +1550,7 @@ public class FragmentChat extends BaseFragment
         //set layout direction to views
 
         //todo : set gravity right for arabic and persian
-        if (G.selectedLanguage.equals("en") || G.selectedLanguage.equals("fr")) {
+        if (!G.isAppRtl) {
             txtName.setGravity(Gravity.LEFT);
             txtLastSeen.setGravity(Gravity.LEFT);
         } else {
@@ -1668,7 +1676,6 @@ public class FragmentChat extends BaseFragment
         isChatReadOnly = realmRoom.getReadOnly();
         //gone video , voice button call then if status was ok visible them
         mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
-        mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
 
         if (isChatReadOnly) {
             viewAttachFile.setVisibility(View.GONE);
@@ -1682,13 +1689,6 @@ public class FragmentChat extends BaseFragment
 
                 } else {
                     mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
-                }
-
-                if (callConfig.isVideo_calling()) {
-                    mHelperToolbar.getThirdRightButton().setVisibility(View.VISIBLE);
-
-                } else {
-                    mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
                 }
 
             } else {
@@ -1717,7 +1717,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void goneCallButtons() {
-        mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
         mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
     }
 
@@ -3067,15 +3066,16 @@ public class FragmentChat extends BaseFragment
         G.openBottomSheetItem = new OpenBottomSheetItem() {
             @Override
             public void openBottomSheet(boolean isNew) {
-                mAttachmentPopup.setIsNewDialog(isNew);
+                if (mAttachmentPopup != null) mAttachmentPopup.setIsNewDialog(isNew);
                 imvAttachFileButton.performClick();
-                mAttachmentPopup.notifyRecyclerView();
+                if (mAttachmentPopup != null) mAttachmentPopup.notifyRecyclerView();
             }
 
         };
 
         imvAttachFileButton.setOnClickListener(view -> {
             if (mAttachmentPopup == null) initPopupAttachment();
+            mAttachmentPopup.setMessagesLayoutHeight(recyclerView.getMeasuredHeight());
             mAttachmentPopup.show();
         });
 
@@ -3199,12 +3199,16 @@ public class FragmentChat extends BaseFragment
 
     private void initPopupAttachment() {
 
+        if (getActivity() == null ) return;
+
         mAttachmentPopup = ChatAttachmentPopup.create()
-                .setContext(getContext())
+                .setContext(getActivity())
                 .setRootView(rootView)
                 .setFragment(FragmentChat.this)
                 .setFragmentActivity(G.fragmentActivity)
                 .setSharedPref(sharedPreferences)
+                .setMessagesLayoutHeight(recyclerView.getMeasuredHeight())
+                .setChatBoxHeight(viewAttachFile.getMeasuredHeight())
                 .setListener(FragmentChat.this)
                 .build();
 
@@ -5583,7 +5587,6 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
 
-        if (mAttachmentPopup != null) mAttachmentPopup.updateHeight();
 
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -5604,6 +5607,9 @@ public class FragmentChat extends BaseFragment
         }, 300);
 
         super.onConfigurationChanged(newConfig);
+
+        if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.updateHeight();
+
     }
 
     /**
@@ -5968,6 +5974,7 @@ public class FragmentChat extends BaseFragment
                 isSendVisibilityAnimInProcess = false;
                 imvSendButton.clearAnimation();
                 layoutAttachBottom.clearAnimation();
+                edtChat.requestLayout();
 
             }
 
@@ -6014,6 +6021,7 @@ public class FragmentChat extends BaseFragment
                 isAttachVisibilityAnimInProcess = false ;
                 imvSendButton.clearAnimation();
                 layoutAttachBottom.clearAnimation();
+                edtChat.requestLayout();
 
             }
 
@@ -8847,12 +8855,9 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onSecondRightIconClickListener(View view) {
-        CallSelectFragment.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-    }
-
-    @Override
-    public void onThirdRightIconClickListener(View view) {
-        CallSelectFragment.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+        CallSelectFragment selectFragment = CallSelectFragment.getInstance(chatPeerId, false, null);
+        if (getFragmentManager() != null)
+            selectFragment.show(getFragmentManager(), null);
     }
 
     @Override

@@ -62,13 +62,11 @@
                     app:layout_constraintStart_toStartOf="@+id/channelAvatar"
                     app:layout_constraintTop_toTopOf="@+id/channelAvatar" />
 
-
                 <net.iGap.module.EmojiEditTextE
                     android:id="@+id/channelNameEditText"
                     style="@style/iGapEmojiChatStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:background="@null"
                     android:enabled="@{viewModel.canChangeChannelName}"
                     android:gravity="bottom"
@@ -78,7 +76,6 @@
                     android:text="@={viewModel.channelName}"
                     android:textSize="@dimen/largeTextSize"
                     app:emojiSize="@dimen/standardTextSize"
-                    app:layout_constraintBottom_toTopOf="@id/groupDescriptionEditText"
                     app:layout_constraintEnd_toStartOf="@+id/emojiButton"
                     app:layout_constraintStart_toEndOf="@id/channelAvatar"
                     app:layout_constraintTop_toTopOf="@+id/channelAvatar" />
@@ -119,10 +116,17 @@
                     android:maxLines="8"
                     android:text="@{viewModel.channelDescription}"
                     android:textSize="@dimen/standardTextSize"
-                    app:layout_constraintBottom_toBottomOf="@id/channelAvatar"
                     app:layout_constraintEnd_toEndOf="@+id/emojiButton"
                     app:layout_constraintStart_toStartOf="@+id/channelNameEditText"
                     app:layout_constraintTop_toBottomOf="@+id/channelNameEditText" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/divider"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="groupDescriptionEditText,channelAvatar" />
 
                 <View
                     android:id="@+id/line2"
@@ -132,7 +136,7 @@
                     android:background="?iGapDividerLine"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/channelAvatar"
+                    app:layout_constraintTop_toBottomOf="@id/divider"
                     app:layout_constraintWidth_percent=".95" />
 
                 <View

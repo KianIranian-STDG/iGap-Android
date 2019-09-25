@@ -96,10 +96,6 @@
     <item name="tv_chatCell_chatIcon" type="id" />
     <item name="tv_chatCell_verify" type="id" />
     <item name="tv_chatCell_messageData" type="id" />
-    <item name="ll_chatCell_messageBox" type="id" />
-    <item name="tv_chatCell_firstTextView" type="id" />
-    <item name="tv_chatCell_secondTextView" type="id" />
-    <item name="tv_chatCell_thirdTextView" type="id" />
     <item name="iv_chatCell_messageStatus" type="id" />
     <item name="iv_chatCell_mute" type="id" />
     <item name="iv_chatCell_messageCount" type="id" />

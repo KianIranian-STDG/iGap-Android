@@ -200,7 +200,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
             showLeaveChannel.set(View.VISIBLE);
         }
 
-        if (G.selectedLanguage.equals("en") || G.selectedLanguage.equals("fr")) {
+        if (!G.isAppRtl) {
             textGravity.set(Gravity.LEFT);
         } else {
             textGravity.set(Gravity.RIGHT);
@@ -269,6 +269,25 @@ public class FragmentChannelProfileViewModel extends ViewModel
 
                                     channelName.postValue(mRoom.getTitle());
                                     channelDescription.postValue(mRoom.getChannelRoom().getDescription());
+
+                                    role = mRoom.getChannelRoom().getRole();
+                                    isPrivate = mRoom.getChannelRoom().isPrivate();
+
+                                    // show link for logic
+                                    if (isPrivate) {
+                                        channelLink.set(mRoom.getChannelRoom().getInviteLink());
+                                        channelLinkTitle.set(R.string.channel_link);
+                                        if (role == ChannelChatRole.OWNER) {
+                                            isShowLink.set(View.VISIBLE);
+                                        } else {
+                                            isShowLink.set(View.GONE);
+                                        }
+                                    } else {
+                                        channelLink.set(mRoom.getChannelRoom().getUsername());
+                                        channelLinkTitle.set(R.string.st_username);
+                                        isShowLink.set(View.VISIBLE);
+                                    }
+
 
                                     if (HelperCalander.isPersianUnicode) {
                                         countText = HelperCalander.convertToUnicodeFarsiNumber(countText);

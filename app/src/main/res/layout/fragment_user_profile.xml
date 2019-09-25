@@ -69,7 +69,7 @@
                 android:layout_height="35dp"
                 android:background="@drawable/circle_green"
                 android:onClick="@{()->viewModel.onAddImageClick()}"
-                android:text="@string/add_icon"
+                android:text="@string/add_icon_without_circle_font"
                 app:layout_constraintBottom_toBottomOf="@id/fup_user_image"
                 app:layout_constraintEnd_toEndOf="@id/fup_user_image"
                 app:layout_constraintStart_toEndOf="@id/fup_user_image" />
@@ -225,7 +225,7 @@
                 android:layout_width="@dimen/dp40"
                 android:layout_height="@dimen/dp40"
                 android:padding="@dimen/fup_items_icon_padding"
-                android:text="@string/add_icon"
+                android:text="@string/add_icon_without_circle_font"
                 android:textSize="@dimen/dp28"
                 app:layout_constraintBottom_toBottomOf="@id/cloudIcon"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -659,7 +659,7 @@
                 android:textColorHint="?iGapHintTextColor"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/versionTitle"
+                app:layout_constraintTop_toBottomOf="@id/versionChange"
                 app:layout_constraintWidth_percent=".9">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -808,7 +808,7 @@
                 android:onClick="@{() -> viewModel.onCountryCodeClick()}"
                 android:paddingBottom="6dp"
                 android:text="@{viewModel.referralCountryCodeObservableField}"
-                android:visibility="@{viewModel.countryCodeVisibility}"
+                android:textColor="?iGapTitleTextColor"
                 app:layout_constraintBottom_toBottomOf="@id/referralView"
                 app:layout_constraintStart_toStartOf="@id/name"
                 app:layout_constraintTop_toTopOf="@id/referralView" />
@@ -879,7 +879,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:visibility="gone"
-                app:constraint_referenced_ids="referralView,addAvatar,name,userName,bio,email,gender,genderValue" />
+                app:constraint_referenced_ids="countryCode,referralView,addAvatar,name,userName,bio,email,gender,genderValue" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -913,6 +913,7 @@ Want to get it?</string>
     <string name="my_contacts">My Contacts</string>
     <string name="privacy_setting">Privacy Setting</string>
     <string name="igap_search">Look and Find</string>
+    <string name="set_color_to_default">Reset Colors Back to Default</string>
     <string name="empty_message">Please try to enter the first 5 characters of username</string>
     <string name="empty_message3">Enter at least 5 characters to search</string>
     <string name="there_is_no_any_result">No Result</string>
@@ -1422,7 +1423,7 @@ Want to get it?</string>
     <string name="ignore">Ignore</string>
     <string name="permission_auto_start">please select and active iGap from menu to receive messages when even app is not in background</string>
     <string name="dont_show_again">Do not show again</string>
-    <string name="invitation_message">\Hey Join iGap : https://www.igap.net/ I\'m waiting for you!\ \n Referred Number is : </string>
+    <string name="invitation_message">\Hey Join iGap : http://d.igap.net/invite I\'m waiting for you!\ \n Referred Number is : </string>
     <string name="namma_per_uh">FileLister</string>
     <string name="Please_enter_valid_folder_name">Please enter a valid folder name</string>
     <string name="This_folder_already_exists">"This folder already exists.\n Please provide another name for the folder"</string>
@@ -2250,4 +2251,7 @@ Want to get it?</string>
     <string name="amber_theme_title">Amber</string>
     <string name="orange_theme_title">Orange</string>
     <string name="gray_theme_title">Gray</string>
+    <string name="error_ivand_limit_gift">Unfortunately, the set gifts have come to an end.</string>
+    <string name="referral_error_yourself">It is not possible to register your number as a referral.</string>
+
 </resources>

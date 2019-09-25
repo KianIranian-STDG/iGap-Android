@@ -13,16 +13,16 @@
         <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
     </style>
 
-    <style name="AppTheme.Launcher" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme.Launcher" parent="BaseTheme">
         <!--<item name="android:windowDisablePreview">true</item>-->
         <item name="android:windowBackground">@drawable/theme</item>
     </style>
 
     <style name="AppTheme.Widget" />
 
-    <style name="AppTheme" parent="BaseTheme"/>
+    <style name="AppTheme" parent="BaseTheme" />
 
-    <style name="AppThemeTranslucent" parent="BaseTheme"/>
+    <style name="AppThemeTranslucent" parent="BaseTheme" />
 
     <style name="ChatMessages.EmojiTextView" parent="ChatMessages">
         <item name="android:layout_width">match_parent</item>

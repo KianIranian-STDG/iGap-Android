@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="?rootBackgroundColor"
+    android:id="@+id/country_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/dialog_background"
+    android:background="?rootBackgroundColor"
     android:clickable="true"
     android:layoutDirection="ltr"
     android:orientation="vertical">
@@ -86,7 +86,7 @@
             android:background="@android:color/transparent"
             android:gravity="center"
             android:text="@string/B_cancel"
-            android:textColor="@color/toolbar_background"
+            android:textColor="?iGapPrimaryTextColor"
             android:textSize="@dimen/dp14"
             android:textStyle="bold" />
 
