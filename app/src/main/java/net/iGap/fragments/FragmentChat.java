@@ -3068,9 +3068,9 @@ public class FragmentChat extends BaseFragment
         G.openBottomSheetItem = new OpenBottomSheetItem() {
             @Override
             public void openBottomSheet(boolean isNew) {
-                mAttachmentPopup.setIsNewDialog(isNew);
+                if (mAttachmentPopup != null) mAttachmentPopup.setIsNewDialog(isNew);
                 imvAttachFileButton.performClick();
-                mAttachmentPopup.notifyRecyclerView();
+                if (mAttachmentPopup != null) mAttachmentPopup.notifyRecyclerView();
             }
 
         };
