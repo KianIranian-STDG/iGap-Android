@@ -172,7 +172,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private boolean retryProviderInstall;
 
-    public static boolean isMenuButtonAddShown = false;
     public static boolean isOpenChatBeforeSheare = false;
     public static boolean isLock = false;
     public static FinishActivity finishActivity;
