@@ -1076,9 +1076,10 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             this.loadingView = loadingView;
         }
 
+        @NotNull
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            RoomListCell roomListCell = new RoomListCell(getContext());
+        public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
+            RoomListCell roomListCell = new RoomListCell(parent.getContext());
             roomListCell.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutCreator.dp(72)));
             return new ViewHolder(roomListCell);
         }

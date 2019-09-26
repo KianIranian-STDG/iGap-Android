@@ -27,13 +27,13 @@ public class TextBadge extends AppCompatTextView {
     public void setBadgeColor(int color) {
         switch (color) {
             case DARK_MODE:
-                setBackground(getResources().getDrawable(R.drawable.background_badge_dark));
+                setBackgroundResource(R.drawable.background_badge_dark);
                 break;
             case MUTE_MODE:
-                setBackground(getResources().getDrawable(R.drawable.background_badge_mute));
+                setBackgroundResource(R.drawable.background_badge_mute);
                 break;
             case UNMUTE_MODE:
-                setBackground(getResources().getDrawable(R.drawable.background_badge));
+                setBackgroundResource(R.drawable.background_badge);
                 break;
         }
     }

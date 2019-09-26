@@ -16,11 +16,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 
 import com.vanniktech.emoji.EmojiTextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.items.chat.ChatCell;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperImageBackColor;
@@ -214,7 +216,7 @@ public class RoomListCell extends FrameLayout {
 
         if (!(room.getUnreadCount() < 1)) {
             if (!haveBadge) {
-                badgeView = new TextBadge(G.context);
+                badgeView = new TextBadge(getContext());
                 setTypeFace(badgeView);
                 addView(badgeView);
                 haveBadge = true;
@@ -508,7 +510,7 @@ public class RoomListCell extends FrameLayout {
         if (room.getActionState() != null && room.getActionStateUserId() != userId) {
 
             SpannableString typingSpannableString = new SpannableString(room.getActionState());
-            typingSpannableString.setSpan(new ForegroundColorSpan(ChatCell.TYPING_COLOR), 0, room.getActionState().length(), 0);
+            typingSpannableString.setSpan(new ForegroundColorSpan(new Theme().getPrimaryTextColor(lastMessageTv.getContext())), 0, room.getActionState().length(), 0);
 
             builder.append(typingSpannableString);
 
@@ -516,7 +518,7 @@ public class RoomListCell extends FrameLayout {
             String draft = getResources().getString(R.string.txt_draft) + " ";
 
             SpannableString redSpannable = new SpannableString(draft);
-            redSpannable.setSpan(new ForegroundColorSpan(ChatCell.DRAFT_COLOR), 0, draft.length(), 0);
+            redSpannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(lastMessageTv.getContext(),R.color.red)), 0, draft.length(), 0);
 
             String draftMessage = room.getDraft().getMessage();
             SpannableString message = new SpannableString(draftMessage);
@@ -542,7 +544,7 @@ public class RoomListCell extends FrameLayout {
                 if (lastMessage.isDeleted()) {
                     String deletedMessage = getResources().getString(R.string.deleted_message);
                     SpannableString deletedSpannable = new SpannableString(deletedMessage);
-                    deletedSpannable.setSpan(new ForegroundColorSpan(ChatCell.DELETED_COLOR), 0, deletedMessage.length(), 0);
+                    deletedSpannable.setSpan(new ForegroundColorSpan(new Theme().getSendMessageTextColor(lastMessageTv.getContext())), 0, deletedMessage.length(), 0);
                     builder.append(deletedSpannable);
                     lastMessageTv.setText(builder, TextView.BufferType.SPANNABLE);
                     return;
@@ -586,7 +588,7 @@ public class RoomListCell extends FrameLayout {
 
                         if (senderNameSpannable != null) {
                             haveSenderName = true;
-                            senderNameSpannable.setSpan(new ForegroundColorSpan(ChatCell.SENDER_COLOR), 0, senderNameTag.length(), 0);
+                            senderNameSpannable.setSpan(new ForegroundColorSpan(new Theme().getPrimaryTextColor(lastMessageTv.getContext())), 0, senderNameTag.length(), 0);
                         }
                     }
 
@@ -673,12 +675,12 @@ public class RoomListCell extends FrameLayout {
 
                     if (attachmentSpannable != null) {
                         haveAttachment = true;
-                        attachmentSpannable.setSpan(new ForegroundColorSpan(ChatCell.attachmentColor()), 0, attachmentTag.length(), 0);
+                        attachmentSpannable.setSpan(new ForegroundColorSpan(new Theme().getPrimaryTextColor(lastMessageTv.getContext())), 0, attachmentTag.length(), 0);
                     }
 
                     if (haveSenderName) {
                         senderNameQuoteSpannable = new SpannableString(haveAttachment ? ":" : nameIsPersian ? ": " : ": ");
-                        senderNameQuoteSpannable.setSpan(new ForegroundColorSpan(ChatCell.SENDER_COLOR), 0, senderNameQuoteSpannable.length(), 0);
+                        senderNameQuoteSpannable.setSpan(new ForegroundColorSpan(new Theme().getPrimaryTextColor(lastMessageTv.getContext())), 0, senderNameQuoteSpannable.length(), 0);
                     }
                     String message;
                     if (lastMessage.getMessage().length() > 70) {
