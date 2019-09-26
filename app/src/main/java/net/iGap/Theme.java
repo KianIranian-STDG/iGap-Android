@@ -1115,6 +1115,10 @@ public class Theme {
         return getColorFromAttr(context, R.attr.iGapPrimaryTextColor);
     }
 
+    public int getPrimaryColor(Context context) {
+        return getColorFromAttr(context, R.attr.colorPrimary);
+    }
+
     public int getForwardFromTextColor(Context context) {
         return getColorFromAttr(context, R.attr.colorAccentDark);
     }

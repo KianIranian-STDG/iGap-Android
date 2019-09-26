@@ -86,7 +86,7 @@
             android:background="@android:color/transparent"
             android:gravity="center"
             android:text="@string/B_cancel"
-            android:textColor="?iGapPrimaryTextColor"
+            android:textColor="?attr/colorPrimary"
             android:textSize="@dimen/dp14"
             android:textStyle="bold" />
 

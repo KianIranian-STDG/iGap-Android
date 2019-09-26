@@ -21,6 +21,9 @@
         <item name="iGapPrimaryIconTextColor">@color/white</item>
         <item name="iGapLogoutButtonColor">@color/players_dark_background</item>
 
+        <item name="iGapBottomNavigationIconStart">#FF50B452</item>
+        <item name="iGapBottomNavigationIconEnd">#FFC6DA42</item>
+
         <item name="iGapReceivedOtherTextColor">#aaaaaa</item>
         <item name="iGapReceivedMessageTextColor">#EEEEEE</item>
 
@@ -49,8 +52,8 @@
         <item name="iGapPrimaryIconTextColor">@color/green</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
 
-        <item name="iGapBottomNavigationIconStart">#dd6f6f</item>
-        <item name="iGapBottomNavigationIconEnd">#c82121</item>
+        <item name="iGapBottomNavigationIconStart">#FFC6DA42</item>
+        <item name="iGapBottomNavigationIconEnd">#FF50B452</item>
 
         <item name="iGapReceivedMessageTextColor">#5F5F5F</item>
         <item name="iGapReceivedOtherTextColor">#cccccc</item>

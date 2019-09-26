@@ -133,9 +133,9 @@ public class RoomListCell extends FrameLayout {
         }
 
         if (room.getLastMessage() != null && room.getLastMessage().getUpdateOrCreateTime() != 0 && !haveDate) {
-            messageDataTv = new AppCompatTextView(G.context);
+            messageDataTv = new AppCompatTextView(getContext());
             messageDataTv.setSingleLine(true);
-            messageDataTv.setTextColor(Color.parseColor(G.textTitleTheme));
+            messageDataTv.setTextColor(new Theme().getSendMessageTextColor(messageDataTv.getContext()));
             messageDataTv.setText(HelperCalander.getTimeForMainRoom(room.getLastMessage().getUpdateOrCreateTime()));
             setTextSize(messageDataTv, R.dimen.dp10);
             setTypeFace(messageDataTv);
@@ -167,7 +167,7 @@ public class RoomListCell extends FrameLayout {
                 chatIconTv = new FontIconTextView(getContext());
                 setTextSize(chatIconTv, R.dimen.standardTextSize);
                 addView(chatIconTv);
-                chatIconTv.setTextColor(isDarkTheme ? Color.parseColor(G.textTitleTheme) : Color.parseColor("#333333"));
+                chatIconTv.setTextColor(new Theme().getSendMessageTextColor(chatIconTv.getContext()));
                 haveChatIcon = true;
 
             }
@@ -190,7 +190,7 @@ public class RoomListCell extends FrameLayout {
             roomNameTv.setEllipsize(TextUtils.TruncateAt.END);
             roomNameTv.setEmojiSize(i_Dp(R.dimen.dp16));
             roomNameTv.setText(room.getTitle());
-            roomNameTv.setTextColor(isDarkTheme ? getResources().getColor(R.color.white) : G.context.getResources().getColor(R.color.black90));
+            roomNameTv.setTextColor(new Theme().getSendMessageTextColor(roomNameTv.getContext()));
             roomNameTv.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT | Gravity.CENTER_VERTICAL);
             addView(roomNameTv);
             haveName = true;
@@ -510,7 +510,7 @@ public class RoomListCell extends FrameLayout {
         if (room.getActionState() != null && room.getActionStateUserId() != userId) {
 
             SpannableString typingSpannableString = new SpannableString(room.getActionState());
-            typingSpannableString.setSpan(new ForegroundColorSpan(new Theme().getPrimaryTextColor(lastMessageTv.getContext())), 0, room.getActionState().length(), 0);
+            typingSpannableString.setSpan(new ForegroundColorSpan(new Theme().getPrimaryColor(lastMessageTv.getContext())), 0, room.getActionState().length(), 0);
 
             builder.append(typingSpannableString);
 
@@ -518,7 +518,7 @@ public class RoomListCell extends FrameLayout {
             String draft = getResources().getString(R.string.txt_draft) + " ";
 
             SpannableString redSpannable = new SpannableString(draft);
-            redSpannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(lastMessageTv.getContext(),R.color.red)), 0, draft.length(), 0);
+            redSpannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(lastMessageTv.getContext(), R.color.red)), 0, draft.length(), 0);
 
             String draftMessage = room.getDraft().getMessage();
             SpannableString message = new SpannableString(draftMessage);
@@ -588,7 +588,7 @@ public class RoomListCell extends FrameLayout {
 
                         if (senderNameSpannable != null) {
                             haveSenderName = true;
-                            senderNameSpannable.setSpan(new ForegroundColorSpan(new Theme().getPrimaryTextColor(lastMessageTv.getContext())), 0, senderNameTag.length(), 0);
+                            senderNameSpannable.setSpan(new ForegroundColorSpan(new Theme().getPrimaryColor(lastMessageTv.getContext())), 0, senderNameTag.length(), 0);
                         }
                     }
 
@@ -675,12 +675,12 @@ public class RoomListCell extends FrameLayout {
 
                     if (attachmentSpannable != null) {
                         haveAttachment = true;
-                        attachmentSpannable.setSpan(new ForegroundColorSpan(new Theme().getPrimaryTextColor(lastMessageTv.getContext())), 0, attachmentTag.length(), 0);
+                        attachmentSpannable.setSpan(new ForegroundColorSpan(new Theme().getPrimaryColor(lastMessageTv.getContext())), 0, attachmentTag.length(), 0);
                     }
 
                     if (haveSenderName) {
                         senderNameQuoteSpannable = new SpannableString(haveAttachment ? ":" : nameIsPersian ? ": " : ": ");
-                        senderNameQuoteSpannable.setSpan(new ForegroundColorSpan(new Theme().getPrimaryTextColor(lastMessageTv.getContext())), 0, senderNameQuoteSpannable.length(), 0);
+                        senderNameQuoteSpannable.setSpan(new ForegroundColorSpan(new Theme().getPrimaryColor(lastMessageTv.getContext())), 0, senderNameQuoteSpannable.length(), 0);
                     }
                     String message;
                     if (lastMessage.getMessage().length() > 70) {

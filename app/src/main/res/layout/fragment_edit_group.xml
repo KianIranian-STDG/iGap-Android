@@ -191,7 +191,7 @@
                     android:onClick="@{()->viewModel.onPermissionClick()}"
                     android:padding="8dp"
                     android:text="@{viewModel.permissionCount}"
-                    android:textColor="?iGapPrimaryTextColor"
+                    android:textColor="?attr/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/permission"
                     app:layout_constraintEnd_toEndOf="@id/chatHistoryTitle"
                     app:layout_constraintStart_toEndOf="@id/permission"
@@ -217,7 +217,7 @@
                     android:onClick="@{()->viewModel.onAdministratorClick()}"
                     android:padding="8dp"
                     android:text="@{viewModel.administratorsCount}"
-                    android:textColor="?iGapPrimaryTextColor"
+                    android:textColor="?attr/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/administrators"
                     app:layout_constraintEnd_toEndOf="@id/chatHistoryTitle"
                     app:layout_constraintStart_toEndOf="@id/administrators"
@@ -243,7 +243,7 @@
                     android:onClick="@{()->viewModel.onModeratorClick()}"
                     android:padding="8dp"
                     android:text="@{viewModel.moderatorsCount}"
-                    android:textColor="?iGapPrimaryTextColor"
+                    android:textColor="?attr/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/moderator"
                     app:layout_constraintEnd_toEndOf="@id/chatHistoryTitle"
                     app:layout_constraintStart_toEndOf="@id/moderator"
@@ -262,6 +262,19 @@
                     app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
                     app:layout_constraintTop_toBottomOf="@id/moderator" />
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/membersCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onMemberClick()}"
+                    android:padding="8dp"
+                    android:text="@{viewModel.membersCount}"
+                    android:textColor="?attr/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@id/members"
+                    app:layout_constraintEnd_toEndOf="@id/chatHistoryTitle"
+                    app:layout_constraintStart_toEndOf="@id/members"
+                    app:layout_constraintTop_toTopOf="@id/members" />
+
                 <View
                     android:id="@+id/line4"
                     android:layout_width="0dp"
@@ -272,19 +285,6 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/members"
                     app:layout_constraintWidth_percent=".95" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/membersCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{()->viewModel.onMemberClick()}"
-                    android:padding="8dp"
-                    android:text="@{viewModel.membersCount}"
-                    android:textColor="?iGapPrimaryTextColor"
-                    app:layout_constraintBottom_toBottomOf="@id/members"
-                    app:layout_constraintEnd_toEndOf="@id/chatHistoryTitle"
-                    app:layout_constraintStart_toEndOf="@id/members"
-                    app:layout_constraintTop_toTopOf="@id/members" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/leaveGroup"
