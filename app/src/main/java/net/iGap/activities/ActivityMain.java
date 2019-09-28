@@ -654,22 +654,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
 
-            ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
-                @Override
-                public void onResponse(@NotNull Call<StructSticker> call, @NotNull Response<StructSticker> response) {
-                    if (response.body() != null) {
-                        if (response.body().getOk()) {
-                            RealmStickers.updateStickers(response.body().getData());
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(@NotNull Call<StructSticker> call, @NotNull Throwable t) {
-
-                }
-            });
-
         } else {
             TextView textView = new TextView(this);
             setContentView(textView);
