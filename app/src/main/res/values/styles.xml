@@ -871,4 +871,10 @@
         <item name="android:windowExitAnimation">@anim/translate_exit_down</item>
     </style>
 
+    <style name="Widget.WaveView" parent="@android:style/Widget">
+        <item name="waveStrokeWidth">1dp</item>
+        <item name="wavesColor">@color/black</item>
+        <item name="waveGap">@dimen/dp26</item>
+    </style>
+
 </resources>

@@ -198,4 +198,12 @@
         <attr name="slider_defaultBanner" format="integer" />
         <attr name="slider_emptyView" format="reference" />
     </declare-styleable>
+
+    <attr name="wavesViewStyle" format="reference" />
+
+    <declare-styleable name="WavesView">
+        <attr name="wavesColor" format="color" />
+        <attr name="waveStrokeWidth" format="dimension" />
+        <attr name="waveGap" format="dimension" />
+    </declare-styleable>
 </resources>
