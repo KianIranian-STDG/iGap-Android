@@ -13,6 +13,7 @@ package net.iGap.fragments;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -165,6 +166,7 @@ public class BaseFragment extends SwipeBackFragment {
     public void popBackStackFragment() {
         try {
             if (getActivity() != null) {
+                Log.wtf(this.getClass().getName(),"popBackStackFragment");
                 getActivity().onBackPressed();
 
                 if (G.iTowPanModDesinLayout != null) {

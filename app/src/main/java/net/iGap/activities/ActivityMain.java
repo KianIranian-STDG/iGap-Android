@@ -1275,18 +1275,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
+        Log.wtf(this.getClass().getName(),"onBackPressed");
         if (G.ISRealmOK) {
             if (G.onBackPressedWebView != null) {
+                Log.wtf(this.getClass().getName(),"onBackPressedWebView");
                 if (G.onBackPressedWebView.onBack()) {
                     return;
                 }
             }
 
             if (G.onBackPressedExplorer != null) {
+                Log.wtf(this.getClass().getName(),"onBackPressedExplorer");
                 if (G.onBackPressedExplorer.onBack()) {
                     return;
                 }
             } else if (G.onBackPressedChat != null) {
+                Log.wtf(this.getClass().getName(),"onBackPressedChat");
                 if (G.onBackPressedChat.onBack()) {
                     return;
                 }
@@ -1297,7 +1301,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 onBackPressedListener.doBack();
             }
             if (G.twoPaneMode) {
+                Log.wtf(this.getClass().getName(), "twoPaneMode");
                 if (findViewById(R.id.fullScreenFrame).getVisibility() == View.VISIBLE) {//handle back in fragment show like dialog
+                    Log.wtf(this.getClass().getName(), "fullScreenFrame VISIBLE");
                     Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fullScreenFrame);
                     if (frag == null) {
                         Log.wtf(this.getClass().getName(), "pop from: detailFrame");
@@ -1315,6 +1321,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
                     }
                 } else {
+                    Log.wtf(this.getClass().getName(), "fullScreenFrame not VISIBLE");
                     if (getSupportFragmentManager().getBackStackEntryCount() > 2) {
                         Log.wtf(this.getClass().getName(), "pop from: backStack");
                         if (getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(FragmentChat.class.getName())) {
