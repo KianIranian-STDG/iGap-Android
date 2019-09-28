@@ -461,11 +461,10 @@ public class RoomListCell extends FrameLayout {
             }
 
             if (haveCheckBox) {
-                checkBox.measure(makeMeasureSpec(65, EXACTLY), makeMeasureSpec(65, EXACTLY));
-                checkBox.layout(isRtl ? avatarLeft : avatarRight - 65, avatarBottom - 65, isRtl ? avatarLeft + 65 : avatarRight, avatarBottom);
+                checkBox.measure(makeMeasureSpec(dpToPx(20), EXACTLY), makeMeasureSpec(dpToPx(20), EXACTLY));
+                checkBox.layout(isRtl ? avatarLeft : avatarRight - dpToPx(20), avatarBottom - dpToPx(20), isRtl ? avatarLeft + dpToPx(20) : avatarRight, avatarBottom);
             }
         }
-
     }
 
     public void setCheck(boolean check) {
