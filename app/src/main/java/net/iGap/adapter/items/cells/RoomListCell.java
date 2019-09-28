@@ -263,7 +263,6 @@ public class RoomListCell extends FrameLayout {
         if (isSelectedMode) {
             if (!haveCheckBox) {
                 checkBox = new CheckBox(getContext(), R.drawable.round_check);
-                checkBox.setColor(getResources().getColor(isDarkTheme ? R.color.md_blue_500 : R.color.notification_badge), getResources().getColor(R.color.whit_background));
                 checkBox.setVisibility(VISIBLE);
                 addView(checkBox);
                 haveCheckBox = true;

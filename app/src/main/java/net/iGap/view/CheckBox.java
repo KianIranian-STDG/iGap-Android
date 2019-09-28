@@ -17,6 +17,8 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import androidx.annotation.Keep;
 
+import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.helper.LayoutCreator;
 
 public class CheckBox extends View {
@@ -71,6 +73,7 @@ public class CheckBox extends View {
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setTextSize(LayoutCreator.dp(18));
         checkDrawable = context.getResources().getDrawable(resId).mutate();
+        setColor(new Theme().getPrimaryColor(context), getResources().getColor(R.color.whit_background));
     }
 
     @Override
