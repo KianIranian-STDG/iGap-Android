@@ -504,6 +504,17 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             }
         });
 
+        viewModel.showRippleView.observe(this, isShow -> {
+            if (isShow != null) {
+                if (isShow) {
+                    binding.rippleItem.setVisibility(View.VISIBLE);
+                } else {
+                    binding.rippleItem.stopAnimation();
+                    binding.rippleItem.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
         timerObserver = time -> {
             if (time == null) return;
             Intent intent = new Intent(CALL_TIMER_BROADCAST);
