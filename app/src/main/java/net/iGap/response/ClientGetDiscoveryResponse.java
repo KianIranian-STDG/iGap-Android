@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import android.util.Log;
+
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.fragments.discovery.OnDiscoveryList;
 import net.iGap.proto.ProtoClientGetDiscovery;
@@ -35,6 +37,7 @@ public class ClientGetDiscoveryResponse extends MessageHandler {
         super.handler();
         ProtoClientGetDiscovery.ClientGetDiscoveryResponse.Builder builder = (ProtoClientGetDiscovery.ClientGetDiscoveryResponse.Builder) message;
         ArrayList<DiscoveryItem> res = new ArrayList<>();
+        Log.i("beniamin", "handler: " + builder.getTitle());
         for (ProtoGlobal.Discovery discovery : builder.getDiscoveriesList()) {
             res.add(new DiscoveryItem(discovery));
         }
