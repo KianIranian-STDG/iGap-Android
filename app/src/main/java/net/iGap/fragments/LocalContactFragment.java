@@ -21,6 +21,7 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterListContact;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
@@ -195,7 +196,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
     public void onRightIconClickListener(View view) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net I'm waiting for you!");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.invitation_message) + "+" + ActivityMain.userPhoneNumber);
         sendIntent.setType("text/plain");
         Intent openInChooser = Intent.createChooser(sendIntent, "Open in...");
         getActivity().startActivity(openInChooser);
