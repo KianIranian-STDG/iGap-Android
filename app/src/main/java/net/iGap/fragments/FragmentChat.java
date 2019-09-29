@@ -2279,10 +2279,10 @@ public class FragmentChat extends BaseFragment
                 return stopSuperPress;
             }
 
-            FragmentShowImage fragment = (FragmentShowImage) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
+            /*FragmentShowImage fragment = (FragmentShowImage) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
             if (fragment != null) {
                 removeFromBaseFragment(fragment);
-            } else if (mAdapter != null && mAdapter.getSelections().size() > 0) {
+            } else*/ if (mAdapter != null && mAdapter.getSelections().size() > 0) {
                 mAdapter.deselect();
             } else if (emojiPopup != null && emojiPopup.isShowing()) {
                 emojiPopup.dismiss();
@@ -4517,7 +4517,7 @@ public class FragmentChat extends BaseFragment
                     String delete;
                     String textCheckBox = G.context.getResources().getString(R.string.st_checkbox_delete) + " " + title;
                     if (HelperCalander.isPersianUnicode) {
-                        delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "1"));
+                        delete = HelperCalander.convertToUnicodeFarsiNumber(getString(R.string.st_desc_delete, "1"));
                     } else {
                         delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "the"));
                     }

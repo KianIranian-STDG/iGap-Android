@@ -22,10 +22,10 @@ import net.iGap.helper.LayoutCreator;
 public class CheckBox extends View {
 
     private Drawable checkDrawable;
-    private static Paint paint;
-    private static Paint eraser;
-    private static Paint eraser2;
-    private static Paint backgroundPaint;
+    private Paint paint;
+    private Paint eraser;
+    private Paint eraser2;
+    private Paint backgroundPaint;
     private TextPaint textPaint;
 
     private Bitmap drawBitmap;
