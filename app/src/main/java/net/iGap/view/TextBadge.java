@@ -24,7 +24,7 @@ public class TextBadge extends AppCompatTextView {
         super(context);
         setTextColor(ContextCompat.getColor(context, R.color.white));
         setGravity(Gravity.CENTER);
-        ViewMaker.setTextSize(this, R.dimen.dp12);
+        ViewMaker.setTextSize(this, R.dimen.dp10);
         setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
     }
 
