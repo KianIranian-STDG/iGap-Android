@@ -327,7 +327,7 @@ public class RealmStickers extends RealmObject {
                         hashedData.add(structGroupSticker.getId());
                     }
 
-                    RealmResults<RealmStickers> allStickers = realm1.where(RealmStickers.class).equalTo(RealmStickersFields.IS_FAVORITE, true).findAll();
+                    RealmResults<RealmStickers> allStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.IS_FAVORITE, true).findAll();
                     for (RealmStickers realmStickers : allStickers) {
                         if (!hashedData.contains(realmStickers.st_id)) {
                             itemToDelete.add(realmStickers);
