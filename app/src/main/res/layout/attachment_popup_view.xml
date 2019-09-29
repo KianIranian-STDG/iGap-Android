@@ -19,21 +19,23 @@
             android:id="@+id/rcvContent"
             style="?textColorMenuTheme"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp100"
-            android:layout_margin="@dimen/dp8"
+            android:layout_height="@dimen/dp105"
+            android:layout_margin="@dimen/dp4"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/divider"/>
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/divider"
             style="?lineColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_margin="@dimen/dp8"
+            android:layout_margin="@dimen/dp4"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rcvContent" />
+            app:layout_constraintTop_toBottomOf="@id/rcvContent"
+            app:layout_constraintBottom_toTopOf="@id/lyt_buttons"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/lyt_buttons"
@@ -42,14 +44,15 @@
             android:visibility="visible"
             app:layout_constraintLeft_toLeftOf="@id/divider"
             app:layout_constraintRight_toRightOf="@id/divider"
-            app:layout_constraintTop_toBottomOf="@id/divider">
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/txtCamera"
                 style="@style/myIconTextViewStyle2"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
-                android:layout_marginTop="@dimen/dp8"
+                android:layout_marginTop="@dimen/dp4"
                 android:text="@string/md_camera_alt"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/textPicture"
@@ -181,7 +184,7 @@
                 style="@style/myIconTextViewStyle2"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
-                android:layout_marginTop="@dimen/dp8"
+                android:layout_marginTop="@dimen/dp4"
                 android:text="@string/md_igap_file"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/txtContact"
@@ -191,7 +194,7 @@
                 android:id="@+id/txtFile2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp8"
+                android:layout_marginBottom="@dimen/dp4"
                 android:text="@string/am_file"
                 android:textSize="@dimen/dp10"
                 style="?text2TitleColorSettingTheme"

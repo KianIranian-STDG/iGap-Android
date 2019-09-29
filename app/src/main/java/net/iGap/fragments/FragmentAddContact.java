@@ -287,7 +287,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
 
     private void setupToolbar(View view) {
 
-        String toolbarTitle = pageMode == ContactMode.ADD ? getString(R.string.menu_add_contact) : getString(R.string.edit_contact);
+        String toolbarTitle = pageMode == ContactMode.ADD ? getString(R.string.menu_add_contact) : getString(R.string.edit);
 
         ViewGroup toolbarLayout = view.findViewById(R.id.frg_add_contact_toolbar);
 
@@ -475,7 +475,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
     public void onContactEditError(int majorCode, int minorCode) {
         G.handler.post(() -> {
             loader.setVisibility(View.GONE);
-            HelperError.showSnackMessage(getString(R.string.server_error), false);
+            if (getActivity() != null ) HelperError.showSnackMessage(getActivity().getString(R.string.server_error), false);
         });
     }
 

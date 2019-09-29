@@ -39,6 +39,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -171,10 +172,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private boolean retryProviderInstall;
 
-    public static boolean isMenuButtonAddShown = false;
     public static boolean isOpenChatBeforeSheare = false;
     public static boolean isLock = false;
-    public static boolean isActivityEnterPassCode = false;
     public static FinishActivity finishActivity;
     public static boolean disableSwipe = false;
     public static OnBackPressedListener onBackPressedListener;
@@ -252,6 +251,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         String message = G.context.getString(R.string.error_submit_qr_code);
                         if (majorCode == 10183 && minorCode == 2) {
                             message = G.context.getString(R.string.E_10183);
+                        } else if (majorCode == 10184 && minorCode == 1) {
+                            message = G.context.getString(R.string.error_ivand_limit_gift);
                         }
 
                         SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, false);
@@ -318,6 +319,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
             handleDeepLink(intent);
+        }
+
+        if (G.isFirstPassCode) {
+            openActivityPassCode();
         }
     }
 
@@ -433,9 +438,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             };
 
-            /*if (G.isFirstPassCode) {
+            if (G.isFirstPassCode) {
                 openActivityPassCode();
-            }*/
+            }
 
             initTabStrip(getIntent());
             IntentFilter intentFilter = new IntentFilter();
@@ -494,20 +499,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 userPhoneNumber = userInfo.getUserInfo().getPhoneNumber();
             }
 
-
-            if (!G.userLogin) {
-                /**
-                 * set true mFirstRun for get room history after logout and login again
-                 */
-                new Thread(() -> {
-                    boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
-                    if (deleteFolderBackground) {
-                        deleteContentFolderChatBackground();
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
-                        editor.apply();
-                    }
-                }).start();
+            boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
+            if (deleteFolderBackground) {
+                deleteContentFolderChatBackground();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
+                editor.apply();
             }
 
             if (G.twoPaneMode) {
@@ -655,22 +652,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     getWallpaperAsDefault();
                 }
             }
-
-            ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
-                @Override
-                public void onResponse(@NotNull Call<StructSticker> call, @NotNull Response<StructSticker> response) {
-                    if (response.body() != null) {
-                        if (response.body().getOk()) {
-                            RealmStickers.updateStickers(response.body().getData());
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(@NotNull Call<StructSticker> call, @NotNull Throwable t) {
-
-                }
-            });
 
         } else {
             TextView textView = new TextView(this);
@@ -968,10 +949,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (availability.isUserResolvableError(errorCode)) {
             // Recoverable error. Show a dialog prompting the user to
             // install/update/enable Google Play services.
-            availability.showErrorDialogFragment(this, errorCode, ERROR_DIALOG_REQUEST_CODE, dialog -> {
-                // The user chose not to take the recovery action
-                onProviderInstallerNotAvailable();
-            });
+            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                availability.showErrorDialogFragment(this, errorCode, ERROR_DIALOG_REQUEST_CODE, dialog -> {
+                    // The user chose not to take the recovery action
+                    onProviderInstallerNotAvailable();
+                });
+            }
         } else {
             // Google Play services is not available.
             onProviderInstallerNotAvailable();
@@ -1213,9 +1196,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
         }
 
-        if (!isActivityEnterPassCode && G.isPassCode && isLock && !G.isRestartActivity && !isUseCamera) {
+        if (G.isPassCode && isLock && !G.isRestartActivity && !isUseCamera) {
             enterPassword();
-        } else if (!isActivityEnterPassCode && !G.isRestartActivity) {
+        } else if (!G.isRestartActivity) {
             long currentTime = System.currentTimeMillis();
             long timeLock = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
             long calculatorTimeLock = currentTime - oldTime;
@@ -1276,18 +1259,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
+        Log.wtf(this.getClass().getName(),"onBackPressed");
         if (G.ISRealmOK) {
             if (G.onBackPressedWebView != null) {
+                Log.wtf(this.getClass().getName(),"onBackPressedWebView");
                 if (G.onBackPressedWebView.onBack()) {
                     return;
                 }
             }
 
             if (G.onBackPressedExplorer != null) {
+                Log.wtf(this.getClass().getName(),"onBackPressedExplorer");
                 if (G.onBackPressedExplorer.onBack()) {
                     return;
                 }
             } else if (G.onBackPressedChat != null) {
+                Log.wtf(this.getClass().getName(),"onBackPressedChat");
                 if (G.onBackPressedChat.onBack()) {
                     return;
                 }
@@ -1298,7 +1285,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 onBackPressedListener.doBack();
             }
             if (G.twoPaneMode) {
+                Log.wtf(this.getClass().getName(), "twoPaneMode");
                 if (findViewById(R.id.fullScreenFrame).getVisibility() == View.VISIBLE) {//handle back in fragment show like dialog
+                    Log.wtf(this.getClass().getName(), "fullScreenFrame VISIBLE");
                     Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fullScreenFrame);
                     if (frag == null) {
                         Log.wtf(this.getClass().getName(), "pop from: detailFrame");
@@ -1316,6 +1305,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
                     }
                 } else {
+                    Log.wtf(this.getClass().getName(), "fullScreenFrame not VISIBLE");
                     if (getSupportFragmentManager().getBackStackEntryCount() > 2) {
                         Log.wtf(this.getClass().getName(), "pop from: backStack");
                         if (getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(FragmentChat.class.getName())) {

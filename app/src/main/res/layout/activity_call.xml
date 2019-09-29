@@ -70,11 +70,12 @@
             app:layout_constraintRight_toRightOf="@id/fcr_imv_background"
             app:layout_constraintTop_toTopOf="@id/fcr_imv_background" />
 
-        <View
+        <net.iGap.module.WavesView
             android:id="@+id/rippleItem"
+            style="@style/Widget.WaveView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="@{activityCallViewModel.showRippleView}"
+            android:layerType="software"
             app:layout_constraintBottom_toTopOf="@id/callInfo"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintLeft_toLeftOf="parent"

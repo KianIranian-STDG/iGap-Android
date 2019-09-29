@@ -1,9 +1,13 @@
 package net.iGap.helper;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Paint;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import net.iGap.G;
 
@@ -125,5 +129,26 @@ public class LayoutCreator {
             return 0;
         }
         return (int) Math.ceil(context.getResources().getDisplayMetrics().density * value);
+    }
+
+    public static int dpToPx(int dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    public static int pxToDp(int px) {
+        return (int) (px / Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    public static int manageSpec(int size, int mode) {
+        return View.MeasureSpec.makeMeasureSpec(size, mode);
+    }
+
+    public static int getTextHeight(TextView textView) {
+        Paint.FontMetrics metrics = textView.getPaint().getFontMetrics();
+        return (int) (metrics.bottom - metrics.top);
+    }
+
+    public static int getTextWidth(TextView textView) {
+        return (int) textView.getPaint().measureText(textView.getText().toString());
     }
 }

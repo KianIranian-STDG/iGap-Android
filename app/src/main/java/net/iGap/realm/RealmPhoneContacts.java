@@ -182,7 +182,11 @@ public class RealmPhoneContacts extends RealmObject {
     private static String checkString(StructListOfContact item) {
         String phoneText = item.getPhone() + "_" + item.firstName + item.lastName;
 
-        phoneText.getBytes(StandardCharsets.UTF_8);
+        try {
+            phoneText.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         return phoneText;
     }
 

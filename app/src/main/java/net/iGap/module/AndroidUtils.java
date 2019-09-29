@@ -490,7 +490,7 @@ public final class AndroidUtils {
     private static String makeSHA1Hash(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA1");
         md.reset();
-        byte[] buffer = input.getBytes(StandardCharsets.UTF_8);
+        byte[] buffer = input.getBytes("UTF-8");
         md.update(buffer);
         byte[] digest = md.digest();
 

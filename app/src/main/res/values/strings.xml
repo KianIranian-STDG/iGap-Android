@@ -1423,7 +1423,7 @@ Want to get it?</string>
     <string name="ignore">Ignore</string>
     <string name="permission_auto_start">please select and active iGap from menu to receive messages when even app is not in background</string>
     <string name="dont_show_again">Do not show again</string>
-    <string name="invitation_message">\Hey Join iGap : https://www.igap.net/ I\'m waiting for you!\ \n Referred Number is : </string>
+    <string name="invitation_message">\Hey Join iGap : http://d.igap.net/invite I\'m waiting for you!\ \n Referred Number is : </string>
     <string name="namma_per_uh">FileLister</string>
     <string name="Please_enter_valid_folder_name">Please enter a valid folder name</string>
     <string name="This_folder_already_exists">"This folder already exists.\n Please provide another name for the folder"</string>
@@ -2241,5 +2241,7 @@ Want to get it?</string>
     <string name="kuknos_RecoverySK_CheckPIN">I want to set a PIN code for extra security.</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
+    <string name="error_ivand_limit_gift">Unfortunately, the set gifts have come to an end.</string>
+    <string name="referral_error_yourself">It is not possible to register your number as a referral.</string>
 
 </resources>

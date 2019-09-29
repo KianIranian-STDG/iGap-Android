@@ -343,11 +343,11 @@
 
                 <net.iGap.module.CustomToggleButton
                     android:id="@+id/useSdk"
-                    android:layout_width="@dimen/toggles_height"
+                    android:layout_width="@dimen/toggles_width"
                     android:layout_height="@dimen/toggles_height"
                     android:checked="@{viewModel.isSdkEnable}"
-                    android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.showLayoutSdk}"
+                    android:clickable="false"
                     app:layout_constraintBottom_toBottomOf="@id/useSdkTitle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/useSdkTitle"
@@ -357,7 +357,11 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:onClick="@{()->viewModel.onClickSdkEnable()}"
-                    android:visibility="@{viewModel.showLayoutSdk}" />
+                    android:visibility="@{viewModel.showLayoutSdk}"
+                    app:layout_constraintStart_toStartOf="@id/useSdkTitle"
+                    app:layout_constraintEnd_toEndOf="@id/useSdk"
+                    app:layout_constraintTop_toTopOf="@id/useSdkTitle"
+                    app:layout_constraintBottom_toBottomOf="@id/useSdkTitle"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

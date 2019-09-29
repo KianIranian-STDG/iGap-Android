@@ -167,7 +167,7 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
     }
 
     public void setBadgeCount(int count) {
-        badgeView.getTextView().setText(String.valueOf(count));
+        badgeView.setText(String.valueOf(count));
         badgeView.getTextView().setTextSize(9);
         badgeView.getTextView().setSingleLine(true);
         if (count == 0) {

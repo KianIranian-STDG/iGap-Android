@@ -209,7 +209,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                 title = view.findViewById(R.id.title);
                 subtitle = view.findViewById(R.id.subtitle);
 
-                if (G.selectedLanguage.equals("en") || G.selectedLanguage.equals("fr")) {
+                if (!G.isAppRtl) {
                     title.setGravity(Gravity.LEFT);
                     subtitle.setGravity(Gravity.LEFT);
                 } else {

@@ -253,17 +253,12 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
         }
     }
 
-    public void onStart() {
-        ActivityMain.isActivityEnterPassCode = true;
-    }
 
     @Override
     protected void onCleared() {
         super.onCleared();
         hideKeyword.setValue(true);
         realm.close();
-        ActivityMain.isActivityEnterPassCode = false;
-
     }
 
     public void onResume() {
