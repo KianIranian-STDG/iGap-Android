@@ -529,7 +529,7 @@ public final class StartupActions {
                 Raad.isFA = true;
                 break;
 
-                //کوردی لوکال از چپ به راست است و برای استفاده از این گویش از زبان های راست به چپ جایگزین استفاده شده است
+            //کوردی لوکال از چپ به راست است و برای استفاده از این گویش از زبان های راست به چپ جایگزین استفاده شده است
             case "کوردی":
                 selectedLanguage = "ur";
                 HelperCalander.isPersianUnicode = true;
@@ -636,25 +636,47 @@ public final class StartupActions {
                 .schemaVersion(REALM_SCHEMA_VERSION)
                 .compactOnLaunch()
                 .migration(new RealmMigration()).build();
+        RealmConfiguration newConfig;
+        if (true) {
+            Log.wtf(this.getClass().getName(),"state true");
+            newConfig = new RealmConfiguration.Builder()
+                    .name(context.getResources().getString(R.string.encriptedDB))
+                    .encryptionKey(mKey)
+                    .compactOnLaunch(new CompactOnLaunchCallback() {
+                        @Override
+                        public boolean shouldCompact(long totalBytes, long usedBytes) {
+                            final long thresholdSize = 10 * 1024 * 1024;
 
-        RealmConfiguration newConfig = new RealmConfiguration.Builder()
-                .name(context.getResources().getString(R.string.encriptedDB))
-                .encryptionKey(mKey)
-                .compactOnLaunch(new CompactOnLaunchCallback() {
-                    @Override
-                    public boolean shouldCompact(long totalBytes, long usedBytes) {
-                        final long thresholdSize = 10 * 1024 * 1024;
+                            if (totalBytes > 500 * 1024 * 1024) {
+                                HelperLog.setErrorLog(new Exception("DatabaseSize=" + totalBytes + " UsedSize=" + usedBytes));
+                            }
 
-                        if (totalBytes > 500 * 1024 * 1024) {
-                            HelperLog.setErrorLog(new Exception("DatabaseSize=" + totalBytes + " UsedSize=" + usedBytes));
+                            return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.9);
                         }
+                    })
+                    .schemaVersion(REALM_SCHEMA_VERSION)
+                    .migration(new RealmMigration())
+                    .build();
+        } else {
+            newConfig = new RealmConfiguration.Builder()
+                    .name("kb24.realm")
+                    .encryptionKey(mKey)
+                    .compactOnLaunch(new CompactOnLaunchCallback() {
+                        @Override
+                        public boolean shouldCompact(long totalBytes, long usedBytes) {
+                            final long thresholdSize = 10 * 1024 * 1024;
 
-                        return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.9);
-                    }
-                })
-                .schemaVersion(REALM_SCHEMA_VERSION)
-                .migration(new RealmMigration())
-                .build();
+                            if (totalBytes > 500 * 1024 * 1024) {
+                                HelperLog.setErrorLog(new Exception("DatabaseSize=" + totalBytes + " UsedSize=" + usedBytes));
+                            }
+
+                            return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.9);
+                        }
+                    })
+                    .schemaVersion(REALM_SCHEMA_VERSION)
+                    .migration(new RealmMigration())
+                    .build();
+        }
 
         File oldRealmFile = new File(oldConfig.getPath());
         File newRealmFile = new File(newConfig.getPath());
@@ -678,5 +700,62 @@ public final class StartupActions {
                 return null;
             }
         }
+    }
+
+    public static RealmConfiguration getInstanceKb(boolean state) {
+        SharedPreferences sharedPreferences = G.context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
+        String stringArray = sharedPreferences.getString("myByteArray", null);
+        if (stringArray == null) {
+            byte[] key = new byte[64];
+            new SecureRandom().nextBytes(key);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            String saveThis = Base64.encodeToString(key, Base64.DEFAULT);
+            editor.putString("myByteArray", saveThis);
+            editor.apply();
+        }
+
+        byte[] mKey = Base64.decode(sharedPreferences.getString("myByteArray", null), Base64.DEFAULT);
+
+        RealmConfiguration newConfig;
+        if (state) {
+            newConfig = new RealmConfiguration.Builder()
+                    .name(context.getResources().getString(R.string.encriptedDB))
+                    .encryptionKey(mKey)
+                    .compactOnLaunch(new CompactOnLaunchCallback() {
+                        @Override
+                        public boolean shouldCompact(long totalBytes, long usedBytes) {
+                            final long thresholdSize = 10 * 1024 * 1024;
+
+                            if (totalBytes > 500 * 1024 * 1024) {
+                                HelperLog.setErrorLog(new Exception("DatabaseSize=" + totalBytes + " UsedSize=" + usedBytes));
+                            }
+
+                            return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.9);
+                        }
+                    })
+                    .schemaVersion(REALM_SCHEMA_VERSION)
+                    .migration(new RealmMigration())
+                    .build();
+        } else {
+            newConfig = new RealmConfiguration.Builder()
+                    .name("kb24.realm")
+                    .encryptionKey(mKey)
+                    .compactOnLaunch(new CompactOnLaunchCallback() {
+                        @Override
+                        public boolean shouldCompact(long totalBytes, long usedBytes) {
+                            final long thresholdSize = 10 * 1024 * 1024;
+
+                            if (totalBytes > 500 * 1024 * 1024) {
+                                HelperLog.setErrorLog(new Exception("DatabaseSize=" + totalBytes + " UsedSize=" + usedBytes));
+                            }
+
+                            return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.9);
+                        }
+                    })
+                    .schemaVersion(REALM_SCHEMA_VERSION)
+                    .migration(new RealmMigration())
+                    .build();
+        }
+        return newConfig;
     }
 }

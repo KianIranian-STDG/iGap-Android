@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.BotInit;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyDialog;
+import net.iGap.module.StartupActions;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.proto.ProtoGlobal;
@@ -78,6 +80,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -113,6 +116,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private ConstraintLayout root;
     private ConstraintSet constraintSet;
     private ViewGroup selectLayoutRoot;
+    private boolean state;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -156,18 +160,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         ViewGroup layoutToolbar = view.findViewById(R.id.amr_layout_toolbar);
 
-        /*if (G.twoPaneMode && G.isLandscape) {
-            mHelperToolbar = HelperToolbar.create()
-                    .setContext(getContext())
-                    .setTabletIcons(R.string.add_icon, R.string.edit_icon, R.string.search_icon)
-                    .setTabletMode(true)
-                    .setListener(this);
-            layoutToolbar.addView(mHelperToolbar.getView());
-            RealmUserInfo userInfo = getRealmFragmentMain().where(RealmUserInfo.class).findFirst();
-            mHelperToolbar.getTabletUserName().setText(userInfo.getUserInfo().getDisplayName());
-            mHelperToolbar.getTabletUserPhone().setText(userInfo.getUserInfo().getPhoneNumber());
-            avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getTabletUserAvatar(), userInfo.getUserId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
-        } else {*/
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.edit_icon)
@@ -181,7 +173,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 .setListener(this);
         layoutToolbar.addView(mHelperToolbar.getView());
         mHelperToolbar.registerTimerBroadcast();
-        /*}*/
 
         mBtnRemoveSelected = view.findViewById(R.id.amr_btn_delete_selected);
         TextView mBtnClearCacheSelected = view.findViewById(R.id.amr_btn_clear_cache_selected);
@@ -283,6 +274,18 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         //just check at first time page loaded
         notifyChatRoomsList();
 
+        view.findViewById(R.id.switchAccount).setOnClickListener(v -> {
+            Log.wtf(this.getClass().getName(), "state: " + state);
+            getRealmFragmentMain().close();
+            realmFragmentMain = null;
+            /*Realm.removeDefaultConfiguration();*/
+            RealmConfiguration configuredRealm = StartupActions.getInstanceKb(state);
+            Realm.setDefaultConfiguration(configuredRealm);
+            state = !state;
+            getRealmFragmentMain();
+            initRecycleView();
+        });
+
     }
 
     private void notifyChatRoomsList() {
@@ -343,16 +346,16 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     private void initRecycleView() {
 
-        if (results == null) {
+        /*if (results == null) {*/
             String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
             Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
             RealmQuery<RealmRoom> temp = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false);
             results = temp.sort(fieldNames, sort).findAllAsync();
             roomListAdapter = new RoomListAdapter(results, viewById, pbLoading, avatarHandler, mSelectedRoomList);
             getChatLists();
-        } else {
+        /*} else {*/
             pbLoading.setVisibility(View.GONE);
-        }
+        /*}*/
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
