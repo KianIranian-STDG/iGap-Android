@@ -106,6 +106,7 @@ import com.vanniktech.emoji.sticker.OnStickerItemDownloaded;
 import com.vanniktech.emoji.sticker.OnStickerListener;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
+import com.vanniktech.emoji.sticker.struct.StructSticker;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -150,6 +151,7 @@ import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.fragments.emoji.add.DialogAddSticker;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
+import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.remove.FragmentSettingRemoveStickers;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
@@ -274,7 +276,6 @@ import net.iGap.proto.ProtoClientRoomReport;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
-import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAttachmentFields;
@@ -343,6 +344,9 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -1100,6 +1104,9 @@ public class FragmentChat extends BaseFragment
         }
 
         registerListener();
+
+        //enable attachment popup camera if was visible
+        if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.enableCamera();
     }
 
     private void checkToolbarNameSize() {
@@ -1131,6 +1138,10 @@ public class FragmentChat extends BaseFragment
         iUpdateLogItem = null;
 
         unRegisterListener();
+
+        //disable attachment popup camera
+        if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.disableCamera();
+
     }
 
     @Override
@@ -1520,7 +1531,7 @@ public class FragmentChat extends BaseFragment
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(G.twoPaneMode ? R.string.close_icon : R.string.back_icon)
-                .setRightIcons(R.string.more_icon, R.string.voice_call_icon, R.string.video_call_icon)
+                .setRightIcons(R.string.more_icon, R.string.voice_call_icon)
                 .setLogoShown(false)
                 .setChatRoom(true)
                 .setPlayerEnable(true)
@@ -1672,7 +1683,6 @@ public class FragmentChat extends BaseFragment
         isChatReadOnly = realmRoom.getReadOnly();
         //gone video , voice button call then if status was ok visible them
         mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
-        mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
 
         if (isChatReadOnly) {
             viewAttachFile.setVisibility(View.GONE);
@@ -1686,13 +1696,6 @@ public class FragmentChat extends BaseFragment
 
                 } else {
                     mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
-                }
-
-                if (callConfig.isVideo_calling()) {
-                    mHelperToolbar.getThirdRightButton().setVisibility(View.VISIBLE);
-
-                } else {
-                    mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
                 }
 
             } else {
@@ -1721,7 +1724,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void goneCallButtons() {
-        mHelperToolbar.getThirdRightButton().setVisibility(View.GONE);
         mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
     }
 
@@ -2277,10 +2279,10 @@ public class FragmentChat extends BaseFragment
                 return stopSuperPress;
             }
 
-            FragmentShowImage fragment = (FragmentShowImage) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
+            /*FragmentShowImage fragment = (FragmentShowImage) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
             if (fragment != null) {
                 removeFromBaseFragment(fragment);
-            } else if (mAdapter != null && mAdapter.getSelections().size() > 0) {
+            } else*/ if (mAdapter != null && mAdapter.getSelections().size() > 0) {
                 mAdapter.deselect();
             } else if (emojiPopup != null && emojiPopup.isShowing()) {
                 emojiPopup.dismiss();
@@ -3071,15 +3073,16 @@ public class FragmentChat extends BaseFragment
         G.openBottomSheetItem = new OpenBottomSheetItem() {
             @Override
             public void openBottomSheet(boolean isNew) {
-                mAttachmentPopup.setIsNewDialog(isNew);
+                if (mAttachmentPopup != null) mAttachmentPopup.setIsNewDialog(isNew);
                 imvAttachFileButton.performClick();
-                mAttachmentPopup.notifyRecyclerView();
+                if (mAttachmentPopup != null) mAttachmentPopup.notifyRecyclerView();
             }
 
         };
 
         imvAttachFileButton.setOnClickListener(view -> {
             if (mAttachmentPopup == null) initPopupAttachment();
+            mAttachmentPopup.setMessagesLayoutHeight(recyclerView.getMeasuredHeight());
             mAttachmentPopup.show();
         });
 
@@ -3203,12 +3206,16 @@ public class FragmentChat extends BaseFragment
 
     private void initPopupAttachment() {
 
+        if (getActivity() == null ) return;
+
         mAttachmentPopup = ChatAttachmentPopup.create()
-                .setContext(getContext())
+                .setContext(getActivity())
                 .setRootView(rootView)
                 .setFragment(FragmentChat.this)
                 .setFragmentActivity(G.fragmentActivity)
                 .setSharedPref(sharedPreferences)
+                .setMessagesLayoutHeight(recyclerView.getMeasuredHeight())
+                .setChatBoxHeight(viewAttachFile.getMeasuredHeight())
                 .setListener(FragmentChat.this)
                 .build();
 
@@ -4510,7 +4517,7 @@ public class FragmentChat extends BaseFragment
                     String delete;
                     String textCheckBox = G.context.getResources().getString(R.string.st_checkbox_delete) + " " + title;
                     if (HelperCalander.isPersianUnicode) {
-                        delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "1"));
+                        delete = HelperCalander.convertToUnicodeFarsiNumber(getString(R.string.st_desc_delete, "1"));
                     } else {
                         delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "the"));
                     }
@@ -5587,7 +5594,6 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
 
-        if (mAttachmentPopup != null) mAttachmentPopup.updateHeight();
 
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -5608,6 +5614,9 @@ public class FragmentChat extends BaseFragment
         }, 300);
 
         super.onConfigurationChanged(newConfig);
+
+        if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.updateHeight();
+
     }
 
     /**
@@ -5651,6 +5660,25 @@ public class FragmentChat extends BaseFragment
                 }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
                     @Override
                     public void onEmojiPopupShown() {
+                        ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
+                            @Override
+                            public void onResponse(@NotNull Call<StructSticker> call, @NotNull Response<StructSticker> response) {
+                                if (response.body() != null) {
+                                    if (response.body().getOk()) {
+                                        RealmStickers.updateStickers(response.body().getData(), () -> {
+                                            if (onUpdateSticker != null && getActivity() != null && !getActivity().isFinishing()) {
+                                                onUpdateSticker.update();
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NotNull Call<StructSticker> call, @NotNull Throwable t) {
+
+                            }
+                        });
                         changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
                         isEmojiSHow = true;
                         if (botInit != null) botInit.close();
@@ -8853,12 +8881,9 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onSecondRightIconClickListener(View view) {
-        CallSelectFragment.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-    }
-
-    @Override
-    public void onThirdRightIconClickListener(View view) {
-        CallSelectFragment.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+        CallSelectFragment selectFragment = CallSelectFragment.getInstance(chatPeerId, false, null);
+        if (getFragmentManager() != null)
+            selectFragment.show(getFragmentManager(), null);
     }
 
     @Override

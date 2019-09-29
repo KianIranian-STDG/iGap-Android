@@ -464,7 +464,6 @@
     <string name = "E_114">هەڵەیەک لە لایەن کلاینتەوە: ئیمەیل هەڵەیە.</string>
     <string name = "E_115">هەڵەی ناوەوەی سێرڤر</string>
     <string name = "E_116">هەڵەیەک لە لایەن کلاینتەوە: جۆری ڕەگەز هەڵەیە.</string>
-    <string name = "E_117">هەڵەی ناوەوەی سێرڤر</string>
     <string name = "E_118">هۆشدار: ژمارەی بەردەنگەکان زیاترە لە سنوورداری ژمارەی لای سێرڤر</string>
     <string name = "list_admin">لیستەی بەڕێوەبەران</string>
     <string name = "list_modereator">لیستەی چاودێران</string>
@@ -1734,7 +1733,6 @@
     <string name = "igasht_buy_ticket_title">کڕینی بلیت</string>
     <string name = "detail_title">وردەکاری</string>
     <string name = "igasht_place_of_visit_title">شوێنی سەردانکردن</string>
-    <string name = "igasht_add_new_place_title">زیادکردنی سەردانکردنی نوێ</string>
     <string name = "igasht_ticket_type_title">جۆری بلیت دیاری بکە</string>
     <string name = "igasht_enter_ticket_count_title">ژمارەی سەردانکەرەکان داخڵ بکە.</string>
     <string name = "igasht_add_ticket_count_button_title">تۆمار </string>

@@ -183,6 +183,7 @@
             android:layout_marginTop="@dimen/dp16"
             android:background="?attr/selectableItemBackground"
             android:onClick="@{()->viewModel.onClickRussian()}"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/txtLanguageRu"
             app:layout_constraintEnd_toEndOf="@id/persianLanguage"
             app:layout_constraintStart_toStartOf="@id/persianLanguage"
@@ -195,6 +196,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
             android:text="Russian"
+            android:visibility="gone"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/russianLanguage"
@@ -208,7 +210,7 @@
             android:text="@string/check_icon"
             android:textColor="@color/green"
             android:textSize="@dimen/largeTextSize"
-            android:visibility="@{viewModel.isRussian}"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/russianLanguage"
             app:layout_constraintEnd_toEndOf="@id/russianLanguage"
             app:layout_constraintTop_toTopOf="@id/russianLanguage" />
@@ -220,6 +222,7 @@
             android:layout_marginTop="@dimen/dp16"
             android:background="?attr/selectableItemBackground"
             android:onClick="@{()->viewModel.onClickKurdi()}"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/txtLanguageKu"
             app:layout_constraintEnd_toEndOf="@id/persianLanguage"
             app:layout_constraintStart_toStartOf="@id/persianLanguage"
@@ -234,6 +237,7 @@
             android:text="کوردی"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/kurdiLanguage"
             app:layout_constraintTop_toTopOf="@id/kurdiLanguage" />
 
@@ -245,7 +249,7 @@
             android:text="@string/check_icon"
             android:textColor="@color/green"
             android:textSize="@dimen/largeTextSize"
-            android:visibility="@{viewModel.isKurdi}"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/kurdiLanguage"
             app:layout_constraintEnd_toEndOf="@id/kurdiLanguage"
             app:layout_constraintTop_toTopOf="@id/kurdiLanguage" />

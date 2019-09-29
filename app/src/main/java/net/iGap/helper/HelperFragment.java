@@ -22,6 +22,7 @@ import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
+import net.iGap.fragments.FragmentShowMember;
 import net.iGap.fragments.ShowCustomList;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.payment.PaymentCallBack;
@@ -330,6 +331,7 @@ public class HelperFragment {
         return fragmentName.equals(FragmentChannelProfile.class.getName()) || fragmentName.equals(EditChannelFragment.class.getName()) ||
                 fragmentName.equals(FragmentGroupProfile.class.getName()) || fragmentName.equals(EditGroupFragment.class.getName()) ||
                 fragmentName.equals(FragmentContactsProfile.class.getName()) || fragmentName.equals(ShowCustomList.class.getName()) ||
-                fragmentName.equals(FragmentShearedMedia.class.getName()) || fragmentName.equals(FragmentEditImage.class.getName());
+                fragmentName.equals(FragmentShearedMedia.class.getName()) || fragmentName.equals(FragmentEditImage.class.getName()) ||
+                fragmentName.equals(FragmentShowMember.class.getName());
     }
 }

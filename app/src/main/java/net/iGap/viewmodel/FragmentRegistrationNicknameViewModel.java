@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModel;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.BindingAdapter;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.interfaces.OnInfoCountryResponse;
@@ -229,7 +230,12 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
 
                     @Override
                     public void onErrorSetRepresentative(int majorCode, int minorCode) {
-                        G.handler.post(() -> prgVisibility.set(View.GONE));
+                        G.handler.post(() -> {
+                            prgVisibility.set(View.GONE);
+                            if (majorCode == 10177  && minorCode == 2) {
+                                HelperError.showSnackMessage(G.context.getString(R.string.referral_error_yourself), false);
+                            }
+                        });
                     }
                 });
     }
