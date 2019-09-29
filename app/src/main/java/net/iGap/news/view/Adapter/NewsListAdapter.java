@@ -22,8 +22,10 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private static final int newsType = 0;
     private static final int advType = 1;
+    private static final int loadType = 2;
     private NewsList mData;
     private onClickListener callBack;
+    private boolean isLoaderVisible = false;
 
     public NewsListAdapter(NewsList mData) {
         this.mData = mData;
@@ -42,6 +44,10 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 View doubleVH = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_adv_item, parent, false);
                 viewHolder = new AdvViewHolder(doubleVH);
                 break;
+            case loadType:
+                View loadVH = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_load_item, parent, false);
+                viewHolder = new LoadViewHolder(loadVH);
+                break;
             default:
                 break;
         }
@@ -58,6 +64,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case advType:
                 ((AdvViewHolder)holder).initVH(position);
                 break;
+            case loadType:
+                ((LoadViewHolder)holder).initVH();
+                break;
             default:
                 break;
         }
@@ -72,7 +81,35 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
+        if (mData.getNews().get(position) == null)
+            return loadType;
         return mData.getNews().get(position).getType();
+    }
+
+    public void addItems(NewsList postItems) {
+        this.mData.getNews().addAll(postItems.getNews());
+        notifyDataSetChanged();
+    }
+
+    public void addLoading() {
+        isLoaderVisible = true;
+        mData.getNews().add(null);
+        notifyItemInserted(mData.getNews().size() - 1);
+    }
+
+    public void removeLoading() {
+        isLoaderVisible = false;
+        int position = mData.getNews().size() - 1;
+        NewsList.News item = mData.getNews().get(position);
+        if (item == null) {
+            mData.getNews().remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public void clear() {
+        mData.setNews(null);
+        notifyDataSetChanged();
     }
 
     public class NewsViewHolder extends RecyclerView.ViewHolder {
@@ -158,6 +195,17 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position)));
         }
 
+    }
+
+    public class LoadViewHolder extends RecyclerView.ViewHolder {
+
+        LoadViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
+
+        void initVH() {
+
+        }
     }
 
     public interface onClickListener {

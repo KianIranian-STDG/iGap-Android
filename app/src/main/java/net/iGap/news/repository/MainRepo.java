@@ -15,7 +15,7 @@ public class MainRepo {
     private NewsAPIRepository repository = new NewsAPIRepository();
 
     public void getSlideNews(int start, int display, ApiResponse<NewsList> apiResponse) {
-        repository.getNewsList(new NewsApiArg(start, display, -1, NewsApiArg.NewsType.ERGENT), apiResponse);
+        repository.getNewsList(new NewsApiArg(start, display, -1, NewsApiArg.NewsType.FEATURED_NEWS), apiResponse);
     }
 
     public void getMainPage(ApiResponse<List<NewsFPList>> apiResponse) {

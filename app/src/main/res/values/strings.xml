@@ -2264,5 +2264,19 @@ Want to get it?</string>
     <string name="news_related_news">اخبار مرتبط</string>
     <string name="news_share">اشتراک گذاری خبر</string>
     <string name="news_write_comment">نظر شما چیست؟</string>
+    <string name="news_no_comment">هیچ نظری ثبت نشده است.</string>
     <string name="news_serverError">Something went wrong. Please try again.</string>
+    <string name="news_add_comment_title">ثبت نظر</string>
+    <string name="news_add_comment_author">نام</string>
+    <string name="news_add_comment_email">ایمیل</string>
+    <string name="news_add_comment_comment">دیدگاه شما</string>
+    <string name="news_add_comment_submit">ثبت</string>
+    <string name="news_add_comment_load">در حال ارسال</string>
+    <string name="news_add_comment_success">ثبت شد.</string>
+    <string name="news_add_comment_fail">خطا!</string>
+    <string name="news_add_comment_successToast">نظر شما با موفقیت ثبت شد.</string>
+    <string name="news_add_comment_errorAuthor">لطفا نام خود را وارد کنید.</string>
+    <string name="news_add_comment_errorEmail">لطفا ایمیل خود را وارد کنید.</string>
+    <string name="news_add_comment_errorEmail2">فرمت ایمیل وارد شده صحیح نیست.</string>
+    <string name="news_add_comment_errorComment">لطفا نظر خود را وارد کنید.</string>
 </resources>

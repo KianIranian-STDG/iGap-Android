@@ -1,5 +1,7 @@
 package net.iGap.news.viewmodel;
 
+import android.util.Log;
+
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -21,8 +23,11 @@ public class NewsDetailVM extends ViewModel {
 
     private MutableLiveData<NewsDetail> data;
     private MutableLiveData<NewsComment> comments;
+    private MutableLiveData<NewsList> relatedNews;
     private MutableLiveData<NewsError> error;
-    private MutableLiveData<Boolean> progressState;
+    private MutableLiveData<Boolean> progressStateContext;
+    private MutableLiveData<Boolean> progressStateComment;
+    private MutableLiveData<Boolean> progressStateRelated;
 
     private ObservableField<String> title;
     private ObservableField<String> rootTitle;
@@ -32,17 +37,17 @@ public class NewsDetailVM extends ViewModel {
     private ObservableField<String> tag;
     private ObservableField<String> date;
 
-
-    /* 0:main 1:comment 2:news*/
-    private int progressType = -1;
     private int newsID = -1;
     private DetailRepo repo;
 
     public NewsDetailVM() {
         data = new MutableLiveData<>();
         comments = new MutableLiveData<>();
+        relatedNews = new MutableLiveData<>();
         error = new MutableLiveData<>();
-        progressState = new MutableLiveData<>();
+        progressStateComment = new MutableLiveData<>();
+        progressStateContext = new MutableLiveData<>();
+        progressStateRelated = new MutableLiveData<>();
         repo = new DetailRepo();
 
         title = new ObservableField<>("عنوان خبر های ایران");
@@ -69,7 +74,7 @@ public class NewsDetailVM extends ViewModel {
                 date.set(newsDetail.getDate());
 
                 getNewsComment();
-                getRelatedNews();
+                getRelatedNewsS();
             }
 
             @Override
@@ -79,8 +84,7 @@ public class NewsDetailVM extends ViewModel {
 
             @Override
             public void setProgressIndicator(boolean visibility) {
-                progressType = 0;
-                progressState.setValue(visibility);
+                progressStateContext.setValue(visibility);
             }
         });
     }
@@ -89,24 +93,44 @@ public class NewsDetailVM extends ViewModel {
         repo.getNewsComment(newsID, 1, 3, new ApiResponse<NewsComment>() {
             @Override
             public void onResponse(NewsComment newsComment) {
+                if (newsComment == null) {
+                    newsComment = new NewsComment();
+                    newsComment.setComments(newsComment.getFakeData());
+                }
                 comments.setValue(newsComment);
             }
 
             @Override
             public void onFailed(String error) {
-
+                NewsComment temp = new NewsComment();
+                temp.setComments(temp.getFakeData());
+                comments.setValue(temp);
             }
 
             @Override
             public void setProgressIndicator(boolean visibility) {
-                progressType = 1;
-                progressState.setValue(visibility);
+                progressStateComment.setValue(visibility);
             }
         });
     }
 
-    private void getRelatedNews() {
-        // TODO to be added
+    private void getRelatedNewsS() {
+        repo.getRelatedNews(newsID, new ApiResponse<NewsList>() {
+            @Override
+            public void onResponse(NewsList newsList) {
+                relatedNews.setValue(newsList);
+            }
+
+            @Override
+            public void onFailed(String error) {
+                relatedNews.setValue(null);
+            }
+
+            @Override
+            public void setProgressIndicator(boolean visibility) {
+                progressStateRelated.setValue(visibility);
+            }
+        });
     }
 
     public void setData(MutableLiveData<NewsDetail> data) {
@@ -127,22 +151,6 @@ public class NewsDetailVM extends ViewModel {
 
     public void setError(MutableLiveData<NewsError> error) {
         this.error = error;
-    }
-
-    public MutableLiveData<Boolean> getProgressState() {
-        return progressState;
-    }
-
-    public void setProgressState(MutableLiveData<Boolean> progressState) {
-        this.progressState = progressState;
-    }
-
-    public int getProgressType() {
-        return progressType;
-    }
-
-    public void setProgressType(int progressType) {
-        this.progressType = progressType;
     }
 
     public int getNewsID() {
@@ -211,5 +219,37 @@ public class NewsDetailVM extends ViewModel {
 
     public MutableLiveData<NewsDetail> getData() {
         return data;
+    }
+
+    public void setRelatedNews(MutableLiveData<NewsList> relatedNews) {
+        this.relatedNews = relatedNews;
+    }
+
+    public MutableLiveData<NewsList> getRelatedNews() {
+        return relatedNews;
+    }
+
+    public MutableLiveData<Boolean> getProgressStateContext() {
+        return progressStateContext;
+    }
+
+    public void setProgressStateContext(MutableLiveData<Boolean> progressStateContext) {
+        this.progressStateContext = progressStateContext;
+    }
+
+    public MutableLiveData<Boolean> getProgressStateComment() {
+        return progressStateComment;
+    }
+
+    public void setProgressStateComment(MutableLiveData<Boolean> progressStateComment) {
+        this.progressStateComment = progressStateComment;
+    }
+
+    public MutableLiveData<Boolean> getProgressStateRelated() {
+        return progressStateRelated;
+    }
+
+    public void setProgressStateRelated(MutableLiveData<Boolean> progressStateRelated) {
+        this.progressStateRelated = progressStateRelated;
     }
 }

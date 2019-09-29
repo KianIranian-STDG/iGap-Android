@@ -1,8 +1,12 @@
 package net.iGap.news.view;
 
+import android.content.ClipData;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.smarteist.autoimageslider.IndicatorAnimations;
@@ -26,32 +29,31 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
 import net.iGap.databinding.NewsDetailPageBinding;
-import net.iGap.databinding.NewsMainPageBinding;
+import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.dialog.payment.CompleteListener;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.news.repository.model.NewsComment;
 import net.iGap.news.repository.model.NewsDetail;
-import net.iGap.news.repository.model.NewsFPList;
-import net.iGap.news.repository.model.NewsFirstPage;
-import net.iGap.news.repository.model.NewsMainBTN;
-import net.iGap.news.repository.model.NewsSlider;
+import net.iGap.news.repository.model.NewsList;
+import net.iGap.news.view.Adapter.NewsCommentAdapter;
+import net.iGap.news.view.Adapter.NewsDetailRelatedCardsAdapter;
 import net.iGap.news.view.Adapter.NewsDetailSliderAdapter;
-import net.iGap.news.view.Adapter.NewsFirstPageAdapter;
-import net.iGap.news.view.Adapter.NewsSliderAdapter;
 import net.iGap.news.viewmodel.NewsDetailVM;
-import net.iGap.news.viewmodel.NewsMainVM;
+
+import org.stellar.sdk.responses.AssetResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class NewsDetailFrag extends BaseFragment {
 
     private NewsDetailPageBinding binding;
     private NewsDetailVM newsMainVM;
-    private String newsID;
 
     public static NewsDetailFrag newInstance() {
         return new NewsDetailFrag();
@@ -97,15 +99,33 @@ public class NewsDetailFrag extends BaseFragment {
         Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        /*binding.rcMain.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        binding.rcMain.setLayoutManager(layoutManager);
+        binding.shareNews.setOnClickListener(v -> Toast.makeText(getContext(), "share", Toast.LENGTH_SHORT).show());
 
-        binding.pullToRefresh.setOnRefreshListener(() -> {
-            newsMainVM.getData();
-            binding.noItemInListError.setVisibility(View.GONE);
-        });*/
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
+        binding.relatedNewsList.setLayoutManager(layoutManager);
+
+        LinearLayoutManager layoutManager2 = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        binding.commentList.setLayoutManager(layoutManager2);
+
+        binding.shareNewsBTN.setOnClickListener(v -> {
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, newsMainVM.getData().getValue().getTitle() + "\n" + newsMainVM.getData().getValue().getLead() + "\n" + "تاریخ انتشار: " + newsMainVM.getData().getValue().getDate() + "\n" + "لینک: " + newsMainVM.getData().getValue().getLink());
+            sendIntent.setType("text/plain");
+            startActivity(Intent.createChooser(sendIntent, "Share via"));
+        });
+
+        binding.writeComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    NewsAddCommentBottomSheetFrag bottomSheetFragment = new NewsAddCommentBottomSheetFrag().setData(arg.getString("NewsID"), new CompleteListener() {
+                        @Override
+                        public void onCompleted() {
+                            Toast.makeText(getContext(), R.string.news_add_comment_successToast, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    bottomSheetFragment.show(getFragmentManager(), "AddCommentBottomSheet");
+            }
+        });
 
         newsMainVM.getDataFromServer(arg.getString("NewsID"));
         onErrorObserver();
@@ -125,35 +145,58 @@ public class NewsDetailFrag extends BaseFragment {
     }
 
     private void onProgress() {
-        newsMainVM.getProgressState().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                switch (newsMainVM.getProgressType()) {
-                    case 0:
-                        if (aBoolean)
-                            binding.ProgressTitleV.setVisibility(View.VISIBLE);
-                        else
-                            binding.ProgressTitleV.setVisibility(View.GONE);
-                        break;
-                    case 1:
-                        if (aBoolean)
-                            binding.ProgressCommentV.setVisibility(View.VISIBLE);
-                        else
-                            binding.ProgressCommentV.setVisibility(View.GONE);
-                        break;
-                    case 2:
-                        if (aBoolean)
-                            binding.ProgressNewsV.setVisibility(View.VISIBLE);
-                        else
-                            binding.ProgressNewsV.setVisibility(View.GONE);
-                        break;
-                }
-            }
+        newsMainVM.getProgressStateContext().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean)
+                binding.ProgressTitleV.setVisibility(View.VISIBLE);
+            else
+                binding.ProgressTitleV.setVisibility(View.GONE);
+        });
+        newsMainVM.getProgressStateComment().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean)
+                binding.ProgressCommentV.setVisibility(View.VISIBLE);
+            else
+                binding.ProgressCommentV.setVisibility(View.GONE);
+        });
+        newsMainVM.getProgressStateRelated().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean)
+                binding.ProgressNewsV.setVisibility(View.VISIBLE);
+            else
+                binding.ProgressNewsV.setVisibility(View.GONE);
         });
     }
 
     private void onDataChanged() {
         newsMainVM.getData().observe(getViewLifecycleOwner(), this::initMainRecycler);
+        newsMainVM.getComments().observe(getViewLifecycleOwner(), this::initCommentRecycler);
+        newsMainVM.getRelatedNews().observe(getViewLifecycleOwner(), this::initRelatedNews);
+    }
+
+    private void initCommentRecycler(NewsComment data) {
+        if (data == null || data.getComments() == null) {
+            Log.d("amini", "initCommentRecycler: empty");
+            binding.noItemInListError.setVisibility(View.VISIBLE);
+            binding.commentList.setVisibility(View.GONE);
+            return;
+        }
+        Log.d("amini", "initCommentRecycler: " + data.getComments().size());
+        NewsCommentAdapter adapter = new NewsCommentAdapter(data);
+        binding.commentList.setAdapter(adapter);
+    }
+
+    private void initRelatedNews(NewsList data) {
+        if (data == null || data.getNews() == null) {
+            binding.newsBack.setVisibility(View.GONE);
+            return;
+        }
+        NewsDetailRelatedCardsAdapter adapter = new NewsDetailRelatedCardsAdapter(data);
+        adapter.setCallback(slide -> {
+            Fragment fragment = NewsDetailFrag.newInstance();
+            Bundle args = new Bundle();
+            args.putString("NewsID", slide.getId());
+            fragment.setArguments(args);
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setTag("news detail " + slide.getId()).setReplace(false).load(false);
+        });
+        binding.relatedNewsList.setAdapter(adapter);
     }
 
     private void initMainRecycler(NewsDetail data) {
@@ -178,13 +221,6 @@ public class NewsDetailFrag extends BaseFragment {
         binding.bannerSlider.setIndicatorAnimation(IndicatorAnimations.THIN_WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
         binding.bannerSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
 
-        binding.shareNews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "share", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         //checks
         if (binding.rootTitle.getText().equals(""))
             binding.rootTitle.setVisibility(View.GONE);
@@ -196,6 +232,9 @@ public class NewsDetailFrag extends BaseFragment {
 
         if (binding.tags.getText().equals(""))
             binding.tags.setVisibility(View.GONE);
+    }
+
+    private void showAddComment() {
 
     }
 

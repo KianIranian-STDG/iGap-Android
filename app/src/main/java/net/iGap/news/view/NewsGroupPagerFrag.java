@@ -90,15 +90,15 @@ public class NewsGroupPagerFrag extends BaseFragment {
         TabAdapter adapter = new TabAdapter(getFragmentManager());
 
         NewsListFrag frag = new NewsListFrag();
-        frag.setApiArg(new NewsApiArg(0, 50, Integer.parseInt(groupID), NewsApiArg.NewsType.GROUP_NEWS));
+        frag.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.GROUP_NEWS));
         adapter.addFragment(frag, getResources().getString(R.string.news_latest));
 
         NewsListFrag frag2 = new NewsListFrag();
-        frag2.setApiArg(new NewsApiArg(0, 50, Integer.parseInt(groupID), NewsApiArg.NewsType.FEATURED_GROUP));
+        frag2.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.FEATURED_GROUP));
         adapter.addFragment(frag2, getResources().getString(R.string.news_MHits));
 
         NewsListFrag frag3 = new NewsListFrag();
-        frag3.setApiArg(new NewsApiArg(0, 50, Integer.parseInt(groupID), NewsApiArg.NewsType.ERGENT_GROUP));
+        frag3.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.ERGENT_GROUP));
         adapter.addFragment(frag3, getResources().getString(R.string.news_ergent));
 
         viewPager.setAdapter(adapter);

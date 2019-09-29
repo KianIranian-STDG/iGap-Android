@@ -13,6 +13,7 @@ public class NewsList {
     private List<News> news;
 
     public NewsList() {
+        news = new ArrayList<>();
     }
 
     public String getIDs() {

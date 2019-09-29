@@ -16,23 +16,23 @@ public class NewsDetail {
     private String date;
     @SerializedName("lead")
     private String lead;
-    @SerializedName("link")
+    @SerializedName("internalLink")
     private String link;
     @SerializedName("alias")
     private String alias;
     @SerializedName("image")
     private List<NewsImage> images;
-    // TODO Must be added to API
-    @SerializedName("Original1")
+    @SerializedName("source")
     private String srouce;
+    @SerializedName("Original4")
+    private String commentCount;
+    @SerializedName("sourceLogo")
+    private String sourceImage;
+    // TODO Must be added to API
     @SerializedName("Original2")
     private String view;
     @SerializedName("Original3")
     private String tags;
-    @SerializedName("Original4")
-    private String commentCount;
-    @SerializedName("Original5")
-    private String sourceImage;
 
     public NewsDetail() {
     }

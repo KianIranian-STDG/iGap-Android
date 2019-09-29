@@ -1,6 +1,7 @@
 package net.iGap.news.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.news.repository.model.NewsApiArg;
 import net.iGap.news.repository.model.NewsList;
 import net.iGap.news.view.Adapter.NewsListAdapter;
+import net.iGap.news.view.Adapter.PaginationScrollListener;
 import net.iGap.news.viewmodel.NewsListVM;
 
 public class NewsListFrag extends BaseFragment {
@@ -31,6 +33,12 @@ public class NewsListFrag extends BaseFragment {
     private NewsListFragBinding binding;
     private NewsListVM newsVM;
     private NewsApiArg apiArg;
+
+    private int currentPage = 0;
+    private boolean isLastPage = false;
+    private int totalPage = 10;
+    private boolean isLoading = false;
+    NewsListAdapter adapter;
 
     public static NewsListFrag newInstance() {
         return new NewsListFrag();
@@ -63,8 +71,47 @@ public class NewsListFrag extends BaseFragment {
         binding.rcGroup.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         binding.rcGroup.setLayoutManager(layoutManager);
+        binding.rcGroup.addOnScrollListener(new PaginationScrollListener(layoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+                currentPage++;
+
+                apiArg.setStart(apiArg.getStart() + 1);
+                newsVM.getData(apiArg);
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+        adapter = new NewsListAdapter(new NewsList());
+        adapter.setCallback(slide -> {
+            FragmentManager fragmentManager = getChildFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Fragment fragment = fragmentManager.findFragmentByTag(NewsDetailFrag.class.getName());
+            if (fragment == null) {
+                fragment = NewsDetailFrag.newInstance();
+                fragmentTransaction.addToBackStack(fragment.getClass().getName());
+            }
+            Bundle args = new Bundle();
+            args.putString("NewsID", slide.getId());
+            fragment.setArguments(args);
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        });
+        binding.rcGroup.setAdapter(adapter);
 
         binding.pullToRefresh.setOnRefreshListener(() -> {
+            currentPage = 0;
+            isLastPage = false;
+            adapter.clear();
+
             newsVM.getData(apiArg);
             binding.noItemInListError.setVisibility(View.GONE);
         });
@@ -90,6 +137,7 @@ public class NewsListFrag extends BaseFragment {
     }
 
     private void onProgress() {
+        if (apiArg.getStart() == 1)
         newsVM.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> binding.pullToRefresh.setRefreshing(aBoolean));
     }
 
@@ -98,21 +146,18 @@ public class NewsListFrag extends BaseFragment {
     }
 
     private void initMainRecycler(NewsList data) {
-        NewsListAdapter adapter = new NewsListAdapter(data);
-        adapter.setCallback(slide -> {
-            FragmentManager fragmentManager = getChildFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            Fragment fragment = fragmentManager.findFragmentByTag(NewsDetailFrag.class.getName());
-            if (fragment == null) {
-                fragment = NewsDetailFrag.newInstance();
-                fragmentTransaction.addToBackStack(fragment.getClass().getName());
-            }
-            Bundle args = new Bundle();
-            args.putString("NewsID", slide.getId());
-            fragment.setArguments(args);
-            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-        });
-        binding.rcGroup.setAdapter(adapter);
+        Log.d("amini", "initMainRecycler: " + currentPage);
+        if (currentPage != 0)
+            adapter.removeLoading();
+        adapter.addItems(data);
+
+        // check weather is last page or not
+        if (currentPage < totalPage) {
+            adapter.addLoading();
+        } else {
+            isLastPage = true;
+        }
+        isLoading = false;
     }
 
     void setApiArg(NewsApiArg apiArg) {
