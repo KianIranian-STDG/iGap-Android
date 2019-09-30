@@ -55,6 +55,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.BottomSheetItemClickCallback;
@@ -178,7 +179,6 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     private double lastLongitude;
     private boolean isEndLine = true;
     private String txtComment = "";
-    private Realm realmMapUsers;
     private boolean isSendRequestGeoCoordinate = false;
     private String url;
     static boolean changeState = false;
@@ -411,7 +411,6 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        realmMapUsers = Realm.getDefaultInstance();
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
 
         KeyboardUtils.addKeyboardToggleListener(getActivity(), new KeyboardUtils.SoftKeyboardToggleListener() {
@@ -841,7 +840,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 }
             });
 
-            getRealmMapUsers().executeTransaction(new Realm.Transaction() {
+            DbManager.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
@@ -1640,19 +1639,6 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     public void onStop() {
         super.onStop();
         G.isFragmentMapActive = false;
-    }
-
-    private Realm getRealmMapUsers() {
-        if (realmMapUsers == null || realmMapUsers.isClosed()) {
-            realmMapUsers = Realm.getDefaultInstance();
-        }
-        return realmMapUsers;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        realmMapUsers.close();
     }
 
     @Override

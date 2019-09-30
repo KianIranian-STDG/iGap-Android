@@ -8,6 +8,7 @@ import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
@@ -73,14 +74,12 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     public String inviteLink;
     public String linkUsername;
     private boolean isPrivate;
-    private Realm realmChannelProfile;
     /*private AttachFile attachFile;*/
     private String pathSaveImage;
 
     public EditChannelViewModel(long roomId) {
         this.roomId = roomId;
 
-        realmChannelProfile = Realm.getDefaultInstance();
         G.onChannelAvatarAdd = this;
         G.onChannelAvatarDelete = this;
         /*G.onChannelAddMember = this;*/
@@ -113,7 +112,7 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
             });
         };
 
-        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         //todo:fixed it
         if (realmRoom == null || realmRoom.getChannelRoom() == null) {
             goBack.setValue(true);
@@ -159,8 +158,8 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
             e.getStackTrace();
         }*/
         subscribersCount.set(String.valueOf(realmChannelRoom.getParticipantsCountLabel()));
-        administratorsCount.set(String.valueOf(RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-        moderatorsCount.set(String.valueOf(RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+        administratorsCount.set(String.valueOf(RealmMember.filterMember(DbManager.getInstance().getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
+        moderatorsCount.set(String.valueOf(RealmMember.filterMember(DbManager.getInstance().getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
 
         if (role == ChannelChatRole.OWNER) {
             leaveChannelText.set(R.string.channel_delete);
@@ -218,12 +217,6 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
         } else {
             initEmoji.setValue(false);
         }
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        realmChannelProfile.close();
     }
 
     public void onSignMessageClick() {
@@ -343,14 +336,6 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     public void onTimeOut() {
 
     }
-
-    private Realm getRealm() {
-        if (realmChannelProfile == null || realmChannelProfile.isClosed()) {
-            realmChannelProfile = Realm.getDefaultInstance();
-        }
-        return realmChannelProfile;
-    }
-
 
     @Override
     public void OnChannelUpdateReactionStatusError() {

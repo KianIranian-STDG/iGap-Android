@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnUserIVandGetScore;
@@ -24,11 +25,10 @@ public class FragmentIVandProfileViewModel {
     public ObservableField<String> referralTv = new ObservableField<>("0");
     public ObservableField<String> pointsTv = new ObservableField<>("-");
     private RealmUserInfo realmUserInfo;
-    private Realm mRealm;
 
 
     public FragmentIVandProfileViewModel() {
-        mRealm = Realm.getDefaultInstance();
+
     }
 
     public static void scanBarCode(Activity activity) {
@@ -41,22 +41,15 @@ public class FragmentIVandProfileViewModel {
     }
 
     private void initData() {
-        realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
-        if (getRealm() != null) {
+        realmUserInfo = DbManager.getInstance().getRealm().where(RealmUserInfo.class).findFirst();
+        if (DbManager.getInstance().getRealm() != null) {
             profileNameTv.set(realmUserInfo.getUserInfo().getDisplayName());
             referralTv.set(G.context.getString(R.string.ra_title) + " " + realmUserInfo.getRepresentPhoneNumber());
         }
     }
 
-    private Realm getRealm() {
-        if (mRealm == null || mRealm.isClosed()) {
-            mRealm = Realm.getDefaultInstance();
-        }
-        return mRealm;
-    }
-
     public int saleVisibility() {
-        realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
+        realmUserInfo = DbManager.getInstance().getRealm().where(RealmUserInfo.class).findFirst();
         if (realmUserInfo.getRepresentPhoneNumber() == null || realmUserInfo.getRepresentPhoneNumber().equals("")) {
             return View.GONE;
         }
@@ -65,10 +58,6 @@ public class FragmentIVandProfileViewModel {
 
     public void onOrderHistoryClick() {
         goToIVandPage.setValue(true);
-    }
-
-    public void onDestroy() {
-        mRealm.close();
     }
 
     public void onResume() {

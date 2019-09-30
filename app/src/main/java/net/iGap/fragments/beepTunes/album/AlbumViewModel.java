@@ -10,6 +10,7 @@ import com.downloader.Error;
 import com.downloader.PRDownloader;
 import com.downloader.Progress;
 
+import net.iGap.DbManager;
 import net.iGap.api.BeepTunesApi;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.fragments.beepTunes.downloadQuality.DownloadQualityFragment;
@@ -38,8 +39,6 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     private BeepTunesApi apiService = ApiServiceProvider.getBeepTunesClient();
     private List<DownloadSong> downloadQueue = new ArrayList<>();
 
-    private Realm realm;
-
     private MutableLiveData<List<Track>> trackMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Albums> albumMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> LoadingProgressMutableLiveData = new MutableLiveData<>();
@@ -48,7 +47,6 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     @Override
     public void onCreateViewModel() {
         super.onCreateViewModel();
-        realm = Realm.getDefaultInstance();
     }
 
     void getAlbumSong(long id) {
@@ -170,7 +168,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
         song.setDisplayName(downloadSong.getTrack().getName());
         song.setArtistId(downloadSong.getArtistId());
         song.setAlbumId(downloadSong.getAlbumId());
-        realm.executeTransactionAsync(realm -> realm.copyToRealmOrUpdate(song));
+        DbManager.getInstance().getRealm().executeTransactionAsync(realm -> realm.copyToRealmOrUpdate(song));
 
         removeFromQueue(downloadSong);
         downloadStatusMutableLiveData.postValue(downloadSong);
@@ -215,11 +213,5 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
 
     MutableLiveData<DownloadSong> getDownloadStatusMutableLiveData() {
         return downloadStatusMutableLiveData;
-    }
-
-    @Override
-    public void onDestroyViewModel() {
-        if (realm != null)
-            realm.close();
     }
 }

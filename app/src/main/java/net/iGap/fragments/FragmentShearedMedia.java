@@ -49,6 +49,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -138,7 +139,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     private mAdapter adapter;
     private OnComplete complete;
     private ProgressBar progressBar;
-    private Realm realmShearedMedia;
     private LinearLayout ll_AppBarSelected;
     private LinearLayout mediaLayout;
     private TextView txtNumberOfSelected;
@@ -211,7 +211,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        realmShearedMedia = Realm.getDefaultInstance();
         return attachToSwipeBack(inflater.inflate(R.layout.activity_sheared_media, container, false));
     }
 
@@ -253,26 +252,12 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        realmShearedMedia.close();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
 
         MusicPlayer.shearedMediaLayout = null;
 
         ActivityMain.setMediaLayout();
-    }
-
-    private Realm getRealm() {
-        if (realmShearedMedia == null || realmShearedMedia.isClosed()) {
-            realmShearedMedia = Realm.getDefaultInstance();
-        }
-        return realmShearedMedia;
     }
 
     private void initComponent(View view) {
@@ -438,7 +423,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             @Override
             public void onComplete(RippleView rippleView) {
                 String count = SelectedList.size() + "";
-                final RealmRoom realmRoom = RealmRoom.getRealmRoom(getRealm(), roomId);
+                final RealmRoom realmRoom = RealmRoom.getRealmRoom(DbManager.getInstance().getRealm(), roomId);
 
                 if (roomType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId != null && bothDeleteMessageId.size() > 0) {
                     // show both Delete check box
@@ -460,7 +445,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                                 for (StructShearedMedia item : SelectedList) {
                                     selectedListForDel.add(item.messageId);
                                 }
-                                RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, selectedListForDel, bothDeleteMessageId, roomType);
+                                RealmRoomMessage.deleteSelectedMessages(DbManager.getInstance().getRealm(), roomId, selectedListForDel, bothDeleteMessageId, roomType);
                             }
                             resetItems();
                         }
@@ -479,7 +464,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                                 for (StructShearedMedia item : SelectedList) {
                                     selectedListForDel.add(item.messageId);
                                 }
-                                RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, selectedListForDel, bothDeleteMessageId, roomType);
+                                RealmRoomMessage.deleteSelectedMessages(DbManager.getInstance().getRealm(), roomId, selectedListForDel, bothDeleteMessageId, roomType);
                             }
                             resetItems();
                         }
@@ -853,7 +838,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         if (mRealmList != null) {
             mRealmList.removeAllChangeListeners();
         }
-        mRealmList = RealmRoomMessage.filterMessage(getRealm(), roomId, ProtoGlobal.RoomMessageType.TEXT);
+        mRealmList = RealmRoomMessage.filterMessage(DbManager.getInstance().getRealm(), roomId, ProtoGlobal.RoomMessageType.TEXT);
 
         setListener();
 
@@ -880,7 +865,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             mRealmList.removeAllChangeListeners();
         }
 
-        mRealmList = RealmRoomMessage.filterMessage(getRealm(), roomId, type);
+        mRealmList = RealmRoomMessage.filterMessage(DbManager.getInstance().getRealm(), roomId, type);
 
         setListener();
 

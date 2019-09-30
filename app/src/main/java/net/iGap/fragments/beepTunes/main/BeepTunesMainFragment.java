@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.beepTunes.BeepTunesLocalSongAdapter;
@@ -46,7 +47,6 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
 
     private BeepTunesMainViewModel viewModel;
     private BeepTunesMainAdapter adapter;
-    private Realm realm;
 
     private BeepTunesProfileFragment profileFragment;
     private MutableLiveData<PlayingSong> toAlbumAdapter;
@@ -98,11 +98,11 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
 
         profileFragment.setCallBack(type -> {
             if (type.equals(SYNC_FRAGMENT)) {
-                List<RealmDownloadSong> downloadSongs = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class).findAll());
+                List<RealmDownloadSong> downloadSongs = DbManager.getInstance().getRealm().copyFromRealm(DbManager.getInstance().getRealm().where(RealmDownloadSong.class).findAll());
                 new HelperFragment(getFragmentManager(), BeepTunesLocalSongFragment.getInstance(downloadSongs, "Sync Song", this))
                         .setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();
             } else if (type.equals(FAVORITE_FRAGMENT)) {
-                List<RealmDownloadSong> downloadSongs = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class)
+                List<RealmDownloadSong> downloadSongs = DbManager.getInstance().getRealm().copyFromRealm(DbManager.getInstance().getRealm().where(RealmDownloadSong.class)
                         .equalTo("isFavorite", true).findAll());
 
                 new HelperFragment(getFragmentManager(), BeepTunesLocalSongFragment.getInstance(downloadSongs, "Favorite Song", this))
@@ -134,20 +134,6 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
     @Override
     public void onSmallAvatarClickListener(View view) {
         profileFragment.show(getChildFragmentManager(), null);
-    }
-
-
-    private Realm getRealm() {
-        if (realm == null)
-            realm = Realm.getDefaultInstance();
-        return realm;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (realm != null)
-            realm.close();
     }
 
     @Override

@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -53,7 +54,6 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     private ImageView imvNothingFound;
     private TextView txtEmptyListComment;
     private RippleView rippleBack;
-    private Realm realmMapUsers;
 
     public FragmentMapUsers() {
         // Required empty public constructor
@@ -65,14 +65,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        realmMapUsers = Realm.getDefaultInstance();
         return inflater.inflate(R.layout.fragment_map_users, container, false);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        realmMapUsers.close();
     }
 
     @Override
@@ -83,13 +76,6 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
         if (FragmentiGapMap.location != null) {
             getDistanceLoop(0, false);
         }
-    }
-
-    private Realm getRealmMapUsers() {
-        if (realmMapUsers == null || realmMapUsers.isClosed()) {
-            realmMapUsers = Realm.getDefaultInstance();
-        }
-        return realmMapUsers;
     }
 
     private void initComponent(View view) {
@@ -118,14 +104,14 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
         mRecyclerView = view.findViewById(R.id.rcy_map_user);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
-        getRealmMapUsers().executeTransaction(new Realm.Transaction() {
+        DbManager.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
             }
         });
 
-        mAdapter = new MapUserAdapter(getRealmMapUsers().where(RealmGeoNearbyDistance.class).findAll(), true);
+        mAdapter = new MapUserAdapter(DbManager.getInstance().getRealm().where(RealmGeoNearbyDistance.class).findAll(), true);
 
         //fastAdapter
         //mAdapter = new MapUserAdapterA();

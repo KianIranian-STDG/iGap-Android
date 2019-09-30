@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -49,29 +50,15 @@ import static net.iGap.G.inflater;
 
 public class FragmentBlockedUser extends BaseFragment implements OnBlockStateChanged, ToolbarListener {
 
-    private Realm realmBlockedUser;
     private StickyRecyclerHeadersDecoration decoration;
     private HelperToolbar mHelperToolbar;
     private FastScroller fastScroller;
 
-    private Realm getRealmBlockedUser() {
-        if (realmBlockedUser == null || realmBlockedUser.isClosed()) {
-            realmBlockedUser = Realm.getDefaultInstance();
-        }
-        return realmBlockedUser;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        realmBlockedUser = Realm.getDefaultInstance();
         return attachToSwipeBack(inflater.inflate(R.layout.fragment_blocked_user, container, false));
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        realmBlockedUser.close();
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -98,7 +85,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
         realmRecyclerView.setItemAnimator(null);
         realmRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
 
-        RealmResults<RealmRegisteredInfo> results = getRealmBlockedUser().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.BLOCK_USER, true).findAll();
+        RealmResults<RealmRegisteredInfo> results = DbManager.getInstance().getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.BLOCK_USER, true).findAll();
         BlockListAdapter blockListAdapter = new BlockListAdapter(results.sort(RealmRegisteredInfoFields.DISPLAY_NAME));
         realmRecyclerView.setAdapter(blockListAdapter);
 

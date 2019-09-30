@@ -21,6 +21,7 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChannelProfile;
@@ -105,7 +106,6 @@ public class FragmentChannelProfileViewModel extends ViewModel
     public long roomId;
     private boolean isPrivate;
     private boolean isNotJoin;
-    private Realm realmChannelProfile;
     private RealmRoom mRoom;
     private FragmentChannelProfile fragment;
 
@@ -116,8 +116,6 @@ public class FragmentChannelProfileViewModel extends ViewModel
     private RealmChangeListener<RealmModel> changeListener;
 
     public FragmentChannelProfileViewModel(FragmentChannelProfile fragmentChannelProfile, long roomId, boolean isNotJoin) {
-
-        realmChannelProfile = Realm.getDefaultInstance();
         this.fragment = fragmentChannelProfile;
 
         this.roomId = roomId;
@@ -141,7 +139,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
             }
         };
 
-        mRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        mRoom = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (mRoom == null || mRoom.getChannelRoom() == null) {
             goBack.setValue(true);
             return;
@@ -178,11 +176,11 @@ public class FragmentChannelProfileViewModel extends ViewModel
         isMuteNotification.set(mRoom.getMute());
 
         subscribersCount.set(mRoom.getChannelRoom().getParticipantsCountLabel());
-        administratorsCount.set(String.valueOf(RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-        moderatorsCount.set(String.valueOf(RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+        administratorsCount.set(String.valueOf(RealmMember.filterMember(DbManager.getInstance().getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
+        moderatorsCount.set(String.valueOf(RealmMember.filterMember(DbManager.getInstance().getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
 
-        admins = RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
-        moderators = RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
+        admins = RealmMember.filterMember(DbManager.getInstance().getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
+        moderators = RealmMember.filterMember(DbManager.getInstance().getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
 
         admins.addChangeListener((realmMembers, changeSet) -> administratorsCount.set(realmMembers.size() + ""));
         moderators.addChangeListener((realmMembers, changeSet) -> moderatorsCount.set(realmMembers.size() + ""));
@@ -217,7 +215,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
     }
 
     public void onClickCircleImage() {
-        if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
+        if (DbManager.getInstance().getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
             goToShowAvatarPage.setValue(roomId);
         }
     }
@@ -254,7 +252,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
     }
 
     public void onResume() {
-        mRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        mRoom = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (mRoom != null) {
             if (changeListener == null) {
                 changeListener = new RealmChangeListener<RealmModel>() {
@@ -378,22 +376,9 @@ public class FragmentChannelProfileViewModel extends ViewModel
         moderators.removeAllChangeListeners();
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        realmChannelProfile.close();
-    }
-
     public void leaveChannel() {
         new RequestChannelLeft().channelLeft(roomId);
         showLoading.set(View.VISIBLE);
-    }
-
-    private Realm getRealm() {
-        if (realmChannelProfile == null || realmChannelProfile.isClosed()) {
-            realmChannelProfile = Realm.getDefaultInstance();
-        }
-        return realmChannelProfile;
     }
 
     //****** show admin or moderator list

@@ -26,6 +26,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
 
 import net.iGap.BuildConfig;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -170,7 +171,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public MutableLiveData<Drawable> changeUserProfileWallpaper = new MutableLiveData<>();
     public MutableLiveData<Boolean> openAccountsDialog = new MutableLiveData<>();
 
-    private Realm mRealm;
     private RealmUserInfo userInfo;
     private String phoneNumber;
     private int retryConnectToWallet = 0;
@@ -194,9 +194,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public UserProfileViewModel(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
         this.sharedPreferences = sharedPreferences;
         this.avatarHandler = avatarHandler;
-        mRealm = Realm.getDefaultInstance();
-        userInfo = getRealm().where(RealmUserInfo.class).findFirst();
-        checkProfileWallpaper(mRealm);
+        userInfo = DbManager.getInstance().getRealm().where(RealmUserInfo.class).findFirst();
+        checkProfileWallpaper(DbManager.getInstance().getRealm());
         updateUserInfoUI();
         if (checkValidationForRealm(userInfo)) {
             userInfo.addChangeListener(realmModel -> {
@@ -390,7 +389,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public void onCloudMessageClick() {
         showLoading.set(View.VISIBLE);
         retryRequestTime++;
-        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userInfo.getUserId()).findFirst();
+        RealmRoom realmRoom = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userInfo.getUserId()).findFirst();
         if (realmRoom != null) {
             showLoading.set(View.GONE);
             goToChatPage.setValue(new GoToChatModel(realmRoom.getId(), userInfo.getUserId()));
@@ -508,7 +507,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onAvatarClick() {
-        if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
+        if (DbManager.getInstance().getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
             goToShowAvatarPage.setValue(userInfo.getUserId());
         }
     }
@@ -685,17 +684,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         }
     }
 
-    private Realm getRealm() {
-        if (mRealm == null || mRealm.isClosed()) {
-            mRealm = Realm.getDefaultInstance();
-        }
-        return mRealm;
-    }
-
     @Override
     protected void onCleared() {
         userInfo.removeAllChangeListeners();
-        mRealm.close();
         super.onCleared();
     }
 

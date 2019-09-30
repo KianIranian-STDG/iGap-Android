@@ -140,11 +140,4 @@ public class FragmentPassCode extends BaseFragment {
         fragmentPassCodeBinding.setFragmentPassCodeViewModel(fragmentPassCodeViewModel);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        fragmentPassCodeViewModel.onDestroy();
-    }
-
-
 }

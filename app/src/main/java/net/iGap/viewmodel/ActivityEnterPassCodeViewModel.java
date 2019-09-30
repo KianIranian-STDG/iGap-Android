@@ -22,6 +22,7 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -68,18 +69,15 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     private static final String KEY_NAME = "androidHive";
     private final int PIN = 0;
 
-    private Realm realm;
     private KeyStore keyStore;
     private Cipher cipher;
 
     private RealmUserInfo realmUserInfo;
 
     public ActivityEnterPassCodeViewModel(boolean isLinePattern) {
-
-        realm = Realm.getDefaultInstance();
         initialPatternView.setValue(!isLinePattern);
 
-        realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        realmUserInfo = DbManager.getInstance().getRealm().where(RealmUserInfo.class).findFirst();
 
         if (realmUserInfo != null) {
             isPattern.set(realmUserInfo.isPattern() ? View.VISIBLE : View.GONE);
@@ -258,7 +256,6 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     protected void onCleared() {
         super.onCleared();
         hideKeyword.setValue(true);
-        realm.close();
     }
 
     public void onResume() {

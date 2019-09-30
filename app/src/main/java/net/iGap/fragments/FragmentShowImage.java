@@ -36,6 +36,7 @@ import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.topsheet.TopSheetDialog;
@@ -100,7 +101,6 @@ public class FragmentShowImage extends BaseFragment {
     private String path;
     private boolean isLockScreen = false;
     private boolean isFocusable = false;
-    private Realm realmShowImage;
     private ViewGroup rooShowImage;
     private ViewGroup mainShowImage;
     private ExitFragmentTransition exitFragmentTransition;
@@ -117,7 +117,6 @@ public class FragmentShowImage extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        realmShowImage = Realm.getDefaultInstance();
 
         //View view = inflater.inflate(R.layout.activity_show_image, container, false);
         //exitFragmentTransition = FragmentTransition.with(this).duration(200).interpolator(new LinearOutSlowInInterpolator()).to(view.findViewById(R.id.asi_view_pager)).start(savedInstanceState);
@@ -166,28 +165,11 @@ public class FragmentShowImage extends BaseFragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        realmShowImage.close();
-        /*if (appBarLayout != null) {
-            appBarLayout.setVisibility(View.VISIBLE);
-        }*/
-    }
-
-    @Override
     public void onAttach(Context context) {
         if (appBarLayout != null) {
             appBarLayout.setVisibility(View.GONE);
         }
         super.onAttach(context);
-    }
-
-    private Realm getRealm() {
-        if (realmShowImage == null || !realmShowImage.isClosed()) {
-            realmShowImage = Realm.getDefaultInstance();
-        }
-        return realmShowImage;
     }
 
     private boolean getIntentData(Bundle bundle) {
@@ -210,7 +192,7 @@ public class FragmentShowImage extends BaseFragment {
                 return false;
             }
 
-            mRealmList = RealmRoomMessage.findSorted(getRealm(), mRoomId, RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
+            mRealmList = RealmRoomMessage.findSorted(DbManager.getInstance().getRealm(), mRoomId, RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
             if (mRealmList.size() < 1) {
                 popBackStackFragment();
                 return false;
@@ -395,7 +377,7 @@ public class FragmentShowImage extends BaseFragment {
             txtImageDesc.setVisibility(View.GONE);
         }
 
-        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), realmRoomMessageFinal.getUserId());
+        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getRealm(), realmRoomMessageFinal.getUserId());
 
         if (realmRegisteredInfo != null) {
             txtImageName.setText(realmRegisteredInfo.getDisplayName());

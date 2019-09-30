@@ -37,6 +37,7 @@ import com.mikepenz.fastadapter_extensions.items.ProgressItem;
 import com.mikepenz.fastadapter_extensions.scroll.EndlessRecyclerOnScrollListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityMediaPlayerBinding;
@@ -87,7 +88,6 @@ public class FragmentMediaPlayer extends BaseFragment {
     private int offset;
     private RealmResults<RealmRoomMessage> mRealmList;
     private ArrayList<RealmRoomMessage> mediaList;
-    private static Realm mRealm;
     private RecyclerView.OnScrollListener onScrollListener;
     private boolean canUpdateAfterDownload = false;
     protected ArrayMap<Long, Boolean> needDownloadList = new ArrayMap<>();
@@ -98,8 +98,6 @@ public class FragmentMediaPlayer extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
-
-        mRealm = Realm.getDefaultInstance();
         if (G.twoPaneMode) {
             fragmentMediaPlayerBinding = DataBindingUtil.inflate(inflater, R.layout.activity_media_player, container, false);
             return fragmentMediaPlayerBinding.getRoot();
@@ -112,12 +110,6 @@ public class FragmentMediaPlayer extends BaseFragment {
                 return fragmentMediaPlayerBinding.getRoot();
             }
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mRealm.close();
     }
 
     @Override
@@ -462,7 +454,7 @@ public class FragmentMediaPlayer extends BaseFragment {
             @Override
             public void run() {
 
-                getRealm().executeTransaction(new Realm.Transaction() {
+                DbManager.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
@@ -480,7 +472,7 @@ public class FragmentMediaPlayer extends BaseFragment {
             mRealmList.removeAllChangeListeners();
         }
 
-        mRealmList = RealmRoomMessage.filterMessage(getRealm(), MusicPlayer.roomId, type);
+        mRealmList = RealmRoomMessage.filterMessage(DbManager.getInstance().getRealm(), MusicPlayer.roomId, type);
 
         changeSize = mRealmList.size();
 
@@ -488,14 +480,6 @@ public class FragmentMediaPlayer extends BaseFragment {
         isThereAnyMoreItemToLoad = true;
         getDataFromServer(filter);
         return mRealmList;
-    }
-
-    private static Realm getRealm() {
-        if (mRealm == null || mRealm.isClosed()) {
-            mRealm = Realm.getDefaultInstance();
-        }
-
-        return mRealm;
     }
 
     private void downloadFile(int position, MessageProgress messageProgress) {
@@ -631,7 +615,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         List<RealmRoomMessage> realmRoomMessages = null;
 
         try {
-            realmRoomMessages = getRealm().where(RealmRoomMessage.class)
+            realmRoomMessages = DbManager.getInstance().getRealm().where(RealmRoomMessage.class)
                     .equalTo(RealmRoomMessageFields.ROOM_ID, MusicPlayer.roomId)
                     .notEqualTo(RealmRoomMessageFields.DELETED, true)
                     .contains(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.AUDIO.toString())

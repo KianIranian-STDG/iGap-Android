@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModel;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.SHP_SETTING;
@@ -56,7 +57,6 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
     public SingleLiveEvent<Boolean> goToSecurityPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goToActiveSessionsPage = new SingleLiveEvent<>();
     private int poSelfRemove;
-    private Realm realm;
     private RealmUserInfo realmUserInfo;
     private RealmPrivacy realmPrivacy;
     private RealmChangeListener<RealmModel> userInfoListener;
@@ -74,7 +74,6 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
     private ArrayList<StructSessions> itemSessionsgetActivelist = new ArrayList<StructSessions>();
 
     public FragmentPrivacyAndSecurityViewModel() {
-        realm = Realm.getDefaultInstance();
         getInfo();
     }
 
@@ -127,8 +126,8 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
 
 
     private void getInfo() {
-        realmPrivacy = realm.where(RealmPrivacy.class).findFirst();
-        realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        realmPrivacy = DbManager.getInstance().getRealm().where(RealmPrivacy.class).findFirst();
+        realmUserInfo = DbManager.getInstance().getRealm().where(RealmUserInfo.class).findFirst();
         RealmPrivacy.getUpdatePrivacyFromServer();
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         poSelfRemove = sharedPreferences.getInt(SHP_SETTING.KEY_POSITION_SELF_REMOVE, 2);
@@ -348,13 +347,7 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
                 ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString()
         );
 
-        realmPrivacy = realm.where(RealmPrivacy.class).findFirst();
+        realmPrivacy = DbManager.getInstance().getRealm().where(RealmPrivacy.class).findFirst();
 
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        realm.close();
     }
 }

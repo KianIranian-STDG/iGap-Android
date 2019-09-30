@@ -52,6 +52,7 @@ import com.google.zxing.integration.android.IntentResult;
 import com.vanniktech.emoji.sticker.struct.StructSticker;
 
 import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
@@ -182,7 +183,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static boolean isUseCamera = false;
     public static boolean waitingForConfiguration = false;
     private SharedPreferences sharedPreferences;
-    private Realm mRealm;
     private TextView iconLock;
     private boolean isNeedToRegister = false;
     private int retryConnectToWallet = 0;
@@ -268,20 +268,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    private Realm getRealm() {
-        if (mRealm == null || mRealm.isClosed()) {
-
-            mRealm = Realm.getDefaultInstance();
-        }
-
-        return mRealm;
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (G.ISRealmOK) {
-            mRealm.close();
 
             if (G.imageLoader != null) {
                 G.imageLoader.clearMemoryCache();
@@ -406,7 +396,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         if (G.ISRealmOK) {
-            mRealm = Realm.getDefaultInstance();
             try (Realm realm = Realm.getDefaultInstance()) {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (realmUserInfo != null) {
@@ -420,7 +409,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
 
-            RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
+            RealmUserInfo userInfo = DbManager.getInstance().getRealm().where(RealmUserInfo.class).findFirst();
             if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
                 isNeedToRegister = true;
                 Intent intent = new Intent(this, ActivityRegistration.class);
@@ -758,7 +747,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void getWallpaperAsDefault() {
         try {
-            RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
+            RealmWallpaper realmWallpaper = DbManager.getInstance().getRealm().where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
             if (realmWallpaper != null) {
                 if (realmWallpaper.getWallPaperList() != null && realmWallpaper.getWallPaperList().size() > 0) {
                     RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
@@ -1462,7 +1451,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 return;
             }
 
-            AppUtils.updateBadgeOnly(getRealm(), -1);
+            AppUtils.updateBadgeOnly(DbManager.getInstance().getRealm(), -1);
         }
         Log.wtf(this.getClass().getName(), "onPause");
     }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnTrackAdapter;
@@ -37,7 +38,6 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
     private static final String TAG = "aabolfazlAdapter";
     private List<Track> tracks = new ArrayList<>();
     private OnTrackAdapter onTrackAdapter;
-    private Realm realm;
     private MediaPlayer mediaPlayer;
 
     public void setTracks(List<Track> tracks) {
@@ -53,7 +53,6 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
     @Override
     public TrackViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_beeptunes_song, viewGroup, false);
-        realm = Realm.getDefaultInstance();
         return new TrackViewHolder(view);
     }
 
@@ -68,9 +67,6 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
     }
 
     public void onDestroy() {
-        if (realm != null)
-            realm.close();
-
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
@@ -106,7 +102,7 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
         }
 
         void bindTracks(Track track) {
-            realmDownloadSong = realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst();
+            realmDownloadSong = DbManager.getInstance().getRealm().where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst();
             if (realmDownloadSong != null) {
                 track.setInStorage(true);
                 songPrwTv.setText(itemView.getContext().getResources().getString(R.string.music_icon));
@@ -198,7 +194,7 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
                     });
                 }
             });
-            realm.addChangeListener(realm -> realmDownloadSong = realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst());
+            DbManager.getInstance().getRealm().addChangeListener(realm -> realmDownloadSong = realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst());
             progressBar.getIndeterminateDrawable().setColorFilter(itemView.getContext().getResources().getColor(R.color.beeptunes_primary), PorterDuff.Mode.SRC_IN);
         }
 

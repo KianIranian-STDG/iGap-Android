@@ -17,6 +17,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import net.iGap.DbManager;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.module.CircleImageView;
@@ -51,8 +52,6 @@ public class BeepTunesPlayer extends BaseFragment {
     private RealmDownloadSong realmDownloadSong;
     private List<RealmDownloadSong> realmDownloadSongs;
 
-    private Realm realm;
-
     private MutableLiveData<PlayingSong> songMutableLiveData;
     private MutableLiveData<PlayingSong> songFromPlayerLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> seekBarLiveData = new MutableLiveData<>();
@@ -71,7 +70,6 @@ public class BeepTunesPlayer extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        realm = Realm.getDefaultInstance();
         rootView = inflater.inflate(R.layout.fragment_beeptunes_player, container, false);
         return rootView;
     }
@@ -92,10 +90,10 @@ public class BeepTunesPlayer extends BaseFragment {
                     playTv.setText(getContext().getResources().getString(R.string.play_icon));
                 }
 
-                realmDownloadSongs = getRealm().copyFromRealm(getRealm().where(RealmDownloadSong.class)
+                realmDownloadSongs = DbManager.getInstance().getRealm().copyFromRealm(DbManager.getInstance().getRealm().where(RealmDownloadSong.class)
                         .equalTo("artistId", playingSong.getArtistId()).findAll());
 
-                realmDownloadSong = getRealm().copyFromRealm(getRealm()
+                realmDownloadSong = DbManager.getInstance().getRealm().copyFromRealm(DbManager.getInstance().getRealm()
                         .where(RealmDownloadSong.class)
                         .equalTo("id", playingSong.getSongId())
                         .findFirst());
@@ -160,12 +158,12 @@ public class BeepTunesPlayer extends BaseFragment {
 
         favoriteTv.setOnClickListener(v -> {
             if (!realmDownloadSong.isFavorite()) {
-                getRealm().executeTransactionAsync(realm -> {
+                DbManager.getInstance().getRealm().executeTransactionAsync(realm -> {
                     realmDownloadSong.setFavorite(true);
                     realm.copyToRealmOrUpdate(realmDownloadSong);
                 }, () -> checkFavorite(realmDownloadSong));
             } else {
-                getRealm().executeTransactionAsync(realm -> {
+                DbManager.getInstance().getRealm().executeTransactionAsync(realm -> {
                     realmDownloadSong.setFavorite(false);
                     realm.copyToRealmOrUpdate(realmDownloadSong);
                 }, () -> checkFavorite(realmDownloadSong));
@@ -245,18 +243,6 @@ public class BeepTunesPlayer extends BaseFragment {
         backgroundIv = rootView.findViewById(R.id.iv_btPlayer_cover);
         favoriteTv = rootView.findViewById(R.id.tv_btPlayer_isFavorite);
         seekBar.getProgressDrawable().setColorFilter(Color.parseColor("#00D20E"), PorterDuff.Mode.SRC_IN);
-    }
-
-    private Realm getRealm() {
-        if (realm == null)
-            realm = Realm.getDefaultInstance();
-        return realm;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        realm.close();
     }
 
     public MutableLiveData<PlayingSong> getSongFromPlayerLiveData() {
