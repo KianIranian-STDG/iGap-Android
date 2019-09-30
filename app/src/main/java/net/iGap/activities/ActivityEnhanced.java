@@ -25,6 +25,7 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -44,6 +45,7 @@ import java.io.File;
 import java.io.IOException;
 
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
+import io.realm.Realm;
 
 import static net.iGap.G.updateResources;
 
@@ -85,6 +87,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         /*Log.wtf("ActivityEnhanced","super.onCreate end");*/
         if (G.ISRealmOK) {
+            DbManager.getInstance().setRealm(Realm.getDefaultInstance());
             /*Log.wtf("ActivityEnhanced","AvatarHandler start");*/
             avatarHandler = new AvatarHandler();
             /*Log.wtf("ActivityEnhanced","AvatarHandler end");*/
@@ -383,6 +386,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (G.ISRealmOK) {
+            DbManager.getInstance().closeRealm();
             unregisterReceiver(myBroadcast);
         }
     }
