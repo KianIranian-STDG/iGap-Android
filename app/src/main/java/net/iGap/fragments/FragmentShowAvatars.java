@@ -28,6 +28,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.BottomSheetItemClickCallback;
@@ -100,7 +101,6 @@ public class FragmentShowAvatars extends BaseFragment {
     private int avatarListSize = 0;
     private FragmentShowAvatars.AdapterViewPager mAdapter;
     private RealmResults<RealmAvatar> avatarList;
-    private Realm realm;
 
     public static FragmentShowAvatars newInstance(long peerId, FragmentShowAvatars.From from) {
         Bundle args = new Bundle();
@@ -115,7 +115,6 @@ public class FragmentShowAvatars extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        realm = Realm.getDefaultInstance();
         return inflater.inflate(R.layout.activity_show_image, container, false);
     }
 
@@ -141,8 +140,6 @@ public class FragmentShowAvatars extends BaseFragment {
         if (appBarLayout != null) {
             appBarLayout.setVisibility(View.VISIBLE);
         }
-
-        realm.close();
     }
 
     @Override
@@ -261,14 +258,14 @@ public class FragmentShowAvatars extends BaseFragment {
         switch (from) {
             case chat:
             case setting:
-                RealmRegisteredInfo user = RealmRegisteredInfo.getRegistrationInfo(realm, mPeerId);
+                RealmRegisteredInfo user = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getRealm(), mPeerId);
                 if (user != null) {
                     new RequestUserAvatarGetList().userAvatarGetList(mPeerId);
                     isRoomExist = true;
                 }
                 break;
             case group:
-                RealmRoom roomGroup = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+                RealmRoom roomGroup = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
                 if (roomGroup != null) {
                     new RequestGroupAvatarGetList().groupAvatarGetList(mPeerId);
                     isRoomExist = true;
@@ -276,7 +273,7 @@ public class FragmentShowAvatars extends BaseFragment {
                 }
                 break;
             case channel:
-                RealmRoom roomChannel = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+                RealmRoom roomChannel = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
                 if (roomChannel != null) {
                     new RequestChannelAvatarGetList().channelAvatarGetList(mPeerId);
                     isRoomExist = true;
@@ -287,7 +284,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
         if (isRoomExist) {
 
-            avatarList = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll().sort(RealmAvatarFields.ID, Sort.DESCENDING);
+            avatarList = DbManager.getInstance().getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll().sort(RealmAvatarFields.ID, Sort.DESCENDING);
             avatarListSize = avatarList.size();
         }
     }
