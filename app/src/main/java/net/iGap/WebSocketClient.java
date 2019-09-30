@@ -46,6 +46,7 @@ public class WebSocketClient {
     private static long latestConnectionOpenTime = 0;
     private static WebSocket webSocketClient;
     private static WebSocketState connectionState;
+    private static boolean changeAccountTime = false;
 
     /**
      * add webSocketConnection listeners and try for connect
@@ -212,39 +213,40 @@ public class WebSocketClient {
      */
 
     public static synchronized void reconnect(boolean force) {
+        if (!changeAccountTime) {
+            if ((force || (webSocketClient == null || !webSocketClient.isOpen()))) {
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (retryConnectionAllowing(latestConnectionTryTiming) && connectionState != WebSocketState.CONNECTING && (connectionState != WebSocketState.OPEN || (HelperTimeOut.timeoutChecking(0, latestConnectionOpenTime, Config.CONNECTION_OPEN_TIME_OUT)))) {
+                            if (reconnectQueueLimitation > 0) {
+                                reconnectQueueLimitation--;
+                            }
 
-        if ((force || (webSocketClient == null || !webSocketClient.isOpen()))) {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (retryConnectionAllowing(latestConnectionTryTiming) && connectionState != WebSocketState.CONNECTING && (connectionState != WebSocketState.OPEN || (HelperTimeOut.timeoutChecking(0, latestConnectionOpenTime, Config.CONNECTION_OPEN_TIME_OUT)))) {
-                        if (reconnectQueueLimitation > 0) {
-                            reconnectQueueLimitation--;
-                        }
-
-                        //if (allowForReconnecting) { // i checked this step, due to the other changes this clause not need
-                        //    allowForReconnecting = false;
-                        HelperConnectionState.connectionState(ConnectionState.CONNECTING);
-                        if (G.allowForConnect) {
-                            latestConnectionTryTiming = System.currentTimeMillis();
-                            waitingForReconnecting = false;
-                            resetWebsocketInfo();
-                            WebSocketClient.getInstance();
-                            checkSocketConnection();
-                        }
-                        //}
-                    } else {
-                        if (reconnectQueueLimitation < Config.TRY_CONNECTION_COUNT) {
-                            reconnectQueueLimitation++;
-                            allowForReconnecting = true;
-                            waitingForReconnecting = false;
-                            reconnect(false);
+                            //if (allowForReconnecting) { // i checked this step, due to the other changes this clause not need
+                            //    allowForReconnecting = false;
+                            HelperConnectionState.connectionState(ConnectionState.CONNECTING);
+                            if (G.allowForConnect) {
+                                latestConnectionTryTiming = System.currentTimeMillis();
+                                waitingForReconnecting = false;
+                                resetWebsocketInfo();
+                                WebSocketClient.getInstance();
+                                checkSocketConnection();
+                            }
+                            //}
                         } else {
-                            reconnectQueueLimitation--;
+                            if (reconnectQueueLimitation < Config.TRY_CONNECTION_COUNT) {
+                                reconnectQueueLimitation++;
+                                allowForReconnecting = true;
+                                waitingForReconnecting = false;
+                                reconnect(false);
+                            } else {
+                                reconnectQueueLimitation--;
+                            }
                         }
                     }
-                }
-            }, Config.REPEAT_CONNECTION_CHECKING);
+                }, Config.REPEAT_CONNECTION_CHECKING);
+            }
         }
     }
 
@@ -356,5 +358,15 @@ public class WebSocketClient {
             }
         });
         thread.start();
+    }
+
+    public static void disconnectSocket() {
+        webSocketClient.disconnect("change account");
+        changeAccountTime = true;
+    }
+
+    public static void connectNewAccount() {
+        changeAccountTime = false;
+        reconnect(true);
     }
 }
