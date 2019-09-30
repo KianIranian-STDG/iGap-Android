@@ -585,7 +585,7 @@ public final class StartupActions {
         return true;
     }
 
-    public Realm getPlainInstance() {
+    /*public Realm getPlainInstance() {
         RealmConfiguration configuration = new RealmConfiguration.Builder()
                 .name(context.getResources().getString(R.string.planDB))
                 .schemaVersion(REALM_SCHEMA_VERSION)
@@ -599,7 +599,7 @@ public final class StartupActions {
                 .migration(new RealmMigration())
                 .build();
         return Realm.getInstance(configuration);
-    }
+    }*/
 
     public RealmConfiguration getInstance() {
         SharedPreferences sharedPreferences = G.context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
@@ -621,7 +621,7 @@ public final class StartupActions {
                 .migration(new RealmMigration()).build();
 
         RealmConfiguration newConfig = new RealmConfiguration.Builder()
-                .name(context.getResources().getString(R.string.encriptedDB))
+                .name(net.iGap.AccountManager.defaultDBName)
                 .encryptionKey(mKey)
                 .compactOnLaunch(new CompactOnLaunchCallback() {
                     @Override
@@ -657,6 +657,7 @@ public final class StartupActions {
                 return null;
             } catch (Exception e) {
                 //TODO : what is that, exception in catch, realm may be null and close it
+                e.printStackTrace();
                 realm.close();
                 return null;
             }

@@ -10,14 +10,15 @@
 
 package net.iGap.realm;
 
+import net.iGap.AccountManager;
 import net.iGap.kuknos.service.model.RealmKuknos;
+import net.iGap.model.AccountUser;
 
 import io.realm.DynamicRealm;
+import io.realm.DynamicRealmObject;
 import io.realm.FieldAttribute;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
-
-import static net.iGap.Config.REALM_LATEST_MIGRATION_VERSION;
 
 public class RealmMigration implements io.realm.RealmMigration {
 
@@ -616,7 +617,7 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 38
+        if (oldVersion == 38) { // REALM_LATEST_MIGRATION_VERSION = 38
 
             RealmObjectSchema realmKuknos = schema.create(RealmKuknos.class.getSimpleName())
                     .addField("kuknosSeedKey", String.class)
@@ -630,6 +631,30 @@ public class RealmMigration implements io.realm.RealmMigration {
             }
 
             oldVersion++;
+        }
+
+        if (oldVersion == 39) {
+            DynamicRealmObject realmUserInfo = realm.where("RealmUserInfo").findFirst();
+            if (realmUserInfo != null) {
+                DynamicRealmObject userInfo = realmUserInfo.getObject("userInfo");
+                if (userInfo != null) {
+                    String userImageAvatarPath = null;
+                    long userId = userInfo.getLong("id");
+                    Number id = realm.where("RealmAvatar").equalTo("ownerId", userId).max("id");
+                    if (id != null) {
+                        userImageAvatarPath = realm.where("RealmAvatar").equalTo("id", id.longValue()).findFirst().getObject("file").getString("url");
+                    }
+                    AccountManager.getInstance().addAccount(new AccountUser(
+                            userId,
+                            null,
+                            userInfo.getString("displayName"),
+                            userImageAvatarPath,
+                            userInfo.getString("initials"),
+                            userInfo.getString("color"),
+                            0)
+                    );
+                }
+            }
         }
     }
 }

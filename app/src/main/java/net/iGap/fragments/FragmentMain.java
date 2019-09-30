@@ -997,7 +997,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     private void markAsRead(List<RealmRoom> rooms, Realm.Transaction.OnSuccess onSuccess) {
         ArrayList<Long> roomIds = new ArrayList<>();
-        for (RealmRoom room: rooms) {
+        for (RealmRoom room : rooms) {
             roomIds.add(room.getId());
         }
         try (Realm realm = Realm.getDefaultInstance()) {

@@ -1406,8 +1406,6 @@ Want to get it?</string>
     <string name="solid_colors">Solid colors</string>
     <string name="wallpapers">Wallpapers</string>
     <string name="planDB">iGapLocalDatabase.realm</string>
-    <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
-
     <string name="realmDatabaseEncrypt">iGapLocalDatabaseEncrypted.realm</string>
     <string name="realmDatabaseNonEncrypt">iGapLocalDatabase.realm</string>
     <string name="check_internet_connection">check internet connection</string>

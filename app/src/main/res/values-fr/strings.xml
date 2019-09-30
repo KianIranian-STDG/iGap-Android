@@ -1263,7 +1263,6 @@
     <string name="separate_notifications" >notifications spares</string>
     <string name="mark_as_unread" >lu</string>
     <string name="planDB" >\\"iGapLocalDatabase.realm\\"</string>
-    <string name="encriptedDB" >iGapLocalDatabaseEncrypted.realm</string>
     <string name="start" >commencer</string>
     <string name="bot" >Robot</string>
     <string name="back_to_menu" >retour  l\'accueil</string>

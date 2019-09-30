@@ -17,6 +17,7 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.BindingAdapter;
@@ -27,6 +28,7 @@ import net.iGap.interfaces.OnUserAvatarResponse;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import net.iGap.interfaces.OnUserProfileSetRepresentative;
+import net.iGap.model.AccountUser;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.FileUploadStructure;
@@ -235,6 +237,7 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
     }
 
     private void getUserInfo() {
+        //ToDo:change it and user register repository
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
@@ -242,6 +245,15 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
                     try (Realm realm = Realm.getDefaultInstance()) {
                         realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, user));
                     }
+                    AccountManager.getInstance().addAccount(new AccountUser(
+                            user.getId(),
+                            null,
+                            user.getDisplayName(),
+                            null,
+                            user.getInitials(),
+                            user.getColor(),
+                            0
+                    ));
                     G.displayName = user.getDisplayName();
                     prgVisibility.set(View.GONE);
                     goToMain.setValue(userId);

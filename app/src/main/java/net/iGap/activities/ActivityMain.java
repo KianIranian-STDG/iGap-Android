@@ -50,6 +50,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.vanniktech.emoji.sticker.struct.StructSticker;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
@@ -393,6 +394,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setContentView(R.layout.activity_main);
 
         detectDeviceType();
+
+        Log.wtf(this.getClass().getName(),"userList Size: " + AccountManager.getInstance().getUserAccountList().size());
+        for (int i=0 ; i< AccountManager.getInstance().getUserAccountList().size();i++){
+            Log.wtf(this.getClass().getName(),"user: "+ AccountManager.getInstance().getUserAccountList().get(i).toString());
+        }
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         if (G.ISRealmOK) {
             mRealm = Realm.getDefaultInstance();

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperString;
@@ -18,6 +19,7 @@ import net.iGap.interfaces.OnUserRegistration;
 import net.iGap.interfaces.OnUserVerification;
 import net.iGap.interfaces.TwoStepVerificationGetPasswordDetail;
 import net.iGap.interfaces.TwoStepVerificationVerifyPassword;
+import net.iGap.model.AccountUser;
 import net.iGap.model.GoToMainFromRegister;
 import net.iGap.model.LocationModel;
 import net.iGap.model.UserPasswordDetail;
@@ -344,6 +346,14 @@ public class RegisterRepository {
                         G.displayName = user.getDisplayName();
                         G.userId = user.getId();
                         G.onUserInfoResponse = null;
+                        AccountManager.getInstance().addAccount(new AccountUser(
+                                user.getId(),
+                                null,
+                                user.getDisplayName(),
+                                null,
+                                user.getInitials(),
+                                user.getColor(),
+                                0));
                         goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
                     });
                 }

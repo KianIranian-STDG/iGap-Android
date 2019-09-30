@@ -492,6 +492,9 @@ public class G extends Application {
     public void onCreate() {
         Log.wtf(this.getClass().getName(), "onCreate");
         super.onCreate();
+        //init account manager for handle multi account
+        AccountManager.initial(this);
+
         RaadApp.onCreate(getApplicationContext());
         LooperThreadHelper.getInstance();
 
