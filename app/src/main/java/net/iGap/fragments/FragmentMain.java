@@ -155,18 +155,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         ViewGroup layoutToolbar = view.findViewById(R.id.amr_layout_toolbar);
 
-        /*if (G.twoPaneMode && G.isLandscape) {
-            mHelperToolbar = HelperToolbar.create()
-                    .setContext(getContext())
-                    .setTabletIcons(R.string.add_icon, R.string.edit_icon, R.string.search_icon)
-                    .setTabletMode(true)
-                    .setListener(this);
-            layoutToolbar.addView(mHelperToolbar.getView());
-            RealmUserInfo userInfo = DbManager.getInstance().getRealm().where(RealmUserInfo.class).findFirst();
-            mHelperToolbar.getTabletUserName().setText(userInfo.getUserInfo().getDisplayName());
-            mHelperToolbar.getTabletUserPhone().setText(userInfo.getUserInfo().getPhoneNumber());
-            avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getTabletUserAvatar(), userInfo.getUserId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
-        } else {*/
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.edit_icon)
@@ -180,7 +168,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 .setListener(this);
         layoutToolbar.addView(mHelperToolbar.getView());
         mHelperToolbar.registerTimerBroadcast();
-        /*}*/
 
         mBtnRemoveSelected = view.findViewById(R.id.amr_btn_delete_selected);
         TextView mBtnClearCacheSelected = view.findViewById(R.id.amr_btn_clear_cache_selected);
@@ -200,7 +187,13 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         });
 
         mBtnMakeAsReadSelected.setOnClickListener(v -> {
-            markAsRead(mSelectedRoomList, () -> onLeftIconClickListener(v));
+
+            if (mSelectedRoomList.size() > 0) {
+                for (int i = 0; i < mSelectedRoomList.size(); i++) {
+                    markAsRead(mSelectedRoomList.get(i).getType(), mSelectedRoomList.get(i).getId());
+                }
+                onLeftIconClickListener(v);
+            }
         });
 
         mBtnReadAllSelected.setOnClickListener(v -> {
@@ -217,7 +210,12 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                     .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
                     .onPositive((dialog, which) -> {
                         dialog.dismiss();
-                        markAsRead(unreadList, () -> onLeftIconClickListener(v));
+
+                        for (RealmRoom room : unreadList) {
+                            markAsRead(room.getType(), room.getId());
+                        }
+
+                        onLeftIconClickListener(v);
                     })
                     .onNegative((dialog, which) -> dialog.dismiss())
                     .show();
@@ -1005,49 +1003,36 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         constraintSet.applyTo(root);
     }
 
-    private void markAsRead(List<RealmRoom> rooms, Realm.Transaction.OnSuccess onSuccess) {
-        ArrayList<Long> roomIds = new ArrayList<>();
-        for (RealmRoom room : rooms) {
-            roomIds.add(room.getId());
-        }
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    for (long roomId : roomIds) {
-                        RealmRoom.setCount(realm, roomId, 0);
+    private void markAsRead(ProtoGlobal.Room.Type chatType, long roomId) {
+
+        G.handler.postDelayed(() -> {
+            Realm realm = Realm.getDefaultInstance();
+            if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
+                RealmRoomMessage.fetchMessages(realm, roomId, new OnActivityChatStart() {
+                    @Override
+                    public void sendSeenStatus(RealmRoomMessage message) {
+                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                     }
-                }
-            }, () -> {
-                try (Realm realm1 = Realm.getDefaultInstance()) {
-                    for (RealmRoom room : rooms) {
-                        AppUtils.updateBadgeOnly(realm1, room.getId());
-                        if (room.getType() == ProtoGlobal.Room.Type.CHAT || room.getType() == ProtoGlobal.Room.Type.GROUP) {
 
-                            final long finalRoomId = room.getId();
-                            final ProtoGlobal.Room.Type finalRoomType = room.getType();
-                            RealmRoomMessage.fetchMessages(realm1, room.getId(), new OnActivityChatStart() {
-                                @Override
-                                public void sendSeenStatus(RealmRoomMessage message) {
-                                    G.chatUpdateStatusUtil.sendUpdateStatus(finalRoomType, finalRoomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                                }
+                    @Override
+                    public void resendMessage(RealmRoomMessage message) {
 
-                                @Override
-                                public void resendMessage(RealmRoomMessage message) {
-
-                                }
-
-                                @Override
-                                public void resendMessageNeedsUpload(RealmRoomMessage message, long messageId) {
-
-                                }
-                            });
-                        }
                     }
-                }
-                onSuccess.onSuccess();
-            });
-        }
+
+                    @Override
+                    public void resendMessageNeedsUpload(RealmRoomMessage message, long messageId) {
+
+                    }
+                });
+            }
+
+            RealmRoom.setCount(roomId, 0);
+
+            G.handler.postDelayed(() -> {
+                AppUtils.updateBadgeOnly(realm, roomId);
+                realm.close();
+            }, 250);
+        }, 5);
     }
 
     @Override

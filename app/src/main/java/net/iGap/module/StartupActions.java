@@ -109,13 +109,14 @@ public final class StartupActions {
         new Thread(HelperUploadFile::new).start();
 
         if (realmConfiguration()) {
-            new Thread(() -> {
-                try (Realm realm = Realm.getDefaultInstance()) {
-                    realm.executeTransaction(realm1 -> {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(@NotNull Realm realm) {
                         try {
                             long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
-                            RealmResults<RealmRoom> realmRooms = realm1.where(RealmRoom.class).findAll();
-                            RealmQuery<RealmRoomMessage> roomMessages = realm1.where(RealmRoomMessage.class);
+                            RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
+                            RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class);
 
                             for (RealmRoom room : realmRooms) {
                                 if (room.getLastMessage() != null) {
@@ -129,7 +130,7 @@ public final class StartupActions {
                                     .limit(100).findAll();
 
                             for (RealmRoomMessage var : realmRoomMessages)
-                                var.removeFromRealm(realm1);
+                                var.removeFromRealm(realm);
 
                         } catch (OutOfMemoryError error) {
                             error.printStackTrace();
@@ -138,9 +139,9 @@ public final class StartupActions {
                             e.printStackTrace();
                             HelperLog.setErrorLog(e);
                         }
-                    });
-                }
-            }).start();
+                    }
+                });
+            }
 
             new Thread(() -> checkDataUsage()).start();
             new Thread(() -> mainUserInfo()).start();
@@ -528,7 +529,7 @@ public final class StartupActions {
                 Raad.isFA = true;
                 break;
 
-                //کوردی لوکال از چپ به راست است و برای استفاده از این گویش از زبان های راست به چپ جایگزین استفاده شده است
+            //کوردی لوکال از چپ به راست است و برای استفاده از این گویش از زبان های راست به چپ جایگزین استفاده شده است
             case "کوردی":
                 selectedLanguage = "ur";
                 HelperCalander.isPersianUnicode = true;
@@ -635,8 +636,9 @@ public final class StartupActions {
                 .schemaVersion(REALM_SCHEMA_VERSION)
                 .compactOnLaunch()
                 .migration(new RealmMigration()).build();
-
-        RealmConfiguration newConfig = new RealmConfiguration.Builder()
+        RealmConfiguration newConfig;
+        Log.wtf(this.getClass().getName(), "state true");
+        newConfig = new RealmConfiguration.Builder()
                 .name(net.iGap.AccountManager.defaultDBName)
                 .encryptionKey(mKey)
                 .compactOnLaunch(new CompactOnLaunchCallback() {
