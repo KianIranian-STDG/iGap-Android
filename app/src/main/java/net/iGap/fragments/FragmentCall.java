@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
@@ -78,8 +79,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     private boolean mIsMultiSelectEnable = false;
     private List<RealmCallLog> mSelectedLogList = new ArrayList<>();
     private ViewGroup mMultiSelectLayout, mFiltersLayout;
-    private Realm mRealm;
-
 
     public static FragmentCall newInstance(boolean openInFragmentMain) {
         FragmentCall fragmentCall = new FragmentCall();
@@ -92,7 +91,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRealm = Realm.getDefaultInstance();
         RealmCallLog.manageClearCallLog();
         return inflater.inflate(R.layout.fragment_call, container, false);
     }
@@ -100,7 +98,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mRealm.close();
     }
 
     @Override
@@ -142,7 +139,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
 
         if (realmResults == null) {
-            realmResults = getRealmResult(mSelectedStatus, mRealm);
+            realmResults = getRealmResult(mSelectedStatus, DbManager.getInstance().getRealm());
         }
 
         realmResults.addChangeListener((realmCallLogs, changeSet) -> {
@@ -326,7 +323,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     private void getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter filter) {
         if (realmResults != null) realmResults.removeAllChangeListeners();
         mSelectedStatus = filter;
-        realmResults = getRealmResult(mSelectedStatus, mRealm);
+        realmResults = getRealmResult(mSelectedStatus, DbManager.getInstance().getRealm());
         mRecyclerView.setAdapter(new CallAdapter(realmResults));
         checkListIsEmpty();
     }
