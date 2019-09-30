@@ -83,11 +83,7 @@ public class ChatCell extends ConstraintLayout {
 
         pinView = new AppCompatImageView(getContext());
         pinView.setId(R.id.iv_iv_chatCell_pin);
-        if (isRtl) {
-            pinView.setBackgroundResource(R.drawable.pin_rtl);
-        } else {
-            pinView.setBackgroundResource(R.drawable.pin);
-        }
+        pinView.setBackgroundResource(R.drawable.pin);
         addView(pinView);
 
         /**
