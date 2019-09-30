@@ -23,6 +23,7 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.Config;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
@@ -99,7 +100,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private View viewById;
     private RecyclerView mRecyclerView;
     private long tagId;
-    private Realm realmFragmentMain;
     private ProgressBar pbLoading;
 
     private RoomListAdapter roomListAdapter;
@@ -125,7 +125,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        realmFragmentMain = Realm.getDefaultInstance();
         return inflater.inflate(R.layout.activity_main_rooms, container, false);
     }
 
@@ -163,7 +162,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                     .setTabletMode(true)
                     .setListener(this);
             layoutToolbar.addView(mHelperToolbar.getView());
-            RealmUserInfo userInfo = getRealmFragmentMain().where(RealmUserInfo.class).findFirst();
+            RealmUserInfo userInfo = DbManager.getInstance().getRealm().where(RealmUserInfo.class).findFirst();
             mHelperToolbar.getTabletUserName().setText(userInfo.getUserInfo().getDisplayName());
             mHelperToolbar.getTabletUserPhone().setText(userInfo.getUserInfo().getPhoneNumber());
             avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getTabletUserAvatar(), userInfo.getUserId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
@@ -206,7 +205,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         mBtnReadAllSelected.setOnClickListener(v -> {
 
-            RealmResults<RealmRoom> unreadList = getRealmFragmentMain().where(RealmRoom.class).greaterThan(RealmRoomFields.UNREAD_COUNT, 0).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
+            RealmResults<RealmRoom> unreadList = DbManager.getInstance().getRealm().where(RealmRoom.class).greaterThan(RealmRoomFields.UNREAD_COUNT, 0).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
 
             if (unreadList.size() == 0) {
                 Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
@@ -335,7 +334,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         if (results == null) {
             String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
             Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
-            RealmQuery<RealmRoom> temp = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false);
+            RealmQuery<RealmRoom> temp = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false);
             results = temp.sort(fieldNames, sort).findAllAsync();
             roomListAdapter = new RoomListAdapter(results, viewById, pbLoading, avatarHandler, mSelectedRoomList);
             getChatLists();
@@ -728,13 +727,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     }
 
-    private Realm getRealmFragmentMain() {
-        if (realmFragmentMain == null || realmFragmentMain.isClosed()) {
-            realmFragmentMain = Realm.getDefaultInstance();
-        }
-        return realmFragmentMain;
-    }
-
     //**************************************************************************************************************************************
 
     @Override
@@ -746,7 +738,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     public void onDestroyView() {
         super.onDestroyView();
 
-        realmFragmentMain.close();
         EventManager.getInstance().removeEventListener(ActivityCall.CALL_EVENT, this);
         mHelperToolbar.unRegisterTimerBroadcast();
 
