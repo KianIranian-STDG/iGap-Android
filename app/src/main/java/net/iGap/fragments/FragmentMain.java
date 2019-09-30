@@ -289,7 +289,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void readAllRoom() {
-        RealmResults<RealmRoom> unreadList = getRealmFragmentMain().where(RealmRoom.class).greaterThan(RealmRoomFields.UNREAD_COUNT, 0).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
+        RealmResults<RealmRoom> unreadList = DbManager.getInstance().getRealm().where(RealmRoom.class).greaterThan(RealmRoomFields.UNREAD_COUNT, 0).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
 
         if (unreadList.size() == 0) {
             Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
