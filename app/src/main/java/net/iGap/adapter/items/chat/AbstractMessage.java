@@ -48,6 +48,7 @@ import com.google.gson.reflect.TypeToken;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -122,7 +123,6 @@ import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.isLocationFromBot;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
-import static net.iGap.fragments.FragmentChat.getRealmChat;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
 public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
@@ -234,22 +234,22 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 messageId = messageId * (-1);
             }
 
-            RealmRoom realmRoomForwardedFrom22 = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
+            RealmRoom realmRoomForwardedFrom22 = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
             if (realmRoomForwardedFrom22 != null && realmRoomForwardedFrom22.isValid())
-                this.realmRoomForwardedFrom = getRealmChat().copyFromRealm(realmRoomForwardedFrom22);
+                this.realmRoomForwardedFrom = DbManager.getInstance().getRealm().copyFromRealm(realmRoomForwardedFrom22);
 
-            RealmChannelExtra realmChannelExtra22 = getRealmChat().where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+            RealmChannelExtra realmChannelExtra22 = DbManager.getInstance().getRealm().where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
             if (realmChannelExtra22 != null && realmChannelExtra22.isValid())
-                this.realmChannelExtra = getRealmChat().copyFromRealm(realmChannelExtra22);
+                this.realmChannelExtra = DbManager.getInstance().getRealm().copyFromRealm(realmChannelExtra22);
 
         } else {
             realmRoomForwardedFrom = null;
             realmChannelExtra = null;
         }
 
-        RealmRoom realmRoom22 = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getRoomId()).findFirst();
+        RealmRoom realmRoom22 = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getRoomId()).findFirst();
         if (realmRoom22 != null && realmRoom22.isValid())
-            this.realmRoom = getRealmChat().copyFromRealm(realmRoom22);
+            this.realmRoom = DbManager.getInstance().getRealm().copyFromRealm(realmRoom22);
 
         if (mMessage.getForwardMessage() != null) {
             myText = new SpannableString(mMessage.getForwardMessage().getMessage());
@@ -381,7 +381,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
-        structMessage.addAttachmentChangeListener(getRealmChat(), this, getIdentifier(), this, holder, mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType());
+        structMessage.addAttachmentChangeListener(DbManager.getInstance().getRealm(), this, getIdentifier(), this, holder, mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType());
         mHolder.getItemContainer().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -713,7 +713,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 holder.getContentBloke().removeView(messageSenderName);
             }
 
-            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), mMessage.getUserId());
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getRealm(), mMessage.getUserId());
             if (realmRegisteredInfo != null) {
                 final EmojiTextViewE _tv = (EmojiTextViewE) ViewMaker.makeHeaderTextView(realmRegisteredInfo.getDisplayName());
 
@@ -1046,7 +1046,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         replyFrom.setText(realmRoom.getTitle());
                     }
                 } else {
-                    RealmRegisteredInfo replayToInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), mMessage.getReplyTo().getUserId());
+                    RealmRegisteredInfo replayToInfo = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getRealm(), mMessage.getReplyTo().getUserId());
                     if (replayToInfo != null) {
                         replyFrom.setText(replayToInfo.getDisplayName());
                     }
@@ -1143,7 +1143,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
              * if forward message from chat or group , sender is user
              * but if message forwarded from channel sender is room
              */
-            RealmRegisteredInfo info = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), mMessage.getForwardMessage().getUserId());
+            RealmRegisteredInfo info = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getRealm(), mMessage.getForwardMessage().getUserId());
             if (info != null) {
 
                 if (RealmRegisteredInfo.needUpdateUser(info.getId(), info.getCacheId())) {
@@ -1167,7 +1167,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }
             } else {
-                RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getRoomId()).findFirst();
+                RealmRoom realmRoom = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getRoomId()).findFirst();
                 if (realmRoom != null) {
                     txtForwardFrom.setText(realmRoom.getTitle());
                     if (mMessage.isSenderMe()) {

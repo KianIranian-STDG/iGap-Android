@@ -22,6 +22,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -42,7 +43,6 @@ import static android.view.Gravity.CENTER;
 import static android.widget.LinearLayout.HORIZONTAL;
 import static android.widget.LinearLayout.VERTICAL;
 import static java.lang.Boolean.TRUE;
-import static net.iGap.fragments.FragmentChat.getRealmChat;
 
 public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
 
@@ -83,7 +83,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
 
         setTextIfNeeded(holder.messageView);
 
-        RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.getMessageId()).findFirst());
+        RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(DbManager.getInstance().getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.getMessageId()).findFirst());
         if (roomMessage != null) {
             holder.thumbnail.setVisibility(View.VISIBLE);
             if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".pdf")) {
