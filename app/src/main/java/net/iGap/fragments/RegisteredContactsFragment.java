@@ -37,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.dialog.BottomSheetItemClickCallback;
@@ -109,7 +110,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     private ProgressBar prgWaitingLoadList, prgMainLoader;
     private ViewGroup mLayoutMultiSelected;
     private TextView mTxtSelectedCount;
-    private Realm realm;
     private ActionMode mActionMode;
 
     private int mPageMode = NEW_CHAT;
@@ -132,17 +132,9 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         return contactsFragment;
     }
 
-    private Realm getRealm() {
-        if (realm == null || realm.isClosed()) {
-            realm = Realm.getDefaultInstance();
-        }
-        return realm;
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        realm = Realm.getDefaultInstance();
         if (isSwipe) {
             return attachToSwipeBack(inflater.inflate(R.layout.fragment_contacts, container, false));
         } else {
@@ -481,13 +473,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        realm.close();
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
 
     }
@@ -677,13 +662,13 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     }
 
     public void loadContacts() {
-        results = getRealm().copyFromRealm(getRealm().where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
+        results = DbManager.getInstance().getRealm().copyFromRealm(DbManager.getInstance().getRealm().where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
         if (realmRecyclerView.getAdapter() != null)
             ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
     }
 
     private void loadContact(String key) {
-        results = getRealm().copyFromRealm(getRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, key, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME));
+        results = DbManager.getInstance().getRealm().copyFromRealm(DbManager.getInstance().getRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, key, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME));
         if (realmRecyclerView.getAdapter() != null)
             ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
     }
