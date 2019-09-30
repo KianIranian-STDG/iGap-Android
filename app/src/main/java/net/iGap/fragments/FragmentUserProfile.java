@@ -56,7 +56,7 @@ import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
-import net.iGap.model.AccountModel;
+import net.iGap.model.AccountUser;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
@@ -105,9 +105,9 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         super.onViewCreated(view, savedInstanceState);
         Log.wtf(this.getClass().getName(), "onViewCreated");
 
-        viewModel.openAccountsDialog.observe(getViewLifecycleOwner() , show -> {
-            if (show ==  null) return;
-            if (show){
+        viewModel.openAccountsDialog.observe(getViewLifecycleOwner(), show -> {
+            if (show == null) return;
+            if (show) {
                 openAccountsDialog();
             }
         });
@@ -355,18 +355,18 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     }
 
     private void openAccountsDialog() {
-        List<AccountModel> accounts = new ArrayList<>();
-        AccountModel accountModel = new AccountModel();
+        List<AccountUser> accounts = new ArrayList<>();
+        AccountUser accountModel = new AccountUser();
         accountModel.setId(G.userId);
         accountModel.setName("Alireza Nazari");
         accountModel.setActive(true);
-        accountModel.setUnread(16);
+        accountModel.setUnReadMessageCount(16);
 
-        AccountModel accountModel1 = new AccountModel();
+        AccountUser accountModel1 = new AccountUser();
         accountModel1.setId(0);
         accountModel1.setName("Behnam Nazari");
         accountModel1.setActive(false);
-        accountModel1.setUnread(111);
+        accountModel1.setUnReadMessageCount(111);
 
         accounts.add(accountModel);
         accounts.add(accountModel1);
@@ -381,7 +381,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             public void onNewAccountClick() {
 
             }
-        }).show(getActivity().getSupportFragmentManager() , "account");
+        }).show(getActivity().getSupportFragmentManager(), "account");
 
     }
 

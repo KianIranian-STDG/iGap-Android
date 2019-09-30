@@ -2,15 +2,22 @@ package net.iGap.model;
 
 import androidx.annotation.NonNull;
 
+import net.iGap.R;
+
 public class AccountUser {
     //ToDo: should be review and change and remove not use item
-    private Long id;
+    private long id;
     private String dbName;
     private String name;
     private String avatarPath;
     private String initialString;
     private String avatarColor;
     private int unReadMessageCount;
+    private boolean isActive;
+    private transient boolean isAddNew ; // flag for show add new or not
+
+    public AccountUser() {
+    }
 
     public AccountUser(long id, String dbName, String name, String avatarPath, String initialString, String avatarColor, int unReadMessageCount) {
         this.id = id;
@@ -21,6 +28,13 @@ public class AccountUser {
         this.avatarColor = avatarColor;
         this.unReadMessageCount = unReadMessageCount;
     }
+
+
+    public AccountUser(boolean isAddNew , String name) {
+        this.name = name;
+        this.isAddNew = isAddNew;
+    }
+
 
     public String getDbName() {
         return dbName;
@@ -70,12 +84,28 @@ public class AccountUser {
         this.unReadMessageCount = unReadMessageCount;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public boolean isAddNew() {
+        return isAddNew;
+    }
+
+    public void setAddNew(boolean addNew) {
+        isAddNew = addNew;
     }
 
     @NonNull
@@ -87,6 +117,8 @@ public class AccountUser {
                 "avatarPath: " + avatarPath +
                 "initialString: " + initialString +
                 "avatarColor: " + avatarColor +
-                "unReadMessageCount: " + unReadMessageCount;
+                "unReadMessageCount: " + unReadMessageCount +
+                "isActive: " + isActive +
+                "isAddNew: " + isAddNew;
     }
 }
