@@ -44,6 +44,8 @@ import net.iGap.activities.ActivityEnhanced;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.FragmentUserProfileBinding;
+import net.iGap.dialog.account.AccountDialogListener;
+import net.iGap.dialog.account.AccountsDialog;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
@@ -54,6 +56,7 @@ import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.model.AccountModel;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
@@ -65,6 +68,8 @@ import org.paygear.WalletActivity;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
@@ -99,6 +104,13 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.wtf(this.getClass().getName(), "onViewCreated");
+
+        viewModel.openAccountsDialog.observe(getViewLifecycleOwner() , show -> {
+            if (show ==  null) return;
+            if (show){
+                openAccountsDialog();
+            }
+        });
 
         viewModel.changeUserProfileWallpaper.observe(getViewLifecycleOwner(), drawable -> {
             if (drawable != null) {
@@ -340,6 +352,37 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         viewModel.showReferralErrorLiveData.postValue(false);
 
         Log.wtf(this.getClass().getName(), "onViewCreated");
+    }
+
+    private void openAccountsDialog() {
+        List<AccountModel> accounts = new ArrayList<>();
+        AccountModel accountModel = new AccountModel();
+        accountModel.setId(G.userId);
+        accountModel.setName("Alireza Nazari");
+        accountModel.setActive(true);
+        accountModel.setUnread(16);
+
+        AccountModel accountModel1 = new AccountModel();
+        accountModel1.setId(0);
+        accountModel1.setName("Behnam Nazari");
+        accountModel1.setActive(false);
+        accountModel1.setUnread(111);
+
+        accounts.add(accountModel);
+        accounts.add(accountModel1);
+
+        new AccountsDialog().setData(accounts, avatarHandler, new AccountDialogListener() {
+            @Override
+            public void onAccountClick(long id) {
+
+            }
+
+            @Override
+            public void onNewAccountClick() {
+
+            }
+        }).show(getActivity().getSupportFragmentManager() , "account");
+
     }
 
     @Override

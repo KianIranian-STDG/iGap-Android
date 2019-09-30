@@ -273,19 +273,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         //just check at first time page loaded
         notifyChatRoomsList();
-
-        view.findViewById(R.id.switchAccount).setOnClickListener(v -> {
-            Log.wtf(this.getClass().getName(), "state: " + state);
-            getRealmFragmentMain().close();
-            realmFragmentMain = null;
-            /*Realm.removeDefaultConfiguration();*/
-            RealmConfiguration configuredRealm = StartupActions.getInstanceKb(state);
-            Realm.setDefaultConfiguration(configuredRealm);
-            state = !state;
-            getRealmFragmentMain();
-            initRecycleView();
-        });
-
     }
 
     private void notifyChatRoomsList() {
