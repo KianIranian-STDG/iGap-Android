@@ -59,11 +59,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="allowBackup,supportsRtl">
+        tools:replace="allowBackup,supportsRtl,android:name">
         <receiver
             android:name="ir.metrix.sdk.MetrixReferrerReceiver"
-            android:permission="android.permission.INSTALL_PACKAGES"
-            android:exported="true" >
+            android:exported="true"
+            android:permission="android.permission.INSTALL_PACKAGES">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
@@ -87,6 +87,7 @@
         <activity
             android:name=".activities.ActivityEnterPassCode"
             android:configChanges="keyboard|orientation|screenSize|locale"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
         <activity

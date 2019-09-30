@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import com.vanniktech.emoji.EmojiUtils;
 
 import net.iGap.Config;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -58,8 +59,6 @@ import io.realm.annotations.PrimaryKey;
 import io.realm.net_iGap_realm_RealmRoomMessageRealmProxy;
 
 import static net.iGap.fragments.FragmentChat.compressingFiles;
-import static net.iGap.fragments.FragmentChat.getRealmChat;
-import static net.iGap.fragments.FragmentChat.realmChat;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -996,7 +995,7 @@ public class RealmRoomMessage extends RealmObject {
         roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
         roomMessage.setMessage(message);
         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-        RealmRoomMessage.addTimeIfNeed(roomMessage, getRealmChat());
+        RealmRoomMessage.addTimeIfNeed(roomMessage, DbManager.getInstance().getRealm());
         RealmRoomMessage.isEmojiInText(roomMessage, message);
         roomMessage.setRoomId(roomId);
         roomMessage.setShowMessage(true);
@@ -1016,9 +1015,9 @@ public class RealmRoomMessage extends RealmObject {
          *  user wants to replay to a message
          */
         if (replyMessageId > 0) {
-            RealmRoomMessage messageToReplay = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replyMessageId).findFirst();
+            RealmRoomMessage messageToReplay = DbManager.getInstance().getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replyMessageId).findFirst();
             if (messageToReplay != null) {
-                roomMessage.setReplyTo(realmChat.copyFromRealm(messageToReplay));
+                roomMessage.setReplyTo(DbManager.getInstance().getRealm().copyFromRealm(messageToReplay));
             }
         }
 

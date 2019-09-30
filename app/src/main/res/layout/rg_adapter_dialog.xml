@@ -20,7 +20,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/countryName"
-        style="@style/TextAppearance.AppCompat.Title"
+        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp4"
@@ -31,7 +31,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/countryCode"
-        style="@style/TextAppearance.AppCompat.Title"
+        style="?textTitleColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp8"

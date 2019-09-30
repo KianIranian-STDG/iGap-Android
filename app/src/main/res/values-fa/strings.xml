@@ -530,7 +530,6 @@
     <string name="E_114">"خطایی از سمت کلاینت: ایمیل اشتباه است."</string>
     <string name="E_115">"خطای درونی سرور"</string>
     <string name="E_116">"خطایی از سمت کلاینت: نوع جنسیت اشتباه است."</string>
-    <string name="E_117">"خطای درونی سرور"</string>
     <string name="E_118">اخطار: تعداد مخاطبین از محدودیت تعداد سمت سرور فراتر است.</string>
     <string name="E_118_5">اخطار: تعداد پکیج انتقال مخاطبین از محدودیت تعداد سمت سرور فراتر است.</string>
     <string name="list_admin">فهرست مدیران</string>
@@ -1416,7 +1415,7 @@
     <string name="igap_update">بروزرسانی</string>
     <string name="permission_auto_start"> لطفا برای رسیدن پیام ها حتی در زمانی که آیگپ در پس زمینه فعال نیست آیگپ را از منو انتخاب و فعال نمایید</string>
     <string name="dont_show_again"> مجددا نمایش نده</string>
-    <string name="invitation_message">سلام!از طریق لینک زیر میتونی تو آیگپ عضو بشی، منتظرتیم https://www.igap.net \nشماره معرف :</string>
+    <string name="invitation_message">سلام!از طریق لینک زیر میتونی تو آیگپ عضو بشی، منتظرتیم  http://d.igap.net/invite \nشماره معرف :</string>
 
     <string name="namma_per_uh">FileLister</string>
     <string name="Please_enter_valid_folder_name">لطفا نام پوشه را وارد کنید</string>
@@ -2220,5 +2219,8 @@
         <item>کیف پول یه حساب مجازی براتون می‌سازه که به شماره موبایل وصل می‌شه و دیگه لازم نیست کیف پول یا پول نقد یا کارت‌بانکی با خودتون ببرید.</item>
         <item>توی مغازه‌ها، توی تاکسی یا هر جایی که پذیرنده کیف پول هستند می‌تونید از دکمه اسکن استفاده کنید و خریدتونو لذت‌بخش‌تر کنید.</item>
     </array>
+
+    <string name="error_ivand_limit_gift">متاسفانه هدایای تعیین شده به اتمام رسیده است.</string>
+    <string name="referral_error_yourself">امکان ثبت شماره خود به عنوان معرف مقدور نیست.</string>
 
 </resources>

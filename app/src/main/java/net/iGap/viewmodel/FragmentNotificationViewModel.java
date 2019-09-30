@@ -52,7 +52,6 @@ public class FragmentNotificationViewModel {
     public ObservableField<String> notificationState = new ObservableField<>(G.fragmentActivity.getResources().getString(array_Default));
     public ObservableField<String> vibrate = new ObservableField<>(G.fragmentActivity.getResources().getString(array_Default));
     public ObservableField<String> sound = new ObservableField<>();
-    private Realm realm;
     private RealmNotificationSetting realmNotificationSetting;
     private ProtoGlobal.Room.Type roomType;
     private FragmentNotificationBinding fragmentNotificationBinding;
@@ -67,7 +66,6 @@ public class FragmentNotificationViewModel {
         this.fragmentNotificationBinding = fragmentNotificationBinding;
         this.roomId = roomId;
 
-        realm = Realm.getDefaultInstance();
         roomType = RealmRoom.detectType(roomId);
         getInfo();
 
@@ -391,9 +389,5 @@ public class FragmentNotificationViewModel {
         } else {
             realmLedColor = -8257792;
         }
-    }
-
-    public void destroy() {
-        realm.close();
     }
 }

@@ -22,6 +22,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperTracker;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SingleLiveEvent;
 
 import java.util.Locale;
 
@@ -33,8 +34,10 @@ public class FragmentLanguageViewModel extends ViewModel {
     private ObservableInt isEnglish = new ObservableInt(View.GONE);
     private ObservableInt isArabic = new ObservableInt(View.GONE);
     private ObservableInt isFrance = new ObservableInt(View.GONE);
-    private MutableLiveData<String> refreshActivityForChangeLanguage = new MutableLiveData<>();
-    private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
+    private ObservableInt isRussian = new ObservableInt(View.GONE);
+    private ObservableInt isKurdi = new ObservableInt(View.GONE);
+    private SingleLiveEvent<String> refreshActivityForChangeLanguage = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> goBack = new SingleLiveEvent<>();
 
     public FragmentLanguageViewModel(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
@@ -52,6 +55,12 @@ public class FragmentLanguageViewModel extends ViewModel {
                     break;
                 case "Français":
                     isFrance.set(View.VISIBLE);
+                    break;
+                case "Russian":
+                    isRussian.set(View.VISIBLE);
+                    break;
+                case "کوردی":
+                    isKurdi.set(View.VISIBLE);
                     break;
             }
         }
@@ -73,20 +82,26 @@ public class FragmentLanguageViewModel extends ViewModel {
         return isFrance;
     }
 
-    public MutableLiveData<String> getRefreshActivityForChangeLanguage() {
+    public ObservableInt getIsRussian() {
+        return isRussian;
+    }
+
+    public ObservableInt getIsKurdi() {
+        return isKurdi;
+    }
+
+    public SingleLiveEvent<String> getRefreshActivityForChangeLanguage() {
         return refreshActivityForChangeLanguage;
     }
 
-    public MutableLiveData<Boolean> getGoBack() {
+    public SingleLiveEvent<Boolean> getGoBack() {
         return goBack;
     }
 
     public void onClickEnglish() {
         if (!G.selectedLanguage.equals("en")) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(SHP_SETTING.KEY_LANGUAGE, "English");
-            editor.apply();
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "English").apply();
             G.selectedLanguage = "en";
             HelperCalander.isPersianUnicode = false;
             HelperCalander.isLanguagePersian = false;
@@ -97,6 +112,27 @@ public class FragmentLanguageViewModel extends ViewModel {
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }
+        } else {
+            goBack.setValue(true);
+        }
+    }
+
+    public void onClickRussian() {
+        if (!G.selectedLanguage.equals("ru")) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(SHP_SETTING.KEY_LANGUAGE, "Russian");
+            editor.apply();
+            G.selectedLanguage = "ru";
+            HelperCalander.isPersianUnicode = false;
+            HelperCalander.isLanguagePersian = false;
+            HelperCalander.isLanguageArabic = false;
+            G.isAppRtl = false;
+            FragmentLanguage.languageChanged = true;
+            refreshActivityForChangeLanguage.setValue("ru");
+            if (MusicPlayer.updateName != null) {
+                MusicPlayer.updateName.rename();
+            }
         }
         goBack.setValue(true);
     }
@@ -104,9 +140,7 @@ public class FragmentLanguageViewModel extends ViewModel {
     public void onClickFrance() {
         if (!G.selectedLanguage.equals("fr")) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(SHP_SETTING.KEY_LANGUAGE, "Français");
-            editor.apply();
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "Français").apply();
             G.selectedLanguage = "fr";
             HelperCalander.isPersianUnicode = false;
             HelperCalander.isLanguagePersian = false;
@@ -117,18 +151,16 @@ public class FragmentLanguageViewModel extends ViewModel {
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }
+        } else {
+            goBack.setValue(true);
         }
-        goBack.setValue(true);
     }
 
     public void onClickFarsi() {
         if (!G.selectedLanguage.equals("fa")) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(SHP_SETTING.KEY_LANGUAGE, "فارسی");
-            editor.apply();
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "فارسی").apply();
             G.selectedLanguage = "fa";
-            G.updateResources(G.currentActivity.getBaseContext());
             HelperCalander.isPersianUnicode = true;
             HelperCalander.isLanguagePersian = true;
             HelperCalander.isLanguageArabic = false;
@@ -138,24 +170,45 @@ public class FragmentLanguageViewModel extends ViewModel {
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }
+        } else {
+            goBack.setValue(true);
         }
-        goBack.setValue(true);
     }
 
     public void onClickArabic() {
         if (!G.selectedLanguage.equals("ar")) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(SHP_SETTING.KEY_LANGUAGE, "العربی");
-            editor.apply();
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "العربی").apply();
             G.selectedLanguage = "ar";
-            G.updateResources(G.currentActivity.getBaseContext());
             HelperCalander.isPersianUnicode = true;
             HelperCalander.isLanguagePersian = false;
             HelperCalander.isLanguageArabic = true;
             G.isAppRtl = true;
             FragmentLanguage.languageChanged = true;
             refreshActivityForChangeLanguage.setValue("ar");
+            if (MusicPlayer.updateName != null) {
+                MusicPlayer.updateName.rename();
+            }
+        } else {
+            goBack.setValue(true);
+        }
+    }
+
+    //کوردی لوکال از چپ به راست است و برای استفاده از این گویش از زبان های راست به چپ جایگزین استفاده شده است
+    public void onClickKurdi() {
+        if (!G.selectedLanguage.equals("ur")) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(SHP_SETTING.KEY_LANGUAGE, "کوردی");
+            editor.apply();
+            G.selectedLanguage = "ur";
+            G.updateResources(G.currentActivity.getBaseContext());
+            HelperCalander.isPersianUnicode = true;
+            HelperCalander.isLanguagePersian = true;
+            HelperCalander.isLanguageArabic = false;
+            G.isAppRtl = true;
+            FragmentLanguage.languageChanged = true;
+            refreshActivityForChangeLanguage.setValue("ur");
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }

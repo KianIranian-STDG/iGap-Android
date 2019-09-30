@@ -286,7 +286,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp15"
                         android:layout_marginBottom="@dimen/dp15"
-                        android:text="@string/add_icon"
+                        android:text="@string/add_icon_without_circle_font"
                         android:textSize="35dp"
                         android:gravity="center" />
 

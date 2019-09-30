@@ -40,7 +40,6 @@ import java.util.List;
 import pl.droidsonroids.gif.GifDrawable;
 
 import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.fragments.FragmentChat.getRealmChat;
 
 public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTextItem.ViewHolder> {
 

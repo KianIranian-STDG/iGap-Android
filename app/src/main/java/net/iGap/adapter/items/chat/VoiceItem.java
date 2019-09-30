@@ -25,6 +25,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -52,7 +53,6 @@ import java.util.Date;
 import java.util.List;
 
 import static java.lang.Long.parseLong;
-import static net.iGap.fragments.FragmentChat.getRealmChat;
 
 public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> {
 
@@ -205,7 +205,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         holder.mRoomId = mMessage.getRoomId();
 
-        RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getUserId() : mMessage.getUserId());
+        RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getRealm(), mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getUserId() : mMessage.getUserId());
 
         if (registeredInfo != null) {
             holder.author.setText(G.context.getString(R.string.recorded_by) + " " + registeredInfo.getDisplayName());

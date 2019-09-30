@@ -9,12 +9,15 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -58,6 +61,7 @@ public class ChatAttachmentPopup {
     private final long POPUP_ANIMATION_DURATION = 160;
     private final String TAG = "ChatAttachmentPopup";
 
+    public boolean isShowing = false ;
     private Context mContext;
     private View mRootView;
     private ChatPopupListener mPopupListener;
@@ -81,6 +85,8 @@ public class ChatAttachmentPopup {
     private boolean isCameraStart;
     private Animator animation;
     private View contentView;
+    private int mChatBoxHeight;
+    private int mMessagesLayoutHeight;
 
     private ChatAttachmentPopup() {
     }
@@ -114,6 +120,16 @@ public class ChatAttachmentPopup {
         return this;
     }
 
+    public ChatAttachmentPopup setChatBoxHeight(int measuredHeight) {
+        this.mChatBoxHeight = measuredHeight ;
+        return this;
+    }
+
+    public ChatAttachmentPopup setMessagesLayoutHeight(int measuredHeight) {
+        this.mMessagesLayoutHeight = measuredHeight ;
+        return this ;
+    }
+    
     public ChatAttachmentPopup setFragment(Fragment frg) {
         this.mFragment = frg;
         return this;
@@ -148,7 +164,8 @@ public class ChatAttachmentPopup {
 
         mPopup.setOnDismissListener(() -> {
             isNewBottomSheet = true;
-            disableCamera(rcvBottomSheet);
+            isShowing = false ;
+            disableCamera();
         });
 
         return this;
@@ -160,6 +177,7 @@ public class ChatAttachmentPopup {
 
     public void show() {
 
+        isShowing = true ;
         setupContentView();
         setupAdapterRecyclerImagesAndShowPopup();
     }
@@ -167,46 +185,96 @@ public class ChatAttachmentPopup {
     private void setupContentView() {
         contentView = viewRoot.findViewById(R.id.content);
 
+        contentView.setOnClickListener(v -> {
+            //nothing
+        });
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            setPopupBackground(R.color.navigation_dark_mode_bg , R.color.chat_bottom_bg);
+            return;
+        }else {
+            contentView.setElevation(0);
+        }
+
+
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) contentView.getLayoutParams();
+        lp.bottomMargin = 0;
+        lp.leftMargin = 0 ;
+        lp.rightMargin = 0 ;
+
         //get height of keyboard if it was gone set wrap content to popup
         int height = getKeyboardHeight();
         if (height == 0){
             height = ViewGroup.LayoutParams.WRAP_CONTENT;
             setPopupBackground(R.drawable.popup_background_dark , R.drawable.popup_background);
+            contentView.setElevation(4);
+
+            if ((contentView.getMeasuredHeight() + mChatBoxHeight ) >= getDeviceScreenHeight()){
+                lp.height =  getDeviceScreenHeight() - mChatBoxHeight - 16;
+
+            }else {
+                lp.height = height ;
+            }
+
+            lp.leftMargin = 10 ;
+            lp.rightMargin = 10 ;
+            lp.bottomMargin = mChatBoxHeight + 10;
+
         }else {
             setPopupBackground(R.color.navigation_dark_mode_bg , R.color.chat_bottom_bg);
-        }
 
-        if (height != ViewGroup.LayoutParams.WRAP_CONTENT){
             if (contentView.getHeight() >= height){
                 contentView.setMinimumHeight(height);
             }else {
-                ViewGroup.LayoutParams lp = contentView.getLayoutParams();
                 lp.height = height;
-                contentView.setLayoutParams(lp);
             }
-        }
 
-        contentView.setOnClickListener(v -> {
-            //nothing
-        });
+            lp.bottomMargin = 0;
+            lp.leftMargin = 0 ;
+            lp.rightMargin = 0 ;
+        }
+        contentView.setLayoutParams(lp);
+
+
     }
 
     public void updateHeight(){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return;
+        }
+
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) contentView.getLayoutParams();
+
+        //get height of keyboard if it was gone set wrap content to popup
         int height = getKeyboardHeight();
         if (height == 0){
             height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        }
 
-        if (height != ViewGroup.LayoutParams.WRAP_CONTENT){
+            if ((contentView.getMeasuredHeight() + mChatBoxHeight ) >= getDeviceScreenHeight()){
+                lp.height =  getDeviceScreenHeight() - mChatBoxHeight - 16;
+            }else {
+                lp.height = height ;
+            }
+
+        }else {
             if (contentView.getHeight() >= height){
                 contentView.setMinimumHeight(height);
             }else {
-                ViewGroup.LayoutParams lp = contentView.getLayoutParams();
                 lp.height = height;
-                contentView.setLayoutParams(lp);
             }
+
         }
 
+        G.handler.postDelayed( ()->{
+            contentView.setLayoutParams(lp);
+        } , 60);
+
+    }
+
+    private int getDeviceScreenHeight(){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        mFrgActivity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.heightPixels;
     }
 
     private void setPopupBackground(int dark, int light) {
@@ -365,6 +433,35 @@ public class ChatAttachmentPopup {
         rcvBottomSheet.setItemViewCacheSize(100);
         rcvBottomSheet.setAdapter(fastItemAdapter);
 
+        //disable and enable camera when user scroll on recycler view
+        rcvBottomSheet.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(final View view) {
+                if (isPermissionCamera) {
+
+                    if (rcvBottomSheet.getChildAdapterPosition(view) == 0) {
+                        isCameraAttached = true;
+                    }
+                    if (isCameraAttached) {
+                        enableCamera();
+                    }
+                }
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(final View view) {
+
+                if (isPermissionCamera) {
+                    if (rcvBottomSheet.getChildAdapterPosition(view) == 0) {
+                        isCameraAttached = false;
+                    }
+                    if (!isCameraAttached) {
+                        disableCamera();
+                    }
+                }
+            }
+        });
+
 
        /* rcvBottomSheet.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
             @Override
@@ -393,73 +490,20 @@ public class ChatAttachmentPopup {
 
     }
 
-    private void enableCamera(View view) {
+    public void enableCamera() {
 
-        G.handler.postDelayed(() -> {
+        if (isCameraStart || !isPermissionCamera) return;
+        if (fotoapparatSwitcher == null) buildCameraSwitcher();
+        setCameraState(true);
 
-            if (!isPermissionCamera) return;
-            //   if (!isCameraAttached) return;
-
-            if (fotoapparatSwitcher != null) {
-                if (!isCameraStart) {
-                    isCameraStart = true;
-                    try {
-                        G.handler.postDelayed(() -> fotoapparatSwitcher.start(), 50);
-                    } catch (Exception e) {
-                        e.getMessage();
-                    }
-                }
-            } else {
-                if (!isCameraStart) {
-                    isCameraStart = true;
-                    try {
-                        fotoapparatSwitcher = Fotoapparat.with(mFrgActivity).into(view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                .lensPosition(back())       // we want back camera
-                                .build();
-
-                        fotoapparatSwitcher.start();
-                    } catch (IllegalStateException e) {
-                        e.getMessage();
-                    }
-                }
-            }
-        }, 100);
     }
 
-    private void disableCamera(View view) {
+    public void disableCamera() {
 
-        G.handler.postDelayed(() -> {
+        if (!isCameraStart || !isPermissionCamera) return;
+        if (fotoapparatSwitcher == null) buildCameraSwitcher();
+        setCameraState(false);
 
-            if (!isPermissionCamera) return;
-            // if (isCameraAttached) return;
-
-            if (fotoapparatSwitcher != null) {
-                if (isCameraStart) {
-
-                    try {
-                        fotoapparatSwitcher.stop();
-                        isCameraStart = false;
-                    } catch (Exception e) {
-                        e.getMessage();
-                    }
-                }
-            } else {
-                if (!isCameraStart) {
-                    isCameraStart = false;
-                    try {
-                        fotoapparatSwitcher = Fotoapparat.with(mFrgActivity).into(view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                .lensPosition(back())       // we want back camera
-                                .build();
-
-                        fotoapparatSwitcher.stop();
-                    } catch (IllegalStateException e) {
-                        e.getMessage();
-                    }
-                }
-            }
-        }, 50);
     }
 
     public void dismiss() {
@@ -467,6 +511,7 @@ public class ChatAttachmentPopup {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             hideViewWithCircularReveal(contentView);
         } else {
+            isShowing = false ;
             mPopup.dismiss();
         }
     }
@@ -577,7 +622,7 @@ public class ChatAttachmentPopup {
                 lblSend.setText(mFrgActivity.getResources().getString(R.string.navigation_drawer_close));
         }
 
-        enableCamera(rcvBottomSheet);
+        enableCamera();
 
 
         if (HelperPermission.grantedUseStorage()) {
@@ -713,16 +758,17 @@ public class ChatAttachmentPopup {
         animation.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                isCameraStart = false;
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                isShowing = false ;
                 mPopup.dismiss();
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
+                isShowing = false ;
                 mPopup.dismiss();
             }
 
@@ -732,6 +778,31 @@ public class ChatAttachmentPopup {
             }
         });
 
+    }
+
+    private void buildCameraSwitcher(){
+
+        fotoapparatSwitcher = Fotoapparat.with(mFrgActivity).into(rcvBottomSheet.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                .photoSize(biggestSize())   // we want to have the biggest photo possible
+                .lensPosition(back())       // we want back camera
+                .build();
+
+    }
+
+    private void setCameraState(boolean state) {
+        isCameraStart = state;
+        try {
+            G.handler.postDelayed(() -> {
+
+                if (state)
+                    fotoapparatSwitcher.start();
+                else
+                    fotoapparatSwitcher.stop();
+
+            }, 50);
+        } catch (Exception e) {
+            e.getMessage();
+        }
     }
 
     public interface ChatPopupListener {

@@ -17,8 +17,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <net.iGap.module.MaterialDesignTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/image"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp48"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -26,10 +27,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:gravity="center"
-            android:text="@string/md_show_more_button"
-            android:textAppearance="@style/TextIconAppearance.all"
-            android:textColor="@color/border_editText"
+            android:text="@string/md_get_score_failed"
             android:textSize="@dimen/dp36"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

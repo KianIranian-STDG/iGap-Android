@@ -118,7 +118,7 @@ public class DialogAddSticker extends DialogFragment {
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.add_icon)
+                .setRightIcons(R.string.add_icon_without_circle_font)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.add_sticker))
                 .setListener(new ToolbarListener() {
@@ -145,9 +145,9 @@ public class DialogAddSticker extends DialogFragment {
                                             progressBar.setVisibility(View.GONE);
                                             if (FragmentChat.onUpdateSticker != null) {
                                                 FragmentChat.onUpdateSticker.update();
-                                                getDialog().dismiss();
+                                                DialogAddSticker.this.dismiss();
 
-                                                HelperError.showSnackMessage(getResources().getString(R.string.Sticker_added_successfully), false);
+                                                HelperError.showSnackMessage(G.context.getResources().getString(R.string.Sticker_added_successfully), false);
                                             }
                                         });
                                     }

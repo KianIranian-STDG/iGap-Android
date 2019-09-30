@@ -74,10 +74,4 @@ public class FragmentNotification extends BaseFragment {
         fragmentNotificationViewModel = new FragmentNotificationViewModel(fragmentNotificationBinding, roomId);
         fragmentNotificationBinding.setFragmentNotificationViewModel(fragmentNotificationViewModel);
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        fragmentNotificationViewModel.destroy();
-    }
 }

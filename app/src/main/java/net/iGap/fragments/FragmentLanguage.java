@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityEnhanced;
+import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentLanguageBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -84,6 +85,9 @@ public class FragmentLanguage extends BaseFragment {
             if (getActivity() instanceof ActivityEnhanced && language != null) {
                 G.updateResources(getActivity());
                 ((ActivityEnhanced) getActivity()).onRefreshActivity(false, language);
+                if (getActivity() instanceof ActivityRegistration) {
+                    getActivity().onBackPressed();
+                }
             }
         });
 
@@ -92,8 +96,5 @@ public class FragmentLanguage extends BaseFragment {
                 removeFromBaseFragment(this);
             }
         });
-
     }
-
-
 }

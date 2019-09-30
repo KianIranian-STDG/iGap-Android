@@ -35,6 +35,7 @@ import net.iGap.fragments.FragmentUserScore;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentWebView;
 import net.iGap.fragments.FragmentiGapMap;
+import net.iGap.fragments.LocalContactFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
@@ -337,11 +338,16 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case CHARITY:
                 try {
+                    HelperUrl.showIndeterminateProgressDialog(activity);
                     JSONObject jsonObject = new JSONObject(discoveryField.value);
                     sendRequestGetCharityPaymentToken(activity, jsonObject.getString("charityId"), jsonObject.getInt("price"));
                 } catch (JSONException e) {
+                    HelperUrl.closeDialogWaiting();
                     e.printStackTrace();
                 }
+                break;
+            case INVITE_FRIEND:
+                new HelperFragment(activity.getSupportFragmentManager(), new LocalContactFragment()).setReplace(false).load(true);
                 break;
 
         }
@@ -351,6 +357,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         new RetrofitFactory().getCharityRetrofit().sendRequestGetCharity(charityId, charityAmount).enqueue(new Callback<MciPurchaseResponse>() {
             @Override
             public void onResponse(@NotNull Call<MciPurchaseResponse> call, @NotNull Response<MciPurchaseResponse> response) {
+                HelperUrl.closeDialogWaiting();
                 if (response.isSuccessful()) {
                     new HelperFragment(activity.getSupportFragmentManager()).loadPayment(activity.getString(R.string.charity_title), response.body().getToken(), new PaymentCallBack() {
                         @Override
@@ -369,6 +376,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void onFailure(@NotNull Call<MciPurchaseResponse> call, @NotNull Throwable t) {
+                HelperUrl.closeDialogWaiting();
                 t.printStackTrace();
                 HelperError.showSnackMessage(activity.getString(R.string.connection_error), false);
             }
