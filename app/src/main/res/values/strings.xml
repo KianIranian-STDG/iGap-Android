@@ -2241,5 +2241,6 @@ Want to get it?</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="error_ivand_limit_gift">Unfortunately, the set gifts have come to an end.</string>
     <string name="referral_error_yourself">It is not possible to register your number as a referral.</string>
+    <string name="add_new_account">Add New Account</string>
 
 </resources>

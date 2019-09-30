@@ -17,17 +17,17 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentBottomSheetDialogBinding;
 import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.model.AccountModel;
+import net.iGap.model.AccountUser;
 
 import java.util.List;
 
 public class AccountsDialog extends BottomSheetDialogFragment {
 
-    private List<AccountModel> mAccountsList;
+    private List<AccountUser> mAccountsList;
     private AccountDialogListener mListener;
     private AvatarHandler mAvatarHandler ;
 
-    public AccountsDialog setData(List<AccountModel> accounts , AvatarHandler avatarHandler , AccountDialogListener listener) {
+    public AccountsDialog setData(List<AccountUser> accounts , AvatarHandler avatarHandler , AccountDialogListener listener) {
         this.mAccountsList = accounts;
         this.mListener = listener;
         this.mAvatarHandler = avatarHandler ;
@@ -40,7 +40,7 @@ public class AccountsDialog extends BottomSheetDialogFragment {
         FragmentBottomSheetDialogBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_bottom_sheet_dialog, container, false);
 
         AccountsDialogAdapter adapter = new AccountsDialogAdapter();
-        adapter.setAvatarHandler(mAvatarHandler);
+        adapter.setAvatarHandler(mAvatarHandler , getContext());
         adapter.setListener(mListener);
         binding.bottomSheetList.setAdapter(adapter);
         adapter.setAccountsList(mAccountsList);

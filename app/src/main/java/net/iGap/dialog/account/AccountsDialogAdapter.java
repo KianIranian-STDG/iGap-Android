@@ -1,5 +1,6 @@
 package net.iGap.dialog.account;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -12,24 +13,25 @@ import net.iGap.R;
 import net.iGap.databinding.RowDilogAccountBinding;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.model.AccountModel;
+import net.iGap.model.AccountUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAdapter.AccountViewHolder> {
 
-    private List<AccountModel> mAccountsList = new ArrayList<>();
+    private List<AccountUser> mAccountsList = new ArrayList<>();
     private AccountDialogListener mListener;
     private AvatarHandler mAvatarHandler;
+    private Context mContext ;
 
-    public void setAccountsList(List<AccountModel> accounts) {
+    public void setAccountsList(List<AccountUser> accounts) {
 
         this.mAccountsList.addAll(accounts);
 
         //if account count was 2 or 1 , add blank account to show add new view
         if (mAccountsList.size() != 3) {
-            mAccountsList.add(new AccountModel(true));
+            mAccountsList.add(new AccountUser(true , mContext.getString(R.string.add_new_account)));
         }
 
         notifyDataSetChanged();
@@ -39,14 +41,15 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
         this.mListener = listener;
     }
 
-    public void setAvatarHandler(AvatarHandler avatarHandler) {
+    public void setAvatarHandler(AvatarHandler avatarHandler , Context context) {
         this.mAvatarHandler = avatarHandler;
+        this.mContext = context ;
     }
 
     @NonNull
     @Override
     public AccountViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        RowDilogAccountBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.row_dilog_account, parent, false);
+        RowDilogAccountBinding binding = DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.row_dilog_account, parent, false);
         return new AccountViewHolder(binding);
     }
 
@@ -71,7 +74,7 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
 
         }
 
-        public void bindView(AccountModel account) {
+        public void bindView(AccountUser account) {
             binding.setAccount(account);
             binding.setIsRtl(G.isAppRtl);
             binding.executePendingBindings();
