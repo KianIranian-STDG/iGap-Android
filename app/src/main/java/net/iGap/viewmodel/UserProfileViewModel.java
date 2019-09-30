@@ -29,6 +29,7 @@ import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
+import net.iGap.databinding.ActivityMediaPlayerLandBindingImpl;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
@@ -167,6 +168,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public SingleLiveEvent<Boolean> resetApp = new SingleLiveEvent<>();
     public SingleLiveEvent<Integer> showError = new SingleLiveEvent<>();
     public MutableLiveData<Drawable> changeUserProfileWallpaper = new MutableLiveData<>();
+    public MutableLiveData<Boolean> openAccountsDialog = new MutableLiveData<>();
 
     private Realm mRealm;
     private RealmUserInfo userInfo;
@@ -379,6 +381,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             isEditProfile.setValue(true);
             getReferral();
         }
+    }
+
+    public void onAccountsClicked(){
+        openAccountsDialog.setValue(true);
     }
 
     public void onCloudMessageClick() {
