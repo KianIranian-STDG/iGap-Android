@@ -39,4 +39,19 @@ public class DbManager {
     public void closeRealm() {
         realm.close();
     }
+
+    @FunctionalInterface
+    public interface RealmTask<T> {
+        T doTask(Realm realm);
+    }
+
+    public <T> T doRealmTask(RealmTask<T> realmTask) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            return realmTask.doTask(getRealm());
+        } else {
+            try (Realm realm = Realm.getDefaultInstance()) {
+                return realmTask.doTask(realm);
+            }
+        }
+    }
 }
