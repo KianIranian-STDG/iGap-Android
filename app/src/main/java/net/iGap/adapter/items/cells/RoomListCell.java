@@ -104,9 +104,29 @@ public class RoomListCell extends FrameLayout {
             avatarImageView = new CircleImageView(getContext());
             addView(avatarImageView);
             haveAvatar = true;
-            avatarHandler(room, avatarHandler);
+            final boolean isMyCloud;
+
+            isMyCloud = room.getChatRoom() != null && room.getChatRoom().getPeerId() > 0 && room.getChatRoom().getPeerId() == userId;
+
+            if (isMyCloud) {
+                avatarHandler.removeImageViewFromHandler(avatarImageView);
+                avatarImageView.setImageResource(R.drawable.ic_cloud_space_blue);
+
+            } else {
+                avatarHandler(room, avatarHandler);
+            }
         } else {
-            avatarHandler(room, avatarHandler);
+            final boolean isMyCloud;
+
+            isMyCloud = room.getChatRoom() != null && room.getChatRoom().getPeerId() > 0 && room.getChatRoom().getPeerId() == userId;
+
+            if (isMyCloud) {
+                avatarHandler.removeImageViewFromHandler(avatarImageView);
+                avatarImageView.setImageResource(R.drawable.ic_cloud_space_blue);
+
+            } else {
+                avatarHandler(room, avatarHandler);
+            }
         }
 
         if (haveName) {
