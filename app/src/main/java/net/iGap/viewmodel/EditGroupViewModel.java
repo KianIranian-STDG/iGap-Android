@@ -7,6 +7,7 @@ import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.BindingAdapter;
@@ -70,7 +71,6 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
     public GroupChatRole role;
     public long roomId;
     //TODO: add To repository. this code same in fragment group profile
-    private Realm realmGroupProfile;
     private RealmGroupRoom realmGroupRoom;
     private String initials;
     RealmResults<RealmMember> adminMembers;
@@ -79,9 +79,8 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
 
     public EditGroupViewModel(Long roomId) {
 
-        realmGroupProfile = Realm.getDefaultInstance();
         this.roomId = roomId;
-        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
             goBack.setValue(true);
             return;
@@ -113,8 +112,8 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
         }*/
 
         //ToDo: add this code to repository
-        adminMembers = RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
-        moderatorMembers = RealmMember.filterMember(getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
+        adminMembers = RealmMember.filterMember(DbManager.getInstance().getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
+        moderatorMembers = RealmMember.filterMember(DbManager.getInstance().getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
         administratorsCount.set(String.valueOf(adminMembers.size()));
         moderatorsCount.set(String.valueOf(moderatorMembers.size()));
 
@@ -144,20 +143,6 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
     public void onCreateFragment(BaseFragment fragment) {
         showUploadProgressLiveData.postValue(View.GONE);
         G.onGroupAvatarResponse = this;
-    }
-
-    //TODO: move this code to repository
-    private Realm getRealm() {
-        if (realmGroupProfile == null || realmGroupProfile.isClosed()) {
-            realmGroupProfile = Realm.getDefaultInstance();
-        }
-        return realmGroupProfile;
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        realmGroupProfile.close();
     }
 
     public void chooseImage() {
