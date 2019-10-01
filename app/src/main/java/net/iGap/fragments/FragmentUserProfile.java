@@ -355,6 +355,9 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     }
 
     private void openAccountsDialog() {
+
+        if (getActivity() == null) return;
+
         List<AccountUser> accounts = new ArrayList<>();
         AccountUser accountModel = new AccountUser();
         accountModel.setId(G.userId);

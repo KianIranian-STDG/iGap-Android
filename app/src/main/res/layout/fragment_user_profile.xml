@@ -104,6 +104,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/userFullName"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:background="@drawable/call_button_background"
+                android:onClick="@{()-> viewModel.onAccountsClicked()}"
                 android:layout_marginEnd="@dimen/dp24"
                 android:padding="@dimen/dp1"
                 android:text="@string/down_arrow_icon"
