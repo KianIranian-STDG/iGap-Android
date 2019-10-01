@@ -332,7 +332,7 @@ public class HelperLogMessage {
                 break;
             case PINNED_MESSAGE:
                 strBuilder.clear();
-                String temp = log.message + "  " + LogMessageTypeString;
+                String temp = LogMessageTypeString + " " + log.message.replace("\n", "");
                 strBuilder.append(temp);
                 break;
             case USER_JOINED:
