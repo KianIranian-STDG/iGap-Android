@@ -125,8 +125,8 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         if (pollList.size() == i) {
-            float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * 2 / 3;
-            viewHolder.itemView.getLayoutParams().height = Math.round(height);
+            //float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * 2 / 3;
+            //viewHolder.itemView.getLayoutParams().height = Math.round(height);
             ((TypeChartViewHolder) viewHolder).bindView(labels, barEntries);
         } else {
             String[] scales = pollList.get(i).scale.split(":");

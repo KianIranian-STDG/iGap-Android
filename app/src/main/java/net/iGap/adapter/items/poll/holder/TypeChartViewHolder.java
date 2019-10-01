@@ -9,6 +9,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
 public class TypeChartViewHolder extends RecyclerView.ViewHolder {
-    private BarChart chart;
+    private HorizontalBarChart chart;
 
     public TypeChartViewHolder(PollAdapter pollAdapter, @NonNull View itemView) {
         super(itemView);
@@ -62,6 +63,7 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f);
         xAxis.setGranularityEnabled(true);
+        chart.getAxisLeft().setAxisMinimum(0);
 //        chart.getAxisLeft().setLabelCount(max);
         chart.getAxisRight().setEnabled(false);
         chart.getAxisLeft().setEnabled(false);
@@ -130,7 +132,7 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
         chart.setFitBars(true);
 
 
-        chart.setVisibleXRangeMaximum((float) totalWith / (maxSize * 7));
+        //chart.setVisibleXRangeMaximum((float) totalWith / (maxSize * 7));
         chart.invalidate();
         chart.getData().notifyDataChanged();
 
