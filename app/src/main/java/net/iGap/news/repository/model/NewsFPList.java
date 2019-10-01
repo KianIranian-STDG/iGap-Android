@@ -13,17 +13,14 @@ public class NewsFPList {
     private String catID;
     @SerializedName("news")
     private List<News> news;
-    @SerializedName("color")
-    private int color;
 
     public NewsFPList() {
     }
 
-    public NewsFPList(String category, String catID, List<News> news, int color) {
+    public NewsFPList(String category, String catID, List<News> news) {
         this.category = category;
         this.catID = catID;
         this.news = news;
-        this.color = color;
     }
 
     public NewsFPList addFakeData() {
@@ -33,8 +30,8 @@ public class NewsFPList {
         tempContent.add(new NewsContent("101", "Root Title", "Title", "Lead",
                 imageTemp, "10/10/1993", "11/10/1993", "www.google.com", "www.google.com"));
         List<News> tempNews = new ArrayList<>();
-        tempNews.add(new News("bbc", tempContent));
-        NewsFPList news = new NewsFPList("sport", "101", tempNews, 0);
+        //tempNews.add(new News("bbc", tempContent));
+        NewsFPList news = new NewsFPList("sport", "101", tempNews);
         return news;
     }
 
@@ -54,24 +51,26 @@ public class NewsFPList {
         this.news = news;
     }
 
-    public int getColor() {
-        return color;
+    public String getCatID() {
+        return catID;
     }
 
-    public void setColor(int color) {
-        this.color = color;
+    public void setCatID(String catID) {
+        this.catID = catID;
     }
 
     public class News {
         @SerializedName("source")
         private String source;
+        @SerializedName("color")
+        private String color;
         @SerializedName("contents")
-        private List<NewsContent> contents;
+        private NewsContent contents;
 
         public News() {
         }
 
-        public News(String source, List<NewsContent> contents) {
+        public News(String source, NewsContent contents) {
             this.source = source;
             this.contents = contents;
         }
@@ -84,12 +83,20 @@ public class NewsFPList {
             this.source = source;
         }
 
-        public List<NewsContent> getContents() {
+        public NewsContent getContents() {
             return contents;
         }
 
-        public void setContents(List<NewsContent> contents) {
+        public void setContents(NewsContent contents) {
             this.contents = contents;
+        }
+
+        public String getColor() {
+            return color;
+        }
+
+        public void setColor(String color) {
+            this.color = color;
         }
     }
 
@@ -102,6 +109,8 @@ public class NewsFPList {
         private String title;
         @SerializedName("lead")
         private String lead;
+        @SerializedName("alias")
+        private String alias;
         @SerializedName("image")
         private List<NewsImage> image;
         @SerializedName("originalDate")
@@ -199,6 +208,14 @@ public class NewsFPList {
 
         public void setImage(List<NewsImage> image) {
             this.image = image;
+        }
+
+        public String getAlias() {
+            return alias;
+        }
+
+        public void setAlias(String alias) {
+            this.alias = alias;
         }
     }
 

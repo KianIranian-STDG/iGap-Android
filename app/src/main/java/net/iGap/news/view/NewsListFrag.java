@@ -16,8 +16,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import net.iGap.R;
 import net.iGap.databinding.NewsListFragBinding;
 import net.iGap.fragments.BaseFragment;
@@ -38,7 +36,7 @@ public class NewsListFrag extends BaseFragment {
     private boolean isLastPage = false;
     private int totalPage = 10;
     private boolean isLoading = false;
-    NewsListAdapter adapter;
+    private NewsListAdapter adapter;
 
     public static NewsListFrag newInstance() {
         return new NewsListFrag();
@@ -146,7 +144,6 @@ public class NewsListFrag extends BaseFragment {
     }
 
     private void initMainRecycler(NewsList data) {
-        Log.d("amini", "initMainRecycler: " + currentPage);
         if (currentPage != 0)
             adapter.removeLoading();
         adapter.addItems(data);

@@ -4,6 +4,7 @@ import net.iGap.api.apiService.ApiResponse;
 import net.iGap.news.repository.api.NewsAPIRepository;
 import net.iGap.news.repository.model.NewsApiArg;
 import net.iGap.news.repository.model.NewsFPList;
+import net.iGap.news.repository.model.NewsFirstPage;
 import net.iGap.news.repository.model.NewsGroup;
 import net.iGap.news.repository.model.NewsList;
 import net.iGap.news.repository.model.NewsPublisher;
@@ -18,8 +19,8 @@ public class MainRepo {
         repository.getNewsList(new NewsApiArg(start, display, -1, NewsApiArg.NewsType.FEATURED_NEWS), apiResponse);
     }
 
-    public void getMainPage(ApiResponse<List<NewsFPList>> apiResponse) {
-        repository.getMainPageNews(1, apiResponse);
+    public void getMainPage(ApiResponse<List<NewsFirstPage>> apiResponse) {
+        repository.getMainPageNews(apiResponse);
     }
 
     public void getNewsGroups(ApiResponse<NewsGroup> apiResponse) {

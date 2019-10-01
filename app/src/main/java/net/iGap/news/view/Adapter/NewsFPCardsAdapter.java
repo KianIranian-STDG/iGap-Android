@@ -22,9 +22,9 @@ import net.iGap.news.repository.model.NewsFirstPage;
 
 public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int newsSingle = 3;
-    private static final int newsDouble = 4;
-    private static final int newsTriple = 5;
+    private static final int newsSingle = 0;
+    private static final int newsDouble = 1;
+    private static final int newsTriple = 2;
     private NewsFirstPage mData;
     private onClickListener callBack;
 
@@ -120,34 +120,35 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         void initSingleVH(int position) {
-            category.setText("" + mData.getmNews().get(position).getCategory());
-            source.setText("" + mData.getmNews().get(position).getNews().get(0).getSource());
-            rootTitle.setText("" + mData.getmNews().get(position).getNews().get(0).getContents().get(0).getRootTitle());
+            NewsFPList temp = mData.getmNews().get(position);
+            category.setText(temp.getCategory());
+            source.setText(temp.getNews().get(0).getSource());
+            rootTitle.setText(temp.getNews().get(0).getContents().getRootTitle());
             if (rootTitle.getText().equals(""))
                 rootTitle.setVisibility(View.GONE);
-            title.setText("" + mData.getmNews().get(position).getNews().get(0).getContents().get(0).getTitle());
+            title.setText(temp.getNews().get(0).getContents().getTitle());
             Picasso.get()
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-                    .load(mData.getmNews().get(position).getNews().get(0).getContents().get(0).getImage().get(0).getTmb256())
+                    .load(temp.getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
-            container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position)));
+            container.setOnClickListener(v -> callBack.onNewsGroupClick(temp));
 
-            if (mData.getmNews().get(position).getColor() == 0) {
+            if (temp.getNews().get(0).getColor().equals("0")) {
                 // Normal
                 changeToNormal();
             }
             else {
                 // Red
-                changeToRed();
+                changeToRed(temp.getNews().get(0).getColor());
             }
         }
 
-        private void changeToRed() {
+        private void changeToRed(String color) {
             category.setTextColor(Color.WHITE);
             source.setTextColor(Color.WHITE);
             title.setTextColor(Color.WHITE);
-            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.news_red));
+            container.setCardBackgroundColor(Color.parseColor("#" + color));
         }
 
         private void changeToNormal() {
@@ -199,59 +200,59 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         void initDoubleVH(int position) {
             if (position*2 >= mData.getmNews().size())
                 return;
-            category.setText("" + mData.getmNews().get(position*2).getCategory());
-            source.setText("" + mData.getmNews().get(position*2).getNews().get(0).getSource());
-            rootTitle.setText("" + mData.getmNews().get(position*2).getNews().get(0).getContents().get(0).getRootTitle());
-            title.setText("" + mData.getmNews().get(position*2).getNews().get(0).getContents().get(0).getTitle());
+            category.setText(mData.getmNews().get(position*2).getCategory());
+            source.setText(mData.getmNews().get(position*2).getNews().get(0).getSource());
+            rootTitle.setText(mData.getmNews().get(position*2).getNews().get(0).getContents().getRootTitle());
+            title.setText(mData.getmNews().get(position*2).getNews().get(0).getContents().getTitle());
             Picasso.get()
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-                    .load(mData.getmNews().get(position*2).getNews().get(0).getContents().get(0).getImage().get(0).getTmb256())
+                    .load(mData.getmNews().get(position*2).getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*2)));
 
-            if (mData.getmNews().get(position*2).getColor() == 0) {
+            if (mData.getmNews().get(position*2).getNews().get(0).getColor().equals(0)) {
                 // Normal
                 changeToNormal();
             }
             else {
                 // Red
-                changeToRed();
+                changeToRed(mData.getmNews().get(position*2).getNews().get(0).getColor());
             }
 
             if ((position*2+1) >= mData.getmNews().size())
                 return;
-            category1.setText("" + mData.getmNews().get(position*2+1).getCategory());
-            source1.setText("" + mData.getmNews().get(position*2+1).getNews().get(0).getSource());
-            rootTitle1.setText("" + mData.getmNews().get(position*2+1).getNews().get(0).getContents().get(0).getRootTitle());
-            title1.setText("" + mData.getmNews().get(position*2+1).getNews().get(0).getContents().get(0).getTitle());
+            category1.setText(mData.getmNews().get(position*2+1).getCategory());
+            source1.setText(mData.getmNews().get(position*2+1).getNews().get(0).getSource());
+            rootTitle1.setText(mData.getmNews().get(position*2+1).getNews().get(0).getContents().getRootTitle());
+            title1.setText(mData.getmNews().get(position*2+1).getNews().get(0).getContents().getTitle());
             Picasso.get()
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-                    .load(mData.getmNews().get(position*2+1).getNews().get(0).getContents().get(0).getImage().get(0).getTmb256())
+                    .load(mData.getmNews().get(position*2+1).getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image1);
             container1.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*2+1)));
 
-            if (mData.getmNews().get(position*2+1).getColor() == 0) {
+            if (mData.getmNews().get(position*2+1).getNews().get(0).getColor().equals(0)) {
                 // Normal
                 changeToNormal();
             }
             else {
                 // Red
-                changeToRed();
+                changeToRed(mData.getmNews().get(position*2+1).getNews().get(0).getColor());
             }
         }
 
-        private void changeToRed() {
+        private void changeToRed(String color) {
             category.setTextColor(Color.WHITE);
             source.setTextColor(Color.WHITE);
             title.setTextColor(Color.WHITE);
-            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.news_red));
+            container.setCardBackgroundColor(Color.parseColor("#" + color));
 
             category1.setTextColor(Color.WHITE);
             source1.setTextColor(Color.WHITE);
             title1.setTextColor(Color.WHITE);
-            container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.news_red));
+            container1.setCardBackgroundColor(Color.parseColor("#" + color));
         }
 
         private void changeToNormal() {
@@ -315,70 +316,70 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         void initTripleVH(int position) {
             if (position*3>mData.getmNews().size())
                 return;
-            category.setText("" + mData.getmNews().get(position*3).getCategory());
+            category.setText(mData.getmNews().get(position*3).getCategory());
             Picasso.get()
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-                    .load(mData.getmNews().get(position*3).getNews().get(0).getContents().get(0).getImage().get(0).getTmb256())
+                    .load(mData.getmNews().get(position*3).getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*3)));
 
-            if (mData.getmNews().get(position*3).getColor() == 0) {
+            if (mData.getmNews().get(position*3).getNews().get(0).getColor().equals(0)) {
                 // Normal
                 changeToNormal();
             }
             else {
                 // Red
-                changeToRed();
+                changeToRed(mData.getmNews().get(position*3).getNews().get(0).getColor());
             }
 
             if (position*3+1>mData.getmNews().size())
                 return;
-            category1.setText("" + mData.getmNews().get(position*3+1).getCategory());
+            category1.setText(mData.getmNews().get(position*3+1).getCategory());
             Picasso.get()
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-                    .load(mData.getmNews().get(position*3+1).getNews().get(0).getContents().get(0).getImage().get(0).getTmb256())
+                    .load(mData.getmNews().get(position*3+1).getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image1);
             container1.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*3+1)));
 
-            if (mData.getmNews().get(position*3+1).getColor() == 0) {
+            if (mData.getmNews().get(position*3+1).getNews().get(0).getColor().equals(0)) {
                 // Normal
                 changeToNormal();
             }
             else {
                 // Red
-                changeToRed();
+                changeToRed(mData.getmNews().get(position*3+1).getNews().get(0).getColor());
             }
 
             if (position*3+2>mData.getmNews().size())
                 return;
-            category2.setText("" + mData.getmNews().get(position*3+2).getCategory());
+            category2.setText(mData.getmNews().get(position*3+2).getCategory());
             Picasso.get()
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-                    .load(mData.getmNews().get(position*3+2).getNews().get(0).getContents().get(0).getImage().get(0).getTmb256())
+                    .load(mData.getmNews().get(position*3+2).getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image2);
             container2.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*3+2)));
 
-            if (mData.getmNews().get(position*3+2).getColor() == 0) {
+            if (mData.getmNews().get(position*3+2).getNews().get(0).getColor().equals(0)) {
                 // Normal
                 changeToNormal();
             }
             else {
                 // Red
-                changeToRed();
+                changeToRed(mData.getmNews().get(position*3+2).getNews().get(0).getColor());
             }
         }
-        private void changeToRed() {
+        private void changeToRed(String color) {
             category.setTextColor(Color.WHITE);
-            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.news_red));
+            container.setCardBackgroundColor(Color.parseColor("#" + color));
 
             category1.setTextColor(Color.WHITE);
-            container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.news_red));
+            container1.setCardBackgroundColor(Color.parseColor("#" + color));
 
             category2.setTextColor(Color.WHITE);
-            container2.setCardBackgroundColor(G.context.getResources().getColor(R.color.news_red));
+            container2.setCardBackgroundColor(Color.parseColor("#" + color));
         }
 
         private void changeToNormal() {

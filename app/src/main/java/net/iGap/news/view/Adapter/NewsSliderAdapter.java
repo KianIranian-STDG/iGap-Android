@@ -10,13 +10,13 @@ import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
-import net.iGap.news.repository.model.NewsSlider;
+import net.iGap.news.repository.model.NewsFPList;
 
 import java.util.List;
 
 public class NewsSliderAdapter extends SliderViewAdapter {
 
-    private List<NewsSlider> data;
+    private List<NewsFPList> data;
     private onClickListener callBack;
 
     @Override
@@ -49,26 +49,27 @@ public class NewsSliderAdapter extends SliderViewAdapter {
         }
 
         void initView(int position) {
-            textViewTitle.setText("" + data.get(position).getTitle());
-            textViewDescription.setText("" + data.get(position).getDesc());
-            imageViewBackground.setOnClickListener(v -> callBack.onSliderClick(data.get(position)));
+            NewsFPList.NewsContent temp = data.get(position).getNews().get(0).getContents();
+            textViewTitle.setText(temp.getTitle());
+            textViewDescription.setText(temp.getLead());
+            imageViewBackground.setOnClickListener(v -> callBack.onSliderClick(temp));
             Picasso.get()
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-                    .load(data.get(position).getImage())
+                    .load(temp.getImage().get(0).getOriginal())
                     .placeholder(R.mipmap.news_temp_banner)
                     .into(imageViewBackground);
         }
     }
 
     public interface onClickListener {
-        void onSliderClick(NewsSlider slide);
+        void onSliderClick(NewsFPList.NewsContent slide);
     }
 
-    public List<NewsSlider> getData() {
+    public List<NewsFPList> getData() {
         return data;
     }
 
-    public void setData(List<NewsSlider> data) {
+    public void setData(List<NewsFPList> data) {
         this.data = data;
         notifyDataSetChanged();
     }

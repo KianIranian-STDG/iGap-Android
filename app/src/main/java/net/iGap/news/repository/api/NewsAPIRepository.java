@@ -10,6 +10,7 @@ import net.iGap.news.repository.model.NewsApiArg;
 import net.iGap.news.repository.model.NewsComment;
 import net.iGap.news.repository.model.NewsDetail;
 import net.iGap.news.repository.model.NewsFPList;
+import net.iGap.news.repository.model.NewsFirstPage;
 import net.iGap.news.repository.model.NewsGroup;
 import net.iGap.news.repository.model.NewsList;
 import net.iGap.news.repository.model.NewsPN;
@@ -26,12 +27,13 @@ public class NewsAPIRepository {
 
     private NewsApi apiService = ApiServiceProvider.getNewsClient();
 
-    public void getMainPageNews(int numOfNewsPerSource, ApiResponse<List<NewsFPList>> apiResponse) {
+    public void getMainPageNews(ApiResponse<List<NewsFirstPage>> apiResponse) {
         apiResponse.setProgressIndicator(true);
-        apiService.getMainPageNews(numOfNewsPerSource).enqueue(new Callback<List<NewsFPList>>() {
+        apiService.getMainPageNews().enqueue(new Callback<List<NewsFirstPage>>() {
             @Override
-            public void onResponse(Call<List<NewsFPList>> call, Response<List<NewsFPList>> response) {
+            public void onResponse(Call<List<NewsFirstPage>> call, Response<List<NewsFirstPage>> response) {
                 if (!response.isSuccessful()) {
+                    Log.d("amini", "onResponse: " + response.isSuccessful() + " " + response.code() + " ");
                     onFailure(call, new Exception("" + response.code()));
                     return;
                 }
@@ -40,7 +42,8 @@ public class NewsAPIRepository {
             }
 
             @Override
-            public void onFailure(Call<List<NewsFPList>> call, Throwable t) {
+            public void onFailure(Call<List<NewsFirstPage>> call, Throwable t) {
+                Log.d("amini", "onFailure: " + t.getCause() + " " + t.getStackTrace());
                 apiResponse.onFailed(t.getMessage());
                 apiResponse.setProgressIndicator(false);
             }
@@ -93,6 +96,9 @@ public class NewsAPIRepository {
                 break;
             case CONTROVERSIAL_NEWS:
                 getMControversialNews(arg.getStart(), arg.getDisplay(), apiResponse);
+                break;
+            case RELATED_NEWS:
+                getRelatedNews(arg.getGroupID(), arg.getStart(), arg.getDisplay(), apiResponse);
                 break;
         }
     }
@@ -181,7 +187,7 @@ public class NewsAPIRepository {
         });
     }
 
-    public void getFeaturedNewsForGroup(int groupID, int start, int display, ApiResponse<NewsList> apiResponse) {
+    private void getFeaturedNewsForGroup(int groupID, int start, int display, ApiResponse<NewsList> apiResponse) {
         apiResponse.setProgressIndicator(true);
         apiService.getFeaturedNewsForGroup(groupID, start, display).enqueue(new Callback<NewsList>() {
             @Override
@@ -202,7 +208,7 @@ public class NewsAPIRepository {
         });
     }
 
-    public void getErgentNewsForGroup(int groupID, int start, int display, ApiResponse<NewsList> apiResponse) {
+    private void getErgentNewsForGroup(int groupID, int start, int display, ApiResponse<NewsList> apiResponse) {
         apiResponse.setProgressIndicator(true);
         apiService.getErgentNewsForGroup(groupID, start, display).enqueue(new Callback<NewsList>() {
             @Override
@@ -223,7 +229,7 @@ public class NewsAPIRepository {
         });
     }
 
-    public void getErgentNews(int start, int display, ApiResponse<NewsList> apiResponse) {
+    private void getErgentNews(int start, int display, ApiResponse<NewsList> apiResponse) {
         apiResponse.setProgressIndicator(true);
         apiService.getErgentNews(start, display).enqueue(new Callback<NewsList>() {
             @Override
@@ -244,9 +250,30 @@ public class NewsAPIRepository {
         });
     }
 
-    public void getGroupsNews(int groupID, int start, int display, ApiResponse<NewsList> apiResponse) {
+    private void getGroupsNews(int groupID, int start, int display, ApiResponse<NewsList> apiResponse) {
         apiResponse.setProgressIndicator(true);
         apiService.getGroupNews(groupID, start, display).enqueue(new Callback<NewsList>() {
+            @Override
+            public void onResponse(Call<NewsList> call, Response<NewsList> response) {
+                if (!response.isSuccessful()) {
+                    onFailure(call, new Exception("" + response.code()));
+                    return;
+                }
+                apiResponse.onResponse(response.body());
+                apiResponse.setProgressIndicator(false);
+            }
+
+            @Override
+            public void onFailure(Call<NewsList> call, Throwable t) {
+                apiResponse.onFailed(t.getMessage());
+                apiResponse.setProgressIndicator(false);
+            }
+        });
+    }
+
+    private void getRelatedNews(int newsID, int start, int display, ApiResponse<NewsList> apiResponse) {
+        apiResponse.setProgressIndicator(true);
+        apiService.getRelatedNews(newsID, start, display).enqueue(new Callback<NewsList>() {
             @Override
             public void onResponse(Call<NewsList> call, Response<NewsList> response) {
                 if (!response.isSuccessful()) {

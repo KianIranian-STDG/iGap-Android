@@ -1,8 +1,6 @@
 package net.iGap.news.view;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,11 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -22,16 +18,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.FragmentBottomSheetDialogBinding;
 import net.iGap.databinding.NewsAddAccountBottomSheetDialogBinding;
-import net.iGap.dialog.BottomSheetItemClickCallback;
-import net.iGap.dialog.BottomSheetListAdapter;
 import net.iGap.dialog.payment.CompleteListener;
-import net.iGap.news.repository.model.NewsError;
 import net.iGap.news.viewmodel.NewsAddCommentVM;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class NewsAddCommentBottomSheetFrag extends BottomSheetDialogFragment {
 

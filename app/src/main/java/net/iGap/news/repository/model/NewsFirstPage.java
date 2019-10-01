@@ -6,8 +6,6 @@ import java.util.List;
 
 public class NewsFirstPage {
 
-    @SerializedName("sliders")
-    private List<NewsSlider> mSlider;
     @SerializedName("buttons")
     private List<NewsMainBTN> mBtns;
     @SerializedName("news")
@@ -18,8 +16,7 @@ public class NewsFirstPage {
     public NewsFirstPage() {
     }
 
-    public NewsFirstPage(List<NewsSlider> mSlider, List<NewsMainBTN> mBtns, List<NewsFPList> mNews, int mType) {
-        this.mSlider = mSlider;
+    public NewsFirstPage(List<NewsMainBTN> mBtns, List<NewsFPList> mNews, int mType) {
         this.mBtns = mBtns;
         this.mNews = mNews;
         this.mType = mType;
@@ -31,14 +28,6 @@ public class NewsFirstPage {
 
     public void setmType(int mType) {
         this.mType = mType;
-    }
-
-    public List<NewsSlider> getmSlider() {
-        return mSlider;
-    }
-
-    public void setmSlider(List<NewsSlider> mSlider) {
-        this.mSlider = mSlider;
     }
 
     public List<NewsMainBTN> getmBtns() {

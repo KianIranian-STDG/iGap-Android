@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 public class NewsApiArg implements Parcelable {
 
-    public enum NewsType {Latest, MOST_HITS, FEATURED_NEWS, GROUP_NEWS, FEATURED_GROUP, ERGENT_GROUP, ERGENT, CONTROVERSIAL_NEWS}
+    public enum NewsType {Latest, MOST_HITS, FEATURED_NEWS, GROUP_NEWS, FEATURED_GROUP, ERGENT_GROUP, ERGENT, CONTROVERSIAL_NEWS, RELATED_NEWS}
 
     private int start;
     private int display;

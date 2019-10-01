@@ -21,11 +21,11 @@ public class NewsAddCommentVM extends ViewModel {
     private MutableLiveData<Boolean> complete = new MutableLiveData<>();
 
     private ObservableField<String> author = new ObservableField<>();
-    private ObservableField<Integer> authorError = new ObservableField<>(0/*R.string.news_add_comment_errorAuthor*/);
+    private ObservableField<Integer> authorError = new ObservableField<>(0);
     private ObservableField<String> email = new ObservableField<>();
-    private ObservableField<Integer> emailError = new ObservableField<>(0/*R.string.news_add_comment_errorEmail*/);
+    private ObservableField<Integer> emailError = new ObservableField<>(0);
     private ObservableField<String> comment = new ObservableField<>();
-    private ObservableField<Integer> commentError = new ObservableField<>(0/*R.string.news_add_comment_errorComment*/);
+    private ObservableField<Integer> commentError = new ObservableField<>(0);
     private ObservableField<Integer> progress = new ObservableField<>(R.string.news_add_comment_submit);
 
     private DetailRepo repo = new DetailRepo();

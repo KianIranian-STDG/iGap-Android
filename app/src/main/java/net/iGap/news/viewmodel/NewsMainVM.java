@@ -8,11 +8,7 @@ import androidx.lifecycle.ViewModel;
 import net.iGap.api.apiService.ApiResponse;
 import net.iGap.news.repository.MainRepo;
 import net.iGap.news.repository.model.NewsError;
-import net.iGap.news.repository.model.NewsFPList;
 import net.iGap.news.repository.model.NewsFirstPage;
-import net.iGap.news.repository.model.NewsList;
-import net.iGap.news.repository.model.NewsMainBTN;
-import net.iGap.news.repository.model.NewsSlider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +29,10 @@ public class NewsMainVM extends ViewModel {
         temp = new ArrayList<>();
     }
 
-    public void getData() {
+    /*public void getData() {
         repo.getSlideNews(1, 5, new ApiResponse<NewsList>() {
             @Override
             public void onResponse(NewsList newsList) {
-                addSlider(newsList);
                 getNews();
             }
 
@@ -52,10 +47,25 @@ public class NewsMainVM extends ViewModel {
                     progressState.setValue(visibility);
             }
         });
-    }
+    }*/
 
-    private void getNews() {
-        repo.getMainPage(new ApiResponse<List<NewsFPList>>() {
+    public void getNews() {
+        repo.getMainPage(new ApiResponse<List<NewsFirstPage>>() {
+            @Override
+            public void onResponse(List<NewsFirstPage> newsFirstPages) {
+                mainList.setValue(newsFirstPages);
+            }
+
+            @Override
+            public void onFailed(String error) {
+            }
+
+            @Override
+            public void setProgressIndicator(boolean visibility) {
+                progressState.setValue(visibility);
+            }
+        });
+        /*repo.getMainPage(new ApiResponse<List<NewsFPList>>() {
             @Override
             public void onResponse(List<NewsFPList> newsFPList) {
 //                addFakeData(newsFPList);
@@ -73,10 +83,10 @@ public class NewsMainVM extends ViewModel {
             public void setProgressIndicator(boolean visibility) {
                 progressState.setValue(visibility);
             }
-        });
+        });*/
     }
 
-    private void addSlider(NewsList newsList) {
+    /*private void addSlider(NewsList newsList) {
         if (newsList == null || newsList.getNews().size() == 0)
             return;
 
@@ -87,7 +97,6 @@ public class NewsMainVM extends ViewModel {
         NewsFirstPage nfp = new NewsFirstPage(tempList, null, null, 0);
         this.temp.add(nfp);
     }
-
     private void addTree4(List<NewsFPList> newsFPList) {
         if (newsFPList == null || newsFPList.size() == 0) {
             mainList.setValue(temp);
@@ -131,7 +140,6 @@ public class NewsMainVM extends ViewModel {
         newsFPList.remove(0);
         addTree4(newsFPList);
     }
-
     private void addFakeData(List<NewsFPList> newsFPList) {
 
         //TODO remove this code from here for final release
@@ -168,7 +176,7 @@ public class NewsMainVM extends ViewModel {
         tempBtn2.add(btn3);
         NewsFirstPage nfp2 = new NewsFirstPage(null, tempBtn2, null, 1);
         this.temp.add(nfp2);
-    }
+    }*/
 
     public MutableLiveData<List<NewsFirstPage>> getMainList() {
         return mainList;

@@ -3,6 +3,7 @@ package net.iGap.api;
 import net.iGap.news.repository.model.NewsComment;
 import net.iGap.news.repository.model.NewsDetail;
 import net.iGap.news.repository.model.NewsFPList;
+import net.iGap.news.repository.model.NewsFirstPage;
 import net.iGap.news.repository.model.NewsGroup;
 import net.iGap.news.repository.model.NewsList;
 import net.iGap.news.repository.model.NewsPN;
@@ -63,7 +64,9 @@ public interface NewsApi {
     @GET("getSourceNewsList/igap/")
     Call<NewsPN> getPublisherNews(@Query("srcid") int publisherID, @Query("page") int page, @Query("perpage") int display);
 
-    //TODO doesn't exist
-    @GET("news")
-    Call<List<NewsFPList>> getMainPageNews(@Query("per_source") int numOfNewsPerSource);
+    @GET("getFirstPageData/igap/")
+    Call<List<NewsFirstPage>> getMainPageNews();
+
+    @GET("getRelatedNewsList/igap/")
+    Call<NewsList> getRelatedNews(@Query("articleId") int newsID, @Query("page") int page, @Query("perpage") int display);
 }

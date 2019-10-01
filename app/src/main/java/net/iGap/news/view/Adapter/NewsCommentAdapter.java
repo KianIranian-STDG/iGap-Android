@@ -4,18 +4,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
 import net.iGap.news.repository.model.NewsComment;
-import net.iGap.news.repository.model.NewsGroup;
 
 public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

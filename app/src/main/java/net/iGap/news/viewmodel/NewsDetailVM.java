@@ -93,10 +93,6 @@ public class NewsDetailVM extends ViewModel {
         repo.getNewsComment(newsID, 1, 3, new ApiResponse<NewsComment>() {
             @Override
             public void onResponse(NewsComment newsComment) {
-                if (newsComment == null) {
-                    newsComment = new NewsComment();
-                    newsComment.setComments(newsComment.getFakeData());
-                }
                 comments.setValue(newsComment);
             }
 

@@ -1,7 +1,5 @@
 package net.iGap.news.view.Adapter;
 
-import android.graphics.Point;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +18,14 @@ import net.iGap.R;
 import net.iGap.news.repository.model.NewsFPList;
 import net.iGap.news.repository.model.NewsFirstPage;
 import net.iGap.news.repository.model.NewsMainBTN;
-import net.iGap.news.repository.model.NewsSlider;
 
 import java.util.List;
 
 public class NewsFirstPageAdapter extends RecyclerView.Adapter{
 
-    private static final int Slider = 0;
-    private static final int doubleButton = 1;
-    private static final int singleButton = 2;
+    private static final int Slider = 5;
+    private static final int doubleButton = 3;
+    private static final int singleButton = 4;
     private List<NewsFirstPage> mData;
     private onClickListener callBack;
 
@@ -44,10 +41,10 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter{
             case Slider:
                 View sliderViewHolder = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_slider_item, parent, false);
                 viewHolder = new SliderViewHolder(sliderViewHolder);
-                Display display = G.currentActivity.getWindowManager().getDefaultDisplay();
+                /*Display display = G.currentActivity.getWindowManager().getDefaultDisplay();
                 Point size = new Point();
                 display.getSize(size);
-                viewHolder.itemView.getLayoutParams().height = (int) (size.y *0.35);
+                viewHolder.itemView.getLayoutParams().height = (int) (size.y *0.35);*/
                 break;
             case doubleButton:
                 View DounbleBTNViewHolder = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_double_button_item, parent, false);
@@ -94,7 +91,7 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter{
 
         void onNewsCategoryClick(NewsFPList channel);
 
-        void onSliderClick(NewsSlider slide);
+        void onSliderClick(NewsFPList.NewsContent slide);
     }
 
     @Override
@@ -133,7 +130,7 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter{
 
         void initSlider(int position) {
             NewsSliderAdapter adapter = new NewsSliderAdapter();
-            adapter.setData(mData.get(position).getmSlider());
+            adapter.setData(mData.get(position).getmNews());
             adapter.setCallBack(slide -> callBack.onSliderClick(slide));
             sliderView.setSliderAdapter(adapter);
             // set animation
@@ -155,8 +152,8 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter{
         }
 
         void initDoubleBTN(int position) {
-            btn1.setText("" + mData.get(position).getmBtns().get(0).getTitle());
-            btn2.setText("" + mData.get(position).getmBtns().get(1).getTitle());
+            btn1.setText(mData.get(position).getmBtns().get(0).getTitle());
+            btn2.setText(mData.get(position).getmBtns().get(1).getTitle());
 
             btn1.setOnClickListener(v -> callBack.onButtonClick(mData.get(position).getmBtns().get(0)));
             btn2.setOnClickListener(v -> callBack.onButtonClick(mData.get(position).getmBtns().get(1)));

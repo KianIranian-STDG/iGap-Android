@@ -1,8 +1,6 @@
 package net.iGap.news.view;
 
-import android.content.ClipData;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -17,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,8 +26,6 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
 import net.iGap.databinding.NewsDetailPageBinding;
-import net.iGap.dialog.BottomSheetItemClickCallback;
-import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.payment.CompleteListener;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
@@ -44,11 +39,6 @@ import net.iGap.news.view.Adapter.NewsCommentAdapter;
 import net.iGap.news.view.Adapter.NewsDetailRelatedCardsAdapter;
 import net.iGap.news.view.Adapter.NewsDetailSliderAdapter;
 import net.iGap.news.viewmodel.NewsDetailVM;
-
-import org.stellar.sdk.responses.AssetResponse;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class NewsDetailFrag extends BaseFragment {
 
@@ -173,12 +163,10 @@ public class NewsDetailFrag extends BaseFragment {
 
     private void initCommentRecycler(NewsComment data) {
         if (data == null || data.getComments() == null) {
-            Log.d("amini", "initCommentRecycler: empty");
             binding.noItemInListError.setVisibility(View.VISIBLE);
             binding.commentList.setVisibility(View.GONE);
             return;
         }
-        Log.d("amini", "initCommentRecycler: " + data.getComments().size());
         NewsCommentAdapter adapter = new NewsCommentAdapter(data);
         binding.commentList.setAdapter(adapter);
     }
@@ -232,10 +220,6 @@ public class NewsDetailFrag extends BaseFragment {
 
         if (binding.tags.getText().equals(""))
             binding.tags.setVisibility(View.GONE);
-    }
-
-    private void showAddComment() {
-
     }
 
 }

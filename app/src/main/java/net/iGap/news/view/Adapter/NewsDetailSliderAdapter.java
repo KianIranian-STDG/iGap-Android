@@ -4,14 +4,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
 import net.iGap.news.repository.model.NewsImage;
-import net.iGap.news.repository.model.NewsSlider;
 
 import java.util.List;
 

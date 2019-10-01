@@ -64,7 +64,7 @@ public class NewsPublisherAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
 
         void initView(int position) {
-            title.setText("" + mData.get(position).getName());
+            title.setText(mData.get(position).getName());
             Picasso.get()
 //                    .load("https://images-eu.ssl-images-amazon.com/images/I/71T0kQ9FJPL.jpg")
                     .load(mData.get(position).getImage())

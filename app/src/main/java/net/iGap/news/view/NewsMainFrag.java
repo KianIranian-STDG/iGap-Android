@@ -12,10 +12,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -25,14 +23,11 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.kuknos.view.KuknosEntryOptionFrag;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.news.repository.model.NewsFPList;
 import net.iGap.news.repository.model.NewsFirstPage;
 import net.iGap.news.repository.model.NewsMainBTN;
-import net.iGap.news.repository.model.NewsSlider;
 import net.iGap.news.view.Adapter.NewsFirstPageAdapter;
-import net.iGap.news.view.Adapter.NewsListAdapter;
 import net.iGap.news.viewmodel.NewsMainVM;
 
 import java.util.ArrayList;
@@ -93,11 +88,11 @@ public class NewsMainFrag extends BaseFragment {
         binding.rcMain.setLayoutManager(layoutManager);
 
         binding.pullToRefresh.setOnRefreshListener(() -> {
-            newsMainVM.getData();
+            newsMainVM.getNews();
             binding.noItemInListError.setVisibility(View.GONE);
         });
 
-        newsMainVM.getData();
+        newsMainVM.getNews();
         onErrorObserver();
         onDataChanged();
         onProgress();
@@ -126,49 +121,43 @@ public class NewsMainFrag extends BaseFragment {
 
     private void initMainRecycler(List<NewsFirstPage> data) {
         List<NewsFirstPage> temp = new ArrayList<>(data);
-        /*Gson gson = new Gson();
-        Log.d("amini", "onDataChanged: in here " + gson.toJson(temp));*/
         NewsFirstPageAdapter adapter = new NewsFirstPageAdapter(temp);
         adapter.setCallBack(new NewsFirstPageAdapter.onClickListener() {
             @Override
             public void onButtonClick(NewsMainBTN btn) {
+
+            }
+
+            @Override
+            public void onNewsCategoryClick(NewsFPList group) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Fragment fragment = null;
-                switch (btn.getId()) {
-                    case 102:
-                        fragment = fragmentManager.findFragmentByTag(NewsGroupListFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = NewsGroupListFrag.newInstance();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
-                        break;
-                    case 103:
-                        fragment = fragmentManager.findFragmentByTag(NewsPublisherListFrag.class.getName());
-                        if (fragment == null) {
-                            fragment = NewsPublisherListFrag.newInstance();
-                            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                        }
-                        break;
+                Fragment fragment = fragmentManager.findFragmentByTag(NewsGroupPagerFrag.class.getName());
+                if (fragment == null) {
+                    fragment = NewsGroupPagerFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
+                Bundle args = new Bundle();
+                args.putString("GroupID", group.getCatID());
+                args.putString("GroupTitle", group.getCategory());
+                args.putString("GroupPic", group.getNews().get(0).getContents().getImage().get(0).getOriginal());
+                fragment.setArguments(args);
                 new HelperFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), fragment).setReplace(false).load();
             }
 
             @Override
-            public void onNewsCategoryClick(NewsFPList channel) {
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment fragment = fragmentManager.findFragmentByTag(NewsDetailFrag.class.getName());
-                    if (fragment == null) {
-                        fragment = NewsDetailFrag.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-            }
-
-            @Override
-            public void onSliderClick(NewsSlider slide) {
-
+            public void onSliderClick(NewsFPList.NewsContent slide) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = fragmentManager.findFragmentByTag(NewsDetailFrag.class.getName());
+                if (fragment == null) {
+                    fragment = NewsDetailFrag.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                }
+                Bundle args = new Bundle();
+                args.putString("NewsID", slide.getId());
+                fragment.setArguments(args);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });
         binding.rcMain.setAdapter(adapter);

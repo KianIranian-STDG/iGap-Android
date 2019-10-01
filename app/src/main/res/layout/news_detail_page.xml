@@ -201,7 +201,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/dp24"
-                    android:text="@={viewmodel.viewNum}"
+                    android:text="@{viewmodel.viewNum}"
                     android:textSize="@dimen/dp12"
                     android:justificationMode="inter_word"
                     android:singleLine="true"

@@ -39,7 +39,7 @@ public class DetailRepo {
     }
 
     public void getRelatedNews(int newsID, ApiResponse<NewsList> apiResponse) {
-        repository.getNewsList(new NewsApiArg(1, 5, -1, NewsApiArg.NewsType.Latest), apiResponse);
+        repository.getNewsList(new NewsApiArg(1, 5, newsID, NewsApiArg.NewsType.RELATED_NEWS), apiResponse);
     }
 
     public String getUserFirstName() {

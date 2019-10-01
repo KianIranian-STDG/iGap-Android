@@ -62,7 +62,7 @@ public class NewsGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
         void initView(int position) {
-            title.setText("" + mData.getGroups().get(position).getTitle());
+            title.setText(mData.getGroups().get(position).getTitle());
             Picasso.get()
 //                    .load("https://images-eu.ssl-images-amazon.com/images/I/71T0kQ9FJPL.jpg")
                     .load(mData.getGroups().get(position).getImage())

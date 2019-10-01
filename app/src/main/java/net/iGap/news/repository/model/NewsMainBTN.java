@@ -7,27 +7,15 @@ import java.util.List;
 public class NewsMainBTN {
 
     @SerializedName("id")
-    private int id;
+    private String id;
     @SerializedName("title")
     private String title;
     @SerializedName("color")
-    private int color;
+    private String color;
+    @SerializedName("link")
+    private String link;
 
     public NewsMainBTN() {
-    }
-
-    public NewsMainBTN(int id, String title, int color) {
-        this.id = id;
-        this.title = title;
-        this.color = color;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getTitle() {
@@ -38,11 +26,27 @@ public class NewsMainBTN {
         this.title = title;
     }
 
-    public int getColor() {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getColor() {
         return color;
     }
 
-    public void setColor(int color) {
+    public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }
