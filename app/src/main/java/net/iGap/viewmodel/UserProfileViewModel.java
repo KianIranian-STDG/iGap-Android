@@ -169,7 +169,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public SingleLiveEvent<Boolean> resetApp = new SingleLiveEvent<>();
     public SingleLiveEvent<Integer> showError = new SingleLiveEvent<>();
     public MutableLiveData<Drawable> changeUserProfileWallpaper = new MutableLiveData<>();
-    public MutableLiveData<Boolean> openAccountsDialog = new MutableLiveData<>();
+    public SingleLiveEvent<Boolean> openAccountsDialog = new SingleLiveEvent<>();
 
     private RealmUserInfo userInfo;
     private String phoneNumber;
