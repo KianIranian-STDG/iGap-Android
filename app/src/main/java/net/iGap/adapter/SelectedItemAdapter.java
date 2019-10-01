@@ -52,7 +52,7 @@ public class SelectedItemAdapter extends RecyclerView.Adapter<SelectedItemAdapte
             super(itemView);
             nameTv = itemView.findViewById(R.id.tv_itemMultiSelect);
             if (G.isDarkTheme) {
-                itemView.setBackgroundResource(R.drawable.background_room_list_multi_select_dark);
+                itemView.setBackgroundResource(R.drawable.round_button_enabled_bg);
                 Utils.darkModeHandler(nameTv);
             }
         }
