@@ -427,14 +427,14 @@ public class G extends ApplicationContext {
 
     public static String getApiToken() {
         String result = "Bearer ";
-        try (Realm realm = Realm.getDefaultInstance()) {
+        result += DbManager.getInstance().doRealmTask(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo != null) {
-                result += realmUserInfo.getAccessToken();
+                 return realmUserInfo.getAccessToken();
             }
-        }
+            return null;
+        });
         return result;
-
     }
 
     public static void refreshRealmUi() {

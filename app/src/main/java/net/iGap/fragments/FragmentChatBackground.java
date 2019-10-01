@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterChatBackground;
@@ -254,7 +255,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         StructWallpaper sw = new StructWallpaper();
         sw.setWallpaperType(WallpaperType.addNew);
         wList.add(sw);
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
 
             if (realmWallpaper != null) {
@@ -297,7 +298,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
                     getImageListFromServer();
                 }
             }
-        }
+        });
     }
 
     @Override

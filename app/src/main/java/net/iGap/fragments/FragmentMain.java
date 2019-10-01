@@ -920,11 +920,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                     long peerId = realmRoom.getChatRoom() != null ? realmRoom.getChatRoom().getPeerId() : 0;
                     boolean isCloud = peerId > 0 && peerId == G.userId;
 
-                    int pinCount;
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        RealmResults realmPinRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_PINNED, true).findAll();
-                        pinCount = realmPinRoom.size();
-                    }
+                    int pinCount = DbManager.getInstance().doRealmTask(realm -> {
+                        return realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_PINNED, true).findAll().size();
+                    });
 
 
                     if (realmRoom.isPinned()) {
@@ -1066,32 +1064,34 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private void markAsRead(ProtoGlobal.Room.Type chatType, long roomId) {
 
         G.handler.postDelayed(() -> {
-            Realm realm = Realm.getDefaultInstance();
-            if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
-                RealmRoomMessage.fetchMessages(realm, roomId, new OnActivityChatStart() {
-                    @Override
-                    public void sendSeenStatus(RealmRoomMessage message) {
-                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                    }
+            //ToDo: Check it for update badge after update sen status in db
+            DbManager.getInstance().doRealmTask(realm -> {
+                if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
+                    RealmRoomMessage.fetchMessages(realm, roomId, new OnActivityChatStart() {
+                        @Override
+                        public void sendSeenStatus(RealmRoomMessage message) {
+                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                        }
 
-                    @Override
-                    public void resendMessage(RealmRoomMessage message) {
+                        @Override
+                        public void resendMessage(RealmRoomMessage message) {
 
-                    }
+                        }
 
-                    @Override
-                    public void resendMessageNeedsUpload(RealmRoomMessage message, long messageId) {
+                        @Override
+                        public void resendMessageNeedsUpload(RealmRoomMessage message, long messageId) {
 
-                    }
-                });
-            }
+                        }
+                    });
+                }
 
-            RealmRoom.setCount(realm,roomId, 0);
+                RealmRoom.setCount(realm, roomId, 0);
 
-            G.handler.postDelayed(() -> {
-                AppUtils.updateBadgeOnly(realm, roomId);
-                realm.close();
-            }, 250);
+                G.handler.postDelayed(() -> {
+                    AppUtils.updateBadgeOnly(realm, roomId);
+                    realm.close();
+                }, 250);
+            });
         }, 5);
     }
 

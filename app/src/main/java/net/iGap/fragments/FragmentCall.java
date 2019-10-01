@@ -255,20 +255,19 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
         //clear all logs
         mBtnDeleteAllLogs.setOnClickListener(v -> {
             if (G.userLogin) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
+                new MaterialDialog.Builder(v.getContext()).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
                         positiveText(R.string.B_ok).onPositive((dialog, which) -> {
-                    try (Realm realm_ = Realm.getDefaultInstance()) {
-                        setViewState(false);
-                        RealmCallLog realmCallLog = realm_.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
-                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
-                        view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
-                        mSelectedLogList.clear();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                            DbManager.getInstance().doRealmTask(realm -> {
+                                //ToDo: add callback to proto request
+                                setViewState(false);
+                                RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
+                                new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
+                                view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
+                                mSelectedLogList.clear();
+                            });
                 }).negativeText(R.string.B_cancel).show();
             } else {
-                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                HelperError.showSnackMessage(getString(R.string.there_is_no_connection_to_server), false);
             }
 
         });
@@ -452,28 +451,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     }
 
     //*************************************************************************************************************
-
-    public void openDialogMenu() {
-        List<String> items = new ArrayList<>();
-        items.add(getString(R.string.clean_log));
-        TopSheetDialog topSheetDialog = new TopSheetDialog(getContext()).setListData(items, -1, position -> {
-            if (G.userLogin) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
-                        positiveText(R.string.B_ok).onPositive((dialog, which) -> {
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
-                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
-                        emptuListView.setVisibility(View.VISIBLE);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }).negativeText(R.string.B_cancel).show();
-            } else {
-                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-            }
-        });
-        topSheetDialog.show();
-    }
 
     @Override
     public void onCallLogClear() {

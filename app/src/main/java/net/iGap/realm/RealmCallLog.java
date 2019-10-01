@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import net.iGap.DbManager;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.proto.ProtoSignalingGetLog;
@@ -64,14 +65,9 @@ public class RealmCallLog extends RealmObject {
     }
 
     public static void clearCallLog(final long clearId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.where(RealmCallLog.class).lessThanOrEqualTo(RealmCallLogFields.ID, clearId).findAll().deleteAllFromRealm();
-                }
-            });
-        }
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransaction(realm1 -> realm1.where(RealmCallLog.class).lessThanOrEqualTo(RealmCallLogFields.ID, clearId).findAll().deleteAllFromRealm());
+        });
     }
 
     /**

@@ -19,6 +19,7 @@ import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -174,42 +175,39 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 new HelperFragment(activity.getSupportFragmentManager(), FragmentPayment.newInstance()).setReplace(false).load();
                 break;
             case WALLET_MENU:/** tested **/
-                try (Realm realm = Realm.getDefaultInstance()) {
-                    RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                    String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
-                    if (!G.isWalletRegister) {
-                        if (discoveryField.value.equals("QR_USER_WALLET")) {
-                            new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), true)).load();
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                        String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
+                        if (!G.isWalletRegister) {
+                            if (discoveryField.value.equals("QR_USER_WALLET")) {
+                                new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), true)).load();
+                            } else {
+                                new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), false)).load();
+                            }
                         } else {
-                            new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), false)).load();
-                        }
-                    } else {
 
-                        Intent intent = new Intent(activity, WalletActivity.class);
-                        intent.putExtra("Language", "fa");
-                        intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
-                        intent.putExtra("PrimaryColor", G.appBarColor);
-                        intent.putExtra("DarkPrimaryColor", G.appBarColor);
-                        intent.putExtra("AccentColor", G.appBarColor);
-                        intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
-                        intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-                        intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-                        intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                        intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-                        intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
-                        intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-                        intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
-                        if (discoveryField.value.equals("QR_USER_WALLET")) {
-                            intent.putExtra("isScan", true);
-                        } else {
-                            intent.putExtra("isScan", true);
+                            Intent intent = new Intent(activity, WalletActivity.class);
+                            intent.putExtra("Language", "fa");
+                            intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
+                            intent.putExtra("PrimaryColor", G.appBarColor);
+                            intent.putExtra("DarkPrimaryColor", G.appBarColor);
+                            intent.putExtra("AccentColor", G.appBarColor);
+                            intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
+                            intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
+                            intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
+                            intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
+                            intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
+                            intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
+                            intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
+                            intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                            if (discoveryField.value.equals("QR_USER_WALLET")) {
+                                intent.putExtra("isScan", true);
+                            } else {
+                                intent.putExtra("isScan", true);
+                            }
+                            G.currentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
                         }
-                        G.currentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
+                    });
                 break;
             case NEARBY_MENU:/** tested **/
                 try {

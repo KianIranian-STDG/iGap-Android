@@ -201,9 +201,9 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     }
 
     public static Drawable avatarMark(long userId, MarkerColor markerColor) {
-        String pathName = "";
-        Bitmap bitmap = null;
-        try (Realm realm = Realm.getDefaultInstance()) {
+        Bitmap bitmap = DbManager.getInstance().doRealmTask(realm -> {
+            String pathName = "";
+            Bitmap bitmap1 = null;
             for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll().sort(RealmAvatarFields.ID, Sort.DESCENDING)) {
                 if (avatar.getFile() != null) {
                     pathName = avatar.getFile().getLocalFilePath();
@@ -214,41 +214,36 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 }
             }
             if (pathName == null || pathName.isEmpty()) {
-                bitmap = getInitials(realm, userId);
+                bitmap1 = getInitials(realm, userId);
             } else {
                 try {
                     File imgFile = new File(pathName);
-                    bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    bitmap1 = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 } catch (OutOfMemoryError e) {
                     try {
                         File imgFile = new File(pathName);
                         BitmapFactory.Options options = new BitmapFactory.Options();
                         options.inSampleSize = 2;
-                        bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
+                        bitmap1 = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
                     } catch (OutOfMemoryError e1) {
                         try {
                             File imgFile = new File(pathName);
                             BitmapFactory.Options options = new BitmapFactory.Options();
                             options.inSampleSize = 4;
-                            bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
+                            bitmap1 = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
                         } catch (OutOfMemoryError e2) {
                             e2.printStackTrace();
                         }
                     }
                 }
 
-                if (bitmap == null) {
-                    bitmap = getInitials(realm, userId);
+                if (bitmap1 == null) {
+                    bitmap1 = getInitials(realm, userId);
                 }
             }
-        }
-
-        boolean mineAvatar = false;
-        if (userId == G.userId) {
-            mineAvatar = true;
-        }
-
-        return new BitmapDrawable(context.getResources(), drawAvatar(bitmap, markerColor, mineAvatar));
+            return bitmap1;
+        });
+        return new BitmapDrawable(context.getResources(), drawAvatar(bitmap, markerColor, userId == G.userId));
     }
 
     private static Bitmap getInitials(Realm realm, long userId) {
@@ -1403,11 +1398,11 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     @Override
     public void onNearbyCoordinate(final List<ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result> results) {
         map.getOverlays().removeAll(markers);
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             for (final ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result result : results) {
                 downloadMarkerAvatar(realm, result.getUserId());
             }
-        }
+        });
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
