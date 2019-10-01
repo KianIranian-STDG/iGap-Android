@@ -171,7 +171,7 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter{
         }
 
         void initSingleBTN(int position) {
-            btn1.setText("" + mData.get(position).getmBtns().get(0).getTitle());
+            btn1.setText(mData.get(position).getmBtns().get(0).getTitle());
             btn1.setOnClickListener(v -> callBack.onButtonClick(mData.get(position).getmBtns().get(0)));
         }
 

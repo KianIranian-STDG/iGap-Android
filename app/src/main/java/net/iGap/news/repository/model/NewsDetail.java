@@ -16,14 +16,14 @@ public class NewsDetail {
     private String date;
     @SerializedName("lead")
     private String lead;
-    @SerializedName("internalLink")
+    @SerializedName("externalLink")
     private String link;
     @SerializedName("alias")
     private String alias;
     @SerializedName("image")
     private List<NewsImage> images;
     @SerializedName("source")
-    private String srouce;
+    private String source;
     @SerializedName("Original4")
     private String commentCount;
     @SerializedName("sourceLogo")
@@ -61,12 +61,12 @@ public class NewsDetail {
         this.body = body;
     }
 
-    public String getSrouce() {
-        return srouce;
+    public String getSource() {
+        return source;
     }
 
-    public void setSrouce(String srouce) {
-        this.srouce = srouce;
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public String getView() {

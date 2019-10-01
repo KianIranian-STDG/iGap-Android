@@ -1,5 +1,7 @@
 package net.iGap.news.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +24,10 @@ import net.iGap.databinding.NewsMainPageBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.news.repository.model.NewsFPList;
 import net.iGap.news.repository.model.NewsFirstPage;
 import net.iGap.news.repository.model.NewsMainBTN;
@@ -125,7 +129,14 @@ public class NewsMainFrag extends BaseFragment {
         adapter.setCallBack(new NewsFirstPageAdapter.onClickListener() {
             @Override
             public void onButtonClick(NewsMainBTN btn) {
-
+                // open Link
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+                int checkedInAppBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
+                if (checkedInAppBrowser == 1 && !HelperUrl.isNeedOpenWithoutBrowser(btn.getLink())) {
+                    HelperUrl.openBrowser(btn.getLink());
+                } else {
+                    HelperUrl.openWithoutBrowser(btn.getLink());
+                }
             }
 
             @Override

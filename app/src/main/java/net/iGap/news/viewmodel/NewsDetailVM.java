@@ -1,23 +1,16 @@
 package net.iGap.news.viewmodel;
 
-import android.util.Log;
-
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.api.apiService.ApiResponse;
-import net.iGap.module.enums.ProgressState;
 import net.iGap.news.repository.DetailRepo;
-import net.iGap.news.repository.MainRepo;
 import net.iGap.news.repository.model.NewsComment;
 import net.iGap.news.repository.model.NewsDetail;
 import net.iGap.news.repository.model.NewsError;
-import net.iGap.news.repository.model.NewsFPList;
 import net.iGap.news.repository.model.NewsList;
-
-import java.util.List;
 
 public class NewsDetailVM extends ViewModel {
 
@@ -69,7 +62,7 @@ public class NewsDetailVM extends ViewModel {
                 rootTitle.set(newsDetail.getRootTitle());
                 viewNum.set(newsDetail.getView());
                 commentNum.set(newsDetail.getView());
-                source.set(newsDetail.getSrouce());
+                source.set(newsDetail.getSource());
                 tag.set(newsDetail.getTags());
                 date.set(newsDetail.getDate());
 

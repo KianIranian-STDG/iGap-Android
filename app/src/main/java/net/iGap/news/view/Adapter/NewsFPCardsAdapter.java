@@ -134,7 +134,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(temp));
 
-            if (temp.getNews().get(0).getColor().equals("0")) {
+            if (temp.getNews().get(0).getColor().equals("#000")) {
                 // Normal
                 changeToNormal();
             }
@@ -148,7 +148,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             category.setTextColor(Color.WHITE);
             source.setTextColor(Color.WHITE);
             title.setTextColor(Color.WHITE);
-            container.setCardBackgroundColor(Color.parseColor("#" + color));
+            container.setCardBackgroundColor(Color.parseColor(color));
         }
 
         private void changeToNormal() {
@@ -211,7 +211,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*2)));
 
-            if (mData.getmNews().get(position*2).getNews().get(0).getColor().equals(0)) {
+            if (mData.getmNews().get(position*2).getNews().get(0).getColor().equals("#000")) {
                 // Normal
                 changeToNormal();
             }
@@ -233,7 +233,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .into(image1);
             container1.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*2+1)));
 
-            if (mData.getmNews().get(position*2+1).getNews().get(0).getColor().equals(0)) {
+            if (mData.getmNews().get(position*2+1).getNews().get(0).getColor().equals("#000")) {
                 // Normal
                 changeToNormal();
             }
@@ -247,12 +247,12 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             category.setTextColor(Color.WHITE);
             source.setTextColor(Color.WHITE);
             title.setTextColor(Color.WHITE);
-            container.setCardBackgroundColor(Color.parseColor("#" + color));
+            container.setCardBackgroundColor(Color.parseColor(color));
 
             category1.setTextColor(Color.WHITE);
             source1.setTextColor(Color.WHITE);
             title1.setTextColor(Color.WHITE);
-            container1.setCardBackgroundColor(Color.parseColor("#" + color));
+            container1.setCardBackgroundColor(Color.parseColor(color));
         }
 
         private void changeToNormal() {
@@ -324,7 +324,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*3)));
 
-            if (mData.getmNews().get(position*3).getNews().get(0).getColor().equals(0)) {
+            if (mData.getmNews().get(position*3).getNews().get(0).getColor().equals("#000")) {
                 // Normal
                 changeToNormal();
             }
@@ -343,7 +343,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .into(image1);
             container1.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*3+1)));
 
-            if (mData.getmNews().get(position*3+1).getNews().get(0).getColor().equals(0)) {
+            if (mData.getmNews().get(position*3+1).getNews().get(0).getColor().equals("#000")) {
                 // Normal
                 changeToNormal();
             }
@@ -362,7 +362,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .into(image2);
             container2.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*3+2)));
 
-            if (mData.getmNews().get(position*3+2).getNews().get(0).getColor().equals(0)) {
+            if (mData.getmNews().get(position*3+2).getNews().get(0).getColor().equals("#000")) {
                 // Normal
                 changeToNormal();
             }
@@ -373,13 +373,13 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
         private void changeToRed(String color) {
             category.setTextColor(Color.WHITE);
-            container.setCardBackgroundColor(Color.parseColor("#" + color));
+            container.setCardBackgroundColor(Color.parseColor(color));
 
             category1.setTextColor(Color.WHITE);
-            container1.setCardBackgroundColor(Color.parseColor("#" + color));
+            container1.setCardBackgroundColor(Color.parseColor(color));
 
             category2.setTextColor(Color.WHITE);
-            container2.setCardBackgroundColor(Color.parseColor("#" + color));
+            container2.setCardBackgroundColor(Color.parseColor(color));
         }
 
         private void changeToNormal() {
