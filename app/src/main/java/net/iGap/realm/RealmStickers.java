@@ -43,38 +43,39 @@ public class RealmStickers extends RealmObject {
 
         if (realmStickers == null) {
             realmStickers = realm.createObject(RealmStickers.class);
-            realmStickers.setCreatedAt(createdAt);
-            realmStickers.setSt_id(st_id);
-            realmStickers.setRefId(refId);
-            realmStickers.setName(name);
-            realmStickers.setAvatarToken(avatarToken);
-            realmStickers.setUri(HelperDownloadSticker.createPathFile(avatarToken, avatarName));
-            realmStickers.setAvatarSize(avatarSize);
-            realmStickers.setAvatarName(avatarName);
-            realmStickers.setPrice(price);
-            realmStickers.setVip(isVip);
-            realmStickers.setSort(sort);
-            realmStickers.setApproved(approved);
-            realmStickers.setCreatedBy(createdBy);
-            realmStickers.setFavorite(isFavorite);
-
-            HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
-                @Override
-                public void OnProgress(String path, String token, int progress) {
-                }
-
-                @Override
-                public void OnError(String token) {
-
-                }
-            });
-
-            RealmList<RealmStickersDetails> realmStickersDetails = new RealmList<>();
-            for (StructItemSticker itemSticker : stickers) {
-                realmStickersDetails.add(RealmStickersDetails.put(realm, itemSticker.getId(), itemSticker.getRefId(), itemSticker.getName(), itemSticker.getToken(), "", itemSticker.getAvatarSize(), itemSticker.getAvatarName(), itemSticker.getSort(), itemSticker.getGroupId()));
-            }
-            realmStickers.setRealmStickersDetails(realmStickersDetails);
         }
+
+        realmStickers.setCreatedAt(createdAt);
+        realmStickers.setSt_id(st_id);
+        realmStickers.setRefId(refId);
+        realmStickers.setName(name);
+        realmStickers.setAvatarToken(avatarToken);
+        realmStickers.setUri(HelperDownloadSticker.createPathFile(avatarToken, avatarName));
+        realmStickers.setAvatarSize(avatarSize);
+        realmStickers.setAvatarName(avatarName);
+        realmStickers.setPrice(price);
+        realmStickers.setVip(isVip);
+        realmStickers.setSort(sort);
+        realmStickers.setApproved(approved);
+        realmStickers.setCreatedBy(createdBy);
+        realmStickers.setFavorite(isFavorite);
+
+        HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
+            @Override
+            public void OnProgress(String path, String token, int progress) {
+            }
+
+            @Override
+            public void OnError(String token) {
+
+            }
+        });
+
+        RealmList<RealmStickersDetails> realmStickersDetails = new RealmList<>();
+        for (StructItemSticker itemSticker : stickers) {
+            realmStickersDetails.add(RealmStickersDetails.put(realm, itemSticker.getId(), itemSticker.getRefId(), itemSticker.getName(), itemSticker.getToken(), "", itemSticker.getAvatarSize(), itemSticker.getAvatarName(), itemSticker.getSort(), itemSticker.getGroupId()));
+        }
+        realmStickers.setRealmStickersDetails(realmStickersDetails);
 
         return realmStickers;
     }
@@ -325,7 +326,7 @@ public class RealmStickers extends RealmObject {
         deleteFromRealm();
     }
 
-    public static void updateStickers(List<StructGroupSticker> mData) {
+    public static void updateStickers(List<StructGroupSticker> mData, Realm.Transaction.OnSuccess onSuccess) {
         try (Realm realm = Realm.getDefaultInstance()) {
             realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
@@ -351,12 +352,10 @@ public class RealmStickers extends RealmObject {
                     }
 
                     for (StructGroupSticker item : mData) {
-                        if (!itemNotNeedToAdd.contains(item.getId())) {
-                            RealmStickers.put(realm, item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), true);
-                        }
+                        RealmStickers.put(realm, item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), true);
                     }
                 }
-            });
+            }, onSuccess);
         }
     }
 }

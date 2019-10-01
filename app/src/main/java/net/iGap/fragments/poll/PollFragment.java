@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,19 +18,22 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.poll.PollAdapter;
 import net.iGap.adapter.items.poll.PollItem;
-import net.iGap.fragments.FragmentToolBarBack;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetPoll;
 
 import java.util.ArrayList;
 
-public class PollFragment extends FragmentToolBarBack {
+public class PollFragment extends BaseFragment {
 
     private RecyclerView rcDiscovery;
     private TextView emptyRecycle;
     private SwipeRefreshLayout pullToRefresh;
     private int pollId;
     PollAdapter pollAdapter;
+    private HelperToolbar mHelperToolbar;
 
     public static PollFragment newInstance(int page) {
         PollFragment pollFragment = new PollFragment();
@@ -49,9 +53,10 @@ public class PollFragment extends FragmentToolBarBack {
         }
     }
 
+    @Nullable
     @Override
-    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
-        inflater.inflate(R.layout.fragment_discovery, root, true);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_discovery, container, false);
     }
 
     @Override
@@ -92,7 +97,28 @@ public class PollFragment extends FragmentToolBarBack {
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
         rcDiscovery.setLayoutManager(layoutManager);
         rcDiscovery.setAdapter(pollAdapter);
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLeftIcon(R.string.back_icon)
+                // .setRightSmallAvatarShown(true)
+                .setLogoShown(true)
+//                .setFragmentActivity(getActivity())
+//                .setPassCodeVisibility(true, R.string.unlock_icon)
+//                .setScannerVisibility(true, R.string.scan_qr_code_icon)
+                //  .setSearchBoxShown(true, false)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                });
+        ViewGroup viewGroup = view.findViewById(R.id.fd_layout_toolbar);
+        viewGroup.addView(mHelperToolbar.getView());
+
         tryToUpdateOrFetchRecycleViewData(0);
+
+
     }
 
     private void setRefreshing(boolean value) {
@@ -155,7 +181,7 @@ public class PollFragment extends FragmentToolBarBack {
 
     private void setAdapterData(ArrayList<PollItem> pollArrayList, String title) {
         pollAdapter.setPollList(pollArrayList);
-        titleTextView.setText(title);
+        mHelperToolbar.setDefaultTitle(title);
         pollAdapter.notifyChangeData();
     }
 

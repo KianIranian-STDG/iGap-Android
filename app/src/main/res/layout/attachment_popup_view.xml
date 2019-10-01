@@ -22,7 +22,8 @@
             android:layout_margin="@dimen/dp4"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/divider"/>
 
         <View
             android:id="@+id/divider"
@@ -32,7 +33,8 @@
             android:background="?iGapDividerLine"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rcvContent" />
+            app:layout_constraintTop_toBottomOf="@id/rcvContent"
+            app:layout_constraintBottom_toTopOf="@id/lyt_buttons"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/lyt_buttons"

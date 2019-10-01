@@ -76,7 +76,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
 
             rootView.setOnClickListener(v -> {
                 Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + contact.getPhone()));
-                smsIntent.putExtra("sms_body", context.getResources().getString(R.string.invitation_message) + ActivityMain.userPhoneNumber);
+                smsIntent.putExtra("sms_body", context.getResources().getString(R.string.invitation_message) + "+" + ActivityMain.userPhoneNumber);
                 smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 G.context.startActivity(smsIntent);
             });

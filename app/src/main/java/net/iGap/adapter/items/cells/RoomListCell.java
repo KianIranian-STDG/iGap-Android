@@ -51,9 +51,6 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.CARD_TO_CARD;
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER;
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.PAYMENT;
-import static net.iGap.view.TextBadge.DARK_MODE;
-import static net.iGap.view.TextBadge.MUTE_MODE;
-import static net.iGap.view.TextBadge.UNMUTE_MODE;
 
 public class RoomListCell extends FrameLayout {
     private static final String TAG = "abbasi";
@@ -109,9 +106,29 @@ public class RoomListCell extends FrameLayout {
             avatarImageView = new CircleImageView(getContext());
             addView(avatarImageView);
             haveAvatar = true;
-            avatarHandler(room, avatarHandler);
+            final boolean isMyCloud;
+
+            isMyCloud = room.getChatRoom() != null && room.getChatRoom().getPeerId() > 0 && room.getChatRoom().getPeerId() == userId;
+
+            if (isMyCloud) {
+                avatarHandler.removeImageViewFromHandler(avatarImageView);
+                avatarImageView.setImageResource(R.drawable.ic_cloud_space_blue);
+
+            } else {
+                avatarHandler(room, avatarHandler);
+            }
         } else {
-            avatarHandler(room, avatarHandler);
+            final boolean isMyCloud;
+
+            isMyCloud = room.getChatRoom() != null && room.getChatRoom().getPeerId() > 0 && room.getChatRoom().getPeerId() == userId;
+
+            if (isMyCloud) {
+                avatarHandler.removeImageViewFromHandler(avatarImageView);
+                avatarImageView.setImageResource(R.drawable.ic_cloud_space_blue);
+
+            } else {
+                avatarHandler(room, avatarHandler);
+            }
         }
 
         if (haveName) {
@@ -221,17 +238,16 @@ public class RoomListCell extends FrameLayout {
                 addView(badgeView);
                 haveBadge = true;
             }
-            badgeView.setText(getUnreadCount(room.getUnreadCount()));
-
             if (room.getMute()) {
-                badgeView.setBadgeColor(MUTE_MODE);
+                badgeView.setColor(getResources().getColor(R.color.gray_9d));
             } else {
                 if (G.isDarkTheme) {
-                    badgeView.setBadgeColor(DARK_MODE);
+                    badgeView.setColor(getResources().getColor(R.color.md_blue_500));
                 } else {
-                    badgeView.setBadgeColor(UNMUTE_MODE);
+                    badgeView.setColor(getResources().getColor(R.color.notification_badge));
                 }
             }
+            badgeView.setText(getUnreadCount(room.getUnreadCount()));
         } else if (haveBadge) {
             removeView(badgeView);
             haveBadge = false;
@@ -417,7 +433,7 @@ public class RoomListCell extends FrameLayout {
                     int badgeLeft = isRtl ? paddingEnd : getWidth() - badgeWidth - paddingEnd - standardMargin;
 
                     badgeView.measure(makeMeasureSpec(badgeWidth, AT_MOST), makeMeasureSpec(badgeHeight, AT_MOST));
-                    badgeView.layout(badgeLeft, h2 + 8, badgeRight, messageBottom - 8);
+                    badgeView.layout(badgeLeft, h2 + dpToPx(2), badgeRight, messageBottom);
 
                     if (isRtl) {
                         messageLeft = badgeRight + standardMargin;
@@ -462,11 +478,10 @@ public class RoomListCell extends FrameLayout {
             }
 
             if (haveCheckBox) {
-                checkBox.measure(makeMeasureSpec(65, EXACTLY), makeMeasureSpec(65, EXACTLY));
-                checkBox.layout(isRtl ? avatarLeft : avatarRight - 65, avatarBottom - 65, isRtl ? avatarLeft + 65 : avatarRight, avatarBottom);
+                checkBox.measure(makeMeasureSpec(dpToPx(20), EXACTLY), makeMeasureSpec(dpToPx(20), EXACTLY));
+                checkBox.layout(isRtl ? avatarLeft : avatarRight - dpToPx(20), avatarBottom - dpToPx(20), isRtl ? avatarLeft + dpToPx(20) : avatarRight, avatarBottom);
             }
         }
-
     }
 
     public void setCheck(boolean check) {

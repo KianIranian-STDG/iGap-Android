@@ -11,8 +11,8 @@
 package net.iGap.module;
 
 import android.content.ContentResolver;
-import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -28,15 +28,12 @@ import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmUserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
-
-import static net.iGap.Config.PHONE_CONTACT_MAX_COUNT_LIMIT;
 
 /**
  * work with saved contacts in database
@@ -226,6 +223,70 @@ public class Contacts {
         }
     }
     */
+
+    public static void getSearchContact(String text , ContactCallback callback){
+        if (!HelperPermission.grantedContactPermission()) {
+            return;
+        }
+
+        int currentItemIndex = 0 ;
+
+        ArrayList<String> tempList = new ArrayList<>();
+        ArrayList<StructListOfContact> contactList = new ArrayList<>();
+        ContentResolver cr = G.context.getContentResolver();
+        String whereString = "display_name LIKE ?";
+        String[] whereParams = new String[]{"%" + text + "%"};
+
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, whereString, whereParams, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+
+        if (cur != null) {
+            if (cur.getCount() > 0) {
+                while (cur.moveToNext()) {
+
+                    currentItemIndex ++ ;
+
+                    int contactId = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
+
+                    try {
+                        if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                            Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                    new String[]{String.valueOf(contactId)}, null);
+                            if (pCur != null) {
+                                while (pCur.moveToNext()) {
+                                    String number = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                    if (number != null) {
+                                        String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                                        if (!tempList.contains(number.replace("[\\s\\-()]", "").replace(" ", ""))) {
+                                            StructListOfContact itemContact = new StructListOfContact();
+                                            itemContact.setDisplayName(name);
+                                            itemContact.setPhone(number);
+                                            contactList.add(itemContact);
+                                            tempList.add(number.replace("[\\s\\-()]", "").replace(" ", ""));
+                                        }
+                                    }
+                                }
+                                pCur.close();
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    } catch (NullPointerException e1) {
+                        e1.printStackTrace();
+                    }
+
+                    //limit search in contact
+                    if (currentItemIndex == 300){
+                        break;
+                    }
+
+                }
+            }
+            cur.close();
+        }
+
+        callback.onLocalContactRetriveForSearch(contactList);
+    }
+
     public static void getPhoneContactForClient() { //get List Of Contact
         if (!HelperPermission.grantedContactPermission()) {
             return;
@@ -241,7 +302,7 @@ public class Contacts {
         String startContactId = ">=" + localPhoneContactId;
         String selection = ContactsContract.Contacts._ID + startContactId;
 
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, selection, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");//ContactsContract.Contacts.DISPLAY_NAME + " ASC"
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, selection, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
 
         if (cur != null) {
             if (cur.getCount() > 0) {
@@ -401,6 +462,10 @@ public class Contacts {
         } catch (Exception e) {
             //nothing
         }
+    }
+
+    public interface ContactCallback {
+        void onLocalContactRetriveForSearch(ArrayList<StructListOfContact> contacts);
     }
 
     /**

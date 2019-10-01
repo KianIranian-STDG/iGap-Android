@@ -58,7 +58,6 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     public ObservableInt showPeerSurface = new ObservableInt(View.GONE);
     public ObservableInt showRendererSurface = new ObservableInt(View.GONE);
     public ObservableInt showImageBackground = new ObservableInt(View.VISIBLE);
-    public ObservableInt showRippleView = new ObservableInt(View.VISIBLE);// never gone it, invisible it
     public ObservableInt showUserAvatar = new ObservableInt(View.VISIBLE);
     public ObservableInt showChatButton = new ObservableInt(View.VISIBLE);
     public ObservableInt showAddMemberButton = new ObservableInt(View.GONE);
@@ -75,6 +74,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     public ObservableInt cllBackBtnSpeaker = new ObservableInt(R.string.speaker_on_icon);
     public ObservableBoolean enableEndCallButton = new ObservableBoolean(true);
     //ui
+    public MutableLiveData<Boolean> showRippleView = new MutableLiveData<>();// never gone it, invisible it
     public MutableLiveData<Boolean> changeViewState = new MutableLiveData<>();
     public MutableLiveData<Boolean> isMuteMusic = new MutableLiveData<>();
     public MutableLiveData<Boolean> playRingTone = new MutableLiveData<>();
@@ -328,9 +328,11 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                         G.isVideoCallRinging = true;
                         break;
                     case INCAMING_CALL:
+                        showRippleView.postValue(true);
                         txtAviVisibility.set(View.VISIBLE);
                         break;
                     case CONNECTING:
+                        showRippleView.postValue(false);
                         txtAviVisibility.set(View.VISIBLE);
                         break;
                     case CONNECTED:
@@ -362,6 +364,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
 
                         break;
                     case DISCONNECTED:
+                        showRippleView.postValue(true);
                         txtAviVisibility.set(View.GONE);
                         G.handler.postDelayed(() -> {
                             playSound.setValue(R.raw.igap_discounect);
@@ -385,6 +388,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                         txtAviVisibility.set(View.GONE);
                         break;
                     case FAILD:
+                        showRippleView.postValue(true);
                         setPhoneSpeaker();
                         playSound.setValue(R.raw.igap_noresponse);
                         txtAviVisibility.set(View.GONE);
