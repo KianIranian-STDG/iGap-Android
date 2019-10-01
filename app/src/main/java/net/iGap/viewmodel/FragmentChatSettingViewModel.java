@@ -257,13 +257,13 @@ public class FragmentChatSettingViewModel extends ViewModel {
     }
 
     public void setTheme(int position) {
-        Log.wtf(this.getClass().getName(), "position: " + position);
         if (themeList.getValue() != null) {
             sharedPreferences.edit()
                     .putInt(SHP_SETTING.KEY_THEME_COLOR, themeList.getValue().get(position).getThemeId())
                     .putBoolean(SHP_SETTING.KEY_THEME_DARK, themeList.getValue().get(position).getThemeId() == Theme.DARK)
                     .apply();
             G.isDarkTheme = themeList.getValue().get(position).getThemeId() == Theme.DARK;
+            G.themeColor = themeList.getValue().get(position).getThemeId();
             updateNewTheme.setValue(true);
             if (G.twoPaneMode) {
                 updateTwoPaneView.setValue(true);

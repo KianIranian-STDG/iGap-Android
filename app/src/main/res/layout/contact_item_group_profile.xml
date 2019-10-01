@@ -10,7 +10,7 @@
         android:layout_height="1px"
         android:layout_marginStart="@dimen/dp8"
         android:layout_marginLeft="@dimen/dp8"
-        android:background="?iGapDividerLine" />
+        android:background="?attr/iGapDividerLine" />
 
     <LinearLayout
         android:layout_width="match_parent"

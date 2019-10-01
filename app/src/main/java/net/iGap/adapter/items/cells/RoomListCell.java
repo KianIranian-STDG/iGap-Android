@@ -1,6 +1,7 @@
 package net.iGap.adapter.items.cells;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -92,7 +93,7 @@ public class RoomListCell extends FrameLayout {
                 pinView = new AppCompatImageView(getContext());
                 pinCornerView = new AppCompatImageView(getContext());
                 pinView.setBackgroundResource(R.drawable.pin);
-                pinCornerView.setBackgroundResource(R.drawable.pin_corner);
+                pinCornerView.setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.pin_corner),getContext(),R.attr.colorAccent));
 
                 if (isRtl)
                     pinCornerView.setRotationY(180);
@@ -246,11 +247,7 @@ public class RoomListCell extends FrameLayout {
             if (room.getMute()) {
                 badgeView.setColor(getResources().getColor(R.color.gray_9d));
             } else {
-                if (G.isDarkTheme) {
-                    badgeView.setColor(getResources().getColor(R.color.md_blue_500));
-                } else {
-                    badgeView.setColor(getResources().getColor(R.color.notification_badge));
-                }
+                badgeView.setColor(new Theme().getAccentColor(badgeView.getContext()));
             }
             badgeView.setText(getUnreadCount(room.getUnreadCount()));
         } else if (haveBadge) {

@@ -761,10 +761,10 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             this.userId = userId;
         }
 
+        @NotNull
         @Override
         public MemberAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = inflater.inflate(R.layout.contact_item_group_profile, viewGroup, false);
-            return new ViewHolder(v);
+            return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.contact_item_group_profile, viewGroup, false));
         }
 
         @Override

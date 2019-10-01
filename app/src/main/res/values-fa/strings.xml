@@ -2209,8 +2209,16 @@
     <string name="prayerRoom_textView">نمازخانه</string>
     <string name="user_edited">کاربر ویرایش شد.</string>
     <string name="edit_contact">ویرایش مخاطب</string>
-    <string name="default_theme_title">رنگ پیش فرض</string>
-    <string name="dark_theme_title">رنگ پیش فرض</string>
+    <string name="default_theme_title">پیش فرض</string>
+    <string name="dark_theme_title">تاریک</string>
+    <string name="red_theme_title">قرمز</string>
+    <string name="pink_theme_title">صورتی</string>
+    <string name="purple_theme_title">بنفش</string>
+    <string name="blue_theme_title">آبی</string>
+    <string name="green_theme_title">سبز</string>
+    <string name="amber_theme_title">زرد</string>
+    <string name="orange_theme_title">نارنجی</string>
+    <string name="gray_theme_title">طوسی تیره</string>
 
     <array name="onboard_titles">
         <item>کیف پول موبایلی</item>

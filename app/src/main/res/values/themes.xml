@@ -2,7 +2,7 @@
 <resources>
 
     <style name="iGapDarkTheme" parent="BaseTheme">
-        <item name="colorAccent">@color/navigation_dark_mode_bg</item>
+        <item name="colorAccent">@color/green</item>
         <item name="colorAccentDark">#333635</item>
         <item name="colorPrimary">@color/navigation_dark_mode_bg</item>
         <item name="colorPrimaryDark">@color/background_setting_dark</item>
@@ -184,7 +184,7 @@
         <item name="colorAccentDark">#8cb238</item>
         <item name="colorPrimary">#b5e663</item>
         <item name="colorPrimaryDark">#9dc756</item>
-        <item name="colorPrimaryLight">#d0e59e</item>
+        <item name="colorPrimaryLight">#dceab7</item>
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
@@ -192,9 +192,9 @@
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
-        <item name="iGapButtonColor">#4CAF50</item>
-        <item name="iGapButtonTextColor">#4CAF50</item>
-        <item name="iGapPrimaryIconTextColor">#4CAF50</item>
+        <item name="iGapButtonColor">#b5e663</item>
+        <item name="iGapButtonTextColor">#b5e663</item>
+        <item name="iGapPrimaryIconTextColor">#b5e663</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
 
         <item name="iGapBottomNavigationIconStart">#b5e663</item>

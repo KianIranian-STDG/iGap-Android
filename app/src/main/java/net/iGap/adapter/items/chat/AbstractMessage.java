@@ -12,7 +12,6 @@ package net.iGap.adapter.items.chat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -36,7 +35,6 @@ import android.widget.Toast;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.collection.ArrayMap;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -558,8 +556,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             messageSenderAvatar.setVisibility(View.GONE);
         }
 
-        replyMessageIfNeeded(holder, getRealmChat());
-        forwardMessageIfNeeded(holder, getRealmChat());
+        replyMessageIfNeeded(holder);
+        forwardMessageIfNeeded(holder);
 
         View messageSenderName = mHolder.getContentBloke().findViewById(R.id.messageSenderName);
         if (messageSenderName != null) {
@@ -868,7 +866,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             ((ChatItemWithTextHolder) holder).messageView.setTextColor(new Theme().getReceivedMessageColor(viewHolder.getContext()));
         }
 
-        viewHolder.getChatBloke().setBackground(tintDrawable(RECEIVED_ITEM_BACKGROUND, ColorStateList.valueOf(new Theme().getReceivedMessageBackgroundColor(viewHolder.getContext()))));
+        viewHolder.getChatBloke().setBackground(new Theme().tintDrawable(RECEIVED_ITEM_BACKGROUND, viewHolder.getContext(), R.attr.colorPrimaryLight));
 
         /**
          * add main layout margin to prevent getting match parent completely
@@ -923,20 +921,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         } else {
             viewHolder.getMessageStatusTv().setTextColor(viewHolder.getColor(R.color.unread_status));
         }
-        viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND, ColorStateList.valueOf(new Theme().getSendChatBubbleColor(viewHolder.getContext()))));
+        viewHolder.getChatBloke().setBackground(new Theme().tintDrawable(SEND_ITEM_BACKGROUND, viewHolder.getContext(), R.attr.iGapSendMessageBubbleColor));
         viewHolder.getMessageTimeTv().setTextColor(new Theme().getSendMessageOtherTextColor(viewHolder.getContext()));
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp36);
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);
     }
 
-    public Drawable tintDrawable(Drawable drawable, ColorStateList colors) {
-        final Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
-        DrawableCompat.setTintList(wrappedDrawable, colors);
-        return wrappedDrawable;
-    }
-
     @CallSuper
-    protected void replyMessageIfNeeded(VH holder, Realm realm) {
+    protected void replyMessageIfNeeded(VH holder) {
         NewChatItemHolder mHolder;
         if (holder instanceof NewChatItemHolder)
             mHolder = (NewChatItemHolder) holder;
@@ -1028,7 +1020,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     @CallSuper
-    protected void forwardMessageIfNeeded(VH holder, Realm realm) {
+    protected void forwardMessageIfNeeded(VH holder) {
         NewChatItemHolder mHolder;
         if (holder instanceof NewChatItemHolder)
             mHolder = (NewChatItemHolder) holder;

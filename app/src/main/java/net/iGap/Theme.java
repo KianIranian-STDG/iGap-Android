@@ -2,8 +2,12 @@ package net.iGap;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
+
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import net.iGap.model.ThemeModel;
 import net.iGap.module.SHP_SETTING;
@@ -1118,6 +1122,10 @@ public class Theme {
     public int getPrimaryColor(Context context) {
         return getColorFromAttr(context, R.attr.colorPrimary);
     }
+    public int getAccentColor(Context context) {
+        return getColorFromAttr(context, R.attr.colorAccent);
+    }
+
 
     public int getForwardFromTextColor(Context context) {
         return getColorFromAttr(context, R.attr.colorAccentDark);
@@ -1129,6 +1137,12 @@ public class Theme {
         int color = a.getColor(0, 0);
         a.recycle();
         return color;
+    }
+
+    public Drawable tintDrawable(Drawable drawable, Context context, int colors) {
+        final Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTintList(wrappedDrawable, ColorStateList.valueOf(getColorFromAttr(context, colors)));
+        return wrappedDrawable;
     }
 
 }
