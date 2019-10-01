@@ -2,6 +2,7 @@ package net.iGap.adapter.items.poll;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -45,7 +46,13 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.barEntries = null;
     }
 
-    public void addChatToEnd(String[] labels, ArrayList<BarEntry> barEntries) {
+    public void addChatToEnd(String[] labels, ArrayList<BarEntry> barEntries , long sum) {
+
+        //convert to percent
+        for (int i = 0 ; i<barEntries.size() ; i++){
+            barEntries.get(i).setY((barEntries.get(i).getY() * 100) / sum);
+        }
+
         this.labels = labels;
         this.barEntries = barEntries;
     }
@@ -59,6 +66,7 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ArrayList<String> labels = new ArrayList<>();
         ArrayList<BarEntry> barValue = new ArrayList<>();
         boolean userPolledBefore = false;
+        long sumOfPoll = 0 ;
         int i = 0;
         for (PollItem pollItem : getData()) {
             for (PollItemField pollItemField : pollItem.pollItemFields) {
@@ -69,6 +77,7 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                     labels.add(pollItemField.label);
                     barValue.add(new BarEntry(i, pollItemField.sum));
+                    sumOfPoll += pollItemField.sum;
                     i++;
                 }
             }
@@ -78,7 +87,7 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         labels2 = labels.toArray(labels2);
 
         if (userPolledBefore) {
-            addChatToEnd(labels2, barValue);
+            addChatToEnd(labels2, barValue, sumOfPoll);
         }
 
     }
