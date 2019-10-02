@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
@@ -17,7 +18,6 @@ import androidx.annotation.RequiresApi;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
 import net.iGap.libs.bottomNavigation.Util.Utils;
@@ -184,6 +184,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     }
 
     public void setDefaultItem(int defaultItem) {
+        Log.wtf(this.getClass().getName(), "default tab: " + defaultItem);
         this.defaultItem = defaultItem;
         this.selectedItemPosition = defaultItem;
     }

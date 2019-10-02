@@ -215,7 +215,7 @@ public class ViewMaker {
         TextView cslr_txt_prefix_forward = new AppCompatTextView(context);
         cslr_txt_prefix_forward.setId(R.id.cslr_txt_prefix_forward);
         cslr_txt_prefix_forward.setText(context.getResources().getString(R.string.forwarded_from));
-        cslr_txt_prefix_forward.setTextColor(new Theme().getSendMessageTextColor(cslr_txt_prefix_forward.getContext()));
+        cslr_txt_prefix_forward.setTextColor(new Theme().getReceivedMessageOtherTextColor(cslr_txt_prefix_forward.getContext()));
         setTextSize(cslr_txt_prefix_forward, R.dimen.dp12);
         cslr_txt_prefix_forward.setSingleLine(true);
         cslr_txt_prefix_forward.setTypeface(G.typeface_IRANSansMobile_Bold);

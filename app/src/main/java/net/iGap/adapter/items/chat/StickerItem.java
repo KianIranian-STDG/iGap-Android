@@ -100,10 +100,10 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
         public ViewHolder(View view) {
             super(view);
 
-            FrameLayout frameLayout = new FrameLayout(G.context);
+            FrameLayout frameLayout = new FrameLayout(getContext());
             frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
-            image = new ReserveSpaceRoundedImageView(G.context);
+            image = new ReserveSpaceRoundedImageView(getContext());
             image.setId(R.id.thumbnail);
             image.setScaleType(ImageView.ScaleType.FIT_XY);
             image.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));

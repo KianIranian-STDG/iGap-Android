@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -18,9 +19,10 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.fragments.FragmentChat;
@@ -96,6 +98,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         voteDownTv = new AppCompatTextView(itemView.getContext());
         voteUpTv = new AppCompatTextView(itemView.getContext());
 
+        //set text color not here because text color depends on send message type or Received message type
         signatureTv = new AppCompatTextView(itemView.getContext());
         signatureTv.setId(R.id.tv_chatItem_signature);
         setTextSize(signatureTv, R.dimen.verySmallTextSize);
@@ -104,7 +107,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         setTypeFace(signatureTv);
         signatureTv.setSingleLine(true);
         signatureTv.setGravity(CENTER_VERTICAL);
-        signatureTv.setTextColor(otherColor);
 
         viewsLabelTv = new TextView(itemView.getContext());
         viewsLabelTv.setId(R.id.tv_chatItem_viewLabel);
@@ -124,12 +126,12 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         setTextSize(messageStatusTv, R.dimen.largeTextSize);
         cslm_view_left_dis = new View(itemView.getContext());
 
+        //set text color not here because text color depends on send message type or Received message type
         messageTimeTv = new AppCompatTextView(itemView.getContext());
         messageTimeTv.setId(R.id.tv_chatItem_time);
         setTextSize(messageTimeTv, R.dimen.verySmallTextSize);
         messageTimeTv.setPadding(dpToPx(2), 0, dpToPx(2), 0);
         messageTimeTv.setSingleLine(true);
-        messageTimeTv.setTextColor(otherColor);
         setTypeFace(messageTimeTv);
 
         voteUpTv.setSingleLine(true);
@@ -284,11 +286,11 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     }
 
     protected void setTypeFace(TextView textView) {
-        textView.setTypeface(G.typeface_IRANSansMobile);
+        textView.setTypeface(ResourcesCompat.getFont(textView.getContext(), R.font.main_font));
     }
 
     protected void setTypeFace(TextView textView, int style) {
-        textView.setTypeface(G.typeface_IRANSansMobile, style);
+        textView.setTypeface(ResourcesCompat.getFont(textView.getContext(), R.font.main_font), style);
     }
 
     protected MessageProgress getProgressBar(int sizeSrc) {

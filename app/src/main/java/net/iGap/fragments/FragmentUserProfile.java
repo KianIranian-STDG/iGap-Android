@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -40,7 +43,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityEnhanced;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.FragmentUserProfileBinding;
@@ -58,6 +61,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SoftKeyboard;
+import net.iGap.module.StatusBarUtil;
 import net.iGap.viewmodel.UserProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -99,6 +103,14 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.wtf(this.getClass().getName(), "onViewCreated");
+
+        if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            TypedValue tV = new TypedValue();
+            TypedArray aa = getContext().obtainStyledAttributes(tV.data, new int[]{R.attr.colorPrimaryDark});
+            int clr = aa.getColor(0, 0);
+            aa.recycle();
+            StatusBarUtil.setColor(getActivity(), clr, 50);
+        }
 
         viewModel.changeUserProfileWallpaper.observe(getViewLifecycleOwner(), drawable -> {
             if (drawable != null) {
@@ -283,9 +295,25 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        viewModel.resetApp.observe(getViewLifecycleOwner(), isReset -> {
-            if (getActivity() instanceof ActivityEnhanced && isReset != null && isReset) {
-                ((ActivityEnhanced) getActivity()).onRefreshActivity(true, "");
+        viewModel.getUpdateNewTheme().observe(getViewLifecycleOwner(), isUpdate -> {
+            if (getActivity() != null && isUpdate != null && isUpdate) {
+                Fragment frg;
+                frg = getActivity().getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.detach(frg);
+                ft.attach(frg);
+                ft.commit();
+            }
+        });
+
+        viewModel.getUpdateTwoPaneView().observe(getViewLifecycleOwner(), isUpdate -> {
+            if (getActivity() != null && isUpdate != null && isUpdate) {
+                Fragment frg;
+                frg = getActivity().getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.detach(frg);
+                ft.attach(frg);
+                ft.commit();
             }
         });
 
@@ -300,7 +328,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 new MaterialDialog.Builder(getActivity())
                         .cancelable(false)
                         .title(R.string.app_version_change_log).titleGravity(GravityEnum.CENTER)
-                        .titleColor(getResources().getColor(R.color.green))
+                        .titleColor(new Theme().getPrimaryColor(getActivity()))
                         .content(R.string.updated_version_title)
                         .contentGravity(GravityEnum.CENTER)
                         .positiveText(R.string.ok).itemsGravity(GravityEnum.START).show();
@@ -312,7 +340,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 new MaterialDialog.Builder(getActivity())
                         .cancelable(false)
                         .title(R.string.app_version_change_log).titleGravity(GravityEnum.CENTER)
-                        .titleColor(Color.parseColor("#f44336"))
+                        .titleColor(new Theme().getPrimaryColor(getActivity()))
                         .content(body)
                         .contentGravity(GravityEnum.CENTER)
                         .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive((dialog, which) -> {
@@ -324,20 +352,11 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        binding.fupBtnDarkMode.setOnClickListener(v -> {
-            binding.darkTheme.setChecked(!G.isDarkTheme);
-            viewModel.onThemeClick(G.isDarkTheme);
-        });
-
-        binding.fupUserBio.setSelected(true);
-
         viewModel.getShowDialogSelectCountry().observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null && isShow) {
                 showCountryDialog();
             }
         });
-
-        viewModel.showReferralErrorLiveData.postValue(false);
 
         Log.wtf(this.getClass().getName(), "onViewCreated");
     }

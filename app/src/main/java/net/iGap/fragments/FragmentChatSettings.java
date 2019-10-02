@@ -90,7 +90,7 @@ public class FragmentChatSettings extends BaseFragment {
         setChatReceivedChatBubble(new Theme().getReceivedChatBubbleColor(getContext()));
         setChatSendBubble(new Theme().getSendChatBubbleColor(getContext()));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             TypedValue tV = new TypedValue();
             TypedArray aa = getContext().obtainStyledAttributes(tV.data, new int[]{R.attr.colorPrimaryDark});
             int clr = aa.getColor(0, 0);

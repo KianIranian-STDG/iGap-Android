@@ -68,7 +68,7 @@
         <item name="colorAccentDark">#720505</item>
         <item name="colorPrimary">#c82121</item>
         <item name="colorPrimaryDark">#9e1010</item>
-        <item name="colorPrimaryLight">#dd6f6f</item>
+        <item name="colorPrimaryLight">#f2b6b6</item>
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
@@ -84,8 +84,8 @@
         <item name="iGapBottomNavigationIconStart">#dd6f6f</item>
         <item name="iGapBottomNavigationIconEnd">#c82121</item>
 
-        <item name="iGapReceivedMessageTextColor">#eeeeee</item>
-        <item name="iGapReceivedOtherTextColor">#cccccc</item>
+        <item name="iGapReceivedMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapReceivedOtherTextColor">#999999</item>
 
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
@@ -126,7 +126,7 @@
         <item name="colorAccentDark">#68265b</item>
         <item name="colorPrimary">#aa5c9f</item>
         <item name="colorPrimaryDark">#854777</item>
-        <item name="colorPrimaryLight">#cc96ca</item>
+        <item name="colorPrimaryLight">#e8bae8</item>
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
@@ -155,7 +155,7 @@
         <item name="colorAccentDark">#07439b</item>
         <item name="colorPrimary">#207dff</item>
         <item name="colorPrimaryDark">#064acb</item>
-        <item name="colorPrimaryLight">#66b3ff</item>
+        <item name="colorPrimaryLight">#9fd4ff</item>
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
@@ -171,8 +171,8 @@
         <item name="iGapBottomNavigationIconStart">#66b3ff</item>
         <item name="iGapBottomNavigationIconEnd">#207dff</item>
 
-        <item name="iGapReceivedMessageTextColor">#eeeeee</item>
-        <item name="iGapReceivedOtherTextColor">#cccccc</item>
+        <item name="iGapReceivedMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapReceivedOtherTextColor">#999999</item>
 
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
@@ -242,7 +242,7 @@
         <item name="colorAccentDark">#ff6700</item>
         <item name="colorPrimary">#ff9d00</item>
         <item name="colorPrimaryDark">#ff8000</item>
-        <item name="colorPrimaryLight">#ffb85a</item>
+        <item name="colorPrimaryLight">#ffc176</item>
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
@@ -259,7 +259,7 @@
         <item name="iGapBottomNavigationIconEnd">#ff8000</item>
 
         <item name="iGapReceivedMessageTextColor">#5F5F5F</item>
-        <item name="iGapReceivedOtherTextColor">#999999</item>
+        <item name="iGapReceivedOtherTextColor">#eeeeee</item>
 
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
@@ -271,7 +271,7 @@
         <item name="colorAccentDark">#182d44</item>
         <item name="colorPrimary">#4e698a</item>
         <item name="colorPrimaryDark">#2d4059</item>
-        <item name="colorPrimaryLight">#7495b5</item>
+        <item name="colorPrimaryLight">#a6c0d1</item>
 
         <item name="md_background_color">@color/white</item>
         <!--<item name="colorAccent">@color/white</item>-->
@@ -289,7 +289,7 @@
         <item name="iGapBottomNavigationIconStart">#7495b5</item>
         <item name="iGapBottomNavigationIconEnd">#4e698a</item>
         <item name="iGapReceivedMessageTextColor">@color/white</item>
-        <item name="iGapReceivedOtherTextColor">#cccccc</item>
+        <item name="iGapReceivedOtherTextColor">#eeeeee</item>
         <item name="iGapSendMessageOtherTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
     </style>

@@ -164,7 +164,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public SingleLiveEvent<GoToChatModel> goToChatPage = new SingleLiveEvent<>();
     public MutableLiveData<Boolean> isEditProfile = new MutableLiveData<>();
     public SingleLiveEvent<Boolean> showDialogChooseImage = new SingleLiveEvent<>();
-    public SingleLiveEvent<Boolean> resetApp = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> updateNewTheme = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
     public SingleLiveEvent<Integer> showError = new SingleLiveEvent<>();
     public MutableLiveData<Drawable> changeUserProfileWallpaper = new MutableLiveData<>();
 
@@ -215,6 +216,14 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         } else {
             textsGravity.set(Gravity.RIGHT);
         }
+    }
+
+    public SingleLiveEvent<Boolean> getUpdateNewTheme() {
+        return updateNewTheme;
+    }
+
+    public SingleLiveEvent<Boolean> getUpdateTwoPaneView() {
+        return updateTwoPaneView;
     }
 
     public void init() {
@@ -481,19 +490,27 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onThemeClick(boolean isCheck) {
-        if (isCheck != isDarkMode.get()) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            if (isCheck) {
-                int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT/*CUSTOM*/);
-                editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DARK);
-                editor.putInt(SHP_SETTING.KEY_OLD_THEME_COLOR, themeColor);
-                editor.apply();
-            } else {
-                int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_OLD_THEME_COLOR, Theme.DEFAULT/*CUSTOM*/);
-                editor.putInt(SHP_SETTING.KEY_THEME_COLOR, themeColor);
-                editor.apply();
-            }
-            resetApp.setValue(true);
+        Log.wtf(this.getClass().getName(), "isCheck: " + isCheck);
+        Log.wtf(this.getClass().getName(), "isDarkMode: " + isDarkMode.get());
+        isDarkMode.set(!isCheck);
+        if (isDarkMode.get()) {
+            G.isDarkTheme = true;
+            G.themeColor = Theme.DARK;
+            int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT);
+            sharedPreferences.edit().
+                    putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DARK).
+                    putInt(SHP_SETTING.KEY_OLD_THEME_COLOR, themeColor).
+                    apply();
+        } else {
+            int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_OLD_THEME_COLOR, Theme.DEFAULT);
+            G.themeColor = themeColor;
+            G.isDarkTheme = false;
+            sharedPreferences.edit().putInt(SHP_SETTING.KEY_THEME_COLOR, themeColor).apply();
+        }
+
+        updateNewTheme.setValue(true);
+        if (G.twoPaneMode) {
+            updateTwoPaneView.setValue(true);
         }
     }
 
@@ -710,7 +727,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         } else if (currentGender != gender.get()) {
             sendRequestSetGender();
         } else if (!referralNumberObservableField.get().equals("") && referralEnableLiveData.getValue()) {
-            Log.wtf(this.getClass().getName(),"setReferral");
+            Log.wtf(this.getClass().getName(), "setReferral");
             setReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replace(" ", ""));
         } else {
             showLoading.set(View.GONE);

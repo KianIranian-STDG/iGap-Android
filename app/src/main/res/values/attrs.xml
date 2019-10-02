@@ -62,28 +62,28 @@
     </declare-styleable>
 
     <!--=======================custom theme=====================-->
-    <attr name="colorPrimaryLight" format="color" />
-    <attr name="colorAccentDark" format="color" />
+    <attr name="colorPrimaryLight" format="reference|color" />
+    <attr name="colorAccentDark" format="reference|color" />
     <!--general color-->
-    <attr name="rootBackgroundColor" format="color" />
-    <attr name="iGapTitleTextColor" format="color" />
-    <attr name="iGapSubtitleTextColor" format="color" />
-    <attr name="iGapPrimaryTextColor" format="color" />
-    <attr name="iGapDividerLine" format="color" />
-    <attr name="iGapHintTextColor" format="color" />
-    <attr name="iGapButtonColor" format="color" />
-    <attr name="iGapButtonTextColor" format="color" />
-    <attr name="iGapPrimaryIconTextColor" format="color" />
-    <attr name="iGapLogoutButtonColor" format="color" />
+    <attr name="rootBackgroundColor" format="reference|color" />
+    <attr name="iGapTitleTextColor" format="reference|color" />
+    <attr name="iGapSubtitleTextColor" format="reference|color" />
+    <attr name="iGapPrimaryTextColor" format="reference|color" />
+    <attr name="iGapDividerLine" format="reference|color" />
+    <attr name="iGapHintTextColor" format="reference|color" />
+    <attr name="iGapButtonColor" format="reference|color" />
+    <attr name="iGapButtonTextColor" format="reference|color" />
+    <attr name="iGapPrimaryIconTextColor" format="reference|color" />
+    <attr name="iGapLogoutButtonColor" format="reference|color" />
     <!--chat item color-->
-    <attr name="iGapReceivedMessageTextColor" format="color" />
-    <attr name="iGapReceivedOtherTextColor" format="color" />
-    <attr name="iGapSendMessageTextColor" format="color" />
-    <attr name="iGapSendMessageOtherTextColor" format="color" />
-    <attr name="iGapSendMessageBubbleColor" format="color" />
+    <attr name="iGapReceivedMessageTextColor" format="reference|color" />
+    <attr name="iGapReceivedOtherTextColor" format="reference|color" />
+    <attr name="iGapSendMessageTextColor" format="reference|color" />
+    <attr name="iGapSendMessageOtherTextColor" format="reference|color" />
+    <attr name="iGapSendMessageBubbleColor" format="reference|color" />
     <!--bottom navigation item icon color-->
-    <attr name="iGapBottomNavigationIconStart" format="color" />
-    <attr name="iGapBottomNavigationIconEnd" format="color" />
+    <attr name="iGapBottomNavigationIconStart" format="reference|color" />
+    <attr name="iGapBottomNavigationIconEnd" format="reference|color" />
 
     <!--=======================custom theme=====================-->
 

@@ -542,7 +542,6 @@
                 android:layout_width="@dimen/toggles_width"
                 android:layout_height="@dimen/toggles_height"
                 android:checked="@={viewModel.isDarkMode}"
-                android:onCheckedChanged="@{()->viewModel.onThemeClick(darkTheme.isChecked())}"
                 app:layout_constraintBottom_toBottomOf="@id/fup_btn_dark_mode"
                 app:layout_constraintEnd_toEndOf="@id/fup_btn_dark_mode"
                 app:layout_constraintTop_toTopOf="@id/fup_btn_dark_mode" />
@@ -553,6 +552,7 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/dp8"
                 android:background="?attr/selectableItemBackground"
+                android:onClick="@{()->viewModel.onThemeClick(darkTheme.isChecked())}"
                 app:layout_constraintBottom_toBottomOf="@id/fup_btn_dark_view_handler_view"
                 app:layout_constraintEnd_toEndOf="@id/fup_btn_invite_friends"
                 app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"

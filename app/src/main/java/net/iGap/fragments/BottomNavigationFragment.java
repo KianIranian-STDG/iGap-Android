@@ -2,7 +2,6 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
@@ -51,9 +51,12 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     private String crawlerMap;
     private DiscoveryFragment.CrawlerStruct crawlerStruct;
 
+    private int currentTab = -1;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setTheme();
         G.onUnreadChange = this;
         return inflater.inflate(R.layout.fragment_bottom_navigation, container, false);
     }
@@ -84,9 +87,8 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         super.onViewCreated(view, savedInstanceState);
 
         bottomNavigation = view.findViewById(R.id.bn_main_bottomNavigation);
-        bottomNavigation.setDefaultItem(2);
+        bottomNavigation.setDefaultItem(currentTab == -1 ? 2 : currentTab);
         bottomNavigation.setOnItemChangeListener(this::loadFragment);
-        bottomNavigation.setCurrentItem(2);
     }
 
     public void setCrawlerMap(String crawlerMap) {
@@ -94,6 +96,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     }
 
     private void loadFragment(int position) {
+        currentTab = position;
         hideKeyboard();
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -182,22 +185,6 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         bottomNavigation.setCurrentItem(4);
     }
 
-    public void setChatPage(FragmentChat fragmentChat) {
-        if (bottomNavigation.getSelectedItemPosition() != 2) {
-            bottomNavigation.setCurrentItem(2);
-        }
-        Fragment page = getChildFragmentManager().findFragmentById(R.id.viewpager);
-        // based on the current position you can then cast the page to the correct
-        // class and call the method:
-        if (page instanceof TabletMainFragment) {
-            Log.wtf(this.getClass().getName(), "if");
-            ((TabletMainFragment) page).loadChatFragment(fragmentChat);
-        } else {
-            Log.wtf(this.getClass().getName(), "else");
-        }
-    }
-
-
     public boolean isFirstTabItem() {
         if (bottomNavigation.getSelectedItemPosition() == 2) {
             return true;
@@ -234,7 +221,6 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
             ((FragmentMain) fragment).setForwardMessage(enable);
         }
     }
-
 
     public void autoLinkCrawler(String uri, DiscoveryFragment.CrawlerStruct.OnDeepValidLink onDeepLinkValid) {
         if (uri.equals("")) {
@@ -305,7 +291,6 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }
     }
 
-
     private void setCrawlerMap(int position, String[] uri) {
 
         try {
@@ -371,7 +356,6 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }
     }
 
-
     private void hideKeyboard() {
         if (getActivity() != null) {
             View view = getActivity().getCurrentFocus();
@@ -391,6 +375,12 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
         if (fragment instanceof RegisteredContactsFragment) {
             ((RegisteredContactsFragment) fragment).loadContacts();
+        }
+    }
+
+    private void setTheme() {
+        if (getContext() != null) {
+            getContext().getTheme().applyStyle(new Theme().getTheme(getContext()), true);
         }
     }
 }

@@ -13,7 +13,6 @@ package net.iGap.module;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -21,17 +20,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Vibrator;
 import android.text.TextUtils;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
@@ -246,7 +241,7 @@ public final class AppUtils {
     public static String conversionMessageType(ProtoGlobal.RoomMessageType type, @Nullable TextView textView, int colorId) {
         String result = returnConversionMessageType(type);
         if (textView != null && !result.isEmpty()) {
-            textView.setTextColor(ContextCompat.getColor(context, colorId));
+            textView.setTextColor(ContextCompat.getColor(textView.getContext(), colorId));
             textView.setText(result);
         }
         return result;
@@ -332,33 +327,23 @@ public final class AppUtils {
         switch (status) {
             case DELIVERED:
                 iconTextView.setText(R.string.delivery_icon);
-                iconTextView.setTextColor(context.getResources()
-                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
+                iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
             case FAILED:
                 iconTextView.setText(R.string.error_icon);
-                iconTextView.setTextColor(context.getResources().getColor(R.color.red));
+                iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), R.color.red));
                 break;
             case SEEN:
-                TypedValue typedValue = new TypedValue();
-                TypedArray a = iconTextView.getContext().obtainStyledAttributes(typedValue.data, new int[] { R.attr.colorPrimaryDark });
-                int color = a.getColor(0, 0);
-                Log.wtf(AppUtils.class.getName(), "color: " + color);
-
-                a.recycle();
-
                 iconTextView.setText(R.string.delivery_icon);
-                iconTextView.setTextColor(color);
+                iconTextView.setTextColor(new Theme().getPrimaryDarkColor(iconTextView.getContext()));
                 break;
             case SENDING:
                 iconTextView.setText(R.string.history_icon);
-                iconTextView.setTextColor(context.getResources()
-                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
+                iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
             case SENT:
                 iconTextView.setText(R.string.check_icon);
-                iconTextView.setTextColor(context.getResources()
-                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
+                iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
                 break;
             default:
                 iconTextView.setVisibility(View.GONE);

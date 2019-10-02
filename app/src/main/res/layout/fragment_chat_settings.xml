@@ -133,7 +133,7 @@
                         android:padding="@dimen/dp4"
                         android:singleLine="true"
                         android:text="i use iGap and it is so good"
-                        android:textColor="?attr/iGapReceivedMessageTextColor"
+                        android:textColor="?attr/iGapPrimaryTextColor"
                         app:layout_constraintLeft_toLeftOf="@id/replayUserName"
                         app:layout_constraintRight_toRightOf="@id/replayUserName"
                         app:layout_constraintTop_toBottomOf="@id/replayUserName" />

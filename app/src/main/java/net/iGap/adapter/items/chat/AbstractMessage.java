@@ -35,6 +35,7 @@ import android.widget.Toast;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.collection.ArrayMap;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -876,6 +877,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).gravity = Gravity.LEFT;
 
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);
+        viewHolder.getMessageTimeTv().setTextColor(new Theme().getReceivedMessageOtherTextColor(viewHolder.getContext()));
+        viewHolder.getSignatureTv().setTextColor(new Theme().getReceivedMessageOtherTextColor(viewHolder.getContext()));
 
         if (type == ProtoGlobal.Room.Type.CHANNEL) {
             ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp15);
@@ -923,6 +926,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
         viewHolder.getChatBloke().setBackground(new Theme().tintDrawable(SEND_ITEM_BACKGROUND, viewHolder.getContext(), R.attr.iGapSendMessageBubbleColor));
         viewHolder.getMessageTimeTv().setTextColor(new Theme().getSendMessageOtherTextColor(viewHolder.getContext()));
+        viewHolder.getSignatureTv().setTextColor(new Theme().getSendMessageOtherTextColor(viewHolder.getContext()));
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp36);
         ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);
     }
@@ -1054,9 +1058,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             });
 
             TextView txtPrefixForwardFrom = forwardView.findViewById(R.id.cslr_txt_prefix_forward);
-            txtPrefixForwardFrom.setTypeface(G.typeface_IRANSansMobile);
+            txtPrefixForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext(), R.font.main_font));
             TextView txtForwardFrom = forwardView.findViewById(R.id.cslr_txt_forward_from);
-            txtForwardFrom.setTypeface(G.typeface_IRANSansMobile);
+            txtForwardFrom.setTypeface(ResourcesCompat.getFont(txtForwardFrom.getContext(), R.font.main_font));
 
             /**
              * if forward message from chat or group , sender is user
