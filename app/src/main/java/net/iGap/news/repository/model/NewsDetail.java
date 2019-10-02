@@ -1,7 +1,14 @@
 package net.iGap.news.repository.model;
 
+import android.text.format.DateUtils;
+
 import com.google.gson.annotations.SerializedName;
 
+import net.iGap.helper.HelperCalander;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class NewsDetail {
@@ -12,7 +19,7 @@ public class NewsDetail {
     private String rootTitle;
     @SerializedName("fulltext")
     private String body;
-    @SerializedName("originalDate")
+    @SerializedName("publishDate")
     private String date;
     @SerializedName("lead")
     private String lead;
@@ -28,10 +35,9 @@ public class NewsDetail {
     private String commentCount;
     @SerializedName("sourceLogo")
     private String sourceImage;
-    // TODO Must be added to API
-    @SerializedName("Original2")
+    @SerializedName("viewNumber")
     private String view;
-    @SerializedName("Original3")
+    @SerializedName("tags")
     private String tags;
 
     public NewsDetail() {
@@ -86,7 +92,7 @@ public class NewsDetail {
     }
 
     public String getDate() {
-        return date;
+        return getTime();
     }
 
     public void setDate(String date) {
@@ -139,5 +145,20 @@ public class NewsDetail {
 
     public void setSourceImage(String sourceImage) {
         this.sourceImage = sourceImage;
+    }
+
+    private String getTime() {
+        if (date == null || date.isEmpty())
+            return "";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date mDate = sdf.parse(date);
+            long timeInMilliseconds = mDate.getTime();
+            return HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return date;
+        }
     }
 }

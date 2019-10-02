@@ -1,8 +1,16 @@
 package net.iGap.news.repository.model;
 
+import android.text.format.DateUtils;
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 
+import net.iGap.helper.HelperCalander;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NewsList {
@@ -112,7 +120,7 @@ public class NewsList {
         }
 
         public String getDate() {
-            return date;
+            return getTime();
         }
 
         public void setDate(String date) {
@@ -125,6 +133,21 @@ public class NewsList {
 
         public void setViewNum(String viewNum) {
             this.viewNum = viewNum;
+        }
+
+        private String getTime() {
+            if (date == null || date.isEmpty())
+                return "";
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                Date mDate = sdf.parse(date);
+                long timeInMilliseconds = mDate.getTime();
+                return HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return "";
+            }
         }
     }
 

@@ -17,6 +17,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.news.repository.model.NewsList;
 
+import java.util.ArrayList;
+
 public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int newsType = 0;
@@ -108,6 +110,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void clear() {
         mData.setNews(null);
+        mData.setNews(new ArrayList<>());
         notifyDataSetChanged();
     }
 

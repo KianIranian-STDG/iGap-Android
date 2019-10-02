@@ -58,13 +58,13 @@ public class NewsDetailVM extends ViewModel {
             @Override
             public void onResponse(NewsDetail newsDetail) {
                 data.setValue(newsDetail);
-                title.set(newsDetail.getTitle());
-                rootTitle.set(newsDetail.getRootTitle());
+                title.set(newsDetail.getLead());
+                rootTitle.set(newsDetail.getTitle());
                 viewNum.set(newsDetail.getView());
                 commentNum.set(newsDetail.getView());
                 source.set(newsDetail.getSource());
-                tag.set(newsDetail.getTags());
-                date.set(newsDetail.getDate());
+                tag.set("برچسب ها: " + newsDetail.getTags());
+                date.set("تاریخ انتشار: " + newsDetail.getDate());
 
                 getNewsComment();
                 getRelatedNewsS();
