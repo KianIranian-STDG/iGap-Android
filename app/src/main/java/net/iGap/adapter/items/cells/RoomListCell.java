@@ -236,18 +236,18 @@ public class RoomListCell extends FrameLayout {
 
         if (!(room.getUnreadCount() < 1)) {
             if (!haveBadge) {
-                badgeView = new TextBadge(G.context);
-                setTypeFace(badgeView);
+                badgeView = new TextBadge(getContext());
+                setTypeFace(badgeView.getTextView());
                 addView(badgeView);
                 haveBadge = true;
             }
             if (room.getMute()) {
-                badgeView.setColor(getResources().getColor(R.color.gray_9d));
+                badgeView.setBadgeColor(getResources().getColor(R.color.gray_9d));
             } else {
                 if (G.isDarkTheme) {
-                    badgeView.setColor(getResources().getColor(R.color.md_blue_500));
+                    badgeView.setBadgeColor(getResources().getColor(R.color.md_blue_500));
                 } else {
-                    badgeView.setColor(getResources().getColor(R.color.notification_badge));
+                    badgeView.setBadgeColor(getResources().getColor(R.color.notification_badge));
                 }
             }
             badgeView.setText(getUnreadCount(room.getUnreadCount()));
@@ -430,14 +430,14 @@ public class RoomListCell extends FrameLayout {
                 int messageBottom = h2 + lastMessageHeight;
 
                 if (haveBadge) {
-                    int badgeHeight = LayoutCreator.getTextHeight(badgeView);
-                    int badgeWidth = LayoutCreator.getTextWidth(badgeView);
+                    int badgeHeight = LayoutCreator.getTextHeight(badgeView.getTextView());
+                    int badgeWidth = LayoutCreator.getTextWidth(badgeView.getTextView());
 
                     int badgeRight = isRtl ? paddingEnd + badgeWidth + standardMargin : getWidth() - paddingEnd;
                     int badgeLeft = isRtl ? paddingEnd : getWidth() - badgeWidth - paddingEnd - standardMargin;
 
                     badgeView.measure(makeMeasureSpec(badgeWidth, AT_MOST), makeMeasureSpec(badgeHeight, AT_MOST));
-                    badgeView.layout(badgeLeft, h2 + dpToPx(2), badgeRight, messageBottom);
+                    badgeView.layout(badgeLeft, h2 + dpToPx(2), badgeRight, messageBottom - dpToPx(2));
 
                     if (isRtl) {
                         messageLeft = badgeRight + standardMargin;
