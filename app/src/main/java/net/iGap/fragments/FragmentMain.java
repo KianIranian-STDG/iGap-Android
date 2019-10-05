@@ -1086,9 +1086,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
                 RealmRoom.setCount(realm, roomId, 0);
 
-                G.handler.postDelayed(() -> {
-                    AppUtils.updateBadgeOnly(realm, roomId);
-                }, 250);
+                G.handler.postDelayed(() -> DbManager.getInstance().doRealmTask(realm1 -> {
+                    AppUtils.updateBadgeOnly(realm1, roomId);
+                }), 250);
             });
         }, 5);
     }
