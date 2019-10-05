@@ -38,8 +38,11 @@
         <item name="iGapButtonSelector">@drawable/button_selector_dark</item>
         <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_dark</item>
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
-        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_default</item>
-        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default</item>
+        <item name="iGapCardToCardButtonBackground">
+            @drawable/background_button_card_to_card_default
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default
+        </item>
     </style>
 
     <style name="iGapLightTheme" parent="BaseTheme">
@@ -73,13 +76,17 @@
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_default</item>
-        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rec_default</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rec_default
+        </item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_default</item>
         <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape</item>
         <item name="iGapButtonSelector">@drawable/button_selector_default</item>
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
-        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_default</item>
-        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default</item>
+        <item name="iGapCardToCardButtonBackground">
+            @drawable/background_button_card_to_card_default
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default
+        </item>
     </style>
 
     <style name="iGapRedTheme" parent="BaseTheme">
@@ -116,8 +123,11 @@
         <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_red</item>
         <item name="iGapButtonSelector">@drawable/button_selector_default</item>
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
-        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_default</item>
-        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default</item>
+        <item name="iGapCardToCardButtonBackground">
+            @drawable/background_button_card_to_card_default
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default
+        </item>
     </style>
 
     <style name="iGapPinkTheme" parent="BaseTheme">
@@ -154,8 +164,11 @@
         <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_red</item>
         <item name="iGapButtonSelector">@drawable/button_selector_default</item>
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
-        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_default</item>
-        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default</item>
+        <item name="iGapCardToCardButtonBackground">
+            @drawable/background_button_card_to_card_default
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default
+        </item>
     </style>
 
     <style name="iGapPurpleTheme" parent="BaseTheme">
@@ -192,8 +205,11 @@
         <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape</item>
         <item name="iGapButtonSelector">@drawable/button_selector_default</item>
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
-        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_default</item>
-        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default</item>
+        <item name="iGapCardToCardButtonBackground">
+            @drawable/background_button_card_to_card_default
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default
+        </item>
     </style>
 
     <style name="iGapBlueTheme" parent="BaseTheme">
@@ -230,8 +246,11 @@
         <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape</item>
         <item name="iGapButtonSelector">@drawable/button_selector_default</item>
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
-        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_default</item>
-        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default</item>
+        <item name="iGapCardToCardButtonBackground">
+            @drawable/background_button_card_to_card_default
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default
+        </item>
     </style>
 
     <style name="iGapGreenTheme" parent="BaseTheme">
@@ -268,8 +287,11 @@
         <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape</item>
         <item name="iGapButtonSelector">@drawable/button_selector_default</item>
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
-        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_default</item>
-        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default</item>
+        <item name="iGapCardToCardButtonBackground">
+            @drawable/background_button_card_to_card_default
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default
+        </item>
     </style>
 
     <style name="iGapAmberTheme" parent="BaseTheme">
@@ -306,8 +328,11 @@
         <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape</item>
         <item name="iGapButtonSelector">@drawable/button_selector_default</item>
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
-        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_default</item>
-        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default</item>
+        <item name="iGapCardToCardButtonBackground">
+            @drawable/background_button_card_to_card_default
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default
+        </item>
     </style>
 
     <style name="iGapOrangeTheme" parent="BaseTheme">
@@ -338,14 +363,16 @@
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">#5f5f5f</item>
 
-        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_dark</item>
-        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_dark</item>
-        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_default</item>
-        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape</item>
-        <item name="iGapButtonSelector">@drawable/button_selector_default</item>
-        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
-        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_default</item>
-        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default</item>
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_orange</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_orange</item>
+        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_orange</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_orange</item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_orange</item>
+        <item name="iGapButtonSelector">@drawable/button_selector_orange</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_orange</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_orange</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_orange</item>
     </style>
 
     <style name="iGapGrayTheme" parent="BaseTheme">
@@ -356,7 +383,6 @@
         <item name="colorPrimaryLight">#a6c0d1</item>
 
         <item name="md_background_color">@color/white</item>
-        <!--<item name="colorAccent">@color/white</item>-->
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
@@ -375,252 +401,17 @@
         <item name="iGapSendMessageOtherTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
-        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_dark</item>
-        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_dark</item>
-        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_default</item>
-        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape</item>
-        <item name="iGapButtonSelector">@drawable/button_selector_default</item>
-        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
-        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_default</item>
-        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default</item>
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_dark_gray</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_dark_gray</item>
+        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_dark_gray</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_dark_gray</item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_dark_gray</item>
+        <item name="iGapButtonSelector">@drawable/button_selector_dark_gray</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_dark_gray</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_dark_gray</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_dark_gray</item>
     </style>
-
-    <!--<style name="iGapBlueGrayTheme" parent="BaseTheme">
-        <item name="colorAccent">#607D8B</item>
-        <item name="colorAccentDark">#da6463</item>
-        <item name="colorPrimary">#607D8B</item>
-        <item name="colorPrimaryDark">#455A64</item>
-        <item name="colorPrimaryLight">#ffcbca</item>
-
-        <item name="md_background_color">@color/blueGreyBackground</item>
-        &lt;!&ndash;<item name="colorAccent">@color/white</item>&ndash;&gt;
-        <item name="rootBackgroundColor">@color/white</item>
-        <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
-        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
-        <item name="iGapPrimaryTextColor">@color/white</item>
-        <item name="iGapDividerLine">@color/blueGrayDividerLine</item>
-        <item name="iGapHintTextColor">#757575</item>
-        <item name="iGapMessageTextColor">#5F5F5F</item>
-        <item name="iGapButtonColor">#607D8B</item>
-        <item name="iGapButtonTextColor">#607D8B</item>
-        <item name="iGapPrimaryIconTextColor">#607D8B</item>
-        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
-        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
-    </style>-->
-
-
-    <!--<style name="iGapIndigoTheme" parent="BaseTheme">
-        <item name="colorAccent">#3F51B5</item>
-        <item name="colorAccentDark">#da6463</item>
-        <item name="colorPrimary">#3F51B5</item>
-        <item name="colorPrimaryDark">#303F9F</item>
-        <item name="colorPrimaryLight">#ffcbca</item>
-
-        <item name="md_background_color">@color/indigoBackground</item>
-        &lt;!&ndash;<item name="colorAccent">@color/white</item>&ndash;&gt;
-        <item name="rootBackgroundColor">@color/white</item>
-        <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
-        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
-        <item name="iGapPrimaryTextColor">@color/white</item>
-        <item name="iGapDividerLine">@color/indigoDividerLine</item>
-        <item name="iGapHintTextColor">#757575</item>
-        <item name="iGapMessageTextColor">#5F5F5F</item>
-        <item name="iGapButtonColor">#3F51B5</item>
-        <item name="iGapButtonTextColor">#3F51B5</item>
-        <item name="iGapPrimaryIconTextColor">#3F51B5</item>
-        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
-        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
-    </style>-->
-
-    <!--<style name="iGapBrownTheme" parent="BaseTheme">
-        <item name="colorAccent">#795548</item>
-        <item name="colorAccentDark">#da6463</item>
-        <item name="colorPrimary">#795548</item>
-        <item name="colorPrimaryDark">#5D4037</item>
-        <item name="colorPrimaryLight">#ffcbca</item>
-
-        <item name="md_background_color">#d7ccc8</item>
-        &lt;!&ndash;<item name="colorAccent">@color/white</item>&ndash;&gt;
-        <item name="rootBackgroundColor">@color/white</item>
-        <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
-        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
-        <item name="iGapPrimaryTextColor">@color/white</item>
-        <item name="iGapDividerLine">@color/brownDividerLine</item>
-        <item name="iGapHintTextColor">#757575</item>
-        <item name="iGapMessageTextColor">#5F5F5F</item>
-        <item name="iGapButtonColor">#795548</item>
-        <item name="iGapButtonTextColor">#795548</item>
-        <item name="iGapPrimaryIconTextColor">#795548</item>
-        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
-        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
-    </style>-->
-
-    <!--<style name="iGapTealTheme" parent="BaseTheme">
-        <item name="colorAccent">#009688</item>
-        <item name="colorAccentDark">#da6463</item>
-        <item name="colorPrimary">#009688</item>
-        <item name="colorPrimaryDark">#00796B</item>
-        <item name="colorPrimaryLight">#ffcbca</item>
-
-        <item name="md_background_color">@color/tealBackground</item>
-        &lt;!&ndash;<item name="colorAccent">@color/white</item>&ndash;&gt;
-        <item name="rootBackgroundColor">@color/white</item>
-        <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
-        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
-        <item name="iGapPrimaryTextColor">@color/white</item>
-        <item name="iGapDividerLine">@color/tealDividerLine</item>
-        <item name="iGapHintTextColor">#757575</item>
-        <item name="iGapMessageTextColor">#5F5F5F</item>
-        <item name="iGapButtonColor">#009688</item>
-        <item name="iGapButtonTextColor">#009688</item>
-        <item name="iGapPrimaryIconTextColor">#009688</item>
-        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
-        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
-    </style>-->
-
-    <!--<style name="iGapDeepPurpleThem" parent="BaseTheme">
-        <item name="colorAccent">#673AB7</item>
-        <item name="colorAccentDark">#da6463</item>
-        <item name="colorPrimary">#673AB7</item>
-        <item name="colorPrimaryDark">#512DA8</item>
-        <item name="colorPrimaryLight">#ffcbca</item>
-
-        <item name="rootBackgroundColor">@color/white</item>
-        <item name="iGapTitleTextColor">@color/black_register</item>
-        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
-        <item name="iGapPrimaryTextColor">@color/white</item>
-        <item name="iGapDividerLine">@color/background_editText</item>
-        <item name="iGapHintTextColor">#757575</item>
-        <item name="iGapMessageTextColor">#5F5F5F</item>
-        <item name="iGapButtonColor">#673AB7</item>
-        <item name="iGapButtonTextColor">#673AB7</item>
-        <item name="iGapPrimaryIconTextColor">#673AB7</item>
-        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
-        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
-    </style>-->
-
-    <!--<style name="iGapLightBlueTheme" parent="BaseTheme">
-        <item name="colorAccent">#03A9F4</item>
-        <item name="colorAccentDark">#da6463</item>
-        <item name="colorPrimary">#03A9F4</item>
-        <item name="colorPrimaryDark">#0288D1</item>
-        <item name="colorPrimaryLight">#ffcbca</item>
-
-        <item name="rootBackgroundColor">@color/white</item>
-        <item name="iGapTitleTextColor">@color/black_register</item>
-        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
-        <item name="iGapPrimaryTextColor">@color/white</item>
-        <item name="iGapDividerLine">@color/background_editText</item>
-        <item name="iGapHintTextColor">#757575</item>
-        <item name="iGapMessageTextColor">#5F5F5F</item>
-        <item name="iGapButtonColor">#03A9F4</item>
-        <item name="iGapButtonTextColor">#03A9F4</item>
-        <item name="iGapPrimaryIconTextColor">#03A9F4</item>
-        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
-        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
-    </style>-->
-
-    <!--<style name="iGapCyanTheme" parent="BaseTheme">
-        <item name="colorAccent">#00BCD4</item>
-        <item name="colorAccentDark">#da6463</item>
-        <item name="colorPrimary">#00BCD4</item>
-        <item name="colorPrimaryDark">#0097A7</item>
-        <item name="colorPrimaryLight">#ffcbca</item>
-
-        <item name="rootBackgroundColor">@color/white</item>
-        <item name="iGapTitleTextColor">@color/black_register</item>
-        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
-        <item name="iGapPrimaryTextColor">@color/white</item>
-        <item name="iGapDividerLine">@color/background_editText</item>
-        <item name="iGapHintTextColor">#757575</item>
-        <item name="iGapMessageTextColor">#5F5F5F</item>
-        <item name="iGapButtonColor">#00BCD4</item>
-        <item name="iGapButtonTextColor">#00BCD4</item>
-        <item name="iGapPrimaryIconTextColor">#00BCD4</item>
-        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
-        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
-    </style>-->
-
-    <!--<style name="iGapLightGreenTheme" parent="BaseTheme">
-        <item name="colorAccent">#8BC34A</item>
-        <item name="colorAccentDark">#da6463</item>
-        <item name="colorPrimary">#8BC34A</item>
-        <item name="colorPrimaryDark">#689F38</item>
-        <item name="colorPrimaryLight">#ffcbca</item>
-
-        <item name="rootBackgroundColor">@color/white</item>
-        <item name="iGapTitleTextColor">@color/black_register</item>
-        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
-        <item name="iGapPrimaryTextColor">@color/white</item>
-        <item name="iGapDividerLine">@color/background_editText</item>
-        <item name="iGapHintTextColor">#757575</item>
-        <item name="iGapMessageTextColor">#5F5F5F</item>
-        <item name="iGapButtonColor">#8BC34A</item>
-        <item name="iGapButtonTextColor">#8BC34A</item>
-        <item name="iGapPrimaryIconTextColor">#8BC34A</item>
-        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
-        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
-    </style>-->
-
-    <!--<style name="iGapLimeTheme" parent="BaseTheme">
-        <item name="colorAccent">#CDDC39</item>
-        <item name="colorAccentDark">#da6463</item>
-        <item name="colorPrimary">#CDDC39</item>
-        <item name="colorPrimaryDark">#AFB42B</item>
-        <item name="colorPrimaryLight">#ffcbca</item>
-
-        <item name="rootBackgroundColor">@color/white</item>
-        <item name="iGapTitleTextColor">@color/black_register</item>
-        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
-        <item name="iGapPrimaryTextColor">@color/white</item>
-        <item name="iGapDividerLine">@color/background_editText</item>
-        <item name="iGapHintTextColor">#757575</item>
-        <item name="iGapMessageTextColor">#5F5F5F</item>
-        <item name="iGapButtonColor">#CDDC39</item>
-        <item name="iGapPrimaryIconTextColor">#CDDC39</item>
-        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
-        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
-    </style>-->
-
-    <!--<style name="iGapYellowTheme" parent="BaseTheme">
-        <item name="colorAccent">#FFEB3B</item>
-        <item name="colorAccentDark">#da6463</item>
-        <item name="colorPrimary">#FFEB3B</item>
-        <item name="colorPrimaryDark">#FBC02D</item>
-        <item name="colorPrimaryLight">#ffcbca</item>
-
-        <item name="rootBackgroundColor">@color/white</item>
-        <item name="iGapTitleTextColor">@color/black_register</item>
-        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
-        <item name="iGapPrimaryTextColor">@color/white</item>
-        <item name="iGapDividerLine">@color/background_editText</item>
-        <item name="iGapHintTextColor">#757575</item>
-        <item name="iGapMessageTextColor">#5F5F5F</item>
-        <item name="iGapButtonColor">#FFEB3B</item>
-        <item name="iGapPrimaryIconTextColor">#FFEB3B</item>
-        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
-        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
-    </style>-->
-
-    <!--<style name="iGapDeepOrangeTheme" parent="BaseTheme">
-        <item name="colorPrimary">#FF5722</item>
-        <item name="colorAccentDark">#da6463</item>
-        <item name="colorPrimaryDark">#E64A19</item>
-        <item name="colorAccent">#FF5722</item>
-        <item name="colorPrimaryLight">#ffcbca</item>
-
-        <item name="rootBackgroundColor">@color/white</item>
-        <item name="iGapTitleTextColor">@color/black_register</item>
-        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
-        <item name="iGapPrimaryTextColor">@color/white</item>
-        <item name="iGapDividerLine">@color/background_editText</item>
-        <item name="iGapHintTextColor">#757575</item>
-        <item name="iGapMessageTextColor">#5F5F5F</item>
-        <item name="iGapButtonColor">#FF5722</item>
-        <item name="iGapPrimaryIconTextColor">#FF5722</item>
-        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
-        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
-    </style>-->
 
     <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -633,6 +424,5 @@
         <item name="android:windowAnimationStyle">@style/Animation.Design.TopSheetDialog</item>
         <item name="bottomSheetStyle">@style/Widget.Design.TopSheet.Modal</item>
     </style>
-
 
 </resources>
