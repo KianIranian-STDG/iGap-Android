@@ -49,7 +49,6 @@ import com.google.android.gms.security.ProviderInstaller;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.vanniktech.emoji.sticker.struct.StructSticker;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -67,7 +66,6 @@ import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
-import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.GoToChatActivity;
@@ -122,7 +120,6 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.realm.RealmStickers;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.realm.RealmWallpaper;
 import net.iGap.realm.RealmWallpaperFields;
@@ -133,7 +130,6 @@ import net.iGap.request.RequestWalletGetAccessToken;
 import net.iGap.request.RequestWalletIdMapping;
 import net.iGap.viewmodel.FragmentIVandProfileViewModel;
 
-import org.jetbrains.annotations.NotNull;
 import org.paygear.RaadApp;
 import org.paygear.fragment.PaymentHistoryFragment;
 
@@ -143,9 +139,6 @@ import java.util.List;
 
 import io.realm.Realm;
 import ir.pec.mpl.pecpayment.view.PaymentInitiator;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
@@ -1418,10 +1411,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 Intent intentTemp = new Intent();
                 intentTemp.putExtra(DEEP_LINK, data.getQuery());
                 handleDeepLink(intentTemp);
+            } else {
+                HelperUrl.getLinkInfo(intent, ActivityMain.this);
             }
-        } else {
-            HelperUrl.getLinkinfo(intent, ActivityMain.this);
         }
+
         getIntent().setData(null);
 
         //ActivityMain.setMediaLayout();
