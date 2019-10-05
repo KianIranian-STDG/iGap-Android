@@ -959,19 +959,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        if (status == ProtoGlobal.RoomMessageStatus.SEEN) {
-
-        } else if (status == ProtoGlobal.RoomMessageStatus.LISTENED) {
-            if (G.isDarkTheme) {
-                viewHolder.getMessageStatusTv().setTextColor(viewHolder.getColor(R.color.iGapColor));
-            } else {
-                viewHolder.getMessageStatusTv().setTextColor(viewHolder.getColor(R.color.backgroundColorCall2));
-            }
-            viewHolder.getMessageStatusTv().setVisibility(View.VISIBLE);
-        } else {
+        if (status != ProtoGlobal.RoomMessageStatus.SEEN) {
             viewHolder.getMessageStatusTv().setTextColor(viewHolder.getColor(R.color.unread_status));
         }
-
 
         if (G.isDarkTheme) {
             viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND, ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_dark))));
