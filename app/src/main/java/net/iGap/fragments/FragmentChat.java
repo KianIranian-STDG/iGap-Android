@@ -8854,97 +8854,98 @@ public class FragmentChat extends BaseFragment
             }
         }
 
-        TopSheetDialog topSheetDialog = new TopSheetDialog(getContext()).setListData(items, -1, position -> {
-            if (items.get(position).equals(getString(R.string.Search))) {
-                initLayoutSearchNavigation();
-                layoutToolbar.setVisibility(View.GONE);
-                ll_Search.setVisibility(View.VISIBLE);
-                if (!initHash) {
-                    initHash = true;
-                    initHashView();
+        if (getContext() != null) {
+            TopSheetDialog topSheetDialog = new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+                if (items.get(position).equals(getString(R.string.Search))) {
+                    initLayoutSearchNavigation();
+                    layoutToolbar.setVisibility(View.GONE);
+                    ll_Search.setVisibility(View.VISIBLE);
+                    if (!initHash) {
+                        initHash = true;
+                        initHashView();
+                    }
+                    G.handler.post(() -> editTextRequestFocus(edtSearchMessage));
+                } else if (items.get(position).equals(getString(R.string.clear_history))) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            onSelectRoomMenu("txtClearHistory", mRoomId);
+                        }
+                    }).negativeText(R.string.no).show();
+                } else if (items.get(position).equals(getString(R.string.delete_chat))) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.delete_chat).content(R.string.delete_chat_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            onSelectRoomMenu("txtDeleteChat", mRoomId);
+                        }
+                    }).negativeText(R.string.no).show();
+                } else if (items.get(position).equals(getString(R.string.mute_notification)) || items.get(position).equals(getString(R.string.unmute_notification))) {
+                    onSelectRoomMenu("txtMuteNotification", mRoomId);
+                } else if (items.get(position).equals(getString(R.string.chat_to_group))) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.convert_chat_to_group_title).content(R.string.convert_chat_to_group_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            //finish();
+                            finishChat();
+                            dialog.dismiss();
+                            G.handler.post(() -> G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId));
+                        }
+                    }).show();
+                } else if (items.get(position).equals(getString(R.string.clean_up))) {
+                    resetMessagingValue();
+                    setDownBtnGone();
+                    setCountNewMessageZero();
+                    RealmRoomMessage.ClearAllMessageRoomAsync(getRealmChat(), mRoomId, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            recyclerView.addOnScrollListener(scrollListener);
+                            saveMessageIdPositionState(0);
+                            /**
+                             * get history from server
+                             */
+                            topMore = true;
+                            getOnlineMessage(0, UP);
+                        }
+                    });
+
+                } else if (items.get(position).equals(getString(R.string.report))) {
+                    dialogReport(false, 0);
+                } else if (items.get(position).equals(getString(R.string.SendMoney))) {
+                    showPaymentDialog();
+                } else if (items.get(position).equals(getString(R.string.export_chat))) {
+                    if (HelperPermission.grantedUseStorage()) {
+                        exportChat();
+                    } else {
+                        try {
+                            HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                                @Override
+                                public void Allow() {
+                                    exportChat();
+                                }
+
+                                @Override
+                                public void deny() {
+                                    Toast.makeText(G.currentActivity, R.string.export_message, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else if (items.get(position).equals(getString(R.string.stop))) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.stop).content(R.string.stop_message_bot).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            //   onSelectRoomMenu("txtClearHistory", mRoomId);
+                            closeWebViewForSpecialUrlChat(true);
+                            //  popBackStackFragment();
+
+                        }
+                    }).negativeText(R.string.no).show();
                 }
-                G.handler.post(() -> editTextRequestFocus(edtSearchMessage));
-            } else if (items.get(position).equals(getString(R.string.clear_history))) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        onSelectRoomMenu("txtClearHistory", mRoomId);
-                    }
-                }).negativeText(R.string.no).show();
-            } else if (items.get(position).equals(getString(R.string.delete_chat))) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.delete_chat).content(R.string.delete_chat_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        onSelectRoomMenu("txtDeleteChat", mRoomId);
-                    }
-                }).negativeText(R.string.no).show();
-            } else if (items.get(position).equals(getString(R.string.mute_notification)) || items.get(position).equals(getString(R.string.unmute_notification))) {
-                onSelectRoomMenu("txtMuteNotification", mRoomId);
-            } else if (items.get(position).equals(getString(R.string.chat_to_group))) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.convert_chat_to_group_title).content(R.string.convert_chat_to_group_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        //finish();
-                        finishChat();
-                        dialog.dismiss();
-                        G.handler.post(() -> G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId));
-                    }
-                }).show();
-            } else if (items.get(position).equals(getString(R.string.clean_up))) {
-                resetMessagingValue();
-                setDownBtnGone();
-                setCountNewMessageZero();
-                RealmRoomMessage.ClearAllMessageRoomAsync(getRealmChat(), mRoomId, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        recyclerView.addOnScrollListener(scrollListener);
-                        saveMessageIdPositionState(0);
-                        /**
-                         * get history from server
-                         */
-                        topMore = true;
-                        getOnlineMessage(0, UP);
-                    }
-                });
-
-            } else if (items.get(position).equals(getString(R.string.report))) {
-                dialogReport(false, 0);
-            } else if (items.get(position).equals(getString(R.string.SendMoney))) {
-                showPaymentDialog();
-            } else if (items.get(position).equals(getString(R.string.export_chat))) {
-                if (HelperPermission.grantedUseStorage()) {
-                    exportChat();
-                } else {
-                    try {
-                        HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
-                            @Override
-                            public void Allow() {
-                                exportChat();
-                            }
-
-                            @Override
-                            public void deny() {
-                                Toast.makeText(G.currentActivity, R.string.export_message, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else if (items.get(position).equals(getString(R.string.stop))) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.stop).content(R.string.stop_message_bot).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        //   onSelectRoomMenu("txtClearHistory", mRoomId);
-                        closeWebViewForSpecialUrlChat(true);
-                        //  popBackStackFragment();
-
-                    }
-                }).negativeText(R.string.no).show();
-            }
-        });
-        topSheetDialog.show();
-
+            });
+            topSheetDialog.show();
+        }
             /*final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
             View v = dialog.getCustomView();
 
