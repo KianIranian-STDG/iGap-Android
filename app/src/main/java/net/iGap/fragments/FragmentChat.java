@@ -5978,6 +5978,8 @@ public class FragmentChat extends BaseFragment
 
     private void sendButtonVisibility(boolean visibility) {
 
+        //Log.i(TAG, "sendButtonVisibility: "+visibility);
+
         if (animGone == null || animVisible == null) {
             animGone = AnimationUtils.loadAnimation(getContext(), R.anim.translate_exit_up);
             animVisible = AnimationUtils.loadAnimation(getContext(), R.anim.translate_enter_down);
@@ -5994,16 +5996,35 @@ public class FragmentChat extends BaseFragment
             isSendVisibilityAnimInProcess = false;
             isAttachVisibilityAnimInProcess = false;
             layoutAttachBottom.setVisibility(View.GONE);
+            //Log.i(TAG, "sendButtonVisibility: reset");
+
+        }
+
+        if (visibility && isAttachVisibilityAnimInProcess) {
+            animGone.reset();
+            animVisible.reset();
+            imvSendButton.clearAnimation();
+            layoutAttachBottom.clearAnimation();
+            isSendVisibilityAnimInProcess = false;
+            isAttachVisibilityAnimInProcess = false;
+            imvSendButton.setVisibility(View.GONE);
+            //Log.i(TAG, "sendButtonVisibility: reset2");
+
         }
 
         if (!visibility && !layoutAttachBottom.isShown()) {
+            //Log.i(TAG, "sendButtonVisibility: in if gone");
             if (isAttachVisibilityAnimInProcess) return;
             attachLayoutAnimateVisible();
         }
+        //Log.i(TAG, "sendButtonVisibility: gone skip");
+
         if (visibility && !imvSendButton.isShown()) {
+            //Log.i(TAG, "sendButtonVisibility: in if visi");
             if (isSendVisibilityAnimInProcess) return;
             sendButtonAnimateVisible();
         }
+        //Log.i(TAG, "sendButtonVisibility: visible");
 
     }
 
@@ -6018,6 +6039,8 @@ public class FragmentChat extends BaseFragment
                 isSendVisibilityAnimInProcess = true;
                 isAttachVisibilityAnimInProcess = false;
                 layoutAttachBottom.setVisibility(View.VISIBLE);
+                //Log.i(TAG, "sendButtonAnimateVisible: anim start");
+
             }
 
             @Override
@@ -6037,6 +6060,8 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onAnimationStart(Animation animation) {
                 imvSendButton.setVisibility(View.VISIBLE);
+                //Log.i(TAG, "sendButtonAnimateVisible: anim22 start");
+
             }
 
             @Override
@@ -6045,6 +6070,7 @@ public class FragmentChat extends BaseFragment
                 imvSendButton.clearAnimation();
                 layoutAttachBottom.clearAnimation();
                 edtChat.requestLayout();
+                //Log.i(TAG, "sendButtonAnimateVisible: anim end");
 
             }
 
@@ -6066,11 +6092,13 @@ public class FragmentChat extends BaseFragment
                 imvSendButton.setVisibility(View.VISIBLE);
                 isSendVisibilityAnimInProcess = false;
                 isAttachVisibilityAnimInProcess = true;
+                //Log.i(TAG, "onAnimationStart: gone start");
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
                 imvSendButton.setVisibility(View.GONE);
+                //Log.i(TAG, "onAnimationEnd: gone end");
                 layoutAttachBottom.startAnimation(animVisible);
             }
 
@@ -6084,6 +6112,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onAnimationStart(Animation animation) {
                 layoutAttachBottom.setVisibility(View.VISIBLE);
+                //Log.i(TAG, "onAnimationStart: gone 2 start");
             }
 
             @Override
@@ -6092,6 +6121,7 @@ public class FragmentChat extends BaseFragment
                 imvSendButton.clearAnimation();
                 layoutAttachBottom.clearAnimation();
                 edtChat.requestLayout();
+                //Log.i(TAG, "onAnimationEnd: gone 2 endded");
 
             }
 
