@@ -463,7 +463,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             @Override
             public boolean onLongClick(RoomListCell roomListCell, RealmRoom realmRoom, int position) {
 
-                if (!isChatMultiSelectEnable) {
+                if (!isChatMultiSelectEnable && FragmentChat.mForwardMessages == null) {
                     enableMultiSelect();
                     selectedItemCountTv.setVisibility(View.VISIBLE);
                     multiSelectRv.setVisibility(View.VISIBLE);
