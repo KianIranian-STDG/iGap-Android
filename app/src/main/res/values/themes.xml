@@ -75,7 +75,7 @@
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_default</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rec_default</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_default</item>
-        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_default</item>
         <item name="iGapButtonSelector">@drawable/button_selector_default</item>
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
         <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_default</item>
@@ -151,7 +151,7 @@
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_pink</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_pink</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_pink</item>
-        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_red</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_pink</item>
         <item name="iGapButtonSelector">@drawable/button_selector_default</item>
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
         <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_default</item>
@@ -189,7 +189,7 @@
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_dark</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_dark</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_default</item>
-        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_violet</item>
         <item name="iGapButtonSelector">@drawable/button_selector_default</item>
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
         <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_default</item>
