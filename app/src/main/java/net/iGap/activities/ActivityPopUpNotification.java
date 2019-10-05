@@ -199,11 +199,13 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     private void setImageAndTextAppBar(int position) {
 
-        if (mList.size() != 0) {
-            initialize = mList.get(position).initialize;
-            color = mList.get(position).color;
-            txtName.setText(mList.get(position).name);
-        }
+        if (mList.size() == 0)
+            return;
+
+        initialize = mList.get(position).initialize;
+        color = mList.get(position).color;
+        txtName.setText(mList.get(position).name);
+
 
         try (Realm realm = Realm.getDefaultInstance()) {
             RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, mList.get(position).senderId);
