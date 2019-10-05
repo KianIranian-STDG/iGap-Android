@@ -200,6 +200,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
             if (mSelectedRoomList.size() == 0) {
                 disableMultiSelect();
+                mHelperToolbar.getLeftButton().setVisibility(View.GONE);
                 return;
             }
 
