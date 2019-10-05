@@ -1138,7 +1138,8 @@ public class FragmentChat extends BaseFragment
         unRegisterListener();
 
         //disable attachment popup camera
-        if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.disableCamera();
+        if (mAttachmentPopup != null && mAttachmentPopup.isShowing)
+            mAttachmentPopup.disableCamera();
 
     }
 
@@ -2280,7 +2281,8 @@ public class FragmentChat extends BaseFragment
             /*FragmentShowImage fragment = (FragmentShowImage) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
             if (fragment != null) {
                 removeFromBaseFragment(fragment);
-            } else*/ if (mAdapter != null && mAdapter.getSelections().size() > 0) {
+            } else*/
+            if (mAdapter != null && mAdapter.getSelections().size() > 0) {
                 mAdapter.deselect();
             } else if (emojiPopup != null && emojiPopup.isShowing()) {
                 emojiPopup.dismiss();
@@ -2799,7 +2801,6 @@ public class FragmentChat extends BaseFragment
         });
 
         MaterialDesignTextView txtNavigationLayout = rootView.findViewById(R.id.ac_txt_down_navigation);
-        /*AndroidUtils.setBackgroundShapeColor(txtNavigationLayout, Color.parseColor(G.appBarColor));*/
 
         llScrollNavigate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3204,7 +3205,7 @@ public class FragmentChat extends BaseFragment
 
     private void initPopupAttachment() {
 
-        if (getActivity() == null ) return;
+        if (getActivity() == null) return;
 
         mAttachmentPopup = ChatAttachmentPopup.create()
                 .setContext(getActivity())
@@ -5928,7 +5929,7 @@ public class FragmentChat extends BaseFragment
 
     private boolean isSendVisibilityAnimInProcess;
     private boolean isAttachVisibilityAnimInProcess;
-    private Animation  animGone , animVisible ;
+    private Animation animGone, animVisible;
 
     private void sendButtonVisibility(boolean visibility) {
 
@@ -5940,13 +5941,13 @@ public class FragmentChat extends BaseFragment
         animGone.setDuration(70);
         animVisible.setDuration(70);
 
-        if (!visibility && isSendVisibilityAnimInProcess){
+        if (!visibility && isSendVisibilityAnimInProcess) {
             animGone.reset();
             animVisible.reset();
             imvSendButton.clearAnimation();
             layoutAttachBottom.clearAnimation();
-            isSendVisibilityAnimInProcess =false ;
-            isAttachVisibilityAnimInProcess = false ;
+            isSendVisibilityAnimInProcess = false;
+            isAttachVisibilityAnimInProcess = false;
             layoutAttachBottom.setVisibility(View.GONE);
         }
 
@@ -6012,19 +6013,19 @@ public class FragmentChat extends BaseFragment
     private void attachLayoutAnimateVisible() {
 
         imvSendButton.startAnimation(animGone);
-        isAttachVisibilityAnimInProcess = true ;
+        isAttachVisibilityAnimInProcess = true;
 
         animGone.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 imvSendButton.setVisibility(View.VISIBLE);
                 isSendVisibilityAnimInProcess = false;
-                isAttachVisibilityAnimInProcess = true ;
+                isAttachVisibilityAnimInProcess = true;
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                imvSendButton.setVisibility( View.GONE);
+                imvSendButton.setVisibility(View.GONE);
                 layoutAttachBottom.startAnimation(animVisible);
             }
 
@@ -6042,7 +6043,7 @@ public class FragmentChat extends BaseFragment
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                isAttachVisibilityAnimInProcess = false ;
+                isAttachVisibilityAnimInProcess = false;
                 imvSendButton.clearAnimation();
                 layoutAttachBottom.clearAnimation();
                 edtChat.requestLayout();
@@ -6944,10 +6945,6 @@ public class FragmentChat extends BaseFragment
         });
 
         ll_Search = rootView.findViewById(R.id.ac_ll_search_message);
-
-        if (G.isDarkTheme)
-            ll_Search.setBackgroundResource(R.drawable.shape_toolbar_background_dark);
-        //btnCloseLayoutSearch = (Button)  rootView.findViewById(R.id.ac_btn_close_layout_search_message);
         edtSearchMessage = rootView.findViewById(R.id.chl_edt_search_message);
         edtSearchMessage.addTextChangedListener(new TextWatcher() {
             @Override

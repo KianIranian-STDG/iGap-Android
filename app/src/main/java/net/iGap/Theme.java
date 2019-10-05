@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.TypedValue;
 
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -1141,5 +1142,47 @@ public class Theme {
         DrawableCompat.setTintList(wrappedDrawable, ColorStateList.valueOf(getColorFromAttr(context, colors)));
         return wrappedDrawable;
     }
+
+    // for under lollipop
+    private int getDrawableAttr(@NotNull Context context, int attrResId) {
+        TypedValue typedValue = new TypedValue();
+        TypedArray a = context.obtainStyledAttributes(typedValue.data, new int[]{attrResId});
+        int drawableResId = a.getResourceId(0, 0);
+        a.recycle();
+        return drawableResId;
+    }
+
+    public int getToolbarDrawable(Context context) {
+        return getDrawableAttr(context, R.attr.iGapToolbarBackground);
+    }
+
+    public int getToolbarDrawableSharpe(Context context) {
+        return getDrawableAttr(context, R.attr.iGapToolbarBackgroundSharp);
+    }
+
+    public int getReceivedReplay(Context context) {
+        return getDrawableAttr(context, R.attr.iGapReceivedReplayBackground);
+    }
+
+    public int getSendReplay(Context context) {
+        return getDrawableAttr(context, R.attr.iGapSendReplayBackground);
+    }
+
+    public int getCardToCardBackground(Context context) {
+        return getDrawableAttr(context, R.attr.iGapCardToCardBackground);
+    }
+
+    public int getCardToCardButtonBackground(Context context) {
+        return getDrawableAttr(context, R.attr.iGapCardToCardButtonBackground);
+    }
+
+    public int getCardToCardIconBackground(Context context) {
+        return getDrawableAttr(context, R.attr.iGapCardToCardIconBackground);
+    }
+
+    public static boolean isUnderLollipop() {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
+    }
+    // for under lollipop
 
 }

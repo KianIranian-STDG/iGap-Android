@@ -43,7 +43,7 @@ public class FragmentChatSettingViewModel extends ViewModel {
     private ObservableInt dateType = new ObservableInt(R.string.miladi);
     private ObservableInt textSize = new ObservableInt(14 - MIN_TEXT_SIZE);
     private ObservableInt textSizeMax = new ObservableInt(MAX_TEXT_SIZE - MIN_TEXT_SIZE);
-    private MutableLiveData<Boolean> goToChatBackgroundPage = new MutableLiveData<>();
+    private SingleLiveEvent<Boolean> goToChatBackgroundPage = new SingleLiveEvent<>();
     private MutableLiveData<Boolean> goToDateFragment = new MutableLiveData<>();
     private MutableLiveData<Integer> selectedThemePosition = new MutableLiveData<>();
     private MutableLiveData<List<ThemeModel>> themeList = new SingleLiveEvent<>();
@@ -136,7 +136,7 @@ public class FragmentChatSettingViewModel extends ViewModel {
         return textSize;
     }
 
-    public MutableLiveData<Boolean> getGoToChatBackgroundPage() {
+    public SingleLiveEvent<Boolean> getGoToChatBackgroundPage() {
         return goToChatBackgroundPage;
     }
 

@@ -41,6 +41,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentWalletAgrement;
@@ -999,7 +1000,7 @@ public class HelperToolbar {
         }
 
         //main fragment onResume not called cause of usage algorithm , we get min activity and update button
-        if (mFragmentActivity instanceof ActivityMain){
+        if (mFragmentActivity instanceof ActivityMain) {
             ((ActivityMain) mFragmentActivity).updatePassCodeState();
         }
 
@@ -1013,14 +1014,14 @@ public class HelperToolbar {
             RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
             if (userInfo != null) {
                 phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
-            }else {
-                phoneNumber = ActivityMain.userPhoneNumber.substring(2) ;
-            }
-        }catch (Exception e){
-            //maybe exception was for realm substring
-            try{
+            } else {
                 phoneNumber = ActivityMain.userPhoneNumber.substring(2);
-            }catch (Exception ex){
+            }
+        } catch (Exception e) {
+            //maybe exception was for realm substring
+            try {
+                phoneNumber = ActivityMain.userPhoneNumber.substring(2);
+            } catch (Exception ex) {
                 //nothing
             }
         }
@@ -1318,15 +1319,9 @@ public class HelperToolbar {
                 mainConstraint.setId(R.id.view_toolbar_main_constraint);
 
                 if (isRoundBackground) {
-                    /*if (isDark)
-                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_dark);
-                    else*/
-                    mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background);
+                    mainConstraint.setBackgroundResource(new Theme().getToolbarDrawable(mContext));
                 } else {
-                    /*if (isDark)
-                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_rect_dark);
-                    else*/
-                    mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_rect);
+                    mainConstraint.setBackgroundResource(new Theme().getToolbarDrawableSharpe(mContext));
                 }
                 setRoot.constrainHeight(mainConstraint.getId(), i_Dp(R.dimen.toolbar_height));
                 setRoot.constrainWidth(mainConstraint.getId(), MATCH_CONSTRAINT);

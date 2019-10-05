@@ -30,5 +30,20 @@
         <item name="android:textColor">#000</item>
     </style>
 
+    <!--for support theme under android version 21-->
+    <style name="BaseTheme.drawable">
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
+        <item name="iGapAvatarBackground">@drawable/circle_mic</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
+        <item name="iGapButtonSelector">@drawable/button_selector</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon</item>
+    </style>
+    <!--for support theme under android version 21-->
+
 
 </resources>

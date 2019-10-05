@@ -84,6 +84,17 @@
     <!--bottom navigation item icon color-->
     <attr name="iGapBottomNavigationIconStart" format="reference|color" />
     <attr name="iGapBottomNavigationIconEnd" format="reference|color" />
+    <!--for support theme under android version 21-->
+    <attr name="iGapToolbarBackground" format="reference" />
+    <attr name="iGapToolbarBackgroundSharp" format="reference" />
+    <attr name="iGapAvatarBackground" format="reference" />
+    <attr name="iGapReceivedReplayBackground" format="reference" />
+    <attr name="iGapSendReplayBackground" format="reference" />
+    <attr name="iGapButtonSelector" format="reference" />
+    <attr name="iGapBottomSheetBackground" format="reference" />
+    <attr name="iGapCardToCardBackground" format="reference" />
+    <attr name="iGapCardToCardButtonBackground" format="reference" />
+    <attr name="iGapCardToCardIconBackground" format="reference" />
 
     <!--=======================custom theme=====================-->
 

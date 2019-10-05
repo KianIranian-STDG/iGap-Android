@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnVoiceRecord;
 import net.iGap.proto.ProtoGlobal;
@@ -68,8 +69,8 @@ public class VoiceRecord {
         txtMillisecond = layoutMic.findViewById(R.id.txt_time_mili_secend);
         layoutMicLock = layoutMic.findViewById(R.id.lmr_layout_mic);
         txt_slide_to_cancel = layoutMic.findViewById(R.id.txt_slideto_cancel);
-        btnMicLayout = (MaterialDesignTextView) layoutMic.findViewById(R.id.lmr_btn_mic_layout);
-        btnLock = (MaterialDesignTextView) layoutMic.findViewById(R.id.lmr_txt_Lock);
+        btnMicLayout = layoutMic.findViewById(R.id.lmr_btn_mic_layout);
+        btnLock = layoutMic.findViewById(R.id.lmr_txt_Lock);
         AndroidUtils.setBackgroundShapeColor(btnMicLayout, Color.parseColor(G.appBarColor));
         this.layoutAttach = layoutAttach;
         this.layoutMic = layoutMic;

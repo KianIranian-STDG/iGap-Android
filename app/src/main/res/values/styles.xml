@@ -156,7 +156,7 @@
     </style>
 
     <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/bottom_sheet_background</item>
+        <item name="android:background">?attr/iGapBottomSheetBackground</item>
     </style>
 
     <style name="Widget.Design.TopSheet.Modal" parent="android:Widget">

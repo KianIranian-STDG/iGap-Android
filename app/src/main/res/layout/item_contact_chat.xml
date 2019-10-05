@@ -32,7 +32,7 @@
             android:layout_height="@dimen/dp52"
             android:layout_marginStart="@dimen/dp16"
             android:layout_marginLeft="@dimen/dp16"
-            android:src="@drawable/shape_background_profile_sample" />
+            android:src="?attr/iGapAvatarBackground" />
 
 
     </LinearLayout>

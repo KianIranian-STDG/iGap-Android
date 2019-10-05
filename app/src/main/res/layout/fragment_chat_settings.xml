@@ -57,7 +57,7 @@
                     app:layout_constraintStart_toStartOf="@id/messageTitle"
                     app:layout_constraintTop_toBottomOf="@id/messageTitle" />
 
-                <androidx.appcompat.widget.AppCompatSeekBar
+                <SeekBar
                     android:id="@+id/st_seekbar_messageTextSize"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
@@ -93,9 +93,10 @@
                     app:layout_constraintWidth_percent=".7">
 
                     <androidx.constraintlayout.widget.Group
+                        android:id="@+id/receivedReplay"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:background="@drawable/rectangle_reply_recive_round_color"
+                        android:background="?attr/iGapReceivedReplayBackground"
                         android:padding="@dimen/dp8"
                         app:layout_constraintBottom_toBottomOf="@id/replayMessage"
                         app:layout_constraintLeft_toLeftOf="parent"

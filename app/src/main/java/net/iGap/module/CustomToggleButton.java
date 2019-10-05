@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 
 public class CustomToggleButton extends ToggleButton {
 
@@ -34,11 +35,11 @@ public class CustomToggleButton extends ToggleButton {
     private void init() {
         setTextOff("");
         setTextOn("");
-        if (G.isDarkTheme) {
+        /*if (Theme.isUnderLollipop()) {
             setButtonDrawable(R.drawable.st_switch_button_dark);
-        } else {
+        } else {*/
             setButtonDrawable(R.drawable.st_switch_button);
-        }
+        /*}*/
     }
 
 }

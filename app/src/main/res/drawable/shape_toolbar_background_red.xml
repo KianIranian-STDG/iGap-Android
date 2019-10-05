@@ -4,8 +4,8 @@
 
     <gradient
         android:angle="135"
-        android:endColor="@color/navigation_dark_mode_bg"
-        android:startColor="@color/background_setting_dark" />
+        android:endColor="#c82121"
+        android:startColor="#9e1010" />
 
     <corners
         android:bottomLeftRadius="@dimen/toolbar_radius"

@@ -38,7 +38,7 @@
                     android:id="@+id/toolbar_background"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp140"
-                    android:background="@drawable/shape_toolbar_background"
+                    android:background="?attr/iGapToolbarBackground"
                     android:minHeight="@dimen/toolbar_height"
                     app:layout_collapseMode="pin" />
 
@@ -608,7 +608,7 @@
             android:layout_marginStart="@dimen/dp14"
             android:layout_marginLeft="@dimen/dp14"
             android:layout_marginTop="@dimen/dp80"
-            android:background="@drawable/shape_background_profile_sample"
+            android:background="?attr/iGapAvatarBackground"
             android:scaleType="centerCrop"
             app:collapsedTarget="@id/toolbar_avatar_collapsed_target"
             app:layout_behavior="net.iGap.module.CollapsingImageBehavior" />

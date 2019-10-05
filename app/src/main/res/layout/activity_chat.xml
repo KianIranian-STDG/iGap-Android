@@ -98,7 +98,6 @@
                     android:orientation="vertical"
                     android:visibility="gone">
 
-
                     <net.iGap.module.MaterialDesignTextView
                         android:id="@+id/ac_txt_down_navigation"
                         style="@style/baseFontIcon"
@@ -106,7 +105,7 @@
                         android:layout_height="@dimen/dp44"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dp12"
-                        android:background="@drawable/circle_mic"
+                        android:background="?attr/iGapAvatarBackground"
                         android:gravity="center"
                         android:text="@string/md_downwards_arrow"
                         android:textColor="@color/white" />
@@ -288,12 +287,12 @@
 
                     <TextView
                         android:id="@+id/chl_txt_mute_channel"
-                        android:textColor="?iGapTitleTextColor"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp16"
 
                         />
@@ -339,7 +338,6 @@
 
                         <TextView
                             android:id="@+id/ac_layout_selected_txt_counter"
-                            android:textColor="?iGapTitleTextColor"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="10dp"
@@ -347,6 +345,7 @@
                             android:gravity="bottom"
                             android:paddingBottom="5dp"
                             android:text=""
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
@@ -434,7 +433,7 @@
                     android:id="@+id/ac_ll_search_message"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/toolbar_height"
-                    android:background="@drawable/shape_toolbar_background"
+                    android:background="?attr/iGapToolbarBackground"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingStart="@dimen/dp8"

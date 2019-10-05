@@ -11,7 +11,7 @@
         android:id="@+id/ac_appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_toolbar_background"
+        android:background="?attr/iGapToolbarBackground"
         android:layoutDirection="ltr"
         app:elevation="0dp">
 

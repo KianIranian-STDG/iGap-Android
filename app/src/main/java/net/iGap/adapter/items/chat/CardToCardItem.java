@@ -120,15 +120,9 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
 //                innerLayout.setPadding(LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4), LayoutCreator.dp(4));
 //            }
 
-            /*if (G.isDarkTheme) {
-                innerLayout.setBackground(getDrawable(R.drawable.background_item_card_to_card_dark));
-                payButton.setBackgroundResource(R.drawable.background_button_card_to_card_dark);
-                cardIcon.setBackground(getDrawable(R.drawable.background_card_to_card_icon_dark));
-            } else {*/
-            innerLayout.setBackgroundResource(R.drawable.background_item_card_to_card);
-            payButton.setBackgroundResource(R.drawable.background_button_card_to_card);
-            cardIcon.setBackgroundResource(R.drawable.background_card_to_card_icon);
-            /*}*/
+            innerLayout.setBackgroundResource(new Theme().getCardToCardBackground(innerLayout.getContext()));
+            payButton.setBackgroundResource(new Theme().getCardToCardButtonBackground(payButton.getContext()));
+            cardIcon.setBackgroundResource(new Theme().getCardToCardIconBackground(cardIcon.getContext()));
 
             set.constrainHeight(payButton.getId(), ConstraintSet.WRAP_CONTENT);
             set.constrainWidth(payButton.getId(), ConstraintSet.MATCH_CONSTRAINT);

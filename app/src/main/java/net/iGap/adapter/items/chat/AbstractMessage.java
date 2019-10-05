@@ -993,9 +993,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 replayMessage.setText(replayText);
 
                 if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
-                    replayView.setBackgroundResource(R.drawable.rectangle_reply_sender_round_color);
+                    replayView.setBackgroundResource(new Theme().getSendReplay(replayView.getContext()));
                 } else {
-                    replayView.setBackgroundResource(R.drawable.rectangle_reply_recive_round_color);
+                    replayView.setBackgroundResource(new Theme().getReceivedReplay(replayView.getContext()));
                 }
                 replyFrom.setTextColor(new Theme().getPrimaryTextColor(replyFrom.getContext()));
                 replayMessage.setTextColor(new Theme().getPrimaryTextColor(replayMessage.getContext()));

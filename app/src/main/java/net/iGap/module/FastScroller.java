@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +25,7 @@ import com.mikepenz.fastadapter.IItem;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.fragments.FragmentBlockedUser;
 import net.iGap.fragments.FragmentSyncRegisteredContacts;
@@ -173,8 +175,9 @@ public class FastScroller extends LinearLayout {
                 handleResId = R.drawable.fastscroll_bubble_light_right;
             }
         }
-        bubble.setImageResource(bubbleResId);
-        handle.setBackgroundResource(handleResId);
+        /*bubble.setImageResource(bubbleResId);*/
+        handle.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(getContext(), handleResId), getContext(), R.attr.colorPrimary));
+        /*handle.setBackgroundResource(handleResId);*/
     }
 
     private void setPosition(float y) {
