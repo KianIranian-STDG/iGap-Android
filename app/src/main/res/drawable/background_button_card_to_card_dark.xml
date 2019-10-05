@@ -4,8 +4,8 @@
 
     <gradient
         android:angle="45"
-        android:endColor="?attr/colorPrimaryDark"
-        android:startColor="?attr/colorPrimary" />
+        android:endColor="@color/background_setting_dark"
+        android:startColor="@color/navigation_dark_mode_bg" />
 
     <corners android:radius="8dp" />
 </shape>
