@@ -1089,7 +1089,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
                 G.handler.postDelayed(() -> {
                     AppUtils.updateBadgeOnly(realm, roomId);
-                    realm.close();
                 }, 250);
             });
         }, 5);
