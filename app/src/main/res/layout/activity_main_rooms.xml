@@ -35,6 +35,7 @@
             android:layout_gravity="bottom"
             android:gravity="center"
             android:paddingTop="24dp"
+            android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
             android:visibility="gone" />
 
