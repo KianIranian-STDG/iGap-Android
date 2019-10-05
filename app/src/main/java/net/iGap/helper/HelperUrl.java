@@ -469,7 +469,8 @@ public class HelperUrl {
                         navigationFragment.autoLinkCrawler(deepLink, new DiscoveryFragment.CrawlerStruct.OnDeepValidLink() {
                             @Override
                             public void linkValid(String link) {
-                                activity.onBackPressed();
+                                if (!G.twoPaneMode)
+                                    activity.onBackPressed();
                             }
 
                             @Override
@@ -1309,8 +1310,7 @@ public class HelperUrl {
         });
     }
 
-    public static void getLinkinfo(Intent intent, FragmentActivity activity) {
-
+    public static void getLinkInfo(Intent intent, FragmentActivity activity) {
         String action = intent.getAction();
 
         if (action == null || intent.getData() == null) return;

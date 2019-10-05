@@ -5,9 +5,11 @@ import android.graphics.Color;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -22,12 +24,13 @@ import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.poll.PollAdapter;
 import net.iGap.helper.HelperCalander;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
 public class TypeChartViewHolder extends RecyclerView.ViewHolder {
-    private BarChart chart;
+    private HorizontalBarChart chart;
 
     public TypeChartViewHolder(PollAdapter pollAdapter, @NonNull View itemView) {
         super(itemView);
@@ -56,16 +59,18 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
         xAxis.setTextColor(Color.parseColor(G.textTitleTheme));
         xAxis.setTypeface(G.typeface_IRANSansMobile);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(ViewMaker.dpToPixel(4));
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f);
         xAxis.setGranularityEnabled(true);
+        chart.getAxisLeft().setAxisMinimum(0);
 //        chart.getAxisLeft().setLabelCount(max);
         chart.getAxisRight().setEnabled(false);
         chart.getAxisLeft().setEnabled(false);
         chart.getAxisLeft().setDrawGridLines(false);
 
         // add a nice and smooth animation
-        chart.animateY(1500);
+        chart.animateY(1000);
 
         chart.getLegend().setEnabled(false);
 
@@ -93,20 +98,31 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
         a[0] = Color.parseColor(G.appBarColor);
         set1.setColors(colors);
         set1.setDrawValues(true);
+        set1.setValueTypeface(ResourcesCompat.getFont(chart.getContext() , R.font.main_font));
         set1.setValueTextColor(Color.parseColor(G.textTitleTheme));
-        set1.setValueTextSize(ViewMaker.dpToPixel(5));
+        set1.setValueTextSize(ViewMaker.dpToPixel(4));
         set1.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                String myValue = String.valueOf((long) Math.floor(value));
 
+                String myValue;
+
+                //number 22.154456 => show 2 digit of float 22.15 if crashed just show number -> 22
+                try {
+                    DecimalFormat df = new DecimalFormat();
+                    df.setMaximumFractionDigits(2);
+                    myValue = df.format(value);
+                }catch (Exception e){
+                    myValue = String.valueOf((long) Math.floor(value));
+
+                }
                 if (HelperCalander.isPersianUnicode)
                     myValue = convertToUnicodeFarsiNumber(myValue);
 
-                return myValue;
+                return myValue + "%";
             }
         });
-        set1.setBarBorderWidth(set1.getBarBorderWidth() == 1.f ? 0.f : 1.f);
+        //set1.setBarBorderWidth(set1.getBarBorderWidth() == 1.f ? 0.f : 1.f);
 
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
@@ -116,7 +132,7 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
         chart.setFitBars(true);
 
 
-        chart.setVisibleXRangeMaximum((float) totalWith / (maxSize * 9));
+        //chart.setVisibleXRangeMaximum((float) totalWith / (maxSize * 7));
         chart.invalidate();
         chart.getData().notifyDataChanged();
 

@@ -267,6 +267,7 @@ import net.iGap.module.structs.StructChannelExtra;
 import net.iGap.module.structs.StructCompress;
 import net.iGap.module.structs.StructMessageAttachment;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.module.structs.StructMessageOption;
 import net.iGap.module.structs.StructSendSticker;
 import net.iGap.module.structs.StructUploadVideo;
 import net.iGap.module.structs.StructWebView;
@@ -306,6 +307,7 @@ import net.iGap.request.RequestChatEditMessage;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestChatUpdateDraft;
 import net.iGap.request.RequestClientGetFavoriteMenu;
+import net.iGap.request.RequestClientGetRoomHistory;
 import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestClientJoinByUsername;
 import net.iGap.request.RequestClientMuteRoom;
@@ -1132,7 +1134,8 @@ public class FragmentChat extends BaseFragment
         unRegisterListener();
 
         //disable attachment popup camera
-        if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.disableCamera();
+        if (mAttachmentPopup != null && mAttachmentPopup.isShowing)
+            mAttachmentPopup.disableCamera();
 
     }
 
@@ -3203,7 +3206,7 @@ public class FragmentChat extends BaseFragment
 
     private void initPopupAttachment() {
 
-        if (getActivity() == null ) return;
+        if (getActivity() == null) return;
 
         mAttachmentPopup = ChatAttachmentPopup.create()
                 .setContext(getActivity())
@@ -4820,13 +4823,54 @@ public class FragmentChat extends BaseFragment
         }, message.realmRoomMessage.getMessageId(), failedMessages);
     }
 
+
+    /**
+     * @param replyMessage when click on replay message this method call.
+     *                     if message in view scroll to position with animation called,but if message exist in room db reset message value and get message.
+     *                     and if not exist in db and view get message from history request and put into db and call again onReplayClick method.
+     */
+
     @Override
     public void onReplyClick(RealmRoomMessage replyMessage) {
-
         if (!goToPositionWithAnimation(replyMessage.getMessageId(), 1000)) {
-            goToPositionWithAnimation(replyMessage.getMessageId() * (-1), 1000);
-        }
+            long replayMessageId = Math.abs(replyMessage.getMessageId());
+            if (!goToPositionWithAnimation(replayMessageId, 1000)) {
+                if (RealmRoomMessage.existMessageInRoom(replayMessageId, mRoomId)) {
+                    resetMessagingValue();
+                    savedScrollMessageId = replayMessageId;
+                    firstVisiblePositionOffset = 0;
+                    getMessages();
+                } else {
+                    new RequestClientGetRoomHistory().getRoomHistory(mRoomId, replayMessageId - 1, 1, DOWN, new RequestClientGetRoomHistory.OnHistoryReady() {
+                        @Override
+                        public void onHistory(List<ProtoGlobal.RoomMessage> messageList) {
+                            G.handler.post(() -> {
+                                try (Realm realm1 = Realm.getDefaultInstance()) {
+                                    realm1.executeTransaction(realm -> {
+                                        for (ProtoGlobal.RoomMessage roomMessage : messageList) {
+                                            onReplyClick(RealmRoomMessage.putOrUpdate(getRealmChat(), mRoomId, roomMessage, new StructMessageOption().setGap()));
+                                        }
+                                    });
+                                }
+                            });
+                        }
 
+                        @Override
+                        public void onErrorHistory(int major, int minor) {
+                            G.handler.post(() -> {
+                                if (major == 626) {
+                                    HelperError.showSnackMessage(getResources().getString(R.string.not_found_message), false);
+                                } else if (minor == 624) {
+                                    HelperError.showSnackMessage(getResources().getString(R.string.ivnalid_data_provided), false);
+                                } else {
+                                    HelperError.showSnackMessage(getResources().getString(R.string.there_is_no_connection_to_server), false);
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        }
     }
 
     @Override
@@ -5953,7 +5997,7 @@ public class FragmentChat extends BaseFragment
 
     private boolean isSendVisibilityAnimInProcess;
     private boolean isAttachVisibilityAnimInProcess;
-    private Animation  animGone , animVisible ;
+    private Animation animGone, animVisible;
 
     private void sendButtonVisibility(boolean visibility) {
 
@@ -5965,13 +6009,13 @@ public class FragmentChat extends BaseFragment
         animGone.setDuration(70);
         animVisible.setDuration(70);
 
-        if (!visibility && isSendVisibilityAnimInProcess){
+        if (!visibility && isSendVisibilityAnimInProcess) {
             animGone.reset();
             animVisible.reset();
             imvSendButton.clearAnimation();
             layoutAttachBottom.clearAnimation();
-            isSendVisibilityAnimInProcess =false ;
-            isAttachVisibilityAnimInProcess = false ;
+            isSendVisibilityAnimInProcess = false;
+            isAttachVisibilityAnimInProcess = false;
             layoutAttachBottom.setVisibility(View.GONE);
         }
 
@@ -6037,19 +6081,19 @@ public class FragmentChat extends BaseFragment
     private void attachLayoutAnimateVisible() {
 
         imvSendButton.startAnimation(animGone);
-        isAttachVisibilityAnimInProcess = true ;
+        isAttachVisibilityAnimInProcess = true;
 
         animGone.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 imvSendButton.setVisibility(View.VISIBLE);
                 isSendVisibilityAnimInProcess = false;
-                isAttachVisibilityAnimInProcess = true ;
+                isAttachVisibilityAnimInProcess = true;
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                imvSendButton.setVisibility( View.GONE);
+                imvSendButton.setVisibility(View.GONE);
                 layoutAttachBottom.startAnimation(animVisible);
             }
 
@@ -6067,7 +6111,7 @@ public class FragmentChat extends BaseFragment
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                isAttachVisibilityAnimInProcess = false ;
+                isAttachVisibilityAnimInProcess = false;
                 imvSendButton.clearAnimation();
                 layoutAttachBottom.clearAnimation();
                 edtChat.requestLayout();
