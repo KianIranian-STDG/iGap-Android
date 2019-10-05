@@ -55,7 +55,7 @@ public class TextBadge extends FrameLayout {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(badgeColor);
         Path path = new Path();
-        path.addRoundRect(new RectF(0, 0, getWidth(), getHeight()), 25, 25, Path.Direction.CCW);
+        path.addRoundRect(new RectF(0, 0, getWidth(), getHeight()), getHeight() / 2, getHeight() / 2, Path.Direction.CCW);
         canvas.drawPath(path, paint);
         super.dispatchDraw(canvas);
     }
