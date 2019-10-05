@@ -205,7 +205,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         holder.mRoomId = mMessage.getRoomId();
 
-        RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getRealm(), mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getUserId() : mMessage.getUserId());
+        RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getUiRealm(), mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getUserId() : mMessage.getUserId());
 
         if (registeredInfo != null) {
             holder.author.setText(G.context.getString(R.string.recorded_by) + " " + registeredInfo.getDisplayName());

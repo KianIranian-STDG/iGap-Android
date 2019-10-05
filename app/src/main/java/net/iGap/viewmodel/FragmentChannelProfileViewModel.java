@@ -48,7 +48,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmModel;
 
@@ -139,7 +138,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
             }
         };
 
-        mRoom = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        mRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (mRoom == null || mRoom.getChannelRoom() == null) {
             goBack.setValue(true);
             return;
@@ -176,11 +175,11 @@ public class FragmentChannelProfileViewModel extends ViewModel
         isMuteNotification.set(mRoom.getMute());
 
         subscribersCount.set(mRoom.getChannelRoom().getParticipantsCountLabel());
-        administratorsCount.set(String.valueOf(RealmMember.filterMember(DbManager.getInstance().getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-        moderatorsCount.set(String.valueOf(RealmMember.filterMember(DbManager.getInstance().getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+        administratorsCount.set(String.valueOf(RealmMember.filterMember(DbManager.getInstance().getUiRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
+        moderatorsCount.set(String.valueOf(RealmMember.filterMember(DbManager.getInstance().getUiRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
 
-        admins = RealmMember.filterMember(DbManager.getInstance().getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
-        moderators = RealmMember.filterMember(DbManager.getInstance().getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
+        admins = RealmMember.filterMember(DbManager.getInstance().getUiRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
+        moderators = RealmMember.filterMember(DbManager.getInstance().getUiRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
 
         admins.addChangeListener((realmMembers, changeSet) -> administratorsCount.set(realmMembers.size() + ""));
         moderators.addChangeListener((realmMembers, changeSet) -> moderatorsCount.set(realmMembers.size() + ""));
@@ -215,7 +214,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
     }
 
     public void onClickCircleImage() {
-        if (DbManager.getInstance().getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
+        if (DbManager.getInstance().getUiRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
             goToShowAvatarPage.setValue(roomId);
         }
     }
@@ -252,7 +251,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
     }
 
     public void onResume() {
-        mRoom = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        mRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (mRoom != null) {
             if (changeListener == null) {
                 changeListener = new RealmChangeListener<RealmModel>() {

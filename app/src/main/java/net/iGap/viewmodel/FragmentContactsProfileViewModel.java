@@ -195,7 +195,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
     public void onClickGoToChat() {
         if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || enterFrom.equals("Others")) { // Others is from FragmentMapUsers adapter
-            RealmRoom realmRoom = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+            RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
             if (realmRoom != null) {
                 goToChatPage.setValue(realmRoom.getId());
             } else {
@@ -292,7 +292,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
     private void mainStart() {
         if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || roomId == 0) {
-            RealmRoom realmRoom = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+            RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
             if (realmRoom != null) {
                 shearedId = realmRoom.getId();
             }
@@ -311,7 +311,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         } else
             cloudVisibility.postValue(false);
 
-        registeredInfo = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getRealm(), userId);
+        registeredInfo = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getUiRealm(), userId);
         if (registeredInfo != null) {
             registeredInfo.addChangeListener((RealmObjectChangeListener<RealmRegisteredInfo>) (realmModel, changeSet) -> {
                 if (changeSet != null) {
@@ -337,18 +337,18 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             userBlockState.set(isBlockUser ? R.string.un_block_user : R.string.block);
             registeredInfo.addChangeListener(element -> isBlockUser = registeredInfo.isBlockUser());
 
-            if (registeredInfo.getLastAvatar(DbManager.getInstance().getRealm()) != null) {
-                String mainFilePath = registeredInfo.getLastAvatar(DbManager.getInstance().getRealm()).getFile().getLocalFilePath();
+            if (registeredInfo.getLastAvatar(DbManager.getInstance().getUiRealm()) != null) {
+                String mainFilePath = registeredInfo.getLastAvatar(DbManager.getInstance().getUiRealm()).getFile().getLocalFilePath();
                 if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
                     avatarPath = mainFilePath;
                 } else {
-                    avatarPath = registeredInfo.getLastAvatar(DbManager.getInstance().getRealm()).getFile().getLocalThumbnailPath();
+                    avatarPath = registeredInfo.getLastAvatar(DbManager.getInstance().getUiRealm()).getFile().getLocalThumbnailPath();
                 }
-                avatarList = registeredInfo.getAvatars(DbManager.getInstance().getRealm());
+                avatarList = registeredInfo.getAvatars(DbManager.getInstance().getUiRealm());
             }
         }
 
-        RealmContacts realmUser = DbManager.getInstance().getRealm().where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+        RealmContacts realmUser = DbManager.getInstance().getUiRealm().where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
 
         if (registeredInfo != null) {
             if (registeredInfo.getDisplayName() != null && !registeredInfo.getDisplayName().equals("")) {
@@ -407,7 +407,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
         //todo: fixed it two times check it and first and her
         if (userId != 134 && G.userId != userId) {
-            RealmCallConfig callConfig = DbManager.getInstance().getRealm().where(RealmCallConfig.class).findFirst();
+            RealmCallConfig callConfig = DbManager.getInstance().getUiRealm().where(RealmCallConfig.class).findFirst();
             if (callConfig != null) {
 
                 if (isBot) {
@@ -432,7 +432,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             callVisibility.setValue(View.GONE);
             videoCallVisibility.setValue(View.GONE);
         }
-        RealmContacts realmContacts = DbManager.getInstance().getRealm().where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone.get())).findFirst();
+        RealmContacts realmContacts = DbManager.getInstance().getUiRealm().where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone.get())).findFirst();
 
         /**
          * if this user isn't in my contacts don't show phone number
@@ -474,7 +474,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
     public void onImageClick() {
         if (userId == G.userId) return; //dont work when profile was cloud
-        if (DbManager.getInstance().getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
+        if (DbManager.getInstance().getUiRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
             goToShowAvatarPage.setValue(userId == G.userId);
         }
     }
@@ -574,7 +574,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
     }
 
     public void onResume() {
-        mRoom = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, shearedId).findFirst();
+        mRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, shearedId).findFirst();
         if (mRoom != null) {
             isMuteNotification.set(mRoom.getMute());
             if (changeListener == null) {

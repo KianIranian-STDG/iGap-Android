@@ -27,8 +27,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_COMPLETE;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_DOWNLOADING;
 import static net.iGap.module.api.beepTunes.DownloadSong.STATUS_ERROR;
@@ -102,7 +100,7 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
         }
 
         void bindTracks(Track track) {
-            realmDownloadSong = DbManager.getInstance().getRealm().where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst();
+            realmDownloadSong = DbManager.getInstance().getUiRealm().where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst();
             if (realmDownloadSong != null) {
                 track.setInStorage(true);
                 songPrwTv.setText(itemView.getContext().getResources().getString(R.string.music_icon));
@@ -194,7 +192,7 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
                     });
                 }
             });
-            DbManager.getInstance().getRealm().addChangeListener(realm -> realmDownloadSong = realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst());
+            DbManager.getInstance().getUiRealm().addChangeListener(realm -> realmDownloadSong = realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst());
             progressBar.getIndeterminateDrawable().setColorFilter(itemView.getContext().getResources().getColor(R.color.beeptunes_primary), PorterDuff.Mode.SRC_IN);
         }
 

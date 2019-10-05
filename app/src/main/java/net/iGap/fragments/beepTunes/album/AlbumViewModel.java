@@ -28,7 +28,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -168,7 +167,7 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
         song.setDisplayName(downloadSong.getTrack().getName());
         song.setArtistId(downloadSong.getArtistId());
         song.setAlbumId(downloadSong.getAlbumId());
-        DbManager.getInstance().getRealm().executeTransactionAsync(realm -> realm.copyToRealmOrUpdate(song));
+        DbManager.getInstance().getUiRealm().executeTransactionAsync(realm -> realm.copyToRealmOrUpdate(song));
 
         removeFromQueue(downloadSong);
         downloadStatusMutableLiveData.postValue(downloadSong);

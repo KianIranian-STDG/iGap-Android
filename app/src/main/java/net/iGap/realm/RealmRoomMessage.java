@@ -10,7 +10,6 @@
 
 package net.iGap.realm;
 
-import android.os.Handler;
 import android.os.Looper;
 import android.text.format.DateUtils;
 
@@ -995,7 +994,7 @@ public class RealmRoomMessage extends RealmObject {
         roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
         roomMessage.setMessage(message);
         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-        RealmRoomMessage.addTimeIfNeed(roomMessage, DbManager.getInstance().getRealm());
+        RealmRoomMessage.addTimeIfNeed(roomMessage, DbManager.getInstance().getUiRealm());
         RealmRoomMessage.isEmojiInText(roomMessage, message);
         roomMessage.setRoomId(roomId);
         roomMessage.setShowMessage(true);
@@ -1015,9 +1014,9 @@ public class RealmRoomMessage extends RealmObject {
          *  user wants to replay to a message
          */
         if (replyMessageId > 0) {
-            RealmRoomMessage messageToReplay = DbManager.getInstance().getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replyMessageId).findFirst();
+            RealmRoomMessage messageToReplay = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replyMessageId).findFirst();
             if (messageToReplay != null) {
-                roomMessage.setReplyTo(DbManager.getInstance().getRealm().copyFromRealm(messageToReplay));
+                roomMessage.setReplyTo(DbManager.getInstance().getUiRealm().copyFromRealm(messageToReplay));
             }
         }
 

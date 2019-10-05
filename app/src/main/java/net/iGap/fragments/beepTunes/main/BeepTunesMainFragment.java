@@ -35,8 +35,6 @@ import net.iGap.realm.RealmDownloadSong;
 
 import java.util.List;
 
-import io.realm.Realm;
-
 import static net.iGap.fragments.beepTunes.BeepTunesProfileFragment.FAVORITE_FRAGMENT;
 import static net.iGap.fragments.beepTunes.BeepTunesProfileFragment.SYNC_FRAGMENT;
 
@@ -98,11 +96,11 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
 
         profileFragment.setCallBack(type -> {
             if (type.equals(SYNC_FRAGMENT)) {
-                List<RealmDownloadSong> downloadSongs = DbManager.getInstance().getRealm().copyFromRealm(DbManager.getInstance().getRealm().where(RealmDownloadSong.class).findAll());
+                List<RealmDownloadSong> downloadSongs = DbManager.getInstance().getUiRealm().copyFromRealm(DbManager.getInstance().getUiRealm().where(RealmDownloadSong.class).findAll());
                 new HelperFragment(getFragmentManager(), BeepTunesLocalSongFragment.getInstance(downloadSongs, "Sync Song", this))
                         .setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();
             } else if (type.equals(FAVORITE_FRAGMENT)) {
-                List<RealmDownloadSong> downloadSongs = DbManager.getInstance().getRealm().copyFromRealm(DbManager.getInstance().getRealm().where(RealmDownloadSong.class)
+                List<RealmDownloadSong> downloadSongs = DbManager.getInstance().getUiRealm().copyFromRealm(DbManager.getInstance().getUiRealm().where(RealmDownloadSong.class)
                         .equalTo("isFavorite", true).findAll());
 
                 new HelperFragment(getFragmentManager(), BeepTunesLocalSongFragment.getInstance(downloadSongs, "Favorite Song", this))

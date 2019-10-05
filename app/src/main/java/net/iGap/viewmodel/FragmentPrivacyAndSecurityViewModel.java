@@ -31,7 +31,6 @@ import net.iGap.request.RequestUserProfileSetSelfRemove;
 
 import java.util.ArrayList;
 
-import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmModel;
 
@@ -126,8 +125,8 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
 
 
     private void getInfo() {
-        realmPrivacy = DbManager.getInstance().getRealm().where(RealmPrivacy.class).findFirst();
-        realmUserInfo = DbManager.getInstance().getRealm().where(RealmUserInfo.class).findFirst();
+        realmPrivacy = DbManager.getInstance().getUiRealm().where(RealmPrivacy.class).findFirst();
+        realmUserInfo = DbManager.getInstance().getUiRealm().where(RealmUserInfo.class).findFirst();
         RealmPrivacy.getUpdatePrivacyFromServer();
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         poSelfRemove = sharedPreferences.getInt(SHP_SETTING.KEY_POSITION_SELF_REMOVE, 2);
@@ -347,7 +346,7 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
                 ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString()
         );
 
-        realmPrivacy = DbManager.getInstance().getRealm().where(RealmPrivacy.class).findFirst();
+        realmPrivacy = DbManager.getInstance().getUiRealm().where(RealmPrivacy.class).findFirst();
 
     }
 }

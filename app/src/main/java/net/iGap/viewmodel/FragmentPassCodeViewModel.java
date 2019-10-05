@@ -122,7 +122,7 @@ public class FragmentPassCodeViewModel {
             if (!isPattern || isChangePattern) {
                 if (mPattern != null) {
                     if (mPattern.equals(PatternLockUtils.patternToString(binding.patternLockView, pattern))) {
-                        DbManager.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
+                        DbManager.getInstance().getUiRealm().executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
                                 if (realmUserInfo != null) {
@@ -245,7 +245,7 @@ public class FragmentPassCodeViewModel {
         passCodeStateChangeListener.postValue(G.isPassCode);
         HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
         edtSetPasswordText.set("");
-        AsyncTransaction.executeTransactionWithLoading(fragment.getActivity(), DbManager.getInstance().getRealm(), new Realm.Transaction() {
+        AsyncTransaction.executeTransactionWithLoading(fragment.getActivity(), DbManager.getInstance().getUiRealm(), new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -266,7 +266,7 @@ public class FragmentPassCodeViewModel {
             rootPatternPassword.set(View.VISIBLE);
             visibilityCreateNewPattern.set(View.VISIBLE);
         } else {
-            AsyncTransaction.executeTransactionWithLoading(fragment.getActivity(), DbManager.getInstance().getRealm(), new Realm.Transaction() {
+            AsyncTransaction.executeTransactionWithLoading(fragment.getActivity(), DbManager.getInstance().getUiRealm(), new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -334,7 +334,7 @@ public class FragmentPassCodeViewModel {
     }
 
     public void onClickChangeVgToggleFingerPrint(View v) {
-        AsyncTransaction.executeTransactionWithLoading(fragment.getActivity(), DbManager.getInstance().getRealm(), new Realm.Transaction() {
+        AsyncTransaction.executeTransactionWithLoading(fragment.getActivity(), DbManager.getInstance().getUiRealm(), new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -402,7 +402,7 @@ public class FragmentPassCodeViewModel {
                 HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
 
                 AppUtils.closeKeyboard(v);
-                AsyncTransaction.executeTransactionWithLoading(fragment.getActivity(), DbManager.getInstance().getRealm(), new Realm.Transaction() {
+                AsyncTransaction.executeTransactionWithLoading(fragment.getActivity(), DbManager.getInstance().getUiRealm(), new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -608,7 +608,7 @@ public class FragmentPassCodeViewModel {
         checkFingerPrint();
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-        realmUserInfo = DbManager.getInstance().getRealm().where(RealmUserInfo.class).findFirst();
+        realmUserInfo = DbManager.getInstance().getUiRealm().where(RealmUserInfo.class).findFirst();
 
         binding.patternLockView.addPatternLockListener(mPatternLockViewListener);
 
@@ -747,7 +747,7 @@ public class FragmentPassCodeViewModel {
                 passCodeStateChangeListener.postValue(G.isPassCode);
                 HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
 
-                DbManager.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
+                DbManager.getInstance().getUiRealm().executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         if (realmUserInfo != null) {

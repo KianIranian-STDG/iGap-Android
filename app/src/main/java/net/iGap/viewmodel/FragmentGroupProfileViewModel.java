@@ -49,7 +49,6 @@ import net.iGap.request.RequestUserInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmList;
 
 public class FragmentGroupProfileViewModel extends ViewModel {
@@ -127,7 +126,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
         this.isNotJoin = isNotJoin;
 
         //group info
-        realmRoom = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
             goBack.setValue(true);
             return;
@@ -277,7 +276,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     }
 
     public void onClickRippleGroupAvatar() {
-        if (DbManager.getInstance().getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
+        if (DbManager.getInstance().getUiRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
             goToShowAvatarPage.setValue(roomId);
         }
     }
@@ -357,7 +356,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
 
     public void addNewMember() {
         List<StructContactInfo> userList = Contacts.retrieve(null);
-        RealmList<RealmMember> memberList = RealmMember.getMembers(DbManager.getInstance().getRealm(), roomId);
+        RealmList<RealmMember> memberList = RealmMember.getMembers(DbManager.getInstance().getUiRealm(), roomId);
 
         //ToDo: change algorithm order is n2
         for (int i = 0; i < memberList.size(); i++) {
@@ -461,7 +460,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
                     @Override
                     public void run() {
                         setMemberCount(roomIdUser);
-                        RealmRegisteredInfo realmRegistered = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getRealm(), userId);
+                        RealmRegisteredInfo realmRegistered = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getUiRealm(), userId);
 
                         if (realmRegistered == null) {
                             if (roomIdUser == roomId) {
@@ -504,7 +503,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     }
 
     private void setMemberCount(final long roomId) {
-        memberCount = RealmRoom.getMemberCount(DbManager.getInstance().getRealm(), roomId);
+        memberCount = RealmRoom.getMemberCount(DbManager.getInstance().getUiRealm(), roomId);
         G.handler.post(new Runnable() {
             @Override
             public void run() {

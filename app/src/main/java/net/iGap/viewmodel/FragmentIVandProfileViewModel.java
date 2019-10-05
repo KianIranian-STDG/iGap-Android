@@ -16,8 +16,6 @@ import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserIVandGetScore;
 
-import io.realm.Realm;
-
 public class FragmentIVandProfileViewModel {
     public static final int REQUEST_CODE_QR_IVAND_CODE = 543;
     public MutableLiveData<Boolean> goToIVandPage = new MutableLiveData<>();
@@ -41,15 +39,15 @@ public class FragmentIVandProfileViewModel {
     }
 
     private void initData() {
-        realmUserInfo = DbManager.getInstance().getRealm().where(RealmUserInfo.class).findFirst();
-        if (DbManager.getInstance().getRealm() != null) {
+        realmUserInfo = DbManager.getInstance().getUiRealm().where(RealmUserInfo.class).findFirst();
+        if (DbManager.getInstance().getUiRealm() != null) {
             profileNameTv.set(realmUserInfo.getUserInfo().getDisplayName());
             referralTv.set(G.context.getString(R.string.ra_title) + " " + realmUserInfo.getRepresentPhoneNumber());
         }
     }
 
     public int saleVisibility() {
-        realmUserInfo = DbManager.getInstance().getRealm().where(RealmUserInfo.class).findFirst();
+        realmUserInfo = DbManager.getInstance().getUiRealm().where(RealmUserInfo.class).findFirst();
         if (realmUserInfo.getRepresentPhoneNumber() == null || realmUserInfo.getRepresentPhoneNumber().equals("")) {
             return View.GONE;
         }

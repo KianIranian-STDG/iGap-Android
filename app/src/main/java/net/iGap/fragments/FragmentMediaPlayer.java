@@ -454,7 +454,7 @@ public class FragmentMediaPlayer extends BaseFragment {
             @Override
             public void run() {
 
-                DbManager.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
+                DbManager.getInstance().getUiRealm().executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
@@ -472,7 +472,7 @@ public class FragmentMediaPlayer extends BaseFragment {
             mRealmList.removeAllChangeListeners();
         }
 
-        mRealmList = RealmRoomMessage.filterMessage(DbManager.getInstance().getRealm(), MusicPlayer.roomId, type);
+        mRealmList = RealmRoomMessage.filterMessage(DbManager.getInstance().getUiRealm(), MusicPlayer.roomId, type);
 
         changeSize = mRealmList.size();
 
@@ -615,7 +615,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         List<RealmRoomMessage> realmRoomMessages = null;
 
         try {
-            realmRoomMessages = DbManager.getInstance().getRealm().where(RealmRoomMessage.class)
+            realmRoomMessages = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class)
                     .equalTo(RealmRoomMessageFields.ROOM_ID, MusicPlayer.roomId)
                     .notEqualTo(RealmRoomMessageFields.DELETED, true)
                     .contains(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.AUDIO.toString())
@@ -626,7 +626,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
         if (realmRoomMessages != null && realmRoomMessages.size() > 0) {
 
-//                                mRealmList = RealmRoomMessage.filterMessage(getRealm(), MusicPlayer.roomId, ProtoGlobal.RoomMessageType.AUDIO);
+//                                mRealmList = RealmRoomMessage.filterMessage(getUiRealm(), MusicPlayer.roomId, ProtoGlobal.RoomMessageType.AUDIO);
             if (realmRoomMessages.size() > MusicPlayer.limitMediaList) {
                 realmRoomMessages = realmRoomMessages.subList(0, MusicPlayer.limitMediaList);
             } else {

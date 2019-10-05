@@ -6,7 +6,7 @@ import io.realm.Realm;
 
 public class DbManager {
 
-    private Realm realm;
+    private Realm uiRealm;
 
     private static final DbManager ourInstance = new DbManager();
 
@@ -17,33 +17,36 @@ public class DbManager {
     private DbManager() {
     }
 
-    public Realm getRealm() {
+    public Realm getUiRealm() {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             throw new IllegalStateException("You must use this realm instance in ui thread.");
         }
 
-//        if (realm == null || realm.isClosed()) {
-//            realm = Realm.getDefaultInstance();
+//        if (uiRealm == null || uiRealm.isClosed()) {
+//            uiRealm = Realm.getDefaultInstance();
 //        }
 
-        return realm;
+        return uiRealm;
     }
 
-    public void setRealm(Realm realm) {
+    public void openUiRealm() {
         if (Looper.myLooper() != Looper.getMainLooper()) {
-            throw new IllegalStateException("You must set this realm instance in ui thread.");
+            throw new IllegalStateException("You must open realm in ui thread.");
         }
-        this.realm = realm;
+        this.uiRealm = Realm.getDefaultInstance();
     }
 
-    public void closeRealm() {
-        realm.close();
+    public void closeUiRealm() {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            throw new IllegalStateException("You must close realm in ui thread.");
+        }
+        uiRealm.close();
     }
 
 
     public <T> T doRealmTask(RealmTaskWithReturn<T> realmTask) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
-            return realmTask.doTask(getRealm());
+            return realmTask.doTask(getUiRealm());
         } else {
             try (Realm realm = Realm.getDefaultInstance()) {
                 return realmTask.doTask(realm);
@@ -53,7 +56,7 @@ public class DbManager {
 
     public void doRealmTask(RealmTask realmTask) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
-            realmTask.doTask(getRealm());
+            realmTask.doTask(getUiRealm());
         } else {
             try (Realm realm = Realm.getDefaultInstance()) {
                 realmTask.doTask(realm);

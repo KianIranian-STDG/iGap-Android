@@ -40,7 +40,6 @@ import io.realm.RealmResults;
 
 import static net.iGap.G.context;
 import static net.iGap.G.inflater;
-import static net.iGap.G.isAppRtl;
 import static net.iGap.fragments.FragmentiGapMap.btnBack;
 import static net.iGap.fragments.FragmentiGapMap.isBackPress;
 import static net.iGap.fragments.FragmentiGapMap.pageUserList;
@@ -104,14 +103,14 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
         mRecyclerView = view.findViewById(R.id.rcy_map_user);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
-        DbManager.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
+        DbManager.getInstance().getUiRealm().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
             }
         });
 
-        mAdapter = new MapUserAdapter(DbManager.getInstance().getRealm().where(RealmGeoNearbyDistance.class).findAll(), true);
+        mAdapter = new MapUserAdapter(DbManager.getInstance().getUiRealm().where(RealmGeoNearbyDistance.class).findAll(), true);
 
         //fastAdapter
         //mAdapter = new MapUserAdapterA();

@@ -42,7 +42,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestUserContactsUnblock;
 
-import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
@@ -85,7 +84,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
         realmRecyclerView.setItemAnimator(null);
         realmRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
 
-        RealmResults<RealmRegisteredInfo> results = DbManager.getInstance().getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.BLOCK_USER, true).findAll();
+        RealmResults<RealmRegisteredInfo> results = DbManager.getInstance().getUiRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.BLOCK_USER, true).findAll();
         BlockListAdapter blockListAdapter = new BlockListAdapter(results.sort(RealmRegisteredInfoFields.DISPLAY_NAME));
         realmRecyclerView.setAdapter(blockListAdapter);
 

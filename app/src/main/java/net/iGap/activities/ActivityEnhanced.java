@@ -87,7 +87,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         /*Log.wtf("ActivityEnhanced","super.onCreate end");*/
         if (G.ISRealmOK) {
-            DbManager.getInstance().setRealm(Realm.getDefaultInstance());
+            DbManager.getInstance().openUiRealm();
             /*Log.wtf("ActivityEnhanced","AvatarHandler start");*/
             avatarHandler = new AvatarHandler();
             /*Log.wtf("ActivityEnhanced","AvatarHandler end");*/
@@ -386,7 +386,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (G.ISRealmOK) {
-            DbManager.getInstance().closeRealm();
+            DbManager.getInstance().closeUiRealm();
             unregisterReceiver(myBroadcast);
         }
     }

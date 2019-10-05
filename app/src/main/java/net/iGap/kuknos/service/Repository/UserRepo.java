@@ -15,8 +15,6 @@ import net.iGap.request.RequestUserProfileGetEmail;
 
 import org.stellar.sdk.KeyPair;
 
-import io.realm.Realm;
-
 public class UserRepo {
 
     private RealmUserInfo userInfo;
@@ -139,7 +137,7 @@ public class UserRepo {
     }
 
     private void updateUserInfo() {
-        userInfo = DbManager.getInstance().getRealm().where(RealmUserInfo.class).findFirst();
+        userInfo = DbManager.getInstance().getUiRealm().where(RealmUserInfo.class).findFirst();
         realmKuknos = userInfo.getKuknosM();
         if (realmKuknos == null) {
             userInfo.createKuknos();

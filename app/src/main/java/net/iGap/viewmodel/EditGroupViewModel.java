@@ -33,8 +33,6 @@ import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupEdit;
 import net.iGap.request.RequestGroupLeft;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -80,7 +78,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
     public EditGroupViewModel(Long roomId) {
 
         this.roomId = roomId;
-        RealmRoom realmRoom = DbManager.getInstance().getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
             goBack.setValue(true);
             return;
@@ -112,8 +110,8 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
         }*/
 
         //ToDo: add this code to repository
-        adminMembers = RealmMember.filterMember(DbManager.getInstance().getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
-        moderatorMembers = RealmMember.filterMember(DbManager.getInstance().getRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
+        adminMembers = RealmMember.filterMember(DbManager.getInstance().getUiRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
+        moderatorMembers = RealmMember.filterMember(DbManager.getInstance().getUiRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
         administratorsCount.set(String.valueOf(adminMembers.size()));
         moderatorsCount.set(String.valueOf(moderatorMembers.size()));
 

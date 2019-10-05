@@ -23,7 +23,6 @@ import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
-import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -139,7 +138,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
 
         if (realmResults == null) {
-            realmResults = getRealmResult(mSelectedStatus, DbManager.getInstance().getRealm());
+            realmResults = getRealmResult(mSelectedStatus, DbManager.getInstance().getUiRealm());
         }
 
         realmResults.addChangeListener((realmCallLogs, changeSet) -> {
@@ -322,7 +321,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     private void getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter filter) {
         if (realmResults != null) realmResults.removeAllChangeListeners();
         mSelectedStatus = filter;
-        realmResults = getRealmResult(mSelectedStatus, DbManager.getInstance().getRealm());
+        realmResults = getRealmResult(mSelectedStatus, DbManager.getInstance().getUiRealm());
         mRecyclerView.setAdapter(new CallAdapter(realmResults));
         checkListIsEmpty();
     }

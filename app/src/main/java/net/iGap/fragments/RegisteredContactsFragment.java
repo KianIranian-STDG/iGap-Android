@@ -78,7 +78,6 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Case;
-import io.realm.Realm;
 
 import static net.iGap.helper.ContactManager.CONTACT_LIMIT;
 
@@ -662,13 +661,13 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     }
 
     public void loadContacts() {
-        results = DbManager.getInstance().getRealm().copyFromRealm(DbManager.getInstance().getRealm().where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
+        results = DbManager.getInstance().getUiRealm().copyFromRealm(DbManager.getInstance().getUiRealm().where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
         if (realmRecyclerView.getAdapter() != null)
             ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
     }
 
     private void loadContact(String key) {
-        results = DbManager.getInstance().getRealm().copyFromRealm(DbManager.getInstance().getRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, key, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME));
+        results = DbManager.getInstance().getUiRealm().copyFromRealm(DbManager.getInstance().getUiRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, key, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME));
         if (realmRecyclerView.getAdapter() != null)
             ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
     }

@@ -21,8 +21,6 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Parcelable;
 import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
@@ -423,7 +421,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             @Override
             public void onComplete(RippleView rippleView) {
                 String count = SelectedList.size() + "";
-                final RealmRoom realmRoom = RealmRoom.getRealmRoom(DbManager.getInstance().getRealm(), roomId);
+                final RealmRoom realmRoom = RealmRoom.getRealmRoom(DbManager.getInstance().getUiRealm(), roomId);
 
                 if (roomType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId != null && bothDeleteMessageId.size() > 0) {
                     // show both Delete check box
@@ -445,7 +443,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                                 for (StructShearedMedia item : SelectedList) {
                                     selectedListForDel.add(item.messageId);
                                 }
-                                RealmRoomMessage.deleteSelectedMessages(DbManager.getInstance().getRealm(), roomId, selectedListForDel, bothDeleteMessageId, roomType);
+                                RealmRoomMessage.deleteSelectedMessages(DbManager.getInstance().getUiRealm(), roomId, selectedListForDel, bothDeleteMessageId, roomType);
                             }
                             resetItems();
                         }
@@ -464,7 +462,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                                 for (StructShearedMedia item : SelectedList) {
                                     selectedListForDel.add(item.messageId);
                                 }
-                                RealmRoomMessage.deleteSelectedMessages(DbManager.getInstance().getRealm(), roomId, selectedListForDel, bothDeleteMessageId, roomType);
+                                RealmRoomMessage.deleteSelectedMessages(DbManager.getInstance().getUiRealm(), roomId, selectedListForDel, bothDeleteMessageId, roomType);
                             }
                             resetItems();
                         }
@@ -838,7 +836,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         if (mRealmList != null) {
             mRealmList.removeAllChangeListeners();
         }
-        mRealmList = RealmRoomMessage.filterMessage(DbManager.getInstance().getRealm(), roomId, ProtoGlobal.RoomMessageType.TEXT);
+        mRealmList = RealmRoomMessage.filterMessage(DbManager.getInstance().getUiRealm(), roomId, ProtoGlobal.RoomMessageType.TEXT);
 
         setListener();
 
@@ -865,7 +863,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             mRealmList.removeAllChangeListeners();
         }
 
-        mRealmList = RealmRoomMessage.filterMessage(DbManager.getInstance().getRealm(), roomId, type);
+        mRealmList = RealmRoomMessage.filterMessage(DbManager.getInstance().getUiRealm(), roomId, type);
 
         setListener();
 

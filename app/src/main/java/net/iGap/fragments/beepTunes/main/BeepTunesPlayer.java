@@ -28,8 +28,6 @@ import net.iGap.realm.RealmDownloadSong;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-
 import static net.iGap.fragments.beepTunes.main.BeepTunesViewModel.MEDIA_PLAYER_STATUS_COMPLETE;
 
 public class BeepTunesPlayer extends BaseFragment {
@@ -90,10 +88,10 @@ public class BeepTunesPlayer extends BaseFragment {
                     playTv.setText(getContext().getResources().getString(R.string.play_icon));
                 }
 
-                realmDownloadSongs = DbManager.getInstance().getRealm().copyFromRealm(DbManager.getInstance().getRealm().where(RealmDownloadSong.class)
+                realmDownloadSongs = DbManager.getInstance().getUiRealm().copyFromRealm(DbManager.getInstance().getUiRealm().where(RealmDownloadSong.class)
                         .equalTo("artistId", playingSong.getArtistId()).findAll());
 
-                realmDownloadSong = DbManager.getInstance().getRealm().copyFromRealm(DbManager.getInstance().getRealm()
+                realmDownloadSong = DbManager.getInstance().getUiRealm().copyFromRealm(DbManager.getInstance().getUiRealm()
                         .where(RealmDownloadSong.class)
                         .equalTo("id", playingSong.getSongId())
                         .findFirst());
@@ -158,12 +156,12 @@ public class BeepTunesPlayer extends BaseFragment {
 
         favoriteTv.setOnClickListener(v -> {
             if (!realmDownloadSong.isFavorite()) {
-                DbManager.getInstance().getRealm().executeTransactionAsync(realm -> {
+                DbManager.getInstance().getUiRealm().executeTransactionAsync(realm -> {
                     realmDownloadSong.setFavorite(true);
                     realm.copyToRealmOrUpdate(realmDownloadSong);
                 }, () -> checkFavorite(realmDownloadSong));
             } else {
-                DbManager.getInstance().getRealm().executeTransactionAsync(realm -> {
+                DbManager.getInstance().getUiRealm().executeTransactionAsync(realm -> {
                     realmDownloadSong.setFavorite(false);
                     realm.copyToRealmOrUpdate(realmDownloadSong);
                 }, () -> checkFavorite(realmDownloadSong));

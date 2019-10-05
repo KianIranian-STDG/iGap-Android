@@ -45,8 +45,6 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
-import io.realm.Realm;
-
 import static android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD;
 import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
 
@@ -77,7 +75,7 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     public ActivityEnterPassCodeViewModel(boolean isLinePattern) {
         initialPatternView.setValue(!isLinePattern);
 
-        realmUserInfo = DbManager.getInstance().getRealm().where(RealmUserInfo.class).findFirst();
+        realmUserInfo = DbManager.getInstance().getUiRealm().where(RealmUserInfo.class).findFirst();
 
         if (realmUserInfo != null) {
             isPattern.set(realmUserInfo.isPattern() ? View.VISIBLE : View.GONE);
