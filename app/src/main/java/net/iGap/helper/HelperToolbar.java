@@ -32,6 +32,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -1173,10 +1174,10 @@ public class HelperToolbar {
     private void typeFaceGenerator() {
 
         if (tfFontIcon == null)
-            tfFontIcon = Typeface.createFromAsset(mContext.getAssets(), "fonts/font_icon.ttf");
+            tfFontIcon = ResourcesCompat.getFont(mContext, R.font.font_icon);
 
         if (tfMain == null)
-            tfMain = Typeface.createFromAsset(mContext.getAssets(), "fonts/IRANSansMobile.ttf");
+            tfMain = ResourcesCompat.getFont(mContext , R.font.main_font);
 
 
     }
