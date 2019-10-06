@@ -740,7 +740,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int type) {
 
             View v;
-            LayoutInflater inflater = LayoutInflater.from(G.context);
+            LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
             if (type == 1) {
                 v = inflater.inflate(R.layout.row_contact_counter, viewGroup, false);

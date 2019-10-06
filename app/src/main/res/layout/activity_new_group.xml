@@ -166,7 +166,6 @@
             app:layout_constraintTop_toBottomOf="@id/ng_txtInput_description"
             android:layout_marginTop="@dimen/dp16"
             style="?hintColorSettingTheme"
-            android:fontFamily="@font/main_font"
             android:hint="@{fragmentNewGroupVieModel.txtDescriptionHint}"
             android:textSize="@dimen/verySmallTextSize"
             android:layout_marginLeft="@dimen/dp20"

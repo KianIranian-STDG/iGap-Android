@@ -131,7 +131,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_igasht_violet"
-            android:fontFamily="@font/main_font"
             android:onClick="@{()->viewModel.onAddPlaceClick()}"
             android:text="@string/igasht_addـexternal_visits"
             android:textColor="@color/white"

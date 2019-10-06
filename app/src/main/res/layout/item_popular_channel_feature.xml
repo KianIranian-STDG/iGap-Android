@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
         android:layout_margin="@dimen/dp2"
-        android:fontFamily="@font/main_font"
         android:textSize="@dimen/smallTextSize" />
 
     <RelativeLayout

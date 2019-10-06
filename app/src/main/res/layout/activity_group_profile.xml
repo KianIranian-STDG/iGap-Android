@@ -77,7 +77,6 @@
                         android:layout_toLeftOf="@id/toolbar_edit"
                         android:layout_toEndOf="@id/toolbar_avatar_collapsed_target"
                         android:layout_toRightOf="@id/toolbar_avatar_collapsed_target"
-                        android:fontFamily="@font/main_font"
                         android:gravity="left|center_vertical"
                         android:singleLine="true"
                         android:textColor="@color/white"
@@ -134,7 +133,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="left"
-                            android:fontFamily="@font/main_font"
                             android:gravity="bottom|center_horizontal"
                             android:singleLine="true"
                             android:textColor="@color/white"
@@ -147,7 +145,6 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="left"
                             android:layout_marginTop="@dimen/dp6"
-                            android:fontFamily="@font/main_font"
                             android:singleLine="true"
                             android:textColor="@color/white"
                             android:textSize="@dimen/standardTextSize" />

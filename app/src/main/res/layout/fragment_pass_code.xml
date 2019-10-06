@@ -256,7 +256,6 @@
 
                     <com.uncopt.android.widget.text.justify.JustifiedTextView
                         style="?textSubColorSettingTheme"
-                        android:fontFamily="@font/main_font"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp14"
@@ -357,7 +356,6 @@
                         style="?textSubColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/main_font"
                         android:padding="@dimen/dp14"
                         android:text="@string/Auto_lock_description"
                         android:textSize="@dimen/dp12" />

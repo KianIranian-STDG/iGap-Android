@@ -20,7 +20,6 @@
         android:layout_height="@dimen/dp48"
         android:layout_weight="1"
         android:gravity="left|center"
-        android:fontFamily="@font/main_font"
         android:paddingLeft="10dp"
         style="?textTitleColorSettingTheme"
         android:textSize="@dimen/largeTextSize" />

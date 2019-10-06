@@ -52,7 +52,6 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/fc_selected_mode_btn_cancel"
             android:layout_toRightOf="@id/fc_selected_mode_btn_cancel"
-            android:fontFamily="@font/main_font"
             android:textSize="@dimen/standardTextSize" />
 
         <androidx.appcompat.widget.AppCompatTextView
