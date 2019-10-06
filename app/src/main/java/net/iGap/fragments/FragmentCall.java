@@ -528,7 +528,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
         public CallAdapter.ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int i) {
             //  new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_call_sub_layout, null));
 
-            return new ViewHolder(ViewMaker.getViewItemCall());
+            return new ViewHolder(ViewMaker.getViewItemCall(parent.getContext()));
         }
 
         @Override

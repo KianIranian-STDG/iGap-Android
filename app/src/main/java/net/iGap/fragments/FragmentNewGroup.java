@@ -803,14 +803,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                     txtPhone.setGravity(Gravity.RIGHT);
                 }
 
-                if (G.isDarkTheme) {
-                    txtName.setTextColor(context.getResources().getColor(R.color.gray_300));
-                    txtPhone.setTextColor(context.getResources().getColor(R.color.white));
-                } else {
-                    txtName.setTextColor(context.getResources().getColor(R.color.black));
-                    txtPhone.setTextColor(context.getResources().getColor(R.color.gray_4c));
-                }
-
                 txtPhone.setVisibility(View.INVISIBLE);
                 chSelected.setVisibility(View.GONE);
                 btnRemove.setVisibility(View.VISIBLE);

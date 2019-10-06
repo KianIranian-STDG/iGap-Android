@@ -208,7 +208,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
 
         appVersion.set(BuildConfig.VERSION_NAME);
-        isDarkMode.set(G.isDarkTheme);
+        isDarkMode.set(G.themeColor == Theme.DARK);
 
         //set user info text gravity
         if (!G.isAppRtl) {
@@ -490,11 +490,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onThemeClick(boolean isCheck) {
-        Log.wtf(this.getClass().getName(), "isCheck: " + isCheck);
-        Log.wtf(this.getClass().getName(), "isDarkMode: " + isDarkMode.get());
         isDarkMode.set(!isCheck);
         if (isDarkMode.get()) {
-            G.isDarkTheme = true;
             G.themeColor = Theme.DARK;
             int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT);
             sharedPreferences.edit().
@@ -504,7 +501,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         } else {
             int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_OLD_THEME_COLOR, Theme.DEFAULT);
             G.themeColor = themeColor;
-            G.isDarkTheme = false;
             sharedPreferences.edit().putInt(SHP_SETTING.KEY_THEME_COLOR, themeColor).apply();
         }
 

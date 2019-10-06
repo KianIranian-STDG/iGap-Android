@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.ImageLoadingService;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.popularChannel.Category;
 
 import java.util.List;
@@ -34,7 +33,7 @@ public class NormalCategoryAdapter extends RecyclerView.Adapter<NormalCategoryAd
     @NonNull
     @Override
     public FragmentGridViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(G.fragmentActivity).inflate(R.layout.item_favorite_channel_category, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_favorite_channel_category, viewGroup, false);
         return new FragmentGridViewHolder(view);
     }
 
@@ -56,20 +55,11 @@ public class NormalCategoryAdapter extends RecyclerView.Adapter<NormalCategoryAd
     public class FragmentGridViewHolder extends RecyclerView.ViewHolder {
         private ImageView channelImageGrid;
         private TextView channelTitleGrid;
-        private CardView root;
-        private LinearLayout linearLayout;
 
         public FragmentGridViewHolder(@NonNull View itemView) {
             super(itemView);
             channelImageGrid = itemView.findViewById(R.id.iv_item_popular_rv_grid);
             channelTitleGrid = itemView.findViewById(R.id.tv_item_popular_rv_grid);
-
-            linearLayout = itemView.findViewById(R.id.ll_item_pop_card_category);
-            if (G.isDarkTheme) {
-                linearLayout.setBackgroundResource(R.drawable.shape_favorite_channel_dark_item_them);
-            }
-            root = itemView.findViewById(R.id.card_item_pop_category);
-            Utils.setCardsBackground(root, R.color.white, R.color.gray_6c);
         }
 
         public void bindChannel(Category category) {

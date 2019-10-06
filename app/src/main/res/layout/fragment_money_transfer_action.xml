@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/card_to_card"
-                android:textColor="@color/black"
+                android:textColor="?attr/iGapTitleTextColor"
                 android:textSize="@dimen/dp12" />
         </LinearLayout>
 
@@ -79,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/WALLET_TRANSFER_MONEY"
-                android:textColor="@color/black"
+                android:textColor="?attr/iGapTitleTextColor"
                 android:textSize="@dimen/dp12" />
         </LinearLayout>
 

@@ -37,7 +37,6 @@ import static android.view.Gravity.LEFT;
 import static android.widget.LinearLayout.HORIZONTAL;
 import static android.widget.LinearLayout.VERTICAL;
 import static net.iGap.G.context;
-import static net.iGap.G.isDarkTheme;
 import static net.iGap.R.dimen.dp4;
 import static net.iGap.R.dimen.dp8;
 import static net.iGap.R.dimen.messageContainerPadding;
@@ -48,14 +47,13 @@ public class ViewMaker {
         TextView cslum_txt_unread_message = new AppCompatTextView(context);
         cslum_txt_unread_message.setId(R.id.cslum_txt_unread_message);
         cslum_txt_unread_message.setPadding(0, dpToPixel(2), 0, dpToPixel(2));
-        /*cslum_txt_unread_message.setBackgroundColor(G.context.getResources().getColor(R.color.green));*/
         setTextSize(cslum_txt_unread_message, R.dimen.dp12);
-        /*setTypeFace(cslum_txt_unread_message);*/
         cslum_txt_unread_message.setGravity(CENTER);
         cslum_txt_unread_message.setText(G.fragmentActivity.getResources().getString(R.string.unread_message));
         cslum_txt_unread_message.setTextColor(ContextCompat.getColor(context, R.color.white));
         LinearLayout.LayoutParams layout_692 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_692.setMargins(i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8));
+        /*layout_692.setMargins(i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8));*/
         cslum_txt_unread_message.setLayoutParams(layout_692);
 
         return cslum_txt_unread_message;
@@ -74,20 +72,15 @@ public class ViewMaker {
         return cslp_progress_bar_waiting;
     }
 
-    public static View getLogItemView() {
-        TextView text = new AppCompatTextView(G.context);
+    public static View getLogItemView(Context context) {
+        TextView text = new AppCompatTextView(context);
         text.setId(R.id.csll_txt_log_text);
 
         text.setPadding(i_Dp(R.dimen.dp24), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp24), i_Dp(R.dimen.dp4));
         text.setGravity(CENTER);
         text.setText("Log");
-        if (isDarkTheme) {
-            text.setTextColor(Color.parseColor(G.textBubble));
-            text.setBackgroundResource(R.drawable.recangle_gray_tranceparent_dark);
-        } else {
-            text.setTextColor(Color.parseColor("#4a5d5c"));
-            text.setBackgroundResource(R.drawable.recangle_gray_tranceparent);
-        }
+        text.setTextColor(new Theme().getTitleTextColor(text.getContext()));
+        text.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(text.getContext(), R.drawable.recangle_gray_tranceparent), text.getContext(), R.attr.iGapDividerLine));
 
         setTextSize(text, R.dimen.dp12);
         setTypeFace(text);
@@ -374,9 +367,9 @@ public class ViewMaker {
 
     //*******************************************************************************************
 
-    public static View getViewItemCall() {
+    public static View getViewItemCall(Context context) {
 
-        LinearLayout linearLayout_205 = new LinearLayout(G.context);
+        LinearLayout linearLayout_205 = new LinearLayout(context);
         linearLayout_205.setId(R.id.mainContainer);
         LinearLayout.LayoutParams layout_218 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayout_205.setLayoutParams(layout_218);
@@ -387,7 +380,7 @@ public class ViewMaker {
 
         //linearLayout_205.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
-        CheckBox checkBox = new CheckBox(G.context);
+        CheckBox checkBox = new CheckBox(context);
         checkBox.setId(R.id.fcsl_check_box);
         checkBox.setVisibility(View.GONE);
         checkBox.setClickable(false);
@@ -398,7 +391,7 @@ public class ViewMaker {
         checkBox.setLayoutParams(lp_checkBox);
         linearLayout_205.addView(checkBox);
 
-        CircleImageView fcsl_imv_picture = new CircleImageView(G.context);
+        CircleImageView fcsl_imv_picture = new CircleImageView(context);
         fcsl_imv_picture.setId(R.id.fcsl_imv_picture);
         LinearLayout.LayoutParams layout_856 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48));
         layout_856.setMargins(i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6));
@@ -407,36 +400,32 @@ public class ViewMaker {
         fcsl_imv_picture.setLayoutParams(layout_856);
         linearLayout_205.addView(fcsl_imv_picture);
 
-        LinearLayout linearLayout_71 = new LinearLayout(G.context);
+        LinearLayout linearLayout_71 = new LinearLayout(context);
         linearLayout_71.setOrientation(VERTICAL);
         LinearLayout.LayoutParams layout_794 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp68));
         linearLayout_71.setLayoutParams(layout_794);
 
-        LinearLayout linearLayout_470 = new LinearLayout(G.context);
+        LinearLayout linearLayout_470 = new LinearLayout(context);
         linearLayout_470.setOrientation(HORIZONTAL);
         LinearLayout.LayoutParams layout_822 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
         linearLayout_470.setPadding(0, i_Dp(R.dimen.dp12), 0, 0);
         linearLayout_470.setLayoutParams(layout_822);
 
-        LinearLayout linearLayout_983 = new LinearLayout(G.context);
+        LinearLayout linearLayout_983 = new LinearLayout(context);
         linearLayout_983.setOrientation(VERTICAL);
         LinearLayout.LayoutParams layout_313 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1);
         layout_313.leftMargin = i_Dp(R.dimen.dp6);
         linearLayout_983.setLayoutParams(layout_313);
 
-        EmojiTextViewE fcsl_txt_name = new EmojiTextViewE(G.context);
+        EmojiTextViewE fcsl_txt_name = new EmojiTextViewE(context);
         fcsl_txt_name.setId(R.id.fcsl_txt_name);
         fcsl_txt_name.setPadding(0, 0, 0, dpToPixel(1));
         fcsl_txt_name.setText("Name");
         fcsl_txt_name.setSingleLine(true);
-        if (G.isDarkTheme) {
-            fcsl_txt_name.setTextColor(Color.parseColor(G.textTitleTheme));
-        } else {
-            fcsl_txt_name.setTextColor(G.context.getResources().getColor(R.color.black90));
-        }
+        fcsl_txt_name.setTextColor(new Theme().getTitleTextColor(context));
 
         setTextSize(fcsl_txt_name, R.dimen.dp15);
-        fcsl_txt_name.setTypeface(G.typeface_IRANSansMobile_Bold);
+        fcsl_txt_name.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
         LinearLayout.LayoutParams layout_415 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_415.gravity = Gravity.START;
         fcsl_txt_name.setLayoutParams(layout_415);
@@ -452,13 +441,9 @@ public class ViewMaker {
         fcsl_txt_time_info.setGravity(Gravity.START);
         fcsl_txt_time_info.setSingleLine(true);
         fcsl_txt_time_info.setText("(4) 9:24 am");
-        if (G.isDarkTheme) {
-            fcsl_txt_time_info.setTextColor(Color.parseColor(G.textSubTheme));
-        } else {
-            fcsl_txt_time_info.setTextColor(G.context.getResources().getColor(R.color.gray_5c));
-        }
+        fcsl_txt_time_info.setTextColor(new Theme().getSubTitleColor(context));
         setTextSize(fcsl_txt_time_info, R.dimen.dp12);
-        fcsl_txt_time_info.setTypeface(G.typeface_IRANSansMobile);
+        fcsl_txt_time_info.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             fcsl_txt_time_info.setTextDirection(View.TEXT_DIRECTION_LOCALE);
         }
@@ -469,36 +454,36 @@ public class ViewMaker {
         linearLayout_983.addView(linearLayout_976);
         linearLayout_470.addView(linearLayout_983);
 
-        LinearLayout linearLayout_202 = new LinearLayout(G.context);
+        LinearLayout linearLayout_202 = new LinearLayout(context);
         linearLayout_202.setOrientation(VERTICAL);
         LinearLayout.LayoutParams layout_803 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         layout_803.rightMargin = i_Dp(R.dimen.dp8);
         layout_803.leftMargin = i_Dp(R.dimen.dp8);
         linearLayout_202.setLayoutParams(layout_803);
 
-        MaterialDesignTextView fcsl_txt_icon = new MaterialDesignTextView(G.context);
+        MaterialDesignTextView fcsl_txt_icon = new MaterialDesignTextView(context);
         fcsl_txt_icon.setId(R.id.fcsl_txt_icon);
-        fcsl_txt_icon.setText(G.fragmentActivity.getResources().getString(R.string.md_call_made));
-        fcsl_txt_icon.setTextColor(G.context.getResources().getColor(R.color.green));
+        fcsl_txt_icon.setText(R.string.md_call_made);
+        fcsl_txt_icon.setTextColor(ContextCompat.getColor(context, R.color.green));
         setTextSize(fcsl_txt_icon, R.dimen.dp18);
         LinearLayout.LayoutParams layout_178 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_178.gravity = Gravity.END;
         fcsl_txt_icon.setLayoutParams(layout_178);
         linearLayout_202.addView(fcsl_txt_icon);
 
-        AppCompatTextView fcsl_txt_dureation_time = new AppCompatTextView(G.context);
+        AppCompatTextView fcsl_txt_dureation_time = new AppCompatTextView(context);
         fcsl_txt_dureation_time.setId(R.id.fcsl_txt_dureation_time);
         fcsl_txt_dureation_time.setText("2:24");
-        fcsl_txt_dureation_time.setTextColor(G.context.getResources().getColor(R.color.btn_start_page5));
+        fcsl_txt_dureation_time.setTextColor(ContextCompat.getColor(context, R.color.btn_start_page5));
         setTextSize(fcsl_txt_dureation_time, R.dimen.dp12);
-        fcsl_txt_dureation_time.setTypeface(G.typeface_IRANSansMobile);
+        fcsl_txt_dureation_time.setTypeface(ResourcesCompat.getFont(context,R.font.main_font));
         LinearLayout.LayoutParams layout_483 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         fcsl_txt_dureation_time.setLayoutParams(layout_483);
         linearLayout_202.addView(fcsl_txt_dureation_time);
         linearLayout_470.addView(linearLayout_202);
         linearLayout_71.addView(linearLayout_470);
 
-        View textView_316 = new View(G.context);
+        View textView_316 = new View(context);
         textView_316.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
         LinearLayout.LayoutParams layout_241 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
         textView_316.setLayoutParams(layout_241);

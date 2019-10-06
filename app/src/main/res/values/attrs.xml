@@ -75,6 +75,7 @@
     <attr name="iGapButtonTextColor" format="reference|color" />
     <attr name="iGapPrimaryIconTextColor" format="reference|color" />
     <attr name="iGapLogoutButtonColor" format="reference|color" />
+    <attr name="iGapCardViewColor" format="reference|color" />
     <!--chat item color-->
     <attr name="iGapReceivedMessageTextColor" format="reference|color" />
     <attr name="iGapReceivedOtherTextColor" format="reference|color" />
@@ -95,6 +96,8 @@
     <attr name="iGapCardToCardBackground" format="reference" />
     <attr name="iGapCardToCardButtonBackground" format="reference" />
     <attr name="iGapCardToCardIconBackground" format="reference" />
+    <attr name="iGapBottomSheetHeaderLine" format="reference" />
+    <attr name="iGapScrollerHandler" format="reference" />
 
     <!--=======================custom theme=====================-->
 

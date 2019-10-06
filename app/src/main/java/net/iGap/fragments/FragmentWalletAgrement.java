@@ -19,6 +19,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.databinding.FragmentWalletAgrementBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
@@ -118,7 +119,7 @@ public class FragmentWalletAgrement extends BaseFragment {
                 intent.putExtra("PrimaryColor", G.appBarColor);
                 intent.putExtra("DarkPrimaryColor", G.appBarColor);
                 intent.putExtra("AccentColor", G.appBarColor);
-                intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
+                intent.putExtra("IS_DARK_THEME", G.currentTime == Theme.DARK);
                 intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
                 intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
                 intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);

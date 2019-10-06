@@ -35,8 +35,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
-import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.BottomSheetListAdapter;
 
@@ -127,9 +127,7 @@ public class TopSheetDialog extends AppCompatDialog {
                     }
                 });
 
-        if (!G.isDarkTheme) {
-            ((GradientDrawable) coordinator.findViewById(R.id.design_top_sheet).getBackground()).setColor(getContext().getResources().getColor(R.color.white));
-        }
+        ((GradientDrawable) coordinator.findViewById(R.id.design_top_sheet).getBackground()).setColor(new Theme().getRootColor(getContext()));
         return coordinator;
     }
 

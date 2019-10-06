@@ -313,7 +313,6 @@ public final class AppUtils {
      * @param iconTextView TextView message status
      */
     public static void rightMessageStatus(FontIconTextView iconTextView, ProtoGlobal.RoomMessageStatus status, boolean isSenderMe) {
-        boolean isDarkTheme = G.isDarkTheme;
 
         if (iconTextView == null) {
             return;
@@ -327,7 +326,7 @@ public final class AppUtils {
         switch (status) {
             case DELIVERED:
                 iconTextView.setText(R.string.delivery_icon);
-                iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
+                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case FAILED:
                 iconTextView.setText(R.string.error_icon);
@@ -339,11 +338,11 @@ public final class AppUtils {
                 break;
             case SENDING:
                 iconTextView.setText(R.string.history_icon);
-                iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
+                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case SENT:
                 iconTextView.setText(R.string.check_icon);
-                iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
+                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             default:
                 iconTextView.setVisibility(View.GONE);
@@ -356,9 +355,7 @@ public final class AppUtils {
      *
      * @param iconTextView TextView message status
      */
-    public static void rightMessageStatus(TextView iconTextView, ProtoGlobal.RoomMessageStatus status
-            , ProtoGlobal.RoomMessageType messageType, boolean isSenderMe) {
-        boolean isDarkTheme = G.isDarkTheme;
+    public static void rightMessageStatus(TextView iconTextView, ProtoGlobal.RoomMessageStatus status, ProtoGlobal.RoomMessageType messageType, boolean isSenderMe) {
         if (iconTextView == null) {
             return;
         }
@@ -372,28 +369,24 @@ public final class AppUtils {
         switch (status) {
             case DELIVERED:
                 iconTextView.setText(R.string.delivery_icon);
-                iconTextView.setTextColor(context.getResources()
-                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
+                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case FAILED:
                 iconTextView.setText(R.string.error_icon);
-                iconTextView.setTextColor(context.getResources().getColor(R.color.red));
+                iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), R.color.red));
                 break;
             case LISTENED:
             case SEEN:
                 iconTextView.setText(R.string.delivery_icon);
-
                 iconTextView.setTextColor(new Theme().getPrimaryTextIconColor(iconTextView.getContext()));
                 break;
             case SENDING:
                 iconTextView.setText(R.string.history_icon);
-                iconTextView.setTextColor(context.getResources()
-                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
+                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case SENT:
                 iconTextView.setText(R.string.check_icon);
-                iconTextView.setTextColor(context.getResources()
-                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
+                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             default:
                 iconTextView.setVisibility(View.GONE);

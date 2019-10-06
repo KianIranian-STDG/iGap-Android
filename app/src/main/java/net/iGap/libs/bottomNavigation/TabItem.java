@@ -13,6 +13,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
 import net.iGap.libs.bottomNavigation.Util.Utils;
@@ -33,7 +34,7 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
     private int position;
     private boolean active = false;
     private boolean isRtl = G.isAppRtl;
-    private boolean isDarkTheme = G.isDarkTheme;
+    private boolean isDarkTheme = G.themeColor == Theme.DARK;
 
 
     public TabItem(Context context) {

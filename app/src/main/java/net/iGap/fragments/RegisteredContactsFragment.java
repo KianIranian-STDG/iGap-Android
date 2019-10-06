@@ -769,14 +769,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     return;
                 }
 
-                if (G.isDarkTheme) {
-                    viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_300));
-                    viewHolder.title.setTextColor(getResources().getColor(R.color.white));
-                } else {
-                    viewHolder.title.setTextColor(getResources().getColor(R.color.black));
-                    viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_4c));
-                }
-
                 viewHolder.title.setText(contact.getDisplay_name());
                 viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(contact.getId(), contact.getLast_seen(), false));
 
@@ -803,16 +795,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 final RealmContacts contact = viewHolder.realmContacts = usersList.get(i);
                 if (contact == null) {
                     return;
-                }
-
-                if (G.isDarkTheme) {
-                    viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_300));
-                    viewHolder.btnVoiceCall.setTextColor(getResources().getColor(R.color.gray_300));
-                    viewHolder.title.setTextColor(getResources().getColor(R.color.white));
-                } else {
-                    viewHolder.title.setTextColor(getResources().getColor(R.color.black));
-                    viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_4c));
-                    viewHolder.btnVoiceCall.setTextColor(getResources().getColor(R.color.gray_4c));
                 }
 
                 viewHolder.title.setText(contact.getDisplay_name());

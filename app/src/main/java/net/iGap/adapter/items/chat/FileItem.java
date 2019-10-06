@@ -24,6 +24,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
@@ -108,21 +109,16 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
+        holder.cslf_txt_file_name.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
+        holder.cslf_txt_file_size.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
     }
 
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
-//        if (G.isDarkTheme) {
-//            holder.cslf_txt_file_name.setTextColor(Color.parseColor(G.textTitleTheme));
-//            holder.cslf_txt_file_size.setTextColor(Color.parseColor(G.textSubTheme));
-//        } else {
-//            holder.cslf_txt_file_name.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-//            holder.cslf_txt_file_size.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-//        }
-//
-        holder.cslf_txt_file_name.setTextColor(Color.parseColor(G.textBubble));
-        holder.cslf_txt_file_size.setTextColor(Color.parseColor(G.textBubble));
+
+        holder.cslf_txt_file_name.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.cslf_txt_file_size.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
 
     }
 
@@ -142,7 +138,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             super(view);
 
 
-            LinearLayout linearLayout_784 = new LinearLayout(G.context);
+            LinearLayout linearLayout_784 = new LinearLayout(view.getContext());
             linearLayout_784.setGravity(Gravity.CENTER_VERTICAL);
             setLayoutDirection(linearLayout_784, View.LAYOUT_DIRECTION_LTR);
             linearLayout_784.setOrientation(HORIZONTAL);
@@ -151,13 +147,13 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             layout_419.gravity = CENTER;
             linearLayout_784.setLayoutParams(layout_419);
 
-            FrameLayout frameLayout = new FrameLayout(G.context);
+            FrameLayout frameLayout = new FrameLayout(view.getContext());
             FrameLayout.LayoutParams layoutParamsFrameLayout = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
             layoutParamsFrameLayout.gravity = CENTER;
             frameLayout.setPadding(10, 10, 10, 10);
             frameLayout.setLayoutParams(layoutParamsFrameLayout);
 
-            thumbnail = new AppCompatImageView(G.context);
+            thumbnail = new AppCompatImageView(view.getContext());
             thumbnail.setId(R.id.thumbnail);
             LinearLayout.LayoutParams thumbnailParams = new LinearLayout.LayoutParams((int) G.context.getResources().getDimension(R.dimen.dp48), (int) G.context.getResources().getDimension(R.dimen.dp48));
             thumbnailParams.gravity = CENTER;
@@ -166,20 +162,19 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             AppUtils.setImageDrawable(thumbnail, R.drawable.file_icon);
             thumbnail.setLayoutParams(thumbnailParams);
 
-            LinearLayout linearLayout_780 = new LinearLayout(G.context);
+            LinearLayout linearLayout_780 = new LinearLayout(view.getContext());
             linearLayout_780.setOrientation(VERTICAL);
             LinearLayout.LayoutParams layout_752 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             layout_752.gravity = CENTER;
             linearLayout_780.setLayoutParams(layout_752);
 
-            cslf_txt_file_name = new AppCompatTextView(G.context);
+            cslf_txt_file_name = new AppCompatTextView(view.getContext());
             cslf_txt_file_name.setId(R.id.songArtist);
             cslf_txt_file_name.setEllipsize(TextUtils.TruncateAt.MIDDLE);
             cslf_txt_file_name.setSingleLine(true);
 
             cslf_txt_file_name.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp180));
             cslf_txt_file_name.setText("file_name.ext");
-            cslf_txt_file_name.setTextColor(Color.parseColor(G.textBubble));
             setTextSize(cslf_txt_file_name, R.dimen.standardTextSize);
             cslf_txt_file_name.setTypeface(G.typeface_IRANSansMobile_Bold, BOLD);
             LinearLayout.LayoutParams layout_1000 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);

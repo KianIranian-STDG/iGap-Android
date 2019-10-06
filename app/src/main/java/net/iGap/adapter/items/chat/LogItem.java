@@ -62,7 +62,7 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
 
         public ViewHolder(View view) {
             super(view);
-            text = (TextView) ViewMaker.getLogItemView();
+            text = (TextView) ViewMaker.getLogItemView(view.getContext());
 
             ((ViewGroup) itemView).addView(text);
 

@@ -156,28 +156,15 @@ public class FastScroller extends LinearLayout {
         bubble = findViewById(R.id.fastscroller_bubble);
         handle = findViewById(R.id.fastscroller_handle);
 
-        int bubbleResId;
         int handleResId;
-        if (G.isDarkTheme) {
-            handle.setTextColor(context.getResources().getColor(R.color.gray));
-            bubbleResId = R.drawable.fastscroll_handle_dark;
-            if (G.isAppRtl) {
-                handleResId = R.drawable.fastscroll_bubble_dark_left;
-            } else {
-                handleResId = R.drawable.fastscroll_bubble_dark_right;
-            }
+        if (G.isAppRtl) {
+            handleResId = R.drawable.fastscroll_bubble_light_left;
         } else {
-            handle.setTextColor(context.getResources().getColor(R.color.white));
-            bubbleResId = R.drawable.fastscroll_handle_light;
-            if (G.isAppRtl) {
-                handleResId = R.drawable.fastscroll_bubble_light_left;
-            } else {
-                handleResId = R.drawable.fastscroll_bubble_light_right;
-            }
+            handleResId = R.drawable.fastscroll_bubble_light_right;
         }
-        /*bubble.setImageResource(bubbleResId);*/
-        handle.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(getContext(), handleResId), getContext(), R.attr.colorPrimary));
-        /*handle.setBackgroundResource(handleResId);*/
+        handle.setTextColor(new Theme().getPrimaryTextColor(context));
+        bubble.setImageResource(new Theme().getFastScrollerBackground(context));
+        handle.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(context, handleResId), context, R.attr.iGapButtonColor));
     }
 
     private void setPosition(float y) {

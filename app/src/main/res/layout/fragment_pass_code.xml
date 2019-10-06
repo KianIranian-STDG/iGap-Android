@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -89,7 +90,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_margin="@dimen/dp32" />
+                android:layout_margin="@dimen/dp32"
+                app:normalStateColor="?attr/colorPrimary"
+                app:correctStateColor="@color/green"
+                app:wrongStateColor="@color/red"
+                app:dotAnimationDuration="150"
+                app:pathEndAnimationDuration="100"
+                app:dotCount="4"
+                app:dotNormalSize="@dimen/dp22"
+                app:dotSelectedSize="@dimen/dp32"
+                app:pathWidth="@dimen/pattern_lock_path_width"
+                app:aspectRatioEnabled="true"
+                app:aspectRatio="height_bias" />
 
         </LinearLayout>
 

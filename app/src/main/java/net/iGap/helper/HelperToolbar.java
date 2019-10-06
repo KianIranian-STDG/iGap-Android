@@ -1057,7 +1057,7 @@ public class HelperToolbar {
             intent.putExtra("PrimaryColor", String.format("#%06X", 0xFFFFFF & primary));
             intent.putExtra("DarkPrimaryColor", String.format("#%06X", 0xFFFFFF & primaryDark));
             intent.putExtra("AccentColor", String.format("#%06X", 0xFFFFFF & accent));
-            intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
+            intent.putExtra("IS_DARK_THEME", G.themeColor == Theme.DARK);
             intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
             intent.putExtra(WalletActivity.PROGRESSBAR, String.format("#%06X", 0xFFFFFF & accent));
             intent.putExtra(WalletActivity.LINE_BORDER, String.format("#%06X", 0xFFFFFF & divider));
@@ -1751,12 +1751,6 @@ public class HelperToolbar {
                     fabChat = new FloatingActionButton(getContext());
                     fabChat.setId(R.id.chi_fab_setPic);
 
-                    if (G.isDarkTheme) {
-                        fabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.navigation_dark_mode_bg)));
-                    } else {
-                        fabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.green)));
-                    }
-
                     fabChat.setImageResource(R.drawable.ic_chat_message);
                     fabChat.setSize(FloatingActionButton.SIZE_MINI);
                     addView(fabChat);
@@ -1808,10 +1802,6 @@ public class HelperToolbar {
                     tvProfileTell.setGravity(Gravity.LEFT);
                     tvProfileTell.setSingleLine();
                     Utils.setTextSize(tvProfileTell, R.dimen.smallTextSize);
-                    if (G.isDarkTheme)
-                        tvProfileTell.setTextColor(getContext().getResources().getColor(R.color.gray_300));
-                    else
-                        tvProfileTell.setTextColor(getContext().getResources().getColor(R.color.gray_4c));
 
                     addView(tvProfileTell);
 
@@ -1828,10 +1818,6 @@ public class HelperToolbar {
                     tvProfileStatus.setGravity(Gravity.LEFT);
                     tvProfileStatus.setSingleLine();
                     Utils.setTextSize(tvProfileStatus, R.dimen.smallTextSize);
-                    if (G.isDarkTheme)
-                        tvProfileStatus.setTextColor(getContext().getResources().getColor(R.color.gray_300));
-                    else
-                        tvProfileStatus.setTextColor(getContext().getResources().getColor(R.color.gray_4c));
 
                     addView(tvProfileStatus);
 
@@ -2102,7 +2088,7 @@ public class HelperToolbar {
 
         private void setupDefaults() {
 
-            isDark = G.isDarkTheme;
+            isDark = G.themeColor == Theme.DARK;
 
             VALUE_1DP = i_Dp(R.dimen.dp1);
             VALUE_4DP = i_Dp(R.dimen.dp4);

@@ -20,6 +20,9 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -42,12 +45,8 @@ public class SearchItemHeader extends AbstractItem<SearchItemHeader, SearchItemH
     }
 
     @Override
-    public void bindView(ViewHolder holder, List payloads) {
+    public void bindView(@NotNull ViewHolder holder, @NotNull List payloads) {
         super.bindView(holder, payloads);
-
-        if (G.isDarkTheme) {
-            holder.txtHeader.setTextColor(G.context.getResources().getColor(R.color.white));
-        }
         holder.txtHeader.setText(text);
     }
 

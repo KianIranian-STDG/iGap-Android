@@ -72,7 +72,6 @@
                     android:layout_gravity="bottom"
                     android:layout_marginRight="@dimen/dp8"
                     android:layout_weight="1"
-                    android:fontFamily="@font/main_font"
                     android:gravity="right|center"
                     android:text="@string/slide_to_cancel_en"
                     android:textColor="?iGapTitleTextColor"

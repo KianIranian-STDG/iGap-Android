@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textSize="@dimen/standardTextSize"
-    app:chip_backgroundColor="@color/gray_300"
+    app:chip_backgroundColor="?attr/iGapDividerLine"
     app:chip_deletable="true"
-    app:chip_deleteIconColor="@color/black"
-    app:deleteIconColor="@android:color/white"
+    app:chip_deleteIconColor="?attr/iGapTitleTextColor"
+    app:deleteIconColor="?attr/iGapPrimaryTextColor"
     app:hint="@string/search"
-    app:hintColor="#7e7e7e"
+    app:hintColor="?attr/iGapHintTextColor"
     app:showChipDetailed="false"
-    app:textColor="@color/black" />
+    app:textColor="?attr/iGapTitleTextColor" />

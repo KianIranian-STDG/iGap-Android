@@ -91,26 +91,13 @@ public class CallSelectFragment extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_select_call_action, container);
-        return rootView;
+        return LayoutInflater.from(getContext()).inflate(R.layout.fragment_select_call_action, container);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         voiceCall = rootView.findViewById(R.id.ll_callAction_voiceCall);
         videoCall = rootView.findViewById(R.id.ll_callAction_videoCall);
-        TextView voiceCallIv = rootView.findViewById(R.id.iv_callAction_voiceCall);
-        TextView videoCallIv = rootView.findViewById(R.id.iv_callAction_videoCall);
-        TextView voiceCallTv = rootView.findViewById(R.id.tv_callAction_voiceCall);
-        TextView videoCallTv = rootView.findViewById(R.id.tv_callAction_videoCall);
-
-        Utils.darkModeHandler(voiceCallIv);
-        Utils.darkModeHandler(voiceCallTv);
-        Utils.darkModeHandler(videoCallTv);
-        Utils.darkModeHandler(videoCallIv);
-
-        if (G.isDarkTheme)
-            rootView.findViewById(R.id.lineViewTop).setBackgroundResource(R.drawable.bottom_sheet_dialog_line_dark);
     }
 
     @Override
@@ -132,10 +119,6 @@ public class CallSelectFragment extends BottomSheetDialogFragment {
 
     @Override
     public int getTheme() {
-        if (G.isDarkTheme) {
-            return R.style.BaseBottomSheetDialog;
-        } else {
-            return R.style.BaseBottomSheetDialogLight;
-        }
+        return R.style.BaseBottomSheetDialog;
     }
 }

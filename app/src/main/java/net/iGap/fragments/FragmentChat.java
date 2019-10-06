@@ -6535,7 +6535,7 @@ public class FragmentChat extends BaseFragment
 
         }
 
-        bottomSheetDialogForward = new BottomSheetDialog(getActivity(), G.isDarkTheme ? R.style.BaseBottomSheetDialog : R.style.BaseBottomSheetDialogLight);
+        bottomSheetDialogForward = new BottomSheetDialog(getActivity(), R.style.BaseBottomSheetDialog);
         bottomSheetDialogForward.setContentView(viewBottomSheetForward);
         final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheetForward.getParent());
 

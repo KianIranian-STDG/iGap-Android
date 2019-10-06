@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
@@ -52,13 +51,8 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     private void parseAttr(AttributeSet attributeSet) {
         if (attributeSet != null) {
             TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.BottomNavigation);
-
             try {
-                if (G.isDarkTheme) {
-                    backgroundColor = getContext().getResources().getColor(R.color.navigation_dark_mode_bg);
-                } else {
-                    backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color, getResources().getColor(R.color.background_color));
-                }
+                backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color, getResources().getColor(R.color.background_color));
                 cornerRadius = typedArray.getInt(R.styleable.BottomNavigation_corner_radius, 0);
             } finally {
                 typedArray.recycle();

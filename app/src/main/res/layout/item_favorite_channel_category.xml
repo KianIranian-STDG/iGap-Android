@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
     android:clickable="true"
+    app:cardBackgroundColor="?attr/iGapCardViewColor"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     app:cardCornerRadius="@dimen/dp12"
     app:cardElevation="@dimen/dp2"
@@ -20,7 +21,7 @@
             android:id="@+id/ll_item_pop_card_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/shape_favorite_channel_dark_item"
+            android:background="?attr/iGapBottomSheetBackground"
             android:gravity="center_horizontal">
 
             <ImageView

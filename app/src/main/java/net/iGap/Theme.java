@@ -1108,6 +1108,10 @@ public class Theme {
         return getColorFromAttr(context, R.attr.colorAccentDark);
     }
 
+    public int getDividerColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapDividerLine);
+    }
+
     public int getPrimaryTextColor(Context context) {
         return getColorFromAttr(context, R.attr.iGapPrimaryTextColor);
     }
@@ -1124,9 +1128,20 @@ public class Theme {
         return getColorFromAttr(context, R.attr.colorPrimaryDark);
     }
 
+    public int getRootColor(Context context) {
+        return getColorFromAttr(context, R.attr.rootBackgroundColor);
+    }
 
     public int getForwardFromTextColor(Context context) {
         return getColorFromAttr(context, R.attr.colorAccentDark);
+    }
+
+    public int getTitleTextColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapTitleTextColor);
+    }
+
+    public int getSubTitleColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapSubtitleTextColor);
     }
 
     private int getColorFromAttr(@NotNull Context context, int attrResId) {
@@ -1178,6 +1193,14 @@ public class Theme {
 
     public int getCardToCardIconBackground(Context context) {
         return getDrawableAttr(context, R.attr.iGapCardToCardIconBackground);
+    }
+
+    public int getFastScrollerBackground(Context context) {
+        return getDrawableAttr(context, R.attr.iGapScrollerHandler);
+    }
+
+    public int getButtonSelectorBackground(Context context){
+        return getDrawableAttr(context ,R.attr.iGapButtonSelector);
     }
 
     public static boolean isUnderLollipop() {

@@ -194,9 +194,9 @@
             android:id="@+id/dragView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@{G.isDarkTheme ? @drawable/shape_top_round_gray_background : @drawable/shape_top_round_gray_background_light}"
+            android:background="?attr/iGapBottomSheetBackground"
             android:clickable="true"
-            android:focusable="false"
+            android:focusable="true"
             android:layoutDirection="ltr"
             android:orientation="vertical">
 

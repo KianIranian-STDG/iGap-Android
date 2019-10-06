@@ -915,11 +915,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (status == ProtoGlobal.RoomMessageStatus.SEEN) {
 
         } else if (status == ProtoGlobal.RoomMessageStatus.LISTENED) {
-            if (G.isDarkTheme) {
-                viewHolder.getMessageStatusTv().setTextColor(viewHolder.getColor(R.color.iGapColor));
-            } else {
-                viewHolder.getMessageStatusTv().setTextColor(viewHolder.getColor(R.color.backgroundColorCall2));
-            }
+            viewHolder.getMessageStatusTv().setTextColor(viewHolder.getColor(R.color.iGapColor));
             viewHolder.getMessageStatusTv().setVisibility(View.VISIBLE);
         } else {
             viewHolder.getMessageStatusTv().setTextColor(viewHolder.getColor(R.color.unread_status));

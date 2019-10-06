@@ -11,12 +11,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.model.popularChannel.Category;
 import net.iGap.model.popularChannel.Channel;
@@ -195,11 +197,9 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
             RelativeLayout relativeLayoutRow = itemView.findViewById(R.id.rl_item_pop_rows);
             LinearLayout linearLayoutRow = itemView.findViewById(R.id.ll_item_pop_rows);
             ImageView imageViewMore = itemView.findViewById(R.id.iv_item_popular_more);
-            if (G.isDarkTheme) {
-                relativeLayoutRow.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.shape_favorite_channel_all_them));
-                linearLayoutRow.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.shape_favorite_channel_dark_them));
-                imageViewMore.setColorFilter(itemView.getContext().getResources().getColor(R.color.navigation_dark_mode_bg));
-            }
+            linearLayoutRow.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.shape_favorite_channel_dark_them), itemView.getContext(), R.attr.iGapDividerLine));
+            relativeLayoutRow.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.shape_favorite_channel_all_them), itemView.getContext(), R.attr.iGapCardViewColor));
+            imageViewMore.setColorFilter(new Theme().getDividerColor(itemView.getContext()));
         }
     }
 

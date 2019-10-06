@@ -32,22 +32,6 @@ public class Utils {
         }
     }
 
-    public static void setBackgroundColor(View view) {
-        if (G.isDarkTheme) {
-            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.white));
-        } else {
-            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.black));
-        }
-    }
-
-    public static void setShapeBackground(View view, int light, int dark) {
-        if (G.isDarkTheme) {
-            view.setBackgroundResource(dark);
-        } else {
-            view.setBackgroundResource(light);
-        }
-    }
-
     public static void setCardsBackground(CardView cardView, int light, int dark) {
         if (G.isDarkTheme) {
             cardView.setCardBackgroundColor(context.getResources().getColor(dark));

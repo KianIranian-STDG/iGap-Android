@@ -401,8 +401,6 @@ public final class StartupActions {
             editor.apply();
         }
 
-//        G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
-
         boolean isDisableAutoDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_DISABLE_TIME_DARK_THEME, true);
         if (!isDisableAutoDarkTheme) {
             checkTimeForAutoTheme(preferences);

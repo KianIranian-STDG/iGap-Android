@@ -4,6 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:minWidth="@dimen/dp26"
+    android:textColor="?attr/iGapTitleTextColor"
     android:layout_marginLeft="@dimen/dp10"
     android:layout_marginRight="@dimen/dp10"
     android:clickable="true"

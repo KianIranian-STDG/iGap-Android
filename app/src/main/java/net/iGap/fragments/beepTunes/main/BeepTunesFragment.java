@@ -20,6 +20,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.libs.bottomNavigation.Util.Utils;
@@ -158,13 +159,7 @@ public class BeepTunesFragment extends BaseFragment {
                 viewModel.seekBarProgressChanged(progress);
         });
 
-        Utils.setShapeBackground(bottomPlayerCl, R.color.gray_300, R.color.navigation_dark_mode_bg);
-        Utils.setShapeBackground(playerToolBarCl, R.color.gray_300, R.color.navigation_dark_mode_bg);
-
-        if (G.isDarkTheme)
-            progressBar.getProgressDrawable().setColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_IN);
-        else
-            progressBar.getProgressDrawable().setColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_IN);
+        progressBar.getProgressDrawable().setColorFilter(new Theme().getAccentColor(progressBar.getContext()), PorterDuff.Mode.SRC_IN);
 
     }
 

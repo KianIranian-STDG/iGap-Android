@@ -24,9 +24,11 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
@@ -42,6 +44,8 @@ import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.List;
@@ -273,6 +277,10 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
 
+        holder.songSize.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
+        holder.songArtist.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
+        holder.songTimeTv.setTextColor(new Theme().getSendMessageOtherTextColor(holder.songTimeTv.getContext()));
+
         if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
             holder.seekBar.getThumb().mutate().setColorFilter(holder.getColor(R.color.black),
                     PorterDuff.Mode.SRC_IN);
@@ -286,6 +294,10 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
+
+        holder.songSize.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.songArtist.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.songTimeTv.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.songTimeTv.getContext()));
 
         if (type == ProtoGlobal.Room.Type.CHANNEL) {
             if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
@@ -306,8 +318,9 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         }
     }
 
+    @NotNull
     @Override
-    public ViewHolder getViewHolder(View v) {
+    public ViewHolder getViewHolder(@NotNull View v) {
         return new ViewHolder(v);
     }
 
@@ -327,69 +340,65 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         private ConstraintLayout rootView;
         private ConstraintSet set;
         private CircleImageView coverIv;
-        private boolean isDarkTheme = G.isDarkTheme;
 
-        public ViewHolder(final View view) {
+        public ViewHolder(View view) {
             super(view);
 
-            thumbnail = new AppCompatImageView(G.context);
+            thumbnail = new AppCompatImageView(view.getContext());
             thumbnail.setId(R.id.thumbnail);
             LinearLayout.LayoutParams thumbnailParams = new LinearLayout.LayoutParams((int) G.context.getResources().getDimension(R.dimen.dp48), (int) G.context.getResources().getDimension(R.dimen.dp48));
             thumbnail.setAdjustViewBounds(true);
             thumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
-            AppUtils.setImageDrawable(thumbnail, R.drawable.green_music_note);
+            thumbnail.setBackgroundResource(R.drawable.green_music_note);
             thumbnail.setLayoutParams(thumbnailParams);
 
-            songSize = new AppCompatTextView(G.context);
+            songSize = new AppCompatTextView(view.getContext());
             songSize.setId(R.id.fileSize);
             songSize.setTextAppearance(context, android.R.style.TextAppearance_Small);
             songSize.setGravity(BOTTOM | CENTER_HORIZONTAL);
             songSize.setSingleLine(true);
             songSize.setAllCaps(TRUE);
-            songSize.setTextColor(isDarkTheme ? getColor(R.color.white) : Color.parseColor(G.textChatMusic));
             setTextSize(songSize, R.dimen.verySmallTextSize);
             setTypeFace(songSize);
 
-            songFileName = new AppCompatTextView(G.context);
+            songFileName = new AppCompatTextView(view.getContext());
             songFileName.setId(R.id.fileName);
             songFileName.setEllipsize(TextUtils.TruncateAt.MIDDLE);
             songFileName.setGravity(LEFT);
             songFileName.setSingleLine(true);
-            songFileName.setTextAppearance(context, android.R.style.TextAppearance_Medium);
+            songFileName.setTextAppearance(view.getContext(), android.R.style.TextAppearance_Medium);
             songFileName.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
             setTextSize(songFileName, R.dimen.smallTextSize);
             Utils.darkModeHandler(songFileName);
-            songFileName.setTypeface(G.typeface_IRANSansMobile);
+            songFileName.setTypeface(ResourcesCompat.getFont(view.getContext(), R.font.main_font));
 
-            songArtist = new AppCompatTextView(G.context);
+            songArtist = new AppCompatTextView(view.getContext());
             songArtist.setId(R.id.songArtist);
-            songArtist.setTextAppearance(context, android.R.style.TextAppearance_Small);
+            songArtist.setTextAppearance(view.getContext(), android.R.style.TextAppearance_Small);
             songArtist.setSingleLine(true);
             songArtist.setText("Artist");
             setTextSize(songArtist, R.dimen.verySmallTextSize);
             setTypeFace(songArtist);
-            songArtist.setTextColor(isDarkTheme ? getColor(R.color.white) : Color.parseColor(G.textChatMusic));
 
-            playBtn = new MaterialDesignTextView(G.context);
+            playBtn = new MaterialDesignTextView(view.getContext());
             playBtn.setId(R.id.txt_play_music);
             playBtn.setBackgroundResource(0); //txt_play_music.setBackgroundResource(@null);
-            playBtn.setTypeface(G.typeface_Fontico);
+            playBtn.setTypeface(ResourcesCompat.getFont(view.getContext(), R.font.font_icon));
             playBtn.setGravity(CENTER);
             playBtn.setTextColor(getColor(R.color.white));
-            playBtn.setText(G.fragmentActivity.getResources().getString(R.string.md_play_arrow));
+            playBtn.setText(R.string.md_play_arrow);
             setTextSize(playBtn, R.dimen.largeTextSize);
-            playBtn.setBackground(getDrawable(R.drawable.background_audioitem_cover));
+            playBtn.setBackgroundResource(R.drawable.background_audioitem_cover);
 
-            seekBar = new SeekBar(G.context);
+            seekBar = new SeekBar(view.getContext());
             seekBar.setId(R.id.csla_seekBar1);
             seekBar.setEnabled(false);
             seekBar.setProgress(0);
 
-            songTimeTv = new AppCompatTextView(G.context);
+            songTimeTv = new AppCompatTextView(view.getContext());
             songTimeTv.setId(R.id.csla_txt_timer);
             songTimeTv.setPadding(0, 0, (int) G.context.getResources().getDimension(R.dimen.dp8), 0);
             songTimeTv.setText("00:00");
-            songTimeTv.setTextColor(isDarkTheme ? getColor(R.color.white) : Color.parseColor(G.textChatMusic));
             setTextSize(songTimeTv, R.dimen.verySmallTextSize);
             setTypeFace(songTimeTv);
 

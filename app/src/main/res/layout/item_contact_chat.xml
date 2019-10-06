@@ -48,7 +48,7 @@
         android:fontFamily="@font/main_font"
         android:singleLine="true"
         android:text="user name"
-        android:textColor="@android:color/black"
+        android:textColor="?attr/iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         android:textStyle="bold"
         app:emojiSize="@dimen/standardTextSize"

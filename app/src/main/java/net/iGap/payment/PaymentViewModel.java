@@ -46,7 +46,6 @@ public class PaymentViewModel extends ViewModel {
 
     public PaymentViewModel(String token, String type) {
         repository = PaymentRepository.getInstance();
-        /*background.set(G.isDarkTheme ? R.drawable.bottom_sheet_background : R.drawable.bottom_sheet_light_background);*/
         this.token = token;
         paymentType.set(type);
         paymentResult = new PaymentResult();

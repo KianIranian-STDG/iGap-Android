@@ -18,6 +18,7 @@
         android:id="@+id/bn_main_bottomNavigation"
         android:layout_width="0dp"
         android:layout_height="54dp"
+        app:background_color="?attr/iGapDividerLine"
         app:corner_radius="35"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/viewpager"

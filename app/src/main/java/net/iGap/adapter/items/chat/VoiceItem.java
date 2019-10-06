@@ -386,10 +386,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             byte[] soundBytes = hexStringToByteArray(value + value);
 
-            if (G.isDarkTheme)
-                waveView.setWaveColor(getColor(R.color.voice_item_dark));
-            else
-                waveView.setWaveColor(getColor(R.color.voice_item));
+            waveView.setWaveColor(getColor(R.color.voice_item_dark));
 
             waveView.setScaledData(soundBytes);
             waveView.setChunkHeight(dpToPx(16));

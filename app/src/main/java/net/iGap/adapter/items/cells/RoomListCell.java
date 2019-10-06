@@ -1,7 +1,6 @@
 package net.iGap.adapter.items.cells;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -24,7 +23,6 @@ import com.vanniktech.emoji.EmojiTextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
-import net.iGap.adapter.items.chat.ChatCell;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLogMessage;
@@ -54,7 +52,13 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER;
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.PAYMENT;
 
 public class RoomListCell extends FrameLayout {
-    private static final String TAG = "abbasi";
+
+    public final int FILE = 0x1F4CE;
+    public final int VIDEO = 0x1F4F9;
+    public final int MUSIC = 0x1F3A7;
+    public final int IMAGE = 0x1F5BC;
+    public final int GIF = 0x1F308;
+    public final int WALLET = 0x1F4B3;
 
     private EmojiTextView roomNameTv;
     private FontIconTextView verifyIconTv;
@@ -75,7 +79,6 @@ public class RoomListCell extends FrameLayout {
     private boolean haveName = false;
     private boolean roomVerified = false;
     private boolean haveChatIcon = false;
-    private boolean isDarkTheme = G.isDarkTheme;
     private boolean isRtl = G.isAppRtl;
     private boolean haveLastMessage = false;
     private boolean haveBadge = false;
@@ -93,7 +96,7 @@ public class RoomListCell extends FrameLayout {
                 pinView = new AppCompatImageView(getContext());
                 pinCornerView = new AppCompatImageView(getContext());
                 pinView.setBackgroundResource(R.drawable.pin);
-                pinCornerView.setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.pin_corner),getContext(),R.attr.colorAccent));
+                pinCornerView.setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.pin_corner), getContext(), R.attr.colorAccent));
 
                 if (isRtl)
                     pinCornerView.setRotationY(180);
@@ -505,7 +508,7 @@ public class RoomListCell extends FrameLayout {
     @Override
     protected void dispatchDraw(Canvas canvas) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(getResources().getColor(isDarkTheme ? R.color.gray100 : R.color.gray_9d));
+        paint.setColor(new Theme().getDividerColor(getContext()));
         canvas.drawLine(isRtl ? 4 : avatarImageView.getRight(), getMeasuredHeight() - 1, isRtl ? avatarImageView.getLeft() : getWidth(), getMeasuredHeight(), paint);
         super.dispatchDraw(canvas);
     }
@@ -541,7 +544,7 @@ public class RoomListCell extends FrameLayout {
 
             String draftMessage = room.getDraft().getMessage();
             SpannableString message = new SpannableString(draftMessage);
-            message.setSpan(new ForegroundColorSpan(ChatCell.messageColor()), 0, message.length(), 0);
+            message.setSpan(new ForegroundColorSpan(new Theme().getSendMessageTextColor(lastMessageTv.getContext())), 0, message.length(), 0);
 
             builder.append(redSpannable);
             builder.append(message);
@@ -613,23 +616,23 @@ public class RoomListCell extends FrameLayout {
 
                     switch (lastMessage.getMessageType()) {
                         case IMAGE_TEXT:
-                            attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.IMAGE);
+                            attachmentTag = AppUtils.getEmojiByUnicode(IMAGE);
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case GIF_TEXT:
-                            attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.GIF);
+                            attachmentTag = AppUtils.getEmojiByUnicode(GIF);
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case FILE_TEXT:
-                            attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.FILE);
+                            attachmentTag = AppUtils.getEmojiByUnicode(FILE);
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case VIDEO_TEXT:
-                            attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.VIDEO);
+                            attachmentTag = AppUtils.getEmojiByUnicode(VIDEO);
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case AUDIO_TEXT:
-                            attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.MUSIC);
+                            attachmentTag = AppUtils.getEmojiByUnicode(MUSIC);
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case GIF:
@@ -645,7 +648,7 @@ public class RoomListCell extends FrameLayout {
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case AUDIO:
-                            attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.MUSIC) + lastMessage.getAttachment().getName();
+                            attachmentTag = AppUtils.getEmojiByUnicode(MUSIC) + lastMessage.getAttachment().getName();
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case FILE:
@@ -661,7 +664,7 @@ public class RoomListCell extends FrameLayout {
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case WALLET:
-                            builder.append(AppUtils.getEmojiByUnicode(ChatCell.WALLET));
+                            builder.append(AppUtils.getEmojiByUnicode(WALLET));
                             if (lastMessage.getRoomMessageWallet() != null) {
                                 String type = lastMessage.getRoomMessageWallet().getType();
                                 if (type.equals(CARD_TO_CARD.toString())) {
@@ -711,7 +714,7 @@ public class RoomListCell extends FrameLayout {
                         message = HelperCalander.convertToUnicodeFarsiNumber(message);
 
                     lastMessageSpannable = new SpannableString(/*subStringInternal(*/message/*)*/);
-                    lastMessageSpannable.setSpan(new ForegroundColorSpan(ChatCell.messageColor()), 0, lastMessageSpannable.length(), 0);
+                    lastMessageSpannable.setSpan(new ForegroundColorSpan(new Theme().getSendMessageTextColor(lastMessageTv.getContext())), 0, lastMessageSpannable.length(), 0);
 
                     if (haveSenderName) {
                         if (haveAttachment) {

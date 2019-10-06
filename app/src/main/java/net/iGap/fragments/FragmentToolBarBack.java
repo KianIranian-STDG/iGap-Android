@@ -53,9 +53,6 @@ public abstract class FragmentToolBarBack extends BaseFragment {
         titleTextView = view.findViewById(R.id.title);
         titleTextView.setTypeface(G.typeface_IRANSansMobile);
         appBarLayout = view.findViewById(R.id.ac_appBarLayout);
-        if (G.isDarkTheme) {
-            appBarLayout.setBackground(G.context.getResources().getDrawable(R.drawable.shape_toolbar_background_dark));
-        }
         menu_item1 = view.findViewById(R.id.menu_item1);
         menu_item1.setVisibility(View.GONE);
 

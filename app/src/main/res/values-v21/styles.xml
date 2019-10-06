@@ -42,6 +42,8 @@
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card</item>
         <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card</item>
         <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
     </style>
     <!--for support theme under android version 21-->
 

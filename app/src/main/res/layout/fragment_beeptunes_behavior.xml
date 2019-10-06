@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:animateLayoutChanges="true"
+        android:background="?attr/iGapDividerLine"
         android:visibility="gone">
 
         <ImageView
@@ -38,7 +39,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
-            android:textColor="?iGapTitleTextColor"
+            android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/iv_btPlayer_hide"
@@ -54,6 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:animateLayoutChanges="true"
+        android:background="?attr/iGapDividerLine"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

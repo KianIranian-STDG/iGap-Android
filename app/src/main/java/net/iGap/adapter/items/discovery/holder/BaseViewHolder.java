@@ -21,6 +21,7 @@ import com.bumptech.glide.request.target.Target;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
@@ -191,7 +192,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                         intent.putExtra("PrimaryColor", G.appBarColor);
                         intent.putExtra("DarkPrimaryColor", G.appBarColor);
                         intent.putExtra("AccentColor", G.appBarColor);
-                        intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
+                        intent.putExtra("IS_DARK_THEME", G.currentTime == Theme.DARK);
                         intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
                         intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
                         intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
