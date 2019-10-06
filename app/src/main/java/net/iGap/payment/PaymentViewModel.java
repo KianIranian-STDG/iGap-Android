@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.api.errorhandler.ResponseCallback;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.helper.HelperCalander;
 
 import org.jetbrains.annotations.NotNull;

@@ -5,7 +5,7 @@ import android.util.Log;
 import net.iGap.api.MciApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
-import net.iGap.api.errorhandler.ResponseCallback;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.model.MciPurchaseResponse;
 

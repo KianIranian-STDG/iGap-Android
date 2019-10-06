@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.api.CPayApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
-import net.iGap.api.errorhandler.ResponseCallback;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.model.cPay.CPayWalletAmountModel;
 import net.iGap.model.cPay.ChargeWalletBodyModel;
 import net.iGap.model.cPay.ChargeWalletModel;

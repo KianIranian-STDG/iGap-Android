@@ -3,7 +3,7 @@ package net.iGap.igasht;
 import net.iGap.api.IgashtApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
-import net.iGap.api.errorhandler.ResponseCallback;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.igasht.barcodescaner.TicketQRCodeResponse;
 import net.iGap.igasht.historylocation.IGashtTicketDetail;
 import net.iGap.igasht.historylocation.TicketHistoryListResponse;

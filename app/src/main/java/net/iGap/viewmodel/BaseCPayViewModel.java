@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.api.errorhandler.ResponseCallback;
+import net.iGap.api.apiService.ResponseCallback;
 
 public abstract class BaseCPayViewModel<T> extends ViewModel implements ResponseCallback<T> {
 

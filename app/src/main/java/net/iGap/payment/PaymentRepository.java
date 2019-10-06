@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import net.iGap.api.PaymentApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
-import net.iGap.api.errorhandler.ResponseCallback;
+import net.iGap.api.apiService.ResponseCallback;
 
 import org.jetbrains.annotations.NotNull;
 

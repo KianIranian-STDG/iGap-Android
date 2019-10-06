@@ -9,6 +9,7 @@ import net.iGap.api.CPayApi;
 import net.iGap.api.CharityApi;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.net.ssl.SSLContext;
@@ -32,7 +33,8 @@ public class RetrofitFactory {
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(httpLoggingInterceptor);
         }
-        builder.addInterceptor(chain -> {
+        builder.addInterceptor(new IgapRetrofitInterceptor());
+        /*builder.addInterceptor(chain -> {
             Request original = chain.request();
             Request request = original.newBuilder()
                     .header("Authorization", G.getApiToken())
@@ -40,9 +42,11 @@ public class RetrofitFactory {
                     .method(original.method(), original.body())
                     .build();
             return chain.proceed(request);
-        });
-
-        httpClient = enableTls12OnPreLollipop(builder).build();
+        });*/
+        ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                .tlsVersions(TlsVersion.TLS_1_2)
+                .build();
+        httpClient = builder.connectionSpecs(Collections.singletonList(spec)).build();
     }
 
     Retrofit getBeepTunesRetrofit() {
