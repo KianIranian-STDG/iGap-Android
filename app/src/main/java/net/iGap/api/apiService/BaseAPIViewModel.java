@@ -3,9 +3,11 @@ package net.iGap.api.apiService;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.api.errorhandler.ErrorModel;
+
 // base view model implements callback for repository and handle on fail and base onError.
 // in other view model extends this you should override onSuccess and if have custom onError override it
-public abstract class BaseAPIViewModel<T> extends ViewModel implements ResponseCallback<T> {
+public abstract class BaseAPIViewModel extends ViewModel implements HandShakeCallback {
 
     private MutableLiveData<Boolean> updateGooglePlay = new MutableLiveData<>(false);
 

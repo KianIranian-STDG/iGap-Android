@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.api.repository.CPayRepository;
 import net.iGap.databinding.FragmentCpayEditBinding;
 import net.iGap.fragments.BaseFragment;
@@ -21,7 +22,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentCPayEditViewModel;
 
-public class FragmentCPayEdit extends BaseFragment implements ToolbarListener {
+public class FragmentCPayEdit extends BaseAPIViewFrag implements ToolbarListener {
 
     private FragmentCPayEditViewModel viewModel;
     private FragmentCpayEditBinding binding;

@@ -35,7 +35,7 @@ public class FragmentCPayChargeViewModel extends BaseCPayViewModel<CPayWalletAmo
 
     public void getRequestAmountFromServer() {
         getLoaderListener().setValue(true);
-        CPayRepository.getInstance().getWalletAmount(new PlaqueBodyModel(mPlaque), this);
+        CPayRepository.getInstance().getWalletAmount(new PlaqueBodyModel(mPlaque), this,this);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class FragmentCPayChargeViewModel extends BaseCPayViewModel<CPayWalletAmo
         secondaryLoaderVisiblity.set(View.VISIBLE);
         payButtonEnableState.set(false);
 
-        CPayRepository.getInstance().getChargeWallet(new ChargeWalletBodyModel(mPlaque, mChargeAmount), new ResponseCallback<ChargeWalletModel>() {
+        CPayRepository.getInstance().getChargeWallet(new ChargeWalletBodyModel(mPlaque, mChargeAmount), this, new ResponseCallback<ChargeWalletModel>() {
             @Override
             public void onSuccess(ChargeWalletModel data) {
                 secondaryLoaderVisiblity.set(View.GONE);

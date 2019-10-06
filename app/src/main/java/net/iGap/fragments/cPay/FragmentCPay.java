@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import net.iGap.R;
 import net.iGap.adapter.cPay.AdapterPlaqueList;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentCpayBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FragmentCPay extends BaseFragment implements ToolbarListener {
+public class FragmentCPay extends BaseAPIViewFrag implements ToolbarListener {
 
     private FragmentSeePayViewModel viewModel;
     private FragmentCpayBinding binding;

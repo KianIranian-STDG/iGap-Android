@@ -14,8 +14,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.adapter.cPay.CPayChargeSpinnerAdapter;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentCpayChargeBinding;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCPay;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -23,7 +23,7 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentCPayChargeViewModel;
 
 
-public class FragmentCPayCharge extends BaseFragment implements ToolbarListener {
+public class FragmentCPayCharge extends BaseAPIViewFrag implements ToolbarListener {
 
     private FragmentCPayChargeViewModel viewModel;
     private FragmentCpayChargeBinding binding;

@@ -19,7 +19,7 @@ public class FragmentSeePayViewModel extends BaseCPayViewModel<UserPlaquesModel>
 
     public void getPlaqueListByApi() {
         getLoaderListener().setValue(true);
-        CPayRepository.getInstance().getAllUserPlaques(this);
+        CPayRepository.getInstance().getAllUserPlaques(this,this);
     }
 
     public MutableLiveData<Boolean> getPlaqueChangeListener() {

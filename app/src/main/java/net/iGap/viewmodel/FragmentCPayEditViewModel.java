@@ -49,7 +49,7 @@ public class FragmentCPayEditViewModel extends BaseCPayViewModel<RegisterPlaqueM
         body.setMobile(phone);
 
         getLoaderListener().setValue(true);
-        CPayRepository.getInstance().registerNewPlaque(body, this);
+        CPayRepository.getInstance().registerNewPlaque(body, this, this);
     }
 
     public void onNameEditTextChanged(String text) {

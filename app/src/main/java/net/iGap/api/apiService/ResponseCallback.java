@@ -32,14 +32,6 @@ public interface ResponseCallback<T> {
     void onError(ErrorModel error);
 
     /**
-     * @apiNote will be called if we need handshake for lower APIs.
-     * @since 2.0.6
-     */
-    default void onHandShake() {
-
-    }
-
-    /**
      * @deprecated As of 10/06/2019, replaced by {@link #onError(String)}
      * @param handShakeError
      */
@@ -52,6 +44,14 @@ public interface ResponseCallback<T> {
      * @param visibility
      */
     default void setProgressIndicator(boolean visibility) {
+
+    }
+
+    /**
+     * @apiNote will be called if we need handshake for lower APIs.
+     * @since 2.0.6
+     */
+    default void onHandShake() {
 
     }
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.igasht.BaseIGashtResponse;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BuyInternetPackageViewModel extends ViewModel {
+public class BuyInternetPackageViewModel extends BaseAPIViewModel {
 
     private ObservableInt showDetail = new ObservableInt(View.GONE);
     private ObservableInt showFilterType = new ObservableInt(View.GONE);

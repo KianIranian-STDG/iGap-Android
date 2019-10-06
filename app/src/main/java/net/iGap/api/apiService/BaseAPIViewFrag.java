@@ -5,13 +5,13 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import net.iGap.activities.ActivityMain;
+import net.iGap.fragments.BaseFragment;
 
-public abstract class BaseAPIView<G> extends Fragment {
+public abstract class BaseAPIViewFrag extends BaseFragment {
 
-    protected BaseAPIViewModel<G> viewModel;
+    protected BaseAPIViewModel viewModel;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
