@@ -378,8 +378,6 @@ public class ViewMaker {
         context.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, rippleView, true);
         linearLayout_205.setBackgroundResource(rippleView.resourceId);
 
-        //linearLayout_205.setBackgroundColor(Color.parseColor(G.backgroundTheme));
-
         CheckBox checkBox = new CheckBox(context);
         checkBox.setId(R.id.fcsl_check_box);
         checkBox.setVisibility(View.GONE);

@@ -25,9 +25,7 @@ import net.iGap.webrtc.WebRTC;
 import io.realm.Realm;
 
 public class CallSelectFragment extends BottomSheetDialogFragment {
-    private static final String TAG = "aabolfazl";
 
-    private View rootView;
     private View voiceCall;
     private View videoCall;
     private long userId;
@@ -96,8 +94,8 @@ public class CallSelectFragment extends BottomSheetDialogFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        voiceCall = rootView.findViewById(R.id.ll_callAction_voiceCall);
-        videoCall = rootView.findViewById(R.id.ll_callAction_videoCall);
+        voiceCall = view.findViewById(R.id.ll_callAction_voiceCall);
+        videoCall = view.findViewById(R.id.ll_callAction_videoCall);
     }
 
     @Override

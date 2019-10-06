@@ -381,7 +381,6 @@
         android:paddingLeft="@dimen/dp8"
         android:paddingRight="@dimen/dp8"
         android:paddingBottom="@dimen/dp20"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
