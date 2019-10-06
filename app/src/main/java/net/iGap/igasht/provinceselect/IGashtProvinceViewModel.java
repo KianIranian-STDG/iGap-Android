@@ -100,6 +100,7 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
     public void onSuccess(BaseIGashtResponse<IGashtProvince> data) {
         showLoadingView.set(View.GONE);
         showMainView.set(View.VISIBLE);
+        repository.setProvinceList(data.getData());
         provinceList.setValue(data.getData());
     }
 

@@ -11,7 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.igasht.BaseIGashtViewModel;
 import net.iGap.igasht.IGashtRepository;
 
-public class IGashtBarcodeScannerViewModel extends BaseIGashtViewModel<String> {
+public class IGashtBarcodeScannerViewModel extends BaseIGashtViewModel<TicketQRCodeResponse> {
 
     private IGashtRepository repository;
     private MutableLiveData<Bitmap> showQRCodeImage = new MutableLiveData<>();
@@ -32,8 +32,8 @@ public class IGashtBarcodeScannerViewModel extends BaseIGashtViewModel<String> {
     }
 
     @Override
-    public void onSuccess(String data) {
-        byte[] decodedString = Base64.decode(data.replace("data:image/png;base64,", ""), Base64.DEFAULT);
+    public void onSuccess(TicketQRCodeResponse data) {
+        byte[] decodedString = Base64.decode(data.getQrCode().replace("data:image/png;base64,", ""), Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         showLoadingView.set(View.GONE);
         showViewRefresh.set(View.GONE);
