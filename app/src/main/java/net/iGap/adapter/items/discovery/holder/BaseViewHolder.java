@@ -192,7 +192,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                         intent.putExtra("PrimaryColor", G.appBarColor);
                         intent.putExtra("DarkPrimaryColor", G.appBarColor);
                         intent.putExtra("AccentColor", G.appBarColor);
-                        intent.putExtra("IS_DARK_THEME", G.currentTime == Theme.DARK);
+                        intent.putExtra("IS_DARK_THEME", G.themeColor == Theme.DARK);
                         intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
                         intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
                         intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
