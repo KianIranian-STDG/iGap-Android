@@ -64,7 +64,6 @@
         android:textColor="@android:color/black"
         android:textSize="@dimen/standardTextSize"
         android:singleLine="true"
-        android:textStyle="bold"
         app:emojiSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toTopOf="@+id/tv_itemContactCall_userPhoneNumber"
         app:layout_constraintEnd_toStartOf="@+id/tv_itemContactCall_voiceCall"

@@ -248,7 +248,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVoiceCall"
             style="@style/Widget.MaterialComponents.Button.TextButton"
-            fontPath="fonts/font_icon.ttf"
+            android:fontFamily="@font/font_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{()-> viewModel.voiceButtonOnClick()}"
@@ -267,7 +267,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVideoCall"
             style="@style/Widget.MaterialComponents.Button.TextButton"
-            fontPath="fonts/font_icon.ttf"
+            android:fontFamily="@font/font_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{()-> viewModel.videoButtonOnClick()}"

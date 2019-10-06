@@ -66,8 +66,9 @@ import net.iGap.realm.RealmRoomMessage;
 import java.io.File;
 import java.util.ArrayList;
 
-import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import io.realm.Realm;
+
+import static net.iGap.G.updateResources;
 
 public class ActivityPopUpNotification extends AppCompatActivity {
 
@@ -128,7 +129,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(G.updateResources(newBase)));
+        super.attachBaseContext(updateResources(newBase));
     }
 
     @Override

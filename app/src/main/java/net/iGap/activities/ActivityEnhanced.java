@@ -43,7 +43,6 @@ import net.iGap.module.StatusBarUtil;
 import java.io.File;
 import java.io.IOException;
 
-import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
 import static net.iGap.G.updateResources;
 
@@ -65,7 +64,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(updateResources(newBase)));
+        super.attachBaseContext(updateResources(newBase));
     }
 
     @Override

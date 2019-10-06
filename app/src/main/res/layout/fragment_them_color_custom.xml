@@ -372,7 +372,6 @@
                     <!--<TextView-->
                     <!--android:id="@+id/asn_txt_set_color_to_default"-->
                     <!--style="?textTitleColorSettingTheme"-->
-                    <!--fontPath="fonts/IRANSansMobile.ttf"-->
                     <!--android:layout_width="match_parent"-->
                     <!--android:layout_height="@dimen/dp48"-->
                     <!--android:gravity="center_vertical"-->

@@ -160,7 +160,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/fcr_btn_end"
             style="@style/Widget.MaterialComponents.Button.TextButton"
-            fontPath="fonts/font_icon.ttf"
+            android:fontFamily="@font/font_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:enabled="@{activityCallViewModel.enableEndCallButton}"
@@ -183,7 +183,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/fcr_btn_call"
             style="@style/Widget.MaterialComponents.Button.TextButton"
-            fontPath="fonts/font_icon.ttf"
+            android:fontFamily="@font/font_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{()->activityCallViewModel.onCallClick()}"

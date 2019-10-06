@@ -187,9 +187,6 @@ dependencies {
     implementation 'com.larswerkman:HoloColorPicker:1.5'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
-    implementation 'io.github.inflationx:calligraphy3:3.1.1'
-    implementation 'io.github.inflationx:viewpump:1.0.0'
-
     implementation 'me.leolin:ShortcutBadger:1.1.18@aar'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.makeramen:roundedimageview:2.3.0'

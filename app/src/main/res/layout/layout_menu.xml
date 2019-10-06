@@ -213,7 +213,7 @@
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/lm_txt_icon_channel"
                     style="?iconColorMenuTheme"
-                    fontPath="fonts/iGap-Fontico.ttf"
+                    android:fontFamily="@font/font_icon_old"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
