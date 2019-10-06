@@ -20,7 +20,7 @@ public class IGashtBarcodeScannerViewModel extends BaseIGashtViewModel<TicketQRC
     public IGashtBarcodeScannerViewModel(String voucherNumber) {
         repository = IGashtRepository.getInstance();
         this.voucherNumber.set(voucherNumber);
-        repository.getTicketQRCode(voucherNumber, this);
+        repository.getTicketQRCode(voucherNumber, this, this);
     }
 
     public MutableLiveData<Bitmap> getShowQRCodeImage() {

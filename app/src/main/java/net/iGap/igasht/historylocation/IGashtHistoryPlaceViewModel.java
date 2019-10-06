@@ -61,7 +61,7 @@ public class IGashtHistoryPlaceViewModel extends BaseIGashtViewModel<TicketHisto
         showLoadingView.set(View.VISIBLE);
         showMainView.set(View.GONE);
         showViewRefresh.set(View.GONE);
-        repository.getHistoryList(0, 10, this);
+        repository.getHistoryList(0, 10, this, this);
     }
 
     public void onRetryClick() {
@@ -79,7 +79,7 @@ public class IGashtHistoryPlaceViewModel extends BaseIGashtViewModel<TicketHisto
             }
             showLoadingView.set(View.VISIBLE);
             //Load more data for recyclerView
-            repository.getHistoryList(response.getOffset() + 1, response.getLimit(), this);
+            repository.getHistoryList(response.getOffset() + 1, response.getLimit(), this, this);
         }
     }
 

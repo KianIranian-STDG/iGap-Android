@@ -60,6 +60,11 @@ public class ApiInitializer<T> {
                 retrofitCallback.setProgressIndicator(false);
                 retrofitCallback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
                 if (new ErrorHandler().checkHandShakeFailure(t)) {
+                    //TODO must be cleared
+                    if (handShakeCallback == null) {
+                        handShakeCallback.onHandShake();
+                        return;
+                    }
                     handShakeCallback.onHandShake();
                     return;
                 }

@@ -2,6 +2,7 @@ package net.iGap.igasht;
 
 import net.iGap.api.IgashtApi;
 import net.iGap.api.apiService.ApiInitializer;
+import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.apiService.ResponseCallback;
@@ -78,54 +79,34 @@ public class IGashtRepository {
         this.selectedLocation = selectedLocation;
     }
 
-    public void getProvinceList(ResponseCallback<BaseIGashtResponse<IGashtProvince>> callback) {
-        new ApiInitializer<BaseIGashtResponse<IGashtProvince>>().initAPI(igashtApi.requestGetProvinceList(), callback);
+    public void getProvinceList(HandShakeCallback handShakeCallback, ResponseCallback<BaseIGashtResponse<IGashtProvince>> callback) {
+        new ApiInitializer<BaseIGashtResponse<IGashtProvince>>().initAPI(igashtApi.requestGetProvinceList(), handShakeCallback, callback);
     }
 
-    public void getLocationListWithProvince(ResponseCallback<BaseIGashtResponse<IGashtLocationItem>> callback) {
-        new ApiInitializer<BaseIGashtResponse<IGashtLocationItem>>().initAPI(igashtApi.requestGetLocationList(selectedProvince.getId()), callback);
+    public void getLocationListWithProvince(HandShakeCallback handShakeCallback, ResponseCallback<BaseIGashtResponse<IGashtLocationItem>> callback) {
+        new ApiInitializer<BaseIGashtResponse<IGashtLocationItem>>().initAPI(igashtApi.requestGetLocationList(selectedProvince.getId()), handShakeCallback, callback);
     }
 
-    public void getServiceList(ResponseCallback<BaseIGashtResponse<IGashtLocationService>> callback) {
-        new ApiInitializer<BaseIGashtResponse<IGashtLocationService>>().initAPI(igashtApi.requestGetServiceList(selectedLocation.getId()), callback);
+    public void getServiceList(HandShakeCallback handShakeCallback, ResponseCallback<BaseIGashtResponse<IGashtLocationService>> callback) {
+        new ApiInitializer<BaseIGashtResponse<IGashtLocationService>>().initAPI(igashtApi.requestGetServiceList(selectedLocation.getId()), handShakeCallback, callback);
     }
 
-    public void getHistoryList(int offset, int limit, ResponseCallback<TicketHistoryListResponse<IGashtTicketDetail>> callback) {
-        new ApiInitializer<TicketHistoryListResponse<IGashtTicketDetail>>().initAPI(igashtApi.requestGetTicketList(offset, limit), callback);
+    public void getHistoryList(int offset, int limit, HandShakeCallback handShakeCallback, ResponseCallback<TicketHistoryListResponse<IGashtTicketDetail>> callback) {
+        new ApiInitializer<TicketHistoryListResponse<IGashtTicketDetail>>().initAPI(igashtApi.requestGetTicketList(offset, limit), handShakeCallback, callback);
     }
 
-    public void registeredOrder(ResponseCallback<RegisterTicketResponse> callback) {
+    public void registeredOrder(HandShakeCallback handShakeCallback, ResponseCallback<RegisterTicketResponse> callback) {
         try (Realm realm = Realm.getDefaultInstance()) {
-            igashtApi.registerOrder(new IGashtOrder(realm.where(RealmUserInfo.class).findFirst().getUserInfo().getPhoneNumber(),
+            new ApiInitializer<RegisterTicketResponse>().initAPI(igashtApi.registerOrder(new IGashtOrder(realm.where(RealmUserInfo.class).findFirst().getUserInfo().getPhoneNumber(),
                     1,
                     selectedProvince.getId(),
                     selectedLocation.getId(),
-                    selectedServiceList
-            )).enqueue(new Callback<RegisterTicketResponse>() {
-                @Override
-                public void onResponse(@NotNull Call<RegisterTicketResponse> call, @NotNull Response<RegisterTicketResponse> response) {
-                    if (response.code() == 200) {
-                        callback.onSuccess(response.body());
-                    } else {
-                        try {
-                            callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(@NotNull Call<RegisterTicketResponse> call, @NotNull Throwable t) {
-                    t.printStackTrace();
-                    callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
-                }
-            });
+                    selectedServiceList)), handShakeCallback, callback);
         }
     }
 
-    public void getTicketQRCode(String voucherNumber, ResponseCallback<TicketQRCodeResponse> callback) {
-        new ApiInitializer<TicketQRCodeResponse>().initAPI(igashtApi.requestGetTicketQRCode(voucherNumber), callback);
+    public void getTicketQRCode(String voucherNumber, HandShakeCallback handShakeCallback, ResponseCallback<TicketQRCodeResponse> callback) {
+        new ApiInitializer<TicketQRCodeResponse>().initAPI(igashtApi.requestGetTicketQRCode(voucherNumber), handShakeCallback, callback);
     }
 
     public void createVoucherList(@NotNull List<IGashtLocationService> data) {

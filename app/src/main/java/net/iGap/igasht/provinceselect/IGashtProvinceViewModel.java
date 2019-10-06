@@ -93,7 +93,7 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
         showViewRefresh.set(View.GONE);
         showLoadingView.set(View.VISIBLE);
         // base view model implements callback and get response in on Success
-        repository.getProvinceList(this);
+        repository.getProvinceList(this,this);
     }
 
     @Override
