@@ -80,7 +80,6 @@
             <TextView
                 android:id="@+id/st_txt_createNewPattern"
                 style="?textTitleColorSettingTheme"
-                fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp20"
@@ -131,7 +130,6 @@
                     <TextView
                         android:id="@+id/st_txt_st_toggle_passCode"
                         style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -167,7 +165,6 @@
                     <TextView
                         android:id="@+id/st_txt_st_toggle_patternPassCode"
                         style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -203,7 +200,6 @@
                     <TextView
                         android:id="@+id/st_txt_st_toggle_tactileFeedback"
                         style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -235,7 +231,6 @@
                     <TextView
                         android:id="@+id/st_txt_ChangePassCode"
                         style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
@@ -290,7 +285,6 @@
                     <TextView
                         android:id="@+id/st_txt_st_toggle_FingerPrint"
                         style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -321,7 +315,6 @@
 
                     <TextView
                         style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -335,7 +328,6 @@
 
                     <TextView
                         android:id="@+id/st_txt_autoLock"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -376,7 +368,6 @@
                     <TextView
                         android:id="@+id/st_txt_st_tAllowScreenCapture"
                         style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -405,7 +396,6 @@
 
                     <com.uncopt.android.widget.text.justify.JustifiedTextView
                         style="?textSubColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp14"

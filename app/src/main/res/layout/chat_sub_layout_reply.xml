@@ -38,7 +38,6 @@
         <net.iGap.module.EmojiTextViewE
             android:id="@+id/chslr_txt_replay_from"
             style="@style/ChatMessages.EmojiTextView"
-            fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
@@ -52,7 +51,6 @@
         <net.iGap.module.EmojiTextViewE
             android:id="@+id/chslr_txt_replay_message"
             style="@style/ChatMessages.EmojiTextView"
-            fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"

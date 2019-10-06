@@ -135,7 +135,6 @@
 
                     <net.iGap.module.EmojiTextViewE
                         android:id="@+id/cs_txt_last_message_sender"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="2dp"
@@ -150,7 +149,6 @@
 
                     <net.iGap.module.EmojiTextViewE
                         android:id="@+id/cs_txt_last_message"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="2dp"
@@ -166,7 +164,6 @@
 
                     <net.iGap.module.EmojiTextViewE
                         android:id="@+id/cs_txt_last_message_file_text"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="2dp"

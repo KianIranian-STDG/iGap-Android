@@ -68,7 +68,6 @@
 
                         <TextView
                             android:id="@+id/txt_titleToolbar_map"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
@@ -140,7 +139,6 @@
                                 <net.iGap.module.MEditText
                                     android:id="@+id/edtMessageGps"
                                     style="?hintColorSettingTheme"
-                                    fontPath="fonts/IRANSansMobile.ttf"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="@android:color/transparent"

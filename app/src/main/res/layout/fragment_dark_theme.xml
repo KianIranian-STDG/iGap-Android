@@ -117,7 +117,6 @@
             <TextView
                 android:id="@+id/txtDisable"
                 style="?textTitleColorSettingTheme"
-                fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="start|center_vertical"
@@ -166,7 +165,6 @@
             <TextView
                 android:id="@+id/txtScheduled"
                 style="?textTitleColorSettingTheme"
-                fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -217,7 +215,6 @@
             <TextView
                 android:id="@+id/txtAutomatic"
                 style="?textTitleColorSettingTheme"
-                fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -262,7 +259,6 @@
 
             <TextView
                 style="?textTitleColorSettingTheme"
-                fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp28"
                 android:gravity="center_vertical"
@@ -283,7 +279,6 @@
 
                 <TextView
                     style="?textTitleColorSettingTheme"
-                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -296,7 +291,6 @@
 
                 <TextView
                     android:id="@+id/st_txtFromTime"
-                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -320,7 +314,6 @@
 
                 <TextView
                     style="?textTitleColorSettingTheme"
-                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -334,7 +327,6 @@
 
                 <TextView
                     android:id="@+id/st_txtToTime"
-                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -357,7 +349,6 @@
 
             <TextView
                 style="?textTitleColorSettingTheme"
-                fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"

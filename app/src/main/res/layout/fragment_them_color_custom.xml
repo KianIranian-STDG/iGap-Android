@@ -138,7 +138,6 @@
                         <TextView
                             android:id="@+id/asn_txt_app_title_bar_color"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp48"
                             android:layout_weight="1"
@@ -177,7 +176,6 @@
                         <TextView
                             android:id="@+id/asn_txt_app_notification_color"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp48"
                             android:layout_weight="1"
@@ -221,7 +219,6 @@
                         <TextView
                             android:id="@+id/asn_txt_app_toggle_botton_color"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp48"
                             android:layout_weight="1"
@@ -260,7 +257,6 @@
                         <TextView
                             android:id="@+id/asn_txt_send_and_attach_color"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp48"
                             android:layout_weight="1"
@@ -299,7 +295,6 @@
                         <TextView
                             android:id="@+id/asn_txt_default_header_font_color"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp48"
                             android:layout_weight="1"
@@ -339,7 +334,6 @@
                         <TextView
                             android:id="@+id/asn_txt_default_progress_color"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp48"
                             android:layout_weight="1"
