@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/txtMapRegister"
-        fontPath="fonts/IRANSansMobile_Bold.ttf"
+        android:fontFamily="@font/main_font_bold"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"

@@ -217,7 +217,7 @@
 
                         <TextView
                             android:id="@+id/txtTextTurnOnOffGps"
-                            fontPath="fonts/IRANSansMobile_Bold.ttf"
+                            android:fontFamily="@font/main_font_bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -240,7 +240,7 @@
 
                         <TextView
                             android:id="@+id/txtDescriptionMap"
-                            fontPath="fonts/IRANSansMobile_Bold.ttf"
+                            android:fontFamily="@font/main_font_bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"

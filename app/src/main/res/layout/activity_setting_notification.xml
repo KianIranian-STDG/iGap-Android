@@ -51,7 +51,7 @@
                 </net.iGap.libs.rippleeffect.RippleView>
 
                 <TextView
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true"
@@ -89,7 +89,7 @@
                 android:visibility="visible">
 
                 <net.iGap.module.HeaderTextView
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -330,7 +330,7 @@
                 android:visibility="visible">
 
                 <net.iGap.module.HeaderTextView
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -568,7 +568,7 @@
                 android:visibility="visible">
 
                 <net.iGap.module.HeaderTextView
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -737,7 +737,7 @@
                 android:visibility="gone">
 
                 <TextView
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -838,7 +838,7 @@
                 android:visibility="visible">
 
                 <net.iGap.module.HeaderTextView
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -1057,7 +1057,7 @@
                 android:visibility="visible">
 
                 <net.iGap.module.HeaderTextView
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"

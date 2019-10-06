@@ -257,7 +257,7 @@
 
               <TextView
                 android:id="@+id/ng_txt_titleToolbar"
-                fontPath="fonts/IRANSansMobile_Bold.ttf"
+                android:fontFamily="@font/main_font_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
@@ -409,7 +409,7 @@
 
             <TextView
               android:id="@+id/ng_txt_nextStep"
-              fontPath="fonts/IRANSansMobile_Bold.ttf"
+              android:fontFamily="@font/main_font_bold"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_alignParentRight="true"
@@ -429,7 +429,7 @@
 
             <TextView
               android:id="@+id/ng_txt_cancel"
-              fontPath="fonts/IRANSansMobile_Bold.ttf"
+              android:fontFamily="@font/main_font_bold"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_below="@+id/ng_txtInput_description"

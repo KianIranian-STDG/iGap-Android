@@ -244,7 +244,7 @@
 
             <net.iGap.module.EmojiTextViewE
                 android:id="@+id/view_toolbar_chat_txt_userName"
-                fontPath="fonts/IRANSansMobile_Bold.ttf"
+                android:fontFamily="@font/main_font_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lineSpacingMultiplier=".8"
