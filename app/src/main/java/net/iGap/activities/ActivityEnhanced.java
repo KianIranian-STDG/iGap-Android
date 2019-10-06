@@ -320,21 +320,6 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
             G.typeface_IRANSansMobile_Bold = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile_Bold.ttf");
         }
 
-        if (G.typeface_Fontico == null) {
-            G.typeface_Fontico = Typeface.createFromAsset(getAssets(), "fonts/iGap-Fontico.ttf");
-        }
-
-        if (G.typeface_FonticonNew == null) {
-            G.typeface_FonticonNew = Typeface.createFromAsset(getAssets(), "fonts/font_icon.ttf");
-        }
-
-        if (G.typeface_neuropolitical == null) {
-            G.typeface_neuropolitical = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
-        }
-
-        if (G.typeface_iGap == null) {
-            G.typeface_iGap = Typeface.createFromAsset(getAssets(), "fonts/font_icon.ttf");
-        }
     }
 
     private void makeDirectoriesIfNotExist() {

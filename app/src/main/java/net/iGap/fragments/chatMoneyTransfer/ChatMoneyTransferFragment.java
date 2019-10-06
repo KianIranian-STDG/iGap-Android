@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -121,8 +122,8 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
         userAvatarIvCard.setImageDrawable(drawable);
         userNameTvCard.setText(userName);
 
-        walletTransferIv.setTypeface(G.typeface_FonticonNew);
-        cardToCardIv.setTypeface(G.typeface_FonticonNew);
+        walletTransferIv.setTypeface(ResourcesCompat.getFont(walletTransferIv.getContext() , R.font.font_icon));
+        cardToCardIv.setTypeface(ResourcesCompat.getFont(cardToCardIv.getContext() , R.font.font_icon));
 
         Utils.darkModeHandler(layoutContainer);
         Utils.darkModeHandler(creditTv);
