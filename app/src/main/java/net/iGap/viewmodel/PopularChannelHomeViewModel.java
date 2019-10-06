@@ -10,7 +10,10 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.FavoriteChannelApi;
+import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.ApiServiceProvider;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentWebView;
 import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
@@ -51,28 +54,16 @@ public class PopularChannelHomeViewModel extends BaseViewModel {
     public void getFirstPage() {
         progressMutableLiveData.postValue(true);
         emptyViewMutableLiveData.postValue(View.GONE);
-        channelApi.getFirstPage().enqueue(new Callback<ParentChannel>() {
+        new ApiInitializer<ParentChannel>().initAPI(channelApi.getFirstPage(), this, new ResponseCallback<ParentChannel>() {
             @Override
-            public void onResponse(Call<ParentChannel> call, Response<ParentChannel> response) {
+            public void onSuccess(ParentChannel data) {
                 progressMutableLiveData.postValue(false);
-                if (response.body() != null) {
-                    if (response.isSuccessful()) {
-                        firstPageMutableLiveData.postValue(response.body());
-                        emptyViewMutableLiveData.postValue(View.GONE);
-                    } else {
-                        if (response.code() == 401) {
-                            HelperLog.setErrorLog(new Exception("401 error on popular channel " + G.getApiToken()));
-                        }
-                        emptyViewMutableLiveData.postValue(View.VISIBLE);
-                    }
-                } else {
-                    emptyViewMutableLiveData.postValue(View.VISIBLE);
-                }
-
+                firstPageMutableLiveData.postValue(data);
+                emptyViewMutableLiveData.postValue(View.GONE);
             }
 
             @Override
-            public void onFailure(Call<ParentChannel> call, Throwable t) {
+            public void onError(ErrorModel error) {
                 progressMutableLiveData.postValue(false);
                 emptyViewMutableLiveData.postValue(View.VISIBLE);
             }
