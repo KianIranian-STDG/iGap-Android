@@ -4,7 +4,7 @@
     <corners
         android:bottomLeftRadius="0dp"
         android:bottomRightRadius="0dp"
-        android:topLeftRadius="0dp"
-        android:topRightRadius="12dp" />
-    <solid android:color="@color/navigation_dark_mode_bg" />
+        android:topLeftRadius="12dp"
+        android:topRightRadius="0dp" />
+    <solid android:color="#c82121" />
 </shape>

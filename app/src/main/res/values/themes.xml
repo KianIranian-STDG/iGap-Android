@@ -38,12 +38,9 @@
         <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape</item>
         <item name="iGapButtonSelector">@drawable/button_selector_dark</item>
         <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_dark</item>
-        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
-        <item name="iGapCardToCardButtonBackground">
-            @drawable/background_button_card_to_card_default
-        </item>
-        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default
-        </item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_dark</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_dark</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_dark</item>
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line_dark</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_dark</item>
     </style>
@@ -80,17 +77,15 @@
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_default</item>
-        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rec_default
-        </item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rec_default</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_default</item>
-        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_default</item>
         <item name="iGapButtonSelector">@drawable/button_selector_default</item>
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
-        <item name="iGapCardToCardButtonBackground">
-            @drawable/background_button_card_to_card_default
-        </item>
-        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default
-        </item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_default</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default</item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_default</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_light</item>
     </style>
@@ -128,13 +123,12 @@
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_red</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_red</item>
         <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_red</item>
-        <item name="iGapButtonSelector">@drawable/button_selector_default</item>
-        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
-        <item name="iGapCardToCardButtonBackground">
-            @drawable/background_button_card_to_card_default
-        </item>
-        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default
-        </item>
+        <item name="iGapButtonSelector">@drawable/button_selector_red</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_red</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_red</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_red</item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_red</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
     </style>
 
     <style name="iGapPinkTheme" parent="BaseTheme">
@@ -169,14 +163,13 @@
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_pink</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_pink</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_pink</item>
-        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_red</item>
-        <item name="iGapButtonSelector">@drawable/button_selector_default</item>
-        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
-        <item name="iGapCardToCardButtonBackground">
-            @drawable/background_button_card_to_card_default
-        </item>
-        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default
-        </item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_pink</item>
+        <item name="iGapButtonSelector">@drawable/button_selector_pink</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_pink</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_pink</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_pink</item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_pink</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
     </style>
 
     <style name="iGapPurpleTheme" parent="BaseTheme">
@@ -208,17 +201,16 @@
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
-        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_dark</item>
-        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_dark</item>
-        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_default</item>
-        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape</item>
-        <item name="iGapButtonSelector">@drawable/button_selector_default</item>
-        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
-        <item name="iGapCardToCardButtonBackground">
-            @drawable/background_button_card_to_card_default
-        </item>
-        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default
-        </item>
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_purple</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_purple</item>
+        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_purple</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_purple</item>
+        <item name="iGapButtonSelector">@drawable/button_selector_purple</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_purple</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_purple</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_purple</item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_purple</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
     </style>
 
     <style name="iGapBlueTheme" parent="BaseTheme">
