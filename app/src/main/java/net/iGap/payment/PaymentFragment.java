@@ -27,9 +27,10 @@ import com.google.android.gms.security.ProviderInstaller;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentUniversalPaymentBinding;
 
-public class PaymentFragment extends Fragment {
+public class PaymentFragment extends BaseAPIViewFrag {
 
     private static String TOKEN = "Payment_Token";
     private static String TYPE = "Payment_Type";
