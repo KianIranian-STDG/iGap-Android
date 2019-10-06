@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 import net.iGap.R;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
 
@@ -216,10 +217,10 @@ public class BuyInternetPackageViewModel extends ViewModel {
                 }
             });
         } else if (packageList == null) {
-            repository.getInternetPackageList(new ResponseCallback<List<InternetPackage>>() {
+            repository.getInternetPackageList(new ResponseCallback<BaseIGashtResponse<InternetPackage>>() {
                 @Override
-                public void onSuccess(List<InternetPackage> data) {
-                    packageList = data;
+                public void onSuccess(BaseIGashtResponse<InternetPackage> data) {
+                    packageList = data.getData();
                     showMainView();
                 }
 
