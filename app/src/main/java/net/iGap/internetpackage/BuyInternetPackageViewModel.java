@@ -163,7 +163,7 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
         if (selectedPackageType > 0) {
             enabledPaymentButton.set(false);
             showLoadingView.set(View.VISIBLE);
-            repository.purchaseInternetPackage(phoneNumber.substring(1), String.valueOf(selectedPackageType), new ResponseCallback<MciPurchaseResponse>() {
+            repository.purchaseInternetPackage(phoneNumber.substring(1), String.valueOf(selectedPackageType),this, new ResponseCallback<MciPurchaseResponse>() {
                 @Override
                 public void onSuccess(MciPurchaseResponse data) {
                     showLoadingView.set(View.INVISIBLE);
@@ -199,7 +199,7 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
         showMainView.set(View.GONE);
         showRetryView.set(View.GONE);
         if (daysFilter == null || trafficFilter == null) {
-            repository.getFilterListData(new ResponseCallback<List<MciInternetPackageFilter>>() {
+            repository.getFilterListData(this, new ResponseCallback<List<MciInternetPackageFilter>>() {
                 @Override
                 public void onSuccess(List<MciInternetPackageFilter> data) {
                     getFilterListDuration(data);
@@ -218,7 +218,7 @@ public class BuyInternetPackageViewModel extends BaseAPIViewModel {
                 }
             });
         } else if (packageList == null) {
-            repository.getInternetPackageList(new ResponseCallback<BaseIGashtResponse<InternetPackage>>() {
+            repository.getInternetPackageList(this, new ResponseCallback<BaseIGashtResponse<InternetPackage>>() {
                 @Override
                 public void onSuccess(BaseIGashtResponse<InternetPackage> data) {
                     packageList = data.getData();

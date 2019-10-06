@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.MySpinnerAdapter;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentBuyInternetPackageBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
@@ -21,7 +22,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
-public class BuyInternetPackageFragment extends BaseFragment {
+public class BuyInternetPackageFragment extends BaseAPIViewFrag {
 
     private BuyInternetPackageViewModel viewModel;
     private FragmentBuyInternetPackageBinding binding;

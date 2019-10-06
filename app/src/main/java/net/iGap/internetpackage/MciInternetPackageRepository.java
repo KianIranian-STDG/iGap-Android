@@ -4,6 +4,7 @@ import android.util.Log;
 
 import net.iGap.api.MciApi;
 import net.iGap.api.apiService.ApiInitializer;
+import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.apiService.ResponseCallback;
@@ -39,21 +40,21 @@ public class MciInternetPackageRepository {
         instance = null;
     }
 
-    public void getFilterListData(ResponseCallback<List<MciInternetPackageFilter>> callback) {
+    public void getFilterListData(HandShakeCallback handShakeCallback, ResponseCallback<List<MciInternetPackageFilter>> callback) {
 
-        new ApiInitializer<List<MciInternetPackageFilter>>().initAPI(api.getInternetPackageFilterList(), callback);
-
-    }
-
-    public void getInternetPackageList(ResponseCallback<BaseIGashtResponse<InternetPackage>> callback) {
-
-        new ApiInitializer<BaseIGashtResponse<InternetPackage>>().initAPI(api.getInternetPackageList(), callback);
+        new ApiInitializer<List<MciInternetPackageFilter>>().initAPI(api.getInternetPackageFilterList(), handShakeCallback, callback);
 
     }
 
-    public void purchaseInternetPackage(String phoneNumber, String internetPackageType, ResponseCallback<MciPurchaseResponse> callback) {
+    public void getInternetPackageList(HandShakeCallback handShakeCallback, ResponseCallback<BaseIGashtResponse<InternetPackage>> callback) {
 
-        new ApiInitializer<MciPurchaseResponse>().initAPI(api.internetPackagePurchase(phoneNumber, internetPackageType), callback);
+        new ApiInitializer<BaseIGashtResponse<InternetPackage>>().initAPI(api.getInternetPackageList(), handShakeCallback, callback);
+
+    }
+
+    public void purchaseInternetPackage(String phoneNumber, String internetPackageType, HandShakeCallback handShakeCallback, ResponseCallback<MciPurchaseResponse> callback) {
+
+        new ApiInitializer<MciPurchaseResponse>().initAPI(api.internetPackagePurchase(phoneNumber, internetPackageType), handShakeCallback, callback);
 
     }
 }
