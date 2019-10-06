@@ -360,7 +360,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             songFileName.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
             setTextSize(songFileName, R.dimen.smallTextSize);
             Utils.darkModeHandler(songFileName);
-            songFileName.setTypeface(G.typeface_IRANSansMobile);
+            songFileName.setTypeface(ResourcesCompat.getFont(songFileName.getContext() , R.font.main_font));
 
             songArtist = new AppCompatTextView(G.context);
             songArtist.setId(R.id.songArtist);

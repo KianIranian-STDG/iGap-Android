@@ -13,7 +13,10 @@ package net.iGap.module;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import net.iGap.G;
+import net.iGap.R;
 
 public class CustomTextViewMedium extends androidx.appcompat.widget.AppCompatTextView {
     public CustomTextViewMedium(Context context) {
@@ -32,6 +35,6 @@ public class CustomTextViewMedium extends androidx.appcompat.widget.AppCompatTex
     }
 
     private void init(Context context) {
-        setTypeface(G.typeface_IRANSansMobile);
+        setTypeface(ResourcesCompat.getFont(context , R.font.main_font));
     }
 }

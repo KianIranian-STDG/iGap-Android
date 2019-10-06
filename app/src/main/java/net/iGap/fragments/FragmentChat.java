@@ -73,6 +73,7 @@ import androidx.cardview.widget.CardView;
 import androidx.collection.ArrayMap;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -2789,7 +2790,7 @@ public class FragmentChat extends BaseFragment
         //added run time -> counter of un read messages
         llScrollNavigate = rootView.findViewById(R.id.ac_ll_scrool_navigate);
         txtNewUnreadMessage = new BadgeView(getContext());
-        txtNewUnreadMessage.getTextView().setTypeface(G.typeface_IRANSansMobile);
+        txtNewUnreadMessage.getTextView().setTypeface(ResourcesCompat.getFont(txtNewUnreadMessage.getContext() , R.font.main_font));
         txtNewUnreadMessage.getTextView().setSingleLine();
         txtNewUnreadMessage.getTextView().setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});//set max length
         txtNewUnreadMessage.setBadgeColor(G.isDarkTheme ? Color.parseColor(Theme.default_notificationColor) : Color.parseColor(G.notificationColor));
@@ -6725,9 +6726,9 @@ public class FragmentChat extends BaseFragment
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = mReplayLayout.findViewById(R.id.replayTo);
             Utils.darkModeHandler(replayTo);
-            replayTo.setTypeface(G.typeface_IRANSansMobile);
+            replayTo.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext() , R.font.main_font));
             TextView replayFrom = mReplayLayout.findViewById(R.id.replyFrom);
-            replayFrom.setTypeface(G.typeface_IRANSansMobile);
+            replayFrom.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext() , R.font.main_font));
 
             FontIconTextView replayIcon = rootView.findViewById(R.id.lcr_imv_replay);
             Utils.darkModeHandler(replayIcon);

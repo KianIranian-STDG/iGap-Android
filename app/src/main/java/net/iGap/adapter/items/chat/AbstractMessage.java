@@ -37,6 +37,7 @@ import android.widget.Toast;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.collection.ArrayMap;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -1126,9 +1127,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             });
 
             TextView txtPrefixForwardFrom = forwardView.findViewById(R.id.cslr_txt_prefix_forward);
-            txtPrefixForwardFrom.setTypeface(G.typeface_IRANSansMobile);
+            txtPrefixForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext() , R.font.main_font));
             TextView txtForwardFrom = forwardView.findViewById(R.id.cslr_txt_forward_from);
-            txtForwardFrom.setTypeface(G.typeface_IRANSansMobile);
+            txtForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext() , R.font.main_font));
 
             /**
              * if forward message from chat or group , sender is user

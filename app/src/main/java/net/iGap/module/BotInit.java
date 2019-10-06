@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -473,7 +474,7 @@ public class BotInit implements MakeButtons.OnClickListener {
         btn.setText(name);
         btn.setAllCaps(false);
         btn.setGravity(Gravity.CENTER);
-        btn.setTypeface(G.typeface_IRANSansMobile);
+        btn.setTypeface(ResourcesCompat.getFont(btn.getContext() , R.font.main_font));
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -514,7 +515,7 @@ public class BotInit implements MakeButtons.OnClickListener {
         txt.setLayoutParams(param);
         txt.setPadding(15, 6, 15, 6);
         txt.setText(action);
-        txt.setTypeface(G.typeface_IRANSansMobile);
+        txt.setTypeface(ResourcesCompat.getFont(txt.getContext() , R.font.main_font));
         txt.setTextColor(Color.BLACK);
         txt.setOnClickListener(new View.OnClickListener() {
             @Override

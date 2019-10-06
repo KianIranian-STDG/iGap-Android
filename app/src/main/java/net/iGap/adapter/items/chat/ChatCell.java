@@ -13,6 +13,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.vanniktech.emoji.EmojiTextView;
 
@@ -348,7 +349,7 @@ public class ChatCell extends ConstraintLayout {
     }
 
     private void setTypeFace(TextView v) {
-        v.setTypeface(G.typeface_IRANSansMobile);
+        v.setTypeface(ResourcesCompat.getFont(v.getContext() , R.font.main_font));
     }
 
     public EmojiTextView getLastMessage() {

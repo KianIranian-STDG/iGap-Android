@@ -62,7 +62,6 @@ public class BaseFragment extends SwipeBackFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         avatarHandler = new AvatarHandler();
-        checkFont();
         super.onCreate(savedInstanceState);
 
         getSwipeBackLayout().setEdgeOrientation(SwipeBackLayout.EDGE_LEFT);
@@ -120,22 +119,6 @@ public class BaseFragment extends SwipeBackFragment {
             }
         }
     }
-
-    /**
-     * check the selected language user and set the language if change it
-     */
-    private void checkFont() {
-
-        if (G.typeface_IRANSansMobile == null) {
-            G.typeface_IRANSansMobile = Typeface.createFromAsset(G.context.getAssets(), "fonts/IRANSansMobile.ttf");
-        }
-
-        if (G.typeface_IRANSansMobile_Bold == null) {
-            G.typeface_IRANSansMobile_Bold = Typeface.createFromAsset(G.context.getAssets(), "fonts/IRANSansMobile_Bold.ttf");
-        }
-
-    }
-
 
     protected void hideKeyboard() {
         if (getActivity() != null) {

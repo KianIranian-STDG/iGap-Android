@@ -28,6 +28,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -284,7 +285,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 TextInputLayout inputGroupLink = new TextInputLayout(getActivity());
                 MEditText edtLink = new MEditText(getActivity());
                 edtLink.setHint(getString(R.string.group_link_hint_revoke));
-                edtLink.setTypeface(G.typeface_IRANSansMobile);
+                edtLink.setTypeface(ResourcesCompat.getFont(edtLink.getContext() , R.font.main_font));
                 edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
                 edtLink.setText(link);
                 edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
@@ -494,7 +495,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             edtUserName.setTextDirection(View.TEXT_DIRECTION_LTR);
         }
-        edtUserName.setTypeface(G.typeface_IRANSansMobile);
+        edtUserName.setTypeface(ResourcesCompat.getFont(edtUserName.getContext() , R.font.main_font));
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources().getDimension(R.dimen.dp14));
         //TODO: fixed this and this will set viewModel
         if (viewModel.isPopup) {

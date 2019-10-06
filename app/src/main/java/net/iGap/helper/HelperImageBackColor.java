@@ -16,7 +16,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import net.iGap.G;
+import net.iGap.R;
 
 public class HelperImageBackColor {
 
@@ -111,7 +114,7 @@ public class HelperImageBackColor {
             textPaint.setColor(Color.parseColor(mColor));
             textPaint.setTextAlign(Paint.Align.CENTER);
             textPaint.setTextSize(fontSize);
-            textPaint.setTypeface(G.typeface_IRANSansMobile_Bold);
+            textPaint.setTypeface(ResourcesCompat.getFont(G.context , R.font.main_font_bold));
             textPaint.setStyle(Paint.Style.FILL);
             cs.drawText(alphabetName, with / 2, with / 2 + fontSize / 4, textPaint);
         } catch (NullPointerException e) {

@@ -41,6 +41,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
 import androidx.core.content.FileProvider;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -569,7 +570,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         TextView textView = new TextView(getContext());
         textView.setText(mSharedTypesList.get(pos));
         Utils.setTextSize(textView, R.dimen.smallTextSize);
-        textView.setTypeface(G.typeface_IRANSansMobile);
+        textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
         textView.setSingleLine(true);
 
         if (G.isDarkTheme) {

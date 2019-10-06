@@ -89,10 +89,6 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
             avatarHandler = new AvatarHandler();
             /*Log.wtf("ActivityEnhanced","AvatarHandler end");*/
 
-            /*Log.wtf("ActivityEnhanced","checkFont start");*/
-            new Thread(this::checkFont);
-            /*Log.wtf("ActivityEnhanced","checkFont end");*/
-
             /*Log.wtf("ActivityEnhanced","screenStateFilter start");*/
             IntentFilter screenStateFilter = new IntentFilter();
             screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
@@ -302,22 +298,6 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
             if (!AttachFile.isInAttach && canSetUserStatus) {
                 UserStatusController.getInstance().setOffline();
             }
-        }
-
-    }
-
-    /**
-     * check the selected language user and set the language if change it
-     */
-
-    private void checkFont() {
-
-        if (G.typeface_IRANSansMobile == null) {
-            G.typeface_IRANSansMobile = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
-        }
-
-        if (G.typeface_IRANSansMobile_Bold == null) {
-            G.typeface_IRANSansMobile_Bold = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile_Bold.ttf");
         }
 
     }

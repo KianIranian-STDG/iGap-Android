@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -362,7 +363,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             edtUserName.setTextDirection(View.TEXT_DIRECTION_LTR);
         }
-        edtUserName.setTypeface(G.typeface_IRANSansMobile);
+        edtUserName.setTypeface(ResourcesCompat.getFont(edtUserName.getContext() , R.font.main_font));
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
 
         /*if (isPopup) {*/

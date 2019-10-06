@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -134,7 +135,7 @@ public class FragmentSettingRemoveStickers extends FragmentToolBarBack {
             TextView tv = new TextView(getContext());
             tv.setText(tabLayout.getTabAt(i).getText());
             tv.setGravity(Gravity.CENTER);
-            tv.setTypeface(G.typeface_IRANSansMobile);
+            tv.setTypeface(ResourcesCompat.getFont(tv.getContext() , R.font.main_font));
 
             if (G.isDarkTheme) {
                 tv.setTextColor(G.context.getResources().getColor(R.color.white));

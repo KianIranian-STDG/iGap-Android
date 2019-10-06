@@ -21,6 +21,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -443,7 +444,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         final AppCompatEditText newPassWord = new AppCompatEditText(G.fragmentActivity);
         newPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password));
         newPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        newPassWord.setTypeface(G.typeface_IRANSansMobile);
+        newPassWord.setTypeface(ResourcesCompat.getFont(layoutNickname.getContext() , R.font.main_font));
         newPassWord.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
         newPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         newPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
@@ -466,7 +467,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         final AppCompatEditText confirmPassWord = new AppCompatEditText(G.fragmentActivity);
         confirmPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_re_enter_your_password));
         confirmPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        confirmPassWord.setTypeface(G.typeface_IRANSansMobile);
+        confirmPassWord.setTypeface(ResourcesCompat.getFont(layoutNickname.getContext() , R.font.main_font));
         confirmPassWord.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
         confirmPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         confirmPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
@@ -597,7 +598,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         final AppCompatEditText newPassWord = new AppCompatEditText(G.fragmentActivity);
         newPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password));
         newPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        newPassWord.setTypeface(G.typeface_IRANSansMobile);
+        newPassWord.setTypeface(ResourcesCompat.getFont(newPassWord.getContext() , R.font.main_font));
         newPassWord.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
         newPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         newPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
