@@ -6619,7 +6619,6 @@ public class FragmentChat extends BaseFragment
             replayFrom.setTypeface(G.typeface_IRANSansMobile);
 
             FontIconTextView replayIcon = rootView.findViewById(R.id.lcr_imv_replay);
-            Utils.darkModeHandler(replayIcon);
             if (isEdit)
                 replayIcon.setText(getString(R.string.edit_icon));
             else
@@ -7512,10 +7511,8 @@ public class FragmentChat extends BaseFragment
                 String str = _count > 1 ? G.fragmentActivity.getResources().getString(R.string.messages_selected) : G.fragmentActivity.getResources().getString(R.string.message_selected);
 
                 EmojiTextViewE emMessage = rootView.findViewById(R.id.cslhf_txt_message);
-                Utils.darkModeHandler(emMessage);
 
                 FontIconTextView forwardIcon = rootView.findViewById(R.id.cslhs_imv_forward);
-                Utils.darkModeHandler(forwardIcon);
 
                 if (HelperCalander.isPersianUnicode) {
 

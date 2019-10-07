@@ -997,7 +997,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 super(itemView);
 
                 txtCounter = itemView.findViewById(R.id.row_contact_counter_txt);
-                Utils.darkModeHandler(txtCounter);
             }
 
             public void setCount(int count) {

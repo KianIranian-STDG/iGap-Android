@@ -197,8 +197,8 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
             RelativeLayout relativeLayoutRow = itemView.findViewById(R.id.rl_item_pop_rows);
             LinearLayout linearLayoutRow = itemView.findViewById(R.id.ll_item_pop_rows);
             ImageView imageViewMore = itemView.findViewById(R.id.iv_item_popular_more);
-            linearLayoutRow.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.shape_favorite_channel_dark_them), itemView.getContext(), R.attr.iGapDividerLine));
-            relativeLayoutRow.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.shape_favorite_channel_all_them), itemView.getContext(), R.attr.iGapCardViewColor));
+            linearLayoutRow.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.shape_favorite_channel_dark_them), itemView.getContext(), R.attr.iGapSubtitleTextColor));
+            relativeLayoutRow.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.shape_favorite_channel_all_them), itemView.getContext(), R.attr.iGapDividerLine));
             imageViewMore.setColorFilter(new Theme().getDividerColor(itemView.getContext()));
         }
     }

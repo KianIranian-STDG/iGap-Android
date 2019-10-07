@@ -27,6 +27,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
@@ -300,22 +301,17 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        holder.txt_Timer.setTextColor(Color.parseColor(G.textTitleTheme));
-        holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
+
+        holder.txt_Timer.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
+        holder.author.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
     }
 
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
 
-        if (type == ProtoGlobal.Room.Type.CHANNEL) {
-            holder.txt_Timer.setTextColor(Color.parseColor(G.textTitleTheme));
-            holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
-        } else {
-
-            holder.txt_Timer.setTextColor(holder.itemView.getResources().getColor(R.color.grayNewDarker));
-            holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
-        }
+        holder.txt_Timer.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.author.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
     }
 
     @NotNull
@@ -358,7 +354,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             setTypeFace(author);
 
 
-            btnPlayMusic = new FontIconTextView(G.context);
+            btnPlayMusic = new FontIconTextView(view.getContext());
             btnPlayMusic.setId(R.id.csla_btn_play_music);
             btnPlayMusic.setBackgroundResource(0);
             btnPlayMusic.setGravity(Gravity.CENTER);
@@ -366,12 +362,10 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             btnPlayMusic.setTextColor(getColor(R.color.voice_item));
             setTextSize(btnPlayMusic, R.dimen.dp36);
 
-            txt_Timer = new AppCompatTextView(G.context);
+            txt_Timer = new AppCompatTextView(view.getContext());
             txt_Timer.setId(R.id.csla_txt_timer);
-            txt_Timer.setTextColor(getColor(R.color.gray));
             setTextSize(txt_Timer, R.dimen.verySmallTextSize);
             setTypeFace(txt_Timer);
-            Utils.darkModeHandler(txt_Timer);
 
 
             rootView = new ConstraintLayout(getContext());
