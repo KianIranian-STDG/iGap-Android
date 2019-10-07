@@ -15,6 +15,7 @@ import android.os.Looper;
 
 import androidx.annotation.Nullable;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.module.SUID;
 import net.iGap.proto.ProtoChannelGetMemberList;
@@ -90,7 +91,7 @@ public class RealmMember extends RealmObject {
     }
 
     public static void addMember(final long roomId, final long userId, final String role) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -113,12 +114,12 @@ public class RealmMember extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void updateMemberRole(final long roomId, final long memberId, final String role) {
         //TODO [Saeed Mozaffari] [2017-10-24 6:05 PM] - Can Write Better Code?
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -148,18 +149,18 @@ public class RealmMember extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void kickMember(final long roomId, final long userId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     kickMember(realm, roomId, userId);
                 }
             });
-        }
+        });
     }
 
     public static boolean kickMember(Realm realm, final long roomId, final long userId) {
@@ -210,7 +211,7 @@ public class RealmMember extends RealmObject {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     final List<ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member> members = new ArrayList<>();
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
@@ -243,7 +244,7 @@ public class RealmMember extends RealmObject {
                             }
                         }
                     });
-                }
+                });
 
             }
         });
@@ -255,7 +256,7 @@ public class RealmMember extends RealmObject {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     final List<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member> members = new ArrayList<ProtoGroupGetMemberList.GroupGetMemberListResponse.Member>();
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
@@ -288,7 +289,7 @@ public class RealmMember extends RealmObject {
                             }
                         }
                     });
-                }
+                });
             }
         });
     }

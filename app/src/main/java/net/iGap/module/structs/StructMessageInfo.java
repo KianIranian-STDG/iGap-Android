@@ -76,7 +76,7 @@ public class StructMessageInfo implements Parcelable {
     }
 
     public StructMessageInfo(RealmRoomMessage realmRoomMessage) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             if (realmRoomMessage.isManaged()) {
                 this.realmRoomMessage = realm.copyFromRealm(realmRoomMessage);
             } else {
@@ -91,7 +91,7 @@ public class StructMessageInfo implements Parcelable {
                     initials = realmRegisteredInfo.getInitials();
                 }
             }
-        }
+        });
     }
 
     public void setContactValues(String firstName, String lastName, String number) {
@@ -107,20 +107,19 @@ public class StructMessageInfo implements Parcelable {
     }
 
     public void setAttachment(RealmAttachment attachment) {
-        RealmAttachment unManagedAttachment;
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmAttachment unManagedAttachment;
             if (attachment.isManaged()) {
                 unManagedAttachment = realm.copyFromRealm(attachment);
             } else {
                 unManagedAttachment = attachment;
             }
-        }
-
-        if (realmRoomMessage.getForwardMessage() != null) {
-            realmRoomMessage.getForwardMessage().setAttachment(unManagedAttachment);
-        } else {
-            realmRoomMessage.setAttachment(unManagedAttachment);
-        }
+            if (realmRoomMessage.getForwardMessage() != null) {
+                realmRoomMessage.getForwardMessage().setAttachment(unManagedAttachment);
+            } else {
+                realmRoomMessage.setAttachment(unManagedAttachment);
+            }
+        });
     }
 
     public int getUploadProgress() {
@@ -210,7 +209,7 @@ public class StructMessageInfo implements Parcelable {
             return realmRoomMessage.getChannelExtra();
         } else {
             new Thread(() -> {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                    DbManager.getInstance().doRealmTask(realm -> {
                     realm.executeTransaction(realm1 -> {
                         RealmRoomMessage newMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
                         RealmChannelExtra channelExtra = realm1.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
@@ -218,17 +217,17 @@ public class StructMessageInfo implements Parcelable {
                             newMessage.setChannelExtra(channelExtra);
                         }
                     });
-                }
+                });
             }).start();
 
-            try (Realm realm = Realm.getDefaultInstance()) {
+            return DbManager.getInstance().doRealmTask(realm -> {
                 RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, realmRoomMessage.getMessageId()).findFirst();
                 if (realmChannelExtra != null) {
                     realmChannelExtra = realm.copyFromRealm(realmChannelExtra);
                 }
 
                 return realmChannelExtra;
-            }
+            });
         }
     }
 

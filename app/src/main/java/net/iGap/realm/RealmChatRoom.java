@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.DbManager;
 import net.iGap.proto.ProtoGlobal;
 
 import io.realm.Realm;
@@ -38,13 +39,13 @@ public class RealmChatRoom extends RealmObject {
     }
 
     public boolean isVerified() {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        return DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, peer_id).findFirst();
             if (realmRegisteredInfo != null) {
                 return realmRegisteredInfo.isVerified();
             }
-        }
-        return false;
+            return false;
+        });
     }
 
     public long getPeerId() {

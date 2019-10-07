@@ -13,6 +13,7 @@ package net.iGap.module;
 import android.app.Activity;
 import android.content.Context;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperUploadFile;
@@ -49,7 +50,7 @@ public class ResendMessage implements IResendMessage {
 
     @Override
     public void deleteMessage() {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -58,7 +59,7 @@ public class ResendMessage implements IResendMessage {
                     }
                 }
             }, () -> mListener.deleteMessage());
-        }
+        });
     }
 
     private void resend(final boolean all) {
@@ -66,7 +67,7 @@ public class ResendMessage implements IResendMessage {
         if (!G.userLogin) {
             return;
         }
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -96,7 +97,7 @@ public class ResendMessage implements IResendMessage {
                             G.handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    try (Realm realm1 = Realm.getDefaultInstance()) {
+                                    DbManager.getInstance().doRealmTask(realm1 -> {
                                         RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessages.get(j).realmRoomMessage.getMessageId()).findFirst();
                                         if (roomMessage != null) {
                                             RealmRoom realmRoom = realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
@@ -113,8 +114,7 @@ public class ResendMessage implements IResendMessage {
                                                 }
                                             }
                                         }
-
-                                    }
+                                    });
                                 }
                             }, 1000 * j);
                         }
@@ -143,7 +143,7 @@ public class ResendMessage implements IResendMessage {
                     }
                 }
             });
-        }
+        });
     }
 
     @Override

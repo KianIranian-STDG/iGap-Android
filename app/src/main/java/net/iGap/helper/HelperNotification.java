@@ -24,6 +24,7 @@ import android.view.Display;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -620,12 +621,12 @@ public class HelperNotification {
     }
 
     public void addMessage(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
             if (room != null) {
                 addMessage(roomId, roomMessage, roomType, room, realm);
             }
-        }
+        });
     }
 
     public void addMessage(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, RealmRoom room, Realm realm) {
@@ -870,14 +871,15 @@ public class HelperNotification {
                         G.handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                try (Realm realm = Realm.getDefaultInstance()) {
+                                DbManager.getInstance().doRealmTask(realm -> {
                                     realm.executeTransactionAsync(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {
                                             RealmRoom.setCount(realm, roomId, 0);
                                         }
                                     }, () -> {
-                                        try (Realm realm2 = Realm.getDefaultInstance()) {
+
+                                        DbManager.getInstance().doRealmTask(realm2 -> {
                                             if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
                                                 RealmRoomMessage.fetchMessages(realm2, roomId, new OnActivityChatStart() {
                                                     @Override
@@ -897,10 +899,10 @@ public class HelperNotification {
                                                 });
                                             }
                                             AppUtils.updateBadgeOnly(realm2, roomId);
-                                        }
+                                        });
 
                                     });
-                                }
+                                });
                             }
                         }, 5);
                     }

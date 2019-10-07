@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.DbManager;
 import net.iGap.module.enums.ClientConditionOffline;
 import net.iGap.module.enums.ClientConditionVersion;
 import net.iGap.proto.ProtoClientCondition;
@@ -54,7 +55,7 @@ public class RealmClientCondition extends RealmObject {
     }
 
     public static void setClearId(final long roomId, final long clearId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -64,11 +65,11 @@ public class RealmClientCondition extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void setVersion(final long roomId, final long version, final ClientConditionVersion conditionVersion) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -84,7 +85,7 @@ public class RealmClientCondition extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void addOfflineDelete(Realm realm, RealmClientCondition realmClientCondition, long messageId, ProtoGlobal.Room.Type roomType, boolean bothDelete) {
@@ -107,7 +108,7 @@ public class RealmClientCondition extends RealmObject {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -117,7 +118,7 @@ public class RealmClientCondition extends RealmObject {
                             }
                         }
                     });
-                }
+                });
             }
         }).start();
 
@@ -132,7 +133,7 @@ public class RealmClientCondition extends RealmObject {
     }
 
     public static void deleteOfflineAction(final long messageId, final ClientConditionOffline messageStatus) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -160,11 +161,11 @@ public class RealmClientCondition extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void clearOfflineAction() {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -176,7 +177,7 @@ public class RealmClientCondition extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     /**
@@ -187,7 +188,7 @@ public class RealmClientCondition extends RealmObject {
     }
 
     public static ProtoClientCondition.ClientCondition.Builder computeClientCondition(Long roomId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        return DbManager.getInstance().doRealmTask(realm -> {
             ProtoClientCondition.ClientCondition.Builder clientCondition = ProtoClientCondition.ClientCondition.newBuilder();
 
             if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).count() == 0) {
@@ -287,7 +288,7 @@ public class RealmClientCondition extends RealmObject {
 
             }
             return clientCondition;
-        }
+        });
     }
 
     public long getRoomId() {

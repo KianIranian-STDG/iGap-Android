@@ -52,7 +52,7 @@ public class RealmCallLog extends RealmObject {
     }
 
     public static void addLogList(final List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> list) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -61,7 +61,7 @@ public class RealmCallLog extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void clearCallLog(final long clearId) {
@@ -76,14 +76,14 @@ public class RealmCallLog extends RealmObject {
      * should be check state of call and clear should be execute synchronise
      */
     private static void clearAllCallLog() {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     realm.where(RealmCallLog.class).findAll().deleteAllFromRealm();
                 }
             });
-        }
+        });
     }
 
     /**

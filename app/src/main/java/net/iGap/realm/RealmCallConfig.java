@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.proto.ProtoSignalingGetConfiguration;
 
@@ -28,7 +29,7 @@ public class RealmCallConfig extends RealmObject {
     private RealmList<RealmIceServer> realmIceServer = null;
 
     public static void updateSignalingConfiguration(final ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.Builder builder) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmCallConfig realmCall = realm.where(RealmCallConfig.class).findFirst();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -53,7 +54,7 @@ public class RealmCallConfig extends RealmObject {
                 }
             });
 
-        }
+        });
     }
 
     public boolean isVoice_calling() {

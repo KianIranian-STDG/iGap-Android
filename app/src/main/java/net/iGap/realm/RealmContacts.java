@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.DbManager;
 import net.iGap.helper.HelperString;
 import net.iGap.proto.ProtoGlobal;
 
@@ -57,7 +58,7 @@ public class RealmContacts extends RealmObject {
     }
 
     public static void deleteContact(final String phone) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -67,11 +68,11 @@ public class RealmContacts extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void updateName(final long userId, final String firstName, final String lastName, final String initials) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -84,11 +85,11 @@ public class RealmContacts extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void updateBlock(final long userId, final boolean block) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
             if (realmContacts != null) {
                 realm.executeTransaction(new Realm.Transaction() {
@@ -98,7 +99,7 @@ public class RealmContacts extends RealmObject {
                     }
                 });
             }
-        }
+        });
     }
 
 

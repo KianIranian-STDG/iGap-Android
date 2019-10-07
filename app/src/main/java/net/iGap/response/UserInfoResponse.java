@@ -12,6 +12,7 @@ package net.iGap.response;
 
 import androidx.annotation.NonNull;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
@@ -48,7 +49,7 @@ public class UserInfoResponse extends MessageHandler {
         super.handler();
         final ProtoUserInfo.UserInfoResponse.Builder builder = (ProtoUserInfo.UserInfoResponse.Builder) message;
 
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(@NonNull Realm realm) {
@@ -61,7 +62,7 @@ public class UserInfoResponse extends MessageHandler {
                     RealmAvatar.putOrUpdateAndManageDelete(realm, builder.getUser().getId(), builder.getUser().getAvatar());
                 }
             });
-        }
+        });
 
         LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
             @Override

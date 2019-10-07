@@ -13,6 +13,7 @@ package net.iGap.realm;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperString;
@@ -58,24 +59,24 @@ public class RealmAttachment extends RealmObject {
     private String localFilePath;
 
     public static void updateToken(long fakeId, String token) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, fakeId).findFirst();
             if (attachment != null) {
                 attachment.setToken(token);
             }
-        }
+        });
     }
 
     public static void updateFileSize(final long messageId, final long fileSize) {
         new Thread(() -> {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(realm1 -> {
                     RealmAttachment attachment = realm1.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
                     if (attachment != null) {
                         attachment.setSize(fileSize);
                     }
                 });
-            }
+            });
         }).start();
 
     }
@@ -215,7 +216,7 @@ public class RealmAttachment extends RealmObject {
     }
 
     public static void setThumbnailPathDataBaseAttachment(final String cashID, final String path) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(@NonNull Realm realm) {
@@ -225,12 +226,11 @@ public class RealmAttachment extends RealmObject {
                     }
                 }
             });
-
-        }
+        });
     }
 
     public static void setFilePAthToDataBaseAttachment(final String cashID, final String path) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -241,7 +241,7 @@ public class RealmAttachment extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public RealmThumbnail getLargeThumbnail() {

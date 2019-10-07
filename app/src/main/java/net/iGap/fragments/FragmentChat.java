@@ -3997,7 +3997,7 @@ public class FragmentChat extends BaseFragment
 
         }
 
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
             if (realmRoomMessage != null && realmRoomMessage.isValid() && !realmRoomMessage.isDeleted()) {
@@ -4027,8 +4027,7 @@ public class FragmentChat extends BaseFragment
                     }
                 }
             }
-
-        }
+        });
     }
 
     private void playReceiveSound(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
@@ -4134,12 +4133,12 @@ public class FragmentChat extends BaseFragment
 
         roomMessage.setChannelExtra(channelExtra);
         new Thread(() -> {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(realm1 -> {
                     realm1.copyToRealmOrUpdate(roomMessage);
                     RealmRoom.setLastMessageWithRoomMessage(realm1, mRoomId, voiceLastMessage);
                 });
-            }
+            });
         }).start();
 
 
@@ -4206,12 +4205,12 @@ public class FragmentChat extends BaseFragment
             JSONObject jObject = new JSONObject(message.getAdditional().getAdditionalData());
             String groupId = jObject.getString("groupId");
             String token = jObject.getString("token");
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
                 if (realmStickers == null || !realmStickers.isFavorite()) {
                     openFragmentAddStickerToFavorite(groupId, token);
                 }
-            }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -4288,7 +4287,7 @@ public class FragmentChat extends BaseFragment
         txtNewUnreadMessage.setVisibility(View.GONE);
         txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
 
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -4296,7 +4295,7 @@ public class FragmentChat extends BaseFragment
                     RealmRoom.removeFirstUnreadMessage(realm, mRoomId);
                 }
             });
-        }
+        });
     }
 
     @Override
@@ -4322,12 +4321,12 @@ public class FragmentChat extends BaseFragment
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    try (Realm realm = Realm.getDefaultInstance()) {
+                    DbManager.getInstance().doRealmTask(realm -> {
                         realm.executeTransaction(realm1 -> {
                             RealmClientCondition.addOfflineSeen(realm1, mRoomId, messageInfo.realmRoomMessage.getMessageId());
                             RealmRoomMessage.setStatusSeenInChat(realm1, messageInfo.realmRoomMessage.getMessageId());
                         });
-                    }
+                    });
                 }
             }).start();
         }
@@ -5363,14 +5362,14 @@ public class FragmentChat extends BaseFragment
      * @param fakeMessageId messageId that create when created this message
      */
     private void makeFailed(final long fakeMessageId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     RealmRoomMessage.setStatusFailedInChat(realm, fakeMessageId);
                 }
             });
-        }
+        });
     }
 
     private void showErrorDialog(final int time) {
@@ -5850,11 +5849,11 @@ public class FragmentChat extends BaseFragment
                         }
 
                         new Thread(() -> {
-                            try (Realm realm = Realm.getDefaultInstance()) {
+                            DbManager.getInstance().doRealmTask(realm -> {
                                 realm.executeTransaction(realm1 -> {
                                     realm1.copyToRealmOrUpdate(roomMessage);
                                 });
-                            }
+                            });
                         }).start();
 
 
@@ -6605,7 +6604,7 @@ public class FragmentChat extends BaseFragment
         txtSpamClose.setOnClickListener(view -> {
             vgSpamUser.setVisibility(View.GONE);
             new Thread(() -> {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     realm.executeTransaction(realm1 -> {
                         if (registeredInfo != null) {
                             RealmRegisteredInfo registeredInfo2 = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registeredInfo.getId()).findFirst();
@@ -6615,7 +6614,7 @@ public class FragmentChat extends BaseFragment
                         }
 
                     });
-                }
+                });
 
             }).start();
         });
@@ -7626,7 +7625,7 @@ public class FragmentChat extends BaseFragment
         }
 
         new Thread(() -> {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(realm1 -> {
                     RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                     if (room != null) {
@@ -7634,7 +7633,7 @@ public class FragmentChat extends BaseFragment
                     }
                     RealmRoom.setLastMessageWithRoomMessage(realm1, roomMessage.getRoomId(), realm1.copyToRealmOrUpdate(roomMessage));
                 });
-            }
+            });
         }).start();
 
 
@@ -7740,7 +7739,7 @@ public class FragmentChat extends BaseFragment
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -7748,7 +7747,7 @@ public class FragmentChat extends BaseFragment
                             RealmRoom.setLastMessageWithRoomMessage(realm, mRoomId, managedMessage);
                         }
                     });
-                }
+                });
             }
         }).start();
 
@@ -8604,9 +8603,9 @@ public class FragmentChat extends BaseFragment
     }
 
     private long gapDetection(RealmResults<RealmRoomMessage> results, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        return DbManager.getInstance().doRealmTask(realm -> {
             return gapDetection(realm.copyFromRealm(results), direction);
-        }
+        });
     }
 
     /**

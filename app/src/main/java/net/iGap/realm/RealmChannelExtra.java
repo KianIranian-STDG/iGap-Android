@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.module.structs.StructChannelExtra;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
@@ -69,7 +70,7 @@ public class RealmChannelExtra extends RealmObject {
     }
 
     public static void setVote(final long messageId, final ProtoGlobal.RoomMessageReaction messageReaction, final String counterLabel) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -83,11 +84,11 @@ public class RealmChannelExtra extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static void updateMessageStats(final List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats> statsArrayList) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -101,19 +102,14 @@ public class RealmChannelExtra extends RealmObject {
                     }
                 }
             });
-        }
+        });
     }
 
     public static boolean hasChannelExtra(long messageId) {
-        boolean hasChannelExtra = false;
-        try (Realm realm = Realm.getDefaultInstance()) {
+        return DbManager.getInstance().doRealmTask(realm -> {
             RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
-            if (realmChannelExtra != null) {
-                hasChannelExtra = true;
-            }
-        }
-
-        return hasChannelExtra;
+            return realmChannelExtra != null;
+        });
     }
 
     public long getMessageId() {

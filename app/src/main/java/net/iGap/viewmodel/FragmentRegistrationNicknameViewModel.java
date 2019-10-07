@@ -18,6 +18,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.BindingAdapter;
@@ -82,12 +83,12 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
         this.avatarHandler = avatarHandler;
         this.sharedPreferences = sharedPreferences;
         //ToDo: create repository and move this to that
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo != null) {
                 RealmAvatar.deleteAvatarWithOwnerId(G.userId);
             }
-        }
+        });
 
         G.onUserAvatarResponse = this;
 
@@ -168,7 +169,7 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
     }
 
     public void OnClickBtnLetsGo(String name, String lastName) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             if (name.length() > 0) {
                 showErrorName.setValue(false);
                 if (lastName.length() > 0) {
@@ -187,7 +188,7 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
             } else {
                 showErrorName.setValue(true);
             }
-        }
+        });
     }
 
     private boolean isValidReagentPhoneNumber() {
@@ -223,10 +224,10 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
                 new OnUserProfileSetRepresentative() {
                     @Override
                     public void onSetRepresentative(String phone) {
-                        try (Realm realm = Realm.getDefaultInstance()) {
+                        DbManager.getInstance().doRealmTask(realm -> {
                             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                             RealmUserInfo.setRepresentPhoneNumber(realm, realmUserInfo, phone);
-                        }
+                        });
                         getUserInfo();
                     }
 
@@ -248,9 +249,9 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 G.handler.post(() -> {
-                    try (Realm realm = Realm.getDefaultInstance()) {
+                    DbManager.getInstance().doRealmTask(realm -> {
                         realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, user));
-                    }
+                    });
                     AccountManager.getInstance().addAccount(new AccountUser(
                             user.getId(),
                             null,

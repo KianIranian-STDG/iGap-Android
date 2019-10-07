@@ -13,6 +13,7 @@ package net.iGap.helper;
 import android.content.Context;
 import android.content.Intent;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -33,7 +34,7 @@ import io.realm.Realm;
 public class HelperPublicMethod {
 
     public static void goToChatRoom(final long peerId, final OnComplete onComplete, final OnError onError) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
 
             if (realmRoom != null) {
@@ -51,12 +52,12 @@ public class HelperPublicMethod {
                         if (onError != null) {
                             onError.error();
                         }
-                        try (Realm realm = Realm.getDefaultInstance()) {
+                        DbManager.getInstance().doRealmTask(realm -> {
                             realm.executeTransaction(realm1 -> {
                                 RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
                                 room1.setDeleted(true);
                             });
-                        }
+                        });
                         getUserInfo(peerId, room.getId(), onComplete, onError);
 
                         G.onChatGetRoom = null;
@@ -88,12 +89,12 @@ public class HelperPublicMethod {
                     }
                 }
             }
-        }
+        });
     }
 
 
     public static void goToChatRoomWithMessage(final Context context, final long peerId, String message, final OnComplete onComplete, final OnError onError) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
 
             if (realmRoom != null) {
@@ -112,13 +113,13 @@ public class HelperPublicMethod {
                         if (onError != null) {
                             onError.error();
                         }
-                        try (Realm realm = Realm.getDefaultInstance()) {
+                        DbManager.getInstance().doRealmTask(realm -> {
                             realm.executeTransaction(realm1 -> {
                                 RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
                                 room1.setDeleted(true);
                                 goToRoomWithTextMessage(context, room1.getId(), message, room1.getType(), -1);
                             });
-                        }
+                        });
                         getUserInfo(peerId, room.getId(), onComplete, onError);
 
                         G.onChatGetRoom = null;
@@ -150,12 +151,11 @@ public class HelperPublicMethod {
                     }
                 }
             }
-        }
+        });
     }
 
     public static void goToChatRoomFromFirstContact(final long peerId, final OnComplete onComplete, final OnError onError) {
-
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
 
             if (realmRoom != null) {
@@ -169,12 +169,12 @@ public class HelperPublicMethod {
                 G.onChatGetRoom = new OnChatGetRoom() {
                     @Override
                     public void onChatGetRoom(final ProtoGlobal.Room room) {
-                        try (Realm realm = Realm.getDefaultInstance()) {
+                        DbManager.getInstance().doRealmTask(realm -> {
                             realm.executeTransaction(realm1 -> {
                                 RealmRoom room1 = RealmRoom.putOrUpdate(room, realm1);
                                 room1.setDeleted(true);
                             });
-                        }
+                        });
                         getUserInfo(peerId, room.getId(), onComplete, onError);
 
                         G.onChatGetRoom = null;
@@ -204,7 +204,7 @@ public class HelperPublicMethod {
                     }
                 }
             }
-        }
+        });
     }
 
     private static void getUserInfo(final long peerId, final long roomId, final OnComplete onComplete, final OnError onError) {
@@ -215,7 +215,7 @@ public class HelperPublicMethod {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            try (Realm realm = Realm.getDefaultInstance()) {
+                            DbManager.getInstance().doRealmTask(realm -> {
                                 realm.executeTransactionAsync(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
@@ -237,7 +237,7 @@ public class HelperPublicMethod {
 
 
                                 });
-                            }
+                            });
                         }
                     });
                 }
@@ -281,7 +281,7 @@ public class HelperPublicMethod {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     if (message != null && message.length() > 0 && roomId > 0) {
                         RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(roomId, message);
                         new ChatSendMessageUtil().newBuilder(type, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(roomMessage.getMessageId() + "");
@@ -297,7 +297,7 @@ public class HelperPublicMethod {
                         });
 
                     }
-                }
+                });
             }
         });
     }

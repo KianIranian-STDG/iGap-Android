@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperString;
@@ -263,7 +264,7 @@ public class RegisterRepository {
         G.onUserLogin = new OnUserLogin() {
             @Override
             public void onLogin() {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, userId, userName, phoneNumber, token, authorHash));
                     BotInit.setCheckDrIgap(true);
                     if (newUser) {
@@ -275,7 +276,7 @@ public class RegisterRepository {
                         requestUserInfo();
                         HelperTracker.sendTracker(HelperTracker.TRACKER_REGISTRATION_USER);
                     }
-                }
+                });
             }
 
             @Override
@@ -298,12 +299,12 @@ public class RegisterRepository {
     private void requestLogin() {
         if (G.socketConnection) {
             if (token == null) {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                     if (realmUserInfo != null) {
                         token = realmUserInfo.getToken();
                     }
-                }
+                });
             }
             new RequestUserLogin().userLogin(token);
         } else {
@@ -341,7 +342,7 @@ public class RegisterRepository {
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     realm.executeTransactionAsync(realm1 -> RealmUserInfo.putOrUpdate(realm1, user), () -> {
                         G.displayName = user.getDisplayName();
                         G.userId = user.getId();
@@ -356,7 +357,7 @@ public class RegisterRepository {
                                 0));
                         goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
                     });
-                }
+                });
 
             }
 
@@ -375,12 +376,12 @@ public class RegisterRepository {
     private void requestUserInfo() {
         if (G.socketConnection) {
             if (userId == 0) {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                     if (realmUserInfo != null) {
                         userId = realmUserInfo.getUserId();
                     }
-                }
+                });
             }
             new RequestUserInfo().userInfo(userId);
         } else {

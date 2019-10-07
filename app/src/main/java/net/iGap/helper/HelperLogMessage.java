@@ -20,6 +20,7 @@ import android.view.View;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -407,7 +408,7 @@ public class HelperLogMessage {
     }
 
     private static void gotToUserRoom(final long id) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
             if (realmRoom != null) {
                 //Intent intent = new Intent(G.currentActivity, ActivityChat.class);
@@ -464,11 +465,11 @@ public class HelperLogMessage {
 
                 new RequestChatGetRoom().chatGetRoom(id);
             }
-        }
+        });
     }
 
     private static void goToRoom(Long roomId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
             //ToDo:fixed it and change to do not use G.currentActivity
             if (realmRoom != null) {
@@ -476,7 +477,7 @@ public class HelperLogMessage {
             } else {
                 RealmRoom.needUpdateRoomInfo(roomId);
             }
-        }
+        });
     }
 
 
