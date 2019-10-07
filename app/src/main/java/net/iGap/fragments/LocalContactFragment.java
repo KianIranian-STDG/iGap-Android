@@ -23,7 +23,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterListContact;
-import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnPhoneContact;
@@ -325,6 +324,13 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
                 phoneContactsList.addAll(slc);
                 adapterListContact.notifyDataSetChanged();
                 loadingPb.setVisibility(View.GONE);
+
+                //check if it was less 10 call automatically because scroll not work
+                if (phoneContactsList.size() < 10 && !Contacts.isEndLocal) {
+                    loadingPb.setVisibility(View.VISIBLE);
+                    new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }
+
             }
             super.onPostExecute(slc);
         }
