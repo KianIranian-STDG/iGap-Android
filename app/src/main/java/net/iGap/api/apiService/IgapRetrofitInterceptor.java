@@ -14,7 +14,6 @@ public class IgapRetrofitInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request original = chain.request();
-        Log.d("amini", "intercept: " + G.getApiToken());
         Request request = original.newBuilder()
                 .header("Authorization", G.getApiToken())
                 .header("Content-Type", "application/json")
