@@ -12,6 +12,6 @@ public class ApiStatic {
     static final String CPAY_URL = BASE_URL + "ati/c-pay/";
     static final String CHARITY_URL = BASE_URL + "charity/";
     static final String KUKNOS_Horizan_Server = "https://hz1-test.kuknos.org/";
-    static final String NEWS_URL = NEWS_BASE_URL + "chaparAPI/";
+    static final String NEWS_URL = NEWS_BASE_URL + "chapar/api/";
 }
 
