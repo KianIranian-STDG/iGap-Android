@@ -80,6 +80,13 @@ public class RoomListCell extends FrameLayout {
     private boolean havePin = false;
     private boolean haveCheckBox = false;
 
+    public static final int FILE = 0x1F4CE;
+    public static final int VIDEO = 0x1F4F9;
+    public static final int MUSIC = 0x1F3A7;
+    public static final int IMAGE = 0x1F4F7;
+    public static final int GIF = 0x1F308;
+    public static final int WALLET = 0x1F4B3;
+
     public RoomListCell(@NonNull Context context) {
         super(context);
     }
@@ -615,23 +622,23 @@ public class RoomListCell extends FrameLayout {
 
                     switch (lastMessage.getMessageType()) {
                         case IMAGE_TEXT:
-                            attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.IMAGE);
+                            attachmentTag = AppUtils.getEmojiByUnicode(IMAGE);
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case GIF_TEXT:
-                            attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.GIF);
+                            attachmentTag = AppUtils.getEmojiByUnicode(GIF);
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case FILE_TEXT:
-                            attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.FILE);
+                            attachmentTag = AppUtils.getEmojiByUnicode(FILE);
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case VIDEO_TEXT:
-                            attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.VIDEO);
+                            attachmentTag = AppUtils.getEmojiByUnicode(VIDEO);
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case AUDIO_TEXT:
-                            attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.MUSIC);
+                            attachmentTag = AppUtils.getEmojiByUnicode(MUSIC);
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case GIF:
@@ -647,7 +654,7 @@ public class RoomListCell extends FrameLayout {
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case AUDIO:
-                            attachmentTag = AppUtils.getEmojiByUnicode(ChatCell.MUSIC) + lastMessage.getAttachment().getName();
+                            attachmentTag = AppUtils.getEmojiByUnicode(MUSIC) + lastMessage.getAttachment().getName();
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case FILE:
@@ -663,7 +670,7 @@ public class RoomListCell extends FrameLayout {
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case WALLET:
-                            builder.append(AppUtils.getEmojiByUnicode(ChatCell.WALLET));
+                            builder.append(AppUtils.getEmojiByUnicode(WALLET));
                             if (lastMessage.getRoomMessageWallet() != null) {
                                 String type = lastMessage.getRoomMessageWallet().getType();
                                 if (type.equals(CARD_TO_CARD.toString())) {
