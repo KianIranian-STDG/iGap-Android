@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
             android:layout_gravity="bottom"
-            android:background="?rootBackgroundColor"
             android:orientation="vertical" />
 
         <LinearLayout

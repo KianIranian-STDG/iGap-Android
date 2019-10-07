@@ -75,7 +75,6 @@ public class KuknosWHistoryFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosWHToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         binding.kuknosWHistoryRecycler.setHasFixedSize(true);

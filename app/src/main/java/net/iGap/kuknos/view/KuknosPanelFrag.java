@@ -94,7 +94,6 @@ public class KuknosPanelFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosPToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         walletSpinner = binding.fragKuknosPWalletSpinner;

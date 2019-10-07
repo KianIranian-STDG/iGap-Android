@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:textColor="@color/black"
+                android:textColor="?attr/iGapTitleTextColor"
                 android:textSize="20sp" />
 
             <TextView
@@ -69,6 +69,7 @@
 
             <TextView
                 android:id="@+id/iv_moneyAction_wallet"
+                style="@style/myIconTextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp8"
@@ -121,6 +122,7 @@
             android:layout_marginLeft="16dp"
             android:lines="1"
             android:text="@string/transfer_to_dialog"
+            android:textColor="?attr/iGapTitleTextColor"
             app:layout_constraintStart_toEndOf="@+id/iv_moneyAction_userAvatar"
             app:layout_constraintTop_toTopOf="@+id/iv_moneyAction_userAvatar"
             tools:layout_editor_absoluteY="16dp" />
@@ -132,6 +134,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:text="@string/user_name"
+            android:textColor="?attr/iGapTitleTextColor"
             app:layout_constraintBottom_toBottomOf="@+id/tv_moneyAction_transferTo"
             app:layout_constraintStart_toEndOf="@+id/tv_moneyAction_transferTo"
             app:layout_constraintTop_toTopOf="@+id/tv_moneyAction_transferTo" />
@@ -141,6 +144,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:textColor="?attr/iGapTitleTextColor"
             app:layout_constraintStart_toStartOf="@+id/tv_moneyAction_transferTo"
             app:layout_constraintTop_toBottomOf="@+id/tv_moneyAction_transferTo" />
 
@@ -221,23 +225,23 @@
 
         <TextView
             android:id="@+id/tv_cardToCard_transferTo"
-            android:textColor="?iGapTitleTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:lines="1"
             android:text="@string/money_request"
+            android:textColor="?iGapTitleTextColor"
             app:layout_constraintBottom_toBottomOf="@+id/iv_cardToCard_userAvatar"
             app:layout_constraintStart_toEndOf="@+id/iv_cardToCard_userAvatar"
             app:layout_constraintTop_toTopOf="@+id/iv_cardToCard_userAvatar" />
 
         <TextView
             android:id="@+id/tv_cardToCard_userName"
-            android:textColor="?iGapTitleTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/user_name"
+            android:textColor="?iGapTitleTextColor"
             app:layout_constraintBottom_toBottomOf="@+id/tv_cardToCard_transferTo"
             app:layout_constraintStart_toEndOf="@+id/tv_cardToCard_transferTo"
             app:layout_constraintTop_toTopOf="@+id/tv_cardToCard_transferTo" />
@@ -251,7 +255,6 @@
 
             <TextView
                 android:id="@+id/tv_chat_card_amountText"
-                android:textColor="?iGapTitleTextColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -259,6 +262,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/amount_in_rial"
+                android:textColor="?attr/iGapTitleTextColor"
                 app:layout_constraintBottom_toTopOf="@+id/et_chat_card_cardamount"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -290,7 +294,6 @@
 
             <TextView
                 android:id="@+id/et_chat_card_cardNumberTv"
-                android:textColor="?iGapTitleTextColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -298,6 +301,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/destination_card"
+                android:textColor="?attr/iGapTitleTextColor"
                 app:layout_constraintBottom_toTopOf="@+id/et_chat_card_cardNumber"
                 app:layout_constraintEnd_toStartOf="@+id/tv_chat_card_bankName"
                 app:layout_constraintStart_toStartOf="parent"
@@ -305,9 +309,9 @@
 
             <TextView
                 android:id="@+id/tv_chat_card_bankName"
-                android:textColor="?iGapTitleTextColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/smallTextSize"
                 app:layout_constraintBottom_toBottomOf="@+id/et_chat_card_cardNumberTv"
                 app:layout_constraintEnd_toEndOf="@+id/et_chat_card_cardamount"
@@ -340,7 +344,6 @@
 
             <TextView
                 android:id="@+id/tv_chat_card_desc"
-                android:textColor="?iGapTitleTextColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -348,6 +351,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/desc"
+                android:textColor="?attr/iGapTitleTextColor"
                 app:layout_constraintBottom_toTopOf="@+id/et_chat_card_desc"
                 app:layout_constraintEnd_toEndOf="@+id/et_chat_card_cardNumber"
                 app:layout_constraintStart_toStartOf="parent"

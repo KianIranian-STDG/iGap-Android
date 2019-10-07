@@ -75,14 +75,6 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         amountEt = rootView.findViewById(R.id.et_moneyAction_amount);
         descriptionEt = rootView.findViewById(R.id.et_moneyAction_description);
-        TextView amountTextTv = rootView.findViewById(R.id.tv_moneyAction_amountText);
-        TextView descriptionTv = rootView.findViewById(R.id.tv_moneyAction_description);
-        amountEt.setTextColor(Utils.darkModeHandler(getContext()));
-        descriptionEt.setTextColor(Utils.darkModeHandler(getContext()));
-        amountTextTv.setTextColor(Utils.darkModeHandler(getContext()));
-        descriptionTv.setTextColor(Utils.darkModeHandler(getContext()));
-
-        Utils.darkModeHandler(rootView);
 
         confirmBtn.setOnClickListener(v -> {
             if (mPrice[0] != null && !mPrice[0].isEmpty()) {

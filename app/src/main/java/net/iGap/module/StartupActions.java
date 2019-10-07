@@ -453,7 +453,7 @@ public final class StartupActions {
             if (currentTime.getTime() > time1.getTime() && currentTime.getTime() < time2.getTime()) {
 
                 //checkes whether the current time is between 14:49:00 and 20:11:13.
-                G.isDarkTheme = true;
+                G.themeColor = Theme.DARK;
                 appBarColor = Theme.default_dark_appBarColor;
                 notificationColor = Theme.default_dark_notificationColor;
                 toggleButtonColor = Theme.default_dark_toggleButtonColor;
@@ -461,7 +461,7 @@ public final class StartupActions {
                 headerTextColor = Theme.default_dark_headerTextColor;
                 G.progressColor = Theme.default_dark_progressColor;
             } else {
-                G.isDarkTheme = false;
+                G.themeColor = Theme.DARK;
                 appBarColor = Theme.default_appBarColor;
                 notificationColor = Theme.default_notificationColor;
                 toggleButtonColor = Theme.default_toggleButtonColor;
@@ -527,7 +527,7 @@ public final class StartupActions {
                 Raad.isFA = true;
                 break;
 
-                //کوردی لوکال از چپ به راست است و برای استفاده از این گویش از زبان های راست به چپ جایگزین استفاده شده است
+            //کوردی لوکال از چپ به راست است و برای استفاده از این گویش از زبان های راست به چپ جایگزین استفاده شده است
             case "کوردی":
                 selectedLanguage = "ur";
                 HelperCalander.isPersianUnicode = true;

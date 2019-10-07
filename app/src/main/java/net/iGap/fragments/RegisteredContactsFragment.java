@@ -161,7 +161,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         realmRecyclerView = view.findViewById(R.id.recycler_view);
 
         LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
-        Utils.darkModeHandler(toolbarLayout);
 
         if (mHelperToolbar == null)
             if (isContact) {

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:layout_margin="@dimen/dp2"
     android:clickable="true"
+    app:cardBackgroundColor="?attr/iGapCardViewColor"
     android:foreground="?attr/selectableItemBackgroundBorderless"
     app:cardCornerRadius="@dimen/dp12"
     app:cardElevation="@dimen/dp2"

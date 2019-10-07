@@ -1488,7 +1488,7 @@ public class HelperToolbar {
                     tvSearch.setGravity(Gravity.CENTER);
                     tvSearch.setVisibility(VISIBLE);
                     tvSearch.setTypeface(tfMain);
-                    tvSearch.setTextColor(Utils.darkModeHandler(getContext()));
+                    tvSearch.setTextColor(new Theme().getTitleTextColor(tvSearch.getContext()));
                     Utils.setTextSize(tvSearch, R.dimen.smallTextSize);
                     setLayoutParams(tvSearch, i_Dp(R.dimen.dp20), 0, 0, i_Dp(R.dimen.dp20), 0, 0);
                     searchLayout.addView(tvSearch);
@@ -1889,7 +1889,7 @@ public class HelperToolbar {
                 setRoot.applyTo(this);
                 set.applyTo(mainConstraint);
 
-            } else {
+            }/* else {
 
                 ConstraintSet set = new ConstraintSet();
 
@@ -2019,7 +2019,7 @@ public class HelperToolbar {
                 set.connect(tViewSplitter3.getId(), TOP, tIconAdd.getId(), BOTTOM, i_Dp(R.dimen.dp6));
 
                 set.applyTo(this);
-            }
+            }*/
         }
 
         private void setIconViewSize(View v, ConstraintSet set) {

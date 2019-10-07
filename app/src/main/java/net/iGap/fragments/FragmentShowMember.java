@@ -896,7 +896,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             holder.title.setText(mContact.displayName);
 
-            checkTheme(holder);
             setRoleStarColor(holder.roleStar, mContact);
 
             avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, mContact.peerId).avatarType(AvatarHandler.AvatarType.USER));
@@ -941,16 +940,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 holder.btnMenu.setVisibility(View.GONE);
             }
         }
-
-        private void checkTheme(ViewHolder holder) {
-
-            Utils.darkModeHandler(holder.btnMenu);
-            Utils.darkModeHandler(holder.title);
-            Utils.darkModeHandlerGray(holder.subtitle);
-            Utils.darkModeHandlerGray(holder.topLine);
-
-        }
-
         private void showPopup(ViewHolder holder, final StructContactInfo mContact) {
             holder.btnMenu.setVisibility(View.VISIBLE);
 

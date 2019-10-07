@@ -107,9 +107,6 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
         TextView userNameTvCard = rootView.findViewById(R.id.tv_cardToCard_userName);
         cancelBtnCard = rootView.findViewById(R.id.btn_cardToCard_cancel);
         Button confirmBtnCard = rootView.findViewById(R.id.btn_cardToCard_confirm);
-        TextView transferToTvCard = rootView.findViewById(R.id.tv_cardToCard_transferTo);
-        TextView amountTvCard = view.findViewById(R.id.tv_chat_card_amountText);
-        TextView cardNumberTvCard = view.findViewById(R.id.et_chat_card_cardNumberTv);
         TextView bankNameTv = view.findViewById(R.id.tv_chat_card_bankName);
         amountEtCard = view.findViewById(R.id.et_chat_card_cardamount);
         cardNumberEtCard = view.findViewById(R.id.et_chat_card_cardNumber);
@@ -123,17 +120,6 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
 
         walletTransferIv.setTypeface(G.typeface_FonticonNew);
         cardToCardIv.setTypeface(G.typeface_FonticonNew);
-
-        Utils.darkModeHandler(layoutContainer);
-        Utils.darkModeHandler(creditTv);
-        Utils.darkModeHandler(userNameTv);
-        Utils.darkModeHandler(transferToTv);
-        Utils.darkModeHandler(userNameTv);
-        Utils.darkModeHandler(cardToCardIv);
-        Utils.darkModeHandler(walletTransferIv);
-        Utils.darkModeHandler(rootView);
-
-        creditTv.setTextColor(Utils.darkModeHandler(getContext()));
 
         /**
          * because add fragment in other fragment can not use getFragmentManager
@@ -196,11 +182,6 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
                 }
             }
         });
-
-        amountEtCard.setTextColor(Utils.darkModeHandler(getContext()));
-        cardNumberEtCard.setTextColor(Utils.darkModeHandler(getContext()));
-        descEtCard.setTextColor(Utils.darkModeHandler(getContext()));
-
     }
 
     @Override

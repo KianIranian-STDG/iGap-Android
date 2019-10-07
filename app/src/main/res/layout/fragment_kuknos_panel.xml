@@ -50,12 +50,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="@{G.isDarkTheme ? @drawable/kuknos_spinner_dark_style : @drawable/kuknos_spinner_style}"
                     android:minHeight="38dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.9" />
+                <!--android:background="@{G.isDarkTheme ? @drawable/kuknos_spinner_dark_style : @drawable/kuknos_spinner_style}"-->
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fragKuknosPBalance"

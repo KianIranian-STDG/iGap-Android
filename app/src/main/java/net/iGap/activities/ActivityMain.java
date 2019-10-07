@@ -53,6 +53,7 @@ import com.vanniktech.emoji.sticker.struct.StructSticker;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.dialog.SubmitScoreDialog;
 import net.iGap.eventbus.EventListener;
@@ -646,7 +647,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             boolean isDefaultBg = sharedPreferences.getBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
             if (isDefaultBg) {
-                if (G.isDarkTheme) {
+                if (G.themeColor == Theme.DARK) {
                     sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
                 } else {
                     getWallpaperAsDefault();

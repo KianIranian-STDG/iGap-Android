@@ -4,6 +4,7 @@
     android:id="@+id/root_chatRoom_bottom_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/iGapChatSendMessageBackground"
     android:clickable="true"
     android:gravity="bottom"
     android:layoutDirection="ltr"

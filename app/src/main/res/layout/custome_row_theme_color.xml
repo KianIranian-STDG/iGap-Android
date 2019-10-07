@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     app:cardUseCompatPadding="true"
     app:contentPadding="@dimen/dp4"
-    app:cardElevation="3dp">
+    app:cardElevation="3dp"
+    app:cardBackgroundColor="?attr/iGapCardViewColor">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

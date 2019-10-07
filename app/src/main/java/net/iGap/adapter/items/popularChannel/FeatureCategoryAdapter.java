@@ -31,7 +31,7 @@ public class FeatureCategoryAdapter extends RecyclerView.Adapter<FeatureCategory
     @NonNull
     @Override
     public ChannelViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(G.fragmentActivity).inflate(R.layout.item_favorite_channel_rv_row, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_favorite_channel_rv_row, viewGroup, false);
         return new ChannelViewHolder(view);
     }
 
@@ -63,8 +63,6 @@ public class FeatureCategoryAdapter extends RecyclerView.Adapter<FeatureCategory
             channelImage = itemView.findViewById(R.id.circle_item_popular_rv_linear);
             channelTitle = itemView.findViewById(R.id.tv_item_popular_rv_linear);
             root = itemView.findViewById(R.id.card_item_pop_row);
-            Utils.setCardsBackground(root, R.color.white, R.color.navigation_dark_mode_bg);
-
         }
 
 

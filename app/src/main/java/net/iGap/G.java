@@ -197,7 +197,6 @@ public class G extends ApplicationContext {
     public static boolean isMplActive = false;
     public static boolean isWalletActive = false;
     public static boolean isWalletRegister = false;
-    public static boolean isDarkTheme = false;
     public static int themeColor;
     public static String selectedTabInMainActivity = "";
     public static int ivSize;

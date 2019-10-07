@@ -511,11 +511,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             final TextView txtTitle = dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
             SearchView edtSearchView = dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
             LinearLayout rootView = dialogChooseCountry.findViewById(R.id.country_root);
-            if (G.isDarkTheme) {
-                rootView.setBackground(getResources().getDrawable(R.drawable.dialog_background_dark));
-            } else {
-                rootView.setBackground(getResources().getDrawable(R.drawable.dialog_background));
-            }
+            rootView.setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.dialog_background),getContext(),R.attr.rootBackgroundColor));
 
             txtTitle.setOnClickListener(view -> {
                 edtSearchView.setIconified(false);

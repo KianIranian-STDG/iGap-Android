@@ -82,6 +82,7 @@
     <attr name="iGapSendMessageTextColor" format="reference|color" />
     <attr name="iGapSendMessageOtherTextColor" format="reference|color" />
     <attr name="iGapSendMessageBubbleColor" format="reference|color" />
+    <attr name="iGapLinkColor" format="reference|color" />
     <!--bottom navigation item icon color-->
     <attr name="iGapBottomNavigationIconStart" format="reference|color" />
     <attr name="iGapBottomNavigationIconEnd" format="reference|color" />
@@ -98,6 +99,7 @@
     <attr name="iGapCardToCardIconBackground" format="reference" />
     <attr name="iGapBottomSheetHeaderLine" format="reference" />
     <attr name="iGapScrollerHandler" format="reference" />
+    <attr name="iGapChatSendMessageBackground" format="reference" />
 
     <!--=======================custom theme=====================-->
 

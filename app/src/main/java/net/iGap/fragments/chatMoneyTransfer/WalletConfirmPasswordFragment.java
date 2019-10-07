@@ -56,7 +56,6 @@ public class WalletConfirmPasswordFragment extends BaseFragment {
         TextView descriptionTv = rootView.findViewById(R.id.tv_confirm_description);
         TextView confirmDescriptionTv = rootView.findViewById(R.id.tv_confirm_confirmDescription);
 
-        Utils.darkModeHandler(rootView);
         Utils.darkModeHandler(confirmDescriptionTv);
         Utils.darkModeHandler(descriptionTv);
         dismissProgress();

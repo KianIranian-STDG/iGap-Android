@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.proto.ProtoGlobal;
 
@@ -159,7 +160,7 @@ public class MakeButtons {
         }*/
 
 
-        LinearLayout linearLayout_529 = new LinearLayout(G.context);
+        LinearLayout linearLayout_529 = new LinearLayout(mainLayout.getContext());
         LinearLayout.LayoutParams layout_941 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp36));
 
         layout_941.gravity = Gravity.CENTER;
@@ -167,7 +168,7 @@ public class MakeButtons {
         linearLayout_529.setLayoutParams(layout_941);
         linearLayout_529.setWeightSum(weightSum);
 
-        AppCompatImageView img1 = new AppCompatImageView(G.context);
+        AppCompatImageView img1 = new AppCompatImageView(mainLayout.getContext());
 
         /*img1.setId(1);
         img1.setTag("abc");*/
@@ -190,7 +191,7 @@ public class MakeButtons {
         }
 
         if (entity.getLable().trim() != null) {
-            TextView btn1 = new AppCompatTextView(G.context);
+            TextView btn1 = new AppCompatTextView(mainLayout.getContext());
 
             // btn1.setId(R.id.btn1);
             btn1.setEllipsize(TextUtils.TruncateAt.END);
@@ -199,12 +200,12 @@ public class MakeButtons {
             btn1.setMaxLines(1);
             btn1.setTypeface(G.typeface_IRANSansMobile);
             if (entity.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
-                btn1.setText(G.context.getString(R.string.cardToCardBtnText));
+                btn1.setText(R.string.cardToCardBtnText);
             } else {
                 btn1.setText(entity.getLable());
             }
             btn1.setTextSize(16);
-            card.setBackgroundResource(R.drawable.background_button_card_to_card);
+            card.setBackgroundResource(new Theme().getCardToCardButtonBackground(mainLayout.getContext()));
             btn1.setTextColor(ContextCompat.getColor(btn1.getContext(), R.color.white));
 
             LinearLayout.LayoutParams layout_844 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);

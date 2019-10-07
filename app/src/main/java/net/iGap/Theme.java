@@ -37,33 +37,16 @@ import static net.iGap.G.toggleButtonColor;
  */
 public class Theme {
 
-    /*public static final int CUSTOM = 0;*/
     public static final int DEFAULT = 1;
     public static final int DARK = 2;
     public static final int RED = 3;
     public static final int PINK = 4;
     public static final int PURPLE = 5;
-    /*public static final int DEEPPURPLE = 6;*/
-    /*public static final int INDIGO = 7;*/
     public static final int BLUE = 8;
-    /*public static final int LIGHT_BLUE = 9;*/
-    /*public static final int CYAN = 10;
-    public static final int TEAL = 11;*/
     public static final int GREEN = 12;
-    /*public static final int LIGHT_GREEN = 13;*/
-    /*public static final int LIME = 14;*/
-    /*public static final int YELLLOW = 15;*/
     public static final int AMBER = 16;
     public static final int ORANGE = 17;
-    /*public static final int DEEP_ORANGE = 18;*/
-    /*public static final int BROWN = 19;*/
     public static final int GREY = 20;
-    /*public static final int BLUE_GREY = 21;*/
-    /*public static final int BLUE_GREY_COMPLETE = 22;
-    public static final int INDIGO_COMPLETE = 23;
-    public static final int BROWN_COMPLETE = 24;
-    public static final int TEAL_COMPLETE = 25;
-    public static final int GREY_COMPLETE = 26;*/
 
 
     public static String default_appBarColor = "#45B321";
@@ -143,42 +126,10 @@ public class Theme {
 
         SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         G.themeColor = preferences.getInt(SHP_SETTING.KEY_THEME_COLOR, DEFAULT);
-        G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
 
         switch (G.themeColor) {
-            /*case CUSTOM:
-                setColor(false,
-                        preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, default_appBarColor),
-                        preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, default_notificationColor),
-                        preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, default_toggleButtonColor),
-                        preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, default_attachmentColor),
-                        preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, default_headerTextColor),
-                        preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, default_progressColor),
-                        lineView,
-                        default_backgroundThemeMsg,
-                        default_backgroundThemeMsgPined,
-                        default_textTitleTheme,
-                        default_textSubTheme,
-                        default_tintImage,
-                        default_logLineTheme,
-                        default_voteIconTheme,
-                        default_bubbleChatSendColor,
-                        default_bubbleChatReceiveColor,
-                        preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, default_appBarColor),
-                        default_textBubbleColor,
-                        default_txtIconCheckColor,
-                        default_bubbleChatMusicColor,
-                        default_linkColor,
-                        default_textChatMusicColor,
-                        default_roomMessageTypeColor,
-                        default_roomSenderTextColor,
-                        default_SeenTickColor
-
-                );
-
-                break;*/
             case DEFAULT:
-                setColor(false,
+                setColor(
                         default_appBarColor,
                         default_notificationColor,
                         default_toggleButtonColor,
@@ -205,10 +156,9 @@ public class Theme {
                         default_roomSenderTextColor,
                         default_SeenTickColor
                 );
-
                 break;
             case DARK:
-                setColor(true,
+                setColor(
                         default_dark_appBarColor,
                         default_dark_notificationColor,
                         default_dark_toggleButtonColor,
@@ -238,7 +188,7 @@ public class Theme {
 
                 break;
             case RED:
-                setColor(false,
+                setColor(
                         default_red_appBarColor,
                         default_red_appBarColor,
                         default_red_appBarColor,
@@ -267,7 +217,7 @@ public class Theme {
                 );
                 break;
             case PINK:
-                setColor(false,
+                setColor(
                         default_Pink_appBarColor,
                         default_Pink_appBarColor,
                         default_Pink_appBarColor,
@@ -296,7 +246,7 @@ public class Theme {
                 );
                 break;
             case PURPLE:
-                setColor(false,
+                setColor(
                         default_purple_appBarColor,
                         default_purple_appBarColor,
                         default_purple_appBarColor,
@@ -324,66 +274,8 @@ public class Theme {
                         default_purple_appBarColor
                 );
                 break;
-            /*case DEEPPURPLE:
-                setColor(false,
-                        default_deepPurple_appBarColor,
-                        default_deepPurple_appBarColor,
-                        default_deepPurple_appBarColor,
-                        default_deepPurple_appBarColor,
-                        default_deepPurple_appBarColor,
-                        default_deepPurple_appBarColor,
-                        "#d1c4e9",//lineView,
-                        "#FFFFFF",//backgroundThemeMsg,
-                        "#b39ddb",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#512DA8",//bubbleChatSendColor,
-                        "#7C4DFF",//bubbleChatReceiveColor,
-                        "#7C4DFF",//fab bottom appBarColor,
-                        "#FFFFFF",//textBubbleColor,
-                        "#FFFFFF",//txtIconCheckColor,
-                        "#d1c4e9",//bubbleChatMusicColor,
-                        "#303F9F",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_deepPurple_appBarColor
-                );
-                break;*/
-            /*case INDIGO:
-                setColor(false,
-                        default_indigo_appBarColor,
-                        default_indigo_appBarColor,
-                        default_indigo_appBarColor,
-                        default_indigo_appBarColor,
-                        default_indigo_appBarColor,
-                        default_indigo_appBarColor,
-                        "#c5cae9",//lineView,
-                        "#FFFFFF",//backgroundThemeMsg,
-                        "#9fa8da",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#303F9F",//bubbleChatSendColor,
-                        "#536DFE",//bubbleChatReceiveColor,
-                        "#536DFE",//fab bottom appBarColor,
-                        "#FFFFFF",//textBubbleColor,
-                        "#FFFFFF",//txtIconCheckColor,
-                        "#c5cae9",//bubbleChatMusicColor,
-                        "#00BCD4",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_indigo_appBarColor
-                );
-                break;*/
             case BLUE:
-                setColor(false,
+                setColor(
                         default_blue_appBarColor,
                         default_blue_appBarColor,
                         default_blue_appBarColor,
@@ -411,97 +303,8 @@ public class Theme {
                         default_blue_appBarColor
                 );
                 break;
-
-            /*case LIGHT_BLUE:
-                setColor(false,
-                        default_lightBlue_appBarColor,
-                        default_lightBlue_appBarColor,
-                        default_lightBlue_appBarColor,
-                        default_lightBlue_appBarColor,
-                        default_lightBlue_appBarColor,
-                        default_lightBlue_appBarColor,
-                        "#b3e5fc",//lineView,
-                        "#FFFFFF",//backgroundThemeMsg,
-                        "#81d4fa",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#0288D1",//bubbleChatSendColor,
-                        "#03A9F4",//bubbleChatReceiveColor,
-                        "#03A9F4",//fab bottom appBarColor,
-                        "#FFFFFF",//textBubbleColor,
-                        "#FFFFFF",//txtIconCheckColor,
-                        "#b3e5fc",//bubbleChatMusicColor,
-                        "#283593",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_lightBlue_appBarColor
-                );
-                break;*/
-
-            /*case CYAN:
-                setColor(false,
-                        default_cyan_appBarColor,
-                        default_cyan_appBarColor,
-                        default_cyan_appBarColor,
-                        default_cyan_appBarColor,
-                        default_cyan_appBarColor,
-                        default_cyan_appBarColor,
-                        "#b2ebf2",//lineView,
-                        "#FFFFFF",//backgroundThemeMsg,
-                        "#81d4fa",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#0097A7",//bubbleChatSendColor,
-                        "#00BCD4",//bubbleChatReceiveColor,
-                        "#00BCD4",//fab bottom appBarColor,
-                        "#FFFFFF",//textBubbleColor,
-                        "#FFFFFF",//txtIconCheckColor,
-                        "#b2ebf2",//bubbleChatMusicColor,
-                        "#283593",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_cyan_appBarColor
-                );
-                break;*/
-            /*case TEAL:
-                setColor(false,
-                        default_teal_appBarColor,
-                        default_teal_appBarColor,
-                        default_teal_appBarColor,
-                        default_teal_appBarColor,
-                        default_teal_appBarColor,
-                        default_teal_appBarColor,
-                        "#b2dfdb",//lineView,
-                        "#FFFFFF",//backgroundThemeMsg,
-                        "#80cbc4",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#00796B",//bubbleChatSendColor,
-                        "#009688",//bubbleChatReceiveColor,
-                        "#009688",//fab bottom appBarColor,
-                        "#FFFFFF",//textBubbleColor,
-                        "#FFFFFF",//txtIconCheckColor,
-                        "#b2dfdb",//bubbleChatMusicColor,
-                        "#303F9F",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_teal_appBarColor
-                );
-                break;*/
             case GREEN:
-                setColor(false,
+                setColor(
                         default_green_appBarColor,
                         default_green_appBarColor,
                         default_green_appBarColor,
@@ -529,96 +332,8 @@ public class Theme {
                         default_green_appBarColor
                 );
                 break;
-            /*case LIGHT_GREEN:
-                setColor(false,
-                        default_lightGreen_appBarColor,
-                        default_lightGreen_appBarColor,
-                        default_lightGreen_appBarColor,
-                        default_lightGreen_appBarColor,
-                        default_lightGreen_appBarColor,
-                        default_lightGreen_appBarColor,
-                        "#dcedc8",//lineView,
-                        "#FFFFFF",//backgroundThemeMsg,
-                        "#c5e1a5",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#689F38",//bubbleChatSendColor,
-                        "#8BC34A",//bubbleChatReceiveColor,
-                        "#8BC34A",//fab bottom appBarColor,
-                        "#FFFFFF",//textBubbleColor,
-                        "#FFFFFF",//txtIconCheckColor,
-                        "#dcedc8",//bubbleChatMusicColor,
-                        "#283593",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_lightGreen_appBarColor
-                );
-                break;*/
-            /*case LIME:
-                setColor(false,
-                        default_lime_appBarColor,
-                        default_lime_appBarColor,
-                        default_lime_appBarColor,
-                        default_lime_appBarColor,
-                        default_lime_appBarColor,
-                        default_lime_appBarColor,
-                        "#f0f4c3",//lineView,
-                        "#FFFFFF",//backgroundThemeMsg,
-                        "#e6ee9c",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#AFB42B",//bubbleChatSendColor,
-                        "#CDDC39",//bubbleChatReceiveColor,
-                        "#CDDC39",//fab bottom appBarColor,
-                        "#212121",//textBubbleColor,
-                        "#212121",//txtIconCheckColor,
-                        "#f0f4c3",//bubbleChatMusicColor,
-                        "#283593",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_lime_appBarColor
-                );
-                break;*/
-
-            /*case YELLLOW:
-                setColor(false,
-                        default_yellow_appBarColor,
-                        default_yellow_appBarColor,
-                        default_yellow_appBarColor,
-                        default_yellow_appBarColor,
-                        default_yellow_appBarColor,
-                        default_yellow_appBarColor,
-                        "#fff9c4",//lineView,
-                        "#FFFFFF",//backgroundThemeMsg,
-                        "#fff59d",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#FBC02D",//bubbleChatSendColor,
-                        "#FFEB3B",//bubbleChatReceiveColor,
-                        "#FFEB3B",//fab bottom appBarColor,
-                        "#212121",//textBubbleColor,
-                        "#212121",//txtIconCheckColor,
-                        "#fff9c4",//bubbleChatMusicColor,
-                        "#00BCD4",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_yellow_appBarColor
-                );
-                break;*/
             case AMBER:
-                setColor(false,
+                setColor(
                         default_amber_appBarColor,
                         default_amber_appBarColor,
                         default_amber_appBarColor,
@@ -647,7 +362,7 @@ public class Theme {
                 );
                 break;
             case ORANGE:
-                setColor(false,
+                setColor(
                         default_orange_appBarColor,
                         default_orange_appBarColor,
                         default_orange_appBarColor,
@@ -675,69 +390,8 @@ public class Theme {
                         default_orange_appBarColor
                 );
                 break;
-
-            /*case DEEP_ORANGE:
-                setColor(false,
-                        default_deepOrange_appBarColor,
-                        default_deepOrange_appBarColor,
-                        default_deepOrange_appBarColor,
-                        default_deepOrange_appBarColor,
-                        default_deepOrange_appBarColor,
-                        default_deepOrange_appBarColor,
-                        "#ffccbc",//lineView,
-                        "#FFFFFF",//backgroundThemeMsg,
-                        "#ffab91",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#E64A19",//bubbleChatSendColor,
-                        "#FF5722",//bubbleChatReceiveColor,
-                        "#FF5722",//fab bottom appBarColor,
-                        "#FFFFFF",//textBubbleColor,
-                        "#FFFFFF",//txtIconCheckColor,
-                        "#ffccbc",//bubbleChatMusicColor,
-                        "#536DFE",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_deepOrange_appBarColor
-
-                );
-                break;*/
-
-            /*case BROWN:
-                setColor(false,
-                        default_brown_appBarColor,
-                        default_brown_appBarColor,
-                        default_brown_appBarColor,
-                        default_brown_appBarColor,
-                        default_brown_appBarColor,
-                        default_brown_appBarColor,
-                        "#d7ccc8",//lineView,
-                        "#FFFFFF",//backgroundThemeMsg,
-                        "#bcaaa4",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#5D4037",//bubbleChatSendColor,
-                        "#795548",//bubbleChatReceiveColor,
-                        "#795548",//fab bottom appBarColor,
-                        "#FFFFFF",//textBubbleColor,
-                        "#FFFFFF",//txtIconCheckColor,
-                        "#d7ccc8",//bubbleChatMusicColor,
-                        "#303F9F",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_brown_appBarColor
-                );
-                break;*/
             case GREY:
-                setColor(false,
+                setColor(
                         default_grey_appBarColor,
                         default_grey_appBarColor,
                         default_grey_appBarColor,
@@ -766,189 +420,10 @@ public class Theme {
 
                 );
                 break;
-            /*case BLUE_GREY:
-                setColor(false,
-                        default_blueGrey_appBarColor,
-                        default_blueGrey_appBarColor,
-                        default_blueGrey_appBarColor,
-                        default_blueGrey_appBarColor,
-                        default_blueGrey_appBarColor,
-                        default_blueGrey_appBarColor,
-                        "#cfd8dc",//lineView,
-                        "#FFFFFF",//backgroundThemeMsg,
-                        "#b0bec5",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#455A64",//bubbleChatSendColor,
-                        "#607D8B",//bubbleChatReceiveColor,
-                        "#607D8B",//fab bottom appBarColor,
-                        "#FFFFFF",//textBubbleColor,
-                        "#FFFFFF",//txtIconCheckColor,
-                        "#cfd8dc",//bubbleChatMusicColor,
-                        "#303F9F",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_blueGrey_appBarColor
-                );
-                break;*/
-            /*case BLUE_GREY_COMPLETE:
-                setColor(false,
-                        default_blueGrey_appBarColor,
-                        default_blueGrey_appBarColor,
-                        default_blueGrey_appBarColor,
-                        default_blueGrey_appBarColor,
-                        default_blueGrey_appBarColor,
-                        default_blueGrey_appBarColor,
-                        "#607D8B",//lineView,
-                        "#CFD8DC",//backgroundThemeMsg,
-                        "#b0bec5",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#455A64",//bubbleChatSendColor,
-                        "#607D8B",//bubbleChatReceiveColor,
-                        "#607D8B",//fab bottom appBarColor,
-                        "#FFFFFF",//textBubbleColor,
-                        "#FFFFFF",//txtIconCheckColor,
-                        "#cfd8dc",//bubbleChatMusicColor,
-                        "#00bcd4",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_blueGrey_appBarColor
-                );
-                break;*/
-
-            /*case INDIGO_COMPLETE:
-                setColor(false,
-                        default_indigo_appBarColor,
-                        default_indigo_appBarColor,
-                        default_indigo_appBarColor,
-                        default_indigo_appBarColor,
-                        default_indigo_appBarColor,
-                        default_indigo_appBarColor,
-                        "#3f51b5",//lineView,
-                        "#C5CAE9",//backgroundThemeMsg,
-                        "#9fa8da",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#303F9F",//bubbleChatSendColor,
-                        "#3f51b5",//bubbleChatReceiveColor,
-                        "#3f51b5",//fab bottom appBarColor,
-                        "#FFFFFF",//textBubbleColor,
-                        "#FFFFFF",//txtIconCheckColor,
-                        "#C5CAE9",//bubbleChatMusicColor,
-                        "#448AFF",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_indigo_appBarColor
-
-                );
-                break;*/
-            /*case BROWN_COMPLETE:
-                setColor(false,
-                        default_brown_appBarColor,
-                        default_brown_appBarColor,
-                        default_brown_appBarColor,
-                        default_brown_appBarColor,
-                        default_brown_appBarColor,
-                        default_brown_appBarColor,
-                        "#795548",//lineView,
-                        "#D7CCC8",//backgroundThemeMsg,
-                        "#bcaaa4",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,?
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#5D4037",//bubbleChatSendColor,
-                        "#795548",//bubbleChatReceiveColor,
-                        "#795548",//fab bottom appBarColor,
-                        "#FFFFFF",//textBubbleColor,
-                        "#FFFFFF",//txtIconCheckColor,?
-                        "#D7CCC8",//bubbleChatMusicColor,
-                        "#00bcd4",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_brown_appBarColor
-                );
-                break;*/
-            /*case TEAL_COMPLETE:
-                setColor(false,
-                        default_teal_appBarColor,
-                        default_teal_appBarColor,
-                        default_teal_appBarColor,
-                        default_teal_appBarColor,
-                        default_teal_appBarColor,
-                        default_teal_appBarColor,
-                        "#009688",//lineView,
-                        "#B2DFDB",//backgroundThemeMsg,
-                        "#80cbc4",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#00796B",//bubbleChatSendColor,
-                        "#009688",//bubbleChatReceiveColor,
-                        "#009688",//fab bottom appBarColor,
-                        "#FFFFFF",//textBubbleColor,
-                        "#FFFFFF",//txtIconCheckColor,
-                        "#B2DFDB",//bubbleChatMusicColor,
-                        "#303F9F",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_teal_appBarColor
-                );
-                break;*/
-
-            /*case GREY_COMPLETE:
-                setColor(false,
-                        default_grey_appBarColor,
-                        default_grey_appBarColor,
-                        default_grey_appBarColor,
-                        default_grey_appBarColor,
-                        default_grey_appBarColor,
-                        default_grey_appBarColor,
-                        "#e0e0e0",//lineView,
-                        "#F5F5F5",//backgroundThemeMsg,
-                        "#e0e0e0",//backgroundThemeMsgPined
-                        "#000000",//textTitleTheme,
-                        "#FF616161",//textSubTheme
-                        "#000000",//tintImage,
-                        "#e9e9e9",//logLineTheme,
-                        "#FFFFFF",//voteIconTheme,
-                        "#616161",//bubbleChatSendColor,
-                        "#9E9E9E",//bubbleChatReceiveColor,
-                        "#9E9E9E",//fab bottom appBarColor,
-                        "#ffffff",//textBubbleColor,
-                        "#212121",//txtIconCheckColor,
-                        "#F5F5F5",//bubbleChatMusicColor,
-                        "#2196f3",//linkColor,
-                        "#212121", //textChatMusicColor
-                        "#007eff", // messageTypeColor
-                        "#FF616161", //roomSenderTextColor
-                        default_grey_appBarColor
-                );
-                break;*/
         }
     }
 
-    private static void setColor(boolean isDarkTheme, String... color) {
-
-        G.isDarkTheme = isDarkTheme;
+    private static void setColor(String... color) {
 
         appBarColor = color[0];
         notificationColor = color[1];
@@ -1144,6 +619,10 @@ public class Theme {
         return getColorFromAttr(context, R.attr.iGapSubtitleTextColor);
     }
 
+    public int getLinkColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapLinkColor);
+    }
+
     private int getColorFromAttr(@NotNull Context context, int attrResId) {
         TypedValue typedValue = new TypedValue();
         TypedArray a = context.obtainStyledAttributes(typedValue.data, new int[]{attrResId});
@@ -1199,8 +678,8 @@ public class Theme {
         return getDrawableAttr(context, R.attr.iGapScrollerHandler);
     }
 
-    public int getButtonSelectorBackground(Context context){
-        return getDrawableAttr(context ,R.attr.iGapButtonSelector);
+    public int getButtonSelectorBackground(Context context) {
+        return getDrawableAttr(context, R.attr.iGapButtonSelector);
     }
 
     public static boolean isUnderLollipop() {

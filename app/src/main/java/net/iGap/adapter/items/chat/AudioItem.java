@@ -277,6 +277,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
 
+        holder.songFileName.setTextColor(new Theme().getSendMessageTextColor(holder.getContext()));
         holder.songSize.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
         holder.songArtist.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
         holder.songTimeTv.setTextColor(new Theme().getSendMessageOtherTextColor(holder.songTimeTv.getContext()));
@@ -295,6 +296,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
 
+        holder.songFileName.setTextColor(new Theme().getReceivedMessageColor(holder.getContext()));
         holder.songSize.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
         holder.songArtist.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
         holder.songTimeTv.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.songTimeTv.getContext()));
@@ -369,7 +371,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             songFileName.setTextAppearance(view.getContext(), android.R.style.TextAppearance_Medium);
             songFileName.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
             setTextSize(songFileName, R.dimen.smallTextSize);
-            Utils.darkModeHandler(songFileName);
             songFileName.setTypeface(ResourcesCompat.getFont(view.getContext(), R.font.main_font));
 
             songArtist = new AppCompatTextView(view.getContext());

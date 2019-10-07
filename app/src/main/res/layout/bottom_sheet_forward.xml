@@ -45,6 +45,7 @@
             android:paddingStart="@dimen/dp14"
             android:paddingTop="6dp"
             android:paddingEnd="@dimen/dp14"
+            android:background="@drawable/fast_sorward_light"
             android:paddingBottom="6dp"
             android:singleLine="true"
             android:textSize="@dimen/largeTextSize" />
@@ -86,6 +87,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/standardTextSize"
         android:textStyle="bold"
+        android:background="?attr/iGapButtonColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

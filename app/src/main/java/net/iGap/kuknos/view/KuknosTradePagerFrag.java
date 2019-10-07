@@ -74,7 +74,6 @@ public class KuknosTradePagerFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.kuknosTradePagerToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         viewPager = binding.kuknosTradePager;

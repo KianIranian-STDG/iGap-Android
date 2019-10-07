@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="@dimen/dp10"
-            android:background="@{viewModel.isDark ? @drawable/round_button_enabled_bg : @drawable/round_button_disabled_bg , default = @drawable/round_button_disabled_bg}"
+            android:background="@drawable/round_button_enabled_bg"
             app:layout_constraintBottom_toBottomOf="@id/txtCredit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

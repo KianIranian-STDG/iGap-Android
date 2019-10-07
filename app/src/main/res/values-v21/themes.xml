@@ -30,6 +30,8 @@
         <item name="iGapSendMessageBubbleColor">#3d3d3d</item>
         <item name="iGapSendMessageOtherTextColor">#cccccc</item>
         <item name="iGapSendMessageTextColor">#AAAAAA</item>
+
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_dark</item>
     </style>
 
     <style name="iGapLightTheme" parent="BaseTheme.drawable">
@@ -70,6 +72,8 @@
         <item name="colorPrimaryDark">#9e1010</item>
         <item name="colorPrimaryLight">#f2b6b6</item>
 
+        <item name="md_dark_theme">false</item>
+
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
@@ -98,6 +102,8 @@
         <item name="colorPrimary">#ffb5b5</item>
         <item name="colorPrimaryDark">#f68787</item>
         <item name="colorPrimaryLight">#ffcbca</item>
+
+        <item name="md_dark_theme">false</item>
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
@@ -128,6 +134,8 @@
         <item name="colorPrimaryDark">#854777</item>
         <item name="colorPrimaryLight">#e8bae8</item>
 
+        <item name="md_dark_theme">false</item>
+
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
@@ -156,6 +164,8 @@
         <item name="colorPrimary">#207dff</item>
         <item name="colorPrimaryDark">#064acb</item>
         <item name="colorPrimaryLight">#9fd4ff</item>
+
+        <item name="md_dark_theme">false</item>
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
@@ -186,6 +196,8 @@
         <item name="colorPrimaryDark">#9dc756</item>
         <item name="colorPrimaryLight">#dceab7</item>
 
+        <item name="md_dark_theme">false</item>
+
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
@@ -214,6 +226,8 @@
         <item name="colorPrimary">#f6d365</item>
         <item name="colorPrimaryDark">#f7be16</item>
         <item name="colorPrimaryLight">#ffe292</item>
+
+        <item name="md_dark_theme">false</item>
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
@@ -245,6 +259,8 @@
         <item name="colorPrimaryDark">#ff8000</item>
         <item name="colorPrimaryLight">#ffc176</item>
 
+        <item name="md_dark_theme">false</item>
+
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
@@ -273,6 +289,8 @@
         <item name="colorPrimary">#4e698a</item>
         <item name="colorPrimaryDark">#2d4059</item>
         <item name="colorPrimaryLight">#a6c0d1</item>
+
+        <item name="md_dark_theme">false</item>
 
         <item name="md_background_color">@color/white</item>
         <item name="rootBackgroundColor">@color/white</item>

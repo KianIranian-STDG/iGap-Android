@@ -44,6 +44,7 @@
         <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon</item>
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
     </style>
     <!--for support theme under android version 21-->
 

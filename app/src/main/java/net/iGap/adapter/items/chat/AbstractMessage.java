@@ -732,16 +732,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * because for chat and group userId will be set
          */
 
-        /*Utils.darkModeHandlerGray(mHolder.getVoteDownIv());
-        Utils.darkModeHandlerGray(mHolder.getVoteUpTv());
-        Utils.darkModeHandlerGray(mHolder.getViewsLabelTv());
-        Utils.darkModeHandlerGray(mHolder.getSignatureTv());
-        Utils.darkModeHandlerGray(mHolder.getEyeIconTv());*/
-        /*Utils.darkModeHandlerGray(mHolder.getMessageStatusTv());*/
-        /*Utils.darkModeHandlerGray(mHolder.getVoteUpIv());
-        Utils.darkModeHandlerGray(mHolder.getVoteDownTv());
-        Utils.darkModeHandlerGray(mHolder.getMessageTimeTv());*/
-
         if ((mMessage.forwardedFrom != null)) {
             if (realmRoomForwardedFrom != null && realmRoomForwardedFrom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                 if (realmChannelExtra != null) {

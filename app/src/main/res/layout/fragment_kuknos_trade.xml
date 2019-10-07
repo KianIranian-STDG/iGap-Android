@@ -146,13 +146,13 @@
                     android:id="@+id/fragKuknosTranTAmountSpinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@{G.isDarkTheme ? @drawable/kuknos_spinner_dark_style : @drawable/kuknos_spinner_style}"
                     android:minHeight="38dp"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosTranTAmountHolder"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/fragKuknosTranTAmountHolder"
                     app:layout_constraintTop_toTopOf="@+id/fragKuknosTranTAmountHolder"
                     app:layout_constraintWidth_percent="0.3" />
+                <!--android:background="@{G.isDarkTheme ? @drawable/kuknos_spinner_dark_style : @drawable/kuknos_spinner_style}"-->
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -191,13 +191,13 @@
                     android:id="@+id/fragKuknosTranExchangeSpinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@{G.isDarkTheme ? @drawable/kuknos_spinner_dark_style : @drawable/kuknos_spinner_style}"
                     android:minHeight="38dp"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosTranExchangeHolder"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/fragKuknosTranExchangeHolder"
                     app:layout_constraintTop_toTopOf="@+id/fragKuknosTranExchangeHolder"
                     app:layout_constraintWidth_percent="0.3" />
+                <!--android:background="@{G.isDarkTheme ? @drawable/kuknos_spinner_dark_style : @drawable/kuknos_spinner_style}"-->
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/fragKuknosTranSubmit"

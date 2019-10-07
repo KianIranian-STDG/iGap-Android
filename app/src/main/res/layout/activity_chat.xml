@@ -150,7 +150,7 @@
                     android:layout_weight="1"
                     android:singleLine="true"
                     android:text="New Text"
-                    android:textColor="?iGapTitleTextColor"
+                    android:textColor="?attr/iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
                 <net.iGap.module.MaterialDesignTextView
@@ -192,7 +192,7 @@
                     android:padding="@dimen/dp8"
                     android:singleLine="true"
                     android:text="0 of 0"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/iGapTitleTextColor"
                     android:textSize="@dimen/dp16" />
 
 
@@ -220,7 +220,7 @@
                         android:background="@null"
                         android:gravity="center"
                         android:text="@string/md_close_button"
-                        android:textColor="#dededd" />
+                        android:textColor="?attr/iGapTitleTextColor" />
 
 
                 </LinearLayout>
