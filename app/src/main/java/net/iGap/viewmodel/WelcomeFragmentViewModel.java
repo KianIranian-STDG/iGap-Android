@@ -11,7 +11,7 @@ public class WelcomeFragmentViewModel extends ViewModel {
     private SingleLiveEvent<Long> goToRegistrationNicknamePage = new SingleLiveEvent<>();
 
     public WelcomeFragmentViewModel(long userId) {
-        new Handler().postDelayed(() -> goToRegistrationNicknamePage.postValue(userId), 2000);
+        new Handler().postDelayed(() -> goToRegistrationNicknamePage.postValue(userId), 1000);
     }
 
     public SingleLiveEvent<Long> getGoToRegistrationNicknamePage() {
