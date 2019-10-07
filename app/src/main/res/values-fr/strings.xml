@@ -558,7 +558,7 @@
     <string name="times">temps</string>
     <string name="info">informations</string>
     <string name="description">explications</string>
-    <string name="type_message">écrire un message</string>
+    <string name="type_message">Message...</string>
     <string name="place">place</string>
     <string name="minutes">minutes</string>
     <string name="channel_link">lien de canal</string>

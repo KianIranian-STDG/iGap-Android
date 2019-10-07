@@ -647,7 +647,7 @@
     <string name="times">Times</string>
     <string name="info">Info</string>
     <string name="description">Description</string>
-    <string name="type_message">Type your message</string>
+    <string name="type_message">Message...</string>
     <string name="place">Place</string>
     <string name="minutes">Minutes</string>
     <string name="channel_link">Channel Link</string>
