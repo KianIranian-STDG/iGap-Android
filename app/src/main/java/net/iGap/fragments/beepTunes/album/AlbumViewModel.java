@@ -167,7 +167,9 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
         song.setDisplayName(downloadSong.getTrack().getName());
         song.setArtistId(downloadSong.getArtistId());
         song.setAlbumId(downloadSong.getAlbumId());
-        DbManager.getInstance().getUiRealm().executeTransactionAsync(realm -> realm.copyToRealmOrUpdate(song));
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransactionAsync(realm2 -> realm2.copyToRealmOrUpdate(song));
+        });
 
         removeFromQueue(downloadSong);
         downloadStatusMutableLiveData.postValue(downloadSong);

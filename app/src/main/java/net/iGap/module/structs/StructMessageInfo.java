@@ -15,6 +15,7 @@ import android.os.Parcelable;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.DbManager;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.interfaces.IChatItemAttachment;
 import net.iGap.module.MyType;
@@ -159,39 +160,41 @@ public class StructMessageInfo implements Parcelable {
         return 0;
     }
 
-    public <VH extends RecyclerView.ViewHolder> void addAttachmentChangeListener(Realm realm, AbstractMessage abstractMessage, long identifier, IChatItemAttachment<VH> itemVHAbstractMessage, VH holder, ProtoGlobal.RoomMessageType messageType) {
+    public <VH extends RecyclerView.ViewHolder> void addAttachmentChangeListener(AbstractMessage abstractMessage, long identifier, IChatItemAttachment<VH> itemVHAbstractMessage, VH holder, ProtoGlobal.RoomMessageType messageType) {
         removeAttachmentChangeListener();
 
         if (getAttachment() == null) {
             return;
         }
 
-        liverRealmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, getAttachment().getId()).findFirstAsync();
+        DbManager.getInstance().doRealmTask(realm -> {
+            liverRealmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, getAttachment().getId()).findFirstAsync();
 
-        realmAttachmentRealmChangeListener = (realmAttachment, changeSet) -> {
-            if (changeSet == null) {
-                //init query
-                return;
-            }
-            if (realmAttachment.isValid() && realmAttachment.isManaged()) {
-                setAttachment(realm.copyFromRealm(realmAttachment));
-                abstractMessage.onProgressFinish(holder, messageType);
+            realmAttachmentRealmChangeListener = (realmAttachment, changeSet) -> {
+                if (changeSet == null) {
+                    //init query
+                    return;
+                }
+                if (realmAttachment.isValid() && realmAttachment.isManaged()) {
+                    setAttachment(realm.copyFromRealm(realmAttachment));
+                    abstractMessage.onProgressFinish(holder, messageType);
 
-                if (realmAttachment.isFileExistsOnLocalAndIsThumbnail()) {
-                    itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
-                } else if (messageType == ProtoGlobal.RoomMessageType.VOICE || messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
-                    itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
-                } else if (messageType.toString().toLowerCase().contains("image") || messageType.toString().toLowerCase().contains("video") || messageType.toString().toLowerCase().contains("gif")) {
-                    if (realmAttachment.isThumbnailExistsOnLocal()) {
-                        itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
+                    if (realmAttachment.isFileExistsOnLocalAndIsThumbnail()) {
+                        itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
+                    } else if (messageType == ProtoGlobal.RoomMessageType.VOICE || messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
+                        itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
+                    } else if (messageType.toString().toLowerCase().contains("image") || messageType.toString().toLowerCase().contains("video") || messageType.toString().toLowerCase().contains("gif")) {
+                        if (realmAttachment.isThumbnailExistsOnLocal()) {
+                            itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
+                        }
                     }
+
+                    //mAdapter.notifyItemChanged(mAdapter.getPosition(identifier));
                 }
 
-                //mAdapter.notifyItemChanged(mAdapter.getPosition(identifier));
-            }
-
-        };
-        liverRealmAttachment.addChangeListener(realmAttachmentRealmChangeListener);
+            };
+            liverRealmAttachment.addChangeListener(realmAttachmentRealmChangeListener);
+        });
     }
 
     private void removeAttachmentChangeListener() {

@@ -78,7 +78,10 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
     public EditGroupViewModel(Long roomId) {
 
         this.roomId = roomId;
-        RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        });
+
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
             goBack.setValue(true);
             return;
@@ -110,8 +113,11 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
         }*/
 
         //ToDo: add this code to repository
-        adminMembers = RealmMember.filterMember(DbManager.getInstance().getUiRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
-        moderatorMembers = RealmMember.filterMember(DbManager.getInstance().getUiRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
+        DbManager.getInstance().doRealmTask(realm -> {
+            adminMembers = RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString());
+            moderatorMembers = RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString());
+
+        });
         administratorsCount.set(String.valueOf(adminMembers.size()));
         moderatorsCount.set(String.valueOf(moderatorMembers.size()));
 

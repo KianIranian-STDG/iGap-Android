@@ -88,13 +88,15 @@ public class BeepTunesPlayer extends BaseFragment {
                     playTv.setText(getContext().getResources().getString(R.string.play_icon));
                 }
 
-                realmDownloadSongs = DbManager.getInstance().getUiRealm().copyFromRealm(DbManager.getInstance().getUiRealm().where(RealmDownloadSong.class)
-                        .equalTo("artistId", playingSong.getArtistId()).findAll());
+//                realmDownloadSongs = DbManager.getInstance().getUiRealm().copyFromRealm(DbManager.getInstance().getUiRealm().where(RealmDownloadSong.class)
+//                        .equalTo("artistId", playingSong.getArtistId()).findAll());
 
-                realmDownloadSong = DbManager.getInstance().getUiRealm().copyFromRealm(DbManager.getInstance().getUiRealm()
-                        .where(RealmDownloadSong.class)
-                        .equalTo("id", playingSong.getSongId())
-                        .findFirst());
+                realmDownloadSong = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.copyFromRealm(realm
+                            .where(RealmDownloadSong.class)
+                            .equalTo("id", playingSong.getSongId())
+                            .findFirst());
+                });
 
                 checkFavorite(realmDownloadSong);
             }
@@ -156,15 +158,19 @@ public class BeepTunesPlayer extends BaseFragment {
 
         favoriteTv.setOnClickListener(v -> {
             if (!realmDownloadSong.isFavorite()) {
-                DbManager.getInstance().getUiRealm().executeTransactionAsync(realm -> {
-                    realmDownloadSong.setFavorite(true);
-                    realm.copyToRealmOrUpdate(realmDownloadSong);
-                }, () -> checkFavorite(realmDownloadSong));
+                DbManager.getInstance().doRealmTask(realm -> {
+                    realm.executeTransactionAsync(realm1 -> {
+                        realmDownloadSong.setFavorite(true);
+                        realm1.copyToRealmOrUpdate(realmDownloadSong);
+                    }, () -> checkFavorite(realmDownloadSong));
+                });
             } else {
-                DbManager.getInstance().getUiRealm().executeTransactionAsync(realm -> {
-                    realmDownloadSong.setFavorite(false);
-                    realm.copyToRealmOrUpdate(realmDownloadSong);
-                }, () -> checkFavorite(realmDownloadSong));
+                DbManager.getInstance().doRealmTask(realm -> {
+                    realm.executeTransactionAsync(realm1 -> {
+                        realmDownloadSong.setFavorite(false);
+                        realm1.copyToRealmOrUpdate(realmDownloadSong);
+                    }, () -> checkFavorite(realmDownloadSong));
+                });
             }
         });
 

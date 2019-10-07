@@ -75,7 +75,9 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     public ActivityEnterPassCodeViewModel(boolean isLinePattern) {
         initialPatternView.setValue(!isLinePattern);
 
-        realmUserInfo = DbManager.getInstance().getUiRealm().where(RealmUserInfo.class).findFirst();
+        realmUserInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmUserInfo.class).findFirst();
+        });
 
         if (realmUserInfo != null) {
             isPattern.set(realmUserInfo.isPattern() ? View.VISIBLE : View.GONE);

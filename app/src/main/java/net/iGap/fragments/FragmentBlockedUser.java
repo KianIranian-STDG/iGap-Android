@@ -84,7 +84,9 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
         realmRecyclerView.setItemAnimator(null);
         realmRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
 
-        RealmResults<RealmRegisteredInfo> results = DbManager.getInstance().getUiRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.BLOCK_USER, true).findAll();
+        RealmResults<RealmRegisteredInfo> results = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.BLOCK_USER, true).findAll();
+        });
         BlockListAdapter blockListAdapter = new BlockListAdapter(results.sort(RealmRegisteredInfoFields.DISPLAY_NAME));
         realmRecyclerView.setAdapter(blockListAdapter);
 

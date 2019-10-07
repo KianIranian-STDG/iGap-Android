@@ -96,12 +96,16 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
 
         profileFragment.setCallBack(type -> {
             if (type.equals(SYNC_FRAGMENT)) {
-                List<RealmDownloadSong> downloadSongs = DbManager.getInstance().getUiRealm().copyFromRealm(DbManager.getInstance().getUiRealm().where(RealmDownloadSong.class).findAll());
+                List<RealmDownloadSong> downloadSongs = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.copyFromRealm(realm.where(RealmDownloadSong.class).findAll());
+                });
                 new HelperFragment(getFragmentManager(), BeepTunesLocalSongFragment.getInstance(downloadSongs, "Sync Song", this))
                         .setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();
             } else if (type.equals(FAVORITE_FRAGMENT)) {
-                List<RealmDownloadSong> downloadSongs = DbManager.getInstance().getUiRealm().copyFromRealm(DbManager.getInstance().getUiRealm().where(RealmDownloadSong.class)
-                        .equalTo("isFavorite", true).findAll());
+                List<RealmDownloadSong> downloadSongs = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.copyFromRealm(realm.where(RealmDownloadSong.class)
+                            .equalTo("isFavorite", true).findAll());
+                });
 
                 new HelperFragment(getFragmentManager(), BeepTunesLocalSongFragment.getInstance(downloadSongs, "Favorite Song", this))
                         .setResourceContainer(R.id.fl_beepTunes_Container).setReplace(false).load();

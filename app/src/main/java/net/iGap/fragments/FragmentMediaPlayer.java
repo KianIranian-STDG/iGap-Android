@@ -454,13 +454,15 @@ public class FragmentMediaPlayer extends BaseFragment {
             @Override
             public void run() {
 
-                DbManager.getInstance().getUiRealm().executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
-                            RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
+                DbManager.getInstance().doRealmTask(realm -> {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
+                                RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
+                            }
                         }
-                    }
+                    });
                 });
             }
         });
@@ -472,7 +474,9 @@ public class FragmentMediaPlayer extends BaseFragment {
             mRealmList.removeAllChangeListeners();
         }
 
-        mRealmList = RealmRoomMessage.filterMessage(DbManager.getInstance().getUiRealm(), MusicPlayer.roomId, type);
+        mRealmList = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmRoomMessage.filterMessage(realm, MusicPlayer.roomId, type);
+        });
 
         changeSize = mRealmList.size();
 
@@ -615,12 +619,14 @@ public class FragmentMediaPlayer extends BaseFragment {
         List<RealmRoomMessage> realmRoomMessages = null;
 
         try {
-            realmRoomMessages = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class)
-                    .equalTo(RealmRoomMessageFields.ROOM_ID, MusicPlayer.roomId)
-                    .notEqualTo(RealmRoomMessageFields.DELETED, true)
-                    .contains(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.AUDIO.toString())
-                    .lessThan(RealmRoomMessageFields.MESSAGE_ID, MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).getMessageId())
-                    .findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            realmRoomMessages = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoomMessage.class)
+                        .equalTo(RealmRoomMessageFields.ROOM_ID, MusicPlayer.roomId)
+                        .notEqualTo(RealmRoomMessageFields.DELETED, true)
+                        .contains(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.AUDIO.toString())
+                        .lessThan(RealmRoomMessageFields.MESSAGE_ID, MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).getMessageId())
+                        .findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            });
         } catch (IllegalStateException e) {
         }
 

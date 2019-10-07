@@ -191,7 +191,9 @@ public class FragmentShowImage extends BaseFragment {
                 return false;
             }
 
-            mRealmList = RealmRoomMessage.findSorted(DbManager.getInstance().getUiRealm(), mRoomId, RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
+            mRealmList = DbManager.getInstance().doRealmTask(realm -> {
+                return RealmRoomMessage.findSorted(realm, mRoomId, RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
+            });
             if (mRealmList.size() < 1) {
                 popBackStackFragment();
                 return false;
@@ -376,7 +378,9 @@ public class FragmentShowImage extends BaseFragment {
             txtImageDesc.setVisibility(View.GONE);
         }
 
-        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getUiRealm(), realmRoomMessageFinal.getUserId());
+        RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmRegisteredInfo.getRegistrationInfo(realm, realmRoomMessageFinal.getUserId());
+        });
 
         if (realmRegisteredInfo != null) {
             txtImageName.setText(realmRegisteredInfo.getDisplayName());

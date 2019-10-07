@@ -135,7 +135,9 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         realmRecyclerView.setLayoutManager(layoutManager);
 
         // get all the contacts from realm
-        results = DbManager.getInstance().getUiRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+        results = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+        });
 
         results.addChangeListener(new RealmChangeListener<RealmResults<RealmContacts>>() {
             @Override
@@ -292,7 +294,9 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
     public void onContactsGetList() {
 
         if (results == null || results.size() == 0) {
-            results = DbManager.getInstance().getUiRealm().where(RealmContacts.class).limit(ContactManager.CONTACT_LIMIT).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            results = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmContacts.class).limit(ContactManager.CONTACT_LIMIT).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            });
             contactListAdapter2 = new ContactListAdapter2(results);
             realmRecyclerView.setAdapter(contactListAdapter2);
             if (results.size() == 0) {
@@ -380,9 +384,13 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
     @Override
     public void onSearchTextChangeListener(View view, String text) {
         if (text.length() > 0) {
-            results = DbManager.getInstance().getUiRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, text, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            results = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, text, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            });
         } else {
-            results = DbManager.getInstance().getUiRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            results = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            });
         }
 //        contactListAdapter.usersList = results;
 //        contactListAdapter.notify();

@@ -138,7 +138,9 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
 
         if (realmResults == null) {
-            realmResults = getRealmResult(mSelectedStatus, DbManager.getInstance().getUiRealm());
+            realmResults = DbManager.getInstance().doRealmTask(realm -> {
+                return getRealmResult(mSelectedStatus, realm);
+            });
         }
 
         realmResults.addChangeListener((realmCallLogs, changeSet) -> {
@@ -321,7 +323,10 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     private void getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter filter) {
         if (realmResults != null) realmResults.removeAllChangeListeners();
         mSelectedStatus = filter;
-        realmResults = getRealmResult(mSelectedStatus, DbManager.getInstance().getUiRealm());
+        realmResults = DbManager.getInstance().doRealmTask(realm -> {
+            return getRealmResult(mSelectedStatus, realm);
+        });
+
         mRecyclerView.setAdapter(new CallAdapter(realmResults));
         checkListIsEmpty();
     }

@@ -194,8 +194,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public UserProfileViewModel(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
         this.sharedPreferences = sharedPreferences;
         this.avatarHandler = avatarHandler;
-        userInfo = DbManager.getInstance().getUiRealm().where(RealmUserInfo.class).findFirst();
-        checkProfileWallpaper(DbManager.getInstance().getUiRealm());
+        DbManager.getInstance().doRealmTask(realm -> {
+            userInfo = realm.where(RealmUserInfo.class).findFirst();
+            checkProfileWallpaper(realm);
+        });
+
         updateUserInfoUI();
         if (checkValidationForRealm(userInfo)) {
             userInfo.addChangeListener(realmModel -> {
@@ -389,7 +392,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public void onCloudMessageClick() {
         showLoading.set(View.VISIBLE);
         retryRequestTime++;
-        RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userInfo.getUserId()).findFirst();
+        RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userInfo.getUserId()).findFirst();
+        });
         if (realmRoom != null) {
             showLoading.set(View.GONE);
             goToChatPage.setValue(new GoToChatModel(realmRoom.getId(), userInfo.getUserId()));
@@ -507,7 +512,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onAvatarClick() {
-        if (DbManager.getInstance().getUiRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
+        if (DbManager.getInstance().doRealmTask(realm -> { return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst();}) != null) {
             goToShowAvatarPage.setValue(userInfo.getUserId());
         }
     }

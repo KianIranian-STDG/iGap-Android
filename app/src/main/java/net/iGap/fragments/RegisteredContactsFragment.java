@@ -661,13 +661,17 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     }
 
     public void loadContacts() {
-        results = DbManager.getInstance().getUiRealm().copyFromRealm(DbManager.getInstance().getUiRealm().where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
+        results = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
+        });
         if (realmRecyclerView.getAdapter() != null)
             ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
     }
 
     private void loadContact(String key) {
-        results = DbManager.getInstance().getUiRealm().copyFromRealm(DbManager.getInstance().getUiRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, key, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME));
+        results = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.copyFromRealm(realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, key, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME));
+        });
         if (realmRecyclerView.getAdapter() != null)
             ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
     }

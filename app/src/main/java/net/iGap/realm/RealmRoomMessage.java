@@ -987,52 +987,54 @@ public class RealmRoomMessage extends RealmObject {
             return null;
         }
 
-        final long messageId = AppUtils.makeRandomId();
-        final long currentTime = TimeUtils.currentLocalTime();
-        RealmRoomMessage roomMessage = new RealmRoomMessage();
-        roomMessage.setMessageId(messageId);
-        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-        roomMessage.setMessage(message);
-        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-        RealmRoomMessage.addTimeIfNeed(roomMessage, DbManager.getInstance().getUiRealm());
-        RealmRoomMessage.isEmojiInText(roomMessage, message);
-        roomMessage.setRoomId(roomId);
-        roomMessage.setShowMessage(true);
-        roomMessage.setUserId(G.userId);
-        roomMessage.setAuthorHash(G.authorHash);
-        roomMessage.setCreateTime(currentTime);
-        if (additinalData != null) {
-            RealmAdditional realmAdditional = new RealmAdditional();
-            realmAdditional.setId(AppUtils.makeRandomId());
-            realmAdditional.setAdditionalData(additinalData);
-            realmAdditional.setAdditionalType(additionalType);
+        return DbManager.getInstance().doRealmTask(realm -> {
+            final long messageId = AppUtils.makeRandomId();
+            final long currentTime = TimeUtils.currentLocalTime();
+            RealmRoomMessage roomMessage = new RealmRoomMessage();
+            roomMessage.setMessageId(messageId);
+            roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+            roomMessage.setMessage(message);
+            roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+            RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
+            RealmRoomMessage.isEmojiInText(roomMessage, message);
+            roomMessage.setRoomId(roomId);
+            roomMessage.setShowMessage(true);
+            roomMessage.setUserId(G.userId);
+            roomMessage.setAuthorHash(G.authorHash);
+            roomMessage.setCreateTime(currentTime);
+            if (additinalData != null) {
+                RealmAdditional realmAdditional = new RealmAdditional();
+                realmAdditional.setId(AppUtils.makeRandomId());
+                realmAdditional.setAdditionalData(additinalData);
+                realmAdditional.setAdditionalType(additionalType);
 
-            roomMessage.setRealmAdditional(realmAdditional);
-        }
-
-        /**
-         *  user wants to replay to a message
-         */
-        if (replyMessageId > 0) {
-            RealmRoomMessage messageToReplay = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replyMessageId).findFirst();
-            if (messageToReplay != null) {
-                roomMessage.setReplyTo(DbManager.getInstance().getUiRealm().copyFromRealm(messageToReplay));
+                roomMessage.setRealmAdditional(realmAdditional);
             }
-        }
 
-        new Thread(() -> {
-            try (Realm realm = Realm.getDefaultInstance()) {
-                realm.executeTransaction(realm1 -> {
-                    RealmRoomMessage managedRoomMessage = realm1.copyToRealmOrUpdate(roomMessage);
-                    RealmRoom.setLastMessageWithRoomMessage(realm, roomId, managedRoomMessage);
-                    if (RealmRoom.detectType(roomId) == CHANNEL) {
-                        RealmChannelExtra.putDefault(realm, roomId, messageId);
-                    }
+            /**
+             *  user wants to replay to a message
+             */
+            if (replyMessageId > 0) {
+                RealmRoomMessage messageToReplay = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replyMessageId).findFirst();
+                if (messageToReplay != null) {
+                    roomMessage.setReplyTo(realm.copyFromRealm(messageToReplay));
+                }
+            }
+
+            new Thread(() -> {
+                DbManager.getInstance().doRealmTask(realm12 -> {
+                    realm12.executeTransaction(realm1 -> {
+                        RealmRoomMessage managedRoomMessage = realm1.copyToRealmOrUpdate(roomMessage);
+                        RealmRoom.setLastMessageWithRoomMessage(realm1, roomId, managedRoomMessage);
+                        if (RealmRoom.detectType(roomId) == CHANNEL) {
+                            RealmChannelExtra.putDefault(realm1, roomId, messageId);
+                        }
+                    });
                 });
-            }
-        }).start();
+            }).start();
 
-        return roomMessage;
+            return roomMessage;
+        });
     }
 
     public static RealmRoomMessage makeTextMessage(final long roomId, final String message, final long replyMessageId) {

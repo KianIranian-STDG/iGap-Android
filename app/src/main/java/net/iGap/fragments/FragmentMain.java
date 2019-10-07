@@ -288,7 +288,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void readAllRoom() {
-        RealmResults<RealmRoom> unreadList = DbManager.getInstance().getUiRealm().where(RealmRoom.class).greaterThan(RealmRoomFields.UNREAD_COUNT, 0).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
+        RealmResults<RealmRoom> unreadList = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).greaterThan(RealmRoomFields.UNREAD_COUNT, 0).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
+        });
 
         if (unreadList.size() == 0) {
             Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
@@ -372,7 +374,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         if (results == null) {
             String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
             Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
-            RealmQuery<RealmRoom> temp = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false);
+            RealmQuery<RealmRoom> temp = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false);
+            });
             results = temp.sort(fieldNames, sort).findAllAsync();
             roomListAdapter = new RoomListAdapter(results, viewById, pbLoading, avatarHandler, mSelectedRoomList);
             getChatLists();

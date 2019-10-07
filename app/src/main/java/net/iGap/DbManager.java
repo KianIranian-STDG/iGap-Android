@@ -17,15 +17,7 @@ public class DbManager {
     private DbManager() {
     }
 
-    public Realm getUiRealm() {
-        if (Looper.myLooper() != Looper.getMainLooper()) {
-            throw new IllegalStateException("You must use this realm instance in ui thread.");
-        }
-
-//        if (uiRealm == null || uiRealm.isClosed()) {
-//            uiRealm = Realm.getDefaultInstance();
-//        }
-
+    private Realm getUiRealm() {
         return uiRealm;
     }
 
@@ -40,12 +32,13 @@ public class DbManager {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             throw new IllegalStateException("You must close realm in ui thread.");
         }
+        uiRealm.removeAllChangeListeners();
         uiRealm.close();
     }
 
 
     public <T> T doRealmTask(RealmTaskWithReturn<T> realmTask) {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
+        if (Looper.myLooper() == Looper.getMainLooper() && getUiRealm() != null && !getUiRealm().isClosed()) {
             return realmTask.doTask(getUiRealm());
         } else {
             try (Realm realm = Realm.getDefaultInstance()) {
@@ -55,7 +48,7 @@ public class DbManager {
     }
 
     public void doRealmTask(RealmTask realmTask) {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
+        if (Looper.myLooper() == Looper.getMainLooper() && getUiRealm() != null && !getUiRealm().isClosed()) {
             realmTask.doTask(getUiRealm());
         } else {
             try (Realm realm = Realm.getDefaultInstance()) {

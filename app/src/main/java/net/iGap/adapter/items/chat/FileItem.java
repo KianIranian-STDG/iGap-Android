@@ -82,8 +82,10 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         }
 
         setTextIfNeeded(holder.messageView);
+        RealmRoomMessage roomMessage = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.getMessageId()).findFirst());
+        });
 
-        RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.getMessageId()).findFirst());
         if (roomMessage != null) {
             holder.thumbnail.setVisibility(View.VISIBLE);
             if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".pdf")) {

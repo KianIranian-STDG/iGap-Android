@@ -835,12 +835,15 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 }
             });
 
-            DbManager.getInstance().getUiRealm().executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
-                }
+            DbManager.getInstance().doRealmTask(realm -> {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
+                    }
+                });
             });
+
             rootTurnOnGps = view.findViewById(R.id.scrollView);
             rootTurnOnGps.setOnClickListener(new View.OnClickListener() {
                 @Override

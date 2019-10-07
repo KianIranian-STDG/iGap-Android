@@ -125,8 +125,13 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
 
 
     private void getInfo() {
-        realmPrivacy = DbManager.getInstance().getUiRealm().where(RealmPrivacy.class).findFirst();
-        realmUserInfo = DbManager.getInstance().getUiRealm().where(RealmUserInfo.class).findFirst();
+        realmPrivacy = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmPrivacy.class).findFirst();
+        });
+        realmUserInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmUserInfo.class).findFirst();
+        });
+
         RealmPrivacy.getUpdatePrivacyFromServer();
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         poSelfRemove = sharedPreferences.getInt(SHP_SETTING.KEY_POSITION_SELF_REMOVE, 2);
@@ -346,7 +351,9 @@ public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
                 ProtoGlobal.PrivacyLevel.ALLOW_ALL.toString()
         );
 
-        realmPrivacy = DbManager.getInstance().getUiRealm().where(RealmPrivacy.class).findFirst();
+        realmPrivacy = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmPrivacy.class).findFirst();
+        });
 
     }
 }

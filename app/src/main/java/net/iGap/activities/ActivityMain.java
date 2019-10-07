@@ -402,7 +402,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
 
-            RealmUserInfo userInfo = DbManager.getInstance().getUiRealm().where(RealmUserInfo.class).findFirst();
+            RealmUserInfo userInfo = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmUserInfo.class).findFirst();
+            });
+
             if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
                 isNeedToRegister = true;
                 Intent intent = new Intent(this, ActivityRegistration.class);
@@ -740,7 +743,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void getWallpaperAsDefault() {
         try {
-            RealmWallpaper realmWallpaper = DbManager.getInstance().getUiRealm().where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
+            RealmWallpaper realmWallpaper = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
+            });
             if (realmWallpaper != null) {
                 if (realmWallpaper.getWallPaperList() != null && realmWallpaper.getWallPaperList().size() > 0) {
                     RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
@@ -1444,8 +1449,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (isNeedToRegister) {
                 return;
             }
-
-            AppUtils.updateBadgeOnly(DbManager.getInstance().getUiRealm(), -1);
+            DbManager.getInstance().doRealmTask(realm -> {
+                AppUtils.updateBadgeOnly(realm, -1);
+            });
         }
         Log.wtf(this.getClass().getName(), "onPause");
     }

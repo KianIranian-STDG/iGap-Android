@@ -379,12 +379,14 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             @Override
             public void run() {
                 mCurrentUpdateCount = 0;
-                DbManager.getInstance().getUiRealm().executeTransactionAsync(realm -> RealmMember.deleteAllMembers(realm, mRoomID, selectedRole), () -> {
-                    if (roomType == GROUP) {
-                        new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
-                    } else {
-                        new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit, ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.valueOf(selectedRole));
-                    }
+                DbManager.getInstance().doRealmTask(realm -> {
+                    realm.executeTransactionAsync(realm1 -> RealmMember.deleteAllMembers(realm1, mRoomID, selectedRole), () -> {
+                        if (roomType == GROUP) {
+                            new RequestGroupGetMemberList().getMemberList(mRoomID, offset, limit, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.valueOf(selectedRole));
+                        } else {
+                            new RequestChannelGetMemberList().channelGetMemberList(mRoomID, offset, limit, ProtoChannelGetMemberList.ChannelGetMemberList.FilterRole.valueOf(selectedRole));
+                        }
+                    });
                 });
 
             }
@@ -430,7 +432,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
         mBtnAdd = view.findViewById(R.id.fcm_lbl_add);
 
-        RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+        RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+        });
 
         //change toolbar title and set Add button text
         if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
@@ -511,7 +515,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             @Override
             public void afterTextChanged(final Editable s) {
-                RealmResults<RealmMember> searchMember = RealmMember.filterMember(DbManager.getInstance().getUiRealm(), mRoomID, s.toString(), getUnselectRow(), selectedRole);
+                RealmResults<RealmMember> searchMember = DbManager.getInstance().doRealmTask(realm -> {
+                    return RealmMember.filterMember(realm, mRoomID, s.toString(), getUnselectRow(), selectedRole);
+                });
                 mAdapter = new MemberAdapter(searchMember, roomType, mMainRole, userID);
                 mRecyclerView.setAdapter(mAdapter);
             }
@@ -559,7 +565,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     private void goToAddMember() {
 
         List<StructContactInfo> userList = Contacts.retrieve(null);
-        RealmList<RealmMember> memberList = RealmMember.getMembers(DbManager.getInstance().getUiRealm(), mRoomID);
+        RealmList<RealmMember> memberList = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmMember.getMembers(realm, mRoomID);
+        });
 
         for (int i = 0; i < memberList.size(); i++) {
             for (int j = 0; j < userList.size(); j++) {
@@ -635,7 +643,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             role = RealmChannelRoom.detectMineRole(mRoomID).toString();
         }
 
-        RealmResults<RealmMember> realmMembers = RealmMember.filterMember(DbManager.getInstance().getUiRealm(), mRoomID, "", getUnselectRow(), selectedRole);
+        RealmResults<RealmMember> realmMembers = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmMember.filterMember(realm, mRoomID, "", getUnselectRow(), selectedRole);
+        });
 
         if (G.fragmentActivity != null) {
             mAdapter = new MemberAdapter(realmMembers, roomType, mMainRole, userID);

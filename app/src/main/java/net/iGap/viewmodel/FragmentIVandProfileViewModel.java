@@ -39,15 +39,19 @@ public class FragmentIVandProfileViewModel {
     }
 
     private void initData() {
-        realmUserInfo = DbManager.getInstance().getUiRealm().where(RealmUserInfo.class).findFirst();
-        if (DbManager.getInstance().getUiRealm() != null) {
+        realmUserInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmUserInfo.class).findFirst();
+        });
+        if (realmUserInfo != null) {
             profileNameTv.set(realmUserInfo.getUserInfo().getDisplayName());
             referralTv.set(G.context.getString(R.string.ra_title) + " " + realmUserInfo.getRepresentPhoneNumber());
         }
     }
 
     public int saleVisibility() {
-        realmUserInfo = DbManager.getInstance().getUiRealm().where(RealmUserInfo.class).findFirst();
+        realmUserInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmUserInfo.class).findFirst();
+        });
         if (realmUserInfo.getRepresentPhoneNumber() == null || realmUserInfo.getRepresentPhoneNumber().equals("")) {
             return View.GONE;
         }

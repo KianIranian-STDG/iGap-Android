@@ -257,14 +257,18 @@ public class FragmentShowAvatars extends BaseFragment {
         switch (from) {
             case chat:
             case setting:
-                RealmRegisteredInfo user = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getUiRealm(), mPeerId);
+                RealmRegisteredInfo user = DbManager.getInstance().doRealmTask(realm -> {
+                    return RealmRegisteredInfo.getRegistrationInfo(realm, mPeerId);
+                });
                 if (user != null) {
                     new RequestUserAvatarGetList().userAvatarGetList(mPeerId);
                     isRoomExist = true;
                 }
                 break;
             case group:
-                RealmRoom roomGroup = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+                RealmRoom roomGroup = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+                });
                 if (roomGroup != null) {
                     new RequestGroupAvatarGetList().groupAvatarGetList(mPeerId);
                     isRoomExist = true;
@@ -272,7 +276,9 @@ public class FragmentShowAvatars extends BaseFragment {
                 }
                 break;
             case channel:
-                RealmRoom roomChannel = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+                RealmRoom roomChannel = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+                });
                 if (roomChannel != null) {
                     new RequestChannelAvatarGetList().channelAvatarGetList(mPeerId);
                     isRoomExist = true;
@@ -283,7 +289,9 @@ public class FragmentShowAvatars extends BaseFragment {
 
         if (isRoomExist) {
 
-            avatarList = DbManager.getInstance().getUiRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll().sort(RealmAvatarFields.ID, Sort.DESCENDING);
+            avatarList = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll().sort(RealmAvatarFields.ID, Sort.DESCENDING);
+            });
             avatarListSize = avatarList.size();
         }
     }

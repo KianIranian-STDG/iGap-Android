@@ -137,7 +137,9 @@ public class UserRepo {
     }
 
     private void updateUserInfo() {
-        userInfo = DbManager.getInstance().getUiRealm().where(RealmUserInfo.class).findFirst();
+        userInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmUserInfo.class).findFirst();
+        });
         realmKuknos = userInfo.getKuknosM();
         if (realmKuknos == null) {
             userInfo.createKuknos();

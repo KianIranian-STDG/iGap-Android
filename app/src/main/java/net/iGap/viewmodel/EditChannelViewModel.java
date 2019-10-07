@@ -110,7 +110,10 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
             });
         };
 
-        RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        });
+
         //todo:fixed it
         if (realmRoom == null || realmRoom.getChannelRoom() == null) {
             goBack.setValue(true);
@@ -156,8 +159,11 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
             e.getStackTrace();
         }*/
         subscribersCount.set(String.valueOf(realmChannelRoom.getParticipantsCountLabel()));
-        administratorsCount.set(String.valueOf(RealmMember.filterMember(DbManager.getInstance().getUiRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
-        moderatorsCount.set(String.valueOf(RealmMember.filterMember(DbManager.getInstance().getUiRealm(), roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+        DbManager.getInstance().doRealmTask(realm -> {
+            administratorsCount.set(String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString()).size()));
+            moderatorsCount.set(String.valueOf(RealmMember.filterMember(realm, roomId, "", new ArrayList<>(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString()).size()));
+
+        });
 
         if (role == ChannelChatRole.OWNER) {
             leaveChannelText.set(R.string.channel_delete);

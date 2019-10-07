@@ -100,7 +100,10 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
         }
 
         void bindTracks(Track track) {
-            realmDownloadSong = DbManager.getInstance().getUiRealm().where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst();
+            realmDownloadSong = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst();
+            });
+
             if (realmDownloadSong != null) {
                 track.setInStorage(true);
                 songPrwTv.setText(itemView.getContext().getResources().getString(R.string.music_icon));
@@ -192,7 +195,12 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
                     });
                 }
             });
-            DbManager.getInstance().getUiRealm().addChangeListener(realm -> realmDownloadSong = realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst());
+
+            realmDownloadSong = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmDownloadSong.class).equalTo("id", track.getId()).findFirst();
+            });
+
+//            realmDownloadSong.addChangeListener(realm -> );
             progressBar.getIndeterminateDrawable().setColorFilter(itemView.getContext().getResources().getColor(R.color.beeptunes_primary), PorterDuff.Mode.SRC_IN);
         }
 

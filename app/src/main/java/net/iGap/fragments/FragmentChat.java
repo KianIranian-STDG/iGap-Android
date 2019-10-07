@@ -722,7 +722,9 @@ public class FragmentChat extends BaseFragment
     public void exportChat() {
 
 
-        RealmResults<RealmRoomMessage> realmRoomMessages = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo("roomId", mRoomId).sort("createTime").findAll();
+        RealmResults<RealmRoomMessage> realmRoomMessages = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoomMessage.class).equalTo("roomId", mRoomId).sort("createTime").findAll();
+        });
         File root = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/iGap", "iGap Messages");
 
         if (!root.exists()) {
@@ -856,48 +858,51 @@ public class FragmentChat extends BaseFragment
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                RealmRoomMessage.fetchMessages(DbManager.getInstance().getUiRealm(), mRoomId, new OnActivityChatStart() {
-                    @Override
-                    public void resendMessage(final RealmRoomMessage message) {
-                        if (!allowResendMessage(message.getMessageId())) {
-                            return;
+                DbManager.getInstance().doRealmTask(realm -> {
+                    RealmRoomMessage.fetchMessages(realm, mRoomId, new OnActivityChatStart() {
+                        @Override
+                        public void resendMessage(final RealmRoomMessage message) {
+                            if (!allowResendMessage(message.getMessageId())) {
+                                return;
+                            }
+                            chatSendMessageUtil.build(chatType, message.getRoomId(), message);
                         }
-                        chatSendMessageUtil.build(chatType, message.getRoomId(), message);
-                    }
 
-                    @Override
-                    public void resendMessageNeedsUpload(final RealmRoomMessage message, final long messageId) {
-                        if (!allowResendMessage(message.getMessageId())) {
-                            return;
-                        }
-                        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getMessage(), RealmRoomMessage.getReplyMessageId(message), new HelperUploadFile.UpdateListener() {
-                            @Override
-                            public void OnProgress(int progress, FileUploadStructure struct) {
-                                if (canUpdateAfterDownload) {
-                                    insertItemAndUpdateAfterStartUpload(progress, struct);
+                        @Override
+                        public void resendMessageNeedsUpload(final RealmRoomMessage message, final long messageId) {
+                            if (!allowResendMessage(message.getMessageId())) {
+                                return;
+                            }
+                            HelperUploadFile.startUploadTaskChat(mRoomId, chatType, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getMessage(), RealmRoomMessage.getReplyMessageId(message), new HelperUploadFile.UpdateListener() {
+                                @Override
+                                public void OnProgress(int progress, FileUploadStructure struct) {
+                                    if (canUpdateAfterDownload) {
+                                        insertItemAndUpdateAfterStartUpload(progress, struct);
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void OnError() {
+                                @Override
+                                public void OnError() {
 
-                            }
-                        });
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                mAdapter.notifyItemChanged(mAdapter.findPositionByMessageId(messageId));
-                            }
-                        }, 300);
-                    }
-
-                    @Override
-                    public void sendSeenStatus(RealmRoomMessage message) {
-
-                        if (!isNotJoin) {
-                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                                }
+                            });
+                            G.handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mAdapter.notifyItemChanged(mAdapter.findPositionByMessageId(messageId));
+                                }
+                            }, 300);
                         }
-                    }
+
+                        @Override
+                        public void sendSeenStatus(RealmRoomMessage message) {
+
+                            if (!isNotJoin) {
+                                G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                            }
+                        }
+                    });
+
                 });
 
 
@@ -930,73 +935,77 @@ public class FragmentChat extends BaseFragment
                     new RequestClientSubscribeToRoom().clientSubscribeToRoom(mRoomId);
                 }
 
-                DbManager.getInstance().getUiRealm().executeTransactionAsync(new Realm.Transaction() {//ASYNC
-                    @Override
-                    public void execute(Realm realm) {
-                        final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                        if (room != null) {
-                            if (G.connectionState == ConnectionState.CONNECTING || G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
-                                setConnectionText(G.connectionState);
-                            } else {
-                                if (room.getType() != CHAT) {
-                                    /**
-                                     * set member count
-                                     * set this code in onResume for update this value when user
-                                     * come back from profile activities
-                                     */
-
-                                    String members = null;
-                                    if (room.getType() == GROUP && room.getGroupRoom() != null) {
-                                        members = room.getGroupRoom().getParticipantsCountLabel();
-                                    } else if (room.getType() == CHANNEL && room.getChannelRoom() != null) {
-                                        members = room.getChannelRoom().getParticipantsCountLabel();
-                                    }
-
-                                    final String finalMembers = members;
-                                    if (finalMembers != null) {
-                                        G.handler.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                if (finalMembers != null && HelperString.isNumeric(finalMembers) && Integer.parseInt(finalMembers) == 1) {
-                                                    txtLastSeen.setText(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
-                                                } else {
-                                                    txtLastSeen.setText(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
-                                                }
-                                                //    avi.setVisibility(View.GONE);
-
-                                                if (HelperCalander.isPersianUnicode)
-                                                    txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
-                                            }
-                                        });
-                                    }
+                DbManager.getInstance().doRealmTask(realm -> {
+                    realm.executeTransactionAsync(new Realm.Transaction() {//ASYNC
+                        @Override
+                        public void execute(Realm realm) {
+                            final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                            if (room != null) {
+                                if (G.connectionState == ConnectionState.CONNECTING || G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
+                                    setConnectionText(G.connectionState);
                                 } else {
-                                    RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, room.getChatRoom().getPeerId());
-                                    if (realmRegisteredInfo != null) {
-                                        setUserStatus(realmRegisteredInfo.getStatus(), realmRegisteredInfo.getLastSeen());
+                                    if (room.getType() != CHAT) {
+                                        /**
+                                         * set member count
+                                         * set this code in onResume for update this value when user
+                                         * come back from profile activities
+                                         */
+
+                                        String members = null;
+                                        if (room.getType() == GROUP && room.getGroupRoom() != null) {
+                                            members = room.getGroupRoom().getParticipantsCountLabel();
+                                        } else if (room.getType() == CHANNEL && room.getChannelRoom() != null) {
+                                            members = room.getChannelRoom().getParticipantsCountLabel();
+                                        }
+
+                                        final String finalMembers = members;
+                                        if (finalMembers != null) {
+                                            G.handler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    if (finalMembers != null && HelperString.isNumeric(finalMembers) && Integer.parseInt(finalMembers) == 1) {
+                                                        txtLastSeen.setText(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
+                                                    } else {
+                                                        txtLastSeen.setText(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
+                                                    }
+                                                    //    avi.setVisibility(View.GONE);
+
+                                                    if (HelperCalander.isPersianUnicode)
+                                                        txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                                                }
+                                            });
+                                        }
+                                    } else {
+                                        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, room.getChatRoom().getPeerId());
+                                        if (realmRegisteredInfo != null) {
+                                            setUserStatus(realmRegisteredInfo.getStatus(), realmRegisteredInfo.getLastSeen());
+                                        }
                                     }
+
                                 }
-
                             }
                         }
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        /**
-                         * hint: should use from this method here because we need checkAction
-                         * changeState after set members count for avoid from hide action if exist
-                         */
-                        checkAction();
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            /**
+                             * hint: should use from this method here because we need checkAction
+                             * changeState after set members count for avoid from hide action if exist
+                             */
+                            checkAction();
+                            RealmRoom room = DbManager.getInstance().doRealmTask(realm1 -> {
+                                return realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                            });
 
-                        RealmRoom room = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                        if (room != null) {
-                            if (txtName == null) {
-                                txtName = mHelperToolbar.getTextViewChatUserName();
+                            if (room != null) {
+                                if (txtName == null) {
+                                    txtName = mHelperToolbar.getTextViewChatUserName();
+                                }
+                                txtName.setText(room.getTitle());
+                                checkToolbarNameSize();
                             }
-                            txtName.setText(room.getTitle());
-                            checkToolbarNameSize();
                         }
-                    }
+                    });
                 });
 
                 try {
@@ -1081,8 +1090,7 @@ public class FragmentChat extends BaseFragment
         if (mForwardMessages == null) {
             rootView.findViewById(R.id.ac_ll_forward).setVisibility(View.GONE);
         }
-
-        RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        RealmRoom realmRoom = getRoom();
         if (realmRoom != null) {
 
             isMuteNotification = realmRoom.getMute();
@@ -1503,6 +1511,12 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+    private RealmRoom getRoom() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        });
+    }
+
     /**
      * set just important item to view in onCreate and load another objects in onResume
      * actions : set app color, load avatar, set background, set title, set status chat or member for group or channel
@@ -1535,7 +1549,7 @@ public class FragmentChat extends BaseFragment
         attachFile = new AttachFile(G.fragmentActivity);
 
 
-        RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        RealmRoom realmRoom = getRoom();
         pageSettings();
 
         // avi = (AVLoadingIndicatorView)  rootView.findViewById(R.id.avi);
@@ -1563,7 +1577,9 @@ public class FragmentChat extends BaseFragment
             chatType = realmRoom.getType();
             if (chatType == CHAT) {
                 chatPeerId = realmRoom.getChatRoom().getPeerId();
-                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getUiRealm(), chatPeerId);
+                RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
+                    return RealmRegisteredInfo.getRegistrationInfo(realm, chatPeerId);
+                });
                 if (realmRegisteredInfo != null) {
                     title = realmRegisteredInfo.getDisplayName();
                     lastSeen = realmRegisteredInfo.getLastSeen();
@@ -1640,7 +1656,9 @@ public class FragmentChat extends BaseFragment
              * when user start new chat this block will be called
              */
             chatType = CHAT;
-            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getUiRealm(), chatPeerId);
+            RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
+                return RealmRegisteredInfo.getRegistrationInfo(realm, chatPeerId);
+            });
             title = realmRegisteredInfo.getDisplayName();
             lastSeen = realmRegisteredInfo.getLastSeen();
             userStatus = realmRegisteredInfo.getStatus();
@@ -1680,7 +1698,10 @@ public class FragmentChat extends BaseFragment
             (rootView.findViewById(R.id.chl_recycler_view_chat)).setPadding(0, 0, 0, 0);
         } else if (chatType == CHAT && G.userId != chatPeerId && !isBot) {
             // gone or visible view call
-            RealmCallConfig callConfig = DbManager.getInstance().getUiRealm().where(RealmCallConfig.class).findFirst();
+            RealmCallConfig callConfig = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmCallConfig.class).findFirst();
+            });
+            
             if (callConfig != null) {
                 if (callConfig.isVoice_calling()) {
                     mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
@@ -1719,7 +1740,9 @@ public class FragmentChat extends BaseFragment
     }
 
     private long getMessagesCount() {
-        return DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size();
+        return DbManager.getInstance().doRealmTask((DbManager.RealmTaskWithReturn<Integer>) realm -> {
+            return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size();
+        });
     }
 
     private void initDrBot() {
@@ -1840,7 +1863,9 @@ public class FragmentChat extends BaseFragment
     }
 
     private void updateUnmanagedRoom() {
-        unmanagedRoom = DbManager.getInstance().getUiRealm().copyFromRealm(managedRoom);
+        DbManager.getInstance().doRealmTask(realm -> {
+            unmanagedRoom = realm.copyFromRealm(managedRoom);
+        });
     }
 
     private void initMain() {
@@ -1885,7 +1910,10 @@ public class FragmentChat extends BaseFragment
          * get userId . use in chat set action.
          */
 
-        RealmUserInfo realmUserInfo = DbManager.getInstance().getUiRealm().where(RealmUserInfo.class).findFirst();
+        RealmUserInfo realmUserInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmUserInfo.class).findFirst();
+        });
+
         if (realmUserInfo == null) {
             //finish();
             finishChat();
@@ -1893,10 +1921,14 @@ public class FragmentChat extends BaseFragment
         }
         userId = realmUserInfo.getUserId();
 
-        managedRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        managedRoom = getRoom();
         if (managedRoom != null) { // room exist
 
-            unmanagedRoom = DbManager.getInstance().getUiRealm().copyFromRealm(managedRoom);
+
+            DbManager.getInstance().doRealmTask(realm -> {
+                unmanagedRoom = realm.copyFromRealm(managedRoom);
+            });
+
             title = managedRoom.getTitle();
             initialize = managedRoom.getInitials();
             color = managedRoom.getColor();
@@ -1912,7 +1944,9 @@ public class FragmentChat extends BaseFragment
 
             if (chatType == CHAT) {
 
-                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getUiRealm(), chatPeerId);
+                RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
+                    return RealmRegisteredInfo.getRegistrationInfo(realm, chatPeerId);
+                });
                 if (realmRegisteredInfo != null) {
                     initialize = realmRegisteredInfo.getInitials();
                     color = realmRegisteredInfo.getColor();
@@ -1941,7 +1975,9 @@ public class FragmentChat extends BaseFragment
         } else {
             //chatPeerId = extras.getLong("peerId");
             chatType = CHAT;
-            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getUiRealm(), chatPeerId);
+            RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
+                return RealmRegisteredInfo.getRegistrationInfo(realm, chatPeerId);
+            });
             if (realmRegisteredInfo != null) {
                 title = realmRegisteredInfo.getDisplayName();
                 initialize = realmRegisteredInfo.getInitials();
@@ -1961,8 +1997,10 @@ public class FragmentChat extends BaseFragment
         insertShearedData();
 
         RealmRoomMessage rm = null;
-        RealmResults<RealmRoomMessage> result = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).
-                equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll();
+        RealmResults<RealmRoomMessage> result = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoomMessage.class).
+                    equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll();
+        });
         if (result.size() > 0) {
             rm = result.last();
             if (rm != null && rm.getMessage() != null) {
@@ -1985,7 +2023,9 @@ public class FragmentChat extends BaseFragment
                     if (goToPositionWithAnimation(savedScrollMessageId, 2000)) {
                         savedScrollMessageId = 0;
                     } else {
-                        RealmRoomMessage rm = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                        RealmRoomMessage rm = DbManager.getInstance().doRealmTask(realm -> {
+                            return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                        });
                         rm = RealmRoomMessage.getFinalMessage(rm);
                         if (rm != null) {
                             resetMessagingValue();
@@ -2078,7 +2118,10 @@ public class FragmentChat extends BaseFragment
         final long pinMessageId = RealmRoom.hasPinedMessage(mRoomId);
         pinedMessageLayout = rootView.findViewById(R.id.ac_ll_strip_Pin);
         if (pinMessageId > 0) {
-            RealmRoomMessage realmRoomMessage = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, pinMessageId).findFirst();
+            RealmRoomMessage realmRoomMessage = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, pinMessageId).findFirst();
+            });
+
             if (realmRoomMessage != null && realmRoomMessage.isValid() && !realmRoomMessage.isDeleted()) {
                 realmRoomMessage = RealmRoomMessage.getFinalMessage(realmRoomMessage);
                 isPinAvailable = true;
@@ -2108,8 +2151,9 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void onClick(View v) {
                         if (!goToPositionWithAnimation(pinMessageId, 1000)) {
-
-                            RealmRoomMessage rm = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, pinMessageId).findFirst();
+                            RealmRoomMessage rm = DbManager.getInstance().doRealmTask(realm -> {
+                                return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, pinMessageId).findFirst();
+                            });
                             rm = RealmRoomMessage.getFinalMessage(rm);
                             if (rm != null) {
                                 resetMessagingValue();
@@ -2123,16 +2167,18 @@ public class FragmentChat extends BaseFragment
                                         G.handler.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                DbManager.getInstance().getUiRealm().executeTransactionAsync(new Realm.Transaction() {
-                                                    @Override
-                                                    public void execute(Realm realm) {
-                                                        RealmRoomMessage.setGapInTransaction(realm, messageId);
-                                                    }
-                                                }, () -> {
-                                                    resetMessagingValue();
-                                                    savedScrollMessageId = pinMessageId;
-                                                    firstVisiblePositionOffset = 0;
-                                                    getMessages();
+                                                DbManager.getInstance().doRealmTask(realm -> {
+                                                    realm.executeTransactionAsync(new Realm.Transaction() {
+                                                        @Override
+                                                        public void execute(Realm realm) {
+                                                            RealmRoomMessage.setGapInTransaction(realm, messageId);
+                                                        }
+                                                    }, () -> {
+                                                        resetMessagingValue();
+                                                        savedScrollMessageId = pinMessageId;
+                                                        firstVisiblePositionOffset = 0;
+                                                        getMessages();
+                                                    });
                                                 });
                                             }
                                         });
@@ -2588,7 +2634,7 @@ public class FragmentChat extends BaseFragment
 
         iconMute = mHelperToolbar.getChatMute();
 
-        final RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        final RealmRoom realmRoom = getRoom();
 
         ll_attach_text = rootView.findViewById(R.id.ac_ll_attach_text);
 
@@ -2638,13 +2684,14 @@ public class FragmentChat extends BaseFragment
             botInit = new BotInit(rootView, false);
             sendButtonVisibility(false);
 
-
-            RealmResults<RealmRoomMessage> result;
             RealmRoomMessage rm = null;
             String lastMessage = "";
             boolean backToMenu = true;
 
-            result = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash).findAll();
+            RealmResults<RealmRoomMessage> result = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash).findAll();
+            });
+
             if (result.size() > 0) {
                 rm = result.last();
                 if (rm.getMessage() != null) {
@@ -3265,7 +3312,7 @@ public class FragmentChat extends BaseFragment
     private void showSelectItem() {
         ChatMoneyTransferFragment transferAction;
 
-        RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        RealmRoom realmRoom = getRoom();
         if (realmRoom != null) {
             chatType = realmRoom.getType();
             if (chatType == CHAT) {
@@ -3763,7 +3810,7 @@ public class FragmentChat extends BaseFragment
 
             for (AbstractMessage message : selectedItems) {
 
-                RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                RealmRoom realmRoom = getRoom();
                 if (realmRoom != null) {
 
                     long messageSender = 0;
@@ -3895,9 +3942,10 @@ public class FragmentChat extends BaseFragment
 
                         RealmRoomMessage rm = null;
                         boolean backToMenu = true;
-
-                        RealmResults<RealmRoomMessage> result = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).
-                                equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash).findAll();
+                        RealmResults<RealmRoomMessage> result = DbManager.getInstance().doRealmTask(realm -> {
+                            return realm.where(RealmRoomMessage.class).
+                                    equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash).findAll();
+                        });
                         if (result.size() > 0) {
                             rm = result.last();
                             if (rm.getMessage() != null) {
@@ -4181,7 +4229,9 @@ public class FragmentChat extends BaseFragment
     private void openMessage(StructMessageInfo message) {
         String _filePath = null;
         String _token = message.realmRoomMessage.getForwardMessage() != null ? message.realmRoomMessage.getForwardMessage().getAttachment().getToken() : message.getAttachment().getToken();
-        RealmAttachment _Attachment = DbManager.getInstance().getUiRealm().where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, _token).findFirst();
+        RealmAttachment _Attachment = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, _token).findFirst();
+        });
 
         if (_Attachment != null) {
             _filePath = _Attachment.getLocalFilePath();
@@ -4337,7 +4387,10 @@ public class FragmentChat extends BaseFragment
         }
 
         boolean shareLinkIsOn = false;
-        RealmRoom room = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.realmRoomMessage.getRoomId()).findFirst();
+
+        RealmRoom room = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.realmRoomMessage.getRoomId()).findFirst();
+        });
         if (room != null && room.getChannelRoom() != null && !room.getChannelRoom().isPrivate()) {
             shareLinkIsOn = true;
         }
@@ -4395,7 +4448,10 @@ public class FragmentChat extends BaseFragment
         }
 
         final boolean isPinedMessage = false;
-        RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.realmRoomMessage.getRoomId()).findFirst();
+        RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.realmRoomMessage.getRoomId()).findFirst();
+        });
+
         if (realmRoom != null) {
             /**
              * if user clicked on any message which he wasn't its sender, remove edit mList option
@@ -4540,8 +4596,9 @@ public class FragmentChat extends BaseFragment
                             if (!dialog.isPromptCheckBoxChecked()) {
                                 bothDeleteMessageId = null;
                             }
-
-                            deleteMassage(DbManager.getInstance().getUiRealm(), message, messageIds, bothDeleteMessageId, chatType);
+                            DbManager.getInstance().doRealmTask(realm -> {
+                                deleteMassage(realm, message, messageIds, bothDeleteMessageId, chatType);
+                            });
                         }
                     }).checkBoxPrompt(textCheckBox, false, null).show();
 
@@ -4551,7 +4608,10 @@ public class FragmentChat extends BaseFragment
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             bothDeleteMessageId = null;
-                            deleteMassage(DbManager.getInstance().getUiRealm(), message, messageIds, bothDeleteMessageId, chatType);
+
+                            DbManager.getInstance().doRealmTask(realm -> {
+                                deleteMassage(realm, message, messageIds, bothDeleteMessageId, chatType);
+                            });
                         }
                     }).show();
                 }
@@ -4841,13 +4901,14 @@ public class FragmentChat extends BaseFragment
                         @Override
                         public void onHistory(List<ProtoGlobal.RoomMessage> messageList) {
                             G.handler.post(() -> {
-                                try (Realm realm1 = Realm.getDefaultInstance()) {
-                                    realm1.executeTransaction(realm -> {
+                                DbManager.getInstance().doRealmTask(realm -> {
+                                    realm.executeTransaction(realm1 -> {
                                         for (ProtoGlobal.RoomMessage roomMessage : messageList) {
-                                            onReplyClick(RealmRoomMessage.putOrUpdate(DbManager.getInstance().getUiRealm(), mRoomId, roomMessage, new StructMessageOption().setGap()));
+                                            onReplyClick(RealmRoomMessage.putOrUpdate(realm1, mRoomId, roomMessage, new StructMessageOption().setGap()));
                                         }
                                     });
-                                }
+                                });
+
                             });
                         }
 
@@ -5171,7 +5232,7 @@ public class FragmentChat extends BaseFragment
             type = AvatarHandler.AvatarType.ROOM;
         }
 
-        final RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        final RealmRoom realmRoom = getRoom();
         if (realmRoom == null || !realmRoom.isValid()) {
             avatarHandler.getAvatar(new ParamWithAvatarType(imvUserPicture, chatPeerId).avatarSize(R.dimen.dp60).avatarType(AvatarHandler.AvatarType.USER).showMain());
         } else {
@@ -5264,7 +5325,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void checkAction() {
-        final RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        final RealmRoom realmRoom = getRoom();
         if (realmRoom != null && realmRoom.getActionState() != null) {
             if (realmRoom.getActionState() != null && (chatType == GROUP || chatType == CHANNEL) || ((isCloudRoom || (!isCloudRoom && realmRoom.getActionStateUserId() != userId)))) {
                 txtLastSeen.setText(realmRoom.getActionState());
@@ -5441,15 +5502,17 @@ public class FragmentChat extends BaseFragment
             }
         }
 
-        DbManager.getInstance().getUiRealm().executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoomMessage.deleteMessage(realm, messageId);
-            }
-        }, () -> {
-            if (position >= 0) {
-                mAdapter.removeMessage(position);
-            }
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoomMessage.deleteMessage(realm, messageId);
+                }
+            }, () -> {
+                if (position >= 0) {
+                    mAdapter.removeMessage(position);
+                }
+            });
         });
     }
 
@@ -5683,7 +5746,7 @@ public class FragmentChat extends BaseFragment
 
     private void setEmojiColor(int BackgroundColor, String iconColor, String dividerColor) {
 
-        emojiPopup = EmojiPopup.Builder.fromRootView(rootView.findViewById(R.id.ac_ll_parent))
+        emojiPopup = EmojiPopup.Builder.fromRootView(rootView.findViewById(ac_ll_parent))
                 .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
 
                     @Override
@@ -5772,9 +5835,16 @@ public class FragmentChat extends BaseFragment
                         roomMessage.setCreateTime(TimeUtils.currentLocalTime());
 
                         if (isReply()) {
-                            RealmRoomMessage copyReplyMessage = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, getReplyMessageId()).findFirst();
+                            RealmRoomMessage copyReplyMessage = DbManager.getInstance().doRealmTask(realm -> {
+                                RealmRoomMessage copyReplyMessage1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, getReplyMessageId()).findFirst();
+                                if (copyReplyMessage1 != null) {
+                                    return realm.copyFromRealm(copyReplyMessage1);
+                                }
+                                return null;
+                            });
+
                             if (copyReplyMessage != null) {
-                                roomMessage.setReplyTo(DbManager.getInstance().getUiRealm().copyFromRealm(copyReplyMessage));
+                                roomMessage.setReplyTo(copyReplyMessage);
                             }
                         }
 
@@ -6148,7 +6218,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void getDraft() {
-        RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        RealmRoom realmRoom = getRoom();
         if (realmRoom != null) {
             RealmRoomDraft draft = realmRoom.getDraft();
             if (draft != null && draft.getMessage().length() > 0) {
@@ -6248,7 +6318,10 @@ public class FragmentChat extends BaseFragment
         // when chat is channel this method will be called
 
         if (messageInfo == null) return;
-        RealmRoom room = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, messageInfo.realmRoomMessage.getRoomId()).findFirst();
+        RealmRoom room = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, messageInfo.realmRoomMessage.getRoomId()).findFirst();
+        });
+
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, "https://igap.net/" + room.getChannelRoom().getUsername() + "/" + messageInfo.realmRoomMessage.getMessageId());
@@ -6437,8 +6510,12 @@ public class FragmentChat extends BaseFragment
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getUiRealm(), chatPeerId);
-                RealmContacts realmContacts = DbManager.getInstance().getUiRealm().where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
+                    return RealmRegisteredInfo.getRegistrationInfo(realm, chatPeerId);
+                });
+                RealmContacts realmContacts = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
+                });
                 if (realmRegisteredInfo != null && realmRegisteredInfo.getId() != G.userId) {
                     if (phoneNumber == null) {
                         if (realmContacts == null && chatType == CHAT && !isChatReadOnly) {
@@ -6748,7 +6825,9 @@ public class FragmentChat extends BaseFragment
                     ReplySetText(replayTo, chatItem.realmRoomMessage.getForwardMessage().getMessage());
                 }
             } else {
-                RealmRoomMessage message = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, chatItem.realmRoomMessage.getMessageId()).findFirst();
+                RealmRoomMessage message = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, chatItem.realmRoomMessage.getMessageId()).findFirst();
+                });
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.realmRoomMessage.getMessageType(), message);
                 String _text = AppUtils.conversionMessageType(chatItem.realmRoomMessage.getMessageType());
                 if (_text != null && _text.length() > 0) {
@@ -6760,12 +6839,16 @@ public class FragmentChat extends BaseFragment
 
             if (!isEdit) {
                 if (chatType == CHANNEL) {
-                    RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatItem.realmRoomMessage.getRoomId()).findFirst();
+                    RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+                        return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatItem.realmRoomMessage.getRoomId()).findFirst();
+                    });
                     if (realmRoom != null) {
                         replayFrom.setText(realmRoom.getTitle());
                     }
                 } else {
-                    RealmRegisteredInfo userInfo = RealmRegisteredInfo.getRegistrationInfo(DbManager.getInstance().getUiRealm(), chatItem.realmRoomMessage.getUserId());
+                    RealmRegisteredInfo userInfo = DbManager.getInstance().doRealmTask(realm -> {
+                        return RealmRegisteredInfo.getRegistrationInfo(realm, chatItem.realmRoomMessage.getUserId());
+                    });
                     if (userInfo != null) {
                         replayFrom.setText(userInfo.getDisplayName());
                     }
@@ -6891,8 +6974,10 @@ public class FragmentChat extends BaseFragment
                                 if (!dialog.isPromptCheckBoxChecked()) {
                                     bothDeleteMessageId = null;
                                 }
+                                DbManager.getInstance().doRealmTask(realm -> {
+                                    RealmRoomMessage.deleteSelectedMessages(realm, mRoomId, list, bothDeleteMessageId, chatType);
+                                });
 
-                                RealmRoomMessage.deleteSelectedMessages(DbManager.getInstance().getUiRealm(), mRoomId, list, bothDeleteMessageId, chatType);
                                 deleteSelectedMessageFromAdapter(list);
                             }
                         }).checkBoxPrompt(textCheckBox, false, null).show();
@@ -6903,7 +6988,10 @@ public class FragmentChat extends BaseFragment
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     bothDeleteMessageId = null;
-                                    RealmRoomMessage.deleteSelectedMessages(DbManager.getInstance().getUiRealm(), mRoomId, list, bothDeleteMessageId, chatType);
+                                    DbManager.getInstance().doRealmTask(realm -> {
+                                        RealmRoomMessage.deleteSelectedMessages(realm, mRoomId, list, bothDeleteMessageId, chatType);
+                                    });
+
                                     deleteSelectedMessageFromAdapter(list);
                                 }
                             }).show();
@@ -7078,10 +7166,14 @@ public class FragmentChat extends BaseFragment
 
         String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
         Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
-        results = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).
-                equalTo(RealmRoomFields.READ_ONLY, false).notEqualTo(RealmRoomFields.ID, mRoomId).findAll().sort(fieldNames, sort);
+        results = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).
+                    equalTo(RealmRoomFields.READ_ONLY, false).notEqualTo(RealmRoomFields.ID, mRoomId).findAll().sort(fieldNames, sort);
+        });
 
-        resultsContact = DbManager.getInstance().getUiRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+        resultsContact = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+        });
 
         List<Long> te = new ArrayList<>();
         te.add(chatPeerId);
@@ -7372,8 +7464,9 @@ public class FragmentChat extends BaseFragment
         roomMessage.setMessageId(messageId);
         roomMessage.setMessageType(finalMessageType);
         roomMessage.setMessage(getWrittenMessage());
-
-        RealmRoomMessage.addTimeIfNeed(roomMessage, DbManager.getInstance().getUiRealm());
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
+        });
         RealmRoomMessage.isEmojiInText(roomMessage, getWrittenMessage());
 
         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
@@ -7599,9 +7692,17 @@ public class FragmentChat extends BaseFragment
         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
 
         if (replyMessageId() > 0) {
-            RealmRoomMessage realmRoomMessage = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replyMessageId()).findFirst();
-            if (realmRoomMessage != null) {
-                roomMessage.setReplyTo(DbManager.getInstance().getUiRealm().copyFromRealm(realmRoomMessage));
+            RealmRoomMessage realmRoomMessageCopy = DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replyMessageId()).findFirst();
+                if (realmRoomMessage != null) {
+                    return realm.copyFromRealm(realmRoomMessage);
+                } else {
+                    return null;
+                }
+            });
+
+            if (realmRoomMessageCopy != null) {
+                roomMessage.setReplyTo(realmRoomMessageCopy);
             }
         }
 
@@ -7719,35 +7820,39 @@ public class FragmentChat extends BaseFragment
 
                 final long messageId = AppUtils.makeRandomId();
 
-                RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                RealmRoom realmRoom = getRoom();
                 if (realmRoom == null || realmRoom.getReadOnly()) {
                     return;
                 }
 
                 final ProtoGlobal.Room.Type type = realmRoom.getType();
 
-                DbManager.getInstance().getUiRealm().executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoomMessage.makeForwardMessage(realm, mRoomId, messageId, messageInfo.realmRoomMessage.getMessageId());
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-
-                        RealmRoomMessage forwardedMessage = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-
-                        if (forwardedMessage != null && forwardedMessage.isValid() && !forwardedMessage.isDeleted()) {
-                            if (isSingleForward) {
-                                switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(forwardedMessage))), false);
-                                scrollToEnd();
-                            }
-                            RealmRoomMessage roomMessage = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageInfo.realmRoomMessage.getMessageId()).findFirst();
-                            if (roomMessage != null) {
-                                chatSendMessageUtil.buildForward(type, forwardedMessage.getRoomId(), forwardedMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
-                            }
+                DbManager.getInstance().doRealmTask(realm -> {
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmRoomMessage.makeForwardMessage(realm, mRoomId, messageId, messageInfo.realmRoomMessage.getMessageId());
                         }
-                    }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            DbManager.getInstance().doRealmTask(realm1 -> {
+                                RealmRoomMessage forwardedMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+
+                                if (forwardedMessage != null && forwardedMessage.isValid() && !forwardedMessage.isDeleted()) {
+                                    if (isSingleForward) {
+                                        switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(forwardedMessage))), false);
+                                        scrollToEnd();
+                                    }
+                                    RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageInfo.realmRoomMessage.getMessageId()).findFirst();
+                                    if (roomMessage != null) {
+                                        chatSendMessageUtil.buildForward(type, forwardedMessage.getRoomId(), forwardedMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
+                                    }
+                                }
+                            });
+
+                        }
+                    });
                 });
             }
         }, (50 * k));
@@ -7952,218 +8057,222 @@ public class FragmentChat extends BaseFragment
      */
     private void getMessages() {
 
-        ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction;
-        ArrayList<StructMessageInfo> messageInfos = new ArrayList<>();
-        /**
-         * get message in first enter to chat if has unread get message with down direction
-         */
-        RealmResults<RealmRoomMessage> results;
-        RealmResults<RealmRoomMessage> resultsDown = null;
-        RealmResults<RealmRoomMessage> resultsUp;
-        long fetchMessageId = 0; // with this value realm will be queried for get message
-        if (hasUnread() || hasSavedState()) {
-
+        DbManager.getInstance().doRealmTask(realm -> {
+            ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction;
+            ArrayList<StructMessageInfo> messageInfos = new ArrayList<>();
             /**
-             * show unread layout and also set firstUnreadMessageId in startFutureMessageIdUp
-             * for try load top message and also topMore default value is true for this target
+             * get message in first enter to chat if has unread get message with down direction
              */
-            if (hasSavedState()) {
-                fetchMessageId = getSavedState();
+            RealmResults<RealmRoomMessage> results;
+            RealmResults<RealmRoomMessage> resultsDown = null;
+            RealmResults<RealmRoomMessage> resultsUp;
+            long fetchMessageId = 0; // with this value realm will be queried for get message
+            if (hasUnread() || hasSavedState()) {
 
-                if (hasUnread()) {
+                /**
+                 * show unread layout and also set firstUnreadMessageId in startFutureMessageIdUp
+                 * for try load top message and also topMore default value is true for this target
+                 */
+                if (hasSavedState()) {
+                    fetchMessageId = getSavedState();
+
+                    if (hasUnread()) {
+                        if (getFirstUnreadMessage() == null) {
+                            resetMessagingValue();
+                            getMessages();
+                            return;
+                        }
+                    }
+                } else {
                     if (getFirstUnreadMessage() == null) {
                         resetMessagingValue();
                         getMessages();
                         return;
                     }
+                    unreadLayoutMessage();
+                    fetchMessageId = getFirstUnreadMessage().getMessageId();
                 }
+
+                if (hasUnread()) {
+                    countNewMessage = unreadCount;
+                    txtNewUnreadMessage.setVisibility(View.VISIBLE);
+                    txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
+                }
+
+                startFutureMessageIdUp = fetchMessageId;
+
+                // we have firstUnreadMessage but for gapDetection method we need RealmResult so get this message with query; if we change gap detection method will be can use from firstUnreadMessage
+                resultsDown = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).findAll();
+
+                addToView = false;
+                direction = DOWN;
             } else {
-                if (getFirstUnreadMessage() == null) {
-                    resetMessagingValue();
-                    getMessages();
-                    return;
-                }
-                unreadLayoutMessage();
-                fetchMessageId = getFirstUnreadMessage().getMessageId();
-            }
-
-            if (hasUnread()) {
-                countNewMessage = unreadCount;
-                txtNewUnreadMessage.setVisibility(View.VISIBLE);
-                txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
-            }
-
-            startFutureMessageIdUp = fetchMessageId;
-
-            // we have firstUnreadMessage but for gapDetection method we need RealmResult so get this message with query; if we change gap detection method will be can use from firstUnreadMessage
-            resultsDown = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).findAll();
-
-            addToView = false;
-            direction = DOWN;
-        } else {
-            addToView = true;
-            direction = UP;
-        }
-
-        /**
-         * Hint: don't use "findFirst()" for find biggest message, because "findFirst()" just will be
-         * returned latest message that inserted to "RealmRoomMessage" and it is not biggest always
-         **/
-        Number latestMessageId = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).max(RealmRoomMessageFields.MESSAGE_ID);
-        if (latestMessageId != null) {
-            resultsUp = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.MESSAGE_ID, latestMessageId.longValue()).findAll();
-        } else {
-            /** use fake query for make empty RealmResult */
-            resultsUp = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, -100).findAll();
-        }
-
-        long gapMessageId;
-        if (direction == DOWN) {
-            RealmQuery realmQuery = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true);
-            /**
-             * if for UP changeState client have message detect gap otherwise try for get online message
-             * because maybe client have message but not exist in Realm yet
-             */
-            if (realmQuery.count() > 1) {
-                resultsUp = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll();
-                gapDetection(resultsUp, UP);
-            } else {
-                getOnlineMessage(fetchMessageId, UP);
-            }
-
-            results = resultsDown;
-            gapMessageId = gapDetection(results, direction);
-        } else {
-            results = resultsUp;
-            gapMessageId = gapDetection(resultsUp, UP);
-        }
-
-        if (results.size() > 0) {
-
-            Object[] object = getLocalMessage(DbManager.getInstance().getUiRealm(), mRoomId, results.first().getMessageId(), gapMessageId, true, direction);
-            messageInfos = (ArrayList<StructMessageInfo>) object[0];
-            if (messageInfos.size() > 0) {
-                if (direction == UP) {
-                    topMore = (boolean) object[1];
-                    startFutureMessageIdUp = messageInfos.get(messageInfos.size() - 1).realmRoomMessage.getMessageId();
-                } else {
-                    bottomMore = (boolean) object[1];
-                    startFutureMessageIdDown = messageInfos.get(messageInfos.size() - 1).realmRoomMessage.getMessageId();
-                }
-            } else {
-                if (direction == UP) {
-                    startFutureMessageIdUp = 0;
-                } else {
-                    startFutureMessageIdDown = 0;
-                }
+                addToView = true;
+                direction = UP;
             }
 
             /**
-             * if gap is exist ,check that reached to gap or not and if
-             * reached send request to server for clientGetRoomHistory
-             */
-            if (gapMessageId > 0) {
-                boolean hasSpaceToGap = (boolean) object[2];
-                if (!hasSpaceToGap) {
-
-                    long oldMessageId = 0;
-                    if (messageInfos.size() > 0) {
-                        /**
-                         * this code is correct for UP or DOWN load message result
-                         */
-                        oldMessageId = messageInfos.get(messageInfos.size() - 1).realmRoomMessage.getMessageId();
-                    }
-                    /**
-                     * send request to server for clientGetRoomHistory
-                     */
-                    getOnlineMessage(oldMessageId, direction);
-                }
+             * Hint: don't use "findFirst()" for find biggest message, because "findFirst()" just will be
+             * returned latest message that inserted to "RealmRoomMessage" and it is not biggest always
+             **/
+            Number latestMessageId = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).max(RealmRoomMessageFields.MESSAGE_ID);
+            if (latestMessageId != null) {
+                resultsUp = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.MESSAGE_ID, latestMessageId.longValue()).findAll();
             } else {
-                /**
-                 * if gap not exist and also not exist more message in local
-                 * send request for get message from server
-                 */
-                if ((direction == UP && !topMore) || (direction == DOWN && !bottomMore)) {
-                    if (messageInfos.size() > 0) {
-                        getOnlineMessage(messageInfos.get(messageInfos.size() - 1).realmRoomMessage.getMessageId(), direction);
-                    } else {
-                        getOnlineMessage(0, direction);
-                    }
-                }
+                /** use fake query for make empty RealmResult */
+                resultsUp = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, -100).findAll();
             }
-        } else {
-            /** send request to server for get message.
-             * if direction is DOWN check again realmRoomMessage for detection
-             * that exist any message without checking deleted changeState and if
-             * exist use from that messageId instead of zero for getOnlineMessage
-             */
-            long oldMessageId = 0;
+
+            long gapMessageId;
             if (direction == DOWN) {
-                RealmRoomMessage realmRoomMessage = DbManager.getInstance().getUiRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).findFirst();
-                if (realmRoomMessage != null) {
-                    oldMessageId = realmRoomMessage.getMessageId();
+                RealmQuery realmQuery = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true);
+                /**
+                 * if for UP changeState client have message detect gap otherwise try for get online message
+                 * because maybe client have message but not exist in Realm yet
+                 */
+                if (realmQuery.count() > 1) {
+                    resultsUp = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll();
+                    gapDetection(resultsUp, UP);
+                } else {
+                    getOnlineMessage(fetchMessageId, UP);
                 }
+
+                results = resultsDown;
+                gapMessageId = gapDetection(results, direction);
+            } else {
+                results = resultsUp;
+                gapMessageId = gapDetection(resultsUp, UP);
             }
 
-            getOnlineMessage(oldMessageId, direction);
-        }
+            if (results.size() > 0) {
 
-        if (direction == UP) {
-            switchAddItem(messageInfos, true);
-        } else {
-            switchAddItem(messageInfos, false);
-            if (hasSavedState()) {
+                Object[] object = getLocalMessage(realm, mRoomId, results.first().getMessageId(), gapMessageId, true, direction);
+                messageInfos = (ArrayList<StructMessageInfo>) object[0];
+                if (messageInfos.size() > 0) {
+                    if (direction == UP) {
+                        topMore = (boolean) object[1];
+                        startFutureMessageIdUp = messageInfos.get(messageInfos.size() - 1).realmRoomMessage.getMessageId();
+                    } else {
+                        bottomMore = (boolean) object[1];
+                        startFutureMessageIdDown = messageInfos.get(messageInfos.size() - 1).realmRoomMessage.getMessageId();
+                    }
+                } else {
+                    if (direction == UP) {
+                        startFutureMessageIdUp = 0;
+                    } else {
+                        startFutureMessageIdDown = 0;
+                    }
+                }
 
-                if (messageId != 0) {
-                    if (goToPositionWithAnimation(savedScrollMessageId, 1000)) {
+                /**
+                 * if gap is exist ,check that reached to gap or not and if
+                 * reached send request to server for clientGetRoomHistory
+                 */
+                if (gapMessageId > 0) {
+                    boolean hasSpaceToGap = (boolean) object[2];
+                    if (!hasSpaceToGap) {
+
+                        long oldMessageId = 0;
+                        if (messageInfos.size() > 0) {
+                            /**
+                             * this code is correct for UP or DOWN load message result
+                             */
+                            oldMessageId = messageInfos.get(messageInfos.size() - 1).realmRoomMessage.getMessageId();
+                        }
+                        /**
+                         * send request to server for clientGetRoomHistory
+                         */
+                        getOnlineMessage(oldMessageId, direction);
+                    }
+                } else {
+                    /**
+                     * if gap not exist and also not exist more message in local
+                     * send request for get message from server
+                     */
+                    if ((direction == UP && !topMore) || (direction == DOWN && !bottomMore)) {
+                        if (messageInfos.size() > 0) {
+                            getOnlineMessage(messageInfos.get(messageInfos.size() - 1).realmRoomMessage.getMessageId(), direction);
+                        } else {
+                            getOnlineMessage(0, direction);
+                        }
+                    }
+                }
+            } else {
+                /** send request to server for get message.
+                 * if direction is DOWN check again realmRoomMessage for detection
+                 * that exist any message without checking deleted changeState and if
+                 * exist use from that messageId instead of zero for getOnlineMessage
+                 */
+                long oldMessageId = 0;
+                if (direction == DOWN) {
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).findFirst();
+                    if (realmRoomMessage != null) {
+                        oldMessageId = realmRoomMessage.getMessageId();
+                    }
+                }
+
+                getOnlineMessage(oldMessageId, direction);
+            }
+
+            if (direction == UP) {
+                switchAddItem(messageInfos, true);
+            } else {
+                switchAddItem(messageInfos, false);
+                if (hasSavedState()) {
+
+                    if (messageId != 0) {
+                        if (goToPositionWithAnimation(savedScrollMessageId, 1000)) {
+                            savedScrollMessageId = 0;
+                        }
+                    } else {
+                        int position = mAdapter.findPositionByMessageId(savedScrollMessageId);
+                        LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
+                        linearLayout.scrollToPositionWithOffset(position, firstVisiblePositionOffset);
                         savedScrollMessageId = 0;
                     }
-                } else {
-                    int position = mAdapter.findPositionByMessageId(savedScrollMessageId);
-                    LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
-                    linearLayout.scrollToPositionWithOffset(position, firstVisiblePositionOffset);
-                    savedScrollMessageId = 0;
-                }
 
+                }
             }
-        }
 
-        /**
-         * make scrollListener for detect change in scroll and load more in chat
-         */
-        scrollListener = new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            /**
+             * make scrollListener for detect change in scroll and load more in chat
+             */
+            scrollListener = new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
 
-                LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
-                int firstVisiblePosition = linearLayoutManager.findFirstVisibleItemPosition();
-                View view = linearLayoutManager.getChildAt(0);
-                if (firstVisiblePosition > 0 && view != null) {
-                    firstVisiblePositionOffset = view.getTop();
-                }
+                    LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
+                    int firstVisiblePosition = linearLayoutManager.findFirstVisibleItemPosition();
+                    View view = linearLayoutManager.getChildAt(0);
+                    if (firstVisiblePosition > 0 && view != null) {
+                        firstVisiblePositionOffset = view.getTop();
+                    }
 
-                visibleItemCount = linearLayoutManager.getChildCount();
-                totalItemCount = linearLayoutManager.getItemCount();
+                    visibleItemCount = linearLayoutManager.getChildCount();
+                    totalItemCount = linearLayoutManager.getItemCount();
 
-                if (firstVisiblePosition < scrollEnd) {  /** scroll to top */
-                    loadMessage(UP);
+                    if (firstVisiblePosition < scrollEnd) {  /** scroll to top */
+                        loadMessage(UP);
 
-                    /** if totalItemCount is lower than scrollEnd so (firstVisiblePosition < scrollEnd) is always true and we can't load DOWN,
-                     * finally for solve this problem we to check following state and load DOWN even totalItemCount is lower than scrollEnd count
-                     */
-                    if (totalItemCount <= scrollEnd) {
+                        /** if totalItemCount is lower than scrollEnd so (firstVisiblePosition < scrollEnd) is always true and we can't load DOWN,
+                         * finally for solve this problem we to check following state and load DOWN even totalItemCount is lower than scrollEnd count
+                         */
+                        if (totalItemCount <= scrollEnd) {
+                            loadMessage(DOWN);
+                        }
+                    } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) { /** scroll to bottom */
                         loadMessage(DOWN);
                     }
-                } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) { /** scroll to bottom */
-                    loadMessage(DOWN);
                 }
-            }
-        };
+            };
 
-        recyclerView.addOnScrollListener(scrollListener);
-        if (unreadCount > 0)
-            recyclerView.scrollToPosition(0);
+            recyclerView.addOnScrollListener(scrollListener);
+            if (unreadCount > 0)
+                recyclerView.scrollToPosition(0);
+        });
+
+
 
     }
 
@@ -8181,7 +8290,9 @@ public class FragmentChat extends BaseFragment
             startFutureMessageId = startFutureMessageIdDown;
         }
         if ((direction == UP && topMore) || (direction == DOWN && bottomMore)) {
-            Object[] object = getLocalMessage(DbManager.getInstance().getUiRealm(), mRoomId, startFutureMessageId, gapMessageId, false, direction);
+            Object[] object = DbManager.getInstance().doRealmTask(realm -> {
+                return getLocalMessage(realm, mRoomId, startFutureMessageId, gapMessageId, false, direction);
+            });
             if (direction == UP) {
                 topMore = (boolean) object[1];
             } else {
@@ -8281,141 +8392,142 @@ public class FragmentChat extends BaseFragment
             }
 
 
-            int limit = Config.LIMIT_GET_HISTORY_NORMAL;
-            if ((firstUp && direction == UP) || (firstDown && direction == DOWN)) {
-                limit = Config.LIMIT_GET_HISTORY_LOW;
-            }
+            String requestId = DbManager.getInstance().doRealmTask(realm -> {
 
-
-            String requestId = MessageLoader.getOnlineMessage(DbManager.getInstance().getUiRealm(), mRoomId, oldMessageId, reachMessageId, limit, direction, new OnMessageReceive() {
-                @Override
-                public void onMessage(final long roomId, long startMessageId, long endMessageId, List<RealmRoomMessage> realmRoomMessages, boolean gapReached, boolean jumpOverLocal, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-                    if (roomId != mRoomId) {
-                        return;
-                    }
-                    hideProgress();
-                    /**
-                     * hide progress received history
-                     */
-                    progressItem(HIDE, direction);
-                    if (direction == UP) {
-                        firstUp = false;
-                        startFutureMessageIdUp = startMessageId;
-                        isWaitingForHistoryUp = false;
-                    } else {
-                        firstDown = false;
-                        startFutureMessageIdDown = endMessageId;
-                        isWaitingForHistoryDown = false;
-                    }
-
-                    MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN);
-
-                    //                    if (realmRoomMessages.size() == 0) { // Hint : link browsable ; Commented Now!!!
-                    //                        getOnlineMessage(oldMessageId, direction);
-                    //                        return;
-                    //                    }
-
-                    /**
-                     * I do this for set addToView true
-                     */
-                    if (direction == DOWN && realmRoomMessages.size() < (Config.LIMIT_GET_HISTORY_NORMAL - 1)) {
-                        getOnlineMessage(startFutureMessageIdDown, direction);
-                    }
-
-                    /**
-                     * when reached to gap and not jumped over local, set gapMessageIdUp = 0; do this action
-                     * means that gap not exist (need this value for future get message) set topMore/bottomMore
-                     * local after that gap reached true for allow that get message from
-                     */
-                    if (gapReached && !jumpOverLocal) {
-                        if (direction == UP) {
-                            gapMessageIdUp = 0;
-                            reachMessageIdUp = 0;
-                            topMore = true;
-                        } else {
-                            gapMessageIdDown = 0;
-                            reachMessageIdDown = 0;
-                            bottomMore = true;
-                        }
-
-                        gapDetection(realmRoomMessages, direction);
-                    } else if ((direction == UP && isReachedToTopView()) || direction == DOWN && isReachedToBottomView()) {
-                        /**
-                         * check this changeState because if user is near to top view and not scroll get top message from server
-                         */
-                        //getOnlineMessage(startFutureMessageId, directionEnum);
-                    }
-
-                    final ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();
-                    for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
-                        structMessageInfos.add(new StructMessageInfo(realmRoomMessage));
-                    }
-
-                    if (direction == UP) {
-                        switchAddItem(structMessageInfos, true);
-                    } else {
-                        switchAddItem(structMessageInfos, false);
-                    }
-
+                int limit = Config.LIMIT_GET_HISTORY_NORMAL;
+                if ((firstUp && direction == UP) || (firstDown && direction == DOWN)) {
+                    limit = Config.LIMIT_GET_HISTORY_LOW;
                 }
+                return MessageLoader.getOnlineMessage(realm, mRoomId, oldMessageId, reachMessageId, limit, direction, new OnMessageReceive() {
+                    @Override
+                    public void onMessage(final long roomId, long startMessageId, long endMessageId, List<RealmRoomMessage> realmRoomMessages, boolean gapReached, boolean jumpOverLocal, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+                        if (roomId != mRoomId) {
+                            return;
+                        }
+                        hideProgress();
+                        /**
+                         * hide progress received history
+                         */
+                        progressItem(HIDE, direction);
+                        if (direction == UP) {
+                            firstUp = false;
+                            startFutureMessageIdUp = startMessageId;
+                            isWaitingForHistoryUp = false;
+                        } else {
+                            firstDown = false;
+                            startFutureMessageIdDown = endMessageId;
+                            isWaitingForHistoryDown = false;
+                        }
 
-                @Override
-                public void onError(int majorCode, int minorCode, long messageIdGetHistory, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-                    hideProgress();
-                    /**
-                     * hide progress if have any error
-                     */
-                    progressItem(HIDE, direction);
+                        MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN);
 
-                    if (majorCode == 617) {
+                        //                    if (realmRoomMessages.size() == 0) { // Hint : link browsable ; Commented Now!!!
+                        //                        getOnlineMessage(oldMessageId, direction);
+                        //                        return;
+                        //                    }
 
-                        if (!isWaitingForHistoryUp && !isWaitingForHistoryDown && mAdapter.getItemCount() == 0) {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                }
-                            });
+                        /**
+                         * I do this for set addToView true
+                         */
+                        if (direction == DOWN && realmRoomMessages.size() < (Config.LIMIT_GET_HISTORY_NORMAL - 1)) {
+                            getOnlineMessage(startFutureMessageIdDown, direction);
+                        }
+
+                        /**
+                         * when reached to gap and not jumped over local, set gapMessageIdUp = 0; do this action
+                         * means that gap not exist (need this value for future get message) set topMore/bottomMore
+                         * local after that gap reached true for allow that get message from
+                         */
+                        if (gapReached && !jumpOverLocal) {
+                            if (direction == UP) {
+                                gapMessageIdUp = 0;
+                                reachMessageIdUp = 0;
+                                topMore = true;
+                            } else {
+                                gapMessageIdDown = 0;
+                                reachMessageIdDown = 0;
+                                bottomMore = true;
+                            }
+
+                            gapDetection(realmRoomMessages, direction);
+                        } else if ((direction == UP && isReachedToTopView()) || direction == DOWN && isReachedToBottomView()) {
+                            /**
+                             * check this changeState because if user is near to top view and not scroll get top message from server
+                             */
+                            //getOnlineMessage(startFutureMessageId, directionEnum);
+                        }
+
+                        final ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();
+                        for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
+                            structMessageInfos.add(new StructMessageInfo(realmRoomMessage));
                         }
 
                         if (direction == UP) {
-                            isWaitingForHistoryUp = false;
-                            allowGetHistoryUp = false;
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //TODO [Saeed Mozaffari] [2017-03-06 9:50 AM] - for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
-                                    mAdapter.notifyDataSetChanged();
-                                }
-                            });
+                            switchAddItem(structMessageInfos, true);
                         } else {
-                            addToView = true;
-                            isWaitingForHistoryDown = false;
-                            allowGetHistoryDown = false;
+                            switchAddItem(structMessageInfos, false);
                         }
+
                     }
 
-                    /**
-                     * if time out came up try again for get history with previous value
-                     */
-                    if (majorCode == 5) {
-                        if (direction == UP) {
-                            isWaitingForHistoryUp = false;
-                        } else {
-                            isWaitingForHistoryDown = false;
-                        }
-                    }
+                    @Override
+                    public void onError(int majorCode, int minorCode, long messageIdGetHistory, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+                        hideProgress();
+                        /**
+                         * hide progress if have any error
+                         */
+                        progressItem(HIDE, direction);
 
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (majorCode == 5) {
-                                getOnlineMessageAfterTimeOut(messageIdGetHistory, direction);
+                        if (majorCode == 617) {
+
+                            if (!isWaitingForHistoryUp && !isWaitingForHistoryDown && mAdapter.getItemCount() == 0) {
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                    }
+                                });
+                            }
+
+                            if (direction == UP) {
+                                isWaitingForHistoryUp = false;
+                                allowGetHistoryUp = false;
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //TODO [Saeed Mozaffari] [2017-03-06 9:50 AM] - for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
+                                        mAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                            } else {
+                                addToView = true;
+                                isWaitingForHistoryDown = false;
+                                allowGetHistoryDown = false;
                             }
                         }
-                    });
+
+                        /**
+                         * if time out came up try again for get history with previous value
+                         */
+                        if (majorCode == 5) {
+                            if (direction == UP) {
+                                isWaitingForHistoryUp = false;
+                            } else {
+                                isWaitingForHistoryDown = false;
+                            }
+                        }
+
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (majorCode == 5) {
+                                    getOnlineMessageAfterTimeOut(messageIdGetHistory, direction);
+                                }
+                            }
+                        });
 
 
-                }
+                    }
+                });
             });
 
             if (direction == UP) {
@@ -8446,7 +8558,9 @@ public class FragmentChat extends BaseFragment
      */
     private long gapDetection(List<RealmRoomMessage> results, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
         if (((direction == UP && gapMessageIdUp == 0) || (direction == DOWN && gapMessageIdDown == 0)) && results.size() > 0) {
-            Object[] objects = MessageLoader.gapExist(DbManager.getInstance().getUiRealm(), mRoomId, results.get(0).getMessageId(), direction);
+            Object[] objects = DbManager.getInstance().doRealmTask(realm -> {
+                return MessageLoader.gapExist(realm, mRoomId, results.get(0).getMessageId(), direction);
+            });
             if (direction == UP) {
                 reachMessageIdUp = (long) objects[1];
                 return gapMessageIdUp = (long) objects[0];
@@ -8755,7 +8869,7 @@ public class FragmentChat extends BaseFragment
 
     private void showPaymentDialog() {
         showSelectItem();
-//        RealmRoom realmRoom = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+//        RealmRoom realmRoom = getRoom();
 //        if (realmRoom != null) {
 //            chatType = realmRoom.getType();
 //            if (chatType == CHAT) {
@@ -8834,7 +8948,7 @@ public class FragmentChat extends BaseFragment
             }
         }
 
-        RealmRoom realmRoom1 = DbManager.getInstance().getUiRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        RealmRoom realmRoom1 = getRoom();
         if (realmRoom1 != null) {
 
                 /*if (realmRoom.getMute()) {
@@ -8936,18 +9050,21 @@ public class FragmentChat extends BaseFragment
                 resetMessagingValue();
                 setDownBtnGone();
                 setCountNewMessageZero();
-                RealmRoomMessage.ClearAllMessageRoomAsync(DbManager.getInstance().getUiRealm(), mRoomId, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        recyclerView.addOnScrollListener(scrollListener);
-                        saveMessageIdPositionState(0);
-                        /**
-                         * get history from server
-                         */
-                        topMore = true;
-                        getOnlineMessage(0, UP);
-                    }
+                DbManager.getInstance().doRealmTask(realm -> {
+                    RealmRoomMessage.ClearAllMessageRoomAsync(realm, mRoomId, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            recyclerView.addOnScrollListener(scrollListener);
+                            saveMessageIdPositionState(0);
+                            /**
+                             * get history from server
+                             */
+                            topMore = true;
+                            getOnlineMessage(0, UP);
+                        }
+                    });
                 });
+
 
             } else if (items.get(position).equals(getString(R.string.report))) {
                 dialogReport(false, 0);
