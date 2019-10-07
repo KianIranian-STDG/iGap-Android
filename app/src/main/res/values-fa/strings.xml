@@ -1188,7 +1188,8 @@
     <string name="verify_channel">کانال تأیید شده</string>
     <string name="verify_user">کاربر تأیید شده</string>
     <string name="save_data_in_sd_card">ذخیره اطلاعات در کارت جانبی</string>
-    <string name="are_you_sure">از انجام این کار مطمئن هستید ؟</string>
+    <string name="are_you_sure">شما مطمئن هستید ؟</string>
+    <string name="are_you_sure_request">آیا از انجام این درخواست مطمئن هستید؟</string>
     <string name="are_you_sure_edit_contact">از ویرایش کاربر مطمئن هستید ؟</string>
     <string name="change_storage_place">تغییر مکان ذخیره سازی</string>
     <string name="other_files">سایر فایل ها</string>

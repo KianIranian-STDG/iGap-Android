@@ -312,7 +312,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case IVANDSCORE:
                 new MaterialDialog.Builder(activity)
-                        .content(R.string.are_you_sure)
+                        .content(R.string.are_you_sure_request)
                         .positiveText(R.string.yes)
                         .negativeText(R.string.no)
                         .onPositive((dialog, which) -> {

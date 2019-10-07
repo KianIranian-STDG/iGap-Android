@@ -2136,6 +2136,7 @@
     <string name="do_not_send">لا ترسل</string>
     <string name="save_data_in_sd_card">حفظ المعلومات على البطاقة الجانبية</string>
     <string name="are_you_sure">هل أنت متأكد؟</string>
+    <string name="are_you_sure_request">هل أنت متأكد أنك تريد تقديم هذا الطلب؟</string>
     <string name="are_you_sure_edit_contact">هل أنت متأكد من تحرير الاتصال؟</string>
     <string name="change_storage_place">تغيير موقع التخزين</string>
     <string name="other_files">ملفات اخرى</string>

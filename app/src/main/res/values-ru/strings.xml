@@ -2128,6 +2128,8 @@
 
     <string name="are_you_sure">Вы уверены?</string>
 
+    <string name="are_you_sure_request">Вы уверены, что хотите сделать этот запрос?</string>
+
     <string name="change_storage_place">Изменить место хранения</string>
 
     <string name="other_files">Другие файлы</string>
