@@ -307,9 +307,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
 
         ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.UNRECOGNIZED;
-        if (mMessage.status != null) {
+        if (mMessage.getStatus() != null) {
             try {
-                status = ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status);
+                status = ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus());
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }

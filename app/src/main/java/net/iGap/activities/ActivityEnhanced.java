@@ -44,8 +44,6 @@ import net.iGap.module.StatusBarUtil;
 import java.io.File;
 import java.io.IOException;
 
-import io.github.inflationx.viewpump.ViewPumpContextWrapper;
-
 import static net.iGap.G.updateResources;
 
 
