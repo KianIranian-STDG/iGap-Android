@@ -5968,10 +5968,19 @@ public class FragmentChat extends BaseFragment
                 // set maxLength  when layout attachment is visible
                 edtChat.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH)});
 
-                sendButtonVisibility(true);
+                sendButtonVisibilityWithNoAnim(true);
             }
         }, 100);
     }
+
+
+    private void sendButtonVisibilityWithNoAnim(boolean visibility) {
+        layoutAttachBottom.setVisibility(visibility ? View.GONE : View.VISIBLE);
+        layoutAttachBottom.clearAnimation();
+        imvSendButton.clearAnimation();
+        imvSendButton.setVisibility(visibility ? View.VISIBLE : View.GONE);
+    }
+
 
     private boolean isSendVisibilityAnimInProcess;
     private boolean isAttachVisibilityAnimInProcess;
@@ -5982,12 +5991,12 @@ public class FragmentChat extends BaseFragment
         //Log.i(TAG, "sendButtonVisibility: "+visibility);
 
         if (animGone == null || animVisible == null) {
-            animGone = AnimationUtils.loadAnimation(getContext(), R.anim.translate_exit_up);
-            animVisible = AnimationUtils.loadAnimation(getContext(), R.anim.translate_enter_down);
+            animGone = AnimationUtils.loadAnimation(getContext(), R.anim.fade_scale_hide);
+            animVisible = AnimationUtils.loadAnimation(getContext(), R.anim.fade_scale_show);
         }
 
-        animGone.setDuration(70);
-        animVisible.setDuration(70);
+        //animGone.setDuration(70);
+        //animVisible.setDuration(70);
 
         if (!visibility && isSendVisibilityAnimInProcess) {
             animGone.reset();
@@ -6048,6 +6057,7 @@ public class FragmentChat extends BaseFragment
             public void onAnimationEnd(Animation animation) {
                 layoutAttachBottom.setVisibility(View.GONE);
                 imvSendButton.startAnimation(animVisible);
+                imvSendButton.setVisibility(View.VISIBLE);
 
             }
 
@@ -6060,7 +6070,6 @@ public class FragmentChat extends BaseFragment
         animVisible.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                imvSendButton.setVisibility(View.VISIBLE);
                 //Log.i(TAG, "sendButtonAnimateVisible: anim22 start");
 
             }
