@@ -24,18 +24,20 @@ import net.iGap.interfaces.ToolbarListener;
 public class IGashtLocationListFragment extends IGashtBaseView {
 
     private FragmentIgashtLocationBinding binding;
+    private IGashtLocationViewModel iGashtLocationViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(IGashtLocationViewModel.class);
+        iGashtLocationViewModel = ViewModelProviders.of(this).get(IGashtLocationViewModel.class);
+        viewModel = iGashtLocationViewModel;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_location, container, false);
-        binding.setViewModel((IGashtLocationViewModel) viewModel);
+        binding.setViewModel(iGashtLocationViewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -73,26 +75,26 @@ public class IGashtLocationListFragment extends IGashtBaseView {
                 }).getView());
 
         binding.locationListView.addItemDecoration(new DividerItemDecoration(binding.locationListView.getContext(), DividerItemDecoration.VERTICAL));
-        binding.locationListView.setAdapter(new IGashtLocationListAdapter(((IGashtLocationViewModel) viewModel).getSelectedProvinceName(), new IGashtLocationListAdapter.onLocationItemClickListener() {
+        binding.locationListView.setAdapter(new IGashtLocationListAdapter(iGashtLocationViewModel.getSelectedProvinceName(), new IGashtLocationListAdapter.onLocationItemClickListener() {
             @Override
             public void buyTicket(int position) {
-                ((IGashtLocationViewModel) viewModel).buyTicket(position);
+                iGashtLocationViewModel.buyTicket(position);
             }
 
             @Override
             public void onItem(int position) {
-                ((IGashtLocationViewModel) viewModel).buyTicket(position);
+                iGashtLocationViewModel.buyTicket(position);
             }
         }));
 
-        ((IGashtLocationViewModel) viewModel).getLocationList().observe(getViewLifecycleOwner(), data -> {
+        iGashtLocationViewModel.getLocationList().observe(getViewLifecycleOwner(), data -> {
             if (binding.locationListView.getAdapter() instanceof IGashtLocationListAdapter && data != null) {
                 ((IGashtLocationListAdapter) binding.locationListView.getAdapter()).setItems(data);
             }
         });
 
 
-        ((IGashtLocationViewModel) viewModel).getGoToLocationDetail().observe(getViewLifecycleOwner(), isGo -> {
+        iGashtLocationViewModel.getGoToLocationDetail().observe(getViewLifecycleOwner(), isGo -> {
             if (getActivity() != null && isGo != null) {
                 if (isGo) {
                     new HelperFragment(getActivity().getSupportFragmentManager()).setFragment(new IGashtLocationDetailFragment()).setReplace(false).load(true);

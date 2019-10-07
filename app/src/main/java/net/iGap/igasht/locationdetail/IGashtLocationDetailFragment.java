@@ -27,18 +27,20 @@ import net.iGap.interfaces.ToolbarListener;
 public class IGashtLocationDetailFragment extends IGashtBaseView {
 
     private FragmentIgashtLocationDetailBinding binding;
+    private IGashtLocationDetailViewModel iGashtLocationDetailViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(IGashtLocationDetailViewModel.class);
+        iGashtLocationDetailViewModel = ViewModelProviders.of(this).get(IGashtLocationDetailViewModel.class);
+        viewModel = iGashtLocationDetailViewModel;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_location_detail, container, false);
-        binding.setViewModel((IGashtLocationDetailViewModel) viewModel);
+        binding.setViewModel(iGashtLocationDetailViewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -68,7 +70,7 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
                     }
                 }).getView());
 
-        ((IGashtLocationDetailViewModel) viewModel).getLoadBuyTicketView().observe(getViewLifecycleOwner(), loadBuyTicketView -> {
+        iGashtLocationDetailViewModel.getLoadBuyTicketView().observe(getViewLifecycleOwner(), loadBuyTicketView -> {
             if (loadBuyTicketView != null) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -90,13 +92,13 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
             }
         });
 
-        ((IGashtLocationDetailViewModel) viewModel).getGoHistoryPage().observe(getViewLifecycleOwner(), voucherNumber -> {
+        iGashtLocationDetailViewModel.getGoHistoryPage().observe(getViewLifecycleOwner(), voucherNumber -> {
             if (voucherNumber != null) {
                 goToHistoryListPage();
             }
         });
 
-        ((IGashtLocationDetailViewModel) viewModel).getGoPayment().observe(getViewLifecycleOwner(), orderToken -> {
+        iGashtLocationDetailViewModel.getGoPayment().observe(getViewLifecycleOwner(), orderToken -> {
             if (getActivity() != null && orderToken != null) {
                 new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.igasht_title), orderToken, result -> {
                     if (result.isSuccess()) {
@@ -106,7 +108,7 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
             }
         });
 
-        ((IGashtLocationDetailViewModel) viewModel).getPaymentError().observe(getViewLifecycleOwner(), isError -> {
+        iGashtLocationDetailViewModel.getPaymentError().observe(getViewLifecycleOwner(), isError -> {
             if (getContext() != null && isError != null && isError) {
                 Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
             }
@@ -114,7 +116,7 @@ public class IGashtLocationDetailFragment extends IGashtBaseView {
     }
 
     public void registerVouchers() {
-        ((IGashtLocationDetailViewModel) viewModel).registerOrder();
+        iGashtLocationDetailViewModel.registerOrder();
     }
 
     private void goToHistoryListPage() {

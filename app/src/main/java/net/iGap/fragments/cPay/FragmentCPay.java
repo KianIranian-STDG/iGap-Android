@@ -17,7 +17,6 @@ import net.iGap.R;
 import net.iGap.adapter.cPay.AdapterPlaqueList;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentCpayBinding;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -29,7 +28,7 @@ import java.util.List;
 
 public class FragmentCPay extends BaseAPIViewFrag implements ToolbarListener {
 
-    private FragmentSeePayViewModel viewModel;
+    private FragmentSeePayViewModel seePayViewModel;
     private FragmentCpayBinding binding;
     private AdapterPlaqueList adapter;
     private List<String> plaqueList = new ArrayList<>();
@@ -41,13 +40,14 @@ public class FragmentCPay extends BaseAPIViewFrag implements ToolbarListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(FragmentSeePayViewModel.class);
+        seePayViewModel = ViewModelProviders.of(this).get(FragmentSeePayViewModel.class);
+        viewModel = seePayViewModel;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cpay, container, false);
-        binding.setViewModel(viewModel);
+        binding.setViewModel(seePayViewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -63,11 +63,11 @@ public class FragmentCPay extends BaseAPIViewFrag implements ToolbarListener {
 
     private void initCallBacks() {
 
-        viewModel.getOnAddClickListener().observe(getViewLifecycleOwner(), isOpen -> {
+        seePayViewModel.getOnAddClickListener().observe(getViewLifecycleOwner(), isOpen -> {
             openEditOrAddFragment(null);
         });
 
-        viewModel.getOnInquiryClickListener().observe(getViewLifecycleOwner(), isOpen -> {
+        seePayViewModel.getOnInquiryClickListener().observe(getViewLifecycleOwner(), isOpen -> {
             if (getActivity() == null) return;
 
             if (adapter.getSelectedPlaqueList().size() == 0) {
@@ -80,7 +80,7 @@ public class FragmentCPay extends BaseAPIViewFrag implements ToolbarListener {
                     .load();
         });
 
-        viewModel.getOnChargeClickListener().observe(getViewLifecycleOwner(), isOpen -> {
+        seePayViewModel.getOnChargeClickListener().observe(getViewLifecycleOwner(), isOpen -> {
             if (getActivity() == null) return;
 
             if (adapter.getSelectedPlaqueList().size() == 0) {
@@ -93,16 +93,16 @@ public class FragmentCPay extends BaseAPIViewFrag implements ToolbarListener {
                     .load();
         });
 
-        viewModel.getPlaqueChangeListener().observe(getViewLifecycleOwner(), isUpdate -> {
-            if (isUpdate != null && isUpdate) viewModel.getPlaqueListByApi();
+        seePayViewModel.getPlaqueChangeListener().observe(getViewLifecycleOwner(), isUpdate -> {
+            if (isUpdate != null && isUpdate) seePayViewModel.getPlaqueListByApi();
         });
 
-        viewModel.getLoaderListener().observe(getViewLifecycleOwner(), isLoading -> {
+        seePayViewModel.getLoaderListener().observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading == null) return;
             handleView(isLoading ? PageState.LOADING : PageState.ERROR);
         });
 
-        viewModel.getPlaquesReceiverListener().observe(getViewLifecycleOwner(), userPlaques -> {
+        seePayViewModel.getPlaquesReceiverListener().observe(getViewLifecycleOwner(), userPlaques -> {
             if (userPlaques == null) {
                 handleView(PageState.NO_CAR);
             } else {
@@ -112,12 +112,12 @@ public class FragmentCPay extends BaseAPIViewFrag implements ToolbarListener {
             }
         });
 
-        viewModel.getMessageToUser().observe(getViewLifecycleOwner(), resID -> {
+        seePayViewModel.getMessageToUser().observe(getViewLifecycleOwner(), resID -> {
             if (resID == null) return;
             Toast.makeText(getActivity(), getString(resID), Toast.LENGTH_LONG).show();
         });
 
-        viewModel.getMessageToUserText().observe(getViewLifecycleOwner(), s -> {
+        seePayViewModel.getMessageToUserText().observe(getViewLifecycleOwner(), s -> {
             if (s == null) return;
             Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
         });
