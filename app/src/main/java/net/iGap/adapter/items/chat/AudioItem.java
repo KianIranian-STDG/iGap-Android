@@ -24,6 +24,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -359,7 +360,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             songFileName.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
             setTextSize(songFileName, R.dimen.smallTextSize);
             Utils.darkModeHandler(songFileName);
-            songFileName.setTypeface(G.typeface_IRANSansMobile);
+            songFileName.setTypeface(ResourcesCompat.getFont(songFileName.getContext() , R.font.main_font));
 
             songArtist = new AppCompatTextView(G.context);
             songArtist.setId(R.id.songArtist);
@@ -373,7 +374,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             playBtn = new MaterialDesignTextView(G.context);
             playBtn.setId(R.id.txt_play_music);
             playBtn.setBackgroundResource(0); //txt_play_music.setBackgroundResource(@null);
-            playBtn.setTypeface(G.typeface_Fontico);
+            playBtn.setTypeface(ResourcesCompat.getFont(playBtn.getContext() , R.font.font_icon_old));
             playBtn.setGravity(CENTER);
             playBtn.setTextColor(getColor(R.color.white));
             playBtn.setText(G.fragmentActivity.getResources().getString(R.string.md_play_arrow));

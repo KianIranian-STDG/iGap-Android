@@ -67,8 +67,9 @@ import net.iGap.realm.RealmRoomMessage;
 import java.io.File;
 import java.util.ArrayList;
 
-import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import io.realm.Realm;
+
+import static net.iGap.G.updateResources;
 
 public class ActivityPopUpNotification extends AppCompatActivity {
 
@@ -129,7 +130,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(G.updateResources(newBase)));
+        super.attachBaseContext(updateResources(newBase));
     }
 
     @Override
@@ -200,11 +201,13 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     private void setImageAndTextAppBar(int position) {
 
-        if (mList.size() != 0) {
-            initialize = mList.get(position).initialize;
-            color = mList.get(position).color;
-            txtName.setText(mList.get(position).name);
-        }
+        if (mList.size() == 0)
+            return;
+
+        initialize = mList.get(position).initialize;
+        color = mList.get(position).color;
+        txtName.setText(mList.get(position).name);
+
 
         try (Realm realm = Realm.getDefaultInstance()) {
             RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, mList.get(position).senderId);

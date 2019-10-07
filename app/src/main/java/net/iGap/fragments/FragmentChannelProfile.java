@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -187,7 +188,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 TextInputLayout inputChannelLink = new TextInputLayout(getActivity());
                 MEditText edtLink = new MEditText(getActivity());
                 edtLink.setHint(getString(R.string.channel_public_hint_revoke));
-                edtLink.setTypeface(G.typeface_IRANSansMobile);
+                edtLink.setTypeface(ResourcesCompat.getFont(edtLink.getContext() , R.font.main_font));
                 edtLink.setText(link);
                 edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
                 Utils.darkModeHandler(edtLink);

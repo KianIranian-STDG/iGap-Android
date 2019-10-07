@@ -51,7 +51,7 @@
                 </net.iGap.libs.rippleeffect.RippleView>
 
                 <TextView
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true"
@@ -89,7 +89,7 @@
                 android:visibility="visible">
 
                 <net.iGap.module.HeaderTextView
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -112,7 +112,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_alert"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -151,7 +150,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_messagePreview"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -185,7 +183,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -225,7 +222,6 @@
                     android:paddingRight="@dimen/dp16">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".6"
@@ -237,7 +233,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_vibrate_message_text"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -263,7 +258,6 @@
                     android:paddingRight="@dimen/dp16">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".6"
@@ -275,7 +269,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_popupNotification_message_text"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -301,7 +294,6 @@
                     android:paddingRight="@dimen/dp16">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".6"
@@ -313,7 +305,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_sound_text"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -339,7 +330,7 @@
                 android:visibility="visible">
 
                 <net.iGap.module.HeaderTextView
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -362,7 +353,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_alert_group"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -401,7 +391,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_messagePreview_group"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -434,7 +423,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -473,7 +461,6 @@
                     android:paddingRight="@dimen/dp16">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".6"
@@ -485,7 +472,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_vibrate_group_text"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -511,7 +497,6 @@
                     android:paddingRight="@dimen/dp16">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".6"
@@ -523,7 +508,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_popupNotification_group_text"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -549,7 +533,6 @@
                     android:paddingRight="@dimen/dp16">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".6"
@@ -561,7 +544,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_sound_group_text"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -586,7 +568,7 @@
                 android:visibility="visible">
 
                 <net.iGap.module.HeaderTextView
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -610,7 +592,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_app_sound"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -648,7 +629,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_app_vibrate"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -687,7 +667,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_app_preview"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -726,7 +705,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_chat_sound"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -759,7 +737,7 @@
                 android:visibility="gone">
 
                 <TextView
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -782,7 +760,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_Contact_joined"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -837,7 +814,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_pinned_message"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
@@ -862,7 +838,7 @@
                 android:visibility="visible">
 
                 <net.iGap.module.HeaderTextView
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -876,7 +852,6 @@
 
                 <TextView
                     android:id="@+id/stns_txt_title_keep_alive_service"
-                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingEnd="@dimen/dp16"
@@ -902,7 +877,6 @@
 
                     <com.uncopt.android.widget.text.justify.JustifiedTextView
                         android:id="@+id/stns_txt_keep_alive_service"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -961,7 +935,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_title_background_connection"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/st_background_connection"
@@ -971,7 +944,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_background_connection"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/stns_txt_title_background_connection"
@@ -1021,7 +993,6 @@
 
                     <TextView
                         android:id="@+id/stns_txt_badge_countent"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
@@ -1053,7 +1024,6 @@
                     android:visibility="gone">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".6"
@@ -1065,7 +1035,6 @@
 
                     <TextView
                         android:id="@+id/st_txt_Repeat_Notifications"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".4"
@@ -1088,7 +1057,7 @@
                 android:visibility="visible">
 
                 <net.iGap.module.HeaderTextView
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -1108,7 +1077,6 @@
                     android:paddingRight="@dimen/dp16">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -1118,7 +1086,6 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical|top"

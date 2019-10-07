@@ -37,6 +37,7 @@ import android.widget.Toast;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.collection.ArrayMap;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -961,19 +962,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        if (status == ProtoGlobal.RoomMessageStatus.SEEN) {
-
-        } else if (status == ProtoGlobal.RoomMessageStatus.LISTENED) {
-            if (G.isDarkTheme) {
-                viewHolder.getMessageStatusTv().setTextColor(viewHolder.getColor(R.color.iGapColor));
-            } else {
-                viewHolder.getMessageStatusTv().setTextColor(viewHolder.getColor(R.color.backgroundColorCall2));
-            }
-            viewHolder.getMessageStatusTv().setVisibility(View.VISIBLE);
-        } else {
+        if (status != ProtoGlobal.RoomMessageStatus.SEEN) {
             viewHolder.getMessageStatusTv().setTextColor(viewHolder.getColor(R.color.unread_status));
         }
-
 
         if (G.isDarkTheme) {
             viewHolder.getChatBloke().setBackground(tintDrawable(SEND_ITEM_BACKGROUND, ColorStateList.valueOf(G.context.getResources().getColor(R.color.chat_item_send_dark))));
@@ -1140,9 +1131,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             });
 
             TextView txtPrefixForwardFrom = forwardView.findViewById(R.id.cslr_txt_prefix_forward);
-            txtPrefixForwardFrom.setTypeface(G.typeface_IRANSansMobile);
+            txtPrefixForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext() , R.font.main_font));
             TextView txtForwardFrom = forwardView.findViewById(R.id.cslr_txt_forward_from);
-            txtForwardFrom.setTypeface(G.typeface_IRANSansMobile);
+            txtForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext() , R.font.main_font));
 
             /**
              * if forward message from chat or group , sender is user

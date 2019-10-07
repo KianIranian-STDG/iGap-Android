@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -73,7 +75,7 @@ public class BadgeView extends FrameLayout {
     public void setText(String text) {
         if (HelperCalander.isPersianUnicode) {
             textView.setText(HelperCalander.convertToUnicodeFarsiNumber(text));
-            textView.setTypeface(G.typeface_IRANSansMobile);
+            textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
         } else {
             textView.setText(text);
         }

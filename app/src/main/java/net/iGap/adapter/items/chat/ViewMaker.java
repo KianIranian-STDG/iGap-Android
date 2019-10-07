@@ -20,6 +20,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
 
 import com.daimajia.swipe.SwipeLayout;
@@ -168,7 +169,7 @@ public class ViewMaker {
         chslr_txt_replay_from.setTextAppearance(context, R.style.ChatMessages_EmojiTextView);
         setTextSize(chslr_txt_replay_from, R.dimen.dp12);
 
-        chslr_txt_replay_from.setTypeface(G.typeface_IRANSansMobile_Bold);
+        chslr_txt_replay_from.setTypeface(ResourcesCompat.getFont(chslr_txt_replay_from.getContext() , R.font.main_font_bold));
         LinearLayout.LayoutParams layout_55 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         chslr_txt_replay_from.setLayoutParams(layout_55);
         linearLayout_376.addView(chslr_txt_replay_from);
@@ -189,7 +190,7 @@ public class ViewMaker {
         setTextSize(chslr_txt_replay_message, R.dimen.dp12);
         LinearLayout.LayoutParams layout_641 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         chslr_txt_replay_message.setLayoutParams(layout_641);
-        chslr_txt_replay_message.setTypeface(G.typeface_IRANSansMobile);
+        chslr_txt_replay_message.setTypeface(ResourcesCompat.getFont(chslr_txt_replay_message.getContext() , R.font.main_font));
         linearLayout_376.addView(chslr_txt_replay_message);
         cslr_replay_layout.addView(linearLayout_376);
 
@@ -224,7 +225,7 @@ public class ViewMaker {
         cslr_txt_prefix_forward.setTextColor(Color.parseColor(G.textBubble));
         setTextSize(cslr_txt_prefix_forward, R.dimen.dp12);
         cslr_txt_prefix_forward.setSingleLine(true);
-        cslr_txt_prefix_forward.setTypeface(G.typeface_IRANSansMobile_Bold);
+        cslr_txt_prefix_forward.setTypeface(ResourcesCompat.getFont(cslr_txt_prefix_forward.getContext() , R.font.main_font_bold));
         LinearLayout.LayoutParams layout_992 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_992.rightMargin = i_Dp(dp4);
         layout_992.leftMargin = i_Dp(R.dimen.dp6);
@@ -238,7 +239,7 @@ public class ViewMaker {
         cslr_txt_forward_from.setTextColor(Color.parseColor(G.textBubble));
         setTextSize(cslr_txt_forward_from, R.dimen.dp12);
         cslr_txt_forward_from.setSingleLine(true);
-        cslr_txt_forward_from.setTypeface(G.typeface_IRANSansMobile_Bold);
+        cslr_txt_forward_from.setTypeface(ResourcesCompat.getFont(cslr_txt_forward_from.getContext() , R.font.main_font_bold));
         LinearLayout.LayoutParams layout_119 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         cslr_txt_forward_from.setLayoutParams(layout_119);
         cslr_ll_forward.addView(cslr_txt_forward_from);
@@ -270,7 +271,7 @@ public class ViewMaker {
         textView.setTextColor(Color.parseColor(G.textBubble));
 
         textView.setId(R.id.messageSenderTextMessage);
-        textView.setTypeface(G.typeface_IRANSansMobile);
+        textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
         setTextSizeDirect(textView, G.userTextSize);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
             textView.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
@@ -288,7 +289,7 @@ public class ViewMaker {
         textView.setGravity(LEFT);
         textView.setPadding(20, 0, 20, 5);
         textView.setSingleLine(true);
-        textView.setTypeface(G.typeface_IRANSansMobile);
+        textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
         textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setText(text);
         setTextSize(textView, R.dimen.dp12);
@@ -373,7 +374,7 @@ public class ViewMaker {
     }
 
     public static void setTypeFace(TextView v) {
-        v.setTypeface(G.typeface_IRANSansMobile);
+        v.setTypeface(ResourcesCompat.getFont(v.getContext() , R.font.main_font));
     }
 
     public static void setLayoutDirection(View view, int direction) {
@@ -445,7 +446,7 @@ public class ViewMaker {
         }
 
         setTextSize(fcsl_txt_name, R.dimen.dp15);
-        fcsl_txt_name.setTypeface(G.typeface_IRANSansMobile_Bold);
+        fcsl_txt_name.setTypeface(ResourcesCompat.getFont(fcsl_txt_name.getContext() , R.font.main_font_bold));
         LinearLayout.LayoutParams layout_415 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_415.gravity = Gravity.START;
         fcsl_txt_name.setLayoutParams(layout_415);
@@ -467,7 +468,7 @@ public class ViewMaker {
             fcsl_txt_time_info.setTextColor(G.context.getResources().getColor(R.color.gray_5c));
         }
         setTextSize(fcsl_txt_time_info, R.dimen.dp12);
-        fcsl_txt_time_info.setTypeface(G.typeface_IRANSansMobile);
+        fcsl_txt_time_info.setTypeface(ResourcesCompat.getFont(fcsl_txt_time_info.getContext() , R.font.main_font));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             fcsl_txt_time_info.setTextDirection(View.TEXT_DIRECTION_LOCALE);
         }
@@ -500,7 +501,7 @@ public class ViewMaker {
         fcsl_txt_dureation_time.setText("2:24");
         fcsl_txt_dureation_time.setTextColor(G.context.getResources().getColor(R.color.btn_start_page5));
         setTextSize(fcsl_txt_dureation_time, R.dimen.dp12);
-        fcsl_txt_dureation_time.setTypeface(G.typeface_IRANSansMobile);
+        fcsl_txt_dureation_time.setTypeface(ResourcesCompat.getFont(fcsl_txt_dureation_time.getContext() , R.font.main_font));
         LinearLayout.LayoutParams layout_483 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         fcsl_txt_dureation_time.setLayoutParams(layout_483);
         linearLayout_202.addView(fcsl_txt_dureation_time);

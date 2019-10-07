@@ -23,7 +23,6 @@ import org.paygear.fragment.CardsFragment;
 import org.paygear.model.Payment;
 import org.paygear.web.Web;
 
-import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import ir.radsense.raadcore.OnWebResponseListener;
 import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.app.NavigationBarActivity;
@@ -73,7 +72,7 @@ public class WalletActivity extends NavigationBarActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(updateResources(newBase)));
+        super.attachBaseContext(updateResources(newBase));
     }
 
     @Override

@@ -57,7 +57,7 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setTextColor(Color.parseColor(G.textTitleTheme));
-        xAxis.setTypeface(G.typeface_IRANSansMobile);
+        xAxis.setTypeface(ResourcesCompat.getFont(chart.getContext() , R.font.main_font));
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextSize(ViewMaker.dpToPixel(4));
         xAxis.setDrawGridLines(false);

@@ -23,6 +23,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import net.iGap.G;
@@ -157,7 +158,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             viewContactBtn.setTextSize(12);
             viewContactBtn.setTextColor(getColor(R.color.md_blue_500));
             viewContactBtn.setAllCaps(false);
-            viewContactBtn.setTypeface(G.typeface_IRANSansMobile);
+            viewContactBtn.setTypeface(ResourcesCompat.getFont(viewContactBtn.getContext() , R.font.main_font));
 
 
             /**
@@ -172,7 +173,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             contactWithUserBtn.setTextSize(10);
             contactWithUserBtn.setTextColor(getColor(R.color.grayNew));
             contactWithUserBtn.setAllCaps(false);
-            contactWithUserBtn.setTypeface(G.typeface_IRANSansMobile);
+            contactWithUserBtn.setTypeface(ResourcesCompat.getFont(viewContactBtn.getContext() , R.font.main_font));
 
 
             /**

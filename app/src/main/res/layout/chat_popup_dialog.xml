@@ -15,7 +15,7 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/cm_icon_mute_pinToTop"
-            fontPath="fonts/iGap-Fontico.ttf"
+            android:fontFamily="@font/font_icon_old"
             android:layout_width="@dimen/dp26"
             android:layout_height="match_parent"
             android:layout_gravity="center"

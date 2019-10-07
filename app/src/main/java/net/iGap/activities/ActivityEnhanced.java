@@ -45,7 +45,6 @@ import java.io.File;
 import java.io.IOException;
 
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
-import io.realm.Realm;
 
 import static net.iGap.G.updateResources;
 
@@ -67,7 +66,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(updateResources(newBase)));
+        super.attachBaseContext(updateResources(newBase));
     }
 
     @Override
@@ -91,10 +90,6 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
             /*Log.wtf("ActivityEnhanced","AvatarHandler start");*/
             avatarHandler = new AvatarHandler();
             /*Log.wtf("ActivityEnhanced","AvatarHandler end");*/
-
-            /*Log.wtf("ActivityEnhanced","checkFont start");*/
-            new Thread(this::checkFont);
-            /*Log.wtf("ActivityEnhanced","checkFont end");*/
 
             /*Log.wtf("ActivityEnhanced","screenStateFilter start");*/
             IntentFilter screenStateFilter = new IntentFilter();
@@ -307,37 +302,6 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
             }
         }
 
-    }
-
-    /**
-     * check the selected language user and set the language if change it
-     */
-
-    private void checkFont() {
-
-        if (G.typeface_IRANSansMobile == null) {
-            G.typeface_IRANSansMobile = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
-        }
-
-        if (G.typeface_IRANSansMobile_Bold == null) {
-            G.typeface_IRANSansMobile_Bold = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile_Bold.ttf");
-        }
-
-        if (G.typeface_Fontico == null) {
-            G.typeface_Fontico = Typeface.createFromAsset(getAssets(), "fonts/iGap-Fontico.ttf");
-        }
-
-        if (G.typeface_FonticonNew == null) {
-            G.typeface_FonticonNew = Typeface.createFromAsset(getAssets(), "fonts/font_icon.ttf");
-        }
-
-        if (G.typeface_neuropolitical == null) {
-            G.typeface_neuropolitical = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
-        }
-
-        if (G.typeface_iGap == null) {
-            G.typeface_iGap = Typeface.createFromAsset(getAssets(), "fonts/font_icon.ttf");
-        }
     }
 
     private void makeDirectoriesIfNotExist() {

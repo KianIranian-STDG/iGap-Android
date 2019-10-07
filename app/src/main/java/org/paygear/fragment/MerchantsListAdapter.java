@@ -4,6 +4,7 @@ package org.paygear.fragment;
 import android.content.Context;
 import android.graphics.Color;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -80,7 +81,7 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
             textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             textView.setPadding(ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10), ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10));
             textView.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
-            textView.setTypeface(G.typeface_IRANSansMobile);
+            textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
             textView.setGravity(Gravity.START);
 
             return new ViewHolderTitle(textView);

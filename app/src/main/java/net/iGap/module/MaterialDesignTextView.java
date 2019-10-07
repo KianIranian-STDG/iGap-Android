@@ -14,8 +14,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.helper.Emojione;
 
 public class MaterialDesignTextView extends AppCompatTextView {
@@ -36,8 +38,7 @@ public class MaterialDesignTextView extends AppCompatTextView {
     }
 
     private void init(Context context) {
-        //        setTypeface(FontCache.get("fonts/Flaticon.ttf", context));
-        setTypeface(G.typeface_FonticonNew);
+        setTypeface(ResourcesCompat.getFont(getContext() , R.font.font_icon));
         setText(getText());
     }
 

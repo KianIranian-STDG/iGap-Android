@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -128,7 +129,7 @@ public class MyInfoWindow extends InfoWindow {
         final TextView txtComment = view.findViewById(R.id.txt_info_comment);
 
         txtName.setText(displayName);
-        txtName.setTypeface(G.typeface_IRANSansMobile_Bold, Typeface.BOLD);
+        txtName.setTypeface(ResourcesCompat.getFont(txtName.getContext() , R.font.main_font_bold), Typeface.BOLD);
 
         if (!G.isAppRtl) {
             txtComment.setGravity(Gravity.RIGHT);

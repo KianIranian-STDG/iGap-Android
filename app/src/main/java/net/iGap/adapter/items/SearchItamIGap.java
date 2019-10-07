@@ -14,6 +14,7 @@ import android.graphics.Typeface;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.items.AbstractItem;
@@ -33,7 +34,6 @@ import java.util.List;
 
 public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.ViewHolder> {
     ProtoClientSearchUsername.ClientSearchUsernameResponse.Result item;
-    private Typeface typeFaceIcon;
     private AvatarHandler avatarHandler;
 
     public SearchItamIGap(AvatarHandler avatarHandler) {
@@ -81,16 +81,15 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
                 holder.lastSeen.setText(item.getRoom().getGroupRoomExtra().getPublicExtra().getUsername());
             }
 
+            Typeface typeFaceIcon = ResourcesCompat.getFont(holder.txtIcon.getContext(), R.font.font_icon);
             if (item.getRoom().getType() == ProtoGlobal.Room.Type.GROUP) {
-                typeFaceIcon = G.typeface_Fontico;
                 holder.txtIcon.setTypeface(typeFaceIcon);
                 holder.txtIcon.setVisibility(View.VISIBLE);
-                holder.txtIcon.setText(G.context.getString(R.string.md_users_social_symbol));
+                holder.txtIcon.setText(G.context.getString(R.string.group_icon));
             } else if (item.getRoom().getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                typeFaceIcon = G.typeface_Fontico;
                 holder.txtIcon.setTypeface(typeFaceIcon);
                 holder.txtIcon.setVisibility(View.VISIBLE);
-                holder.txtIcon.setText(G.context.getString(R.string.md_channel_icon));
+                holder.txtIcon.setText(G.context.getString(R.string.channel_main_icon));
             }
         }
 

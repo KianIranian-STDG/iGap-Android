@@ -40,7 +40,7 @@
                     android:src="@mipmap/empty" />
 
                 <net.iGap.module.EmojiTextViewE
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp16"
@@ -59,7 +59,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile_Bold.ttf"
+                        android:fontFamily="@font/main_font_bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp16"
@@ -149,7 +149,7 @@
 
                 <TextView
                     style="?textColorMenuTheme"
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp4"
@@ -186,7 +186,7 @@
 
                 <TextView
                     style="?textColorMenuTheme"
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp4"
@@ -213,7 +213,7 @@
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/lm_txt_icon_channel"
                     style="?iconColorMenuTheme"
-                    fontPath="fonts/iGap-Fontico.ttf"
+                    android:fontFamily="@font/font_icon_old"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -226,7 +226,7 @@
 
                 <TextView
                     style="?textColorMenuTheme"
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/dp4"
@@ -269,7 +269,7 @@
 
                 <TextView
                     style="?textColorMenuTheme"
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp4"
@@ -288,7 +288,7 @@
 
                 <TextView
                     android:id="@+id/cash"
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|end"
@@ -328,7 +328,7 @@
 
                 <TextView
                     style="?textColorMenuTheme"
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp4"
@@ -370,7 +370,7 @@
 
                 <TextView
                     style="?textColorMenuTheme"
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp4"
@@ -405,7 +405,7 @@
 
                 <TextView
                     style="?textColorMenuTheme"
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp4"
@@ -443,7 +443,7 @@
 
                 <TextView
                     style="?textColorMenuTheme"
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp4"
@@ -482,7 +482,7 @@
 
                 <TextView
                     style="?textColorMenuTheme"
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp4"
@@ -520,7 +520,7 @@
 
                 <TextView
                     style="?textColorMenuTheme"
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp4"
@@ -558,7 +558,7 @@
                 <TextView
                     android:id="@+id/textView2"
                     style="?textColorMenuTheme"
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp4"
@@ -593,7 +593,7 @@
 
                 <TextView
                     style="?textColorMenuTheme"
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/dp4"
@@ -639,7 +639,7 @@
                 <TextView
                     android:id="@+id/textView3"
                     style="?textColorMenuTheme"
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp4"

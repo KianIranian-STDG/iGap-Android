@@ -74,7 +74,7 @@
                     </net.iGap.libs.rippleeffect.RippleView>
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile_Bold.ttf"
+                        android:fontFamily="@font/main_font_bold"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentTop="true"
@@ -111,7 +111,6 @@
                     android:visibility="visible">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/dp12"
@@ -137,7 +136,6 @@
                         <TextView
                             android:id="@+id/stns_txt_alert"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -177,7 +175,6 @@
                         <TextView
                             android:id="@+id/stns_txt_messagePreview"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -209,7 +206,6 @@
 
                         <TextView
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -245,7 +241,6 @@
 
                         <TextView
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -256,7 +251,6 @@
                         <TextView
                             android:id="@+id/stns_txt_vibrate_message_text"
                             style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -279,7 +273,6 @@
 
                         <TextView
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
@@ -291,7 +284,6 @@
                         <TextView
                             android:id="@+id/stns_txt_popupNotification_message_text"
                             style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -314,7 +306,6 @@
 
                         <TextView
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -325,7 +316,6 @@
                         <TextView
                             android:id="@+id/stns_txt_sound_text"
                             style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -357,7 +347,6 @@
                     android:visibility="visible">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -384,7 +373,6 @@
                         <TextView
                             android:id="@+id/stns_txt_alert_group"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -420,7 +408,6 @@
                         <TextView
                             android:id="@+id/stns_txt_messagePreview_group"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -451,7 +438,6 @@
 
                         <TextView
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -486,7 +472,6 @@
 
                         <TextView
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -497,7 +482,6 @@
                         <TextView
                             android:id="@+id/stns_txt_vibrate_group_text"
                             style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -520,7 +504,6 @@
 
                         <TextView
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -531,7 +514,6 @@
                         <TextView
                             android:id="@+id/stns_txt_popupNotification_group_text"
                             style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -554,7 +536,6 @@
 
                         <TextView
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -565,7 +546,6 @@
                         <TextView
                             android:id="@+id/stns_txt_sound_group_text"
                             style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
@@ -599,7 +579,6 @@
                     android:visibility="visible">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp12"
@@ -626,7 +605,6 @@
                         <TextView
                             android:id="@+id/stns_txt_app_sound"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -666,7 +644,6 @@
                         <TextView
                             android:id="@+id/stns_txt_app_vibrate"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -705,7 +682,6 @@
                         <TextView
                             android:id="@+id/stns_txt_app_preview"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
 
@@ -744,7 +720,6 @@
                         <TextView
                             android:id="@+id/stns_txt_chat_sound"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -786,7 +761,6 @@
                     android:visibility="gone">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingRight="@dimen/dp16"
@@ -811,7 +785,6 @@
                         <TextView
                             android:id="@+id/stns_txt_Contact_joined"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
 
@@ -859,7 +832,6 @@
                         <TextView
                             android:id="@+id/stns_txt_pinned_message"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
@@ -889,7 +861,6 @@
                     android:visibility="visible">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingRight="@dimen/dp12"
@@ -915,7 +886,6 @@
                         <TextView
                             android:id="@+id/stns_txt_separate_notifications"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -939,7 +909,6 @@
                     <TextView
                         android:id="@+id/stns_txt_title_keep_alive_service"
                         style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingEnd="@dimen/dp16"
@@ -967,7 +936,6 @@
                         <com.uncopt.android.widget.text.justify.JustifiedTextView
                             android:id="@+id/stns_txt_keep_alive_service"
                             style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -1022,7 +990,6 @@
                         <TextView
                             android:id="@+id/stns_txt_title_background_connection"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/st_background_connection"
@@ -1032,7 +999,6 @@
                         <TextView
                             android:id="@+id/stns_txt_background_connection"
                             style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/stns_txt_title_background_connection"
@@ -1075,7 +1041,6 @@
                         <TextView
                             android:id="@+id/stns_txt_badge_countent"
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
@@ -1100,7 +1065,6 @@
 
                         <TextView
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -1111,7 +1075,6 @@
                         <TextView
                             android:id="@+id/st_txt_Repeat_Notifications"
                             style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -1141,7 +1104,6 @@
                     android:visibility="visible">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingRight="@dimen/dp16"
@@ -1163,7 +1125,6 @@
 
                         <TextView
                             style="?textTitleColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
@@ -1173,7 +1134,6 @@
 
                         <TextView
                             style="?textSubColorSettingTheme"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical|top"

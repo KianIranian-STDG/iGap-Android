@@ -62,7 +62,6 @@
 
                                 <net.iGap.module.CustomTextViewMedium
                                     android:id="@+id/title"
-                                    fontPath="fonts/IRANSansMobile.ttf"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center_vertical|start"
@@ -75,7 +74,6 @@
 
                                 <net.iGap.module.CustomTextViewMedium
                                     android:id="@+id/subtitle"
-                                    fontPath="fonts/IRANSansMobile.ttf"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:singleLine="true"
@@ -97,7 +95,6 @@
                             <net.iGap.module.CustomTextViewMedium
                                 android:id="@+id/amountCard"
                                 style="?textTitleColorSettingTheme"
-                                fontPath="fonts/IRANSansMobile.ttf"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -137,7 +134,6 @@
 
                             <TextView
                                 android:id="@+id/pu_txt_title_desc"
-                                fontPath="fonts/IRANSansMobile.ttf"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/dp52"
@@ -150,7 +146,6 @@
 
                             <net.iGap.module.EditTextAdjustPan
                                 android:id="@+id/amount"
-                                fontPath="fonts/IRANSansMobile.ttf"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/dp32"
@@ -170,7 +165,6 @@
 
                             <TextView
                                 android:id="@+id/txtDescriptionMap"
-                                fontPath="fonts/IRANSansMobile.ttf"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/dp52"
@@ -183,7 +177,6 @@
 
                             <net.iGap.module.EditTextAdjustPan
                                 android:id="@+id/edtDescription"
-                                fontPath="fonts/IRANSansMobile.ttf"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/dp32"
@@ -206,7 +199,6 @@
                         <com.google.android.material.button.MaterialButton
                             style="?iGapButton"
                             android:id="@+id/pay_button"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/dp10"

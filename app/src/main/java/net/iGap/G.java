@@ -384,12 +384,6 @@ public class G extends ApplicationContext {
     public static ISignalingGetCallLog iSignalingGetCallLog;
     public static ISignalingCallBack iSignalingCallBack;
     public static ISignalingErrore iSignalingErrore;
-    public static Typeface typeface_IRANSansMobile;
-    public static Typeface typeface_IRANSansMobile_Bold;
-    public static Typeface typeface_Fontico;
-    public static Typeface typeface_FonticonNew;
-    public static Typeface typeface_neuropolitical;
-    public static Typeface typeface_iGap;
     public static boolean isPassCode;
     public static OneFragmentIsOpen oneFragmentIsOpen;
     public static boolean isFragmentMapActive = false; // for check network

@@ -147,7 +147,7 @@
 
                     <TextView
                         android:id="@+id/acs_txt_number_of_comment"
-                        fontPath="fonts/IRANSansMobile_Bold.ttf"
+                        android:fontFamily="@font/main_font_bold"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"

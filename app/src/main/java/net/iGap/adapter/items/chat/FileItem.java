@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.DbManager;
 import net.iGap.G;
@@ -183,7 +184,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             cslf_txt_file_name.setText("file_name.ext");
             cslf_txt_file_name.setTextColor(Color.parseColor(G.textBubble));
             setTextSize(cslf_txt_file_name, R.dimen.standardTextSize);
-            cslf_txt_file_name.setTypeface(G.typeface_IRANSansMobile_Bold, BOLD);
+            cslf_txt_file_name.setTypeface(ResourcesCompat.getFont(cslf_txt_file_name.getContext() , R.font.main_font_bold), BOLD);
             LinearLayout.LayoutParams layout_1000 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             cslf_txt_file_name.setLayoutParams(layout_1000);
             linearLayout_780.addView(cslf_txt_file_name);

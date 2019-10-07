@@ -36,6 +36,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -814,7 +815,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                 txtPhone.setVisibility(View.INVISIBLE);
                 chSelected.setVisibility(View.GONE);
                 btnRemove.setVisibility(View.VISIBLE);
-                btnRemove.setTypeface(G.typeface_IRANSansMobile);
+                btnRemove.setTypeface(ResourcesCompat.getFont(btnRemove.getContext() , R.font.main_font));
                 txtName.setText(data.displayName);
                 avatarHandler.getAvatar(new ParamWithAvatarType(imgAvatar, data.peerId).avatarType(AvatarHandler.AvatarType.USER));
 

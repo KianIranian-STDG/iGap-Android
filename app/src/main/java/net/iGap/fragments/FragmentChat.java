@@ -73,6 +73,7 @@ import androidx.cardview.widget.CardView;
 import androidx.collection.ArrayMap;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -1701,7 +1702,7 @@ public class FragmentChat extends BaseFragment
             RealmCallConfig callConfig = DbManager.getInstance().doRealmTask(realm -> {
                 return realm.where(RealmCallConfig.class).findFirst();
             });
-            
+
             if (callConfig != null) {
                 if (callConfig.isVoice_calling()) {
                     mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
@@ -2831,7 +2832,7 @@ public class FragmentChat extends BaseFragment
         //added run time -> counter of un read messages
         llScrollNavigate = rootView.findViewById(R.id.ac_ll_scrool_navigate);
         txtNewUnreadMessage = new BadgeView(getContext());
-        txtNewUnreadMessage.getTextView().setTypeface(G.typeface_IRANSansMobile);
+        txtNewUnreadMessage.getTextView().setTypeface(ResourcesCompat.getFont(txtNewUnreadMessage.getContext() , R.font.main_font));
         txtNewUnreadMessage.getTextView().setSingleLine();
         txtNewUnreadMessage.getTextView().setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});//set max length
         txtNewUnreadMessage.setBadgeColor(G.isDarkTheme ? Color.parseColor(Theme.default_notificationColor) : Color.parseColor(G.notificationColor));
@@ -6067,6 +6068,8 @@ public class FragmentChat extends BaseFragment
 
     private void sendButtonVisibility(boolean visibility) {
 
+        //Log.i(TAG, "sendButtonVisibility: "+visibility);
+
         if (animGone == null || animVisible == null) {
             animGone = AnimationUtils.loadAnimation(getContext(), R.anim.translate_exit_up);
             animVisible = AnimationUtils.loadAnimation(getContext(), R.anim.translate_enter_down);
@@ -6083,16 +6086,35 @@ public class FragmentChat extends BaseFragment
             isSendVisibilityAnimInProcess = false;
             isAttachVisibilityAnimInProcess = false;
             layoutAttachBottom.setVisibility(View.GONE);
+            //Log.i(TAG, "sendButtonVisibility: reset");
+
+        }
+
+        if (visibility && isAttachVisibilityAnimInProcess) {
+            animGone.reset();
+            animVisible.reset();
+            imvSendButton.clearAnimation();
+            layoutAttachBottom.clearAnimation();
+            isSendVisibilityAnimInProcess = false;
+            isAttachVisibilityAnimInProcess = false;
+            imvSendButton.setVisibility(View.GONE);
+            //Log.i(TAG, "sendButtonVisibility: reset2");
+
         }
 
         if (!visibility && !layoutAttachBottom.isShown()) {
+            //Log.i(TAG, "sendButtonVisibility: in if gone");
             if (isAttachVisibilityAnimInProcess) return;
             attachLayoutAnimateVisible();
         }
+        //Log.i(TAG, "sendButtonVisibility: gone skip");
+
         if (visibility && !imvSendButton.isShown()) {
+            //Log.i(TAG, "sendButtonVisibility: in if visi");
             if (isSendVisibilityAnimInProcess) return;
             sendButtonAnimateVisible();
         }
+        //Log.i(TAG, "sendButtonVisibility: visible");
 
     }
 
@@ -6107,6 +6129,8 @@ public class FragmentChat extends BaseFragment
                 isSendVisibilityAnimInProcess = true;
                 isAttachVisibilityAnimInProcess = false;
                 layoutAttachBottom.setVisibility(View.VISIBLE);
+                //Log.i(TAG, "sendButtonAnimateVisible: anim start");
+
             }
 
             @Override
@@ -6126,6 +6150,8 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onAnimationStart(Animation animation) {
                 imvSendButton.setVisibility(View.VISIBLE);
+                //Log.i(TAG, "sendButtonAnimateVisible: anim22 start");
+
             }
 
             @Override
@@ -6134,6 +6160,7 @@ public class FragmentChat extends BaseFragment
                 imvSendButton.clearAnimation();
                 layoutAttachBottom.clearAnimation();
                 edtChat.requestLayout();
+                //Log.i(TAG, "sendButtonAnimateVisible: anim end");
 
             }
 
@@ -6155,11 +6182,13 @@ public class FragmentChat extends BaseFragment
                 imvSendButton.setVisibility(View.VISIBLE);
                 isSendVisibilityAnimInProcess = false;
                 isAttachVisibilityAnimInProcess = true;
+                //Log.i(TAG, "onAnimationStart: gone start");
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
                 imvSendButton.setVisibility(View.GONE);
+                //Log.i(TAG, "onAnimationEnd: gone end");
                 layoutAttachBottom.startAnimation(animVisible);
             }
 
@@ -6173,6 +6202,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onAnimationStart(Animation animation) {
                 layoutAttachBottom.setVisibility(View.VISIBLE);
+                //Log.i(TAG, "onAnimationStart: gone 2 start");
             }
 
             @Override
@@ -6181,6 +6211,7 @@ public class FragmentChat extends BaseFragment
                 imvSendButton.clearAnimation();
                 layoutAttachBottom.clearAnimation();
                 edtChat.requestLayout();
+                //Log.i(TAG, "onAnimationEnd: gone 2 endded");
 
             }
 
@@ -6790,9 +6821,9 @@ public class FragmentChat extends BaseFragment
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = mReplayLayout.findViewById(R.id.replayTo);
             Utils.darkModeHandler(replayTo);
-            replayTo.setTypeface(G.typeface_IRANSansMobile);
+            replayTo.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext() , R.font.main_font));
             TextView replayFrom = mReplayLayout.findViewById(R.id.replyFrom);
-            replayFrom.setTypeface(G.typeface_IRANSansMobile);
+            replayFrom.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext() , R.font.main_font));
 
             FontIconTextView replayIcon = rootView.findViewById(R.id.lcr_imv_replay);
             Utils.darkModeHandler(replayIcon);
@@ -9010,47 +9041,48 @@ public class FragmentChat extends BaseFragment
             }
         }
 
-        TopSheetDialog topSheetDialog = new TopSheetDialog(getContext()).setListData(items, -1, position -> {
-            if (items.get(position).equals(getString(R.string.Search))) {
-                initLayoutSearchNavigation();
-                layoutToolbar.setVisibility(View.GONE);
-                ll_Search.setVisibility(View.VISIBLE);
-                if (!initHash) {
-                    initHash = true;
-                    initHashView();
-                }
-                G.handler.post(() -> editTextRequestFocus(edtSearchMessage));
-            } else if (items.get(position).equals(getString(R.string.clear_history))) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        onSelectRoomMenu("txtClearHistory", mRoomId);
+        if (getContext() != null) {
+            TopSheetDialog topSheetDialog = new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+                if (items.get(position).equals(getString(R.string.Search))) {
+                    initLayoutSearchNavigation();
+                    layoutToolbar.setVisibility(View.GONE);
+                    ll_Search.setVisibility(View.VISIBLE);
+                    if (!initHash) {
+                        initHash = true;
+                        initHashView();
                     }
-                }).negativeText(R.string.no).show();
-            } else if (items.get(position).equals(getString(R.string.delete_chat))) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.delete_chat).content(R.string.delete_chat_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        onSelectRoomMenu("txtDeleteChat", mRoomId);
-                    }
-                }).negativeText(R.string.no).show();
-            } else if (items.get(position).equals(getString(R.string.mute_notification)) || items.get(position).equals(getString(R.string.unmute_notification))) {
-                onSelectRoomMenu("txtMuteNotification", mRoomId);
-            } else if (items.get(position).equals(getString(R.string.chat_to_group))) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.convert_chat_to_group_title).content(R.string.convert_chat_to_group_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        //finish();
-                        finishChat();
-                        dialog.dismiss();
-                        G.handler.post(() -> G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId));
-                    }
-                }).show();
-            } else if (items.get(position).equals(getString(R.string.clean_up))) {
-                resetMessagingValue();
-                setDownBtnGone();
-                setCountNewMessageZero();
-                DbManager.getInstance().doRealmTask(realm -> {
+                    G.handler.post(() -> editTextRequestFocus(edtSearchMessage));
+                } else if (items.get(position).equals(getString(R.string.clear_history))) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            onSelectRoomMenu("txtClearHistory", mRoomId);
+                        }
+                    }).negativeText(R.string.no).show();
+                } else if (items.get(position).equals(getString(R.string.delete_chat))) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.delete_chat).content(R.string.delete_chat_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            onSelectRoomMenu("txtDeleteChat", mRoomId);
+                        }
+                    }).negativeText(R.string.no).show();
+                } else if (items.get(position).equals(getString(R.string.mute_notification)) || items.get(position).equals(getString(R.string.unmute_notification))) {
+                    onSelectRoomMenu("txtMuteNotification", mRoomId);
+                } else if (items.get(position).equals(getString(R.string.chat_to_group))) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.convert_chat_to_group_title).content(R.string.convert_chat_to_group_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            //finish();
+                            finishChat();
+                            dialog.dismiss();
+                            G.handler.post(() -> G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId));
+                        }
+                    }).show();
+                } else if (items.get(position).equals(getString(R.string.clean_up))) {
+                    resetMessagingValue();
+                    setDownBtnGone();
+                    setCountNewMessageZero();
+                    DbManager.getInstance().doRealmTask(realm -> {
                     RealmRoomMessage.ClearAllMessageRoomAsync(realm, mRoomId, new Realm.Transaction.OnSuccess() {
                         @Override
                         public void onSuccess() {
@@ -9065,45 +9097,44 @@ public class FragmentChat extends BaseFragment
                     });
                 });
 
+                } else if (items.get(position).equals(getString(R.string.report))) {
+                    dialogReport(false, 0);
+                } else if (items.get(position).equals(getString(R.string.SendMoney))) {
+                    showPaymentDialog();
+                } else if (items.get(position).equals(getString(R.string.export_chat))) {
+                    if (HelperPermission.grantedUseStorage()) {
+                        exportChat();
+                    } else {
+                        try {
+                            HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                                @Override
+                                public void Allow() {
+                                    exportChat();
+                                }
 
-            } else if (items.get(position).equals(getString(R.string.report))) {
-                dialogReport(false, 0);
-            } else if (items.get(position).equals(getString(R.string.SendMoney))) {
-                showPaymentDialog();
-            } else if (items.get(position).equals(getString(R.string.export_chat))) {
-                if (HelperPermission.grantedUseStorage()) {
-                    exportChat();
-                } else {
-                    try {
-                        HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
-                            @Override
-                            public void Allow() {
-                                exportChat();
-                            }
-
-                            @Override
-                            public void deny() {
-                                Toast.makeText(G.currentActivity, R.string.export_message, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                                @Override
+                                public void deny() {
+                                    Toast.makeText(G.currentActivity, R.string.export_message, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
+                } else if (items.get(position).equals(getString(R.string.stop))) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.stop).content(R.string.stop_message_bot).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            //   onSelectRoomMenu("txtClearHistory", mRoomId);
+                            closeWebViewForSpecialUrlChat(true);
+                            //  popBackStackFragment();
+
+                        }
+                    }).negativeText(R.string.no).show();
                 }
-            } else if (items.get(position).equals(getString(R.string.stop))) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.stop).content(R.string.stop_message_bot).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        //   onSelectRoomMenu("txtClearHistory", mRoomId);
-                        closeWebViewForSpecialUrlChat(true);
-                        //  popBackStackFragment();
-
-                    }
-                }).negativeText(R.string.no).show();
-            }
-        });
-        topSheetDialog.show();
-
+            });
+            topSheetDialog.show();
+        }
             /*final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
             View v = dialog.getCustomView();
 

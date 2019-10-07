@@ -50,9 +50,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import io.github.inflationx.calligraphy3.CalligraphyConfig;
-import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
-import io.github.inflationx.viewpump.ViewPump;
 import io.realm.CompactOnLaunchCallback;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -539,13 +536,6 @@ public final class StartupActions {
                 break;
         }
 
-        ViewPump.init(ViewPump.builder()
-                .addInterceptor(new CalligraphyInterceptor(
-                        new CalligraphyConfig.Builder()
-                                .setDefaultFontPath("fonts/IRANSansMobile.ttf")
-                                .setFontAttrId(R.attr.fontPath)
-                                .build()))
-                .build());
     }
 
     private void initializeGlobalVariables() {

@@ -29,7 +29,6 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
 
-import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
 
 public class BaseFragment extends SwipeBackFragment {
@@ -40,8 +39,7 @@ public class BaseFragment extends SwipeBackFragment {
 
     @Override
     public void onAttach(Context context) {
-        //super.onAttach(context);
-        super.onAttach(ViewPumpContextWrapper.wrap(context));
+        super.onAttach(context);
         G.fragmentActivity = (FragmentActivity) context;
         currentFragment = this;
         hideKeyboard();
@@ -62,7 +60,6 @@ public class BaseFragment extends SwipeBackFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         avatarHandler = new AvatarHandler();
-        checkFont();
         super.onCreate(savedInstanceState);
 
         getSwipeBackLayout().setEdgeOrientation(SwipeBackLayout.EDGE_LEFT);
@@ -120,38 +117,6 @@ public class BaseFragment extends SwipeBackFragment {
             }
         }
     }
-
-    /**
-     * check the selected language user and set the language if change it
-     */
-    private void checkFont() {
-
-        if (G.typeface_IRANSansMobile == null) {
-            G.typeface_IRANSansMobile = Typeface.createFromAsset(G.context.getAssets(), "fonts/IRANSansMobile.ttf");
-        }
-
-        if (G.typeface_IRANSansMobile_Bold == null) {
-            G.typeface_IRANSansMobile_Bold = Typeface.createFromAsset(G.context.getAssets(), "fonts/IRANSansMobile_Bold.ttf");
-        }
-
-        if (G.typeface_Fontico == null) {
-            G.typeface_Fontico = Typeface.createFromAsset(G.context.getAssets(), "fonts/iGap-Fontico.ttf");
-        }
-
-
-        if (G.typeface_FonticonNew == null) {
-            G.typeface_FonticonNew = Typeface.createFromAsset(G.context.getAssets(), "fonts/font_icon.ttf");
-        }
-
-        if (G.typeface_neuropolitical == null) {
-            G.typeface_neuropolitical = Typeface.createFromAsset(G.context.getAssets(), "fonts/neuropolitical.ttf");
-        }
-
-        if (G.typeface_iGap == null) {
-            G.typeface_iGap = Typeface.createFromAsset(G.context.getAssets(), "fonts/font_icon.ttf");
-        }
-    }
-
 
     protected void hideKeyboard() {
         if (getActivity() != null) {

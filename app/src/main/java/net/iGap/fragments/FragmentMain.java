@@ -198,6 +198,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
             if (mSelectedRoomList.size() == 0) {
                 disableMultiSelect();
+                mHelperToolbar.getLeftButton().setVisibility(View.GONE);
                 return;
             }
 
@@ -464,7 +465,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             @Override
             public boolean onLongClick(RoomListCell roomListCell, RealmRoom realmRoom, int position) {
 
-                if (!isChatMultiSelectEnable) {
+                if (!isChatMultiSelectEnable && FragmentChat.mForwardMessages == null) {
                     enableMultiSelect();
                     selectedItemCountTv.setVisibility(View.VISIBLE);
                     multiSelectRv.setVisibility(View.VISIBLE);
@@ -899,6 +900,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             mHelperToolbar.getmSearchBox().setVisibility(View.VISIBLE);
             mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
             mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
+            mHelperToolbar.getLeftButton().setVisibility(View.GONE);
             if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
             mSelectedRoomList.clear();
             roomListAdapter.setMultiSelect(false);

@@ -194,7 +194,6 @@
                     style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/main_font"
                     android:onClick="@{()-> viewModel.onSignMessageClick()}"
                     android:padding="8dp"
                     android:text="@string/sign_message_title"

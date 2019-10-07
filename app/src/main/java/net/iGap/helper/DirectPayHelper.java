@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
@@ -74,7 +76,7 @@ public class DirectPayHelper {
         TextView descriptionTxt = v.findViewById(R.id.description);
         TextView priceTxt = v.findViewById(R.id.price);
         TextView priceTitle = v.findViewById(R.id.priceTitle);
-        priceTxt.setTypeface(G.typeface_IRANSansMobile_Bold);
+        priceTxt.setTypeface(ResourcesCompat.getFont(priceTxt.getContext() , R.font.main_font_bold));
         priceTitle.setText(G.currentActivity.getString(R.string.price) + ":");
         titleTxt.setText(title);
         descriptionTxt.setText(description);

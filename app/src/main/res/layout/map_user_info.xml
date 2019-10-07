@@ -90,7 +90,7 @@
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/txt_name_info_map"
-                    fontPath="fonts/IRANSansMobile_Bold.ttf"
+                    android:fontFamily="@font/main_font_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
@@ -118,7 +118,6 @@
 
                 <TextView
                     android:id="@+id/txt_info_comment"
-                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

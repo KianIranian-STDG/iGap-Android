@@ -14,7 +14,6 @@
         android:textSize="@dimen/largeTextSize"
         style="?textTitleColorSettingTheme"
         android:gravity="center"
-        android:fontFamily="@font/main_font"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

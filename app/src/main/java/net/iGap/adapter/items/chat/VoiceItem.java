@@ -305,6 +305,21 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         super.updateLayoutForSend(holder);
         holder.txt_Timer.setTextColor(Color.parseColor(G.textTitleTheme));
         holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
+
+        ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.UNRECOGNIZED;
+        if (mMessage.status != null) {
+            try {
+                status = ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (status == ProtoGlobal.RoomMessageStatus.LISTENED) {
+            holder.listenView.setVisibility(View.GONE);
+        } else {
+            holder.listenView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -319,6 +334,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             holder.txt_Timer.setTextColor(holder.itemView.getResources().getColor(R.color.grayNewDarker));
             holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
         }
+        holder.listenView.setVisibility(View.GONE);
     }
 
     @NotNull
@@ -343,6 +359,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         private ConstraintLayout rootView;
         private ConstraintSet set;
         private AudioWave waveView;
+        private View listenView;
 
         public ViewHolder(View view) {
             super(view);
@@ -376,6 +393,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             setTypeFace(txt_Timer);
             Utils.darkModeHandler(txt_Timer);
 
+            listenView = new View(getContext());
+            listenView.setBackground(getResources().getDrawable(R.drawable.shape_voice_item_listen));
+            listenView.setId(R.id.view_listen);
 
             rootView = new ConstraintLayout(getContext());
             set = new ConstraintSet();
@@ -415,6 +435,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             set.constrainWidth(waveView.getId(), dpToPx(190));
             set.constrainHeight(waveView.getId(), dpToPx(30));
 
+            set.constrainWidth(listenView.getId(), LayoutCreator.dp(4));
+            set.constrainHeight(listenView.getId(), LayoutCreator.dp(4));
+
             set.connect(waveView.getId(), ConstraintSet.LEFT, btnPlayMusic.getId(), ConstraintSet.RIGHT, dpToPx(4));
             set.centerVertically(waveView.getId(), ConstraintSet.PARENT_ID);
             rootView.addView(waveView);
@@ -427,6 +450,11 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             set.connect(progress.getId(), ConstraintSet.RIGHT, btnPlayMusic.getId(), ConstraintSet.RIGHT);
             set.connect(progress.getId(), ConstraintSet.LEFT, btnPlayMusic.getId(), ConstraintSet.LEFT);
             rootView.addView(progress);
+
+            set.connect(listenView.getId(), ConstraintSet.LEFT, txt_Timer.getId(), ConstraintSet.RIGHT, LayoutCreator.dp(8));
+            set.connect(listenView.getId(), ConstraintSet.TOP, txt_Timer.getId(), ConstraintSet.TOP);
+            set.connect(listenView.getId(), ConstraintSet.BOTTOM, txt_Timer.getId(), ConstraintSet.BOTTOM);
+            rootView.addView(listenView);
 
             set.constrainWidth(txt_Timer.getId(), ConstraintSet.WRAP_CONTENT);
             set.constrainHeight(txt_Timer.getId(), ConstraintSet.WRAP_CONTENT);

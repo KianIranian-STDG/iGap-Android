@@ -18,6 +18,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
@@ -278,11 +279,11 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     }
 
     protected void setTypeFace(TextView textView) {
-        textView.setTypeface(G.typeface_IRANSansMobile);
+        textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
     }
 
     protected void setTypeFace(TextView textView, int style) {
-        textView.setTypeface(G.typeface_IRANSansMobile, style);
+        textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font), style);
     }
 
     protected MessageProgress getProgressBar(int sizeSrc) {

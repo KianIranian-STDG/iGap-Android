@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -195,7 +196,7 @@ public class MakeButtons {
             btn1.setGravity(CENTER);
             btn1.setPadding(i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp2));
             btn1.setMaxLines(1);
-            btn1.setTypeface(G.typeface_IRANSansMobile);
+            btn1.setTypeface(ResourcesCompat.getFont(btn1.getContext() , R.font.main_font));
             if (entity.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
                 btn1.setText(G.context.getString(R.string.cardToCardBtnText));
             } else {

@@ -54,7 +54,7 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile_Bold.ttf"
+                        android:fontFamily="@font/main_font_bold"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentTop="true"
@@ -111,7 +111,7 @@
                     android:visibility="gone">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile_Bold.ttf"
+                        android:fontFamily="@font/main_font_bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -129,7 +129,6 @@
 
                     <TextView
                         android:id="@+id/st_txt_notifyAndSound"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:gravity="center_vertical|start"
@@ -152,7 +151,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
@@ -166,7 +164,6 @@
                             android:textStyle="normal" />
 
                         <TextView
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -190,7 +187,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
@@ -203,7 +199,6 @@
                             android:textStyle="normal" />
 
                         <TextView
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -240,7 +235,6 @@
 
                     <TextView
                         android:id="@+id/stps_txt_blocked_user"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
                         android:gravity="center_vertical|start"
@@ -261,7 +255,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
@@ -276,7 +269,6 @@
 
                         <TextView
                             android:id="@+id/stps_txt_who_can_see_my_avatar"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -302,7 +294,6 @@
                         >
 
                         <TextView
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
@@ -318,7 +309,6 @@
 
                         <TextView
                             android:id="@+id/stps_txt_who_can_invite_me_to_Channel"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -342,7 +332,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
@@ -358,7 +347,6 @@
 
                         <TextView
                             android:id="@+id/stps_txt_who_can_invite_me_to_group"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -382,7 +370,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
@@ -397,7 +384,6 @@
 
                         <TextView
                             android:id="@+id/stps_txt_who_can_voice_call_to_me"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -421,7 +407,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
@@ -436,7 +421,6 @@
 
                         <TextView
                             android:id="@+id/stps_txt_who_can_video_call_to_me"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -460,7 +444,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
@@ -475,7 +458,6 @@
 
                         <TextView
                             android:id="@+id/stps_who_can_see_my_last_seen"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -508,7 +490,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:gravity="center_vertical|start"
@@ -522,7 +503,6 @@
                         android:visibility="gone" />
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/dp8"
@@ -541,7 +521,6 @@
                         android:visibility="gone" />
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp48"
                         android:gravity="center_vertical|start"
@@ -556,7 +535,6 @@
 
                     <TextView
                         android:id="@+id/stps_passCode"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
                         android:gravity="center_vertical|start"
@@ -571,7 +549,6 @@
 
                     <TextView
                         android:id="@+id/stps_twoStepVerification"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
                         android:gravity="center_vertical|start"
@@ -586,7 +563,6 @@
 
                     <TextView
                         android:id="@+id/stps_activitySessions"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
                         android:gravity="center_vertical|start"
@@ -622,7 +598,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/dp16"
@@ -642,7 +617,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight=".5"
@@ -657,7 +631,6 @@
 
                         <TextView
                             android:id="@+id/stps_txt_Self_destruction"
-                            fontPath="fonts/IRANSansMobile.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
@@ -674,7 +647,6 @@
                     </LinearLayout>
 
                     <com.uncopt.android.widget.text.justify.JustifiedTextView
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="top"
