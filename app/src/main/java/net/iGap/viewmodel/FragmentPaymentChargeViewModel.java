@@ -19,6 +19,9 @@ import androidx.lifecycle.ViewModel;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.MciApi;
+import net.iGap.api.apiService.ApiInitializer;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.errorhandler.ErrorModel;
@@ -36,7 +39,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class FragmentPaymentChargeViewModel extends ViewModel {
+public class FragmentPaymentChargeViewModel extends BaseAPIViewModel {
 
     private ObservableInt showDetail = new ObservableInt(View.GONE);
     private ObservableInt observeTarabord = new ObservableInt(View.GONE);
@@ -304,28 +307,19 @@ public class FragmentPaymentChargeViewModel extends ViewModel {
     }
 
     private void sendRequestChargeMci(String phoneNumber, int price) {
-        new RetrofitFactory().getMciRetrofit().create(MciApi.class).topUpPurchase(phoneNumber, price).enqueue(new Callback<MciPurchaseResponse>() {
+        new ApiInitializer<MciPurchaseResponse>().initAPI(
+                new RetrofitFactory().getMciRetrofit().create(MciApi.class).topUpPurchase(phoneNumber, price),
+                this, new ResponseCallback<MciPurchaseResponse>() {
             @Override
-            public void onResponse(@NotNull Call<MciPurchaseResponse> call, @NotNull Response<MciPurchaseResponse> response) {
+            public void onSuccess(MciPurchaseResponse data) {
                 observeEnabledPayment.set(true);
-                if (response.code() == 200) {
-                    goToPaymentPage.setValue(response.body().getToken());
-                } else {
-                    try {
-                        showMciPaymentError.setValue(new ErrorHandler().getError(response.code(), response.errorBody().string()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                goToPaymentPage.setValue(data.getToken());
             }
 
             @Override
-            public void onFailure(@NotNull Call<MciPurchaseResponse> call, @NotNull Throwable t) {
-                t.printStackTrace();
+            public void onError(ErrorModel error) {
                 observeEnabledPayment.set(true);
-                if (new ErrorHandler().checkHandShakeFailure(t)) {
-                    needUpdate.setValue(true);
-                }
+                showMciPaymentError.setValue(error);
             }
         });
     }
