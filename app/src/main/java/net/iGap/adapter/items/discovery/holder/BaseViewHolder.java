@@ -311,7 +311,18 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 CardToCardHelper.CallCardToCard(activity);
                 break;
             case IVANDSCORE:
-                ActivityMain.doIvandScore(discoveryField.value, activity);
+                new MaterialDialog.Builder(activity)
+                        .content(R.string.are_you_sure)
+                        .positiveText(R.string.yes)
+                        .negativeText(R.string.no)
+                        .onPositive((dialog, which) -> {
+                            dialog.dismiss();
+                            ActivityMain.doIvandScore(discoveryField.value, activity);
+                        })
+                        .onNegative((dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
                 break;
             case NONE:
                 break;
