@@ -55,12 +55,14 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnClientCheckInviteLink;
+import net.iGap.interfaces.OnClientGetRoomResponse;
 import net.iGap.interfaces.OnClientJoinByInviteLink;
 import net.iGap.interfaces.OnClientResolveUsername;
 import net.iGap.libs.Tuple;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructMessageOption;
+import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoClientResolveUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -70,6 +72,7 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientCheckInviteLink;
+import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestClientGetRoomHistory;
 import net.iGap.request.RequestClientJoinByInviteLink;
 import net.iGap.request.RequestClientResolveUsername;
@@ -1229,7 +1232,27 @@ public class HelperUrl {
                             }
                         }
                         else {
-                            // Do Nothing
+                            G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
+                                @Override
+                                public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, RequestClientGetRoom.IdentityClientGetRoom identity) {
+                                    G.onClientGetRoomResponse = null;
+                                    G.handler.postDelayed(() -> {
+                                        new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity(activity);
+                                        G.onChatGetRoom = null;
+                                    }, 500);
+                                }
+
+                                @Override
+                                public void onError(int majorCode, int minorCode) {
+
+                                }
+
+                                @Override
+                                public void onTimeOut() {
+
+                                }
+                            };
+                            new RequestClientGetRoom().clientGetRoom(roomId, null);
                             Toast.makeText(activity, "Please Wait...", Toast.LENGTH_SHORT).show();
                         }
                     }
