@@ -163,7 +163,7 @@ public class FragmentThemColorViewModel extends ViewModel {
         showDialogChangeTheme.setValue(new ChangeTheme(config, isDark));
     }
 
-    public void setNewTheme(ChangeTheme newTheme, boolean applyColorsToCustomize, Context context) {
+    public void setNewTheme(ChangeTheme newTheme, boolean applyColorsToCustomize) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(SHP_SETTING.KEY_THEME_COLOR, newTheme.getConfig());
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, newTheme.isDark());
