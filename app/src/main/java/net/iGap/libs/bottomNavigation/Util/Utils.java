@@ -24,37 +24,37 @@ public class Utils {
         return (int) (px / Resources.getSystem().getDisplayMetrics().density);
     }
 
-    public static void darkModeHandler(View view) {
+    /*public static void darkModeHandler(View view) {
         if (G.isDarkTheme) {
             view.setBackgroundColor(view.getContext().getResources().getColor(R.color.background_setting_dark));
         } else {
             view.setBackgroundColor(view.getContext().getResources().getColor(R.color.white));
         }
-    }
+    }*/
 
-    public static void setCardsBackground(CardView cardView, int light, int dark) {
+    /*public static void setCardsBackground(CardView cardView, int light, int dark) {
         if (G.isDarkTheme) {
             cardView.setCardBackgroundColor(context.getResources().getColor(dark));
         } else {
             cardView.setCardBackgroundColor(context.getResources().getColor(light));
         }
-    }
+    }*/
 
-    public static void setBackgroundColorGray(View view) {
+    /*public static void setBackgroundColorGray(View view) {
         if (G.isDarkTheme) {
             view.setBackgroundColor(view.getContext().getResources().getColor(R.color.gray_300));
         } else {
             view.setBackgroundColor(view.getContext().getResources().getColor(R.color.gray_3c));
         }
-    }
+    }*/
 
-    public static void darkModeHandlerGray(View view) {
+    /*public static void darkModeHandlerGray(View view) {
         if (G.isDarkTheme) {
             view.setBackgroundColor(view.getContext().getResources().getColor(R.color.gray_4c));
         } else {
             view.setBackgroundColor(view.getContext().getResources().getColor(R.color.bottomSheetHeaderLine));
         }
-    }
+    }*/
 
     public static void darkModeHandlerGray(TextView textView) {
         textView.setTextColor(Color.parseColor(G.textSubTheme));
@@ -64,13 +64,13 @@ public class Utils {
         textView.setTextColor(Color.parseColor(G.textTitleTheme));
     }
 
-    public static int darkModeHandler(Context context) {
+    /*public static int darkModeHandler(Context context) {
         if (G.isDarkTheme) {
             return context.getResources().getColor(R.color.white);
         } else {
             return context.getResources().getColor(R.color.black);
         }
-    }
+    }*/
 
 
     public static int getScreenHeight() {

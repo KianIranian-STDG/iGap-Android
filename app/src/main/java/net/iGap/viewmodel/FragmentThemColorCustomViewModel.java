@@ -141,10 +141,10 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
 
                         case R.string.app_theme:
 
-                            G.appBarColor = "#" + Integer.toHexString(picker.getColor());
-                            editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
-                            editor.apply();
-                            appBarColorClick(0);
+//                            G.appBarColor = "#" + Integer.toHexString(picker.getColor());
+//                            editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
+//                            editor.apply();
+//                            appBarColorClick(0);
 
 
                             break;
@@ -203,7 +203,7 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
     private void getInfo() {
         sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-        String appBarColor = sharedPreferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Theme.default_appBarColor);
+        /*String appBarColor = sharedPreferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Theme.default_appBarColor);*/
         String notificationColor = sharedPreferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Theme.default_notificationColor);
         String toggleButtonColor = sharedPreferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Theme.default_toggleButtonColor);
         String attachmentColor = sharedPreferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Theme.default_attachmentColor);
@@ -212,7 +212,7 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
 
         //***********************
         GradientDrawable bgShape = (GradientDrawable) fragmentThemColorCustomBinding.asnImgTitleBarColor.getBackground();
-        bgShape.setColor(Color.parseColor(appBarColor));
+        /*bgShape.setColor(Color.parseColor(appBarColor));*/
 
         //***********************
 
@@ -248,7 +248,7 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
 
         if (fragmentThemColorCustomBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentThemColorCustomBinding.asnImgTitleBarColor.getBackground();
-            bgShape.setColor(Color.parseColor(G.appBarColor));
+        //    bgShape.setColor(Color.parseColor(G.appBarColor));
         }
     }
 

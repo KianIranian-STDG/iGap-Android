@@ -629,7 +629,7 @@ public final class AppUtils {
 
         try {
 
-            progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(G.progressColor), PorterDuff.Mode.SRC_IN);
+            progressBar.getIndeterminateDrawable().setColorFilter(new Theme().getAccentColor(progressBar.getContext()), PorterDuff.Mode.SRC_IN);
 
             //  getResources().getColor(R.color.toolbar_background)
 
