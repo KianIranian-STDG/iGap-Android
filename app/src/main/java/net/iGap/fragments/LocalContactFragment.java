@@ -1,8 +1,11 @@
 package net.iGap.fragments;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +46,9 @@ import java.util.TimerTask;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static net.iGap.helper.LayoutCreator.dpToPx;
+
+
 public class LocalContactFragment extends BaseFragment implements ToolbarListener, OnPhoneContact , Contacts.ContactCallback {
 
     public List<StructListOfContact> phoneContactsList = new ArrayList<>();
@@ -54,6 +60,8 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
     private FastItemAdapter fastItemAdapter;
     private RecyclerView recyclerView;
     private boolean inSearchMode = false;
+    private int recyclerRowsHeight = 0 ;
+    private int deviceScreenHeight = 0 ;
 
 
     @Nullable
@@ -73,6 +81,11 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         toolbarLayout = rootView.findViewById(R.id.ll_localContact_toolbar);
         loadingPb = rootView.findViewById(R.id.pb_localContact);
         toolbarInit();
+
+        //calculate these for recycler pagination
+        recyclerRowsHeight = getResources().getDimensionPixelSize(R.dimen.dp60);
+        deviceScreenHeight = getDeviceScreenHeight();
+
 
         recyclerView = rootView.findViewById(R.id.rv_localContact);
 
@@ -175,6 +188,14 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         mHelperToolbar.setListener(this);
 
         toolbarLayout.addView(mHelperToolbar.getView());
+    }
+
+    private int getDeviceScreenHeight(){
+        if (getActivity() == null) return -1;
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size.y ;
     }
 
     @Override
@@ -326,7 +347,10 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
                 loadingPb.setVisibility(View.GONE);
 
                 //check if it was less 10 call automatically because scroll not work
-                if (phoneContactsList.size() < 10 && !Contacts.isEndLocal) {
+                int minItem = deviceScreenHeight / recyclerRowsHeight ;
+                if (minItem < 4) minItem = 5 ;
+
+                if (phoneContactsList.size() < minItem && !Contacts.isEndLocal) {
                     loadingPb.setVisibility(View.VISIBLE);
                     new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
