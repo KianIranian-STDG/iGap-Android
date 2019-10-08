@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -20,8 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -36,8 +33,6 @@ import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 
-import org.paygear.model.Contact;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -46,10 +41,8 @@ import java.util.TimerTask;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-import static net.iGap.helper.LayoutCreator.dpToPx;
 
-
-public class LocalContactFragment extends BaseFragment implements ToolbarListener, OnPhoneContact , Contacts.ContactCallback {
+public class LocalContactFragment extends BaseFragment implements ToolbarListener, OnPhoneContact, Contacts.ContactCallback {
 
     public List<StructListOfContact> phoneContactsList = new ArrayList<>();
     private View rootView;
@@ -57,11 +50,11 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
     private AdapterListContact adapterListContact;
     private LinearLayout toolbarLayout;
     private ProgressBar loadingPb;
-    private FastItemAdapter fastItemAdapter;
     private RecyclerView recyclerView;
+    private TextView txtNoItem;
     private boolean inSearchMode = false;
-    private int recyclerRowsHeight = 0 ;
-    private int deviceScreenHeight = 0 ;
+    private int recyclerRowsHeight = 0;
+    private int deviceScreenHeight = 0;
 
 
     @Nullable
@@ -71,7 +64,6 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         G.onPhoneContact = this;
         Contacts.localPhoneContactId = 0;
         Contacts.getContact = true;
-        fastItemAdapter = new FastItemAdapter();
         return rootView;
     }
 
@@ -80,6 +72,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         super.onViewCreated(view, savedInstanceState);
         toolbarLayout = rootView.findViewById(R.id.ll_localContact_toolbar);
         loadingPb = rootView.findViewById(R.id.pb_localContact);
+        txtNoItem = rootView.findViewById(R.id.txt_no_item);
         toolbarInit();
 
         //calculate these for recycler pagination
@@ -97,7 +90,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                if (!inSearchMode || mHelperToolbar.getEditTextSearch().getText().toString().trim().equals("")){
+                if (!inSearchMode || mHelperToolbar.getEditTextSearch().getText().toString().trim().equals("")) {
                     if (Contacts.isEndLocal) {
                         return;
                     }
@@ -111,7 +104,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         mHelperToolbar.getEditTextSearch().setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
                     cancelSearchTimer();
                     String text = mHelperToolbar.getEditTextSearch().getText().toString().trim();
@@ -126,13 +119,13 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
 
     }
 
-    private Timer mTimerSearch ;
-    private TimerTask mTimerTaskSearch ;
-    private byte mSearchCurrentTime = 0 ;
+    private Timer mTimerSearch;
+    private TimerTask mTimerTaskSearch;
+    private byte mSearchCurrentTime = 0;
 
-    private void startOrReStartSearchTimer(){
+    private void startOrReStartSearchTimer() {
 
-        mSearchCurrentTime = 0 ;
+        mSearchCurrentTime = 0;
         cancelSearchTimer();
 
         if (mTimerSearch == null) {
@@ -140,32 +133,32 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
             mTimerTaskSearch = new TimerTask() {
                 @Override
                 public void run() {
-                    if (mSearchCurrentTime > 2){
+                    if (mSearchCurrentTime > 2) {
 
                         String text = mHelperToolbar.getEditTextSearch().getText().toString().trim();
                         if (!text.equals(""))
-                            G.handler.post(()-> new SearchAsync(text).execute());
+                            G.handler.post(() -> new SearchAsync(text).execute());
 
                         cancelSearchTimer();
 
-                    }else {
-                        mSearchCurrentTime ++ ;
+                    } else {
+                        mSearchCurrentTime++;
                     }
                 }
             };
 
             mTimerSearch = new Timer();
-            mTimerSearch.schedule(mTimerTaskSearch , 1000 , 5);
+            mTimerSearch.schedule(mTimerTaskSearch, 1000, 5);
         }
     }
 
     private void cancelSearchTimer() {
 
         if (mTimerSearch != null) {
-            mSearchCurrentTime = 0 ;
+            mSearchCurrentTime = 0;
             mTimerSearch.cancel();
-            mTimerTaskSearch = null ;
-            mTimerSearch = null ;
+            mTimerTaskSearch = null;
+            mTimerSearch = null;
         }
 
     }
@@ -190,12 +183,12 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         toolbarLayout.addView(mHelperToolbar.getView());
     }
 
-    private int getDeviceScreenHeight(){
+    private int getDeviceScreenHeight() {
         if (getActivity() == null) return -1;
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        return size.y ;
+        return size.y;
     }
 
     @Override
@@ -210,6 +203,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         recyclerView.setAdapter(adapterListContact);
         cancelSearchTimer();
         inSearchMode = false;
+        checkLocalContactIsEmpty(phoneContactsList);
     }
 
     @Override
@@ -239,11 +233,12 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
             if (phoneContactsList.get(i).displayName.toLowerCase().contains(text.toLowerCase()))
                 searchContact.add(phoneContactsList.get(i));
         }*/
-        if (text.trim().equals("")){
+        if (text.trim().equals("")) {
             recyclerView.setVisibility(View.VISIBLE);
             recyclerView.setAdapter(adapterListContact);
+            checkLocalContactIsEmpty(phoneContactsList);
             cancelSearchTimer();
-        }else {
+        } else {
             startOrReStartSearchTimer();
         }
     }
@@ -258,9 +253,9 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         new AddAsync(contacts, true).execute();
     }
 
-    private class SearchAsync extends AsyncTask<Void , Void , Void>{
+    private class SearchAsync extends AsyncTask<Void, Void, Void> {
 
-        private String text ;
+        private String text;
 
         public SearchAsync(String text) {
             this.text = text;
@@ -275,7 +270,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         @Override
         protected Void doInBackground(Void... voids) {
 
-            Contacts.getSearchContact(text.trim() , LocalContactFragment.this);
+            Contacts.getSearchContact(text.trim(), LocalContactFragment.this);
 
             return null;
         }
@@ -288,7 +283,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
 
         public AddAsync(ArrayList<StructListOfContact> contacts, boolean isSearch) {
             this.contacts = contacts;
-            this.isSearch = isSearch ;
+            this.isSearch = isSearch;
         }
 
         @Override
@@ -301,13 +296,13 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
                     s = s.replace(" ", "");
                 if (!s.startsWith("98"))
                     s = "98" + s;
-                if (isSearch){
-                    if (HelperString.isInteger(s)){
+                if (isSearch) {
+                    if (HelperString.isInteger(s)) {
                         contacts.get(i).setPhone(s);
-                    }else {
+                    } else {
                         contacts.remove(contacts.get(i));
                     }
-                }else {
+                } else {
                     contacts.get(i).setPhone(s);
                 }
             }
@@ -336,27 +331,42 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
         @Override
         protected void onPostExecute(ArrayList<StructListOfContact> slc) {
 
-            if (isSearch){
+            if (isSearch) {
                 recyclerView.setVisibility(View.VISIBLE);
                 recyclerView.setAdapter(new AdapterListContact(slc, getContext()));
                 loadingPb.setVisibility(View.GONE);
 
-            }else {
+                checkLocalContactIsEmpty(slc);
+
+            } else {
                 phoneContactsList.addAll(slc);
                 adapterListContact.notifyDataSetChanged();
                 loadingPb.setVisibility(View.GONE);
 
                 //check if it was less 10 call automatically because scroll not work
-                int minItem = deviceScreenHeight / recyclerRowsHeight ;
-                if (minItem < 4) minItem = 5 ;
+                int minItem = deviceScreenHeight / recyclerRowsHeight;
+                if (minItem < 4) minItem = 5;
 
                 if (phoneContactsList.size() < minItem && !Contacts.isEndLocal) {
                     loadingPb.setVisibility(View.VISIBLE);
                     new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
 
+                checkLocalContactIsEmpty(phoneContactsList);
             }
             super.onPostExecute(slc);
         }
+    }
+
+    private void checkLocalContactIsEmpty(List<StructListOfContact> contacts) {
+
+        if (Contacts.isEndLocal && contacts.size() == 0) {
+            txtNoItem.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            txtNoItem.setVisibility(View.GONE);
+        }
+
     }
 }
