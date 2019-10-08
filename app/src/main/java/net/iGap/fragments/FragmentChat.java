@@ -225,7 +225,6 @@ import net.iGap.interfaces.OpenBottomSheetItem;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.MyWebViewClient;
 import net.iGap.libs.Tuple;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -2329,11 +2328,13 @@ public class FragmentChat extends BaseFragment
         recyclerView = rootView.findViewById(R.id.chl_recycler_view_chat);
 
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
+        Log.wtf(this.getClass().getName(), "value of background: " + backGroundPath);
         imgBackGround = rootView.findViewById(R.id.chl_img_view_chat);
         if (backGroundPath.length() > 0) {
             File f = new File(backGroundPath);
             if (f.exists()) {
                 try {
+                    Log.wtf(this.getClass().getName(), "set image");
                     Drawable d = Drawable.createFromPath(f.getAbsolutePath());
                     imgBackGround.setImageDrawable(d);
                 } catch (OutOfMemoryError e) {
@@ -2344,17 +2345,15 @@ public class FragmentChat extends BaseFragment
                 }
             } else {
                 try {
+                    Log.wtf(this.getClass().getName(), "set color");
                     imgBackGround.setBackgroundColor(Color.parseColor(backGroundPath));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         } else {
-            if (G.themeColor == Theme.DARK) {
-                imgBackGround.setImageResource(R.drawable.chat_bg_dark);
-            } else {
-                //todo: fixed load default background in light mode
-            }
+            Log.wtf(this.getClass().getName(), "here KB 24");
+            imgBackGround.setImageResource(R.drawable.chat_default_background_pattern);
         }
 
     }

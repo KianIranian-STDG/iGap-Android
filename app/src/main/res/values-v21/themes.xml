@@ -31,6 +31,9 @@
         <item name="iGapSendMessageOtherTextColor">#cccccc</item>
         <item name="iGapSendMessageTextColor">#AAAAAA</item>
 
+        <item name="iGapLinkColor">#00BCD4</item>
+        <item name="iGapDefaultChatBackground">@color/background_setting_dark</item>
+
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_dark</item>
 
         <item name="iGapCardViewColor">@color/gray_6c</item>
@@ -67,6 +70,8 @@
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapCardViewColor">@color/white</item>
+
+        <item name="iGapDefaultChatBackground">#f4f0e8</item>
     </style>
 
     <style name="iGapRedTheme" parent="BaseTheme.drawable">
@@ -100,6 +105,8 @@
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapCardViewColor">@color/white</item>
+
+        <item name="iGapDefaultChatBackground">#ffebee</item>
     </style>
 
     <style name="iGapPinkTheme" parent="BaseTheme.drawable">
@@ -133,6 +140,8 @@
         <item name="iGapSendMessageTextColor">#5F5F5F</item>
 
         <item name="iGapCardViewColor">@color/white</item>
+
+        <item name="iGapDefaultChatBackground">#FCE4EC</item>
     </style>
 
     <style name="iGapPurpleTheme" parent="BaseTheme.drawable">
@@ -166,6 +175,7 @@
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapCardViewColor">@color/white</item>
+        <item name="iGapDefaultChatBackground">#F3E5F5</item>
     </style>
 
     <style name="iGapBlueTheme" parent="BaseTheme.drawable">
@@ -196,9 +206,11 @@
 
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
+
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapCardViewColor">@color/white</item>
+        <item name="iGapDefaultChatBackground">#E3F2FD</item>
     </style>
 
     <style name="iGapGreenTheme" parent="BaseTheme.drawable">
@@ -232,6 +244,7 @@
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapCardViewColor">@color/white</item>
+        <item name="iGapDefaultChatBackground">#F1F8E9</item>
     </style>
 
     <style name="iGapAmberTheme" parent="BaseTheme.drawable">
@@ -265,6 +278,7 @@
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapCardViewColor">@color/white</item>
+        <item name="iGapDefaultChatBackground">#FFF8E1</item>
     </style>
 
     <style name="iGapOrangeTheme" parent="BaseTheme.drawable">
@@ -298,6 +312,7 @@
         <item name="iGapSendMessageTextColor">#5f5f5f</item>
 
         <item name="iGapCardViewColor">@color/white</item>
+        <item name="iGapDefaultChatBackground">#FFF3E0</item>
     </style>
 
     <style name="iGapGrayTheme" parent="BaseTheme.drawable">
@@ -332,6 +347,7 @@
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapCardViewColor">@color/white</item>
+        <item name="iGapDefaultChatBackground">#CFD8DC</item>
     </style>
 
     <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">

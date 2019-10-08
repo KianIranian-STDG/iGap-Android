@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ac_ll_parent"
-    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="ltr"
-    tools:ignore="MissingPrefix">
+    android:clickable="true"
+    android:focusable="true"
+    android:layoutDirection="ltr">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,6 +16,7 @@
             android:id="@+id/chl_img_view_chat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="?attr/iGapDefaultChatBackground"
             android:scaleType="centerCrop" />
 
         <LinearLayout

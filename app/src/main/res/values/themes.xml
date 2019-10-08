@@ -33,6 +33,7 @@
         <item name="iGapSendMessageTextColor">#AAAAAA</item>
 
         <item name="iGapLinkColor">#00BCD4</item>
+        <item name="iGapDefaultChatBackground">@color/background_setting_dark</item>
 
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_dark</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_dark</item>
@@ -80,6 +81,7 @@
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#f4f0e8</item>
 
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_default</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rec_default</item>
@@ -128,6 +130,7 @@
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#ffcdd2</item>
 
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_red</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_red</item>
@@ -176,6 +179,7 @@
         <item name="iGapSendMessageTextColor">#5F5F5F</item>
 
         <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#F8BBD0</item>
 
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_pink</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_pink</item>
@@ -224,6 +228,7 @@
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#E1BEE7</item>
 
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_purple</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_purple</item>
@@ -272,6 +277,7 @@
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#BBDEFB</item>
 
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_blue</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_blue</item>
@@ -320,6 +326,7 @@
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#DCEDC8</item>
 
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_green</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_green</item>
@@ -368,6 +375,7 @@
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#FFF9C4</item>
 
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_amber</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_amber</item>
@@ -416,6 +424,7 @@
         <item name="iGapSendMessageTextColor">#5f5f5f</item>
 
         <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#FFE0B2</item>
 
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_orange</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_orange</item>
@@ -463,6 +472,7 @@
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
         <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#CFD8DC</item>
 
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_dark_gray</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_dark_gray</item>
