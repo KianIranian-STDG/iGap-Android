@@ -464,43 +464,16 @@ public class Theme {
                 return R.style.iGapPinkTheme;
             case PURPLE:
                 return R.style.iGapPurpleTheme;
-            /*case DEEPPURPLE:
-                return R.style.iGapDeepPurpleThem;*/
-            /*case INDIGO:
-            case INDIGO_COMPLETE:
-                return R.style.iGapIndigoTheme;*/
             case BLUE:
                 return R.style.iGapBlueTheme;
-            /*case LIGHT_BLUE:
-                return R.style.iGapLightBlueTheme;*/
-            /*case CYAN:
-                return R.style.iGapCyanTheme;*/
-            /*case TEAL:
-            case TEAL_COMPLETE:
-                return R.style.iGapTealTheme;*/
             case GREEN:
                 return R.style.iGapGreenTheme;
-            /*case LIGHT_GREEN:
-                return R.style.iGapLightGreenTheme;*/
-            /*case LIME:
-                return R.style.iGapLimeTheme;*/
-            /*case YELLLOW:
-                return R.style.iGapYellowTheme;*/
             case AMBER:
                 return R.style.iGapAmberTheme;
             case ORANGE:
                 return R.style.iGapOrangeTheme;
-            /*case DEEP_ORANGE:
-                return R.style.iGapDeepOrangeTheme;*/
-            /*case BROWN:
-            case BROWN_COMPLETE:
-                return R.style.iGapBrownTheme;*/
             case GREY:
-                /*case GREY_COMPLETE:*/
                 return R.style.iGapGrayTheme;
-            /*case BLUE_GREY:
-            case BLUE_GREY_COMPLETE:
-                return R.style.iGapBlueGrayTheme;*/
             default:
                 return R.style.iGapLightTheme;
         }
@@ -605,6 +578,10 @@ public class Theme {
 
     public int getRootColor(Context context) {
         return getColorFromAttr(context, R.attr.rootBackgroundColor);
+    }
+
+    public int getButtonColor(Context context){
+        return getColorFromAttr(context,R.attr.iGapButtonColor);
     }
 
     public int getForwardFromTextColor(Context context) {

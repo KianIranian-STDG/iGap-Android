@@ -78,7 +78,7 @@ public class ArcMenu extends FrameLayout {
 
     public void setBackgroundTintColor() {
 
-        fabMenu.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        fabMenu.setBackgroundTintList(ColorStateList.valueOf(new Theme().getButtonColor(getContext())));
     }
 
 

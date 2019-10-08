@@ -32,6 +32,8 @@
         <item name="iGapSendMessageTextColor">#AAAAAA</item>
 
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_dark</item>
+
+        <item name="iGapCardViewColor">@color/gray_6c</item>
     </style>
 
     <style name="iGapLightTheme" parent="BaseTheme.drawable">
@@ -63,6 +65,8 @@
         <item name="iGapSendMessageBubbleColor">#f5ffec</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+
+        <item name="iGapCardViewColor">@color/white</item>
     </style>
 
     <style name="iGapRedTheme" parent="BaseTheme.drawable">
@@ -94,6 +98,8 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+
+        <item name="iGapCardViewColor">@color/white</item>
     </style>
 
     <style name="iGapPinkTheme" parent="BaseTheme.drawable">
@@ -125,6 +131,8 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">#5F5F5F</item>
+
+        <item name="iGapCardViewColor">@color/white</item>
     </style>
 
     <style name="iGapPurpleTheme" parent="BaseTheme.drawable">
@@ -156,6 +164,8 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+
+        <item name="iGapCardViewColor">@color/white</item>
     </style>
 
     <style name="iGapBlueTheme" parent="BaseTheme.drawable">
@@ -187,6 +197,8 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+
+        <item name="iGapCardViewColor">@color/white</item>
     </style>
 
     <style name="iGapGreenTheme" parent="BaseTheme.drawable">
@@ -218,6 +230,8 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+
+        <item name="iGapCardViewColor">@color/white</item>
     </style>
 
     <style name="iGapAmberTheme" parent="BaseTheme.drawable">
@@ -250,6 +264,7 @@
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
 
+        <item name="iGapCardViewColor">@color/white</item>
     </style>
 
     <style name="iGapOrangeTheme" parent="BaseTheme.drawable">
@@ -281,6 +296,8 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">#5f5f5f</item>
+
+        <item name="iGapCardViewColor">@color/white</item>
     </style>
 
     <style name="iGapGrayTheme" parent="BaseTheme.drawable">
@@ -313,6 +330,8 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+
+        <item name="iGapCardViewColor">@color/white</item>
     </style>
 
     <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">

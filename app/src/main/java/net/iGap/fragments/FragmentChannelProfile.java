@@ -187,11 +187,11 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
                 TextInputLayout inputChannelLink = new TextInputLayout(getActivity());
                 MEditText edtLink = new MEditText(getActivity());
-                edtLink.setHint(getString(R.string.channel_public_hint_revoke));
+                edtLink.setHint(R.string.channel_public_hint_revoke);
                 edtLink.setTypeface(G.typeface_IRANSansMobile);
                 edtLink.setText(link);
                 edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
-                Utils.darkModeHandler(edtLink);
+                edtLink.setText(new Theme().getTitleTextColor(getActivity()));
                 edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                 edtLink.setPadding(0, 8, 0, 8);
                 edtLink.setEnabled(false);
@@ -201,7 +201,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
                 TextView txtLink = new AppCompatTextView(getActivity());
                 txtLink.setText(Config.IGAP_LINK_PREFIX + link);
-                Utils.darkModeHandlerGray(txtLink);
+                txtLink.setTextColor(new Theme().getTitleTextColor(getActivity()));
 
                 viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

@@ -9,7 +9,7 @@
     app:chip_backgroundColor="?attr/iGapDividerLine"
     app:chip_deletable="true"
     app:chip_deleteIconColor="?attr/iGapTitleTextColor"
-    app:deleteIconColor="?attr/iGapPrimaryTextColor"
+    app:deleteIconColor="?attr/iGapTitleTextColor"
     app:hint="@string/search"
     app:hintColor="?attr/iGapHintTextColor"
     app:showChipDetailed="false"

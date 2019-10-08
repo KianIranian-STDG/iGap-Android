@@ -50,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp4"
             android:ellipsize="end"
+            android:textColor="?attr/iGapSubtitleTextColor"
             android:gravity="left"
             android:maxLines="1"
             android:singleLine="true"

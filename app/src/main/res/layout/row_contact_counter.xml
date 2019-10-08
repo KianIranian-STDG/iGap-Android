@@ -11,7 +11,7 @@
         android:layout_marginTop="@dimen/dp10"
         android:gravity="center"
         android:padding="@dimen/dp20"
-        android:textColor="?iGapTitleTextColor"
+        android:textColor="?attr/iGapTitleTextColor"
         android:textSize="@dimen/largeTextSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,11 +1,14 @@
 package net.iGap.module;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ToggleButton;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -38,7 +41,10 @@ public class CustomToggleButton extends ToggleButton {
         /*if (Theme.isUnderLollipop()) {
             setButtonDrawable(R.drawable.st_switch_button_dark);
         } else {*/
-            setButtonDrawable(R.drawable.st_switch_button);
+
+        ContextThemeWrapper wrapper = new ContextThemeWrapper(getContext(), new Theme().getTheme(getContext()));
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.st_switch_button, wrapper.getTheme());
+        setButtonDrawable(drawable);
         /*}*/
     }
 
