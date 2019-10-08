@@ -236,7 +236,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                 WalletActivity.backgroundTheme_2 = "#FF" + WalletActivity.backgroundTheme_2.substring(3);
             }
 
-            WalletActivity.primaryColor = G.appBarColor ;
+         //   WalletActivity.primaryColor = G.appBarColor ;
 
         }catch (Exception e){
 

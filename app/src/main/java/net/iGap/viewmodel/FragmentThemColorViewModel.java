@@ -9,6 +9,7 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -162,13 +163,13 @@ public class FragmentThemColorViewModel extends ViewModel {
         showDialogChangeTheme.setValue(new ChangeTheme(config, isDark));
     }
 
-    public void setNewTheme(ChangeTheme newTheme, boolean applyColorsToCustomize) {
+    public void setNewTheme(ChangeTheme newTheme, boolean applyColorsToCustomize, Context context) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(SHP_SETTING.KEY_THEME_COLOR, newTheme.getConfig());
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, newTheme.isDark());
         editor.apply();
         if (applyColorsToCustomize) {
-            editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
+          //  editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
             editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
             editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleButtonColor);
             editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, G.attachmentColor);

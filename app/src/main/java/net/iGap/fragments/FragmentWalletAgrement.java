@@ -116,9 +116,9 @@ public class FragmentWalletAgrement extends BaseFragment {
                 Intent intent = new Intent(getActivity(), WalletActivity.class);
                 intent.putExtra("Language", "fa");
                 intent.putExtra("Mobile", "0" + data.getPhone());
-                intent.putExtra("PrimaryColor", G.appBarColor);
-                intent.putExtra("DarkPrimaryColor", G.appBarColor);
-                intent.putExtra("AccentColor", G.appBarColor);
+                intent.putExtra("PrimaryColor", new Theme().getPrimaryColor(getContext()));
+                intent.putExtra("DarkPrimaryColor",new Theme().getPrimaryColor(getContext()));
+                intent.putExtra("AccentColor",new Theme().getPrimaryColor(getContext()));
                 intent.putExtra("IS_DARK_THEME", G.themeColor == Theme.DARK);
                 intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
                 intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);

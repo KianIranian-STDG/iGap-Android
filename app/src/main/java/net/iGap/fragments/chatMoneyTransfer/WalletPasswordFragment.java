@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.webservice.APIService;
@@ -101,7 +102,7 @@ public class WalletPasswordFragment extends BaseFragment {
                         dialog.dismiss();
                         sendPost(response.body().callbackUrl, paymentAuth.token);
                         G.cardamount -= response.body().amount;
-                    }, G.appBarColor);
+                    }, "");
                     dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
                     cancelBtn.performClick();
                 }

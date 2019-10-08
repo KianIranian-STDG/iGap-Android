@@ -145,7 +145,7 @@ public class G extends ApplicationContext {
     public static String SeenTickColor;
     public static String attachmentColor;
     public static String roomMessageTypeColor;
-    //    public static String iconColorBottomSheet;
+    //    public static String iconColorBottom  Sheet;
     public static String progressColor;
     public static String headerTextColor;
     public static String backgroundTheme;

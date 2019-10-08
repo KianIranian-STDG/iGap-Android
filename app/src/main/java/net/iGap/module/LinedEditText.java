@@ -20,6 +20,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 
 import net.iGap.G;
+import net.iGap.Theme;
 
 public class LinedEditText extends androidx.appcompat.widget.AppCompatEditText {
 
@@ -101,7 +102,7 @@ public class LinedEditText extends androidx.appcompat.widget.AppCompatEditText {
         super.onFocusChanged(focused, direction, previouslyFocusedRect);
 
         if (focused) {
-            dashedLinePaint.setColor(Color.parseColor(G.appBarColor));
+            dashedLinePaint.setColor(new Theme().getPrimaryColor(getContext()));
         } else {
             dashedLinePaint.setColor(Color.parseColor(G.lineBorder));
         }

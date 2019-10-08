@@ -56,7 +56,7 @@
                         android:paddingRight="@dimen/dp16"
                         android:paddingBottom="@dimen/dp16"
                         android:text="@string/privacy"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+                        android:textColor="@{attr/iGapToolbarBackground,default=@color/toolbar_background}"
                         android:textSize="@dimen/dp18"
                         android:textStyle="normal"
 
@@ -110,7 +110,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/everybody"
-                            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+                            android:textColor="@{attr/iGapToolbarBackground,default=@color/toolbar_background}"
                             android:textSize="@dimen/dp16"
                             android:textStyle="normal" />
                     </LinearLayout>
@@ -142,7 +142,7 @@
                             android:paddingTop="@dimen/dp4"
                             android:paddingRight="@dimen/dp16"
                             android:text="@string/everybody"
-                            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+                            android:textColor="@{attr/iGapToolbarBackground,default=@color/toolbar_background}"
                             android:textSize="@dimen/dp16"
                             android:textStyle="normal" />
                     </LinearLayout>

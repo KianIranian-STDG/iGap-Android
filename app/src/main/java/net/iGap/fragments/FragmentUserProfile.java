@@ -142,9 +142,9 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 Intent intent = new Intent(getActivity(), WalletActivity.class);
                 intent.putExtra("Language", "fa");
                 intent.putExtra("Mobile", phoneNumber);
-                intent.putExtra("PrimaryColor", G.appBarColor);
-                intent.putExtra("DarkPrimaryColor", G.appBarColor);
-                intent.putExtra("AccentColor", G.appBarColor);
+                intent.putExtra("PrimaryColor",new Theme().getPrimaryColor(getContext()));
+                intent.putExtra("DarkPrimaryColor", new Theme().getPrimaryColor(getContext()));
+                intent.putExtra("AccentColor",new Theme().getPrimaryColor(getContext()));
                 intent.putExtra("IS_DARK_THEME", G.themeColor == Theme.DARK);
                 intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
                 intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);

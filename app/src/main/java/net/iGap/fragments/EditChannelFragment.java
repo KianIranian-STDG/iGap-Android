@@ -387,7 +387,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
         layoutUserName.addView(inputUserName, layoutParams);
 
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(new Theme().getPrimaryColor(getContext())).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -507,10 +507,9 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
             String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
             new RequestChannelUpdateUsername().channelUpdateUsername(viewModel.roomId, userName);
         });
-
         edtUserName.setOnFocusChangeListener((view, b) -> {
             if (b) {
-                viewUserName.setBackgroundColor(Color.parseColor(G.appBarColor));
+                viewUserName.setBackgroundColor(new Theme().getAccentColor(getContext()));
             } else {
                 viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
             }

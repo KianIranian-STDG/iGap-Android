@@ -30,7 +30,7 @@
                 android:id="@+id/asn_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp60"
-                android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+                android:background="@{attr/iGapToolbarBackground,default=@color/toolbar_background}"
                 android:layoutDirection="ltr"
                 android:padding="0dp"
                 app:contentInsetLeft="0dp"

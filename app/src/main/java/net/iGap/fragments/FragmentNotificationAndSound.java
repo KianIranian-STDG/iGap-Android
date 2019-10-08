@@ -20,6 +20,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.databinding.FragmentNotificationAndSoundBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperNotification;
@@ -66,7 +67,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
         setupToolbar();
 
-        fragmentNotificationAndSoundBinding.asnToolbar.setBackgroundColor(Color.parseColor(G.appBarColor));
+        fragmentNotificationAndSoundBinding.asnToolbar.setBackgroundColor(new Theme().getAccentColor(getContext()));
 
         fragmentNotificationAndSoundBinding.stnsRippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override

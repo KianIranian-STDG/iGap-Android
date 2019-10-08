@@ -71,7 +71,7 @@ public class VoiceRecord {
         txt_slide_to_cancel = layoutMic.findViewById(R.id.txt_slideto_cancel);
         btnMicLayout = layoutMic.findViewById(R.id.lmr_btn_mic_layout);
         btnLock = layoutMic.findViewById(R.id.lmr_txt_Lock);
-        AndroidUtils.setBackgroundShapeColor(btnMicLayout, Color.parseColor(G.appBarColor));
+        AndroidUtils.setBackgroundShapeColor(btnMicLayout, new Theme().getPrimaryColor(context));
         this.layoutAttach = layoutAttach;
         this.layoutMic = layoutMic;
         this.onVoiceRecordListener = listener;

@@ -46,6 +46,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityNewGroupBinding;
 import net.iGap.helper.GoToChatActivity;
@@ -426,7 +427,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             public void onFocusChange(View view, boolean b) {
 
                 if (b) {
-                    ViewGroupName.setBackgroundColor(Color.parseColor(G.appBarColor));
+                    ViewGroupName.setBackgroundColor(new Theme().getAccentColor(getContext()));
                 } else {
                     ViewGroupName.setBackgroundColor(Color.parseColor(G.lineBorder));
                 }

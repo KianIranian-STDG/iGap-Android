@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
@@ -261,9 +262,9 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         intent.putExtra("Mobile", "0" + G.userId);
         intent.putExtra("IsP2P", true);
         intent.putExtra("Payment", payment);
-        intent.putExtra("PrimaryColor", G.appBarColor);
-        intent.putExtra("DarkPrimaryColor", G.appBarColor);
-        intent.putExtra("AccentColor", G.appBarColor);
+        intent.putExtra("PrimaryColor",new Theme().getPrimaryColor(getContext()));
+        intent.putExtra("DarkPrimaryColor", new Theme().getPrimaryColor(getContext()));
+        intent.putExtra("AccentColor", new Theme().getPrimaryColor(getContext()));
         intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
         intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
         intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);

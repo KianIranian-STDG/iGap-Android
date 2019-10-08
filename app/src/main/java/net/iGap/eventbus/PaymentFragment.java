@@ -360,7 +360,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                             sendPost(response.body().callbackUrl, paymentAuth.token);
                             G.cardamount -= response.body().amount;
                         }
-                    }, G.appBarColor);
+                    },"");
                     dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
                   /*  if (G.refreshWalletBalance != null) {
                         G.refreshWalletBalance.setRefreshBalance();
