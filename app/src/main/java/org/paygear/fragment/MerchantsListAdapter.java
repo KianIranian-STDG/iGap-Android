@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.databinding.MerchantsListItemBinding;
 
@@ -79,7 +80,7 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
             AppCompatTextView textView = new AppCompatTextView(parent.getContext());
             textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             textView.setPadding(ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10), ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10));
-            textView.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
+            textView.setBackgroundColor(new Theme().getRootColor(textView.getContext()));
             textView.setTypeface(G.typeface_IRANSansMobile);
             textView.setGravity(Gravity.START);
 

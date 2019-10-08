@@ -7,19 +7,23 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+
 import androidx.databinding.DataBindingUtil;
+
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.appcompat.widget.AppCompatTextView;
+
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -149,8 +153,8 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                         if (getActivity() instanceof NavigationBarActivity) {
                             isVisible = false;
                             ((NavigationBarActivity) getActivity()).pushFullFragment(new MyQRFragment(), "MyQRFragment");
-                        }else {
-                            isVisible = false ;
+                        } else {
+                            isVisible = false;
                             new HelperFragment(getActivity().getSupportFragmentManager(), new MyQRFragment()).setReplace(false).load();
                         }
                     }
@@ -197,7 +201,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         if (RaadApp.paygearCard != null) {
             balanceText.setText(getString(R.string.paygear_card_balance) + "\n" +
                     RaadCommonUtils.formatPrice(RaadApp.paygearCard.balance, true));
-        }else{
+        } else {
             balanceText.setText(getString(R.string.paygear_card_balance) + "\n" +
                     String.format(getString(R.string.wallet_Reial), G.cardamount));
         }
@@ -224,9 +228,9 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
     private void setupTheme() {
 
-        try{
-            WalletActivity.backgroundTheme = G.backgroundTheme;
-            WalletActivity.backgroundTheme_2 = G.backgroundTheme_2;
+        try {
+            //     WalletActivity.backgroundTheme = G.backgroundTheme;
+            //  WalletActivity.backgroundTheme_2 = G.backgroundTheme_2;
 
             if (WalletActivity.backgroundTheme.length() == 9) {
                 WalletActivity.backgroundTheme = "#FF" + WalletActivity.backgroundTheme.substring(3);
@@ -236,9 +240,9 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                 WalletActivity.backgroundTheme_2 = "#FF" + WalletActivity.backgroundTheme_2.substring(3);
             }
 
-         //   WalletActivity.primaryColor = G.appBarColor ;
+            //   WalletActivity.primaryColor = G.appBarColor ;
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -654,7 +658,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
                             if (success) {
                                 try {
-                                    showSuccessfulDialog(response.body().message,qrData);
+                                    showSuccessfulDialog(response.body().message, qrData);
                               /*      if (getActivity() instanceof NavigationBarActivity) {
                                         ((NavigationBarActivity) getActivity()).broadcastMessage(
                                                 ScannerFragment.this, null, CardsFragment.class);
@@ -695,7 +699,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
     }
 
-    private void showSuccessfulDialog(String message,QRResponse qrData) {
+    private void showSuccessfulDialog(String message, QRResponse qrData) {
         isVisible = false;
         final Context context = getContext();
         if (context == null)
@@ -740,7 +744,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
                       }*/
 
-                    ((NavigationBarActivity) getActivity()).pushFullFragment(CardsFragment.newInstance(true,qrData.accountId),"CardsFragment");
+                    ((NavigationBarActivity) getActivity()).pushFullFragment(CardsFragment.newInstance(true, qrData.accountId), "CardsFragment");
 
 
                 }

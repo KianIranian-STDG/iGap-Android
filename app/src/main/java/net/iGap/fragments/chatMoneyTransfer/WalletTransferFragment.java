@@ -49,6 +49,7 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.G.context;
 import static net.iGap.G.fragmentActivity;
+import static net.iGap.G.needGetSignalingConfiguration;
 
 public class WalletTransferFragment extends BaseFragment implements EventListener {
     private static final String TAG = "aabolfazlWallet";
@@ -267,8 +268,8 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         intent.putExtra("AccentColor", new Theme().getPrimaryColor(getContext()));
         intent.putExtra(WalletActivity.PROGRESSBAR, new Theme().getAccentColor(getContext()));
         intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-        intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-        intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
+        intent.putExtra(WalletActivity.BACKGROUND,new Theme().getRootColor(getContext()));
+        intent.putExtra(WalletActivity.BACKGROUND_2,new Theme().getRootColor(getContext()));
         intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
         intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
         startActivityForResult(intent, 66);

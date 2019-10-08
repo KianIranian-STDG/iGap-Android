@@ -394,7 +394,7 @@ public class G extends ApplicationContext {
     public static OneFragmentIsOpen oneFragmentIsOpen;
     public static boolean isFragmentMapActive = false; // for check network
     public static boolean isRestartActivity = false; // for check passCode
-    public static boolean isFirstPassCode = true; // for check passCode
+    public static boolean isFirstPassCode = true; // for check passCodeG.backgroundTheme
     public static boolean isTimeWhole = false;
     public static Account iGapAccount;
     public static Card selectedCard = null;
