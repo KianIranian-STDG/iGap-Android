@@ -76,10 +76,10 @@ public class DataStorageFragment extends BaseFragment {
                 .getView()
         );
 
-        viewModel.getGoToDataUsagePage().observe(getViewLifecycleOwner(), isMobileData -> {
-            if (getActivity() instanceof ActivityManageSpace && isMobileData != null) {
+        viewModel.getGoToDataUsagePage().observe(getViewLifecycleOwner(), isWifiData -> {
+            if (getActivity() instanceof ActivityManageSpace && isWifiData != null) {
                 Bundle bundle = new Bundle();
-                bundle.putBoolean("TYPE", isMobileData);
+                bundle.putBoolean("TYPE", isWifiData);
                 FragmentDataUsage fragmentDataUsage = new FragmentDataUsage();
                 fragmentDataUsage.setArguments(bundle);
                 ((ActivityManageSpace) getActivity()).loadFragment(fragmentDataUsage);

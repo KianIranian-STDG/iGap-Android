@@ -125,11 +125,11 @@ public class DataStorageViewModel extends ViewModel {
     }
 
     public void onWifiDataUsageClick() {
-        goToDataUsagePage.setValue(false);
+        goToDataUsagePage.setValue(true);
     }
 
     public void onMobileDataUsageClick() {
-        goToDataUsagePage.setValue(true);
+        goToDataUsagePage.setValue(false);
     }
 
     public void onClickKeepMedia() {
