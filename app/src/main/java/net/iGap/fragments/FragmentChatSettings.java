@@ -21,10 +21,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
+import net.iGap.activities.ActivityEnhanced;
 import net.iGap.adapter.ThemeColorListAdapter;
 import net.iGap.databinding.FragmentChatSettingsBinding;
 import net.iGap.helper.HelperFragment;
@@ -123,12 +125,18 @@ public class FragmentChatSettings extends BaseFragment {
 
         viewModel.getUpdateNewTheme().observe(getViewLifecycleOwner(), isUpdate -> {
             if (getActivity() != null && isUpdate != null && isUpdate) {
-                Fragment frg;
-                frg = getActivity().getSupportFragmentManager().findFragmentByTag(FragmentChatSettings.class.getName());
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.detach(frg);
-                ft.attach(frg);
-                ft.commit();
+                if (Theme.isUnderLollipop()){
+                    if (getActivity() instanceof ActivityEnhanced) {
+                        ((ActivityEnhanced) getActivity()).onRefreshActivity(true, "");
+                    }
+                }else {
+                    Fragment frg;
+                    frg = getActivity().getSupportFragmentManager().findFragmentByTag(FragmentChatSettings.class.getName());
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    ft.detach(frg);
+                    ft.attach(frg);
+                    ft.commit();
+                }
             }
         });
 

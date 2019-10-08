@@ -45,6 +45,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
+        <item name="iGapCheckButton">@drawable/check_box_background_on</item>
     </style>
     <!--for support theme under android version 21-->
 
