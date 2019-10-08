@@ -642,7 +642,7 @@ public final class AppUtils {
 
         try {
 
-            progressBar.setColor(Color.parseColor(G.progressColor));
+            progressBar.setColor(new Theme().getAccentColor(context));
         } catch (Exception e) {
 
         }

@@ -240,7 +240,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         txtTitle.setTextColor(new Theme().getPrimaryColor(getContext()));
 
         fabOpenMap = view.findViewById(R.id.mf_fab_openMap);
-        fabOpenMap.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        fabOpenMap.setBackgroundTintList(ColorStateList.valueOf(new Theme().getButtonColor(getContext())));
         fabOpenMap.setColorFilter(Color.WHITE);
 
         bundle = getArguments();

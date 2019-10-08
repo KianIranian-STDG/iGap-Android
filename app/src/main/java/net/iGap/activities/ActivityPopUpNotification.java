@@ -504,7 +504,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             });
 
             btnSend = findViewById(R.id.apn_btn_send);
-            btnSend.setTextColor(Color.parseColor(G.attachmentColor));
+          //  btnSend.setTextColor(Color.parseColor(G.attachmentColor));
 
             btnSend.setOnClickListener(new View.OnClickListener() {
                 @Override

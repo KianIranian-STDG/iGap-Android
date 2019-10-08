@@ -74,6 +74,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static net.iGap.G.context;
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
@@ -194,7 +195,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                         intent.putExtra("AccentColor",new Theme().getPrimaryColor(activity));
                         intent.putExtra("IS_DARK_THEME", G.themeColor == Theme.DARK);
                         intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-                        intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
+                        intent.putExtra(WalletActivity.PROGRESSBAR,new Theme().getAccentColor(context));
                         intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
                         intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
                         intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);

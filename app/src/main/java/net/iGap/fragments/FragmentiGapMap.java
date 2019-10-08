@@ -995,7 +995,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
             fabGps = view.findViewById(st_fab_gps);
 
 
-            fabGps.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+            fabGps.setBackgroundTintList(ColorStateList.valueOf(new Theme().getButtonColor(getContext())));
             fabGps.setColorFilter(Color.WHITE);
 
 

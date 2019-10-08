@@ -121,7 +121,7 @@ public class ActivityPaint extends ActivityEnhanced {
         });
 
         TextView tvSend = (TextView) findViewById(R.id.textView_send);
-        tvSend.setTextColor(Color.parseColor(G.attachmentColor));
+      //  tvSend.setTextColor(Color.parseColor(G.attachmentColor));
         tvSend.setOnClickListener(new OnClickListener() {
 
             @Override
