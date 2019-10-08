@@ -250,7 +250,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                                                     intent.putExtra("PrimaryColor", new Theme().getPrimaryColor(getContext()));
                                                     intent.putExtra("DarkPrimaryColor", new Theme().getPrimaryColor(getContext()));
                                                     intent.putExtra("AccentColor", new Theme().getPrimaryColor(getContext()));
-                                                    intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
+                                                    intent.putExtra(WalletActivity.PROGRESSBAR, new Theme().getAccentColor(getContext()));
                                                     intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
                                                     intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
                                                     intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);

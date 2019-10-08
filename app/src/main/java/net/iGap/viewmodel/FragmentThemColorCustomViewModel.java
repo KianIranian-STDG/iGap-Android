@@ -173,8 +173,8 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
                             break;
                         case R.string.default_header_font_color:
 
-                            G.headerTextColor = "#" + Integer.toHexString(picker.getColor());
-                            editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
+//                            G.headerTextColor = "#" + Integer.toHexString(picker.getColor());
+//                            editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
                             editor.apply();
                             headerColorClick(0, true);
 
@@ -283,7 +283,7 @@ public class FragmentThemColorCustomViewModel extends ViewModel {
 
         if (fragmentThemColorCustomBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentThemColorCustomBinding.asnImgDefaultHeaderFontColor.getBackground();
-            bgShape.setColor(Color.parseColor(G.headerTextColor));
+//            bgShape.setColor(Color.parseColor(G.headerTextColor));
         }
     }
 
