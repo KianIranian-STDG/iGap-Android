@@ -1902,7 +1902,7 @@ Want to get it?</string>
     <string name="copy_link_title">Copy Link</string>
     <string name="location_dialog_message">Do you want to use your location?</string>
     <string name="forward_slash">/</string>
-    <string name="reaction_message_detail">Add names of the admins to the messages they post.</string>
+    <string name="reaction_message_detail">show a vote section for every channel\'\s posts for members.</string>
     <string name="all">All</string>
     <string name="missed">Missed</string>
     <string name="incoming">Incoming</string>
