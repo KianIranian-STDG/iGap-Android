@@ -3,6 +3,7 @@ package net.iGap.helper;
 import android.content.res.Configuration;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -210,9 +211,18 @@ public class HelperFragment {
 
     public void removeAll(boolean keepMain) {
         /*if (G.fragmentActivity != null && !G.fragmentActivity.isFinishing()) {*/
-        for (int i = fragmentManager.getBackStackEntryCount() - 1; i > -1; i--) {
-
+        if (G.twoPaneMode) {
+            Fragment fragment = fragmentManager.findFragmentById(R.id.mainFrame);
+            if (fragment instanceof FragmentChat) {
+                fragmentManager.beginTransaction().remove(fragment).commit();
+            }
+            fragmentManager.popBackStack(TabletEmptyChatFragment.class.getName(), 0);
+        } else {
+            fragmentManager.popBackStack(BottomNavigationFragment.class.getName(), 0);
         }
+        /*for (int i = fragmentManager.getBackStackEntryCount() - 1; i > -1; i--) {
+
+        }*/
         /*for (Fragment fragment : fragmentManager.getFragments()) {
             if (fragment != null) {
 
