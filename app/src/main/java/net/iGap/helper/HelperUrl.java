@@ -1017,67 +1017,73 @@ public class HelperUrl {
      * if message isn't exist in Realm resolve from server and then open chat
      */
     private static void resolveMessageAndOpenChat(FragmentActivity activity, final long messageId, final String username, final ChatEntry chatEntry, final ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, final ProtoGlobal.RegisteredUser user, final ProtoGlobal.Room room) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoomMessage rm = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId()).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-            if (rm != null) {
-                openChat(activity, username, type, user, room, chatEntry, messageId);
-            } else {
-                new RequestClientGetRoomHistory().getRoomHistory(room.getId(), messageId - 1, 1, DOWN, new RequestClientGetRoomHistory.OnHistoryReady() {
-                    @Override
-                    public void onHistory(List<ProtoGlobal.RoomMessage> messageList) {
-                        if (messageList.size() == 0 || messageList.get(0).getMessageId() != messageId || messageList.get(0).getDeleted()) {
+        DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
+            @Override
+            public void doTask(Realm realm) {
+                RealmRoomMessage rm = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId()).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                if (rm != null) {
+                    openChat(activity, username, type, user, room, chatEntry, messageId);
+                } else {
+                    new RequestClientGetRoomHistory().getRoomHistory(room.getId(), messageId - 1, 1, DOWN, new RequestClientGetRoomHistory.OnHistoryReady() {
+                        @Override
+                        public void onHistory(List<ProtoGlobal.RoomMessage> messageList) {
+                            if (messageList.size() == 0 || messageList.get(0).getMessageId() != messageId || messageList.get(0).getDeleted()) {
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        closeDialogWaiting();
+                                        HelperError.showSnackMessage(activity.getString(R.string.not_found_message), false);
+                                        openChat(activity, username, type, user, room, chatEntry, 0);
+                                    }
+                                });
+                            } else {
+                                DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
+                                    @Override
+                                    public void doTask(Realm realm) {
+                                        realm.executeTransaction(new Realm.Transaction() {
+                                            @Override
+                                            public void execute(Realm realm) {
+                                                for (ProtoGlobal.RoomMessage roomMessage : messageList) {
+                                                    if (roomMessage.getAuthor().hasUser()) {
+                                                        RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
+                                                    }
+                                                    RealmRoomMessage.putOrUpdate(realm, room.getId(), roomMessage, new StructMessageOption().setGap());
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+
+                                RealmRoomMessage.setGap(messageList.get(0).getMessageId());
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        G.refreshRealmUi();
+                                        openChat(activity, username, type, user, room, chatEntry, messageList.get(0).getMessageId());
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onErrorHistory(int major, int minor) {
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     closeDialogWaiting();
-                                    HelperError.showSnackMessage(activity.getString(R.string.not_found_message), false);
-                                    openChat(activity, username, type, user, room, chatEntry, 0);
-                                }
-                            });
-                        } else {
-                            DbManager.getInstance().doRealmTask(realm -> {
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        for (ProtoGlobal.RoomMessage roomMessage : messageList) {
-                                            if (roomMessage.getAuthor().hasUser()) {
-                                                RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
-                                            }
-                                            RealmRoomMessage.putOrUpdate(realm, room.getId(), roomMessage, new StructMessageOption().setGap());
-                                        }
+                                    if (major == 626) {
+                                        HelperError.showSnackMessage(activity.getString(R.string.not_found_message), false);
+                                    } else if (minor == 624) {
+                                        HelperError.showSnackMessage(activity.getString(R.string.ivnalid_data_provided), false);
+                                    } else {
+                                        HelperError.showSnackMessage(activity.getString(R.string.there_is_no_connection_to_server), false);
                                     }
-                                });
-                            });
-
-                            RealmRoomMessage.setGap(messageList.get(0).getMessageId());
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    G.refreshRealmUi();
-                                    openChat(activity, username, type, user, room, chatEntry, messageList.get(0).getMessageId());
                                 }
                             });
                         }
-                    }
+                    });
 
-                    @Override
-                    public void onErrorHistory(int major, int minor) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                closeDialogWaiting();
-                                if (major == 626) {
-                                    HelperError.showSnackMessage(activity.getString(R.string.not_found_message), false);
-                                } else if (minor == 624) {
-                                    HelperError.showSnackMessage(activity.getString(R.string.ivnalid_data_provided), false);
-                                } else {
-                                    HelperError.showSnackMessage(activity.getString(R.string.there_is_no_connection_to_server), false);
-                                }
-                            }
-                        });
-                    }
-                });
-
+                }
             }
         });
     }
@@ -1112,49 +1118,55 @@ public class HelperUrl {
         switch (chatEntry) {
             case chat:
                 if (roomId != FragmentChat.lastChatRoomId) {
-                    DbManager.getInstance().doRealmTask(realm -> {
-                        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+                    DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
+                        @Override
+                        public void doTask(Realm realm) {
+                            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
 
-                        if (realmRoom != null) {
-                            new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity(activity);
-                        } else {
-                            G.onChatGetRoom = new OnChatGetRoom() {
-                                @Override
-                                public void onChatGetRoom(final ProtoGlobal.Room room) {
-                                    DbManager.getInstance().doRealmTask(realm1 -> {
-                                        realm1.executeTransaction(new Realm.Transaction() {
+                            if (realmRoom != null) {
+                                new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity(activity);
+                            } else {
+                                G.onChatGetRoom = new OnChatGetRoom() {
+                                    @Override
+                                    public void onChatGetRoom(final ProtoGlobal.Room room) {
+                                        DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
                                             @Override
-                                            public void execute(Realm realm) {
-                                                if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
-                                                    RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
-                                                    realmRoom1.setDeleted(true);
-                                                } else {
-                                                    RealmRoom.putOrUpdate(room, realm);
-                                                }
+                                            public void doTask(Realm realm1) {
+                                                realm1.executeTransaction(new Realm.Transaction() {
+                                                    @Override
+                                                    public void execute(Realm realm) {
+                                                        if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
+                                                            RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
+                                                            realmRoom1.setDeleted(true);
+                                                        } else {
+                                                            RealmRoom.putOrUpdate(room, realm);
+                                                        }
+                                                    }
+                                                });
                                             }
                                         });
-                                    });
-                                    G.handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity(activity);
-                                            G.onChatGetRoom = null;
-                                        }
-                                    }, 500);
-                                }
+                                        G.handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity(activity);
+                                                G.onChatGetRoom = null;
+                                            }
+                                        }, 500);
+                                    }
 
-                                @Override
-                                public void onChatGetRoomTimeOut() {
+                                    @Override
+                                    public void onChatGetRoomTimeOut() {
 
-                                }
+                                    }
 
-                                @Override
-                                public void onChatGetRoomError(int majorCode, int minorCode) {
+                                    @Override
+                                    public void onChatGetRoomError(int majorCode, int minorCode) {
 
-                                }
-                            };
+                                    }
+                                };
 
-                            new RequestChatGetRoom().chatGetRoom(peerId);
+                                new RequestChatGetRoom().chatGetRoom(peerId);
+                            }
                         }
                     });
                 }
