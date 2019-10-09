@@ -107,7 +107,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
             viewTop = LayoutCreator.dpToPx(2);
 
             badgeView.measure(LayoutCreator.manageSpec(viewWidth, AT_MOST), LayoutCreator.manageSpec(viewHeight, AT_MOST));
-            badgeView.layout(viewLeft, viewTop, imageView.getRight() + viewWidth - LayoutCreator.dpToPx(2), imageView.getTop() + LayoutCreator.dpToPx(8));
+            badgeView.layout(viewLeft, viewTop, imageView.getRight() + viewWidth - LayoutCreator.dpToPx(2), imageView.getTop() + LayoutCreator.dpToPx(10));
         }
     }
 
