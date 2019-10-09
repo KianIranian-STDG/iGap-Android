@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="BaseTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -10,6 +10,7 @@
         <item name="md_medium_font">IRANSansMobile.ttf</item>
         <item name="md_regular_font">IRANSansMobile.ttf</item>
         <item name="fontFamily">@font/main_font</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
         <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
     </style>
 
