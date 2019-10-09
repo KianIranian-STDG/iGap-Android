@@ -1970,4 +1970,6 @@
     <string name="user_edited"> utilisateur a été modifié </string>
     <string name="iland">iLand</string>
     <string name="all_calls">des appels</string>
+    <string name="open_url">ouvrir le lien</string>
+    <string name="url_copied">lien copié</string>
 </resources>

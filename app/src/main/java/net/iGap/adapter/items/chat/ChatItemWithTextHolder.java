@@ -63,7 +63,16 @@ public class ChatItemWithTextHolder extends NewChatItemHolder {
         messageView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                itemView.performLongClick();
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!G.isLinkClicked) {
+                            itemView.performLongClick();
+                        }else {
+                            G.isLinkClicked = false ;
+                        }
+                    }
+                }, 15);
                 return true;
             }
         });

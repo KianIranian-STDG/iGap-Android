@@ -2980,4 +2980,6 @@
     <string name="referral_error_yourself">لا يمكن تسجيل رقمك كمرجع.</string>
     <string name="iland">آیلند</string>
     <string name="all_calls">المكالمات</string>
+    <string name="open_url">رابط مفتوح</string>
+    <string name="url_copied">تم نسخ الرابط</string>
 </resources>

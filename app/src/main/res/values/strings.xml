@@ -2246,5 +2246,7 @@ Want to get it?</string>
     <string name="referral_error_yourself">It is not possible to register your number as a referral.</string>
     <string name="iland">iLand</string>
     <string name="all_calls">Calls</string>
+    <string name="open_url">Open Link</string>
+    <string name="url_copied">Link Copied</string>
 
 </resources>

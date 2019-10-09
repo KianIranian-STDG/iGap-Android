@@ -141,6 +141,7 @@ import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.databinding.PaymentDialogBinding;
+import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.ChatAttachmentPopup;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
@@ -4280,6 +4281,15 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
+    public void onOpenLinkDialog(String url) {
+
+        mAdapter.deselect();
+
+        if (getActivity() == null) return;
+        HelperUrl.openLinkDialog(getActivity() , url);
+    }
+
+    @Override
     public boolean getShowVoteChannel() {
         return showVoteChannel;
     }
@@ -4391,18 +4401,18 @@ public class FragmentChat extends BaseFragment
                 } else {
                     showLayoutPin = true;
                 }
-                ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, parseLong(message.senderID));
+                //ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, parseLong(message.senderID));
                 if (!G.authorHash.equals(message.authorHash)) {
                     if (channelRole == ChannelChatRole.MEMBER) {
                         items.remove(getString(R.string.delete_item_dialog));
                     } else if (channelRole == ChannelChatRole.MODERATOR) {
-                        if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
-                            items.remove(getString(R.string.delete_item_dialog));
-                        }
+                        //if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
+                        items.remove(getString(R.string.delete_item_dialog));
+                        //}
                     } else if (channelRole == ChannelChatRole.ADMIN) {
-                        if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
-                            items.remove(getString(R.string.delete_item_dialog));
-                        }
+                        //if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
+                        items.remove(getString(R.string.delete_item_dialog));
+                        //}
                     }
                     if (channelRole != ChannelChatRole.OWNER) {
                         items.remove(getString(R.string.edit_item_dialog));
@@ -4413,18 +4423,18 @@ public class FragmentChat extends BaseFragment
                 if (groupRole != GroupChatRole.MEMBER) {
                     showLayoutPin = true;
                 }
-                GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, parseLong(message.senderID));
+                //GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, parseLong(message.senderID));
                 if (!G.authorHash.equals(message.authorHash)) {
                     if (groupRole == GroupChatRole.MEMBER) {
                         items.remove(getString(R.string.delete_item_dialog));
                     } else if (groupRole == GroupChatRole.MODERATOR) {
-                        if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
-                            items.remove(getString(R.string.delete_item_dialog));
-                        }
+                        //if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
+                        items.remove(getString(R.string.delete_item_dialog));
+                        //}
                     } else if (groupRole == GroupChatRole.ADMIN) {
-                        if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
-                            items.remove(getString(R.string.delete_item_dialog));
-                        }
+                        //if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
+                        items.remove(getString(R.string.delete_item_dialog));
+                        //}
                     }
                     items.remove(getString(R.string.edit_item_dialog));
                 }

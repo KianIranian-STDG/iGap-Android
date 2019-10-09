@@ -2226,5 +2226,7 @@
     <string name="referral_error_yourself">امکان ثبت شماره خود به عنوان معرف مقدور نیست.</string>
     <string name="iland">آیلند</string>
     <string name="all_calls">تماس ها</string>
+    <string name="open_url">باز کردن لینک</string>
+    <string name="url_copied">لینک کپی شد.</string>
 
 </resources>

@@ -86,6 +86,7 @@ import io.realm.Realm;
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
+import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
@@ -159,7 +160,7 @@ public class HelperUrl {
         return false;
     }
 
-    private static boolean isTextLink(String text) {
+    public static boolean isTextLink(String text) {
         Pattern p = Pattern.compile("((http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.([a-zA-Z0-9\\&\\.\\/\\?\\:@\\-_=#])*");
         Matcher m = p.matcher(text);
         if (m.find()) {
@@ -1409,6 +1410,41 @@ public class HelperUrl {
 
     }
 
+    public static void openLinkDialog(FragmentActivity fa , String mUrl){
+        String url = mUrl ;
+        if (!url.startsWith("https://") && !url.startsWith("http://")) {
+            url = "http://" + mUrl;
+        }
+        String finalUrl = url;
+
+        List<String> items = new ArrayList<>();
+        items.add(fa.getString(R.string.copy_item_dialog));
+        items.add(fa.getString(R.string.open_url));
+
+        new BottomSheetFragment().setTitle(url).setData(items, -1, new BottomSheetItemClickCallback() {
+            @Override
+            public void onClick(int position) {
+                if (items.get(position).equals(fa.getString(R.string.copy_item_dialog))) {
+
+                    ClipboardManager clipboard = (ClipboardManager) fa.getSystemService(CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("Copied Url", finalUrl);
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(fa, R.string.url_copied, Toast.LENGTH_SHORT).show();
+
+                } else if (items.get(position).equals(fa.getString(R.string.open_url))) {
+
+                    SharedPreferences sharedPreferences = fa.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
+                    if (sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1) == 1&& !HelperUrl.isNeedOpenWithoutBrowser(finalUrl)) {
+                        HelperUrl.openBrowser(finalUrl); //internal chrome
+                    } else {
+                        HelperUrl.openWithoutBrowser(finalUrl);//external intent
+                    }
+
+                }
+            }
+        }).show(fa.getSupportFragmentManager(), "bottom sheet");
+    }
 
     //************************************  go to room by urlLink   *********************************************************************
 

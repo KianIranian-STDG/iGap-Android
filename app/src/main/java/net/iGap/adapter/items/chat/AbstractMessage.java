@@ -119,6 +119,7 @@ import io.realm.Realm;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.G.context;
 import static net.iGap.G.isLocationFromBot;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
@@ -472,6 +473,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             return FragmentChat.isInSelectionMode;
                         })
                         .setOnLinkLongClickListener((tv, url) -> {
+
+                            if (!FragmentChat.isInSelectionMode){
+                                if (HelperUrl.isTextLink(url)){
+                                    G.isLinkClicked = true ;
+                                    messageClickListener.onOpenLinkDialog(url);
+                                }
+
+                            }
                             return true;
                         });
             } else {
