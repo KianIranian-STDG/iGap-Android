@@ -144,8 +144,8 @@
         <attr name="unselected_icon" format="reference" />
         <attr name="dark_selected_icon" format="reference" />
         <attr name="dark_unselected_icon" format="reference" />
-
-
+        <attr name="item_text" format="reference" />
+        <attr name="item_text_size" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="PlaqueView">
