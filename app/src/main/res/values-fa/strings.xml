@@ -2224,5 +2224,7 @@
 
     <string name="error_ivand_limit_gift">متاسفانه هدایای تعیین شده به اتمام رسیده است.</string>
     <string name="referral_error_yourself">امکان ثبت شماره خود به عنوان معرف مقدور نیست.</string>
+    <string name="open_url">باز کردن لینک</string>
+    <string name="url_copied">لینک کپی شد.</string>
 
 </resources>

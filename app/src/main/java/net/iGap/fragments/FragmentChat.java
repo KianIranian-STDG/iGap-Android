@@ -141,6 +141,7 @@ import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.databinding.PaymentDialogBinding;
+import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.ChatAttachmentPopup;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
@@ -4289,6 +4290,15 @@ public class FragmentChat extends BaseFragment
                 HelperLog.setErrorLog(e);
             }
         }
+    }
+
+    @Override
+    public void onOpenLinkDialog(String url) {
+
+        mAdapter.deselect();
+
+        if (getActivity() == null) return;
+        HelperUrl.openLinkDialog(getActivity() , url);
     }
 
     @Override

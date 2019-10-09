@@ -2978,4 +2978,6 @@
 
     <string name="error_ivand_limit_gift">لسوء الحظ ، فإن الهدايا مجموعة قد انتهت.</string>
     <string name="referral_error_yourself">لا يمكن تسجيل رقمك كمرجع.</string>
+    <string name="open_url">رابط مفتوح</string>
+    <string name="url_copied">تم نسخ الرابط</string>
 </resources>

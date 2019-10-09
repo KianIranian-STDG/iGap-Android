@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -68,6 +69,8 @@ import net.iGap.request.RequestGroupUpdateUsername;
 import net.iGap.viewmodel.FragmentGroupProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
+
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
@@ -259,7 +262,18 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
             }
         });
 
-        binding.description.setMovementMethod(LinkMovementMethod.getInstance());
+        BetterLinkMovementMethod
+                .linkify(Linkify.ALL, binding.description)
+                .setOnLinkClickListener((tv, url) -> {
+                    return false;
+                })
+                .setOnLinkLongClickListener((tv, url) -> {
+                    if (HelperUrl.isTextLink(url)){
+                        G.isLinkClicked = true ;
+                        HelperUrl.openLinkDialog(getActivity() , url);
+                    }
+                    return true;
+                });
 
         viewModel.groupDescription.observe(getViewLifecycleOwner(), groupDescription -> {
             if (getActivity() != null && groupDescription != null) {
