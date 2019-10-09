@@ -244,7 +244,7 @@
         <item name="iGapDefaultChatBackground">#E1BEE7</item>
     </style>
 
-    <style name="iGapPurpleTheme" parent="BaseTheme">
+    <style name="iGapPurpleTheme" parent="BaseTheme.basePurpleTheme">
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_purple</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_purple</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_purple</item>
@@ -296,7 +296,7 @@
         <item name="iGapDefaultChatBackground">#BBDEFB</item>
     </style>
 
-    <style name="BaseTheme.baseBlueTheme.iGapBlueTheme" parent="BaseTheme">
+    <style name="iGapBlueTheme" parent="BaseTheme.baseBlueTheme">
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_blue</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_blue</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_blue</item>
@@ -348,7 +348,7 @@
         <item name="iGapDefaultChatBackground">#DCEDC8</item>
     </style>
 
-    <style name="BaseTheme.baseGreenTheme.iGapGreenTheme" parent="BaseTheme">
+    <style name="iGapGreenTheme" parent="BaseTheme.baseGreenTheme">
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_green</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_green</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_green</item>
@@ -400,7 +400,7 @@
         <item name="iGapDefaultChatBackground">#FFF9C4</item>
     </style>
 
-    <style name="BaseTheme.baseAmberTheme.iGapAmberTheme" parent="BaseTheme">
+    <style name="iGapAmberTheme" parent="BaseTheme.baseAmberTheme">
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_amber</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_amber</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_amber</item>
@@ -453,7 +453,7 @@
         <item name="iGapReceivedReplayColor">#F2B469</item>
     </style>
 
-    <style name="BaseTheme.baseOrangeTheme.iGapOrangeTheme" parent="BaseTheme">
+    <style name="iGapOrangeTheme" parent="BaseTheme.baseOrangeTheme">
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_orange</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_orange</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_orange</item>
@@ -503,7 +503,8 @@
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#CFD8DC</item>
     </style>
-    <style name="BaseTheme.baseDarkGrayTheme.iGapGrayTheme" parent="BaseTheme">
+
+    <style name="iGapGrayTheme" parent="BaseTheme.baseDarkGrayTheme">
         <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_dark_gray</item>
         <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_dark_gray</item>
         <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_dark_gray</item>
