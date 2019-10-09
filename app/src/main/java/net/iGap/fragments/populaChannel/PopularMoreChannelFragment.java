@@ -21,14 +21,14 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.popularChannel.PopularChannelMoreSliderAdapter;
 import net.iGap.adapter.items.popularChannel.PopularMoreChannelAdapter;
-import net.iGap.fragments.BaseFragment;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.viewmodel.PopularMoreChannelViewModel;
 
 
-public class PopularMoreChannelFragment extends BaseFragment implements ToolbarListener {
+public class PopularMoreChannelFragment extends BaseAPIViewFrag implements ToolbarListener {
 
     private View rootView;
     private View sliderCv;
@@ -46,13 +46,14 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
     private int itemSize;
 
     private PopularChannelMoreSliderAdapter sliderAdapter;
-    private PopularMoreChannelViewModel viewModel;
+    private PopularMoreChannelViewModel popularMoreChannelViewModel;
     private PopularMoreChannelAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(PopularMoreChannelViewModel.class);
+        popularMoreChannelViewModel = ViewModelProviders.of(this).get(PopularMoreChannelViewModel.class);
+        viewModel = popularMoreChannelViewModel;
     }
 
     @NonNull
@@ -68,16 +69,16 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
         super.onViewCreated(view, savedInstanceState);
         setupViews();
 
-        viewModel.getFirstPage(id, 0, pageMax);
+        popularMoreChannelViewModel.getFirstPage(id, 0, pageMax);
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             pageMax = 20;
             page = 1;
-            viewModel.getFirstPage(id, 0, pageMax);
+            popularMoreChannelViewModel.getFirstPage(id, 0, pageMax);
         });
 
 
-        viewModel.getMoreChannelMutableLiveData().observe(getViewLifecycleOwner(), childChannel -> {
+        popularMoreChannelViewModel.getMoreChannelMutableLiveData().observe(getViewLifecycleOwner(), childChannel -> {
             if (childChannel != null) {
 
                 if (title.equals("")) {
@@ -103,7 +104,7 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
                         slider.setLoopSlides(true);
                         slider.setInterval(playBackTime);
                         slider.setOnSlideClickListener(position -> {
-                            viewModel.onSlideClick(PopularMoreChannelFragment.this, childChannel, position);
+                            popularMoreChannelViewModel.onSlideClick(PopularMoreChannelFragment.this, childChannel, position);
                         });
                     }, 200);
                 }
@@ -120,16 +121,16 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
             }
         });
 
-        adapter.setCallBack(channel -> viewModel.onChannelClick(channel, PopularMoreChannelFragment.this));
+        adapter.setCallBack(channel -> popularMoreChannelViewModel.onChannelClick(channel, PopularMoreChannelFragment.this));
 
-        viewModel.getProgressMutableLiveData().observe(getViewLifecycleOwner(), progress -> {
+        popularMoreChannelViewModel.getProgressMutableLiveData().observe(getViewLifecycleOwner(), progress -> {
             if (progress != null && progress)
                 swipeRefreshLayout.setRefreshing(true);
             else
                 swipeRefreshLayout.setRefreshing(false);
         });
 
-        viewModel.getEmptyViewMutableLiveData().observe(getViewLifecycleOwner(), haveEmptyView -> {
+        popularMoreChannelViewModel.getEmptyViewMutableLiveData().observe(getViewLifecycleOwner(), haveEmptyView -> {
             if (haveEmptyView != null && haveEmptyView)
                 emptyTextView.setVisibility(View.VISIBLE);
             else
@@ -140,7 +141,7 @@ public class PopularMoreChannelFragment extends BaseFragment implements ToolbarL
         scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (nestedScrollView1, i, i1, i2, i3) -> {
             if (itemSize >= pageMax) {
                 int nextPage = pageMax + pageMax;
-                viewModel.getFirstPage(id, pageMax, nextPage);
+                popularMoreChannelViewModel.getFirstPage(id, pageMax, nextPage);
                 page = page + 1;
             }
         });

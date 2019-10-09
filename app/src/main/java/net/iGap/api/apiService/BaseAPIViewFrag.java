@@ -1,19 +1,17 @@
-package net.iGap.igasht;
+package net.iGap.api.apiService;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import net.iGap.activities.ActivityMain;
-import net.iGap.api.apiService.BaseAPIViewFrag;
+import net.iGap.fragments.BaseFragment;
 
-public abstract class IGashtBaseView<G> extends BaseAPIViewFrag {
+public abstract class BaseAPIViewFrag extends BaseFragment {
 
-    protected BaseIGashtViewModel<G> viewModel;
+    protected BaseAPIViewModel viewModel;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -25,10 +23,5 @@ public abstract class IGashtBaseView<G> extends BaseAPIViewFrag {
             }
         });
 
-        viewModel.getRequestErrorMessage().observe(getViewLifecycleOwner(), message -> {
-            if (getActivity() != null && message != null) {
-                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

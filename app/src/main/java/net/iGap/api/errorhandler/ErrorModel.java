@@ -8,6 +8,13 @@ public class ErrorModel {
     private String name;
     @SerializedName("message")
     private String message;
+    private boolean needToRefresh = false;
+
+    public ErrorModel(String name, String message, boolean needToRefresh) {
+        this.name = name;
+        this.message = message;
+        this.needToRefresh = needToRefresh;
+    }
 
     public ErrorModel(String name, String message) {
         this.name = name;
@@ -20,5 +27,13 @@ public class ErrorModel {
 
     public String getMessage() {
         return message;
+    }
+
+    public boolean isNeedToRefresh() {
+        return needToRefresh;
+    }
+
+    public void setNeedToRefresh(boolean needToRefresh) {
+        this.needToRefresh = needToRefresh;
     }
 }

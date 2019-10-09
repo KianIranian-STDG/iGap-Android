@@ -24,8 +24,11 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
+import net.iGap.api.apiService.ApiInitializer;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
@@ -365,31 +368,22 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     private static void sendRequestGetCharityPaymentToken(FragmentActivity activity, String charityId, int charityAmount) {
-        new RetrofitFactory().getCharityRetrofit().sendRequestGetCharity(charityId, charityAmount).enqueue(new Callback<MciPurchaseResponse>() {
+        new ApiInitializer<MciPurchaseResponse>().initAPI(new RetrofitFactory().getCharityRetrofit().sendRequestGetCharity(charityId, charityAmount), null, new ResponseCallback<MciPurchaseResponse>() {
             @Override
-            public void onResponse(@NotNull Call<MciPurchaseResponse> call, @NotNull Response<MciPurchaseResponse> response) {
+            public void onSuccess(MciPurchaseResponse data) {
                 HelperUrl.closeDialogWaiting();
-                if (response.isSuccessful()) {
-                    new HelperFragment(activity.getSupportFragmentManager()).loadPayment(activity.getString(R.string.charity_title), response.body().getToken(), new PaymentCallBack() {
-                        @Override
-                        public void onPaymentFinished(PaymentResult result) {
+                new HelperFragment(activity.getSupportFragmentManager()).loadPayment(activity.getString(R.string.charity_title), data.getToken(), new PaymentCallBack() {
+                    @Override
+                    public void onPaymentFinished(PaymentResult result) {
 
-                        }
-                    });
-                } else {
-                    try {
-                        HelperError.showSnackMessage(new ErrorHandler().getError(response.code(), response.errorBody().string()).getMessage(), false);
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
-                }
+                });
             }
 
             @Override
-            public void onFailure(@NotNull Call<MciPurchaseResponse> call, @NotNull Throwable t) {
+            public void onError(ErrorModel error) {
                 HelperUrl.closeDialogWaiting();
-                t.printStackTrace();
-                HelperError.showSnackMessage(activity.getString(R.string.connection_error), false);
+                HelperError.showSnackMessage(error.getMessage(), false);
             }
         });
     }
