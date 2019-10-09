@@ -91,6 +91,10 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // to disable swipe in channel creation mode
+        if (typeCreate.equals("CHANNEL"))
+            getSwipeBackLayout().setEnableGesture(false);
+
         selectedContacts.clear();
         G.onContactsGetList = this;
 

@@ -77,6 +77,9 @@ public class FragmentCreateChannel extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // to disable swipe in channel creation mode
+        getSwipeBackLayout().setEnableGesture(false);
+
         binding.fchLayoutToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLogoShown(true)
