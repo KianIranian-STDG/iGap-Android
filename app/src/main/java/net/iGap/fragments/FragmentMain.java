@@ -1008,7 +1008,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     @Override
     public void onToolbarTitleClickListener(View view) {
-        mRecyclerView.smoothScrollToPosition(0);
+        scrollToTopOfList();
     }
 
     @Override
@@ -1147,6 +1147,11 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     private interface onChatCellClick {
         void onClicked(RealmRoom item, int pos, boolean status);
+    }
+
+    @Override
+    public void scrollToTopOfList() {
+        if (mRecyclerView != null) mRecyclerView.smoothScrollToPosition(0);
     }
 
     //check state of forward message from chat room and show on toolbar
