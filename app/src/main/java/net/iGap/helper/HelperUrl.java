@@ -42,6 +42,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityEnhanced;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.dialog.BottomSheetItemClickCallback;
@@ -284,7 +285,7 @@ public class HelperUrl {
     public static void openBrowser(String url) {
         final CustomTabsHelperFragment mCustomTabsHelperFragment = CustomTabsHelperFragment.attachTo(G.currentActivity);
 
-        int mColorPrimary = Color.parseColor(G.appBarColor);
+        int mColorPrimary = new Theme().getPrimaryColor(mCustomTabsHelperFragment.getContext());
         final Uri PROJECT_URI = Uri.parse(url);
 
         CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(mColorPrimary).setShowTitle(true).build();

@@ -1,10 +1,12 @@
 package net.iGap.fragments;
 
+import android.app.ActivityManager;
 import android.content.res.ColorStateList;
-import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +23,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+
+import com.crashlytics.android.Crashlytics;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -38,6 +41,9 @@ import net.iGap.viewmodel.FragmentChatSettingViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+
+import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentChatSettings extends BaseFragment {
@@ -89,15 +95,12 @@ public class FragmentChatSettings extends BaseFragment {
         binding.themeColorList.setNestedScrollingEnabled(false);
         binding.themeColorList.setAdapter(adapter);
 
+        viewModel.getChatBackground();
         setChatReceivedChatBubble(new Theme().getReceivedChatBubbleColor(getContext()));
         setChatSendBubble(new Theme().getSendChatBubbleColor(getContext()));
 
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            TypedValue tV = new TypedValue();
-            TypedArray aa = getContext().obtainStyledAttributes(tV.data, new int[]{R.attr.colorPrimaryDark});
-            int clr = aa.getColor(0, 0);
-            aa.recycle();
-            StatusBarUtil.setColor(getActivity(), clr, 50);
+            StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
         }
 
         viewModel.getGoToChatBackgroundPage().observe(getViewLifecycleOwner(), go -> {
@@ -125,11 +128,11 @@ public class FragmentChatSettings extends BaseFragment {
 
         viewModel.getUpdateNewTheme().observe(getViewLifecycleOwner(), isUpdate -> {
             if (getActivity() != null && isUpdate != null && isUpdate) {
-                if (Theme.isUnderLollipop()){
+                if (Theme.isUnderLollipop()) {
                     if (getActivity() instanceof ActivityEnhanced) {
                         ((ActivityEnhanced) getActivity()).onRefreshActivity(true, "");
                     }
-                }else {
+                } else {
                     Fragment frg;
                     frg = getActivity().getSupportFragmentManager().findFragmentByTag(FragmentChatSettings.class.getName());
                     FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
@@ -155,6 +158,37 @@ public class FragmentChatSettings extends BaseFragment {
             if (textSize != null) {
                 binding.message.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
                 binding.senderMessage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
+            }
+        });
+
+        viewModel.getSetChatBackground().observe(getViewLifecycleOwner(), backgroundPath -> {
+            if (getActivity() != null && backgroundPath != null) {
+                File f = new File(backgroundPath);
+                if (f.exists()) {
+                    try {
+                        Log.wtf(this.getClass().getName(), "set image");
+                        Drawable d = Drawable.createFromPath(f.getAbsolutePath());
+                        binding.chatBackgroundImage.setImageDrawable(d);
+                    } catch (OutOfMemoryError e) {
+                        ActivityManager activityManager = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
+                        ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+                        activityManager.getMemoryInfo(memoryInfo);
+                        Crashlytics.logException(new Exception("FragmentChat -> Device Name : " + Build.BRAND + " || memoryInfo.availMem : " + memoryInfo.availMem + " || memoryInfo.totalMem : " + memoryInfo.totalMem + " || memoryInfo.lowMemory : " + memoryInfo.lowMemory));
+                    }
+                } else {
+                    try {
+                        Log.wtf(this.getClass().getName(), "set color");
+                        binding.chatBackgroundImage.setBackgroundColor(Color.parseColor(backgroundPath));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        viewModel.getSetChatBackgroundDefault().observe(getViewLifecycleOwner(), drawableRes -> {
+            if (drawableRes != null) {
+                binding.chatBackgroundImage.setImageResource(R.drawable.chat_default_background_pattern);
             }
         });
     }

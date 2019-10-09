@@ -494,6 +494,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp6"
             android:visibility="gone"
+            app:cardBackgroundColor="?attr/iGapCardViewColor"
             app:cardCornerRadius="5dp">
 
             <RelativeLayout
@@ -505,7 +506,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/background_log_time"
                     android:maxLines="1"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingTop="@dimen/dp4"
@@ -514,10 +514,8 @@
                     android:singleLine="true"
                     android:text="Today"
                     android:textAllCaps="false"
-                    android:textColor="@color/text_log_time"
-                    android:textSize="@dimen/dp12"
-
-                    />
+                    android:textColor="?attr/iGapTitleTextColor"
+                    android:textSize="@dimen/dp12" />
 
 
             </RelativeLayout>

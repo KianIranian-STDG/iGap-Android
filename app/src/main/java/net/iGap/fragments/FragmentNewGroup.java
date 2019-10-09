@@ -46,6 +46,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityNewGroupBinding;
 import net.iGap.helper.GoToChatActivity;
@@ -418,20 +419,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         });
 
         //=======================name of group
-        edtGroupName = fragmentNewGroupBinding.ngEdtNewGroup;
-        final View ViewGroupName = fragmentNewGroupBinding.ngViewNewGroup;
-        edtGroupName.setPadding(0, 8, 0, 8);
-        edtGroupName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-
-                if (b) {
-                    ViewGroupName.setBackgroundColor(Color.parseColor(G.appBarColor));
-                } else {
-                    ViewGroupName.setBackgroundColor(Color.parseColor(G.lineBorder));
-                }
-            }
-        });
 
         //=======================description group
         edtDescription = fragmentNewGroupBinding.ngEdtDescription;

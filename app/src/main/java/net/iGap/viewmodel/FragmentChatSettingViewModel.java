@@ -1,6 +1,7 @@
 package net.iGap.viewmodel;
 
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import androidx.databinding.ObservableBoolean;
@@ -20,6 +21,7 @@ import net.iGap.module.StartupActions;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.List;
 
 
@@ -50,6 +52,8 @@ public class FragmentChatSettingViewModel extends ViewModel {
     private MutableLiveData<Integer> updateTextSizeSampleView = new MutableLiveData<>();
     private SingleLiveEvent<Boolean> updateNewTheme = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
+    private MutableLiveData<String> setChatBackground = new MutableLiveData<>();
+    private MutableLiveData<Integer> setChatBackgroundDefault = new MutableLiveData<>();
 
     private SharedPreferences sharedPreferences;
 
@@ -156,6 +160,14 @@ public class FragmentChatSettingViewModel extends ViewModel {
         return updateTextSizeSampleView;
     }
 
+    public MutableLiveData<String> getSetChatBackground() {
+        return setChatBackground;
+    }
+
+    public MutableLiveData<Integer> getSetChatBackgroundDefault() {
+        return setChatBackgroundDefault;
+    }
+
     public SingleLiveEvent<Boolean> getUpdateNewTheme() {
         return updateNewTheme;
     }
@@ -254,6 +266,16 @@ public class FragmentChatSettingViewModel extends ViewModel {
                 dateTypeResId = R.string.miladi;
         }
         dateType.set(dateTypeResId);
+    }
+
+    public void getChatBackground(){
+        String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
+        Log.wtf(this.getClass().getName(), "value of background: " + backGroundPath);
+        if (backGroundPath.length() > 0) {
+            setChatBackground.setValue(backGroundPath);
+        } else {
+            setChatBackgroundDefault.setValue(R.drawable.chat_default_background_pattern);
+        }
     }
 
     public void setTheme(int position) {

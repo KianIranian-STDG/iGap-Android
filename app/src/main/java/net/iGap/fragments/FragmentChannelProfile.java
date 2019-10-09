@@ -215,7 +215,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(R.string.channel_link)
                         .positiveText(R.string.array_Copy)
                         .customView(layoutChannelLink, true)
-                        .widgetColor(Color.parseColor(G.appBarColor))
+                        .widgetColor(new Theme().getAccentColor(getContext()))
                         .negativeText(R.string.B_cancel)
                         .onPositive((dialog1, which) -> {
                             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);

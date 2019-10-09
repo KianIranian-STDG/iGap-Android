@@ -25,7 +25,7 @@
             android:theme="@style/MySearch"
             app:submitBackground="@color/red" />
 
-        <net.iGap.module.HeaderTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/rg_txt_titleToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -37,7 +37,7 @@
             android:paddingRight="@dimen/dp52"
             android:singleLine="true"
             android:text="@string/rg_Select_Country"
-            android:textColor="@android:color/black"
+            android:textColor="?colorPrimary"
             android:textSize="@dimen/dp20"
             android:textStyle="bold" />
 
@@ -77,7 +77,7 @@
         android:padding="@dimen/dp8">
 
 
-        <net.iGap.module.HeaderTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/rg_txt_okDialog"
             android:layout_width="@dimen/dp60"
             android:layout_height="@dimen/dp36"
@@ -86,7 +86,7 @@
             android:background="@android:color/transparent"
             android:gravity="center"
             android:text="@string/B_cancel"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="?colorPrimary"
             android:textSize="@dimen/dp14"
             android:textStyle="bold" />
 

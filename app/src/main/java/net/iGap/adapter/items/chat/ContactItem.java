@@ -125,14 +125,14 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
 
             contactName = new AppCompatTextView(getContext());
             contactName.setId(R.id.tv_contactItem_contactName);
-            contactName.setTextColor(Color.parseColor(G.textBubble));
+            //contactName.setTextColor(Color.parseColor(G.textBubble));
             ViewMaker.setTextSize(contactName, R.dimen.dp14);
             ViewMaker.setTypeFace(contactName);
 
             contactNumberTv = new AppCompatTextView(getContext());
             contactNumberTv.setId(R.id.tv_contactItem_contactNumber);
             ViewMaker.setTypeFace(contactNumberTv);
-            contactNumberTv.setTextColor(Color.parseColor(G.textBubble));
+           // contactNumberTv.setTextColor(Color.parseColor(G.textBubble));
 
 
             /**

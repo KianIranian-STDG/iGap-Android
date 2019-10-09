@@ -29,13 +29,13 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/dp16">
+                android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/messageTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
                     android:text="@string/st_title_message"
                     android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/largeTextSize"
@@ -45,7 +45,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/messageSizeTitle"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp8"
                     android:layout_marginTop="@dimen/dp16"
@@ -81,11 +81,24 @@
                     app:layout_constraintEnd_toEndOf="@id/messageSizeTitle"
                     app:layout_constraintTop_toTopOf="@id/st_seekbar_messageTextSize" />
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/chatBackgroundImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginBottom="@dimen/dp8"
+                    android:background="?attr/iGapDefaultChatBackground"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toTopOf="@id/chatBackground"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/st_seekbar_messageTextSize" />
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/receivedChatItem"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_margin="@dimen/dp16"
                     android:background="@drawable/chat_item_receive_bg_light"
                     android:padding="@dimen/dp8"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -179,7 +192,7 @@
                     android:id="@+id/sendChatItem"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_margin="@dimen/dp8"
                     android:background="@drawable/chat_item_sent_bg_light"
                     android:padding="@dimen/dp8"
                     app:layout_constraintRight_toRightOf="parent"
@@ -226,7 +239,7 @@
                     android:id="@+id/chatBackground"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dp48"
-                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp16"
                     android:background="?attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:onClick="@{()->viewModel.onClickChatBackground()}"

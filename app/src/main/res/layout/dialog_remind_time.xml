@@ -16,14 +16,14 @@
         android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/dp18" />
 
-    <net.iGap.module.HeaderTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/remindTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp16"
         android:gravity="center_horizontal"
         android:text="356 secend"
-        android:textColor="@color/green"
+        android:textColor="?colorPrimary"
         android:textSize="@dimen/dp18" />
 
 </LinearLayout>

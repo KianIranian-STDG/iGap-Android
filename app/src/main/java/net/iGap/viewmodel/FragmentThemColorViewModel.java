@@ -9,6 +9,7 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -168,12 +169,12 @@ public class FragmentThemColorViewModel extends ViewModel {
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, newTheme.isDark());
         editor.apply();
         if (applyColorsToCustomize) {
-            editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
-            editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
-            editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleButtonColor);
-            editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, G.attachmentColor);
-            editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
-            editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
+//           editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
+//           editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
+//            editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleButtonColor);
+//            editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, G.attachmentColor);
+//            editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
+//            editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
             editor.apply();
         }
         reCreateApp.setValue(true);

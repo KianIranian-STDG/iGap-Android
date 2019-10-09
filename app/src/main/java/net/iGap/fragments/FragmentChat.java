@@ -2016,7 +2016,7 @@ public class FragmentChat extends BaseFragment
         if (isNotJoin) {
             final LinearLayout layoutJoin = rootView.findViewById(R.id.ac_ll_join);
 
-            layoutJoin.setBackgroundColor(Color.parseColor(G.appBarColor));
+            layoutJoin.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
             layoutJoin.setVisibility(View.VISIBLE);
             layoutMute.setVisibility(View.GONE);
             viewAttachFile.setVisibility(View.GONE);
@@ -5622,7 +5622,6 @@ public class FragmentChat extends BaseFragment
             case Theme.GREY_COMPLETE:
             case Theme.TEAL_COMPLETE:*/
             case Theme.DARK:
-
                 setEmojiColor(G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);
                 break;
             default:

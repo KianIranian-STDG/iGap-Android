@@ -247,13 +247,13 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                                                     intent.putExtra("Mobile", "0" + G.userId);
                                                     intent.putExtra("IsP2P", true);
                                                     intent.putExtra("Payment", payment);
-                                                    intent.putExtra("PrimaryColor", G.appBarColor);
-                                                    intent.putExtra("DarkPrimaryColor", G.appBarColor);
-                                                    intent.putExtra("AccentColor", G.appBarColor);
-                                                    intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
+                                                    intent.putExtra("PrimaryColor", new Theme().getPrimaryColor(getContext()));
+                                                    intent.putExtra("DarkPrimaryColor", new Theme().getPrimaryColor(getContext()));
+                                                    intent.putExtra("AccentColor", new Theme().getPrimaryColor(getContext()));
+                                                    intent.putExtra(WalletActivity.PROGRESSBAR, new Theme().getAccentColor(getContext()));
                                                     intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                                                    intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-                                                    intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
+                                                    intent.putExtra(WalletActivity.BACKGROUND, new Theme().getRootColor(getContext()));
+                                                    intent.putExtra(WalletActivity.BACKGROUND_2, new Theme().getRootColor(getContext()));
                                                     intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
                                                     intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
                                                     startActivityForResult(intent, 66);
@@ -360,7 +360,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                             sendPost(response.body().callbackUrl, paymentAuth.token);
                             G.cardamount -= response.body().amount;
                         }
-                    }, G.appBarColor);
+                    },"");
                     dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
                   /*  if (G.refreshWalletBalance != null) {
                         G.refreshWalletBalance.setRefreshBalance();
@@ -490,7 +490,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                         .title(G.fragmentActivity.getResources().getString(R.string.please_set_password))
                         .inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD)
                         .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).customView(layoutNickname, true)
-                        .widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                        .widgetColor(new Theme().getPrimaryColor(getContext())).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
 
@@ -498,7 +498,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewNewPassword.setBackgroundColor(Color.parseColor(G.appBarColor));
+                    viewNewPassword.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
                 } else {
                     viewNewPassword.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
@@ -509,7 +509,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewConfirmPassWord.setBackgroundColor(Color.parseColor(G.appBarColor));
+                    viewConfirmPassWord.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
                 } else {
                     viewConfirmPassWord.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
@@ -620,7 +620,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                         .title(R.string.your_password)
                         .inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD)
                         .positiveText(R.string.B_ok).customView(layoutNickname, true)
-                        .widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                        .widgetColor(new Theme().getPrimaryColor(getContext())).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
 
@@ -628,7 +628,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewFirstName.setBackgroundColor(Color.parseColor(G.appBarColor));
+                    viewFirstName.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
                 } else {
                     viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }

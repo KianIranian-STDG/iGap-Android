@@ -87,19 +87,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
-                android:background="@android:color/transparent"
                 android:paddingTop="@dimen/dp8"
                 android:paddingBottom="@dimen/dp4"
                 android:singleLine="true"
                 android:text="@={fragmentNewGroupVieModel.edtSetNewGroup}"
                 android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize" />
-
-            <View
-                android:id="@+id/ng_view_newGroup"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="?iGapDividerLine" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -121,8 +114,6 @@
                 android:id="@+id/ng_edt_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ng_txtInput_newGroup"
-                android:background="@android:color/transparent"
                 android:ems="4"
                 android:gravity="top"
                 android:imeOptions="@{safeUnbox(fragmentNewGroupVieModel.edtDescriptionImeOptions)}"
@@ -137,14 +128,6 @@
                 android:text="@={fragmentNewGroupVieModel.edtDescription}"
                 android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize" />
-
-
-            <View
-                android:id="@+id/ng_view_desc"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="?iGapDividerLine" />
-
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatTextView

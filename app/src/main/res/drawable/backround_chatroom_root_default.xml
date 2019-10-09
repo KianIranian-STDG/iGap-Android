@@ -4,7 +4,7 @@
     <corners
         android:topLeftRadius="@dimen/dp8"
         android:topRightRadius="@dimen/dp8" />
-    <solid android:color="?attr/iGapDividerLine" />
+    <solid android:color="@color/background_editText" />
 
     <stroke
         android:width="0.1dp"

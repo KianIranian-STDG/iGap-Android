@@ -72,7 +72,6 @@ public class Theme {
     public static String default_roomMessageTypeColor = "#9dc756";
     public static String default_roomSenderTextColor = default_textSubTheme;
     public static String default_SeenTickColor = default_appBarColor;
-
     public static String default_dark_appBarColor = "#383838";
     public static String default_dark_notificationColor = "#c4d838";
     public static String default_dark_toggleButtonColor = "#000000";//
@@ -96,9 +95,7 @@ public class Theme {
     public static String default_dark_roomMessageTypeColor = "#809dc756";
     public static String default_dark_roomSenderTextColor = default_dark_textSubTheme;
     public static String default_dark_SeenTickColor = default_dark_notificationColor;
-
     public static String default_dark_background = "#2f2f2f";
-
     public static String default_red_appBarColor = "#F44336";
     public static String default_Pink_appBarColor = "#f68787";
     public static String default_purple_appBarColor = "#9C27B0";
@@ -431,7 +428,6 @@ public class Theme {
         attachmentColor = color[3];
         headerTextColor = color[4];
         G.progressColor = color[5];
-
         G.lineBorder = color[6];// ok
         G.backgroundTheme = color[7];
         G.backgroundTheme_2 = color[8];
@@ -578,6 +574,10 @@ public class Theme {
 
     public int getRootColor(Context context) {
         return getColorFromAttr(context, R.attr.rootBackgroundColor);
+    }
+
+    public int getButtonColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapButtonColor);
     }
 
     public int getForwardFromTextColor(Context context) {
