@@ -211,9 +211,9 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
         fragmentNewGroupViewModel.goToCreateChannelPage.observe(this, data -> {
             if (getActivity() != null && data != null) {
-                if (!getActivity().isFinishing()) {
+                /*if (!getActivity().isFinishing()) {
                     getActivity().getSupportFragmentManager().popBackStack();
-                }
+                }*/
                 if (G.iTowPanModDesinLayout != null) {
                     G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
                 }

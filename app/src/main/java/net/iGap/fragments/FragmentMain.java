@@ -1016,8 +1016,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
         try {
             if (getActivity() != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment)
-                        .setReplace(false).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         } catch (Exception e) {
             e.getStackTrace();

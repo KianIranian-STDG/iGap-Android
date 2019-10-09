@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentCreateChannelBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -122,5 +123,11 @@ public class FragmentCreateChannel extends BaseFragment {
                 Toast.makeText(getActivity(), R.string.copy_link_title, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+        return true;
     }
 }

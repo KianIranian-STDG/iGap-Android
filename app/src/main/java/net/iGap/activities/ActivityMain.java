@@ -57,6 +57,7 @@ import net.iGap.dialog.SubmitScoreDialog;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentChat;
@@ -1333,10 +1334,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
                     }
                 }
-            } else {
+            }
+            else {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                     if (!(getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment)) {
-                        super.onBackPressed();
+
+                        List fragmentList = getSupportFragmentManager().getFragments();
+                        boolean handled = ((BaseFragment)fragmentList.get(fragmentList.size()-1)).onBackPressed();
+
+                        if(!handled) {
+                            super.onBackPressed();
+                        }
                     }
                 } else {
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
@@ -1349,7 +1357,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 }
             }
-        } else {
+        }
+        else {
             super.onBackPressed();
         }
     }
