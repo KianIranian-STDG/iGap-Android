@@ -151,7 +151,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
                 intent.putExtra(WalletActivity.BACKGROUND, new Theme().getRootColor(getContext()));
                 intent.putExtra(WalletActivity.BACKGROUND_2,new Theme().getRootColor(getContext()));
-                intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
+                intent.putExtra(WalletActivity.TEXT_TITLE,new Theme().getTitleTextColor(getContext()));
                 intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
                 startActivityForResult(intent, ActivityMain.WALLET_REQUEST_CODE);
             }

@@ -111,6 +111,10 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         super.updateLayoutForSend(holder);
         holder.cslf_txt_file_name.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
         holder.cslf_txt_file_size.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
+        holder.spaceView.setBackgroundColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
+        holder.fileType.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
+
+
     }
 
     @Override
@@ -118,6 +122,9 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         super.updateLayoutForReceive(holder);
         holder.cslf_txt_file_name.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
         holder.cslf_txt_file_size.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.spaceView.setBackgroundColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.fileType.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
+
     }
 
     @Override
@@ -131,6 +138,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         protected AppCompatImageView thumbnail;
         protected MessageProgress progress;
         private TextView fileType;
+        private View spaceView;
 
         public ViewHolder(View view) {
             super(view);
@@ -195,15 +203,13 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
 //            layout_958.topMargin = 3;
 //            cslf_txt_file_size.setLayoutParams(layout_958);
 
-            View spaceView = new View(getContext());
-            spaceView.setBackgroundColor(Color.parseColor(G.textBubble));
-
-
+            spaceView = new View(getContext());
             fileType = new TextView(getContext());
+
+
             fileType.setSingleLine(true);
             fileType.setText("3.2 mb");
             fileType.setAllCaps(TRUE);
-            fileType.setTextColor(Color.parseColor(G.textBubble));
             setTextSize(fileType, R.dimen.verySmallTextSize);
             setTypeFace(fileType);
 
