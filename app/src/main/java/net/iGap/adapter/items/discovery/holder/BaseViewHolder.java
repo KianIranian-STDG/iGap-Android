@@ -361,7 +361,21 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case INVITE_FRIEND:
-                new HelperFragment(activity.getSupportFragmentManager(), new LocalContactFragment()).setReplace(false).load(true);
+                try {
+                    HelperPermission.getContactPermision(activity, new OnGetPermission() {
+                        @Override
+                        public void Allow() {
+                            new HelperFragment(activity.getSupportFragmentManager(), new LocalContactFragment()).setReplace(false).load(true);
+                        }
+
+                        @Override
+                        public void deny() {
+
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
 
         }
