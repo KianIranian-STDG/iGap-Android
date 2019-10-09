@@ -81,7 +81,6 @@ public final class HelperLogout {
 
 
     private static void resetStaticField() {
-        Theme.setThemeColor();
         G.userLogin = false;
         G.isTimeWhole = false;
         G.isFirstPassCode = false;

@@ -240,7 +240,8 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Color.parseColor(G.linkColor);
+                //ToDo: fixed it and pass color to this function
+                ds.linkColor = new Theme().getLinkColor(G.context);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -342,8 +343,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Color.parseColor(G.linkColor);
-
+                ds.linkColor = new Theme().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -366,7 +366,8 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Color.parseColor(G.linkColor);
+                //ToDo: fixed it and pass color to this function
+                ds.linkColor = new Theme().getLinkColor(G.context);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -405,7 +406,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Color.parseColor(G.linkColor);
+                ds.linkColor = new Theme().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -425,7 +426,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Color.parseColor(G.linkColor);
+                ds.linkColor = new Theme().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -468,7 +469,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Color.parseColor(G.linkColor);
+                ds.linkColor = new Theme().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -535,7 +536,8 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Color.parseColor(G.linkColor);
+                //ToDo: fixed it and pass color to this function
+                ds.linkColor = new Theme().getLinkColor(G.context);
 
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
@@ -608,7 +610,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Color.parseColor(G.linkColor);
+                ds.linkColor = new Theme().getLinkColor(activity);
 
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
@@ -1362,7 +1364,7 @@ public class HelperUrl {
                                 activity.startActivity(intent);
                             } else if (items.get(position).equals(activity.getString(R.string.add_to_contact))) {
                                 FragmentAddContact fragment = FragmentAddContact.newInstance(
-                                        text , FragmentAddContact.ContactMode.ADD
+                                        text, FragmentAddContact.ContactMode.ADD
                                 );
                                 new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
                             } else if (items.get(position).equals(activity.getString(R.string.verify_register_sms))) {

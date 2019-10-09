@@ -133,34 +133,6 @@ public class G extends ApplicationContext {
     public static String CHAT_MESSAGE_TIME = "H:mm";
     public static String selectedLanguage = null;
     public static String symmetricMethod;
-    public static String appBarColor; // default color
-    public static String bubbleChatSend; // default color
-    public static String bubbleChatReceive; // default color
-    public static String fabBottom; // default color
-    public static String bubbleChatMusic; // default color
-    public static String textChatMusic;
-    public static String notificationColor;
-    public static String toggleButtonColor;
-    public static String roomSenderTextColor;
-    public static String SeenTickColor;
-    public static String attachmentColor;
-    public static String roomMessageTypeColor;
-    //    public static String iconColorBottom  Sheet;
-    public static String progressColor;
-    public static String headerTextColor;
-    public static String backgroundTheme;
-    public static String backgroundTheme_2;
-    public static String logLineTheme;
-    public static String voteIconTheme;
-    public static String textTitleTheme;
-    public static String textBubble;
-    public static String linkColor;
-    public static String textSubTheme;
-    public static String lineBorder;
-    public static String txtIconCheck;
-//    public static String textBubbleSend;
-
-    public static String tintImage;
     public static Ipromote ipromote;
     //    public static String menuBackgroundColor;
     public static String authorHash;
@@ -453,14 +425,6 @@ public class G extends ApplicationContext {
                 }
             });
         }
-    }
-
-    public static int getTheme2BackgroundColor() {
-        return makeColorTransparent100(backgroundTheme_2);
-    }
-
-    public static int getThemeBackgroundColor() {
-        return makeColorTransparent100(backgroundTheme);
     }
 
     public static Context updateResources(Context baseContext) {

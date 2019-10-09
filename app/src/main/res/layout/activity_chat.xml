@@ -275,6 +275,7 @@
                 android:id="@+id/chl_ll_channel_footer"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp52"
+                android:background="?attr/selectableItemBackground"
                 android:orientation="vertical"
                 android:visibility="gone">
 
@@ -283,6 +284,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentBottom="true"
+                    android:background="?attr/iGapButtonColor"
                     android:orientation="horizontal">
 
                     <TextView
@@ -292,10 +294,8 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:textColor="?iGapTitleTextColor"
-                        android:textSize="@dimen/dp16"
-
-                        />
+                        android:textColor="?attr/iGapPrimaryTextColor"
+                        android:textSize="@dimen/dp16" />
                 </LinearLayout>
 
             </RelativeLayout>

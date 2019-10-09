@@ -121,11 +121,11 @@ public class FragmentWalletAgrement extends BaseFragment {
                 intent.putExtra("AccentColor",new Theme().getPrimaryColor(getContext()));
                 intent.putExtra("IS_DARK_THEME", G.themeColor == Theme.DARK);
                 intent.putExtra(WalletActivity.PROGRESSBAR, new Theme().getAccentColor(getContext()));
-                intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
+                intent.putExtra(WalletActivity.LINE_BORDER, new Theme().getDividerColor(getContext()));
                 intent.putExtra(WalletActivity.BACKGROUND, new Theme().getRootColor(getContext()));
                 intent.putExtra(WalletActivity.BACKGROUND_2, new Theme().getRootColor(getContext()));
                 intent.putExtra(WalletActivity.TEXT_TITLE, new Theme().getTitleTextColor(getContext()));
-                intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                intent.putExtra(WalletActivity.TEXT_SUB_TITLE, new Theme().getSubTitleColor(getContext()));
                 intent.putExtra("isScan", data.isScan());
                 getActivity().startActivity(intent);
                 getActivity().onBackPressed();

@@ -19,7 +19,6 @@ public class TypeUnknownViewHolder extends BaseViewHolder {
         super(itemView, activity);
         txt0 = itemView.findViewById(R.id.unknown_text);
         card0 = itemView.findViewById(R.id.unknown_card);
-        card0.setCardBackgroundColor(G.getThemeBackgroundColor());
     }
 
     @Override

@@ -4,7 +4,7 @@
     android:viewportWidth="140"
     android:viewportHeight="140">
     <path
-        android:fillColor="?attr/iGapBottomNavigationIconStart"
+        android:fillColor="?attr/iGapReceivedReplayColor"
         android:pathData="M70,70m-65.7,0a65.7,65.7 0,1 1,131.4 0a65.7,65.7 0,1 1,-131.4 0" />
     <path
         android:fillColor="?attr/iGapSendMessageBubbleColor"

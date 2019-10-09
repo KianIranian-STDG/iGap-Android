@@ -74,18 +74,13 @@ import static net.iGap.G.DIR_VIDEOS;
 import static net.iGap.G.IGAP;
 import static net.iGap.G.IMAGE_NEW_CHANEL;
 import static net.iGap.G.IMAGE_NEW_GROUP;
-import static net.iGap.G.appBarColor;
-import static net.iGap.G.attachmentColor;
 import static net.iGap.G.authorHash;
 import static net.iGap.G.context;
 import static net.iGap.G.displayName;
-import static net.iGap.G.headerTextColor;
 import static net.iGap.G.imageFile;
 import static net.iGap.G.imageLoader;
 import static net.iGap.G.isSaveToGallery;
-import static net.iGap.G.notificationColor;
 import static net.iGap.G.selectedLanguage;
-import static net.iGap.G.toggleButtonColor;
 import static net.iGap.G.userId;
 import static net.iGap.G.userTextSize;
 
@@ -454,20 +449,8 @@ public final class StartupActions {
 
                 //checkes whether the current time is between 14:49:00 and 20:11:13.
                 G.themeColor = Theme.DARK;
-                appBarColor = Theme.default_dark_appBarColor;
-                notificationColor = Theme.default_dark_notificationColor;
-                toggleButtonColor = Theme.default_dark_toggleButtonColor;
-                attachmentColor = Theme.default_dark_attachmentColor;
-                headerTextColor = Theme.default_dark_headerTextColor;
-                G.progressColor = Theme.default_dark_progressColor;
             } else {
                 G.themeColor = Theme.DARK;
-                appBarColor = Theme.default_appBarColor;
-                notificationColor = Theme.default_notificationColor;
-                toggleButtonColor = Theme.default_toggleButtonColor;
-                attachmentColor = Theme.default_attachmentColor;
-                headerTextColor = Theme.default_headerTextColor;
-                G.progressColor = Theme.default_progressColor;
             }
         } catch (ParseException e) {
             e.printStackTrace();

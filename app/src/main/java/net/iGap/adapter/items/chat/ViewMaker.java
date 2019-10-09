@@ -253,7 +253,6 @@ public class ViewMaker {
         textView.setEmojiSize(i_Dp(R.dimen.dp18));
 
         textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        textView.setTextColor(Color.parseColor(G.textBubble));
 
         textView.setId(R.id.messageSenderTextMessage);
         textView.setTypeface(G.typeface_IRANSansMobile);
@@ -267,9 +266,9 @@ public class ViewMaker {
         return textView;
     }
 
-    static View makeHeaderTextView(String text) {
+    static View makeHeaderTextView(Context context,String text) {
         EmojiTextViewE textView = new EmojiTextViewE(context);
-        textView.setTextColor(Color.parseColor(G.textBubble));
+        /*textView.setTextColor(Color.parseColor(G.textBubble));*/
         textView.setId(R.id.messageSenderName);
         textView.setGravity(LEFT);
         textView.setPadding(20, 0, 20, 5);

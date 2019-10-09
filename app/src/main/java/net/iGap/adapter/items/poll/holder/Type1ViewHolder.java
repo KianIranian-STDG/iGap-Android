@@ -20,8 +20,6 @@ public class Type1ViewHolder extends BaseViewHolder {
         super(pollAdapter, itemView);
         img0 = itemView.findViewById(R.id.type1_img0);
         card0 = itemView.findViewById(R.id.type1_card0);
-        card0.setCardBackgroundColor(G.getThemeBackgroundColor());
-
         tick0 = itemView.findViewById(R.id.type1_tick0);
     }
 

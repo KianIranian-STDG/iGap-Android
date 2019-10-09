@@ -197,11 +197,11 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                         intent.putExtra("IS_DARK_THEME", G.themeColor == Theme.DARK);
                         intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
                         intent.putExtra(WalletActivity.PROGRESSBAR,new Theme().getAccentColor(activity));
-                        intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
+                        intent.putExtra(WalletActivity.LINE_BORDER, new Theme().getDividerColor(activity));
                         intent.putExtra(WalletActivity.BACKGROUND,new Theme().getRootColor(activity));
                         intent.putExtra(WalletActivity.BACKGROUND_2, new Theme().getRootColor(activity));
                         intent.putExtra(WalletActivity.TEXT_TITLE, new Theme().getTitleTextColor(activity));
-                        intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                        intent.putExtra(WalletActivity.TEXT_SUB_TITLE, new Theme().getSubTitleColor(activity));
                         if (discoveryField.value.equals("QR_USER_WALLET")) {
                             intent.putExtra("isScan", true);
                         } else {

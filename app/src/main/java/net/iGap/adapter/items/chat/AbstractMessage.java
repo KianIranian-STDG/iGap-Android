@@ -567,7 +567,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (type == ProtoGlobal.Room.Type.GROUP) {
             if (!mMessage.isSenderMe()) {
-                addSenderNameToGroupIfNeed(mHolder, getRealmChat());
+                addSenderNameToGroupIfNeed(mHolder);
 
                 if (messageSenderAvatar == null) {
                     messageSenderAvatar = ViewMaker.makeCircleImageView();
@@ -684,7 +684,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    private void addSenderNameToGroupIfNeed(final NewChatItemHolder holder, Realm realm) {
+    private void addSenderNameToGroupIfNeed(final NewChatItemHolder holder) {
 
         if (G.showSenderNameInGroup) {
             View messageSenderName = holder.getContentBloke().findViewById(R.id.messageSenderName);
@@ -694,7 +694,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), Long.parseLong(mMessage.senderID));
             if (realmRegisteredInfo != null) {
-                final EmojiTextViewE _tv = (EmojiTextViewE) ViewMaker.makeHeaderTextView(realmRegisteredInfo.getDisplayName());
+                final EmojiTextViewE _tv = (EmojiTextViewE) ViewMaker.makeHeaderTextView(holder.getContext(),realmRegisteredInfo.getDisplayName());
 
                 _tv.measure(0, 0);       //must call measure!
                 int maxWith = 0;

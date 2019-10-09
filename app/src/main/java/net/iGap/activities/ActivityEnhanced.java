@@ -317,7 +317,6 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
         new HelperFragment(getSupportFragmentManager()).removeAll(false);
 
-        Theme.setThemeColor();
         this.recreate();
 
     }
