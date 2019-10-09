@@ -343,7 +343,16 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     @Override
     public void onLeftIconClickListener(View view) {
         G.fragmentActivity.onBackPressed();
+    }
 
+    @Override
+    public boolean onBackPressed() {
+        if (typeCreate.equals("CHANNEL")) {
+            ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+            return true;
+        }
+        else
+            return false;
     }
 
     @Override
