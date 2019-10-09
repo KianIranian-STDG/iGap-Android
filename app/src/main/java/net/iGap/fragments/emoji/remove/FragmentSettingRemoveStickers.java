@@ -27,6 +27,7 @@ import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.helper.HelperError;
+import net.iGap.realm.RealmStickers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,11 +45,10 @@ public class FragmentSettingRemoveStickers extends FragmentToolBarBack {
         // Required empty public constructor
     }
 
-    public static FragmentSettingRemoveStickers newInstance(List<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
+    public static FragmentSettingRemoveStickers newInstance(ArrayList<StructItemSticker> recentStickerList) {
 
         FragmentSettingRemoveStickers fragmentDetailStickers = new FragmentSettingRemoveStickers();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("GROUP_ID", (Serializable) stickerList);
         bundle.putSerializable("RECENT", recentStickerList);
         fragmentDetailStickers.setArguments(bundle);
         return fragmentDetailStickers;
@@ -64,7 +64,7 @@ public class FragmentSettingRemoveStickers extends FragmentToolBarBack {
         super.onViewCreated(view, savedInstanceState);
         titleTextView.setText(R.string.remove_sticker);
 
-        stickerList = (List<StructGroupSticker>) getArguments().getSerializable("GROUP_ID");
+        stickerList = RealmStickers.getAllStickers(true);
         recentStickerList = (ArrayList<StructItemSticker>) getArguments().getSerializable("RECENT");
 
         menu_item1.setText(R.string.delete_icon);

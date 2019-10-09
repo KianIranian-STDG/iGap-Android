@@ -407,7 +407,6 @@ public class FragmentChat extends BaseFragment
     public static long messageId;
     public static long mRoomIdStatic = 0;
     public static long lastChatRoomId = 0;
-    public static List<StructGroupSticker> data = new ArrayList<>();
     public static ArrayList<String> listPathString;
     public static OnUpdateSticker onUpdateSticker;
     private static List<StructBottomSheet> contacts;
@@ -678,15 +677,6 @@ public class FragmentChat extends BaseFragment
             Log.i("UUU", name + " in line : " + line + " is UI Thread");
         } else {
             Log.i("UUU", name + " in line : " + line + " is NOT UI Thread");
-        }
-    }
-
-    public void fillStickerList() {
-
-        data.clear();
-        data = RealmStickers.getAllStickers(true);
-        if (data != null && emojiPopup != null) {
-            emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
         }
     }
 
@@ -3126,9 +3116,8 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        if (data.size() == 0) {
-            fillStickerList();
-        }
+
+
         // to toggle between keyboard and emoji popup
         imvSmileButton.setOnClickListener(new View.OnClickListener() {
 
@@ -3136,7 +3125,8 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
 
                 emojiPopup.toggle();
-                if (data != null && data.size() > 0) {
+                List<StructGroupSticker> data = RealmStickers.getAllStickers(true);
+                if (data != null && emojiPopup != null) {
                     emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
                 }
             }
@@ -3145,9 +3135,7 @@ public class FragmentChat extends BaseFragment
         onUpdateSticker = new OnUpdateSticker() {
             @Override
             public void update() {
-
-                data.clear();
-                data = RealmStickers.getAllStickers(true);
+                List<StructGroupSticker> data = RealmStickers.getAllStickers(true);
                 if (data != null && emojiPopup != null) {
                     emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
                 }
@@ -5850,7 +5838,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
                         if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingRemoveStickers.newInstance(data, recentStickerList)).setReplace(false).load();
+                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingRemoveStickers.newInstance(recentStickerList)).setReplace(false).load();
                         }
                     }
                 })
