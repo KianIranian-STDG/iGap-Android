@@ -29,12 +29,16 @@ import org.webrtc.AudioTrack;
 import org.webrtc.Camera1Enumerator;
 import org.webrtc.CameraEnumerator;
 import org.webrtc.CameraVideoCapturer;
+import org.webrtc.DefaultVideoDecoderFactory;
+import org.webrtc.DefaultVideoEncoderFactory;
+import org.webrtc.EglBase;
 import org.webrtc.MediaConstraints;
 import org.webrtc.MediaStream;
 import org.webrtc.PeerConnection;
 import org.webrtc.PeerConnectionFactory;
 import org.webrtc.SdpObserver;
 import org.webrtc.SessionDescription;
+import org.webrtc.SurfaceTextureHelper;
 import org.webrtc.VideoCapturer;
 import org.webrtc.VideoFrame;
 import org.webrtc.VideoSink;
@@ -70,12 +74,11 @@ public class WebRTC {
     private ProtoSignalingOffer.SignalingOffer.Type callTYpe;
 
     private static WebRTC webRTCInstance;
-
+    EglBase.Context eglBaseContext = null;
 
     public static WebRTC getInstance() {
         if (webRTCInstance == null) {
             webRTCInstance = new WebRTC();
-
         }
         return webRTCInstance;
     }
@@ -123,12 +126,20 @@ public class WebRTC {
         this.callTYpe = callTYpe;
     }
 
+    public EglBase.Context getEglBaseContext() {
+        if (eglBaseContext == null)
+            eglBaseContext = EglBase.create().getEglBaseContext();
+        return eglBaseContext;
+    }
+
 
     private void addVideoTrack(MediaStream mediaStream) {
 
         if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             videoCapturer = createCameraCapturer(new Camera1Enumerator(false));
-            videoSource = peerConnectionFactoryInstance().createVideoSource(videoCapturer);
+            videoSource = peerConnectionFactoryInstance().createVideoSource(videoCapturer.isScreencast());
+            SurfaceTextureHelper surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", getEglBaseContext());
+            videoCapturer.initialize(surfaceTextureHelper, G.context, videoSource.getCapturerObserver());
             videoCapturer.startCapture(VIDEO_RESOLUTION_WIDTH, VIDEO_RESOLUTION_HEIGHT, FPS);
             videoTrackFromCamera = peerConnectionFactoryInstance().createVideoTrack(VIDEO_TRACK_ID, videoSource);
             videoTrackFromCamera.setEnabled(true);
@@ -208,7 +219,14 @@ public class WebRTC {
             initializePeerConnectionFactory();
 
             PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
-            peerConnectionFactory = PeerConnectionFactory.builder().createPeerConnectionFactory();
+            PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
+            DefaultVideoEncoderFactory defaultVideoEncoderFactory = new DefaultVideoEncoderFactory(eglBaseContext, true, true);
+            DefaultVideoDecoderFactory defaultVideoDecoderFactory = new DefaultVideoDecoderFactory(eglBaseContext);
+            peerConnectionFactory = PeerConnectionFactory.builder()
+                    .setOptions(options)
+                    .setVideoEncoderFactory(defaultVideoEncoderFactory)
+                    .setVideoDecoderFactory(defaultVideoDecoderFactory)
+                    .createPeerConnectionFactory();
 
         }
         return peerConnectionFactory;
@@ -254,11 +272,10 @@ public class WebRTC {
             }
 
             PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
-        } catch (UnsatisfiedLinkError e) {
+        }
+        catch (UnsatisfiedLinkError e) {
             e.printStackTrace();
         }
-
-
     }
 
     PeerConnection peerConnectionInstance() {
