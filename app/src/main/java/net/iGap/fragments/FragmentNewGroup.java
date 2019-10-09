@@ -419,20 +419,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         });
 
         //=======================name of group
-        edtGroupName = fragmentNewGroupBinding.ngEdtNewGroup;
-        final View ViewGroupName = fragmentNewGroupBinding.ngViewNewGroup;
-        edtGroupName.setPadding(0, 8, 0, 8);
-        edtGroupName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-
-                if (b) {
-                    ViewGroupName.setBackgroundColor(new Theme().getAccentColor(getContext()));
-                } else {
-                    ViewGroupName.setBackgroundColor(Color.parseColor(G.lineBorder));
-                }
-            }
-        });
 
         //=======================description group
         edtDescription = fragmentNewGroupBinding.ngEdtDescription;

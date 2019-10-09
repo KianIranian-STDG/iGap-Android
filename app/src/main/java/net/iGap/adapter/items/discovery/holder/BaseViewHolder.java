@@ -75,6 +75,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static net.iGap.G.context;
+import static net.iGap.G.needGetSignalingConfiguration;
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
@@ -195,11 +196,11 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                         intent.putExtra("AccentColor",new Theme().getPrimaryColor(activity));
                         intent.putExtra("IS_DARK_THEME", G.themeColor == Theme.DARK);
                         intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-                        intent.putExtra(WalletActivity.PROGRESSBAR,new Theme().getAccentColor(context));
+                        intent.putExtra(WalletActivity.PROGRESSBAR,new Theme().getAccentColor(activity));
                         intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                        intent.putExtra(WalletActivity.BACKGROUND,new Theme().getRootColor(context));
-                        intent.putExtra(WalletActivity.BACKGROUND_2, new Theme().getRootColor(context));
-                        intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
+                        intent.putExtra(WalletActivity.BACKGROUND,new Theme().getRootColor(activity));
+                        intent.putExtra(WalletActivity.BACKGROUND_2, new Theme().getRootColor(activity));
+                        intent.putExtra(WalletActivity.TEXT_TITLE, new Theme().getTitleTextColor(activity));
                         intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
                         if (discoveryField.value.equals("QR_USER_WALLET")) {
                             intent.putExtra("isScan", true);

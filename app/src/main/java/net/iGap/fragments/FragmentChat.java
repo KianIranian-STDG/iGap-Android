@@ -5623,7 +5623,6 @@ public class FragmentChat extends BaseFragment
             case Theme.GREY_COMPLETE:
             case Theme.TEAL_COMPLETE:*/
             case Theme.DARK:
-
                 setEmojiColor(G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);
                 break;
             default:

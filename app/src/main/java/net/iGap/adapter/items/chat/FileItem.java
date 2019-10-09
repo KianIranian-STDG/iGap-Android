@@ -116,10 +116,8 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
-
         holder.cslf_txt_file_name.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
         holder.cslf_txt_file_size.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
-
     }
 
     @Override
@@ -190,7 +188,6 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             cslf_txt_file_size.setSingleLine(true);
             cslf_txt_file_size.setText("3.2 mb");
             cslf_txt_file_size.setAllCaps(TRUE);
-            cslf_txt_file_size.setTextColor(Color.parseColor(G.textBubble));
             setTextSize(cslf_txt_file_size, R.dimen.verySmallTextSize);
             setTypeFace(cslf_txt_file_size);
             bottomView.addView(cslf_txt_file_size);

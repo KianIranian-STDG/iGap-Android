@@ -210,7 +210,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
                 avatarHandler.getAvatar(new ParamWithAvatarType(binding.channelAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
         });
 
-        setUpEmojiPopup();
+        setEmojiColor();
 
     }
 
@@ -642,22 +642,8 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
         }).show();
     }*/
 
-    private void setUpEmojiPopup() {
-        switch (G.themeColor) {
-            /*case Theme.BLUE_GREY_COMPLETE:
-            case Theme.INDIGO_COMPLETE:
-            case Theme.BROWN_COMPLETE:
-            case Theme.GREY_COMPLETE:
-            case Theme.TEAL_COMPLETE:*/
-            case Theme.DARK:
-                setEmojiColor(G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);
-                break;
-            default:
-                setEmojiColor(Color.parseColor("#eceff1"), "#61000000", "#61000000");
-        }
-    }
 
-    private void setEmojiColor(int BackgroundColor, String iconColor, String dividerColor) {
+    private void setEmojiColor() {
         emojiPopup = EmojiPopup.Builder.fromRootView(binding.root)
                 .setOnEmojiBackspaceClickListener(v -> {
 
@@ -665,9 +651,9 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
                 .setOnSoftKeyboardOpenListener(keyBoardHeight -> {
                 }).setOnEmojiPopupDismissListener(() -> isEmojiShow = false)
                 .setOnSoftKeyboardCloseListener(() -> emojiPopup.dismiss())
-                .setBackgroundColor(BackgroundColor)
-                .setIconColor(Color.parseColor(iconColor))
-                .setDividerColor(Color.parseColor(dividerColor))
+                .setBackgroundColor(new Theme().getRootColor(getContext()))
+                .setIconColor(new Theme().getTitleTextColor(getContext()))
+                .setDividerColor(new Theme().getTitleTextColor(getContext()))
                 .build(binding.channelNameEditText);
     }
 

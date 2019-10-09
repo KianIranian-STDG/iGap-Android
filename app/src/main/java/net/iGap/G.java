@@ -155,11 +155,12 @@ public class G extends ApplicationContext {
     public static String textTitleTheme;
     public static String textBubble;
     public static String linkColor;
-    public static String txtIconCheck;
-    //    public static String textBubbleSend;
     public static String textSubTheme;
-    public static String tintImage;
     public static String lineBorder;
+    public static String txtIconCheck;
+//    public static String textBubbleSend;
+
+    public static String tintImage;
     public static Ipromote ipromote;
     //    public static String menuBackgroundColor;
     public static String authorHash;
@@ -506,7 +507,7 @@ public class G extends ApplicationContext {
         // dont remove below line please
         if (!BuildConfig.DEBUG && BuildConfig.Store.length() > 1) {
             Metrix.getInstance().setStore(BuildConfig.Store);
-            Metrix.getInstance().setAppSecret(1,1728320174, 43612053, 1626881868, 580653578);
+            Metrix.getInstance().setAppSecret(1, 1728320174, 43612053, 1626881868, 580653578);
         }
 
         new Thread(new Runnable() {

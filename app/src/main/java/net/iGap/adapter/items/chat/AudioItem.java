@@ -289,7 +289,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         holder.seekBar.getProgressDrawable().setColorFilter(holder.getColor(R.color.text_line1_igap_dark),
                 android.graphics.PorterDuff.Mode.SRC_IN);
-        holder.songTimeTv.setTextColor(Color.parseColor(G.textTitleTheme));
     }
 
     @Override

@@ -304,6 +304,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         holder.txt_Timer.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
         holder.author.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
+
     }
 
     @Override
@@ -347,7 +348,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             author = new AppCompatTextView(G.context);
             author.setId(R.id.cslv_txt_author);
-            author.setTextColor(Color.parseColor(G.textBubble));
             author.setSingleLine(true);
             setTextSize(author, R.dimen.standardTextSize);
             author.setMaxLines(2);
@@ -359,7 +359,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             btnPlayMusic.setBackgroundResource(0);
             btnPlayMusic.setGravity(Gravity.CENTER);
             btnPlayMusic.setText(R.string.play_icon);
-            btnPlayMusic.setTextColor(getColor(R.color.voice_item));
+        //    btnPlayMusic.setTextColor(getColor(R.color.voice_item));
             setTextSize(btnPlayMusic, R.dimen.dp36);
 
             txt_Timer = new AppCompatTextView(view.getContext());
