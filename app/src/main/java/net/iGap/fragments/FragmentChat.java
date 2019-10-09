@@ -3791,21 +3791,21 @@ public class FragmentChat extends BaseFragment
                             isAllSenderId = false;
                         }
                         final long senderId = G.userId;
-                        ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, messageSender);
+                        //ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, messageSender);
                         if (senderId != messageSender) {  // if message dose'nt belong to owner
                             if (channelRole == ChannelChatRole.MEMBER) {
                                 mBtnDeleteSelected.setVisibility(View.GONE);
                                 isAllSenderId = false;
                             } else if (channelRole == ChannelChatRole.MODERATOR) {
-                                if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
-                                    mBtnDeleteSelected.setVisibility(View.GONE);
-                                    isAllSenderId = false;
-                                }
+                                //if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
+                                mBtnDeleteSelected.setVisibility(View.GONE);
+                                isAllSenderId = false;
+                                //}
                             } else if (channelRole == ChannelChatRole.ADMIN) {
-                                if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
-                                    mBtnDeleteSelected.setVisibility(View.GONE);
-                                    isAllSenderId = false;
-                                }
+                               // if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
+                                mBtnDeleteSelected.setVisibility(View.GONE);
+                                isAllSenderId = false;
+                               // }
                             }
                         } else {
                             mBtnDeleteSelected.setVisibility(View.VISIBLE);
@@ -3813,22 +3813,22 @@ public class FragmentChat extends BaseFragment
                     } else if (chatType == GROUP) {
 
                         final long senderId = G.userId;
-                        GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, messageSender);
+                        //GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, messageSender);
 
                         if (senderId != messageSender) {  // if message dose'nt belong to owner
                             if (groupRole == GroupChatRole.MEMBER) {
                                 mBtnDeleteSelected.setVisibility(View.GONE);
                                 isAllSenderId = false;
                             } else if (groupRole == GroupChatRole.MODERATOR) {
-                                if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
-                                    mBtnDeleteSelected.setVisibility(View.GONE);
-                                    isAllSenderId = false;
-                                }
+                                //if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
+                                mBtnDeleteSelected.setVisibility(View.GONE);
+                                isAllSenderId = false;
+                                //}
                             } else if (groupRole == GroupChatRole.ADMIN) {
-                                if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
-                                    mBtnDeleteSelected.setVisibility(View.GONE);
-                                    isAllSenderId = false;
-                                }
+                                //if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
+                                mBtnDeleteSelected.setVisibility(View.GONE);
+                                isAllSenderId = false;
+                                //}
                             }
                         } else {
                             mBtnDeleteSelected.setVisibility(View.VISIBLE);
