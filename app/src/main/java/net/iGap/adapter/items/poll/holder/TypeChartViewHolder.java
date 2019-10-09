@@ -54,7 +54,7 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
         chart.setDoubleTapToZoomEnabled(false);
 
         XAxis xAxis = chart.getXAxis();
-        xAxis.setTextColor(Color.parseColor(G.textTitleTheme));
+        xAxis.setTextColor(new Theme().getTitleTextColor(chart.getContext()));
         xAxis.setTypeface(G.typeface_IRANSansMobile);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
@@ -94,7 +94,7 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
         a[0] = new Theme().getPrimaryColor(chart.getContext());
         set1.setColors(colors);
         set1.setDrawValues(true);
-        set1.setValueTextColor(Color.parseColor(G.textTitleTheme));
+        set1.setValueTextColor(new Theme().getTitleTextColor(chart.getContext()));
         set1.setValueTextSize(ViewMaker.dpToPixel(5));
         set1.setValueFormatter(new ValueFormatter() {
             @Override

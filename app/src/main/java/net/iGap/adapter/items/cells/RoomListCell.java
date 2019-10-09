@@ -177,7 +177,7 @@ public class RoomListCell extends FrameLayout {
                 muteIconTv = new FontIconTextView(getContext());
                 muteIconTv.setText(R.string.mute_icon);
                 muteIconTv.setGravity(Gravity.RIGHT);
-                muteIconTv.setTextColor(Color.parseColor(G.textTitleTheme));
+                muteIconTv.setTextColor(new Theme().getTitleTextColor(getContext()));
                 setTextSize(muteIconTv, R.dimen.dp13);
                 addView(muteIconTv);
                 isMute = true;
