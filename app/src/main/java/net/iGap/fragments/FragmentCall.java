@@ -512,6 +512,11 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
         return true;
     }
 
+    @Override
+    public void scrollToTopOfList() {
+        if (mRecyclerView != null) mRecyclerView.smoothScrollToPosition(0);
+    }
+
     /**
      * **********************************************************************************
      * ********************************** RealmAdapter **********************************

@@ -631,6 +631,10 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         return viewModel.checkEditModeForOnBackPressed();
     }
 
+    @Override
+    public void scrollToTopOfList() {
+        //no thing -> its for scroll list if available
+    }
 
     @Override
     public void profileImageAdd(String path) {

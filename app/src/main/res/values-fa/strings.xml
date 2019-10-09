@@ -631,7 +631,7 @@
     <string name="times">زمان‌ها</string>
     <string name="info">اطلاعات</string>
     <string name="description">توضیحات</string>
-    <string name="type_message">نوشتن پیام</string>
+    <string name="type_message">پیام...</string>
     <string name="place">مکان</string>
     <string name="minutes">دقیقه‌ها</string>
     <string name="channel_link">پیوند کانال</string>
@@ -1189,6 +1189,7 @@
     <string name="verify_user">کاربر تأیید شده</string>
     <string name="save_data_in_sd_card">ذخیره اطلاعات در کارت جانبی</string>
     <string name="are_you_sure">شما مطمئن هستید ؟</string>
+    <string name="are_you_sure_request">آیا از ثبت درخواست خود اطمینان دارید؟</string>
     <string name="are_you_sure_edit_contact">از ویرایش کاربر مطمئن هستید ؟</string>
     <string name="change_storage_place">تغییر مکان ذخیره سازی</string>
     <string name="other_files">سایر فایل ها</string>

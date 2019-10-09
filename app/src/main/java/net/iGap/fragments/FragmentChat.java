@@ -3829,21 +3829,21 @@ public class FragmentChat extends BaseFragment
                             isAllSenderId = false;
                         }
                         final long senderId = G.userId;
-                        ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, messageSender);
+                        //ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, messageSender);
                         if (senderId != messageSender) {  // if message dose'nt belong to owner
                             if (channelRole == ChannelChatRole.MEMBER) {
                                 mBtnDeleteSelected.setVisibility(View.GONE);
                                 isAllSenderId = false;
                             } else if (channelRole == ChannelChatRole.MODERATOR) {
-                                if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
-                                    mBtnDeleteSelected.setVisibility(View.GONE);
-                                    isAllSenderId = false;
-                                }
+                                //if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
+                                mBtnDeleteSelected.setVisibility(View.GONE);
+                                isAllSenderId = false;
+                                //}
                             } else if (channelRole == ChannelChatRole.ADMIN) {
-                                if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
-                                    mBtnDeleteSelected.setVisibility(View.GONE);
-                                    isAllSenderId = false;
-                                }
+                               // if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
+                                mBtnDeleteSelected.setVisibility(View.GONE);
+                                isAllSenderId = false;
+                               // }
                             }
                         } else {
                             mBtnDeleteSelected.setVisibility(View.VISIBLE);
@@ -3851,22 +3851,22 @@ public class FragmentChat extends BaseFragment
                     } else if (chatType == GROUP) {
 
                         final long senderId = G.userId;
-                        GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, messageSender);
+                        //GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, messageSender);
 
                         if (senderId != messageSender) {  // if message dose'nt belong to owner
                             if (groupRole == GroupChatRole.MEMBER) {
                                 mBtnDeleteSelected.setVisibility(View.GONE);
                                 isAllSenderId = false;
                             } else if (groupRole == GroupChatRole.MODERATOR) {
-                                if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
-                                    mBtnDeleteSelected.setVisibility(View.GONE);
-                                    isAllSenderId = false;
-                                }
+                                //if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
+                                mBtnDeleteSelected.setVisibility(View.GONE);
+                                isAllSenderId = false;
+                                //}
                             } else if (groupRole == GroupChatRole.ADMIN) {
-                                if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
-                                    mBtnDeleteSelected.setVisibility(View.GONE);
-                                    isAllSenderId = false;
-                                }
+                                //if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
+                                mBtnDeleteSelected.setVisibility(View.GONE);
+                                isAllSenderId = false;
+                                //}
                             }
                         } else {
                             mBtnDeleteSelected.setVisibility(View.VISIBLE);
@@ -6056,10 +6056,19 @@ public class FragmentChat extends BaseFragment
                 // set maxLength  when layout attachment is visible
                 edtChat.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH)});
 
-                sendButtonVisibility(true);
+                sendButtonVisibilityWithNoAnim(true);
             }
         }, 100);
     }
+
+
+    private void sendButtonVisibilityWithNoAnim(boolean visibility) {
+        layoutAttachBottom.setVisibility(visibility ? View.GONE : View.VISIBLE);
+        layoutAttachBottom.clearAnimation();
+        imvSendButton.clearAnimation();
+        imvSendButton.setVisibility(visibility ? View.VISIBLE : View.GONE);
+    }
+
 
     private boolean isSendVisibilityAnimInProcess;
     private boolean isAttachVisibilityAnimInProcess;
@@ -6070,12 +6079,12 @@ public class FragmentChat extends BaseFragment
         //Log.i(TAG, "sendButtonVisibility: "+visibility);
 
         if (animGone == null || animVisible == null) {
-            animGone = AnimationUtils.loadAnimation(getContext(), R.anim.translate_exit_up);
-            animVisible = AnimationUtils.loadAnimation(getContext(), R.anim.translate_enter_down);
+            animGone = AnimationUtils.loadAnimation(getContext(), R.anim.fade_scale_hide);
+            animVisible = AnimationUtils.loadAnimation(getContext(), R.anim.fade_scale_show);
         }
 
-        animGone.setDuration(70);
-        animVisible.setDuration(70);
+        //animGone.setDuration(70);
+        //animVisible.setDuration(70);
 
         if (!visibility && isSendVisibilityAnimInProcess) {
             animGone.reset();
@@ -6136,6 +6145,7 @@ public class FragmentChat extends BaseFragment
             public void onAnimationEnd(Animation animation) {
                 layoutAttachBottom.setVisibility(View.GONE);
                 imvSendButton.startAnimation(animVisible);
+                imvSendButton.setVisibility(View.VISIBLE);
 
             }
 
@@ -6148,7 +6158,6 @@ public class FragmentChat extends BaseFragment
         animVisible.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                imvSendButton.setVisibility(View.VISIBLE);
                 //Log.i(TAG, "sendButtonAnimateVisible: anim22 start");
 
             }

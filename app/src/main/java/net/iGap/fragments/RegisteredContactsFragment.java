@@ -660,6 +660,11 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         }
     }
 
+    @Override
+    public void scrollToTopOfList() {
+        if (realmRecyclerView != null) realmRecyclerView.smoothScrollToPosition(0);
+    }
+
     public void loadContacts() {
         results = DbManager.getInstance().doRealmTask(realm -> {
             return realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());

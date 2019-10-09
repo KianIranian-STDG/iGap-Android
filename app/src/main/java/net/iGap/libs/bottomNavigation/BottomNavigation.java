@@ -17,7 +17,6 @@ import androidx.annotation.RequiresApi;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
 import net.iGap.libs.bottomNavigation.Util.Utils;
@@ -91,6 +90,10 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
             onSelectedItemChanged();
             if (onItemChangeListener != null) {
                 onItemChangeListener.onSelectedItemChanged(tabItems.get(position).getPosition());
+            }
+        } else {
+            if (onItemChangeListener != null) {
+                onItemChangeListener.onSelectAgain(tabItems.get(position).getPosition());
             }
         }
     }

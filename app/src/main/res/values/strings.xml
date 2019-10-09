@@ -647,7 +647,7 @@
     <string name="times">Times</string>
     <string name="info">Info</string>
     <string name="description">Description</string>
-    <string name="type_message">Type your message</string>
+    <string name="type_message">Message...</string>
     <string name="place">Place</string>
     <string name="minutes">Minutes</string>
     <string name="channel_link">Channel Link</string>
@@ -1227,6 +1227,7 @@ Want to get it?</string>
     <string name="do_not_send">Don\'t Send</string>
     <string name="save_data_in_sd_card">Save data in sd card</string>
     <string name="are_you_sure">Are you sure</string>
+    <string name="are_you_sure_request">Are you sure you want to submit your request?</string>
     <string name="are_you_sure_edit_contact">Are you sure to edit contact?</string>
     <string name="change_storage_place">Change storage place</string>
     <string name="other_files">Other Files</string>

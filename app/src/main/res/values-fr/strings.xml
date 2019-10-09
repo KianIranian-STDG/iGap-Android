@@ -558,7 +558,7 @@
     <string name="times">temps</string>
     <string name="info">informations</string>
     <string name="description">explications</string>
-    <string name="type_message">écrire un message</string>
+    <string name="type_message">Message...</string>
     <string name="place">place</string>
     <string name="minutes">minutes</string>
     <string name="channel_link">lien de canal</string>
@@ -1060,6 +1060,7 @@
     <string name="verify_user">Utilisateur vérifié</string>
     <string name="save_data_in_sd_card">enregistrement les informations sur la carte SD</string>
     <string name="are_you_sure">Etes- vous sûr ?</string>
+    <string name="are_you_sure_request">Êtes-vous sûr de vouloir soumettre votre demande?</string>
     <string name="change_storage_place"> Changer de lieu de stockage</string>
     <string name="other_files">Autres fichiers</string>
     <string name="title_import_contact_limit">Avertissement: Chargement de la liste de contacts</string>

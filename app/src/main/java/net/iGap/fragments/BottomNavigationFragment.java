@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,7 @@ import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnUnreadChange;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
+import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +87,20 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
         bottomNavigation = view.findViewById(R.id.bn_main_bottomNavigation);
         bottomNavigation.setDefaultItem(2);
-        bottomNavigation.setOnItemChangeListener(this::loadFragment);
+        bottomNavigation.setOnItemChangeListener(new OnItemChangeListener() {
+            @Override
+            public void onSelectedItemChanged(int i) {
+                loadFragment(i);
+            }
+
+            @Override
+            public void onSelectAgain(int i) {
+                Fragment page = getChildFragmentManager().findFragmentById(R.id.viewpager);
+                if (page instanceof BaseMainFragments) {
+                    ((BaseMainFragments) page).scrollToTopOfList();
+                }
+            }
+        });
         bottomNavigation.setCurrentItem(2);
     }
 
