@@ -55,12 +55,14 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnClientCheckInviteLink;
+import net.iGap.interfaces.OnClientGetRoomResponse;
 import net.iGap.interfaces.OnClientJoinByInviteLink;
 import net.iGap.interfaces.OnClientResolveUsername;
 import net.iGap.libs.Tuple;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructMessageOption;
+import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoClientResolveUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -70,6 +72,7 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientCheckInviteLink;
+import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestClientGetRoomHistory;
 import net.iGap.request.RequestClientJoinByInviteLink;
 import net.iGap.request.RequestClientResolveUsername;
@@ -1173,6 +1176,89 @@ public class HelperUrl {
                 });
                 break;
         }
+    }
+
+    public static void goToActivityFromFCM(FragmentActivity activity, final long roomId, final long peerId) {
+
+        if (roomId != FragmentChat.lastChatRoomId) {
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+
+                        if (realmRoom != null) {
+                            // room with given roomID exists.
+                            new GoToChatActivity(realmRoom.getId()).startActivity(activity);
+                        }
+                        else if (peerId > 0){
+                            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+                            if (realmRoom != null) {
+                                new GoToChatActivity(realmRoom.getId()).startActivity(activity);
+                            }
+                            else {
+                                G.onChatGetRoom = new OnChatGetRoom() {
+                                    @Override
+                                    public void onChatGetRoom(final ProtoGlobal.Room room) {
+                                        try (Realm realm1 = Realm.getDefaultInstance()) {
+                                            realm1.executeTransaction(new Realm.Transaction() {
+                                                @Override
+                                                public void execute(Realm realm) {
+                                                    if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
+                                                        RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
+                                                        realmRoom1.setDeleted(true);
+                                                    } else {
+                                                        RealmRoom.putOrUpdate(room, realm);
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        G.handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity(activity);
+                                                G.onChatGetRoom = null;
+                                            }
+                                        }, 500);
+                                    }
+
+                                    @Override
+                                    public void onChatGetRoomTimeOut() {
+
+                                    }
+
+                                    @Override
+                                    public void onChatGetRoomError(int majorCode, int minorCode) {
+
+                                    }
+                                };
+                                new RequestChatGetRoom().chatGetRoom(peerId);
+                            }
+                        }
+                        else {
+                            G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
+                                @Override
+                                public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, RequestClientGetRoom.IdentityClientGetRoom identity) {
+                                    G.onClientGetRoomResponse = null;
+                                    G.handler.postDelayed(() -> {
+                                        new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity(activity);
+                                        G.onChatGetRoom = null;
+                                    }, 500);
+                                }
+
+                                @Override
+                                public void onError(int majorCode, int minorCode) {
+
+                                }
+
+                                @Override
+                                public void onTimeOut() {
+
+                                }
+                            };
+                            new RequestClientGetRoom().clientGetRoom(roomId, null);
+                            Toast.makeText(activity, "Please Wait...", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
     }
 
     private static void goToChat(FragmentActivity activity, final ProtoGlobal.RegisteredUser user, final ChatEntry chatEntery, long messageId) {

@@ -50,9 +50,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import io.fotoapparat.Fotoapparat;
+import io.fotoapparat.selector.ResolutionSelectorsKt;
 
-import static io.fotoapparat.parameter.selector.LensPositionSelectors.back;
-import static io.fotoapparat.parameter.selector.SizeSelectors.biggestSize;
+import static io.fotoapparat.selector.LensPositionSelectorsKt.back;
 import static net.iGap.R.string.item;
 import static net.iGap.fragments.FragmentChat.listPathString;
 
@@ -782,9 +782,10 @@ public class ChatAttachmentPopup {
 
     private void buildCameraSwitcher(){
 
-        fotoapparatSwitcher = Fotoapparat.with(mFrgActivity).into(rcvBottomSheet.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                .photoSize(biggestSize())   // we want to have the biggest photo possible
-                .lensPosition(back())       // we want back camera
+        fotoapparatSwitcher = Fotoapparat.with(mFrgActivity)
+                .into(rcvBottomSheet.findViewById(R.id.cameraView))// view which will draw the camera preview
+                .photoResolution(ResolutionSelectorsKt.highestResolution())   // we want to have the biggest photo possible
+                .lensPosition(back())     // we want back camera
                 .build();
 
     }

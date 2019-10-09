@@ -366,12 +366,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             long roomId = extras.getLong(ActivityMain.openChat);
             if (!FragmentLanguage.languageChanged && roomId > 0) { // if language changed not need check enter to chat
-                GoToChatActivity goToChatActivity = new GoToChatActivity(roomId);
+//                GoToChatActivity goToChatActivity = new GoToChatActivity(roomId);
+                // TODO this change is duo to room null bug. if it works server must change routine.
                 long peerId = extras.getLong("PeerID");
-                if (peerId > 0) {
-                    goToChatActivity.setPeerID(peerId);
-                }
-                goToChatActivity.startActivity(this);
+                new HelperUrl().goToActivityFromFCM(this, roomId, peerId);
+//                if (peerId > 0) {
+//                    goToChatActivity.setPeerID(peerId);
+//                }
+//                goToChatActivity.startActivity(this);
             }
             FragmentLanguage.languageChanged = false;
 

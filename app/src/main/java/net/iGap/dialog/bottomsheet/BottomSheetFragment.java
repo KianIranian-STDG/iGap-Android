@@ -97,4 +97,10 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new BottomSheetDialog(requireContext(), getTheme());
     }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        //No call for super(). Bug on API Level > 11.
+//        super.onSaveInstanceState(outState);
+    }
 }
