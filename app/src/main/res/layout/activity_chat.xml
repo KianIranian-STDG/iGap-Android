@@ -494,7 +494,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp6"
             android:visibility="gone"
-            app:cardBackgroundColor="?attr/iGapCardViewColor"
+            app:cardBackgroundColor="?attr/iGapDividerLine"
             app:cardCornerRadius="5dp">
 
             <RelativeLayout

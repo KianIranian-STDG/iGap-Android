@@ -704,7 +704,7 @@ public class FragmentChat extends BaseFragment
 
         edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
-        edtChat.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext), edtChat.getContext(), R.attr.iGapCardViewColor));
+        edtChat.setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.backround_chatroom_edittext), edtChat.getContext(), R.attr.iGapEditTxtColor));
 
         EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT, this);
 
@@ -6486,18 +6486,13 @@ public class FragmentChat extends BaseFragment
         rcvItem.setLayoutManager(new GridLayoutManager(rcvItem.getContext(), 4, GridLayoutManager.VERTICAL, false));
         rcvItem.setItemViewCacheSize(100);
         rcvItem.setAdapter(fastItemAdapterForward);
-        edtSearch.setBackground(new Theme().tintDrawable(edtSearch.getBackground(), getContext(), R.attr.iGapCardViewColor));
+        edtSearch.setBackground(new Theme().tintDrawable(edtSearch.getBackground(), getContext(), R.attr.iGapDividerLine));
 
         bottomSheetDialogForward = new BottomSheetDialog(getActivity(), R.style.BaseBottomSheetDialog);
         bottomSheetDialogForward.setContentView(viewBottomSheetForward);
         final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheetForward.getParent());
 
-        fastItemAdapterForward.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<ItemBottomSheetForward>() {
-            @Override
-            public boolean filter(ItemBottomSheetForward item, CharSequence constraint) {
-                return item.structBottomSheetForward.getDisplayName().toLowerCase().contains(String.valueOf(constraint));
-            }
-        });
+        fastItemAdapterForward.getItemFilter().withFilterPredicate((IItemAdapter.Predicate<ItemBottomSheetForward>) (item, constraint) -> item.structBottomSheetForward.getDisplayName().toLowerCase().contains(String.valueOf(constraint)));
 
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
