@@ -150,22 +150,10 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     }
 
     private void setUpEmojiPopup() {
-        switch (G.themeColor) {
-            case Theme.BLUE_GREY_COMPLETE:
-            case Theme.INDIGO_COMPLETE:
-            case Theme.BROWN_COMPLETE:
-            case Theme.GREY_COMPLETE:
-            case Theme.TEAL_COMPLETE:
-            case Theme.DARK:
-
-                setEmojiColor(G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);
-                break;
-            default:
-                setEmojiColor(Color.parseColor("#eceff1"), "#61000000", "#61000000");
-        }
+        setEmojiColor(new Theme().getRootColor(this), new Theme().getTitleTextColor(this),new Theme().getTitleTextColor(this));
     }
 
-    private void setEmojiColor(int BackgroundColor, String iconColor, String dividerColor) {
+    private void setEmojiColor(int BackgroundColor, int iconColor, int dividerColor) {
         emojiPopup = EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent_notification)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
             @Override
             public void onEmojiBackspaceClick(View v) {
@@ -193,8 +181,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             }
         })
                 .setBackgroundColor(BackgroundColor)
-                .setIconColor(Color.parseColor(iconColor))
-                .setDividerColor(Color.parseColor(dividerColor))
+                .setIconColor(iconColor)
+                .setDividerColor(dividerColor)
                 .build(edtChat);
     }
 
@@ -313,25 +301,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             viewAttachFile = findViewById(R.id.apn_layout_attach_file);
 
             viewMicRecorder = findViewById(R.id.apn_layout_mic_recorde);
-            View layoutMicBottom = findViewById(R.id.lmr_layout_bottom);
-            TextView micMainText = findViewById(R.id.txt_slideto_cancel);
-            TextView micTime1 = findViewById(R.id.txt_time_mili_secend);
-            TextView micTime2 = findViewById(R.id.txt_time_record);
-
-            if (G.isDarkTheme) {
-                findViewById(R.id.apn_ll_toolbar).setBackgroundResource(R.drawable.shape_toolbar_background_dark);
-                viewAttachFile.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root_dark));
-                layoutMicBottom.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root_dark));
-                micMainText.setTextColor(getResources().getColor(R.color.white));
-                micTime1.setTextColor(getResources().getColor(R.color.white));
-                micTime2.setTextColor(getResources().getColor(R.color.white));
-            } else {
-                viewAttachFile.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root));
-                layoutMicBottom.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root));
-                micMainText.setTextColor(getResources().getColor(R.color.black));
-                micTime1.setTextColor(getResources().getColor(R.color.black));
-                micTime2.setTextColor(getResources().getColor(R.color.black));
-            }
+            findViewById(R.id.lmr_layout_bottom).setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.backround_chatroom_root_dark),ActivityPopUpNotification.this,R.attr.rootBackgroundColor));
 
             voiceRecord = new VoiceRecord(ActivityPopUpNotification.this, viewMicRecorder, viewAttachFile, new OnVoiceRecord() {
                 @Override
@@ -524,8 +494,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 }
             });
 
-            btnSend = (MaterialDesignTextView) findViewById(R.id.apn_btn_send);
-            btnSend.setTextColor(Color.parseColor(G.attachmentColor));
+            btnSend = findViewById(R.id.apn_btn_send);
+          //  btnSend.setTextColor(Color.parseColor(G.attachmentColor));
 
             btnSend.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -540,15 +510,6 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                     finish();
                 }
             });
-
-            if (G.isDarkTheme) {
-                btnSend.setTextColor(getResources().getColor(R.color.white));
-                btnMic.setTextColor(getResources().getColor(R.color.white));
-                btnSmileButton.setTextColor(getResources().getColor(R.color.white));
-                edtChat.setTextColor(getResources().getColor(R.color.white));
-                edtChat.setHintTextColor(getResources().getColor(R.color.gray_9d));
-            }
-
         }
     }
 

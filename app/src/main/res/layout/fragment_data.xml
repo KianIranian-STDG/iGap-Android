@@ -11,11 +11,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootFragmentLanguage"
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
         android:orientation="vertical">
 
         <LinearLayout
@@ -30,7 +28,6 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/miladiTitle"
-            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp48"
             android:layout_marginStart="@dimen/dp16"
@@ -38,6 +35,7 @@
             android:layout_marginTop="@dimen/dp16"
             android:gravity="start|center_vertical"
             android:text="@string/miladi"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintEnd_toStartOf="@id/miladiCheckIcon"
             app:layout_constraintStart_toStartOf="parent"
@@ -72,12 +70,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/shamsiTitle"
-            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp48"
             android:layout_marginTop="@dimen/dp16"
             android:gravity="center_vertical"
             android:text="@string/shamsi"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             app:layout_constraintEnd_toStartOf="@id/shamsiCheckIcon"
             app:layout_constraintStart_toStartOf="@id/miladiTitle"
@@ -108,12 +106,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtLanguageGhamary"
-            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp48"
             android:layout_marginTop="@dimen/dp16"
             android:gravity="center_vertical"
             android:text="@string/ghamari"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintEnd_toEndOf="@id/st_icon_ghamary"
             app:layout_constraintStart_toStartOf="@id/miladiTitle"
@@ -136,11 +134,11 @@
             android:id="@+id/st_layout_ghamari"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:onClick="@{()->viewModel.onGhamariClick()}"
             android:background="?attr/selectableItemBackground"
-            app:layout_constraintStart_toStartOf="@id/txtLanguageGhamary"
+            android:onClick="@{()->viewModel.onGhamariClick()}"
             app:layout_constraintBottom_toBottomOf="@id/txtLanguageGhamary"
-            app:layout_constraintTop_toTopOf="@id/txtLanguageGhamary"
-            app:layout_constraintEnd_toEndOf="@id/st_icon_ghamary"/>
+            app:layout_constraintEnd_toEndOf="@id/st_icon_ghamary"
+            app:layout_constraintStart_toStartOf="@id/txtLanguageGhamary"
+            app:layout_constraintTop_toTopOf="@id/txtLanguageGhamary" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

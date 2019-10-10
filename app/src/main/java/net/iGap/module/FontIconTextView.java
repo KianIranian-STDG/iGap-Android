@@ -6,7 +6,7 @@ import android.view.Gravity;
 
 import androidx.core.content.res.ResourcesCompat;
 
-import net.iGap.G;
+import net.iGap.R;
 import net.iGap.R;
 
 public class FontIconTextView extends androidx.appcompat.widget.AppCompatTextView {
@@ -26,7 +26,7 @@ public class FontIconTextView extends androidx.appcompat.widget.AppCompatTextVie
     }
 
     private void init() {
-        setTypeface(ResourcesCompat.getFont(getContext() , R.font.font_icon));
+        setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icon));
         setGravity(Gravity.CENTER);
     }
 }

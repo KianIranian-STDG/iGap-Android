@@ -11,12 +11,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootFragmentLanguage"
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:layoutDirection="locale">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/fl_layout_toolbar"
@@ -42,11 +39,11 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtLanguageFarsi"
-            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
             android:text="فارسی"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/persianLanguage"
@@ -79,11 +76,11 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtLanguageEn"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
             android:text="English"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/englishLanguage"
@@ -116,11 +113,11 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtLanguageAr"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
             android:text="العربی"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/arabicLanguage"
@@ -153,11 +150,11 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtLanguageFr"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
             android:text="Français"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="@id/franceLanguage"
@@ -191,14 +188,14 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtLanguageRu"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
             android:text="Russian"
-            android:visibility="gone"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/russianLanguage"
             app:layout_constraintTop_toTopOf="@id/russianLanguage" />
 
@@ -230,11 +227,11 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtLanguageKu"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp8"
             android:text="کوردی"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             android:visibility="gone"

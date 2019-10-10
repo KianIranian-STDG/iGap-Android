@@ -161,7 +161,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         realmRecyclerView = view.findViewById(R.id.recycler_view);
 
         LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
-        Utils.darkModeHandler(toolbarLayout);
 
         if (mHelperToolbar == null)
             if (isContact) {
@@ -774,14 +773,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     return;
                 }
 
-                if (G.isDarkTheme) {
-                    viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_300));
-                    viewHolder.title.setTextColor(getResources().getColor(R.color.white));
-                } else {
-                    viewHolder.title.setTextColor(getResources().getColor(R.color.black));
-                    viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_4c));
-                }
-
                 viewHolder.title.setText(contact.getDisplay_name());
                 viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(contact.getId(), contact.getLast_seen(), false));
 
@@ -808,16 +799,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 final RealmContacts contact = viewHolder.realmContacts = usersList.get(i);
                 if (contact == null) {
                     return;
-                }
-
-                if (G.isDarkTheme) {
-                    viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_300));
-                    viewHolder.btnVoiceCall.setTextColor(getResources().getColor(R.color.gray_300));
-                    viewHolder.title.setTextColor(getResources().getColor(R.color.white));
-                } else {
-                    viewHolder.title.setTextColor(getResources().getColor(R.color.black));
-                    viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_4c));
-                    viewHolder.btnVoiceCall.setTextColor(getResources().getColor(R.color.gray_4c));
                 }
 
                 viewHolder.title.setText(contact.getDisplay_name());
@@ -1021,7 +1002,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 super(itemView);
 
                 txtCounter = itemView.findViewById(R.id.row_contact_counter_txt);
-                Utils.darkModeHandler(txtCounter);
             }
 
             public void setCount(int count) {

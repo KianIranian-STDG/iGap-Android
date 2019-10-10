@@ -2982,4 +2982,6 @@
     <string name="all_calls">المكالمات</string>
     <string name="open_url">رابط مفتوح</string>
     <string name="url_copied">تم نسخ الرابط</string>
+    <string name="charity_confirm">شما مبلغ %s ریال جهت کمک به خیریه %s در نظر گرفته اید.</string>
+    <string name="default_theme_title">السمة الافتراضية</string>
 </resources>

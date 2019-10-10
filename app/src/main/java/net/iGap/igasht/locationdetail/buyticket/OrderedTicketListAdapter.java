@@ -96,7 +96,6 @@ public class OrderedTicketListAdapter extends RecyclerView.Adapter<OrderedTicket
         private AppCompatTextView ticketPrice;
         private View plusButton;
         private View minusButton;
-        private View viewBackground;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -106,12 +105,6 @@ public class OrderedTicketListAdapter extends RecyclerView.Adapter<OrderedTicket
             ticketPrice = itemView.findViewById(R.id.price_ticket);
             minusButton = itemView.findViewById(R.id.minusButton);
             plusButton = itemView.findViewById(R.id.plusButton);
-            viewBackground = itemView.findViewById(R.id.view_frame);
-            if (G.isDarkTheme) {
-                viewBackground.setBackgroundResource(R.drawable.igasht_tabbar_background_dark);
-            } else {
-                viewBackground.setBackgroundResource(R.drawable.igasht_tabbar_background_light);
-            }
         }
     }
 }

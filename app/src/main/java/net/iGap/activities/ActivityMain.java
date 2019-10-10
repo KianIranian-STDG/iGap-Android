@@ -52,6 +52,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.dialog.SubmitScoreDialog;
 import net.iGap.eventbus.EventListener;
@@ -642,11 +643,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             boolean isDefaultBg = sharedPreferences.getBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
             if (isDefaultBg) {
-                if (G.isDarkTheme) {
-                    sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
-                } else {
-                    getWallpaperAsDefault();
-                }
+                sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
             }
 
         } else {
@@ -746,7 +743,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         };
     }
 
-    private void getWallpaperAsDefault() {
+    /*private void getWallpaperAsDefault() {
         try {
             RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
             if (realmWallpaper != null) {
@@ -787,9 +784,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             e3.printStackTrace();
         }
 
-    }
+    }*/
 
-    private void setDefaultBackground(String bigImagePath) {
+    /*private void setDefaultBackground(String bigImagePath) {
         String finalPath = "";
         try {
             finalPath = HelperSaveFile.saveInPrivateDirectory(this, bigImagePath);
@@ -800,9 +797,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, finalPath);
         editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
         editor.apply();
-    }
+    }*/
 
-    private void getImageListFromServer() {
+    /*private void getImageListFromServer() {
         Log.e("wallpaper", "request in main ");
         G.onGetWallpaper = new OnGetWallpaper() {
             @Override
@@ -819,7 +816,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         };
 
         new RequestInfoWallpaper().infoWallpaper(ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND);
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

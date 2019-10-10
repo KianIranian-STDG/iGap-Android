@@ -407,7 +407,7 @@ public class BotInit implements MakeButtons.OnClickListener {
         buttonList = new HashMap<>();
         buttonList = MakeButtons.parseData(additionalData);
 
-        childLayout = MakeButtons.createLayout();
+        childLayout = MakeButtons.createLayout(rootView.getContext());
         gson = new GsonBuilder().create();
         for (int i = 0; i < buttonList.size(); i++) {
             for (int j = 0; j < buttonList.get(i).length(); j++) {
@@ -426,7 +426,7 @@ public class BotInit implements MakeButtons.OnClickListener {
             }
             layoutBot.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
             layoutBot.addView(childLayout);
-            childLayout = MakeButtons.createLayout();
+            childLayout = MakeButtons.createLayout(rootView.getContext());
 
         }
 

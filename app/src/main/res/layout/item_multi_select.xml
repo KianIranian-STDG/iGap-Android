@@ -3,12 +3,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/dp2"
-    android:background="@drawable/round_button_disabled_bg"
+    android:background="?attr/iGapButtonSelector"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_itemMultiSelect"
-        style="?textTitleColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -18,5 +17,5 @@
         android:paddingRight="@dimen/dp6"
         android:paddingTop="@dimen/dp2"
         android:paddingBottom="@dimen/dp2"
-        android:textColor="@color/black" />
+        android:textColor="?attr/iGapTitleTextColor" />
 </LinearLayout>

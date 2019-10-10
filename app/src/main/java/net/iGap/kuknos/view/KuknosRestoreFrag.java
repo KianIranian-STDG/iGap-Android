@@ -73,7 +73,6 @@ public class KuknosRestoreFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosRToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
         binding.fragKuknosIdPINCheck.setChecked(false);
 

@@ -7,13 +7,13 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/dp8"
     android:layout_marginRight="@dimen/dp8"
-    card_view:cardPreventCornerOverlap="false"
     card_view:cardBackgroundColor="@android:color/transparent"
     card_view:cardCornerRadius="@dimen/dp8"
-    card_view:cardElevation="0dp">
+    card_view:cardElevation="0dp"
+    card_view:cardPreventCornerOverlap="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -36,7 +36,6 @@
 
         <net.iGap.module.CustomTextViewMedium
             android:id="@+id/txt_message"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -47,14 +46,15 @@
             android:gravity="center"
             android:padding="8dp"
             android:text="TextView"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp14"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image" />
 
         <com.google.android.material.button.MaterialButton
-            style="?iGapButton"
             android:id="@+id/ok"
+            style="@style/iGapButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp8"
@@ -66,10 +66,10 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp8"
-            app:layout_constraintTop_toBottomOf="@id/ok"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ok" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

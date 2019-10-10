@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +21,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -32,6 +32,7 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.BottomSheetItem;
 import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.fragments.FragmentEditImage;
@@ -61,7 +62,7 @@ public class ChatAttachmentPopup {
     private final long POPUP_ANIMATION_DURATION = 160;
     private final String TAG = "ChatAttachmentPopup";
 
-    public boolean isShowing = false ;
+    public boolean isShowing = false;
     private Context mContext;
     private View mRootView;
     private ChatPopupListener mPopupListener;
@@ -121,15 +122,15 @@ public class ChatAttachmentPopup {
     }
 
     public ChatAttachmentPopup setChatBoxHeight(int measuredHeight) {
-        this.mChatBoxHeight = measuredHeight ;
+        this.mChatBoxHeight = measuredHeight;
         return this;
     }
 
     public ChatAttachmentPopup setMessagesLayoutHeight(int measuredHeight) {
-        this.mMessagesLayoutHeight = measuredHeight ;
-        return this ;
+        this.mMessagesLayoutHeight = measuredHeight;
+        return this;
     }
-    
+
     public ChatAttachmentPopup setFragment(Fragment frg) {
         this.mFragment = frg;
         return this;
@@ -164,7 +165,7 @@ public class ChatAttachmentPopup {
 
         mPopup.setOnDismissListener(() -> {
             isNewBottomSheet = true;
-            isShowing = false ;
+            isShowing = false;
             disableCamera();
         });
 
@@ -177,7 +178,7 @@ public class ChatAttachmentPopup {
 
     public void show() {
 
-        isShowing = true ;
+        isShowing = true;
         setupContentView();
         setupAdapterRecyclerImagesAndShowPopup();
     }
@@ -190,55 +191,55 @@ public class ChatAttachmentPopup {
         });
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            setPopupBackground(R.color.navigation_dark_mode_bg , R.color.chat_bottom_bg);
+            contentView.setBackgroundResource(new Theme().getRootColor(contentView.getContext()));
             return;
-        }else {
+        } else {
             contentView.setElevation(0);
         }
 
 
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) contentView.getLayoutParams();
         lp.bottomMargin = 0;
-        lp.leftMargin = 0 ;
-        lp.rightMargin = 0 ;
+        lp.leftMargin = 0;
+        lp.rightMargin = 0;
 
         //get height of keyboard if it was gone set wrap content to popup
         int height = getKeyboardHeight();
-        if (height == 0){
+        if (height == 0) {
             height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            setPopupBackground(R.drawable.popup_background_dark , R.drawable.popup_background);
+            contentView.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(contentView.getContext(),R.drawable.popup_background),contentView.getContext(),R.attr.rootBackgroundColor));
             contentView.setElevation(4);
 
-            if ((contentView.getMeasuredHeight() + mChatBoxHeight ) >= getDeviceScreenHeight()){
-                lp.height =  getDeviceScreenHeight() - mChatBoxHeight - 16;
+            if ((contentView.getMeasuredHeight() + mChatBoxHeight) >= getDeviceScreenHeight()) {
+                lp.height = getDeviceScreenHeight() - mChatBoxHeight - 16;
 
-            }else {
-                lp.height = height ;
+            } else {
+                lp.height = height;
             }
 
-            lp.leftMargin = 10 ;
-            lp.rightMargin = 10 ;
+            lp.leftMargin = 10;
+            lp.rightMargin = 10;
             lp.bottomMargin = mChatBoxHeight + 10;
 
-        }else {
-            setPopupBackground(R.color.navigation_dark_mode_bg , R.color.chat_bottom_bg);
+        } else {
+            contentView.setBackgroundResource(new Theme().getRootColor(contentView.getContext()));
 
-            if (contentView.getHeight() >= height){
+            if (contentView.getHeight() >= height) {
                 contentView.setMinimumHeight(height);
-            }else {
+            } else {
                 lp.height = height;
             }
 
             lp.bottomMargin = 0;
-            lp.leftMargin = 0 ;
-            lp.rightMargin = 0 ;
+            lp.leftMargin = 0;
+            lp.rightMargin = 0;
         }
         contentView.setLayoutParams(lp);
 
 
     }
 
-    public void updateHeight(){
+    public void updateHeight() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             return;
         }
@@ -247,38 +248,34 @@ public class ChatAttachmentPopup {
 
         //get height of keyboard if it was gone set wrap content to popup
         int height = getKeyboardHeight();
-        if (height == 0){
+        if (height == 0) {
             height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
-            if ((contentView.getMeasuredHeight() + mChatBoxHeight ) >= getDeviceScreenHeight()){
-                lp.height =  getDeviceScreenHeight() - mChatBoxHeight - 16;
-            }else {
-                lp.height = height ;
+            if ((contentView.getMeasuredHeight() + mChatBoxHeight) >= getDeviceScreenHeight()) {
+                lp.height = getDeviceScreenHeight() - mChatBoxHeight - 16;
+            } else {
+                lp.height = height;
             }
 
-        }else {
-            if (contentView.getHeight() >= height){
+        } else {
+            if (contentView.getHeight() >= height) {
                 contentView.setMinimumHeight(height);
-            }else {
+            } else {
                 lp.height = height;
             }
 
         }
 
-        G.handler.postDelayed( ()->{
+        G.handler.postDelayed(() -> {
             contentView.setLayoutParams(lp);
-        } , 60);
+        }, 60);
 
     }
 
-    private int getDeviceScreenHeight(){
+    private int getDeviceScreenHeight() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         mFrgActivity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.heightPixels;
-    }
-
-    private void setPopupBackground(int dark, int light) {
-        contentView.setBackgroundResource(G.isDarkTheme ? dark : light);
     }
 
     private void initViews(View view) {
@@ -511,7 +508,7 @@ public class ChatAttachmentPopup {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             hideViewWithCircularReveal(contentView);
         } else {
-            isShowing = false ;
+            isShowing = false;
             mPopup.dismiss();
         }
     }
@@ -751,7 +748,7 @@ public class ChatAttachmentPopup {
         int cx = view.getMeasuredWidth() / 2;
         int cy = view.getMeasuredHeight() / 2;
 
-        animation = ViewAnimationUtils.createCircularReveal(view, cx, cy , finalRadius, 0);
+        animation = ViewAnimationUtils.createCircularReveal(view, cx, cy, finalRadius, 0);
         animation.setDuration(POPUP_ANIMATION_DURATION);
         animation.start();
 
@@ -762,13 +759,13 @@ public class ChatAttachmentPopup {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                isShowing = false ;
+                isShowing = false;
                 mPopup.dismiss();
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
-                isShowing = false ;
+                isShowing = false;
                 mPopup.dismiss();
             }
 
@@ -780,7 +777,7 @@ public class ChatAttachmentPopup {
 
     }
 
-    private void buildCameraSwitcher(){
+    private void buildCameraSwitcher() {
 
         fotoapparatSwitcher = Fotoapparat.with(mFrgActivity)
                 .into(rcvBottomSheet.findViewById(R.id.cameraView))// view which will draw the camera preview

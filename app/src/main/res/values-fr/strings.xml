@@ -1972,4 +1972,6 @@
     <string name="all_calls">des appels</string>
     <string name="open_url">ouvrir le lien</string>
     <string name="url_copied">lien copié</string>
+    <string name="default_theme_title">thème par défaut</string>
+    <string name="dark_theme_title">Thème sombre</string>
 </resources>

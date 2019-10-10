@@ -21,6 +21,7 @@ import com.bumptech.glide.request.target.Target;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
@@ -76,6 +77,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static net.iGap.G.context;
+import static net.iGap.G.needGetSignalingConfiguration;
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
@@ -191,17 +194,17 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                         Intent intent = new Intent(activity, WalletActivity.class);
                         intent.putExtra("Language", "fa");
                         intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
-                        intent.putExtra("PrimaryColor", G.appBarColor);
-                        intent.putExtra("DarkPrimaryColor", G.appBarColor);
-                        intent.putExtra("AccentColor", G.appBarColor);
-                        intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
+                        intent.putExtra("PrimaryColor", new Theme().getPrimaryColor(activity));
+                        intent.putExtra("DarkPrimaryColor",new Theme().getPrimaryColor(activity));
+                        intent.putExtra("AccentColor",new Theme().getPrimaryColor(activity));
+                        intent.putExtra("IS_DARK_THEME", G.themeColor == Theme.DARK);
                         intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-                        intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-                        intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                        intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-                        intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
-                        intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-                        intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                        intent.putExtra(WalletActivity.PROGRESSBAR,new Theme().getAccentColor(activity));
+                        intent.putExtra(WalletActivity.LINE_BORDER, new Theme().getDividerColor(activity));
+                        intent.putExtra(WalletActivity.BACKGROUND,new Theme().getRootColor(activity));
+                        intent.putExtra(WalletActivity.BACKGROUND_2, new Theme().getRootColor(activity));
+                        intent.putExtra(WalletActivity.TEXT_TITLE, new Theme().getTitleTextColor(activity));
+                        intent.putExtra(WalletActivity.TEXT_SUB_TITLE, new Theme().getSubTitleColor(activity));
                         if (discoveryField.value.equals("QR_USER_WALLET")) {
                             intent.putExtra("isScan", true);
                         } else {

@@ -44,8 +44,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
                 android:contentDescription="@null"
-                android:scaleType="centerCrop"
-                android:src="@drawable/background_call_fragment" />
+                android:scaleType="centerCrop" />
 
         </androidx.cardview.widget.CardView>
 

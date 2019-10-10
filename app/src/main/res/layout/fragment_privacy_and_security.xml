@@ -16,79 +16,15 @@
 
     <RelativeLayout
         android:id="@+id/parentPrivacySecurity"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme_2"
-        android:clickable="true"
-        android:layoutDirection="locale"
-        tools:context="net.iGap.fragments.FragmentPrivacyAndSecurity"
-        tools:ignore="MissingPrefix">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:id="@+id/fps_layout_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_height" />
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/stps_backgroundToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-
-            <androidx.appcompat.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp60"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-                android:layoutDirection="ltr"
-                android:padding="0dp"
-                app:contentInsetLeft="0dp"
-                app:contentInsetStart="0dp"
-                tools:ignore="MissingPrefix">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:fontFamily="@font/main_font_bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentTop="true"
-                        android:layout_toEndOf="@+id/stps_ripple_back"
-                        android:layout_toRightOf="@+id/stps_ripple_back"
-                        android:gravity="center"
-                        android:text="@string/st_title_Privacy_Security"
-                        android:textColor="@color/whit_background"
-                        android:textSize="@dimen/dp18"
-                        android:visibility="visible" />
-
-                    <net.iGap.libs.rippleeffect.RippleView
-                        android:id="@+id/stps_ripple_back"
-                        rv_centered="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:rv_alpha="200"
-                        app:rv_centered="true"
-                        app:rv_rippleDuration="0"
-                        app:rv_ripplePadding="5dp">
-
-                        <net.iGap.module.MaterialDesignTextView
-                            android:layout_width="@dimen/dp52"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentLeft="true"
-                            android:gravity="center"
-                            android:text="@string/md_back_arrow"
-                            android:textAppearance="@style/TextIconAppearance_toolbar"
-                            android:textColor="@color/whit_background" />
-
-                    </net.iGap.libs.rippleeffect.RippleView>
-                </RelativeLayout>
-            </androidx.appcompat.widget.Toolbar>
-        </com.google.android.material.appbar.AppBarLayout>
+            android:layout_height="@dimen/toolbar_height"
+            android:orientation="horizontal" />
 
 
         <ScrollView
@@ -115,12 +51,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:paddingBottom="@dimen/dp16"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp12"
+                        android:paddingRight="@dimen/dp16"
+                        android:paddingBottom="@dimen/dp16"
                         android:text="@string/privacy"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+                        android:background="?attr/iGapToolbarBackground"
                         android:textSize="@dimen/dp18"
                         android:textStyle="normal"
 
@@ -133,8 +69,8 @@
                         android:layout_height="@dimen/dp48"
                         android:gravity="center_vertical|start"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="@string/Block_Users"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/dp15"
@@ -143,7 +79,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        style="?lineColorSettingTheme" />
+                        android:background="?iGapDividerLine" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -156,8 +92,8 @@
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/Last_Seen"
                             android:textColor="@color/black_register"
                             android:textSize="@dimen/dp16"
@@ -168,18 +104,13 @@
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/everybody"
-                            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+                            android:background="?attr/iGapToolbarBackground"
                             android:textSize="@dimen/dp16"
                             android:textStyle="normal" />
                     </LinearLayout>
-
-                    <!--<View-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--style="?lineColorSettingTheme" />-->
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -203,10 +134,10 @@
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/everybody"
-                            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+                            android:background="?attr/iGapToolbarBackground"
                             android:textSize="@dimen/dp16"
                             android:textStyle="normal" />
                     </LinearLayout>
@@ -216,7 +147,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="?backgroundColorSettingTheme"
                     android:orientation="vertical">
 
                     <TextView
@@ -224,11 +154,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/dp12"
-                        android:paddingRight="@dimen/dp12"
                         android:paddingTop="@dimen/dp12"
+                        android:paddingRight="@dimen/dp12"
                         android:paddingBottom="@dimen/dp16"
                         android:text="@string/privacy"
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
@@ -240,10 +170,10 @@
                         android:gravity="center_vertical|start"
                         android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickBlocked}"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="@string/Block_Users"
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal" />
 
@@ -260,10 +190,10 @@
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/who_can_see_my_avatar"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -273,15 +203,12 @@
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSeeMyAvatar , default=@string/everybody}"
-                            style="?textSubColorSettingTheme"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
-                            android:textStyle="normal"
-
-                            />
+                            android:textStyle="normal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -299,11 +226,11 @@
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:singleLine="true"
                             android:text="@string/who_can_invite_you_to_channel_s"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -313,15 +240,12 @@
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackInviteChannel , default=@string/everybody}"
-                            style="?textSubColorSettingTheme"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
-                            android:textStyle="normal"
-
-                            />
+                            android:textStyle="normal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -337,11 +261,11 @@
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:singleLine="true"
                             android:text="@string/who_can_invite_you_to_group_s"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -351,15 +275,12 @@
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackInviteGroup , default=@string/everybody}"
-                            style="?textSubColorSettingTheme"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
-                            android:textStyle="normal"
-
-                            />
+                            android:textStyle="normal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -375,10 +296,10 @@
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/who_is_allowed_to_voice_call"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -388,15 +309,12 @@
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackVoiceCall , default=@string/everybody}"
-                            style="?textSubColorSettingTheme"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
-                            android:textStyle="normal"
-
-                            />
+                            android:textStyle="normal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -412,10 +330,10 @@
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/who_is_allowed_to_video_call"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -425,15 +343,12 @@
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackVideoCall , default=@string/everybody}"
-                            style="?textSubColorSettingTheme"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
-                            android:textStyle="normal"
-
-                            />
+                            android:textStyle="normal" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -449,10 +364,10 @@
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/last_seen"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -462,11 +377,10 @@
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSeeLastSeen , default=@string/everybody}"
-                            style="?textSubColorSettingTheme"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
                             android:textStyle="normal" />
                     </LinearLayout>
@@ -477,16 +391,15 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    style="?lineColorSettingTheme"
-                    android:layout_marginTop="@dimen/dp10"
-                    android:layout_marginBottom="@dimen/dp10"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10" />
+                    android:layout_marginTop="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:layout_marginBottom="@dimen/dp10"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="?backgroundColorSettingTheme_2"
                     android:orientation="vertical">
 
                     <TextView
@@ -494,10 +407,10 @@
                         android:layout_height="@dimen/dp48"
                         android:gravity="center_vertical|start"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="@string/Passcode_Lock"
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp16"
                         android:textStyle="normal"
                         android:visibility="gone" />
@@ -505,19 +418,19 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/dp8"
                         android:paddingLeft="@dimen/dp12"
-                        android:paddingRight="@dimen/dp12"
                         android:paddingTop="@dimen/dp12"
+                        android:paddingRight="@dimen/dp12"
+                        android:paddingBottom="@dimen/dp8"
                         android:text="@string/Security"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
-                        style="?textTitleColorSettingTheme"
                         android:textStyle="normal" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        style="?lineColorSettingTheme"
+                        android:background="?iGapDividerLine"
                         android:visibility="gone" />
 
                     <TextView
@@ -525,10 +438,10 @@
                         android:layout_height="@dimen/dp48"
                         android:gravity="center_vertical|start"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="@string/Two_Step_Verification"
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp16"
                         android:textStyle="normal"
                         android:visibility="gone" />
@@ -540,10 +453,10 @@
                         android:gravity="center_vertical|start"
                         android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickPassCode}"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="@string/two_step_pass_code"
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal" />
 
@@ -554,10 +467,10 @@
                         android:gravity="center_vertical|start"
                         android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickTwoStepVerification}"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="@string/two_step_verification"
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal" />
 
@@ -568,44 +481,37 @@
                         android:gravity="center_vertical|start"
                         android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickActivitySessions}"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="@string/Active_Sessions"
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
                         android:textStyle="normal" />
-
-                    <!--<View-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--style="?lineColorSettingTheme"-->
-                    <!--/>-->
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    style="?lineColorSettingTheme"
-                    android:layout_marginTop="@dimen/dp10"
-                    android:layout_marginBottom="@dimen/dp10"
                     android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10" />
+                    android:layout_marginTop="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:layout_marginBottom="@dimen/dp10"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="?backgroundColorSettingTheme"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/dp16"
                         android:paddingLeft="@dimen/dp12"
-                        android:paddingRight="@dimen/dp12"
                         android:paddingTop="@dimen/dp16"
+                        android:paddingRight="@dimen/dp12"
+                        android:paddingBottom="@dimen/dp16"
                         android:text="@string/Account_Self_destruction"
-                        style="?textTitleColorSettingTheme"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
                         android:textStyle="normal" />
 
@@ -622,10 +528,10 @@
                             android:layout_weight=".5"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@string/if_you_are_away_for"
-                            style="?textTitleColorSettingTheme"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             android:textStyle="normal" />
 
@@ -635,15 +541,12 @@
                             android:layout_height="match_parent"
                             android:gravity="center_vertical|start"
                             android:paddingLeft="@dimen/dp16"
-                            android:paddingRight="@dimen/dp16"
                             android:paddingTop="@dimen/dp4"
+                            android:paddingRight="@dimen/dp16"
                             android:text="@{fragmentPrivacyAndSecurityViewModel.callbackSelfDestruction , default=@string/year_1}"
-                            style="?textSubColorSettingTheme"
-                            android:textColor="@color/setting_items_value_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="@dimen/smallTextSize"
-                            android:textStyle="normal"
-
-                            />
+                            android:textStyle="normal" />
                     </LinearLayout>
 
                     <com.uncopt.android.widget.text.justify.JustifiedTextView
@@ -652,7 +555,6 @@
                         android:gravity="top"
                         android:padding="@dimen/dp16"
                         android:text="@string/desc_self_destroy"
-                        style="?textSubColorSettingTheme"
                         android:textSize="@dimen/smallTextSize"
                         android:textStyle="normal" />
 

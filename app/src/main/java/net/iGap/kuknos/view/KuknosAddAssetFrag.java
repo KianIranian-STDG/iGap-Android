@@ -85,7 +85,6 @@ public class KuknosAddAssetFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosAddAToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         binding.fragKuknosAddARecyclerAdv.setHasFixedSize(true);

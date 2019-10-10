@@ -1830,7 +1830,7 @@ Want to get it?</string>
     <string name="charge_amount">Charge amount</string>
     <string name="buy_internet_package_title">Buy Internet Package</string>
     <string name="charity_title">Charity</string>
-    <string name="charity_confirm">You have set the %s Rial to help charity %s</string>
+    <string name="charity_confirm">You have set the %1$s Rial to help charity %2$s</string>
     <string name="disk_and_network_usage">Disk and Network Usage</string>
     <string name="cache">Cache</string>
     <string name="auto_play_media">Auto-play Media</string>
@@ -1936,7 +1936,7 @@ Want to get it?</string>
     <string name="igasht_ticket_type_title">Specify the type of ticket</string>
     <string name="igasht_enter_ticket_count_title">تعداد بازدید کننده را وارد کنید.</string>
     <string name="igasht_add_ticket_count_button_title">ثبت</string>
-    <string name="igasht_order_ticket_title">%s for %d person</string>
+    <string name="igasht_order_ticket_title">%1$s for %2$d person</string>
     <string name="igasht_favorites_title">Favorites</string>
     <string name="igasht_history_title">History</string>
     <string name="igasht_total_ticket_price">Total Price: %d Rials</string>
@@ -2242,6 +2242,16 @@ Want to get it?</string>
     <string name="kuknos_RecoverySK_CheckPIN">I want to set a PIN code for extra security.</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
+    <string name="default_theme_title">Default</string>
+    <string name="dark_theme_title">Dark</string>
+    <string name="red_theme_title">Red</string>
+    <string name="pink_theme_title">Pink</string>
+    <string name="purple_theme_title">Purple</string>
+    <string name="blue_theme_title">Blue</string>
+    <string name="green_theme_title">Green</string>
+    <string name="amber_theme_title">Yellow</string>
+    <string name="orange_theme_title">Orange</string>
+    <string name="gray_theme_title">Dark Gray</string>
     <string name="error_ivand_limit_gift">Unfortunately, the set gifts have come to an end.</string>
     <string name="referral_error_yourself">It is not possible to register your number as a referral.</string>
     <string name="iland">iLand</string>

@@ -7,33 +7,33 @@
         android:id="@+id/cellAddAssetContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dp8"
-        android:layout_marginBottom="@dimen/dp8"
         android:layout_marginStart="@dimen/dp32"
-        android:layout_marginRight="@dimen/dp32"
-        android:layout_marginEnd="@dimen/dp32"
         android:layout_marginLeft="@dimen/dp32"
-        app:cardCornerRadius="6dp"
-        app:cardBackgroundColor="@color/kuknos_WH_itembg">
+        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginEnd="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:layout_marginBottom="@dimen/dp8"
+        app:cardBackgroundColor="@color/kuknos_WH_itembg"
+        app:cardCornerRadius="6dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <TextView
-                style="?textTitleColorSettingTheme"
                 android:id="@+id/cellAddAssetTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/kuknos_AddAsset_Title"
-                android:textStyle="bold"
-                android:textSize="@dimen/dp18"
-                android:singleLine="true"
                 android:layout_margin="@dimen/dp4"
-                app:layout_constraintTop_toTopOf="parent"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@string/kuknos_AddAsset_Title"
+                android:textColor="?iGapTitleTextColor"
+                android:textSize="@dimen/dp18"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

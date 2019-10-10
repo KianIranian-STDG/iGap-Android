@@ -42,6 +42,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityEnhanced;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.dialog.BottomSheetItemClickCallback;
@@ -121,7 +122,7 @@ public class HelperUrl {
 
         if (withAtSign) strBuilder = analaysAtSign(activity, strBuilder);
 
-        if (withHash) strBuilder = analaysHash(strBuilder, messageID);
+        if (withHash) strBuilder = analaysHash(activity, strBuilder, messageID);
 
         String newText = text.toLowerCase();
 
@@ -136,7 +137,7 @@ public class HelperUrl {
             } else if (str.contains(igapResolve)) {
                 insertIgapResolveLink(activity, strBuilder, count, count + str.length());
             } else if (isTextLink(str)) {
-                insertLinkSpan(strBuilder, count, count + str.length(), withClickable);
+                insertLinkSpan(activity, strBuilder, count, count + str.length(), withClickable);
             }
             count += str.length() + 1;
         }
@@ -202,7 +203,7 @@ public class HelperUrl {
         return false;
     }
 
-    private static void insertLinkSpan(final SpannableStringBuilder strBuilder, final int start, final int end, final boolean withclickable) {
+    private static void insertLinkSpan(Context context, SpannableStringBuilder strBuilder, final int start, final int end, final boolean withclickable) {
 
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
@@ -222,7 +223,7 @@ public class HelperUrl {
 
                     G.isLinkClicked = true;
                     boolean openLocalWebPage;
-                    SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+                    SharedPreferences sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
 
                     int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
 
@@ -243,13 +244,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-//                if (G.isDarkTheme) {
-//                    ds.linkColor = LinkColorDark;
-//                } else {
-//                    ds.linkColor = LinkColor;
-//                }
-                ds.linkColor = Color.parseColor(G.linkColor);
-
+                ds.linkColor = new Theme().getLinkColor(context);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -294,7 +289,7 @@ public class HelperUrl {
     public static void openBrowser(String url) {
         final CustomTabsHelperFragment mCustomTabsHelperFragment = CustomTabsHelperFragment.attachTo(G.currentActivity);
 
-        int mColorPrimary = Color.parseColor(G.appBarColor);
+        int mColorPrimary = new Theme().getPrimaryColor(mCustomTabsHelperFragment.getContext());
         final Uri PROJECT_URI = Uri.parse(url);
 
         CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(mColorPrimary).setShowTitle(true).build();
@@ -351,14 +346,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-//                if (G.isDarkTheme) {
-//                    ds.linkColor = LinkColorDark;
-//                } else {
-//                    ds.linkColor = LinkColor;
-//                }
-
-                ds.linkColor = Color.parseColor(G.linkColor);
-
+                ds.linkColor = new Theme().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -367,7 +355,7 @@ public class HelperUrl {
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    private static void insertIgapBot(final SpannableStringBuilder strBuilder, final int start, final int end) {
+    private static void insertIgapBot(Context context, SpannableStringBuilder strBuilder, final int start, final int end) {
 
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
@@ -381,7 +369,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Color.parseColor(G.linkColor);
+                ds.linkColor = new Theme().getLinkColor(context);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -420,12 +408,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-//                if (G.isDarkTheme) {
-//                    ds.linkColor = LinkColorDark;
-//                } else {
-//                    ds.linkColor = LinkColor;
-//                }
-                ds.linkColor = Color.parseColor(G.linkColor);
+                ds.linkColor = new Theme().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -445,7 +428,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Color.parseColor(G.linkColor);
+                ds.linkColor = new Theme().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -488,7 +471,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Color.parseColor(G.linkColor);
+                ds.linkColor = new Theme().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -497,7 +480,7 @@ public class HelperUrl {
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    private static SpannableStringBuilder analaysHash(SpannableStringBuilder builder, String messageID) {
+    private static SpannableStringBuilder analaysHash(Context context, SpannableStringBuilder builder, String messageID) {
 
         if (builder == null) return builder;
 
@@ -524,7 +507,7 @@ public class HelperUrl {
             if (isHash) {
                 if (!(s.matches("\\w") || s.equals("-"))) {
                     if (tmp.length() > 0) {
-                        insertHashLink(tmp, builder, start, messageID);
+                        insertHashLink(context, tmp, builder, start, messageID);
                     }
 
                     tmp = "";
@@ -536,13 +519,13 @@ public class HelperUrl {
         }
 
         if (isHash) {
-            if (tmp.length() > 0) insertHashLink(tmp, builder, start, messageID);
+            if (tmp.length() > 0) insertHashLink(context, tmp, builder, start, messageID);
         }
 
         return builder;
     }
 
-    private static void insertHashLink(final String text, SpannableStringBuilder builder, int start, final String messageID) {
+    private static void insertHashLink(Context context, String text, SpannableStringBuilder builder, int start, final String messageID) {
 
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
@@ -555,12 +538,8 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-//                if (G.isDarkTheme) {
-//                    ds.linkColor = LinkColorDark;
-//                } else {
-//                    ds.linkColor = LinkColor;
-//                }
-                ds.linkColor = Color.parseColor(G.linkColor);
+                //ToDo: fixed it and pass color to this function
+                ds.linkColor = new Theme().getLinkColor(context);
 
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
@@ -633,12 +612,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-//                if (G.isDarkTheme) {
-//                    ds.linkColor = LinkColorDark;
-//                } else {
-//                    ds.linkColor = LinkColor;
-//                }
-                ds.linkColor = Color.parseColor(G.linkColor);
+                ds.linkColor = new Theme().getLinkColor(activity);
 
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
@@ -672,7 +646,7 @@ public class HelperUrl {
                 try {
                     switch (type) {
                         case "hash":
-                            insertHashLink(text.substring(start + 1, end), strBuilder, start, messageID);
+                            insertHashLink(activity, text.substring(start + 1, end), strBuilder, start, messageID);
                             break;
                         case "atSighn":
                             insertAtSignLink(activity, text.substring(start + 1, end), strBuilder, start);
@@ -684,10 +658,10 @@ public class HelperUrl {
                             insertIgapResolveLink(activity, strBuilder, start, end);
                             break;
                         case "bot":
-                            insertIgapBot(strBuilder, start, end);
+                            insertIgapBot(activity, strBuilder, start, end);
                             break;
                         case "webLink":
-                            insertLinkSpan(strBuilder, start, end, true);
+                            insertLinkSpan(activity, strBuilder, start, end, true);
                             break;
                         case "digitLink":
                             insertDigitLink(activity, strBuilder, start, end);
@@ -1474,7 +1448,7 @@ public class HelperUrl {
                                 activity.startActivity(intent);
                             } else if (items.get(position).equals(activity.getString(R.string.add_to_contact))) {
                                 FragmentAddContact fragment = FragmentAddContact.newInstance(
-                                        text , FragmentAddContact.ContactMode.ADD
+                                        text, FragmentAddContact.ContactMode.ADD
                                 );
                                 new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
                             } else if (items.get(position).equals(activity.getString(R.string.verify_register_sms))) {

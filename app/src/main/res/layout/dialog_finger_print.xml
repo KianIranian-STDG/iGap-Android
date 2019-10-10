@@ -2,15 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
     android:background="@android:color/transparent"
+    android:clickable="true"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Confirm_fingerPrint_continue"
-        style="?textTitleColorSettingTheme"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/dp13" />
 
     <LinearLayout
@@ -20,17 +20,14 @@
         android:orientation="horizontal">
 
         <net.iGap.module.MaterialDesignTextView
-
             android:id="@+id/iconDialogTitle"
             android:layout_width="@dimen/dp60"
             android:layout_height="@dimen/dp60"
             android:layout_gravity="center"
             android:text="@string/md_igap_fingerprint"
             android:textAppearance="@style/TextIconAppearance.all"
-            style="?textSubColorSettingTheme"
-            android:textSize="@dimen/dp26"
-
-            />
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/dp26" />
 
         <TextView
             android:id="@+id/txtDialogTitle"
@@ -38,7 +35,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/dp8"
             android:text="@string/Touch_sensor"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp12" />
     </LinearLayout>
 </LinearLayout>

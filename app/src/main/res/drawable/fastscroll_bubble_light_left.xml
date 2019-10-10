@@ -8,7 +8,7 @@
         android:topLeftRadius="24dp"
         android:topRightRadius="24dp" />
 
-    <solid android:color="@color/colorToolbarBackgroundEnd" />
+    <!--<solid android:color="?attr/colorPrimary" />-->
 
     <size
         android:width="48dp"

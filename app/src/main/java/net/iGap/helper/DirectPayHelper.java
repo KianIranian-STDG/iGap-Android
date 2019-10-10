@@ -76,19 +76,12 @@ public class DirectPayHelper {
         TextView descriptionTxt = v.findViewById(R.id.description);
         TextView priceTxt = v.findViewById(R.id.price);
         TextView priceTitle = v.findViewById(R.id.priceTitle);
-        priceTxt.setTypeface(ResourcesCompat.getFont(priceTxt.getContext() , R.font.main_font_bold));
+        priceTxt.setTypeface(ResourcesCompat.getFont(priceTxt.getContext(), R.font.main_font_bold));
         priceTitle.setText(G.currentActivity.getString(R.string.price) + ":");
         titleTxt.setText(title);
         descriptionTxt.setText(description);
         priceTxt.setText(content);
-        if (G.isDarkTheme) {
-            priceTxt.setTextColor(G.currentActivity.getResources().getColor(R.color.white));
-        } else {
-            priceTxt.setTextColor(Color.parseColor(G.appBarColor));
-        }
         Button pay = v.findViewById(R.id.pay);
-        //pay.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
-
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

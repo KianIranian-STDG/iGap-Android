@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.databinding.FragmentDialogCreditPaymentBinding;
 
 import org.paygear.RaadApp;
@@ -469,22 +470,19 @@ public class CreditPaymentDialog extends BottomSheetDialogFragment {
                     PaymentResult paymentResult = response.body();
 
                     PaymentResultDialog dialog = PaymentResultDialog.newInstance(paymentResult);
-                    dialog.setListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            RaadApp.cards = null;
-                            if (getActivity() instanceof NavigationBarActivity) {
-                                ((NavigationBarActivity) getActivity()).broadcastMessage(
-                                        CreditPaymentDialog.this, null, CardsFragment.class);
-                                try {
-                                    ((FactorPaymentDialog) getActivity().getSupportFragmentManager().findFragmentByTag("FactorPaymentDialog")).dismiss();
-                                } catch (Exception e) {
+                    dialog.setListener(v -> {
+                        RaadApp.cards = null;
+                        if (getActivity() instanceof NavigationBarActivity) {
+                            ((NavigationBarActivity) getActivity()).broadcastMessage(
+                                    CreditPaymentDialog.this, null, CardsFragment.class);
+                            try {
+                                ((FactorPaymentDialog) getActivity().getSupportFragmentManager().findFragmentByTag("FactorPaymentDialog")).dismiss();
+                            } catch (Exception e) {
 
-                                }
                             }
-                            dismiss();
                         }
-                    }, G.appBarColor);
+                        dismiss();
+                    }, String.valueOf(new Theme().getPrimaryColor(getContext())));
 
                     dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
 

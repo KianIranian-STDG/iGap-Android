@@ -20,7 +20,6 @@ import net.iGap.model.cPay.PlaqueBodyModel;
 public class FragmentCPayChargeViewModel extends BaseCPayViewModel<CPayWalletAmountModel> {
 
     private MutableLiveData<Boolean> editTextVisibilityListener = new MutableLiveData<>();
-    public ObservableField<Boolean> isDark = new ObservableField<>(false);
     public ObservableField<String> userCurrentAmount = new ObservableField<>("-");
     public ObservableInt secondaryLoaderVisiblity = new ObservableInt(View.GONE);
     public ObservableBoolean payButtonEnableState = new ObservableBoolean(true);
@@ -30,7 +29,6 @@ public class FragmentCPayChargeViewModel extends BaseCPayViewModel<CPayWalletAmo
     private String mPlaque;
 
     public FragmentCPayChargeViewModel() {
-        isDark.set(G.isDarkTheme);
     }
 
     public void getRequestAmountFromServer() {

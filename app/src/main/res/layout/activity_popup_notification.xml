@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp60"
             android:layout_alignParentTop="true"
-            android:background="@drawable/shape_toolbar_background"
+            android:background="?attr/iGapToolbarBackground"
             android:orientation="horizontal">
 
 
@@ -127,7 +127,7 @@
             android:id="@+id/apn_layout_attach_file"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
-            android:background="@drawable/backround_chatroom_root"
+            android:background="?attr/iGapChatSendMessageBackground"
             android:layout_alignParentBottom="true"
             android:gravity="center"
             android:orientation="horizontal">
@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/dp8"
                 android:text="@string/md_emoticon_with_happy_face"
-                android:textColor="@color/black" />
+                android:textColor="?attr/iGapTitleTextColor" />
 
             <net.iGap.module.EmojiEditTextE
                 android:id="@+id/apn_edt_chat"
@@ -150,30 +150,30 @@
                 android:hint="@string/type_message"
                 android:maxLines="4"
                 android:paddingRight="@dimen/dp4"
-                style="?hintColorSettingTheme"
-                android:textColor="@color/black"
-                android:textColorHint="@color/gray_4c"
+                style="@style/iGapEditTextStyle"
+                android:textColor="?attr/iGapTitleTextColor"
+                android:textColorHint="?attr/iGapHintTextColor"
                 app:emojiSize="26sp" />
 
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/apn_btn_send"
-                style="@style/myIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/dp8"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorPrimary"
                 android:text="@string/md_send_button"
                 android:visibility="gone" />
 
 
             <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/apn_btn_mic"
-                style="@style/myIconTextViewStyle"
+                style="@style/baseFontIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/dp8"
                 android:text="@string/md_voice_message_microphone_button"
-                android:textColor="@color/black" />
+                android:textColor="?attr/iGapTitleTextColor" />
 
 
         </LinearLayout>

@@ -18,7 +18,6 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
 
     private ObservableField<String> backgroundImageUrl = new ObservableField<>("");
     private ObservableInt selectIcon = new ObservableInt(R.string.down_arrow_icon);
-    private ObservableInt backgroundShape = new ObservableInt(R.drawable.shape_igasht_yellow);
     private MutableLiveData<List<IGashtProvince>> provinceList = new MutableLiveData<>();
     private MutableLiveData<Boolean> goToShowLocationListPage = new MutableLiveData<>();
     private MutableLiveData<Boolean> clearEditText = new MutableLiveData<>();
@@ -26,19 +25,12 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
     private IGashtRepository repository;
 
     public IGashtProvinceViewModel() {
-        if (G.isDarkTheme) {
-            backgroundShape.set(R.drawable.shape_igasht_gradient_gray);
-        }
         repository = IGashtRepository.getInstance();
         getProvinceList();
     }
 
     public ObservableField<String> getBackgroundImageUrl() {
         return backgroundImageUrl;
-    }
-
-    public ObservableInt getBackgroundShap() {
-        return backgroundShape;
     }
 
     public MutableLiveData<Boolean> getGoToShowLocationListPage() {

@@ -41,7 +41,7 @@ public class ChatItemWithTextHolder extends NewChatItemHolder {
         layoutMessageContainer = ViewMaker.getTextView();
         layoutMessageContainer.addView(messageView);
 
-        BtnContainer = new LinearLayout(G.context);
+        BtnContainer = new LinearLayout(getContext());
         BtnContainer.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams layout_327 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         BtnContainer.setLayoutParams(layout_327);

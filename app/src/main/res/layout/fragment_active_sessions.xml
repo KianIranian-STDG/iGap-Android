@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/stas_rootActiveSession"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="?backgroundColorSettingTheme"
-    android:clickable="true"
-    android:orientation="vertical"
-    tools:context="net.iGap.fragments.FragmentActiveSessions"
-    tools:ignore="MissingPrefix">
-
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/fas_layout_toolbar"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height" />
+        android:layout_height="@dimen/toolbar_height"
+        android:orientation="horizontal" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/stas_rcvContent"
-        style="?backgroundColorSettingTheme_2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/fas_layout_toolbar" />

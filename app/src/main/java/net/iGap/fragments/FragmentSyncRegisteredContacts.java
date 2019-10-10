@@ -114,7 +114,6 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
         //Toolbar Initial
         LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
-        Utils.darkModeHandler(toolbarLayout);
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setSearchBoxShown(true)

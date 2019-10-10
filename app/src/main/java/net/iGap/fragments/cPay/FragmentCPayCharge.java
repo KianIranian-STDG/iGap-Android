@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.cPay.CPayChargeSpinnerAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentCpayChargeBinding;
@@ -70,6 +71,8 @@ public class FragmentCPayCharge extends BaseAPIViewFrag implements ToolbarListen
 
         cPayChargeViewModel.setPlaque(plaqueText);
         cPayChargeViewModel.getRequestAmountFromServer();
+
+        binding.plaqueBg.setBackground(new Theme().tintDrawable(binding.plaqueBg.getBackground(),getContext(),R.attr.iGapCardViewColor));
         initPlaque();
         setupSpinner();
         initCallback();

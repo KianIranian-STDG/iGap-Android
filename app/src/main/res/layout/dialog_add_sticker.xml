@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    style="?backgroundColorSettingTheme"
-    tools:ignore="MissingPrefix">
+    android:background="?rootBackgroundColor"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/add_sticker_toolbar"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/toolbar_height" />
+        android:minHeight="@dimen/toolbar_height"
+        android:orientation="horizontal" />
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
@@ -160,13 +161,8 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
             TextView tv = new TextView(getContext());
             tv.setText(tabLayout.getTabAt(i).getText());
             tv.setGravity(Gravity.CENTER);
-            tv.setTypeface(ResourcesCompat.getFont(tv.getContext() , R.font.main_font));
-
-            if (G.isDarkTheme) {
-                tv.setTextColor(G.context.getResources().getColor(R.color.white));
-            } else {
-                tv.setTextColor(G.context.getResources().getColor(R.color.black));
-            }
+            tv.setTypeface(ResourcesCompat.getFont(tv.getContext(), R.font.main_font));
+            tv.setTextColor(new Theme().getTitleTextColor(tv.getContext()));
             tabLayout.getTabAt(i).setCustomView(tv);
         }
     }

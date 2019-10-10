@@ -227,7 +227,6 @@ import net.iGap.interfaces.OpenBottomSheetItem;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.MyWebViewClient;
 import net.iGap.libs.Tuple;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -691,10 +690,6 @@ public class FragmentChat extends BaseFragment
 
         ViewGroup chatBoxRootView = rootView.findViewById(R.id.layout_attach_file);
 
-        if (G.isDarkTheme)
-            chatBoxRootView.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root_dark));
-        else
-            chatBoxRootView.setBackground(getResources().getDrawable(R.drawable.backround_chatroom_root));
         sendMoney = rootView.findViewById(R.id.btn_chatRoom_wallet);
 
         /**
@@ -703,17 +698,7 @@ public class FragmentChat extends BaseFragment
 
         edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
-
-        if (G.isDarkTheme) {
-            imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.green));
-            edtChat.setBackground(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext_dark));
-            edtChat.setHintTextColor(ContextCompat.getColor(inflater.getContext(), R.color.white));
-            edtChat.setTextColor(inflater.getContext().getResources().getColor(R.color.white));
-        } else {
-            imvSendButton.setTextColor(inflater.getContext().getResources().getColor(R.color.md_green_700));
-            edtChat.setBackground(ContextCompat.getDrawable(inflater.getContext(), R.drawable.backround_chatroom_edittext));
-            edtChat.setHintTextColor(ContextCompat.getColor(inflater.getContext(), R.color.gray_4c));
-        }
+        edtChat.setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.backround_chatroom_edittext), edtChat.getContext(), R.attr.iGapEditTxtColor));
 
         EventManager.getInstance().addEventListener(ActivityCall.CALL_EVENT, this);
 
@@ -1955,8 +1940,7 @@ public class FragmentChat extends BaseFragment
             }
         }
 
-        if (G.isDarkTheme)
-            rootView.findViewById(R.id.ac_ll_selected_and_pin).setBackground(context.getResources().getDrawable(R.drawable.shape_multi_select_bg_dark));
+        rootView.findViewById(R.id.ac_ll_selected_and_pin).setBackground(new Theme().tintDrawable(rootView.findViewById(R.id.ac_ll_selected_and_pin).getBackground(), getContext(), R.attr.rootBackgroundColor));
 
         initComponent();
         initAppbarSelected();
@@ -2026,7 +2010,7 @@ public class FragmentChat extends BaseFragment
         if (isNotJoin) {
             final LinearLayout layoutJoin = rootView.findViewById(R.id.ac_ll_join);
 
-            layoutJoin.setBackgroundColor(Color.parseColor(G.appBarColor));
+            layoutJoin.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
             layoutJoin.setVisibility(View.VISIBLE);
             layoutMute.setVisibility(View.GONE);
             viewAttachFile.setVisibility(View.GONE);
@@ -2277,7 +2261,8 @@ public class FragmentChat extends BaseFragment
             /*FragmentShowImage fragment = (FragmentShowImage) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
             if (fragment != null) {
                 removeFromBaseFragment(fragment);
-            } else*/ if (mAdapter != null && mAdapter.getSelections().size() > 0) {
+            } else*/
+            if (mAdapter != null && mAdapter.getSelections().size() > 0) {
                 mAdapter.deselect();
             } else if (emojiPopup != null && emojiPopup.isShowing()) {
                 emojiPopup.dismiss();
@@ -2358,11 +2343,7 @@ public class FragmentChat extends BaseFragment
                 }
             }
         } else {
-            if (G.themeColor == Theme.DARK) {
-                imgBackGround.setImageResource(R.drawable.chat_bg_dark);
-            } else {
-                //todo: fixed load default background in light mode
-            }
+            imgBackGround.setImageResource(R.drawable.chat_default_background_pattern);
         }
 
     }
@@ -2784,7 +2765,7 @@ public class FragmentChat extends BaseFragment
         txtNewUnreadMessage.getTextView().setTypeface(ResourcesCompat.getFont(txtNewUnreadMessage.getContext() , R.font.main_font));
         txtNewUnreadMessage.getTextView().setSingleLine();
         txtNewUnreadMessage.getTextView().setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});//set max length
-        txtNewUnreadMessage.setBadgeColor(G.isDarkTheme ? Color.parseColor(Theme.default_notificationColor) : Color.parseColor(G.notificationColor));
+        txtNewUnreadMessage.setBadgeColor(new Theme().getPrimaryDarkColor(txtNewUnreadMessage.getContext()));
         llScrollNavigate.addView(txtNewUnreadMessage, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER | Gravity.TOP));
 
         G.handler.post(new Runnable() {
@@ -2796,7 +2777,6 @@ public class FragmentChat extends BaseFragment
         });
 
         MaterialDesignTextView txtNavigationLayout = rootView.findViewById(R.id.ac_txt_down_navigation);
-        AndroidUtils.setBackgroundShapeColor(txtNavigationLayout, Color.parseColor(G.appBarColor));
 
         llScrollNavigate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -5673,25 +5653,11 @@ public class FragmentChat extends BaseFragment
      * emoji initialization
      */
     private void setUpEmojiPopup() {
-        switch (G.themeColor) {
-            case Theme.BLUE_GREY_COMPLETE:
-            case Theme.INDIGO_COMPLETE:
-            case Theme.BROWN_COMPLETE:
-            case Theme.GREY_COMPLETE:
-            case Theme.TEAL_COMPLETE:
-            case Theme.DARK:
-
-                setEmojiColor(G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);
-                break;
-            default:
-                setEmojiColor(Color.parseColor("#eceff1"), "#61000000", "#61000000");
-
-
-        }
+        setEmojiColor(new Theme().getRootColor(getContext()), new Theme().getTitleTextColor(getContext()),new Theme().getTitleTextColor(getContext()));
 
     }
 
-    private void setEmojiColor(int BackgroundColor, String iconColor, String dividerColor) {
+    private void setEmojiColor(int BackgroundColor, int iconColor, int dividerColor) {
 
         emojiPopup = EmojiPopup.Builder.fromRootView(rootView.findViewById(R.id.ac_ll_parent))
                 .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
@@ -5853,8 +5819,8 @@ public class FragmentChat extends BaseFragment
                     }
                 })
                 .setBackgroundColor(BackgroundColor)
-                .setIconColor(Color.parseColor(iconColor))
-                .setDividerColor(Color.parseColor(dividerColor))
+                .setIconColor(iconColor)
+                .setDividerColor(dividerColor)
                 .build(edtChat);
 
     }
@@ -5958,10 +5924,6 @@ public class FragmentChat extends BaseFragment
                     imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
                 }
 
-                txtFileNameForSend = rootView.findViewById(R.id.ac_txt_file_neme_for_sending);
-
-                Utils.darkModeHandler(txtFileNameForSend);
-
                 ll_attach_text.setVisibility(View.VISIBLE);
                 // set maxLength  when layout attachment is visible
                 edtChat.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH)});
@@ -5985,8 +5947,6 @@ public class FragmentChat extends BaseFragment
     private Animation animGone, animVisible;
 
     private void sendButtonVisibility(boolean visibility) {
-
-        //Log.i(TAG, "sendButtonVisibility: "+visibility);
 
         if (animGone == null || animVisible == null) {
             animGone = AnimationUtils.loadAnimation(getContext(), R.anim.fade_scale_hide);
@@ -6409,14 +6369,9 @@ public class FragmentChat extends BaseFragment
         btnDownHash = rootView.findViewById(R.id.ac_btn_hash_down);
         txtHashCounter = rootView.findViewById(R.id.ac_txt_hash_counter);
 
-        if (G.isDarkTheme) {
-            txtHashCounter.setTextColor(getContext().getResources().getColor(R.color.white));
-        }
-
         searchHash = new SearchHash();
 
         btnHashLayoutClose = rootView.findViewById(R.id.ac_btn_hash_close);
-        if (!G.isDarkTheme) btnHashLayoutClose.setTextColor(Color.parseColor(G.appBarColor));
         btnHashLayoutClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -6606,28 +6561,13 @@ public class FragmentChat extends BaseFragment
         rcvItem.setLayoutManager(new GridLayoutManager(rcvItem.getContext(), 4, GridLayoutManager.VERTICAL, false));
         rcvItem.setItemViewCacheSize(100);
         rcvItem.setAdapter(fastItemAdapterForward);
+        edtSearch.setBackground(new Theme().tintDrawable(edtSearch.getBackground(), getContext(), R.attr.iGapDividerLine));
 
-        if (G.isDarkTheme) {
-            textSend.setBackgroundColor(getContext().getResources().getColor(R.color.gray));
-            edtSearch.setTextColor(getContext().getResources().getColor(R.color.white));
-            edtSearch.setBackground(getContext().getResources().getDrawable(R.drawable.fast_sorward_dark));
-        } else {
-            textSend.setBackgroundColor(getContext().getResources().getColor(R.color.green));
-            edtSearch.setBackground(getContext().getResources().getDrawable(R.drawable.fast_sorward_light));
-            edtSearch.setTextColor(getContext().getResources().getColor(R.color.black));
-
-        }
-
-        bottomSheetDialogForward = new BottomSheetDialog(getActivity(), G.isDarkTheme ? R.style.BaseBottomSheetDialog : R.style.BaseBottomSheetDialogLight);
+        bottomSheetDialogForward = new BottomSheetDialog(getActivity(), R.style.BaseBottomSheetDialog);
         bottomSheetDialogForward.setContentView(viewBottomSheetForward);
         final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheetForward.getParent());
 
-        fastItemAdapterForward.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<ItemBottomSheetForward>() {
-            @Override
-            public boolean filter(ItemBottomSheetForward item, CharSequence constraint) {
-                return item.structBottomSheetForward.getDisplayName().toLowerCase().contains(String.valueOf(constraint));
-            }
-        });
+        fastItemAdapterForward.getItemFilter().withFilterPredicate((IItemAdapter.Predicate<ItemBottomSheetForward>) (item, constraint) -> item.structBottomSheetForward.getDisplayName().toLowerCase().contains(String.valueOf(constraint)));
 
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -6721,10 +6661,7 @@ public class FragmentChat extends BaseFragment
         if (rootView.findViewById(R.id.replayLayoutAboveEditText) == null) {
             ViewStubCompat stubView = rootView.findViewById(R.id.replayLayoutStub);
             stubView.setInflatedId(R.id.replayLayoutAboveEditText);
-            if (G.isDarkTheme)
-                stubView.setLayoutResource(R.layout.layout_chat_reply_dark);
-            else
-                stubView.setLayoutResource(R.layout.layout_chat_reply);
+            stubView.setLayoutResource(R.layout.layout_chat_reply);
             stubView.inflate();
 
             inflateReplayLayoutIntoStub(chatItem, isEdit);
@@ -6732,13 +6669,11 @@ public class FragmentChat extends BaseFragment
             mReplayLayout = rootView.findViewById(R.id.replayLayoutAboveEditText);
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = mReplayLayout.findViewById(R.id.replayTo);
-            Utils.darkModeHandler(replayTo);
             replayTo.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext() , R.font.main_font));
             TextView replayFrom = mReplayLayout.findViewById(R.id.replyFrom);
             replayFrom.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext() , R.font.main_font));
 
             FontIconTextView replayIcon = rootView.findViewById(R.id.lcr_imv_replay);
-            Utils.darkModeHandler(replayIcon);
             if (isEdit)
                 replayIcon.setText(getString(R.string.edit_icon));
             else
@@ -7028,10 +6963,6 @@ public class FragmentChat extends BaseFragment
         });
 
         ll_Search = rootView.findViewById(R.id.ac_ll_search_message);
-
-        if (G.isDarkTheme)
-            ll_Search.setBackgroundResource(R.drawable.shape_toolbar_background_dark);
-        //btnCloseLayoutSearch = (Button)  rootView.findViewById(R.id.ac_btn_close_layout_search_message);
         edtSearchMessage = rootView.findViewById(R.id.chl_edt_search_message);
         edtSearchMessage.addTextChangedListener(new TextWatcher() {
             @Override
@@ -7591,7 +7522,6 @@ public class FragmentChat extends BaseFragment
     private void manageForwardedMessage() {
         if ((mForwardMessages != null && !isChatReadOnly) || multiForwardList.size() > 0) {
             final LinearLayout ll_Forward = rootView.findViewById(R.id.ac_ll_forward);
-            Utils.darkModeHandlerGray(ll_Forward);
             int multiForwardSize = multiForwardList.size();
             if (hasForward || multiForwardSize > 0) {
 
@@ -7636,10 +7566,8 @@ public class FragmentChat extends BaseFragment
                 String str = _count > 1 ? G.fragmentActivity.getResources().getString(R.string.messages_selected) : G.fragmentActivity.getResources().getString(R.string.message_selected);
 
                 EmojiTextViewE emMessage = rootView.findViewById(R.id.cslhf_txt_message);
-                Utils.darkModeHandler(emMessage);
 
                 FontIconTextView forwardIcon = rootView.findViewById(R.id.cslhs_imv_forward);
-                Utils.darkModeHandler(forwardIcon);
 
                 if (HelperCalander.isPersianUnicode) {
 

@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fcg_layoutRoot"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    style="?backgroundColorSettingTheme"
-    android:clickable="true"
-    android:layoutDirection="locale"
-    tools:ignore="MissingPrefix">
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="vertical"
         android:id="@+id/fcg_layout_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <!--added at runtime-->
@@ -27,14 +23,13 @@
         android:id="@+id/fcg_layout_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="?backgroundColorSettingTheme"
-        app:layout_constraintTop_toBottomOf="@id/fcg_layout_toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layoutDirection="ltr"
+        android:orientation="vertical"
         android:paddingLeft="@dimen/dp16"
         android:paddingRight="@dimen/dp16"
-        android:layoutDirection="ltr"
-        android:orientation="vertical">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fcg_layout_toolbar">
 
         <!--for some problem in theme we created 2 layout and check theme then add at run time-->
         <!--library does not support change text color or background color at run time until 1.0.8-->
@@ -51,7 +46,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:text="@string/add_new_member"
-        style="?textTitleColorSettingTheme"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,23 +61,22 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        style="?lineColorSettingTheme"
+        android:background="?iGapDividerLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fcg_lbl_add_member" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fcg_recycler_view_add_item_to_group"
-        style="?backgroundColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
+        android:paddingBottom="@dimen/dp8"
+        android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fcg_splitter_add_member"
-        android:paddingBottom="@dimen/dp8"
-        android:scrollbars="none" />
+        app:layout_constraintTop_toBottomOf="@id/fcg_splitter_add_member" />
 
 
     <net.iGap.module.FastScroller

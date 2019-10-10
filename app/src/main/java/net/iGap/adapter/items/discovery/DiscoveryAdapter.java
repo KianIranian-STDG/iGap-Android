@@ -44,7 +44,7 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     @NonNull
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        LayoutInflater layoutInflater = LayoutInflater.from(activity);
+        LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
         switch (i) {
             case 1:
                 return new Type1ViewHolder(layoutInflater.inflate(R.layout.item_discovery_1, viewGroup, false), activity);

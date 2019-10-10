@@ -47,6 +47,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityNewGroupBinding;
 import net.iGap.helper.GoToChatActivity;
@@ -419,20 +420,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         });
 
         //=======================name of group
-        edtGroupName = fragmentNewGroupBinding.ngEdtNewGroup;
-        final View ViewGroupName = fragmentNewGroupBinding.ngViewNewGroup;
-        edtGroupName.setPadding(0, 8, 0, 8);
-        edtGroupName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-
-                if (b) {
-                    ViewGroupName.setBackgroundColor(Color.parseColor(G.appBarColor));
-                } else {
-                    ViewGroupName.setBackgroundColor(Color.parseColor(G.lineBorder));
-                }
-            }
-        });
 
         //=======================description group
         edtDescription = fragmentNewGroupBinding.ngEdtDescription;
@@ -802,14 +789,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                 } else {
                     txtName.setGravity(Gravity.RIGHT);
                     txtPhone.setGravity(Gravity.RIGHT);
-                }
-
-                if (G.isDarkTheme) {
-                    txtName.setTextColor(context.getResources().getColor(R.color.gray_300));
-                    txtPhone.setTextColor(context.getResources().getColor(R.color.white));
-                } else {
-                    txtName.setTextColor(context.getResources().getColor(R.color.black));
-                    txtPhone.setTextColor(context.getResources().getColor(R.color.gray_4c));
                 }
 
                 txtPhone.setVisibility(View.INVISIBLE);

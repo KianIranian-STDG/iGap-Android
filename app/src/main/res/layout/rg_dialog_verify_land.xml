@@ -5,12 +5,12 @@
     android:clickable="true"
     android:orientation="vertical">
 
-    <net.iGap.module.HeaderTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp52"
         android:gravity="center"
         android:text="@string/Re_Phone_Verification"
-        android:textColor="@color/toolbar_background"
+        android:textColor="?colorPrimary"
         android:textSize="@dimen/dp22"
         android:textStyle="bold" />
 

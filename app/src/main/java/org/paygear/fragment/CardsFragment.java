@@ -39,6 +39,7 @@ import android.widget.TextView;
 import net.cachapa.expandablelayout.ExpandableLayout;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.databinding.FragmentCardsBinding;
 import net.iGap.databinding.OtpDialogBinding;
 import net.iGap.helper.HelperToolbar;
@@ -788,7 +789,7 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
 
             if (total == 0) {
                 view.findViewById(R.id.bals_layout).setVisibility(View.VISIBLE);
-                view.findViewById(R.id.balance_layout).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
+                view.findViewById(R.id.balance_layout).getBackground().setColorFilter(new PorterDuffColorFilter(new Theme().getPrimaryColor(getContext()), PorterDuff.Mode.SRC_IN));
             }
 
         }

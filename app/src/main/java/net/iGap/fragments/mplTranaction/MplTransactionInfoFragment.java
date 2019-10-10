@@ -253,10 +253,6 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
                 .setLeftIcon(R.string.back_icon);
 
         toolBarContainer.addView(toolbar.getView());
-
-        Utils.setCardsBackground(statusRootView, R.color.white, R.color.toolbar_search_box_dark_bg);
-        Utils.setCardsBackground(rvContainer, R.color.white, R.color.toolbar_search_box_dark_bg);
-
     }
 
     private void setStatus(int status) {

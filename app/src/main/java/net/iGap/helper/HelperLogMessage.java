@@ -22,6 +22,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.interfaces.OnChatGetRoom;
@@ -392,12 +393,8 @@ public class HelperLogMessage {
 
                 @Override
                 public void updateDrawState(TextPaint ds) {
-                    if (G.isDarkTheme) {
-                        ds.linkColor = Color.parseColor(G.textTitleTheme);
-                    } else {
-                        ds.linkColor = Color.DKGRAY;
-                    }
-
+                    //ToDo: fixed it and pass color to this function
+                    ds.linkColor = new Theme().getLinkColor(G.context);
                     super.updateDrawState(ds);
                 }
             };

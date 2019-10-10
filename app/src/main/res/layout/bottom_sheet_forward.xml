@@ -35,19 +35,20 @@
 
         <net.iGap.module.MEditText
             android:id="@+id/edtSearch"
-            style="?hintColorSettingTheme"
+            style="@style/iGapEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/dp8"
             android:hint="@string/search"
             android:imeOptions="actionSearch"
-            android:textSize="@dimen/largeTextSize"
-            android:singleLine="true"
+            android:paddingStart="@dimen/dp14"
             android:paddingTop="6dp"
-            android:paddingBottom="6dp"
             android:paddingEnd="@dimen/dp14"
-            android:paddingStart="@dimen/dp14" />
+            android:background="@drawable/fast_sorward_light"
+            android:paddingBottom="6dp"
+            android:singleLine="true"
+            android:textSize="@dimen/largeTextSize" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -64,13 +65,13 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/copyLink"
-        style="?textTitleColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"
         android:background="?attr/selectableItemBackground"
         android:padding="8dp"
         android:text="@string/copy_link_title"
+        android:textColor="?iGapTitleTextColor"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/txtSend"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -86,6 +87,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/standardTextSize"
         android:textStyle="bold"
+        android:background="?attr/iGapButtonColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

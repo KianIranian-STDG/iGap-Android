@@ -270,7 +270,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         mRecyclerView = view.findViewById(R.id.cl_recycler_view_contact);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setItemViewCacheSize(0);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
         initRecycleView();
 
         //check is available forward message

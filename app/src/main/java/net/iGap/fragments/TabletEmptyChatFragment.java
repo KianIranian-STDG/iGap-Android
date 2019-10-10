@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,7 @@ public class TabletEmptyChatFragment extends Fragment {
                 imgBackGround.setImageResource(R.drawable.chat_bg_dark);
             } else {
                 //todo: fixed load default background in light mode
+                Log.wtf(this.getClass().getName(), "else else: ");
             }
         }
     }

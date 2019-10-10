@@ -124,7 +124,7 @@ public class FragmentSetting extends BaseFragment {
 
         viewModel.goToChatSettingsPage.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentChatSettings()).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentChatSettings())/*.setReplace(false)*/.load();
             }
         });
 

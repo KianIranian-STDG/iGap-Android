@@ -104,10 +104,10 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
         public ViewHolder(View view) {
             super(view);
             boolean withText = true;
-            FrameLayout frameLayout = new FrameLayout(G.context);
+            FrameLayout frameLayout = new FrameLayout(view.getContext());
             frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
-            image = new ReserveSpaceRoundedImageView(G.context);
+            image = new ReserveSpaceRoundedImageView(view.getContext());
             image.setId(R.id.thumbnail);
             image.setScaleType(ImageView.ScaleType.FIT_XY);
             LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -120,7 +120,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
             frameLayout.addView(image);
 
 
-            more = new FontIconTextView(G.context);
+            more = new FontIconTextView(view.getContext());
             more.setId(R.id.more);
             //more.setBackgroundResource(R.drawable.bg_message_image_time);
             more.setGravity(Gravity.CENTER);
@@ -136,7 +136,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
             more.setLayoutParams(layout_50);
             frameLayout.addView(more);
 
-            progress = getProgressBar(0);
+            progress = getProgressBar(view.getContext(), 0);
             frameLayout.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
         }
 
