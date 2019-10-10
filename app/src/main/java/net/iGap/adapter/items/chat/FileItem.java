@@ -191,7 +191,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             bottomView.setGravity(Gravity.CENTER);
             bottomView.setOrientation(HORIZONTAL);
 
-            cslf_txt_file_size = new AppCompatTextView(G.context);
+            cslf_txt_file_size = new AppCompatTextView(view.getContext());
             cslf_txt_file_size.setId(R.id.fileSize);
             cslf_txt_file_size.setSingleLine(true);
             cslf_txt_file_size.setText("3.2 mb");
@@ -227,7 +227,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
 
             setLayoutMessageContainer();
 
-            progress = getProgressBar(R.dimen.dp52);
+            progress = getProgressBar(view.getContext(), R.dimen.dp52);
             frameLayout.addView(thumbnail);
             frameLayout.addView(progress);
         }

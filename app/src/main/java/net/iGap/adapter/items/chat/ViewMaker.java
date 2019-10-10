@@ -2,7 +2,6 @@ package net.iGap.adapter.items.chat;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -266,7 +265,7 @@ public class ViewMaker {
         return textView;
     }
 
-    static View makeHeaderTextView(Context context,String text) {
+    static View makeHeaderTextView(Context context, String text) {
         EmojiTextViewE textView = new EmojiTextViewE(context);
         /*textView.setTextColor(Color.parseColor(G.textBubble));*/
         textView.setId(R.id.messageSenderName);
@@ -308,8 +307,8 @@ public class ViewMaker {
         return csliwt_layout_container_message;
     }
 
-    public static MessageProgress getProgressBar(int sizeSrc) {
-        MessageProgress messageProgress = new MessageProgress(G.context);
+    public static MessageProgress getProgressBar(Context context, int sizeSrc) {
+        MessageProgress messageProgress = new MessageProgress(context);
         messageProgress.setId(R.id.progress);
         LinearLayout.LayoutParams params;
         if (sizeSrc > 0) {
@@ -473,7 +472,7 @@ public class ViewMaker {
         fcsl_txt_dureation_time.setText("2:24");
         fcsl_txt_dureation_time.setTextColor(ContextCompat.getColor(context, R.color.btn_start_page5));
         setTextSize(fcsl_txt_dureation_time, R.dimen.dp12);
-        fcsl_txt_dureation_time.setTypeface(ResourcesCompat.getFont(context,R.font.main_font));
+        fcsl_txt_dureation_time.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
         LinearLayout.LayoutParams layout_483 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         fcsl_txt_dureation_time.setLayoutParams(layout_483);
         linearLayout_202.addView(fcsl_txt_dureation_time);

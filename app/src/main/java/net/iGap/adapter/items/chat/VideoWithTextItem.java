@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -117,11 +118,11 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         public ViewHolder(View view) {
             super(view);
             boolean withText = true;
-            FrameLayout frameLayout_642 = new FrameLayout(G.context);
+            FrameLayout frameLayout_642 = new FrameLayout(view.getContext());
             LinearLayout.LayoutParams layout_535 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             frameLayout_642.setLayoutParams(layout_535);
 
-            image = new ReserveSpaceRoundedImageView(G.context);
+            image = new ReserveSpaceRoundedImageView(view.getContext());
             image.setId(R.id.thumbnail);
             FrameLayout.LayoutParams layout_679 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             image.setLayoutParams(layout_679);
@@ -129,7 +130,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             image.setCornerRadius(HelperRadius.computeRadius());
             frameLayout_642.addView(image);
 
-            duration = new AppCompatTextView(G.context);
+            duration = new AppCompatTextView(view.getContext());
             duration.setId(R.id.duration);
             duration.setBackgroundResource(R.drawable.bg_message_image_time);
             duration.setGravity(Gravity.CENTER_VERTICAL);
@@ -137,7 +138,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             duration.setPadding(i_Dp(R.dimen.dp4), dpToPx(1), i_Dp(R.dimen.dp4), dpToPx(1));
             duration.setText("3:48 (4.5 MB)");
             duration.setAllCaps(TRUE);
-            duration.setTextColor(G.context.getResources().getColor(R.color.gray10));
+            duration.setTextColor(ContextCompat.getColor(view.getContext(), R.color.gray10));
             setTextSize(duration, R.dimen.verySmallTextSize);
             setTypeFace(duration);
             FrameLayout.LayoutParams layout_49 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -148,13 +149,13 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             duration.setLayoutParams(layout_49);
             frameLayout_642.addView(duration);
 
-            more = new FontIconTextView(G.context);
+            more = new FontIconTextView(view.getContext());
             more.setId(R.id.more);
             //more.setBackgroundResource(R.drawable.bg_message_image_time);
             more.setGravity(Gravity.CENTER);
             more.setText(R.string.horizontal_more_icon);
             setTextSize(more, R.dimen.largeTextSize);
-            more.setTextColor(G.context.getResources().getColor(R.color.white));
+            more.setTextColor(ContextCompat.getColor(view.getContext(), R.color.white));
             more.setPadding(i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp12), i_Dp(R.dimen.dp8));
             FrameLayout.LayoutParams layout_50 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layout_50.gravity = Gravity.RIGHT | Gravity.TOP;
@@ -164,7 +165,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             more.setLayoutParams(layout_50);
             frameLayout_642.addView(more);
 
-            progress = getProgressBar(0);
+            progress = getProgressBar(view.getContext(), 0);
             frameLayout_642.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48), Gravity.CENTER));
             getContentBloke().addView(frameLayout_642);
             if (withText) {

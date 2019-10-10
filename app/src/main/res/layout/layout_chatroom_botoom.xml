@@ -29,7 +29,7 @@
         android:layout_gravity="center_vertical"
         android:layout_margin="@dimen/dp8"
         android:layout_weight="1"
-        android:background="?attr/iGapLinkColor"
+        android:background="@drawable/backround_chatroom_edittext"
         android:gravity="bottom"
         android:hint="@string/type_message"
         android:imeOptions="flagNoExtractUi"

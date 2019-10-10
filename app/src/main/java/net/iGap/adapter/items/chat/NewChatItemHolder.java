@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -19,7 +18,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -293,8 +291,8 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         textView.setTypeface(ResourcesCompat.getFont(textView.getContext(), R.font.main_font), style);
     }
 
-    protected MessageProgress getProgressBar(int sizeSrc) {
-        return ViewMaker.getProgressBar(sizeSrc);
+    protected MessageProgress getProgressBar(Context context, int sizeSrc) {
+        return ViewMaker.getProgressBar(context, sizeSrc);
     }
 
     public Context getContext() {

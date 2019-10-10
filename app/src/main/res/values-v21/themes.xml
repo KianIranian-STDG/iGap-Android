@@ -1,44 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="BaseTheme.baseDarkTheme.iGapDarkTheme" parent="BaseTheme.drawable">
-        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_dark</item>
+    <style name="iGapDarkTheme" parent="BaseTheme.baseDarkTheme">
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
+        <item name="iGapAvatarBackground">@drawable/circle_mic</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
+        <item name="iGapButtonSelector">@drawable/button_selector</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
+        <item name="iGapCheckButton">@drawable/check_box_background_on</item>
     </style>
 
-    <style name="BaseTheme.baseLightTheme..iGapLightTheme" parent="BaseTheme.drawable">
-
+    <style name="iGapLightTheme" parent="BaseTheme.baseLightTheme">
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
+        <item name="iGapAvatarBackground">@drawable/circle_mic</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
+        <item name="iGapButtonSelector">@drawable/button_selector</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
+        <item name="iGapCheckButton">@drawable/check_box_background_on</item>
     </style>
 
-    <style name="BaseTheme.baseRedTheme.iGapRedTheme" parent="BaseTheme.drawable">
-
+    <style name="iGapRedTheme" parent="BaseTheme.baseRedTheme">
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
+        <item name="iGapAvatarBackground">@drawable/circle_mic</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
+        <item name="iGapButtonSelector">@drawable/button_selector</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
+        <item name="iGapCheckButton">@drawable/check_box_background_on</item>
     </style>
 
-    <style name="BaseTheme.basePinkTheme.iGapPinkTheme" parent="BaseTheme.drawable">
-
+    <style name="iGapPinkTheme" parent="BaseTheme.basePinkTheme">
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
+        <item name="iGapAvatarBackground">@drawable/circle_mic</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
+        <item name="iGapButtonSelector">@drawable/button_selector</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
+        <item name="iGapCheckButton">@drawable/check_box_background_on</item>
     </style>
 
-    <style name="BaseTheme.basePurpleTheme.iGapPurpleTheme" parent="BaseTheme.drawable">
-
+    <style name="iGapPurpleTheme" parent="BaseTheme.basePurpleTheme">
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
+        <item name="iGapAvatarBackground">@drawable/circle_mic</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
+        <item name="iGapButtonSelector">@drawable/button_selector</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
+        <item name="iGapCheckButton">@drawable/check_box_background_on</item>
     </style>
 
-    <style name="BaseTheme.baseBlueTheme.iGapBlueTheme" parent="BaseTheme.drawable">
-
+    <style name="iGapBlueTheme" parent="BaseTheme.baseBlueTheme">
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
+        <item name="iGapAvatarBackground">@drawable/circle_mic</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
+        <item name="iGapButtonSelector">@drawable/button_selector</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
+        <item name="iGapCheckButton">@drawable/check_box_background_on</item>
     </style>
 
-    <style name="BaseTheme.baseGreenTheme.iGapGreenTheme" parent="BaseTheme.drawable">
-
+    <style name="iGapGreenTheme" parent="BaseTheme.baseGreenTheme">
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
+        <item name="iGapAvatarBackground">@drawable/circle_mic</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
+        <item name="iGapButtonSelector">@drawable/button_selector</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
+        <item name="iGapCheckButton">@drawable/check_box_background_on</item>
     </style>
 
-    <style name="BaseTheme.baseAmberTheme.iGapAmberTheme" parent="BaseTheme.drawable">
-
+    <style name="iGapAmberTheme" parent="BaseTheme.baseAmberTheme">
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
+        <item name="iGapAvatarBackground">@drawable/circle_mic</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
+        <item name="iGapButtonSelector">@drawable/button_selector</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
+        <item name="iGapCheckButton">@drawable/check_box_background_on</item>
     </style>
 
-    <style name="BaseTheme.baseOrangeTheme.iGapOrangeTheme" parent="BaseTheme.drawable">
-
+    <style name="iGapOrangeTheme" parent="BaseTheme.baseOrangeTheme">
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
+        <item name="iGapAvatarBackground">@drawable/circle_mic</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
+        <item name="iGapButtonSelector">@drawable/button_selector</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
+        <item name="iGapCheckButton">@drawable/check_box_background_on</item>
     </style>
 
-    <style name="BaseTheme.baseDarkGrayTheme.iGapGrayTheme" parent="BaseTheme.drawable">
-
+    <style name="iGapGrayTheme" parent="BaseTheme.baseDarkGrayTheme">
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect</item>
+        <item name="iGapAvatarBackground">@drawable/circle_mic</item>
+        <item name="iGapReceivedReplayBackground">@drawable/rectangle_reply_recive_round_color</item>
+        <item name="iGapSendReplayBackground">@drawable/rectangle_reply_sender_round_color</item>
+        <item name="iGapButtonSelector">@drawable/button_selector</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
+        <item name="iGapCheckButton">@drawable/check_box_background_on</item>
     </style>
 
     <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">

@@ -73,7 +73,7 @@ public class CheckBox extends View {
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setTextSize(LayoutCreator.dp(18));
         checkDrawable = context.getResources().getDrawable(resId).mutate();
-        setColor(new Theme().getPrimaryColor(context), getResources().getColor(R.color.whit_background));
+        setColor(new Theme().getButtonColor(context), getResources().getColor(R.color.whit_background));
     }
 
     @Override

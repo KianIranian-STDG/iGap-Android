@@ -11,7 +11,6 @@
 package net.iGap.adapter.items.chat;
 
 import android.animation.ValueAnimator;
-import android.graphics.Color;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
@@ -35,7 +34,6 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.libs.audio.AudioWave;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AppUtils;
 import net.iGap.module.FontIconTextView;
@@ -341,12 +339,12 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         public ViewHolder(View view) {
             super(view);
 
-            thumbnail = new AppCompatImageView(G.context);
+            thumbnail = new AppCompatImageView(view.getContext());
             thumbnail.setId(R.id.thumbnail);
             AppUtils.setImageDrawable(thumbnail, R.drawable.microphone_icon);
-            progress = getProgressBar(0);
+            progress = getProgressBar(view.getContext(), 0);
 
-            author = new AppCompatTextView(G.context);
+            author = new AppCompatTextView(view.getContext());
             author.setId(R.id.cslv_txt_author);
             author.setSingleLine(true);
             setTextSize(author, R.dimen.standardTextSize);
@@ -359,7 +357,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             btnPlayMusic.setBackgroundResource(0);
             btnPlayMusic.setGravity(Gravity.CENTER);
             btnPlayMusic.setText(R.string.play_icon);
-        //    btnPlayMusic.setTextColor(getColor(R.color.voice_item));
+            //    btnPlayMusic.setTextColor(getColor(R.color.voice_item));
             setTextSize(btnPlayMusic, R.dimen.dp36);
 
             txt_Timer = new AppCompatTextView(view.getContext());

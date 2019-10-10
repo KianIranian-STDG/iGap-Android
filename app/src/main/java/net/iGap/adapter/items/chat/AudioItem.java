@@ -10,7 +10,6 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.text.TextUtils;
@@ -35,7 +34,6 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnComplete;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -405,7 +403,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             LinearLayout.LayoutParams layout_992 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp220), LinearLayout.LayoutParams.WRAP_CONTENT); // before width was -> LinearLayout.LayoutParams.MATCH_PARENT, for fix text scroll changed it
             setLayoutMessageContainer(layout_992);
 
-            progress = getProgressBar(R.dimen.dp48);
+            progress = getProgressBar(view.getContext(), R.dimen.dp48);
             rootView = new ConstraintLayout(getContext());
             set = new ConstraintSet();
 

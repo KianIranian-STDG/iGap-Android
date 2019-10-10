@@ -6,5 +6,5 @@
         android:bottomRightRadius="0dp"
         android:topLeftRadius="12dp"
         android:topRightRadius="0dp" />
-    <solid android:color="@color/colorToolbarBackgroundStart" />
+    <solid android:color="#e2e8de" />
 </shape>

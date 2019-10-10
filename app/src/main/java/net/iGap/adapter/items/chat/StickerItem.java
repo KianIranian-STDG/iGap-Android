@@ -113,7 +113,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
             frameLayout.addView(image);
             image.reserveSpace(180, 180, ProtoGlobal.Room.Type.CHAT);
 
-            progress = getProgressBar(0);
+            progress = getProgressBar(view.getContext(), 0);
             frameLayout.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
 
         }

@@ -610,7 +610,7 @@ public class RoomListCell extends FrameLayout {
 
                         if (senderNameSpannable != null) {
                             haveSenderName = true;
-                            senderNameSpannable.setSpan(new ForegroundColorSpan(new Theme().getPrimaryColor(lastMessageTv.getContext())), 0, senderNameTag.length(), 0);
+                            senderNameSpannable.setSpan(new ForegroundColorSpan(new Theme().getAccentColor(lastMessageTv.getContext())), 0, senderNameTag.length(), 0);
                         }
                     }
 
@@ -697,12 +697,12 @@ public class RoomListCell extends FrameLayout {
 
                     if (attachmentSpannable != null) {
                         haveAttachment = true;
-                        attachmentSpannable.setSpan(new ForegroundColorSpan(new Theme().getPrimaryColor(lastMessageTv.getContext())), 0, attachmentTag.length(), 0);
+                        attachmentSpannable.setSpan(new ForegroundColorSpan(new Theme().getAccentColor(lastMessageTv.getContext())), 0, attachmentTag.length(), 0);
                     }
 
                     if (haveSenderName) {
                         senderNameQuoteSpannable = new SpannableString(haveAttachment ? ":" : nameIsPersian ? ": " : ": ");
-                        senderNameQuoteSpannable.setSpan(new ForegroundColorSpan(new Theme().getPrimaryColor(lastMessageTv.getContext())), 0, senderNameQuoteSpannable.length(), 0);
+                        senderNameQuoteSpannable.setSpan(new ForegroundColorSpan(new Theme().getAccentColor(lastMessageTv.getContext())), 0, senderNameQuoteSpannable.length(), 0);
                     }
                     String message;
                     if (lastMessage.getMessage().length() > 70) {
