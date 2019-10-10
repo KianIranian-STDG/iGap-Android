@@ -324,15 +324,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         holder.txt_Timer.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
         holder.author.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
-
-        if (type == ProtoGlobal.Room.Type.CHANNEL) {
-            holder.txt_Timer.setTextColor(Color.parseColor(G.textTitleTheme));
-            holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
-        } else {
-
-            holder.txt_Timer.setTextColor(holder.itemView.getResources().getColor(R.color.grayNewDarker));
-            holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
-        }
         holder.listenView.setVisibility(View.GONE);
     }
 

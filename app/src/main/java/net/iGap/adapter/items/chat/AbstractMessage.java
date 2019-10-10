@@ -911,7 +911,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (status != ProtoGlobal.RoomMessageStatus.SEEN) {
-            viewHolder.getMessageStatusTv().setTextColor(new Theme().getSend);
+            viewHolder.getMessageStatusTv().setTextColor(new Theme().getSendMessageOtherTextColor(viewHolder.getContext()));
         }
         viewHolder.getChatBloke().setBackground(new Theme().tintDrawable(SEND_ITEM_BACKGROUND, viewHolder.getContext(), R.attr.iGapSendMessageBubbleColor));
         viewHolder.getMessageTimeTv().setTextColor(new Theme().getSendMessageOtherTextColor(viewHolder.getContext()));

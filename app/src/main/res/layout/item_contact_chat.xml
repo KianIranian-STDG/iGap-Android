@@ -52,7 +52,6 @@
         android:textSize="@dimen/standardTextSize"
         android:textStyle="bold"
         app:emojiSize="@dimen/standardTextSize"
-        app:emojiSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toTopOf="@+id/tv_itemContactChat_userPhoneNumber"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_itemContactChat_ll"

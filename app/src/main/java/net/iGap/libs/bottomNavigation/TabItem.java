@@ -2,8 +2,8 @@ package net.iGap.libs.bottomNavigation;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,10 +12,12 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
@@ -24,8 +26,6 @@ import net.iGap.view.TextBadge;
 import static android.view.View.MeasureSpec.AT_MOST;
 
 public class TabItem extends LinearLayout implements View.OnClickListener {
-
-    private final String TAG = "abbasiLog";
 
     private BottomNavigation bottomNavigation;
     private OnItemSelected onTabItemSelected;
@@ -43,7 +43,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
 
     private boolean active = false;
     private boolean isRtl = G.isAppRtl;
-    private boolean isDarkTheme = G.isDarkTheme;
+    private boolean isDarkTheme = G.themeColor == Theme.DARK;
 
 
     public TabItem(Context context) {
@@ -72,6 +72,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
 
         textView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
         textView.setText(text);
+        textView.setTextColor(ContextCompat.getColor(getContext(), R.color.bottom_navigation_text_color));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
 
         addView(imageView);
@@ -129,10 +130,8 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
     private void setupViews() {
         if (isDarkTheme) {
             imageView.setImageResource(darkSelectedIcon);
-            textView.setTextColor(Color.parseColor("#AAA9A9"));
         } else {
             imageView.setImageResource(selectedIcon);
-            textView.setTextColor(Color.parseColor("#FF4F4F4F"));
         }
 
         if (position == bottomNavigation.getDefaultItem())
@@ -179,7 +178,8 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         if (active != isActive) {
             active = isActive;
         }
-
+        Log.wtf(this.getClass().getName(), "setSelectedItem: " + isActive);
+        textView.setSelected(isActive);
         if (isDarkTheme) {
             if (active) {
                 imageView.setImageResource(darkSelectedIcon);

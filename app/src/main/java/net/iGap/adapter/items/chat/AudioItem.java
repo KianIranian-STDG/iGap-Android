@@ -368,7 +368,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             songFileName.setTextAppearance(view.getContext(), android.R.style.TextAppearance_Medium);
             songFileName.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
             setTextSize(songFileName, R.dimen.smallTextSize);
-            Utils.darkModeHandler(songFileName);
             songFileName.setTypeface(ResourcesCompat.getFont(songFileName.getContext() , R.font.main_font));
 
             songArtist = new AppCompatTextView(view.getContext());
