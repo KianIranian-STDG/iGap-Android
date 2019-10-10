@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.Theme;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.model.ThemeModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,9 +25,9 @@ public class ThemeColorListAdapter extends RecyclerView.Adapter<ThemeColorListAd
 
     private List<ThemeModel> items;
     private int selectedThemePosition = -1;
-    private BottomSheetItemClickCallback callback;
+    private onThemeItemClickedListener callback;
 
-    public ThemeColorListAdapter(BottomSheetItemClickCallback callback) {
+    public ThemeColorListAdapter(onThemeItemClickedListener callback) {
         items = new ArrayList<>();
         this.callback = callback;
     }
@@ -58,7 +57,7 @@ public class ThemeColorListAdapter extends RecyclerView.Adapter<ThemeColorListAd
 
         setChatReceivedChatBubble(holder.themeColor, new Theme().getColor(items.get(position).getThemeId()));
         holder.themeName.setText(items.get(position).getThemeNameRes());
-        holder.itemView.setOnClickListener(v -> callback.onClick(holder.getAdapterPosition()));
+        holder.itemView.setOnClickListener(v -> callback.onItemClicked(selectedThemePosition, holder.getAdapterPosition()));
     }
 
     @Override
@@ -88,5 +87,9 @@ public class ThemeColorListAdapter extends RecyclerView.Adapter<ThemeColorListAd
 
     private void setChatReceivedChatBubble(@NotNull View view, int color) {
         view.setBackground(tintDrawable(view.getBackground(), ColorStateList.valueOf(ContextCompat.getColor(view.getContext(), color))));
+    }
+
+    public interface onThemeItemClickedListener {
+        void onItemClicked(int oldThemePosition, int newThemePosition);
     }
 }

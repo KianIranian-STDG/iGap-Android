@@ -1,7 +1,6 @@
 package net.iGap.viewmodel;
 
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import androidx.databinding.ObservableBoolean;
@@ -21,7 +20,6 @@ import net.iGap.module.StartupActions;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.util.List;
 
 
@@ -77,7 +75,7 @@ public class FragmentChatSettingViewModel extends ViewModel {
         dateIsChange();
 
         themeList.setValue(new Theme().getThemeList());
-        selectedThemePosition.setValue(themeList.getValue().indexOf(new ThemeModel(sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT),0)));
+        selectedThemePosition.setValue(themeList.getValue().indexOf(new ThemeModel(sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT), 0)));
     }
 
     public ObservableBoolean getIsTime() {
@@ -268,7 +266,7 @@ public class FragmentChatSettingViewModel extends ViewModel {
         dateType.set(dateTypeResId);
     }
 
-    public void getChatBackground(){
+    public void getChatBackground() {
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
         Log.wtf(this.getClass().getName(), "value of background: " + backGroundPath);
         if (backGroundPath.length() > 0) {
@@ -278,18 +276,19 @@ public class FragmentChatSettingViewModel extends ViewModel {
         }
     }
 
-    public void setTheme(int position) {
+    public void setTheme(int oldTheme, int newTheme) {
         if (themeList.getValue() != null) {
             sharedPreferences.edit()
-                    .putInt(SHP_SETTING.KEY_THEME_COLOR, themeList.getValue().get(position).getThemeId())
-                    .putBoolean(SHP_SETTING.KEY_THEME_DARK, themeList.getValue().get(position).getThemeId() == Theme.DARK)
+                    .putInt(SHP_SETTING.KEY_OLD_THEME_COLOR, themeList.getValue().get(oldTheme).getThemeId())
+                    .putInt(SHP_SETTING.KEY_THEME_COLOR, themeList.getValue().get(newTheme).getThemeId())
+                    .putBoolean(SHP_SETTING.KEY_THEME_DARK, themeList.getValue().get(newTheme).getThemeId() == Theme.DARK)
                     .apply();
-            G.themeColor = themeList.getValue().get(position).getThemeId();
+            G.themeColor = themeList.getValue().get(newTheme).getThemeId();
             updateNewTheme.setValue(true);
             if (G.twoPaneMode) {
                 updateTwoPaneView.setValue(true);
             }
-            selectedThemePosition.setValue(position);
+            selectedThemePosition.setValue(newTheme);
         }
     }
 
