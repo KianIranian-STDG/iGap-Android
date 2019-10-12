@@ -75,7 +75,7 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
         titleTextView.setText(R.string.add_sticker);
 
         tabLayout = view.findViewById(R.id.tab_layout);
-        tabLayout.setSelectedTabIndicatorColor(getContext().getResources().getColor(R.color.setting_items_value_color));
+        tabLayout.setSelectedTabIndicatorColor(new Theme().getAccentColor(getContext()));
         viewPager = view.findViewById(R.id.pager);
 
         adapter = new SectionPagerAdapter(getActivity().getSupportFragmentManager(), new StickerCategory[0]);

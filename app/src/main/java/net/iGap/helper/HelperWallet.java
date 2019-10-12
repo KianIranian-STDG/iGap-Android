@@ -11,7 +11,7 @@ import org.paygear.WalletActivity;
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 
 public class HelperWallet {
-    public void goToWallet(Context context, String phoneNumber) {
+    public void goToWallet(Context context, String phoneNumber,boolean goToScanner) {
         Intent intent = new Intent(context, WalletActivity.class);
         intent.putExtra("Language", "fa");
         intent.putExtra("Mobile", phoneNumber);
@@ -26,7 +26,7 @@ public class HelperWallet {
         intent.putExtra(WalletActivity.BACKGROUND_2, String.format("#%06X", 0xFFFFFF & new Theme().getRootColor(context)));
         intent.putExtra(WalletActivity.TEXT_TITLE, String.format("#%06X", 0xFFFFFF & new Theme().getTitleTextColor(context)));
         intent.putExtra(WalletActivity.TEXT_SUB_TITLE, String.format("#%06X", 0xFFFFFF & new Theme().getSubTitleColor(context)));
-        intent.putExtra("isScan", true);
+        intent.putExtra("isScan", goToScanner);
         G.currentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
     }
 }

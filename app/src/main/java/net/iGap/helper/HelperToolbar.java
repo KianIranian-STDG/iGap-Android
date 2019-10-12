@@ -1024,7 +1024,7 @@ public class HelperToolbar {
         if (!G.isWalletRegister) {
             new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
         } else {
-            new HelperWallet().goToWallet(mContext, "0" + phoneNumber);
+            new HelperWallet().goToWallet(mContext, "0" + phoneNumber,true);
         }
     }
 
