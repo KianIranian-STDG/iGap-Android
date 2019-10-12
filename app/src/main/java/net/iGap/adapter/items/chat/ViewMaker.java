@@ -59,8 +59,8 @@ public class ViewMaker {
         return cslum_txt_unread_message;
     }
 
-    public static View getProgressWaitingItemView() {
-        ProgressBar cslp_progress_bar_waiting = new ProgressBar(G.context);
+    public static View getProgressWaitingItemView(Context context) {
+        ProgressBar cslp_progress_bar_waiting = new ProgressBar(context);
         cslp_progress_bar_waiting.setId(R.id.cslp_progress_bar_waiting);
         cslp_progress_bar_waiting.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
         cslp_progress_bar_waiting.setVisibility(View.VISIBLE);
