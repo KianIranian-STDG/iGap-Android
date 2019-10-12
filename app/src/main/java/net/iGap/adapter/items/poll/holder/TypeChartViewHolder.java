@@ -94,9 +94,7 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
 
         set1 = new BarDataSet(barEntries, "Data Set");
         ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(new Theme().getPrimaryColor(chart.getContext()));
-        int[] a = new int[1];
-        a[0] = new Theme().getPrimaryColor(chart.getContext());
+        colors.add(new Theme().getAccentColor(chart.getContext()));
         set1.setColors(colors);
         set1.setDrawValues(true);
         set1.setValueTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.main_font));
