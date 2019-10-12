@@ -1972,5 +1972,6 @@
     <string name="all_calls">des appels</string>
     <string name="open_url">ouvrir le lien</string>
     <string name="url_copied">lien copié</string>
+    <string name="message_is_long">Votre message est trop long. \n Le message sera converti en</string>
     <string name="add_new_account">Ajouter un nouveau compte</string>
 </resources>

@@ -230,7 +230,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                         clearHistory(item.getId(), true);
                         break;
                     case 3:
-                        deleteChat(item, true);
+                        confirmActionForRemoveItem(item);
                         break;
                     case 4:
                         readAllRoom();
@@ -1061,6 +1061,17 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                         disableMultiSelect();
 
                     }
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void confirmActionForRemoveItem(RealmRoom item) {
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.delete_chat))
+                .content(getString(R.string.are_you_sure_request)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+                    deleteChat(item, true);
                 })
                 .onNegative((dialog, which) -> dialog.dismiss())
                 .show();

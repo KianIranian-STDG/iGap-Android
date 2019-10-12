@@ -1112,6 +1112,17 @@ public class RealmRoom extends RealmObject {
         });
     }
 
+    public static long getRoomIdByPeerId(long peerId){
+        long roomId = 0 ;
+        try(Realm realm = Realm.getDefaultInstance()) {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+            if (realmRoom != null){
+                roomId =  realmRoom.getId();
+            }
+        }
+        return roomId ;
+    }
+
     public static void clearMessage(final long roomId, final long clearId) {
         DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {

@@ -609,6 +609,8 @@ public class FragmentChat extends BaseFragment
     private int receiveMessageSound;
     private String TAG = "messageSound";
     private ChatAttachmentPopup mAttachmentPopup;
+    private int messageLentghCounter ;
+    private int oldMessageLentghCounter;
 
     public static boolean allowResendMessage(long messageId) {
         if (resentedMessageId == null) {
@@ -3102,6 +3104,9 @@ public class FragmentChat extends BaseFragment
                     scrollToEnd();
                 }
 
+                oldMessageLentghCounter = 0;
+                messageLentghCounter = 0 ;
+
             }
         });
 
@@ -3212,6 +3217,12 @@ public class FragmentChat extends BaseFragment
                 } else {
                     imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
                 }*/
+
+               messageLentghCounter = ((int) Math.ceil((float) text.length() / (float) Config.MAX_TEXT_LENGTH) );
+               if ( messageLentghCounter > 1 && messageLentghCounter != oldMessageLentghCounter && getContext() != null){
+                   oldMessageLentghCounter = messageLentghCounter ;
+                   Toast.makeText(getContext(), getString(R.string.message_is_long) + " " + messageLentghCounter + " " + getString(R.string.message) , Toast.LENGTH_SHORT).show();
+               }
 
             }
 
@@ -3803,12 +3814,12 @@ public class FragmentChat extends BaseFragment
                 RealmRoom realmRoom = getRoom();
                 if (realmRoom != null) {
 
-                    long messageSender = 0;
+                    /*long messageSender = 0;
                     if (message != null && message.mMessage != null) {
                         messageSender = message.mMessage.getUserId();
                     } else {
                         continue;
-                    }
+                    }*/
 
                     // if user clicked on any message which he wasn't its sender, remove edit mList option
                     if (chatType == CHANNEL) {
@@ -3817,9 +3828,9 @@ public class FragmentChat extends BaseFragment
                             mBtnDeleteSelected.setVisibility(View.GONE);
                             isAllSenderId = false;
                         }
-                        final long senderId = G.userId;
+                        //final long senderId = G.userId;
                         //ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, messageSender);
-                        if (senderId != messageSender) {  // if message dose'nt belong to owner
+                        if (!G.authorHash.equals(message.mMessage.authorHash)) {  // if message dose'nt belong to owner
                             if (channelRole == ChannelChatRole.MEMBER) {
                                 mBtnDeleteSelected.setVisibility(View.GONE);
                                 isAllSenderId = false;
@@ -3839,10 +3850,10 @@ public class FragmentChat extends BaseFragment
                         }
                     } else if (chatType == GROUP) {
 
-                        final long senderId = G.userId;
+                        //final long senderId = G.userId;
                         //GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, messageSender);
 
-                        if (senderId != messageSender) {  // if message dose'nt belong to owner
+                        if (!G.authorHash.equals(message.mMessage.authorHash)) {  // if message dose'nt belong to owner
                             if (groupRole == GroupChatRole.MEMBER) {
                                 mBtnDeleteSelected.setVisibility(View.GONE);
                                 isAllSenderId = false;
