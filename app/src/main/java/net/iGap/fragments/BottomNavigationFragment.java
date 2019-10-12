@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +17,8 @@ import androidx.fragment.app.FragmentTransaction;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.dialog.account.AccountDialogListener;
+import net.iGap.dialog.account.AccountsDialog;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
 import net.iGap.fragments.populaChannel.PopularMoreChannelFragment;
@@ -28,6 +29,7 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnUnreadChange;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
+import net.iGap.model.AccountUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,11 +104,49 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
             }
         });
         bottomNavigation.setCurrentItem(2);
+
+        bottomNavigation.setProfileOnLongClickListener(v -> {
+            openAccountsDialog();
+            return false;
+        });
     }
 
     public void setCrawlerMap(String crawlerMap) {
         this.crawlerMap = crawlerMap;
     }
+
+
+    private void openAccountsDialog() {
+        List<AccountUser> accounts = new ArrayList<>();
+        AccountUser accountModel = new AccountUser();
+        accountModel.setId(G.userId);
+        accountModel.setName("Alireza Nazari");
+        accountModel.setActive(true);
+        accountModel.setUnReadMessageCount(16);
+
+        AccountUser accountModel1 = new AccountUser();
+        accountModel1.setId(0);
+        accountModel1.setName("Behnam Nazari");
+        accountModel1.setActive(false);
+        accountModel1.setUnReadMessageCount(111);
+
+        accounts.add(accountModel);
+        accounts.add(accountModel1);
+
+        new AccountsDialog().setData(accounts, bottomNavigation.getAvatarHandler(), new AccountDialogListener() {
+            @Override
+            public void onAccountClick(long id) {
+
+            }
+
+            @Override
+            public void onNewAccountClick() {
+
+            }
+        }).show(getActivity().getSupportFragmentManager(), "account");
+
+    }
+
 
     private void loadFragment(int position) {
         hideKeyboard();

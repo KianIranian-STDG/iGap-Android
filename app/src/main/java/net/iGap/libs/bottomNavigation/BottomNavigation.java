@@ -3,11 +3,13 @@ package net.iGap.libs.bottomNavigation;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
@@ -17,14 +19,18 @@ import androidx.annotation.RequiresApi;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.module.AppUtils;
+import net.iGap.module.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BottomNavigation extends LinearLayout implements OnItemSelected {
+public class BottomNavigation extends LinearLayout implements OnItemSelected, View.OnClickListener, View.OnLongClickListener {
 
     public static final String TAG = "aabolfazlNavigation";
     private OnItemChangeListener onItemChangeListener;
@@ -34,6 +40,10 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     private float cornerRadius;
     private int backgroundColor;
     private int badgeColor;
+    private OnLongClickListener onLongClickListener;
+    private CircleImageView avatarImageView;
+
+    private AvatarHandler avatarHandler;
 
     public BottomNavigation(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -73,13 +83,23 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     }
 
     private void setupChildren() {
-        for (int i = 0; i < getChildCount(); i++) {
-            final TabItem tabItem = (TabItem) getChildAt(i);
-            tabItem.setPosition(i);
-            tabItems.add(tabItem);
-            tabItem.setOnTabItemSelected(this);
+        try {
+            for (int i = 0; i < getChildCount(); i++) {
+                if (i != 4) {
+                    final TabItem tabItem = (TabItem) getChildAt(i);
+                    tabItem.setPosition(i);
+                    tabItems.add(tabItem);
+                    tabItem.setOnTabItemSelected(this);
+                } else {
+                    avatarImageView = (CircleImageView) getChildAt(4);
+                    avatarImageView.setOnLongClickListener(this);
+                    avatarImageView.setOnClickListener(this);
+                    avatarImageView.setBorderColor(Color.parseColor(G.isDarkTheme ? "#868686" : "#FF696969"));
+                }
+            }
+        } catch (Exception e) {
+            Log.e(getClass().getName(), "setupChildren: ", e);
         }
-
     }
 
 
@@ -89,7 +109,11 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
             selectedItemPosition = position;
             onSelectedItemChanged();
             if (onItemChangeListener != null) {
-                onItemChangeListener.onSelectedItemChanged(tabItems.get(position).getPosition());
+                if (position != 4) {
+                    onItemChangeListener.onSelectedItemChanged(tabItems.get(position).getPosition());
+                } else {
+                    onItemChangeListener.onSelectedItemChanged(position);
+                }
             }
         } else {
             if (onItemChangeListener != null) {
@@ -108,6 +132,14 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
         } else {
             super.dispatchDraw(canvas);
         }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        avatarHandler = new AvatarHandler();
+        avatarHandler.registerChangeFromOtherAvatarHandler();
+        avatarHandler.getAvatar(new ParamWithAvatarType(avatarImageView, G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -173,12 +205,16 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     }
 
     private void onSelectedItemChanged() {
-        for (int i = 0; i < tabItems.size(); i++) {
-            if (tabItems.get(i).getPosition() == selectedItemPosition) {
-                tabItems.get(i).setSelectedItem(true);
-            } else {
-                tabItems.get(i).setSelectedItem(false);
+        try {
+            for (int i = 0; i < tabItems.size(); i++) {
+                if (tabItems.get(i).getPosition() == selectedItemPosition) {
+                    tabItems.get(i).setSelectedItem(true);
+                } else {
+                    tabItems.get(i).setSelectedItem(false);
+                }
             }
+        } catch (Exception e) {
+            Log.e(getClass().getName(), "onSelectedItemChanged: ", e);
         }
     }
 
@@ -209,5 +245,33 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
     public int getCurrentTab() {
         return selectedItemPosition;
+    }
+
+    @Override
+    public void onClick(View v) {
+        selectedTabItem(4);
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        if (onItemChangeListener != null) {
+            onLongClickListener.onLongClick(v);
+            AppUtils.setVibrator(15);
+        }
+        return false;
+    }
+
+    public void setProfileOnLongClickListener(OnLongClickListener onLongClickListener) {
+        this.onLongClickListener = onLongClickListener;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        avatarHandler.unregisterChangeFromOtherAvatarHandler();
+    }
+
+    public AvatarHandler getAvatarHandler() {
+        return avatarHandler;
     }
 }

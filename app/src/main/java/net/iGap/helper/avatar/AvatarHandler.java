@@ -64,7 +64,7 @@ public class AvatarHandler {
         }
     }
 
-    private HashSet<AvatarHandler> allAvatarHandler = new HashSet<>();
+    private static HashSet<AvatarHandler> allAvatarHandler = new HashSet<>();
 
     private ConcurrentHashMap<ImageView, ImageHashValue> imageViewHashValue;
     private ConcurrentHashMap<Long, HashSet<ImageView>> avatarHashImages;
@@ -121,13 +121,23 @@ public class AvatarHandler {
         synchronized (mutex2) {
             for (AvatarHandler avatarHandler : allAvatarHandler) {
                 if (!avatarHandler.equals(this)) {
-                    avatarHandler.notifyMe(avatarPath, avatarOwnerId, isMain, fileId, avatarId);
+                    avatarHandler.notifyMe(avatarPath, avatarOwnerId, isMain, fileId, avatarId, false);
                 }
             }
         }
     }
 
+    public void notifyAllAvatar(String avatarPath, long avatarOwnerId, boolean isMain, long fileId, long avatarId) {
+        for (AvatarHandler avatarHandler : allAvatarHandler) {
+            avatarHandler.notifyMe(avatarPath, avatarOwnerId, isMain, fileId, avatarId, false);
+        }
+    }
+
     private void notifyMe(String avatarPath, long avatarOwnerId, boolean isMain, long fileId, long avatarId) {
+        notifyMe(avatarPath, avatarOwnerId, isMain, fileId, avatarId, true);
+    }
+
+    private void notifyMe(String avatarPath, long avatarOwnerId, boolean isMain, long fileId, long avatarId, boolean returnCache) {
         ArrayList<Long> myLimitedList;
         ConcurrentHashMap<Long, CacheValue> myAvatarCache;
         int limit;
@@ -142,7 +152,7 @@ public class AvatarHandler {
         }
 
         CacheValue cache = myAvatarCache.get(avatarOwnerId);
-        if (cache != null && cache.fileId == fileId) {
+        if (returnCache && cache != null && cache.fileId == fileId) {
             return;
         }
 

@@ -72,18 +72,14 @@
             app:selected_icon="@drawable/ic_bottomnavigation_discovery_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_discovery_off" />
 
-        <net.iGap.libs.bottomNavigation.TabItem
+        <net.iGap.module.CircleImageView
             android:id="@+id/ti_main_setting"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            app:item_text="@string/settings"
-            app:item_text_size="@dimen/dp10"
-            app:dark_selected_icon="@drawable/ic_bottomnavigation_setting_on_darkmode"
-            app:dark_unselected_icon="@drawable/ic_bottomnavigation_setting_off_darkmode"
-            app:selected_icon="@drawable/ic_bottomnavigation_setting_on"
-            app:unselected_icon="@drawable/ic_bottomnavigation_setting_off" />
+            android:padding="16dp"
+            app:civ_border_width="1dp"
+            app:civ_border_padding="2dp" />
 
     </net.iGap.libs.bottomNavigation.BottomNavigation>
 
