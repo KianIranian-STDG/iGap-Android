@@ -261,7 +261,7 @@
     <color name="receive_message_text_light">#5F5F5F</color>
 
     <color name="shared_media_music_list_icon_color">#468DA7</color>
-    <color name="players_dark_background">#3b9f1c</color>
+    <color name="players_dark_background">#242424</color>
     <color name="toolbar_search_box_dark_bg">#7D7D80</color>
     <color name="bottom_navigation_color">#F6F6F9</color>
     <color name="round_buttons_enabled_bg">#7B7B7B</color>

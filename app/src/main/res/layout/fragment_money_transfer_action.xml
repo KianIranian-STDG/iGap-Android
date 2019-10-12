@@ -173,7 +173,7 @@
         <Button
             android:id="@+id/btn_moneyAction_confirm"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp40"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="32dp"
@@ -183,7 +183,7 @@
             android:background="@drawable/background_pay_mony_action"
             android:text="@string/next"
             android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:textColor="?attr/iGapButtonTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_moneyAction_cancel"
@@ -192,14 +192,13 @@
         <Button
             android:id="@+id/btn_moneyAction_cancel"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp40"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:background="@drawable/background_cancel_money_action"
             android:text="@string/cancel"
             android:textAllCaps="false"
-            android:textColor="@color/grayNew"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_moneyAction_confirm"
+            android:textColor="?attr/iGapButtonTextColor"            app:layout_constraintBottom_toBottomOf="@+id/btn_moneyAction_confirm"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btn_moneyAction_confirm" />
 
@@ -382,7 +381,7 @@
         <Button
             android:id="@+id/btn_cardToCard_confirm"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp40"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"
@@ -392,8 +391,7 @@
             android:background="@drawable/background_pay_mony_action"
             android:text="@string/send"
             android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textColor="?attr/iGapButtonTextColor"              app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_cardToCard_cancel"
             app:layout_constraintTop_toBottomOf="@+id/fl_cardToCard_Container" />
@@ -401,14 +399,13 @@
         <Button
             android:id="@+id/btn_cardToCard_cancel"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp40"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:background="@drawable/background_cancel_money_action"
             android:text="@string/cancel"
             android:textAllCaps="false"
-            android:textColor="@color/grayNew"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_cardToCard_confirm"
+            android:textColor="?attr/iGapButtonTextColor"              app:layout_constraintBottom_toBottomOf="@+id/btn_cardToCard_confirm"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btn_cardToCard_confirm" />
 
