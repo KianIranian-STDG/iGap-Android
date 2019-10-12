@@ -356,35 +356,19 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
 
     private void openAccountsDialog() {
 
-        if (getActivity() == null) return;
+        if (getActivity() != null) {
+            new AccountsDialog().setData(avatarHandler, new AccountDialogListener() {
+                @Override
+                public void onAccountClick(long id) {
 
-        List<AccountUser> accounts = new ArrayList<>();
-        AccountUser accountModel = new AccountUser();
-        accountModel.setId(G.userId);
-        accountModel.setName("Alireza Nazari");
-        accountModel.setActive(true);
-        accountModel.setUnReadMessageCount(16);
+                }
 
-        AccountUser accountModel1 = new AccountUser();
-        accountModel1.setId(0);
-        accountModel1.setName("Behnam Nazari");
-        accountModel1.setActive(false);
-        accountModel1.setUnReadMessageCount(111);
+                @Override
+                public void onNewAccountClick() {
 
-        accounts.add(accountModel);
-        accounts.add(accountModel1);
-
-        new AccountsDialog().setData(accounts, avatarHandler, new AccountDialogListener() {
-            @Override
-            public void onAccountClick(long id) {
-
-            }
-
-            @Override
-            public void onNewAccountClick() {
-
-            }
-        }).show(getActivity().getSupportFragmentManager(), "account");
+                }
+            }).show(getActivity().getSupportFragmentManager(), "account");
+        }
 
     }
 

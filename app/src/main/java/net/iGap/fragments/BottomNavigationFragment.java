@@ -117,23 +117,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
 
     private void openAccountsDialog() {
-        List<AccountUser> accounts = new ArrayList<>();
-        AccountUser accountModel = new AccountUser();
-        accountModel.setId(G.userId);
-        accountModel.setName("Alireza Nazari");
-        accountModel.setActive(true);
-        accountModel.setUnReadMessageCount(16);
-
-        AccountUser accountModel1 = new AccountUser();
-        accountModel1.setId(0);
-        accountModel1.setName("Behnam Nazari");
-        accountModel1.setActive(false);
-        accountModel1.setUnReadMessageCount(111);
-
-        accounts.add(accountModel);
-        accounts.add(accountModel1);
-
-        new AccountsDialog().setData(accounts, bottomNavigation.getAvatarHandler(), new AccountDialogListener() {
+        new AccountsDialog().setData(bottomNavigation.getAvatarHandler(), new AccountDialogListener() {
             @Override
             public void onAccountClick(long id) {
 

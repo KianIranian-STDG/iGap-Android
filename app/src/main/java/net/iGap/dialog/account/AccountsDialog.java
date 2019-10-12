@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentBottomSheetDialogBinding;
@@ -27,8 +28,8 @@ public class AccountsDialog extends BottomSheetDialogFragment {
     private AccountDialogListener mListener;
     private AvatarHandler mAvatarHandler ;
 
-    public AccountsDialog setData(List<AccountUser> accounts , AvatarHandler avatarHandler , AccountDialogListener listener) {
-        this.mAccountsList = accounts;
+    public AccountsDialog setData( AvatarHandler avatarHandler , AccountDialogListener listener) {
+        this.mAccountsList = AccountManager.getInstance().getUserAccountList();
         this.mListener = listener;
         this.mAvatarHandler = avatarHandler ;
         return this;
