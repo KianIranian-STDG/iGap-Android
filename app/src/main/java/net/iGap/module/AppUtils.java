@@ -456,7 +456,7 @@ public final class AppUtils {
                     messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, G.fragmentActivity.getString(R.string.location_message));
                     break;
                 case LOG:
-                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, HelperLogMessage.deserializeLog(message.getLogs(), false).toString());
+                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, HelperLogMessage.deserializeLog(G.fragmentActivity,message.getLogs(), false).toString());
                     break;
                 case VIDEO_TEXT:
                 case VIDEO:

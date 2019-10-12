@@ -48,7 +48,7 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
-        holder.text.setText(HelperLogMessage.deserializeLog(mMessage.logs, true));
+        holder.text.setText(HelperLogMessage.deserializeLog(holder.text.getContext(), mMessage.logs, true));
     }
 
     @Override
