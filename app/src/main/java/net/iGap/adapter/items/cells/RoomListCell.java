@@ -2,7 +2,6 @@ package net.iGap.adapter.items.cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -644,7 +643,7 @@ public class RoomListCell extends FrameLayout {
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case LOG:
-                            attachmentTag = HelperLogMessage.deserializeLog(lastMessage.getLogs(), false).toString();
+                            attachmentTag = HelperLogMessage.deserializeLog(lastMessageTv.getContext(), lastMessage.getLogs(), false).toString();
                             attachmentSpannable = new SpannableString(attachmentTag);
                             break;
                         case AUDIO:
