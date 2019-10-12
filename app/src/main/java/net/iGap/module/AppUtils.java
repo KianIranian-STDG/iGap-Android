@@ -334,7 +334,7 @@ public final class AppUtils {
                 break;
             case SEEN:
                 iconTextView.setText(R.string.delivery_icon);
-                iconTextView.setTextColor(new Theme().getPrimaryDarkColor(iconTextView.getContext()));
+                iconTextView.setTextColor(new Theme().getAccentColor(iconTextView.getContext()));
                 break;
             case SENDING:
                 iconTextView.setText(R.string.history_icon);
@@ -378,7 +378,7 @@ public final class AppUtils {
             case LISTENED:
             case SEEN:
                 iconTextView.setText(R.string.delivery_icon);
-                iconTextView.setTextColor(new Theme().getPrimaryTextIconColor(iconTextView.getContext()));
+                iconTextView.setTextColor(new Theme().getAccentColor(iconTextView.getContext()));
                 break;
             case SENDING:
                 iconTextView.setText(R.string.history_icon);
