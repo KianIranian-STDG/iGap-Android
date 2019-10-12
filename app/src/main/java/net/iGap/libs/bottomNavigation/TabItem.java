@@ -3,7 +3,6 @@ package net.iGap.libs.bottomNavigation;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.content.res.XmlResourceParser;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -14,7 +13,6 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
@@ -24,10 +22,6 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
 import net.iGap.view.TextBadge;
-
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 
 import static android.view.View.MeasureSpec.AT_MOST;
 
@@ -79,17 +73,18 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         textView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
         textView.setText(text);
 
-        /*XmlResourceParser parser = getResources().getXml(R.color.bottom_navigation_text_color);
-        ColorStateList colors = null;
-        try {
-            colors = ColorStateList.createFromXml(getResources(), parser);
-            Log.d("amini", "init: " + colors.getDefaultColor());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        }*/
-        textView.setTextColor(ContextCompat.getColorStateList(getContext(), R.color.bottom_navigation_text_color));
+        int[][] states = new int[][]{
+                new int[]{android.R.attr.state_selected}, // selected
+                new int[]{-android.R.attr.state_selected}, // none
+        };
+
+        int[] colors = new int[]{
+                new Theme().getAccentColor(textView.getContext()),
+                new Theme().getSubTitleColor(textView.getContext())
+        };
+
+        ColorStateList myList = new ColorStateList(states, colors);
+        textView.setTextColor(myList);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
 
         addView(imageView);
