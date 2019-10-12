@@ -1005,8 +1005,7 @@ public class HelperToolbar {
     private void onScannerClickListener() {
         String phoneNumber = "0";
 
-        try {
-            Realm realm = Realm.getDefaultInstance();
+        try (Realm realm = Realm.getDefaultInstance()) {
             RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
             if (userInfo != null) {
                 phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);

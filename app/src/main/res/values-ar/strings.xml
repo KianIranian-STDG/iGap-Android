@@ -2984,4 +2984,5 @@
     <string name="url_copied">تم نسخ الرابط</string>
     <string name="charity_confirm">شما مبلغ %s ریال جهت کمک به خیریه %s در نظر گرفته اید.</string>
     <string name="default_theme_title">السمة الافتراضية</string>
+    <string name="message_is_long">Your message is too long  Message will covert to</string>
 </resources>
