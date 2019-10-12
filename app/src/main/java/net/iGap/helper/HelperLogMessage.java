@@ -97,14 +97,23 @@ public class HelperLogMessage {
     }
 
     private static SpannableStringBuilder extractLog(StructMyLog log, boolean withLink) throws InvalidProtocolBufferException {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            String authorName = getAuthorName(log, realm);
-            String targetName = getTargetName(log, realm);
-            String finalTypeRoom = getRoomTypeString(log, realm);
-            String LogMessageTypeString = getLogTypeString(ProtoGlobal.RoomMessageLog.parseFrom(log.messageLog).getType(), ProtoGlobal.RoomMessage.Author.parseFrom(log.author));
-            return getLogMessage(authorName, targetName, finalTypeRoom, LogMessageTypeString, log, withLink);
-        }
+        SpannableStringBuilder spannableStringBuilder = DbManager.getInstance().doRealmTask(realm -> {
+            try {
+                String authorName = getAuthorName(log, realm);
+                String targetName = getTargetName(log, realm);
+                String finalTypeRoom = getRoomTypeString(log, realm);
+                String LogMessageTypeString = getLogTypeString(ProtoGlobal.RoomMessageLog.parseFrom(log.messageLog).getType(), ProtoGlobal.RoomMessage.Author.parseFrom(log.author));
+                return getLogMessage(authorName, targetName, finalTypeRoom, LogMessageTypeString, log, withLink);
+            } catch (Exception e) {
+                return null;
+            }
+        });
 
+        if (spannableStringBuilder == null) {
+            throw new InvalidProtocolBufferException("Bug");
+        } else {
+            return spannableStringBuilder;
+        }
     }
 
     private static String getAuthorName(StructMyLog log, Realm realm) throws InvalidProtocolBufferException {
