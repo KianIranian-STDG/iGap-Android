@@ -610,6 +610,8 @@ public class FragmentChat extends BaseFragment
     private int receiveMessageSound;
     private String TAG = "messageSound";
     private ChatAttachmentPopup mAttachmentPopup;
+    private int messageLentghCounter ;
+    private int oldMessageLentghCounter;
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -3062,6 +3064,9 @@ public class FragmentChat extends BaseFragment
                     scrollToEnd();
                 }
 
+                oldMessageLentghCounter = 0;
+                messageLentghCounter = 0 ;
+
             }
         });
 
@@ -3172,6 +3177,12 @@ public class FragmentChat extends BaseFragment
                 } else {
                     imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
                 }*/
+
+               messageLentghCounter = ((int) Math.ceil((float) text.length() / (float) Config.MAX_TEXT_LENGTH) );
+               if ( messageLentghCounter > 1 && messageLentghCounter != oldMessageLentghCounter && getContext() != null){
+                   oldMessageLentghCounter = messageLentghCounter ;
+                   Toast.makeText(getContext(), getString(R.string.message_is_long) + " " + messageLentghCounter + " " + getString(R.string.message) , Toast.LENGTH_SHORT).show();
+               }
 
             }
 

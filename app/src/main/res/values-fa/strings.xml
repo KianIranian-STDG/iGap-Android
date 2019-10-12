@@ -2228,5 +2228,6 @@
     <string name="all_calls">تماس ها</string>
     <string name="open_url">باز کردن لینک</string>
     <string name="url_copied">لینک کپی شد.</string>
+    <string name="message_is_long">پیام شما طولانی است.\nپیام تبدیل خواهد شد به</string>
 
 </resources>

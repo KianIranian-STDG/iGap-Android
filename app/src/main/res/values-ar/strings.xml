@@ -2982,4 +2982,5 @@
     <string name="all_calls">المكالمات</string>
     <string name="open_url">رابط مفتوح</string>
     <string name="url_copied">تم نسخ الرابط</string>
+    <string name="message_is_long">Your message is too long  Message will covert to</string>
 </resources>
