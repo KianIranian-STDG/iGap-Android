@@ -116,7 +116,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
                 }
             }
         } else {
-            if (onItemChangeListener != null) {
+            if (onItemChangeListener != null && position != 4) {
                 onItemChangeListener.onSelectAgain(tabItems.get(position).getPosition());
             }
         }
