@@ -91,10 +91,6 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // to disable swipe in channel creation mode
-        if (typeCreate.equals("CHANNEL"))
-            getSwipeBackLayout().setEnableGesture(false);
-
         selectedContacts.clear();
         G.onContactsGetList = this;
 
@@ -105,6 +101,10 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
             roomId = bundle.getLong("RoomId");
             typeCreate = bundle.getString("TYPE");
         }
+
+        // to disable swipe in channel creation mode
+        if (typeCreate.equals("CHANNEL"))
+            getSwipeBackLayout().setEnableGesture(false);
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
