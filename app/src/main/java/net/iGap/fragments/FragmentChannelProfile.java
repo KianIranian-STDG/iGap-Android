@@ -195,7 +195,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 edtLink.setTypeface(ResourcesCompat.getFont(edtLink.getContext() , R.font.main_font));
                 edtLink.setText(link);
                 edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
-                edtLink.setText(new Theme().getTitleTextColor(getActivity()));
+                edtLink.setTextColor(new Theme().getTitleTextColor(getActivity()));
                 edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                 edtLink.setPadding(0, 8, 0, 8);
                 edtLink.setEnabled(false);

@@ -191,7 +191,7 @@ public class ChatAttachmentPopup {
         });
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            contentView.setBackgroundResource(new Theme().getRootColor(contentView.getContext()));
+            contentView.setBackgroundColor(new Theme().getRootColor(contentView.getContext()));
             return;
         } else {
             contentView.setElevation(0);
@@ -222,7 +222,7 @@ public class ChatAttachmentPopup {
             lp.bottomMargin = mChatBoxHeight + 10;
 
         } else {
-            contentView.setBackgroundResource(new Theme().getRootColor(contentView.getContext()));
+            contentView.setBackgroundColor(new Theme().getRootColor(contentView.getContext()));
 
             if (contentView.getHeight() >= height) {
                 contentView.setMinimumHeight(height);

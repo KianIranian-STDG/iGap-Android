@@ -287,9 +287,10 @@ public class HelperUrl {
     }
 
     public static void openBrowser(String url) {
+        //todo: fixed it and do not user G.currentActivity
         final CustomTabsHelperFragment mCustomTabsHelperFragment = CustomTabsHelperFragment.attachTo(G.currentActivity);
 
-        int mColorPrimary = new Theme().getPrimaryColor(mCustomTabsHelperFragment.getContext());
+        int mColorPrimary = new Theme().getAccentColor(G.currentActivity);
         final Uri PROJECT_URI = Uri.parse(url);
 
         CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(mColorPrimary).setShowTitle(true).build();

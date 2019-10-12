@@ -1062,11 +1062,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void checkGoogleUpdate() {
-        if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
-            Log.wtf(this.getClass().getName(), "installIfNeeded");
-            ProviderInstaller.installIfNeededAsync(this, this);
-            Log.wtf(this.getClass().getName(), "installIfNeeded");
-        }
+        Log.wtf(this.getClass().getName(), "installIfNeeded");
+        ProviderInstaller.installIfNeededAsync(this, this);
+        Log.wtf(this.getClass().getName(), "installIfNeeded");
     }
 
     //*******************************************************************************************************************************************
@@ -1335,11 +1333,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             else {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                     if (!(getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment)) {
-
                         List fragmentList = getSupportFragmentManager().getFragments();
-                        boolean handled = ((BaseFragment)fragmentList.get(fragmentList.size()-1)).onBackPressed();
-
-                        if(!handled) {
+                        boolean handled = false;
+                        try {
+                            // because some of our fragments are NOT extended from BaseFragment
+                            handled = ((BaseFragment) fragmentList.get(fragmentList.size() - 1)).onBackPressed();
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (!handled) {
                             super.onBackPressed();
                         }
                     }

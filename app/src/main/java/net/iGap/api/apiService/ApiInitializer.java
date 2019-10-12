@@ -59,10 +59,8 @@ public class ApiInitializer<T> {
                 retrofitCallback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
                 if (new ErrorHandler().checkHandShakeFailure(t)) {
                     //TODO must be cleared
-                    if (handShakeCallback == null) {
-                        handShakeCallback.onHandShake();
+                    if (handShakeCallback == null)
                         return;
-                    }
                     handShakeCallback.onHandShake();
                     return;
                 }
