@@ -1901,7 +1901,7 @@ Want to get it?</string>
     <string name="copy_link_title">Copy Link</string>
     <string name="location_dialog_message">Do you want to use your location?</string>
     <string name="forward_slash">/</string>
-    <string name="reaction_message_detail">Add names of the admins to the messages they post.</string>
+    <string name="reaction_message_detail">show a vote section for every channel\'\s posts for members.</string>
     <string name="all">All</string>
     <string name="missed">Missed</string>
     <string name="incoming">Incoming</string>
@@ -2242,6 +2242,10 @@ Want to get it?</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="error_ivand_limit_gift">Unfortunately, the set gifts have come to an end.</string>
     <string name="referral_error_yourself">It is not possible to register your number as a referral.</string>
+    <string name="iland">iLand</string>
+    <string name="all_calls">Calls</string>
+    <string name="open_url">Open Link</string>
+    <string name="url_copied">Link Copied</string>
     <string name="add_new_account">Add New Account</string>
 
 </resources>

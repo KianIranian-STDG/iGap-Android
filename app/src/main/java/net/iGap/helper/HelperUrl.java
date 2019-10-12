@@ -56,12 +56,14 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnClientCheckInviteLink;
+import net.iGap.interfaces.OnClientGetRoomResponse;
 import net.iGap.interfaces.OnClientJoinByInviteLink;
 import net.iGap.interfaces.OnClientResolveUsername;
 import net.iGap.libs.Tuple;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructMessageOption;
+import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoClientResolveUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -71,6 +73,7 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientCheckInviteLink;
+import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestClientGetRoomHistory;
 import net.iGap.request.RequestClientJoinByInviteLink;
 import net.iGap.request.RequestClientResolveUsername;
@@ -87,6 +90,7 @@ import io.realm.Realm;
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
+import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
@@ -160,7 +164,7 @@ public class HelperUrl {
         return false;
     }
 
-    private static boolean isTextLink(String text) {
+    public static boolean isTextLink(String text) {
         Pattern p = Pattern.compile("((http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.([a-zA-Z0-9\\&\\.\\/\\?\\:@\\-_=#])*");
         Matcher m = p.matcher(text);
         if (m.find()) {
@@ -1189,6 +1193,89 @@ public class HelperUrl {
         }
     }
 
+    public static void goToActivityFromFCM(FragmentActivity activity, final long roomId, final long peerId) {
+
+        if (roomId != FragmentChat.lastChatRoomId) {
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+
+                        if (realmRoom != null) {
+                            // room with given roomID exists.
+                            new GoToChatActivity(realmRoom.getId()).startActivity(activity);
+                        }
+                        else if (peerId > 0){
+                            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+                            if (realmRoom != null) {
+                                new GoToChatActivity(realmRoom.getId()).startActivity(activity);
+                            }
+                            else {
+                                G.onChatGetRoom = new OnChatGetRoom() {
+                                    @Override
+                                    public void onChatGetRoom(final ProtoGlobal.Room room) {
+                                        try (Realm realm1 = Realm.getDefaultInstance()) {
+                                            realm1.executeTransaction(new Realm.Transaction() {
+                                                @Override
+                                                public void execute(Realm realm) {
+                                                    if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
+                                                        RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
+                                                        realmRoom1.setDeleted(true);
+                                                    } else {
+                                                        RealmRoom.putOrUpdate(room, realm);
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        G.handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity(activity);
+                                                G.onChatGetRoom = null;
+                                            }
+                                        }, 500);
+                                    }
+
+                                    @Override
+                                    public void onChatGetRoomTimeOut() {
+
+                                    }
+
+                                    @Override
+                                    public void onChatGetRoomError(int majorCode, int minorCode) {
+
+                                    }
+                                };
+                                new RequestChatGetRoom().chatGetRoom(peerId);
+                            }
+                        }
+                        else {
+                            G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
+                                @Override
+                                public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, RequestClientGetRoom.IdentityClientGetRoom identity) {
+                                    G.onClientGetRoomResponse = null;
+                                    G.handler.postDelayed(() -> {
+                                        new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity(activity);
+                                        G.onChatGetRoom = null;
+                                    }, 500);
+                                }
+
+                                @Override
+                                public void onError(int majorCode, int minorCode) {
+
+                                }
+
+                                @Override
+                                public void onTimeOut() {
+
+                                }
+                            };
+                            new RequestClientGetRoom().clientGetRoom(roomId, null);
+                            Toast.makeText(activity, "Please Wait...", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+    }
+
     private static void goToChat(FragmentActivity activity, final ProtoGlobal.RegisteredUser user, final ChatEntry chatEntery, long messageId) {
         long id = user.getId();
         DbManager.getInstance().doRealmTask(realm -> {
@@ -1420,6 +1507,41 @@ public class HelperUrl {
 
     }
 
+    public static void openLinkDialog(FragmentActivity fa , String mUrl){
+        String url = mUrl ;
+        if (!url.startsWith("https://") && !url.startsWith("http://")) {
+            url = "http://" + mUrl;
+        }
+        String finalUrl = url;
+
+        List<String> items = new ArrayList<>();
+        items.add(fa.getString(R.string.copy_item_dialog));
+        items.add(fa.getString(R.string.open_url));
+
+        new BottomSheetFragment().setTitle(url).setData(items, -1, new BottomSheetItemClickCallback() {
+            @Override
+            public void onClick(int position) {
+                if (items.get(position).equals(fa.getString(R.string.copy_item_dialog))) {
+
+                    ClipboardManager clipboard = (ClipboardManager) fa.getSystemService(CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("Copied Url", finalUrl);
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(fa, R.string.url_copied, Toast.LENGTH_SHORT).show();
+
+                } else if (items.get(position).equals(fa.getString(R.string.open_url))) {
+
+                    SharedPreferences sharedPreferences = fa.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
+                    if (sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1) == 1&& !HelperUrl.isNeedOpenWithoutBrowser(finalUrl)) {
+                        HelperUrl.openBrowser(finalUrl); //internal chrome
+                    } else {
+                        HelperUrl.openWithoutBrowser(finalUrl);//external intent
+                    }
+
+                }
+            }
+        }).show(fa.getSupportFragmentManager(), "bottom sheet");
+    }
 
     //************************************  go to room by urlLink   *********************************************************************
 

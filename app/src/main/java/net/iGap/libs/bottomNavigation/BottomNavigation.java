@@ -202,28 +202,9 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     }
 
     public void setOnBottomNavigationBadge(int unreadCount, int callCount) {
-        for (int i = 0; i < tabItems.size(); i++) {
-            TabItem tabItem = tabItems.get(i);
-            tabItem.setBadgeColor(badgeColor);
-
-            switch (i) {
-                case 0:
-                    tabItem.setBadgeCount(0);
-                    break;
-                case 1:
-                    tabItem.setBadgeCount(callCount);
-                    break;
-                case 2:
-                    tabItem.setBadgeCount(unreadCount);
-                    break;
-                case 3:
-                    tabItem.setBadgeCount(0);
-                    break;
-                case 4:
-                    tabItem.setBadgeCount(0);
-                    break;
-            }
-        }
+        TabItem tabItem = tabItems.get(2);
+        tabItem.setBadgeColor(badgeColor);
+        tabItem.setBadgeCount(unreadCount);
     }
 
     public int getCurrentTab() {

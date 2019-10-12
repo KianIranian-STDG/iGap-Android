@@ -323,7 +323,6 @@ public class RealmStickers extends RealmObject {
                 public void execute(Realm realm) {
                     HashSet<String> hashedData = new HashSet<>();
                     ArrayList<RealmStickers> itemToDelete = new ArrayList<>();
-                    HashSet<String> itemNotNeedToAdd = new HashSet<>();
                     for (StructGroupSticker structGroupSticker : mData) {
                         hashedData.add(structGroupSticker.getId());
                     }
@@ -332,8 +331,6 @@ public class RealmStickers extends RealmObject {
                     for (RealmStickers realmStickers : allStickers) {
                         if (!hashedData.contains(realmStickers.st_id)) {
                             itemToDelete.add(realmStickers);
-                        } else {
-                            itemNotNeedToAdd.add(realmStickers.st_id);
                         }
                     }
 

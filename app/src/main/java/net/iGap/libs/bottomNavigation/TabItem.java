@@ -2,24 +2,30 @@ package net.iGap.libs.bottomNavigation;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.items.chat.BadgeView;
+import net.iGap.helper.HelperCalander;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
-import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.view.TextBadge;
 
-public class TabItem extends RelativeLayout implements View.OnClickListener {
+import static android.view.View.MeasureSpec.AT_MOST;
 
-    private final String TAG = "TabItem";
+public class TabItem extends LinearLayout implements View.OnClickListener {
+
+    private final String TAG = "abbasiLog";
 
     private BottomNavigation bottomNavigation;
     private OnItemSelected onTabItemSelected;
@@ -28,9 +34,13 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
     private int unSelectedIcon;
     private int darkSelectedIcon;
     private int darkUnSelectedIcon;
-    private ImageView imageView;
-    private BadgeView badgeView;
     private int position;
+    private int text;
+
+    private ImageView imageView;
+    private TextBadge badgeView;
+    private AppCompatTextView textView;
+
     private boolean active = false;
     private boolean isRtl = G.isAppRtl;
     private boolean isDarkTheme = G.isDarkTheme;
@@ -56,28 +66,49 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
 
         if (imageView == null)
             imageView = new AppCompatImageView(getContext());
-        if (badgeView == null)
-            badgeView = new BadgeView(getContext());
 
-        imageView.setId(R.id.bottomIcon);
-        RelativeLayout.LayoutParams badgeParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        RelativeLayout.LayoutParams iconParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        if (textView == null)
+            textView = new AppCompatTextView(getContext());
 
-        iconParams.addRule(CENTER_IN_PARENT);
-        imageView.setLayoutParams(iconParams);
-        if (isRtl) {
-            badgeParams.addRule(RelativeLayout.LEFT_OF, imageView.getId());
-            badgeParams.setMargins(0, Utils.dpToPx(4), -16, Utils.dpToPx(4));
-        } else {
-            badgeParams.addRule(RelativeLayout.RIGHT_OF, imageView.getId());
-            badgeParams.setMargins(-16, Utils.dpToPx(4), 0, Utils.dpToPx(4));
-        }
-
-        badgeView.setLayoutParams(badgeParams);
+        textView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
+        textView.setText(text);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
 
         addView(imageView);
-        postDelayed(() -> addView(badgeView), 150);
+        addView(textView);
+
         setOnClickListener(this);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        int w = r - l;
+        int h = b - t;
+
+        int viewWidth = LayoutCreator.dpToPx(position == 3 ? 32 : 26);
+        imageView.measure(LayoutCreator.manageSpec(viewWidth, MeasureSpec.EXACTLY), LayoutCreator.manageSpec(viewWidth, MeasureSpec.EXACTLY));
+        int viewLeft = (w - viewWidth) / 2;
+        int viewTop = position == 3 ? LayoutCreator.dpToPx(2) : (h - viewWidth) / 4;
+        int viewHeight;
+        imageView.layout(viewLeft, viewTop, w - viewLeft, viewTop + viewWidth);
+
+        viewWidth = LayoutCreator.getTextWidth(textView);
+        viewHeight = LayoutCreator.getTextHeight(textView);
+        textView.measure(LayoutCreator.manageSpec(viewWidth, MeasureSpec.EXACTLY), LayoutCreator.manageSpec(viewHeight, MeasureSpec.EXACTLY));
+        viewLeft = (w - viewWidth) / 2;
+        viewTop = imageView.getBottom() + (position == 3 ? LayoutCreator.dpToPx(1) : LayoutCreator.dpToPx(2));
+        textView.layout(viewLeft, viewTop, w - viewLeft, viewTop + viewHeight);
+
+        if (badgeView != null) {
+            viewHeight = LayoutCreator.getTextHeight(badgeView.getTextView());
+            viewWidth = LayoutCreator.getTextWidth(badgeView.getTextView());
+
+            viewLeft = imageView.getRight() - LayoutCreator.dpToPx(8);
+            viewTop = LayoutCreator.dpToPx(2);
+
+            badgeView.measure(LayoutCreator.manageSpec(viewWidth, AT_MOST), LayoutCreator.manageSpec(viewHeight, AT_MOST));
+            badgeView.layout(viewLeft, viewTop, imageView.getRight() + viewWidth - LayoutCreator.dpToPx(2), imageView.getTop() + LayoutCreator.dpToPx(10));
+        }
     }
 
     @Override
@@ -96,11 +127,13 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
     }
 
     private void setupViews() {
-        if (isDarkTheme)
+        if (isDarkTheme) {
             imageView.setImageResource(darkSelectedIcon);
-        else
+            textView.setTextColor(Color.parseColor("#AAA9A9"));
+        } else {
             imageView.setImageResource(selectedIcon);
-
+            textView.setTextColor(Color.parseColor("#FF4F4F4F"));
+        }
 
         if (position == bottomNavigation.getDefaultItem())
             active = true;
@@ -116,7 +149,7 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
                 unSelectedIcon = typedArray.getResourceId(R.styleable.TabItem_unselected_icon, -1);
                 darkSelectedIcon = typedArray.getResourceId(R.styleable.TabItem_dark_selected_icon, -1);
                 darkUnSelectedIcon = typedArray.getResourceId(R.styleable.TabItem_dark_unselected_icon, -1);
-
+                text = typedArray.getResourceId(R.styleable.TabItem_item_text, R.string.error);
             } finally {
                 typedArray.recycle();
             }
@@ -129,6 +162,11 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
 
     public void setPosition(int position) {
         this.position = position;
+
+        if (position == 2) {
+            badgeView = new TextBadge(getContext());
+            postDelayed(() -> addView(badgeView), 150);
+        }
     }
 
     @Override
@@ -167,20 +205,36 @@ public class TabItem extends RelativeLayout implements View.OnClickListener {
     }
 
     public void setBadgeCount(int count) {
-        badgeView.setText(String.valueOf(count));
-        badgeView.getTextView().setTextSize(9);
-        badgeView.getTextView().setSingleLine(true);
-        if (count == 0) {
-            badgeView.setVisibility(GONE);
-        } else if (count > 99) {
-            badgeView.setVisibility(VISIBLE);
-            badgeView.getTextView().setText("+99");
-        } else
-            badgeView.setVisibility(VISIBLE);
+        if (badgeView != null) {
+            badgeView.setText(getUnreadCount(count));
+            badgeView.getTextView().setTextSize(9);
+            badgeView.getTextView().setSingleLine(true);
+            if (count == 0) {
+                badgeView.setVisibility(GONE);
+            } else
+                badgeView.setVisibility(VISIBLE);
+        }
+    }
+
+    private String getUnreadCount(int unreadCount) {
+        if (unreadCount > 99) {
+            if (isRtl)
+                return HelperCalander.convertToUnicodeFarsiNumber("99+");
+            else
+                return "+99";
+        } else {
+            String s = String.valueOf(unreadCount);
+            if (isRtl)
+                return HelperCalander.convertToUnicodeFarsiNumber(s);
+            else
+                return s;
+
+        }
     }
 
     public void setBadgeColor(int color) {
-        badgeView.setBadgeColor(color);
+        if (badgeView != null)
+            badgeView.setBadgeColor(color);
     }
 
     public boolean isActive() {

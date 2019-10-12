@@ -53,7 +53,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     public MutableLiveData<Long> goToTwoStepVerificationPage = new MutableLiveData<>();
     public MutableLiveData<WaitTimeModel> showDialogWaitTime = new MutableLiveData<>();
     public MutableLiveData<Boolean> showErrorMessageEmptyErrorPhoneNumberDialog = new MutableLiveData<>();
-    public MutableLiveData<Integer> showDialogQrCode = new MutableLiveData<>();
+    public SingleLiveEvent<Integer> showDialogQrCode = new SingleLiveEvent<>();
     public MutableLiveData<Uri> shareQrCodeIntent = new MutableLiveData<>();
     public MutableLiveData<Boolean> hideDialogQRCode = new MutableLiveData<>();
     public MutableLiveData<Integer> showError = new MutableLiveData<>();

@@ -142,6 +142,7 @@ import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.databinding.PaymentDialogBinding;
+import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.ChatAttachmentPopup;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
@@ -406,7 +407,6 @@ public class FragmentChat extends BaseFragment
     public static long messageId;
     public static long mRoomIdStatic = 0;
     public static long lastChatRoomId = 0;
-    public static List<StructGroupSticker> data = new ArrayList<>();
     public static ArrayList<String> listPathString;
     public static OnUpdateSticker onUpdateSticker;
     private static List<StructBottomSheet> contacts;
@@ -670,15 +670,6 @@ public class FragmentChat extends BaseFragment
             Log.i("UUU", name + " in line : " + line + " is UI Thread");
         } else {
             Log.i("UUU", name + " in line : " + line + " is NOT UI Thread");
-        }
-    }
-
-    public void fillStickerList() {
-
-        data.clear();
-        data = RealmStickers.getAllStickers(true);
-        if (data != null && emojiPopup != null) {
-            emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
         }
     }
 
@@ -3166,9 +3157,8 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        if (data.size() == 0) {
-            fillStickerList();
-        }
+
+
         // to toggle between keyboard and emoji popup
         imvSmileButton.setOnClickListener(new View.OnClickListener() {
 
@@ -3176,7 +3166,8 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
 
                 emojiPopup.toggle();
-                if (data != null && data.size() > 0) {
+                List<StructGroupSticker> data = RealmStickers.getAllStickers(true);
+                if (data != null && emojiPopup != null) {
                     emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
                 }
             }
@@ -3185,9 +3176,7 @@ public class FragmentChat extends BaseFragment
         onUpdateSticker = new OnUpdateSticker() {
             @Override
             public void update() {
-
-                data.clear();
-                data = RealmStickers.getAllStickers(true);
+                List<StructGroupSticker> data = RealmStickers.getAllStickers(true);
                 if (data != null && emojiPopup != null) {
                     emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
                 }
@@ -4348,6 +4337,15 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
+    public void onOpenLinkDialog(String url) {
+
+        mAdapter.deselect();
+
+        if (getActivity() == null) return;
+        HelperUrl.openLinkDialog(getActivity() , url);
+    }
+
+    @Override
     public boolean getShowVoteChannel() {
         return showVoteChannel;
     }
@@ -4465,18 +4463,18 @@ public class FragmentChat extends BaseFragment
                 } else {
                     showLayoutPin = true;
                 }
-                ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, message.realmRoomMessage.getUserId());
+                //ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, message.realmRoomMessage.getUserId());
                 if (!G.authorHash.equals(message.realmRoomMessage.getAuthorHash())) {
                     if (channelRole == ChannelChatRole.MEMBER) {
                         items.remove(getString(R.string.delete_item_dialog));
                     } else if (channelRole == ChannelChatRole.MODERATOR) {
-                        if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
-                            items.remove(getString(R.string.delete_item_dialog));
-                        }
+                        //if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
+                        items.remove(getString(R.string.delete_item_dialog));
+                        //}
                     } else if (channelRole == ChannelChatRole.ADMIN) {
-                        if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
-                            items.remove(getString(R.string.delete_item_dialog));
-                        }
+                        //if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
+                        items.remove(getString(R.string.delete_item_dialog));
+                        //}
                     }
                     if (channelRole != ChannelChatRole.OWNER) {
                         items.remove(getString(R.string.edit_item_dialog));
@@ -4487,18 +4485,18 @@ public class FragmentChat extends BaseFragment
                 if (groupRole != GroupChatRole.MEMBER) {
                     showLayoutPin = true;
                 }
-                GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, message.realmRoomMessage.getUserId());
+                //GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, message.realmRoomMessage.getUserId());
                 if (!G.authorHash.equals(message.realmRoomMessage.getAuthorHash())) {
                     if (groupRole == GroupChatRole.MEMBER) {
                         items.remove(getString(R.string.delete_item_dialog));
                     } else if (groupRole == GroupChatRole.MODERATOR) {
-                        if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
-                            items.remove(getString(R.string.delete_item_dialog));
-                        }
+                        //if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
+                        items.remove(getString(R.string.delete_item_dialog));
+                        //}
                     } else if (groupRole == GroupChatRole.ADMIN) {
-                        if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
-                            items.remove(getString(R.string.delete_item_dialog));
-                        }
+                        //if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
+                        items.remove(getString(R.string.delete_item_dialog));
+                        //}
                     }
                     items.remove(getString(R.string.edit_item_dialog));
                 }
@@ -5938,7 +5936,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
                         if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingRemoveStickers.newInstance(data, recentStickerList)).setReplace(false).load();
+                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentSettingRemoveStickers.newInstance(recentStickerList)).setReplace(false).load();
                         }
                     }
                 })

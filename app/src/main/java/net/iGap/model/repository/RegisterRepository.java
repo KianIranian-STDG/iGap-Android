@@ -9,6 +9,7 @@ import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperLogout;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.OnInfoCountryResponse;
@@ -25,6 +26,7 @@ import net.iGap.model.GoToMainFromRegister;
 import net.iGap.model.LocationModel;
 import net.iGap.model.UserPasswordDetail;
 import net.iGap.module.BotInit;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoRequest;
@@ -143,6 +145,7 @@ public class RegisterRepository {
         G.onPushLoginToken = (tokenQrCode, userNameR, userIdR, authorHashR) -> {
             token = tokenQrCode;
             G.displayName = userName = userNameR;
+            new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
             G.userId = userId = userIdR;
             G.authorHash = authorHash = authorHashR;
             hideDialogQRCode.postValue(true);
@@ -151,6 +154,7 @@ public class RegisterRepository {
 
         G.onPushTwoStepVerification = (userNameR, userIdR, authorHashR) -> {
             G.displayName = userName = userNameR;
+            new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
             G.userId = userId = userIdR;
             G.authorHash = authorHash = authorHashR;
             goToTwoStepVerificationPage.postValue(userIdR);
@@ -218,11 +222,15 @@ public class RegisterRepository {
 
     //basically it is send request resend activation code and send this request for getting new activation code
     public void registration(RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
+        // check for re-use
+        if (phoneNumber == null || phoneNumber.isEmpty())
+            phoneNumber = new HelperPreferences().readString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_NUMBER);
         requestRegister(phoneNumber, callback);
     }
 
     private void requestRegister(String phoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
         this.phoneNumber = phoneNumber.replace("-", "");
+        new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_NUMBER, this.phoneNumber);
         ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
         builder.setCountryCode(isoCode);
         builder.setPhoneNumber(Long.parseLong(this.phoneNumber));
@@ -236,6 +244,7 @@ public class RegisterRepository {
                 /*digitCount = verifyCodeDigitCount;*/
                 regexFetchCodeVerification = regex;
                 userName = userNameR;
+                new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
                 userId = userIdR;
                 authorHash = authorHashR;
                 G.smsNumbers = smsNumbersR;
@@ -265,6 +274,8 @@ public class RegisterRepository {
             @Override
             public void onLogin() {
                 DbManager.getInstance().doRealmTask(realm -> {
+                    if (userName == null || userName.isEmpty())
+                        userName = new HelperPreferences().readString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME);
                     realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, userId, userName, phoneNumber, token, authorHash));
                     BotInit.setCheckDrIgap(true);
                     if (newUser) {
@@ -318,6 +329,8 @@ public class RegisterRepository {
             userVerify.setCode(Integer.parseInt(verificationCode
                     .replaceAll("[^0-9]", "")
                     .replaceAll("[\u0000-\u001f]", "")));
+            if (userName == null || userName.isEmpty())
+                userName = new HelperPreferences().readString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME);
             userVerify.setUsername(userName);
             RequestWrapper requestWrapper = new RequestWrapper(101, userVerify, new OnUserVerification() {
                 @Override

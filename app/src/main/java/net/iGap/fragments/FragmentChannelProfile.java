@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
@@ -248,7 +251,21 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
             }
         });
 
-        binding.description.setMovementMethod(LinkMovementMethod.getInstance());
+        BetterLinkMovementMethod
+                .linkify(Linkify.ALL, binding.description)
+                .setOnLinkClickListener((tv, url) -> {
+                    return false;
+                })
+                .setOnLinkLongClickListener((tv, url) -> {
+                        if (HelperUrl.isTextLink(url)){
+                            G.isLinkClicked = true ;
+
+                            HelperUrl.openLinkDialog(getActivity() , url);
+                        }
+                    return true;
+                });
+
+        //binding.description.setMovementMethod(LinkMovementMethod.getInstance());
 
         AppUtils.setProgresColler(binding.loading);
 
