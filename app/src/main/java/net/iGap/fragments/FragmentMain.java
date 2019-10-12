@@ -32,6 +32,7 @@ import net.iGap.adapter.SelectedItemAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
+import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
@@ -79,6 +80,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -280,17 +282,30 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void markAsRead() {
-        if (mSelectedRoomList.size() > 0) {
-            for (int i = 0; i < mSelectedRoomList.size(); i++) {
-                markAsRead(mSelectedRoomList.get(i).getType(), mSelectedRoomList.get(i).getId());
-            }
-            disableMultiSelect();
-        }
+        DbManager.getInstance().doRealmTask(realm -> {
+            List<RealmRoom> rooms = realm.copyFromRealm(mSelectedRoomList);
+            AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    if (rooms.size() > 0) {
+                        for (int i = 0; i < rooms.size(); i++) {
+                            markAsRead(realm, rooms.get(i).getType(), rooms.get(i).getId());
+                        }
+                    }
+                }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    disableMultiSelect();
+                }
+            });
+        });
+
     }
 
     private void readAllRoom() {
-        RealmResults<RealmRoom> unreadList = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).greaterThan(RealmRoomFields.UNREAD_COUNT, 0).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
+        List<RealmRoom> unreadList = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.copyFromRealm(realm.where(RealmRoom.class).greaterThan(RealmRoomFields.UNREAD_COUNT, 0).equalTo(RealmRoomFields.IS_DELETED, false).findAll());
         });
 
         if (unreadList.size() == 0) {
@@ -303,11 +318,23 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
-
-                    for (RealmRoom room : unreadList) {
-                        markAsRead(room.getType(), room.getId());
-                    }
-                    disableMultiSelect();
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                if (unreadList.size() > 0) {
+                                    for (RealmRoom room : unreadList) {
+                                        markAsRead(realm, room.getType(), room.getId());
+                                    }
+                                }
+                            }
+                        }, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                disableMultiSelect();
+                            }
+                        });
+                    });
 
                 })
                 .onNegative((dialog, which) -> dialog.dismiss())
@@ -1066,37 +1093,32 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         constraintSet.applyTo(root);
     }
 
-    private void markAsRead(ProtoGlobal.Room.Type chatType, long roomId) {
-
-        G.handler.postDelayed(() -> {
-            //ToDo: Check it for update badge after update sen status in db
-            DbManager.getInstance().doRealmTask(realm -> {
-                if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
-                    RealmRoomMessage.fetchMessages(realm, roomId, new OnActivityChatStart() {
-                        @Override
-                        public void sendSeenStatus(RealmRoomMessage message) {
-                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                        }
-
-                        @Override
-                        public void resendMessage(RealmRoomMessage message) {
-
-                        }
-
-                        @Override
-                        public void resendMessageNeedsUpload(RealmRoomMessage message, long messageId) {
-
-                        }
-                    });
+    private void markAsRead(Realm realm, ProtoGlobal.Room.Type chatType, long roomId) {
+        //ToDo: Check it for update badge after update sen status in db
+        if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
+            RealmRoomMessage.fetchMessages(realm, roomId, new OnActivityChatStart() {
+                @Override
+                public void sendSeenStatus(RealmRoomMessage message) {
+                    G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                 }
 
-                RealmRoom.setCount(realm, roomId, 0);
+                @Override
+                public void resendMessage(RealmRoomMessage message) {
 
-                G.handler.postDelayed(() -> DbManager.getInstance().doRealmTask(realm1 -> {
-                    AppUtils.updateBadgeOnly(realm1, roomId);
-                }), 250);
+                }
+
+                @Override
+                public void resendMessageNeedsUpload(RealmRoomMessage message, long messageId) {
+
+                }
             });
-        }, 5);
+        }
+
+        RealmRoom.setCount(realm, roomId, 0);
+
+        G.handler.postDelayed(() -> DbManager.getInstance().doRealmTask(realm1 -> {
+            AppUtils.updateBadgeOnly(realm1, roomId);
+        }), 250);
     }
 
     @Override
