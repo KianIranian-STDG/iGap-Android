@@ -1009,19 +1009,18 @@ public class HelperToolbar {
 
         String phoneNumber = "0";
 
-        try {
-            Realm realm = Realm.getDefaultInstance();
+        try (Realm realm = Realm.getDefaultInstance()) {
             RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
             if (userInfo != null) {
                 phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
-            }else {
-                phoneNumber = ActivityMain.userPhoneNumber.substring(2) ;
-            }
-        }catch (Exception e){
-            //maybe exception was for realm substring
-            try{
+            } else {
                 phoneNumber = ActivityMain.userPhoneNumber.substring(2);
-            }catch (Exception ex){
+            }
+        } catch (Exception e) {
+            //maybe exception was for realm substring
+            try {
+                phoneNumber = ActivityMain.userPhoneNumber.substring(2);
+            } catch (Exception ex) {
                 //nothing
             }
         }
