@@ -3830,7 +3830,7 @@ public class FragmentChat extends BaseFragment
                         }
                         //final long senderId = G.userId;
                         //ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, messageSender);
-                        if (!G.authorHash.equals(message.mMessage.authorHash)) {  // if message dose'nt belong to owner
+                        if (!G.authorHash.equals(message.mMessage.getAuthorHash())) {  // if message dose'nt belong to owner
                             if (channelRole == ChannelChatRole.MEMBER) {
                                 mBtnDeleteSelected.setVisibility(View.GONE);
                                 isAllSenderId = false;
@@ -3853,7 +3853,7 @@ public class FragmentChat extends BaseFragment
                         //final long senderId = G.userId;
                         //GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, messageSender);
 
-                        if (!G.authorHash.equals(message.mMessage.authorHash)) {  // if message dose'nt belong to owner
+                        if (!G.authorHash.equals(message.mMessage.getAuthorHash())) {  // if message dose'nt belong to owner
                             if (groupRole == GroupChatRole.MEMBER) {
                                 mBtnDeleteSelected.setVisibility(View.GONE);
                                 isAllSenderId = false;
