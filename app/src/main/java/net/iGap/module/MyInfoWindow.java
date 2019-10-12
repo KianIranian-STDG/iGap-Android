@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.CallSelectFragment;
@@ -80,9 +81,8 @@ public class MyInfoWindow extends InfoWindow {
         if (userId == G.userId) {
             return;
         }
-        String displayName = "";
 
-        try (Realm realm2 = Realm.getDefaultInstance()) {
+        String displayName = DbManager.getInstance().doRealmTask(realm2 -> {
             RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm2, userId);
             if (realmRegisteredInfo == null) {
                 RealmRegisteredInfo.getRegistrationInfo(userId, new OnInfo() {
@@ -96,9 +96,12 @@ public class MyInfoWindow extends InfoWindow {
                         });
                     }
                 });
-                return;
+                return null;
             }
-            displayName = realmRegisteredInfo.getDisplayName();
+            return realmRegisteredInfo.getDisplayName();
+        });
+        if (displayName == null) {
+            return;
         }
 
 

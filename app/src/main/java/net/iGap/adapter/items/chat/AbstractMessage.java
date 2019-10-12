@@ -859,7 +859,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         long finalAuthorRoomId = authorRoomId;
         long finalMessageId = messageId;
         new Thread(() -> {
-            try (Realm realm1 = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm1 -> {
                 realm1.executeTransaction(realm -> {
 
                     RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.getMessageId()).findFirst();
@@ -885,7 +885,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
                     }
                 });
-            }
+            });
         }).start();
     }
 
@@ -1967,9 +1967,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
 
                     new Thread(() -> {
-                        try (Realm realm12 = Realm.getDefaultInstance()) {
+                        DbManager.getInstance().doRealmTask(realm12 -> {
                             realm12.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(roomMessage));
-                        }
+                        });
                     }).start();
 
                     G.chatSendMessageUtil.build(type, mMessage.getRoomId(), roomMessage).sendMessage(messageId + "");
