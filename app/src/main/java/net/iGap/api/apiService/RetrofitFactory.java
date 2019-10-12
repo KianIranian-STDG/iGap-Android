@@ -47,6 +47,7 @@ public class RetrofitFactory {
                 .tlsVersions(TlsVersion.TLS_1_2)
                 .build();
         httpClient = builder.connectionSpecs(Collections.singletonList(spec)).build();
+//        httpClient = enableTls12OnPreLollipop(builder).build();
     }
 
     Retrofit getBeepTunesRetrofit() {

@@ -1062,11 +1062,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void checkGoogleUpdate() {
-        if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
-            Log.wtf(this.getClass().getName(), "installIfNeeded");
-            ProviderInstaller.installIfNeededAsync(this, this);
-            Log.wtf(this.getClass().getName(), "installIfNeeded");
-        }
+        Log.wtf(this.getClass().getName(), "installIfNeeded");
+        ProviderInstaller.installIfNeededAsync(this, this);
+        Log.wtf(this.getClass().getName(), "installIfNeeded");
     }
 
     //*******************************************************************************************************************************************
