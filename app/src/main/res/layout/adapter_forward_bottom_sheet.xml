@@ -12,19 +12,19 @@
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent=".7"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent=".7" />
 
     <net.iGap.module.EmojiTextViewE
         android:id="@+id/txtTitle_forward_bottomSheet"
-        android:textColor="?iGapTitleTextColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp4"
         android:gravity="center"
         android:lines="2"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/dp13"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,13 +36,12 @@
         android:layout_height="@dimen/dp24"
         android:layout_gravity="center"
         android:clickable="false"
-        android:visibility="visible"
         app:animDuration="200"
-        app:checkedColor="@color/green"
+        app:checkedColor="?attr/iGapButtonColor"
         app:layout_constraintBottom_toBottomOf="@id/txtTitle_forward_bottomSheet"
         app:layout_constraintRight_toRightOf="@id/txtTitle_forward_bottomSheet"
         app:lineColor="#fff"
         app:lineWidth="1.2dp"
-        app:unCheckColor="#ff0" />
+        app:unCheckColor="?attr/colorPrimary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

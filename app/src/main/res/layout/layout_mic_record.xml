@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
             android:layout_gravity="bottom"
+            android:background="?attr/rootBackgroundColor"
             android:orientation="vertical" />
 
         <LinearLayout
@@ -39,11 +40,11 @@
 
                 <TextView
                     android:id="@+id/txt_time_record"
-                    android:textColor="?iGapTitleTextColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:text="00:00"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14" />
 
                 <TextView

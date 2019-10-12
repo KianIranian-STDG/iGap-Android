@@ -208,7 +208,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
 
         appVersion.set(BuildConfig.VERSION_NAME);
-        isDarkMode.set(G.themeColor == Theme.DARK);
 
         //set user info text gravity
         if (!G.isAppRtl) {
@@ -227,7 +226,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void init() {
-
+        isDarkMode.set(G.themeColor == Theme.DARK);
         //set credit amount
         if (G.selectedCard != null) {
             currentCredit.set(G.cardamount);
