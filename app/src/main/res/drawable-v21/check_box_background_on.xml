@@ -28,7 +28,7 @@
         android:top="@dimen/dp6">
         <shape android:shape="rectangle">
 
-            <solid android:color="?attr/iGapButtonColor" />
+            <solid android:color="?attr/colorAccent" />
 
             <corners android:radius="@dimen/dp4" />
 

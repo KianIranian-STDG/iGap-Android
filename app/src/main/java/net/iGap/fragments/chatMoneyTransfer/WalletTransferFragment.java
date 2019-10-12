@@ -56,8 +56,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
 
     private final String[] mPrice = {""};
     private View rootView;
-    private EditText amountEt;
-    private EditText descriptionEt;
+    private EditText amountEt,descriptionEt;
     private Button confirmBtn;
     private Card selectedCard = null;
     private Long userId;
@@ -70,6 +69,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_send_money_detail, container, false);
+        rootView.setBackgroundColor(new Theme().getRootColor(getContext()));
         return rootView;
     }
 

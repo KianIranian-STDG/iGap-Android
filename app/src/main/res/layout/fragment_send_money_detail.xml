@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent">
 
     <TextView
@@ -69,6 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/desc"
+        android:textColor="?attr/iGapTitleTextColor"
         app:layout_constraintEnd_toEndOf="@+id/et_moneyAction_amount"
         app:layout_constraintStart_toStartOf="@+id/tv_moneyAction_amountText"
         app:layout_constraintTop_toBottomOf="@+id/et_moneyAction_amount" />
