@@ -105,11 +105,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         Log.wtf(this.getClass().getName(), "onViewCreated");
 
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            TypedValue tV = new TypedValue();
-            TypedArray aa = getContext().obtainStyledAttributes(tV.data, new int[]{R.attr.colorPrimaryDark});
-            int clr = aa.getColor(0, 0);
-            aa.recycle();
-            StatusBarUtil.setColor(getActivity(), clr, 50);
+            StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
         }
 
         viewModel.changeUserProfileWallpaper.observe(getViewLifecycleOwner(), drawable -> {

@@ -635,7 +635,7 @@
                 android:textColorHint="?iGapHintTextColor"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/versionChange"
+                app:layout_constraintTop_toBottomOf="@id/fup_user_image"
                 app:layout_constraintWidth_percent=".9">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -843,16 +843,16 @@
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/profileViewGroup"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:constraint_referenced_ids="inviteTitle,inviteIcon,scanQRIcon,scanQRTitle,nearByIcon,nearByTitle,darkTheme,darkThemeTitle,fup_btn_dark_view_handler_view,fup_btn_faq_view_handler_view,faqTitle,fup_user_name,fup_user_tel,fup_user_bio,cloudIcon,cloudTitle,settingIcon,settingTitle,addIcon,addTitle,fup_splitter_1,fup_btn_credit,fup_splitter_2,fup_btn_score,fup_splitter_3,inviteIcon,inviteTitle,fup_btn_qr_scanner,fup_btn_nearBy,fup_btn_dark_mode,fup_btn_faq,fup_splitter_4,versionTitle,fup_txt_app_version,userFullName,versionChange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="fup_btn_cloud,fup_btn_settings,fup_btn_add,scanQRIcon,scanQRTitle,nearByIcon,nearByTitle,darkTheme,darkThemeTitle,fup_btn_dark_view_handler_view,fup_btn_faq_view_handler_view,faqTitle,fup_user_name,fup_user_tel,fup_user_bio,cloudIcon,cloudTitle,settingIcon,settingTitle,addIcon,addTitle,fup_splitter_1,fup_btn_credit,fup_splitter_2,fup_btn_score,fup_splitter_3,inviteIcon,inviteTitle,fup_btn_qr_scanner,fup_btn_nearBy,fup_btn_dark_mode,fup_btn_faq,fup_splitter_4,versionTitle,fup_txt_app_version,userFullName,versionChange,fup_btn_invite_friends"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/editProfileView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:constraint_referenced_ids="countryCode,referralView,addAvatar,name,userName,bio,email,gender,genderValue" />
 
