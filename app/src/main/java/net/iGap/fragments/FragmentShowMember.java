@@ -790,7 +790,12 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                                                 // bagi:// dont uncomment below line it has some bug
                                                 //new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();
                                             } else {
-                                                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString())).setReplace(false).load();
+                                                long roomId = RealmRoom.getRoomIdByPeerId(mContact.peerId);
+                                                if (roomId != 0) {
+                                                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(roomId, mContact.peerId, GROUP.toString())).setReplace(false).load();
+                                                }else {
+                                                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, mContact.peerId, "Others")).setReplace(false).load();
+                                                }
                                             }
                                             break;
                                         case SELECT_FOR_ADD_MODERATOR:
