@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.ColorStateList;
-import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Editable;
@@ -55,8 +53,6 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.realm.RealmUserInfo;
 
-import org.paygear.WalletActivity;
-
 import io.realm.Realm;
 
 import static androidx.constraintlayout.widget.ConstraintSet.BOTTOM;
@@ -66,7 +62,6 @@ import static androidx.constraintlayout.widget.ConstraintSet.PARENT_ID;
 import static androidx.constraintlayout.widget.ConstraintSet.START;
 import static androidx.constraintlayout.widget.ConstraintSet.TOP;
 import static androidx.constraintlayout.widget.ConstraintSet.WRAP_CONTENT;
-import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 
@@ -1030,44 +1025,7 @@ public class HelperToolbar {
         if (!G.isWalletRegister) {
             new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
         } else {
-            TypedValue typedValue = new TypedValue();
-            TypedArray a = mContext.obtainStyledAttributes(typedValue.data, new int[]{
-                    R.attr.colorPrimaryLight,
-                    R.attr.colorPrimary,
-                    R.attr.colorPrimaryDark,
-                    R.attr.colorAccentDark,
-                    R.attr.colorAccent,
-                    R.attr.rootBackgroundColor,
-                    R.attr.iGapDividerLine,
-                    R.attr.iGapTitleTextColor,
-                    R.attr.iGapSubtitleTextColor
-            });
-            int primaryLight = a.getColor(0, 0);
-            int primary = a.getColor(1, 0);
-            int primaryDark = a.getColor(2, 0);
-            int accentDark = a.getColor(3, 0);
-            int accent = a.getColor(4, 0);
-            int backgroundColor = a.getColor(5, 0);
-            int divider = a.getColor(6, 0);
-            int textTitle = a.getColor(7, 0);
-            int textSubTitle = a.getColor(8, 0);
-            a.recycle();
-            Intent intent = new Intent(mContext, WalletActivity.class);
-            intent.putExtra("Language", "fa");
-            intent.putExtra("Mobile", "0" + phoneNumber);
-            intent.putExtra("PrimaryColor", String.format("#%06X", 0xFFFFFF & primary));
-            intent.putExtra("DarkPrimaryColor", String.format("#%06X", 0xFFFFFF & primaryDark));
-            intent.putExtra("AccentColor", String.format("#%06X", 0xFFFFFF & accent));
-            intent.putExtra("IS_DARK_THEME", G.themeColor == Theme.DARK);
-            intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-            intent.putExtra(WalletActivity.PROGRESSBAR, String.format("#%06X", 0xFFFFFF & accent));
-            intent.putExtra(WalletActivity.LINE_BORDER, String.format("#%06X", 0xFFFFFF & divider));
-            intent.putExtra(WalletActivity.BACKGROUND, String.format("#%06X", 0xFFFFFF & backgroundColor));
-            intent.putExtra(WalletActivity.BACKGROUND_2, String.format("#%06X", 0xFFFFFF & backgroundColor));
-            intent.putExtra(WalletActivity.TEXT_TITLE, String.format("#%06X", 0xFFFFFF & textTitle));
-            intent.putExtra(WalletActivity.TEXT_SUB_TITLE, String.format("#%06X", 0xFFFFFF & textSubTitle));
-            intent.putExtra("isScan", true);
-            G.fragmentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
+            new HelperWallet().goToWallet(mContext, "0" + phoneNumber);
         }
     }
 
@@ -1200,7 +1158,7 @@ public class HelperToolbar {
             tfFontIcon = ResourcesCompat.getFont(mContext, R.font.font_icon);
 
         if (tfMain == null)
-            tfMain = ResourcesCompat.getFont(mContext , R.font.main_font);
+            tfMain = ResourcesCompat.getFont(mContext, R.font.main_font);
 
 
     }

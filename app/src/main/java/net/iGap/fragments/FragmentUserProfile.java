@@ -53,6 +53,7 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.HelperWallet;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
@@ -65,7 +66,6 @@ import net.iGap.module.StatusBarUtil;
 import net.iGap.viewmodel.UserProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
-import org.paygear.WalletActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -138,22 +138,8 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         });
 
         viewModel.goToWalletPage.observe(getViewLifecycleOwner(), phoneNumber -> {
-            if (phoneNumber != null) {
-                Intent intent = new Intent(getActivity(), WalletActivity.class);
-                intent.putExtra("Language", "fa");
-                intent.putExtra("Mobile", phoneNumber);
-                intent.putExtra("PrimaryColor",new Theme().getPrimaryColor(getContext()));
-                intent.putExtra("DarkPrimaryColor", new Theme().getPrimaryColor(getContext()));
-                intent.putExtra("AccentColor",new Theme().getPrimaryColor(getContext()));
-                intent.putExtra("IS_DARK_THEME", G.themeColor == Theme.DARK);
-                intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-                intent.putExtra(WalletActivity.PROGRESSBAR,new Theme().getAccentColor(getContext()));
-                intent.putExtra(WalletActivity.LINE_BORDER, new Theme().getDividerColor(getContext()));
-                intent.putExtra(WalletActivity.BACKGROUND, new Theme().getRootColor(getContext()));
-                intent.putExtra(WalletActivity.BACKGROUND_2,new Theme().getRootColor(getContext()));
-                intent.putExtra(WalletActivity.TEXT_TITLE,new Theme().getTitleTextColor(getContext()));
-                intent.putExtra(WalletActivity.TEXT_SUB_TITLE, new Theme().getSubTitleColor(getContext()));
-                startActivityForResult(intent, ActivityMain.WALLET_REQUEST_CODE);
+            if (getContext() != null && phoneNumber != null) {
+                new HelperWallet().goToWallet(getContext(), phoneNumber);
             }
         });
 
@@ -511,7 +497,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             final TextView txtTitle = dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
             SearchView edtSearchView = dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
             LinearLayout rootView = dialogChooseCountry.findViewById(R.id.country_root);
-            rootView.setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.dialog_background),getContext(),R.attr.rootBackgroundColor));
+            rootView.setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.dialog_background), getContext(), R.attr.rootBackgroundColor));
 
             txtTitle.setOnClickListener(view -> {
                 edtSearchView.setIconified(false);
