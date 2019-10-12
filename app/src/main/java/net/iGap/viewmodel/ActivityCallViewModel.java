@@ -21,6 +21,7 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
@@ -575,7 +576,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     }
 
     private void setPicture() {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
             if (registeredInfo != null) {
                 loadOrDownloadPicture(registeredInfo, realm);
@@ -585,17 +586,17 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                 G.handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        try (Realm realm = Realm.getDefaultInstance()) {
-                            RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+                        DbManager.getInstance().doRealmTask(realm1 -> {
+                            RealmRegisteredInfo registeredInfo1 = RealmRegisteredInfo.getRegistrationInfo(realm1, userId);
 
-                            if (registeredInfo != null) {
-                                loadOrDownloadPicture(registeredInfo, realm);
+                            if (registeredInfo1 != null) {
+                                loadOrDownloadPicture(registeredInfo1, realm1);
                             }
-                        }
+                        });
                     }
                 }, 3000);
             }
-        }
+        });
     }
 
     private void loadOrDownloadPicture(RealmRegisteredInfo registeredInfo, Realm realm) {

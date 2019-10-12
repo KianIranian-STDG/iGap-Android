@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 
 import androidx.collection.ArrayMap;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -415,14 +416,14 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
 
         HelperSetAction.sendCancel(uploadStructure.messageId);
 
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     RealmAttachment.updateToken(uploadStructure.messageId, uploadStructure.token);
                 }
             });
-        }
+        });
 
         /**
          * this code should exist in under of other codes in this block

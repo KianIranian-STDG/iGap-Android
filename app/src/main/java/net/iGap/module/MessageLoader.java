@@ -11,6 +11,7 @@
 
 package net.iGap.module;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import net.iGap.interfaces.OnMessageReceive;
@@ -134,78 +135,81 @@ public final class MessageLoader {
                 /**
                  * convert message from RealmRoomMessage to StructMessageInfo for send to view
                  */
-                try (Realm realm = Realm.getDefaultInstance()) {
-                    boolean gapReached = false;
-                    boolean jumpOverLocal = false;
+                DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
+                    @Override
+                    public void doTask(Realm realm) {
+                        boolean gapReached = false;
+                        boolean jumpOverLocal = false;
 
-                    if (UP == historyDirection) {
-                        if (startMessageId <= reachMessageId) {
-                            gapReached = true;
-                            /**
-                             * if gapReached now check that future gap is reached or no. if future gap reached this means
-                             * that with get this history , client jumped from local messages and now is in another gap
-                             */
-                            if (startMessageId <= (long) gapExist(realm, roomId, reachMessageId, UP)[0]) {
-                                jumpOverLocal = true;
+                        if (UP == historyDirection) {
+                            if (startMessageId <= reachMessageId) {
+                                gapReached = true;
+                                /**
+                                 * if gapReached now check that future gap is reached or no. if future gap reached this means
+                                 * that with get this history , client jumped from local messages and now is in another gap
+                                 */
+                                if (startMessageId <= (long) gapExist(realm, roomId, reachMessageId, UP)[0]) {
+                                    jumpOverLocal = true;
+                                }
+                            }
+                        } else {
+                            if (endMessageId >= reachMessageId) {
+                                gapReached = true;
+                                /**
+                                 * if gapReached now check that future gap is reached or no. if future gap reached this means
+                                 * that with get this history , client jumped from local messages and now is in another gap
+                                 */
+                                if (endMessageId >= (long) gapExist(realm, roomId, reachMessageId, DOWN)[0]) {
+                                    jumpOverLocal = true;
+                                }
                             }
                         }
-                    } else {
-                        if (endMessageId >= reachMessageId) {
-                            gapReached = true;
-                            /**
-                             * if gapReached now check that future gap is reached or no. if future gap reached this means
-                             * that with get this history , client jumped from local messages and now is in another gap
-                             */
-                            if (endMessageId >= (long) gapExist(realm, roomId, reachMessageId, DOWN)[0]) {
-                                jumpOverLocal = true;
+
+                        final boolean gapReachedFinal = gapReached;
+                        final boolean jumpOverLocalFinal = jumpOverLocal;
+                        long finalMessageId;
+                        if (UP == historyDirection) {
+                            finalMessageId = startMessageId;
+                        } else {
+                            finalMessageId = endMessageId;
+                        }
+
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                /**
+                                 * clear before state gap for avoid compute this message for gap state again
+                                 */
+                                clearGap(roomId, messageIdGetHistorySafe, finalMessageId, historyDirection, realm);
+
+                                /**
+                                 * if not reached to gap yet and exist reachMessageId
+                                 * set new gap state for compute message for gap
+                                 */
+                                if (jumpOverLocalFinal || (!gapReachedFinal && reachMessageId > 0)) {
+                                    setGap(finalMessageId, historyDirection, realm);
+                                }
                             }
+                        });
+
+                        Sort sort;
+                        if (historyDirection == UP) {
+                            sort = Sort.DESCENDING;
+                        } else {
+                            sort = Sort.ASCENDING;
                         }
-                    }
 
-                    final boolean gapReachedFinal = gapReached;
-                    final boolean jumpOverLocalFinal = jumpOverLocal;
-                    long finalMessageId;
-                    if (UP == historyDirection) {
-                        finalMessageId = startMessageId;
-                    } else {
-                        finalMessageId = endMessageId;
-                    }
-
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            /**
-                             * clear before state gap for avoid compute this message for gap state again
-                             */
-                            clearGap(roomId, messageIdGetHistorySafe, finalMessageId, historyDirection, realm);
-
-                            /**
-                             * if not reached to gap yet and exist reachMessageId
-                             * set new gap state for compute message for gap
-                             */
-                            if (jumpOverLocalFinal || (!gapReachedFinal && reachMessageId > 0)) {
-                                setGap(finalMessageId, historyDirection, realm);
+                        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, sort);
+                        List<RealmRoomMessage> list = realm.copyFromRealm(realmRoomMessages);
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                G.refreshRealmUi();
+                                onMessageReceive.onMessage(roomId, startMessageId, endMessageId, list, gapReachedFinal, jumpOverLocalFinal, historyDirection);
                             }
-                        }
-                    });
-
-                    Sort sort;
-                    if (historyDirection == UP) {
-                        sort = Sort.DESCENDING;
-                    } else {
-                        sort = Sort.ASCENDING;
+                        });
                     }
-
-                    RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, sort);
-                    List<RealmRoomMessage> list = realm.copyFromRealm(realmRoomMessages);
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            G.refreshRealmUi();
-                            onMessageReceive.onMessage(roomId, startMessageId, endMessageId, list, gapReachedFinal, jumpOverLocalFinal, historyDirection);
-                        }
-                    });
-                }
+                });
             }
 
             @Override

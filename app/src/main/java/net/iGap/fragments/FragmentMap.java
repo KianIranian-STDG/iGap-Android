@@ -56,6 +56,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -304,7 +305,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
             rvSendPosition.setVisibility(View.GONE);
             fabOpenMap.setOnClickListener(this);
 
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fabOpenMap.getLayoutParams();
 
                 if (HelperCalander.isPersianUnicode) {
@@ -339,7 +340,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
                     setAvatar(roomId);
 
                 }
-            }
+            });
         }
     }
 

@@ -32,6 +32,7 @@ import androidx.core.content.FileProvider;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.AbstractMessage;
@@ -261,16 +262,11 @@ public final class AppUtils {
 
                     view.setImageBitmap(bitmap);
                     final String savedPath = AppUtils.saveMapToFile(bitmap, message.getLocation().getLocationLat(), message.getLocation().getLocationLong());
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                if (message.getLocation() != null) {
-                                    message.getLocation().setImagePath(savedPath);
-                                }
-                            }
-                        });
-                    }
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        if (message.getLocation() != null) {
+                            message.getLocation().setImagePath(savedPath);
+                        }
+                    });
                 }
             });
         }
@@ -572,7 +568,7 @@ public final class AppUtils {
     }
 
     public static String computeLastMessage(long roomId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        return DbManager.getInstance().doRealmTask(realm -> {
             String lastMessage = "";
             RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
             for (RealmRoomMessage realmRoomMessage : realmList) {
@@ -582,7 +578,7 @@ public final class AppUtils {
                 }
             }
             return lastMessage;
-        }
+        });
     }
 
     public static MaterialDialog.Builder buildResendDialog(Context context, int failedMessagesCount, final IResendMessage listener) {

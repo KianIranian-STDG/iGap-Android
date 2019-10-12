@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -306,7 +307,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
                     contacts.get(i).setPhone(s);
                 }
             }
-            try (Realm realm = Realm.getDefaultInstance()) {
+            return DbManager.getInstance().doRealmTask(realm -> {
                 RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
 
                 ArrayList<StructListOfContact> slc = new ArrayList();
@@ -324,7 +325,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
                     }
                 }
                 return slc;
-            }
+            });
 
         }
 

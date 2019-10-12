@@ -348,54 +348,55 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             if (item == null) {
                 return;
             }
-            try (Realm realm = Realm.getDefaultInstance()) {
-                RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, item.getUserId());
-                if (registeredInfo == null) {
-                    return;
-                }
+            RealmRegisteredInfo registeredInfo = DbManager.getInstance().doRealmTask(realm -> {
+                return RealmRegisteredInfo.getRegistrationInfo(realm, item.getUserId());
+            });
 
-                if (!G.isAppRtl) {
-                    holder.arrow.setRotation(270);
-                } else {
-                    holder.arrow.setRotation(90);
-                }
+            if (registeredInfo == null) {
+                return;
+            }
+
+            if (!G.isAppRtl) {
+                holder.arrow.setRotation(270);
+            } else {
+                holder.arrow.setRotation(90);
+            }
 
 //            holder.arrow.setTextColor(Color.parseColor(G.appBarColor));
 
-                holder.layoutMap.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
-                        }
+            holder.layoutMap.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (getActivity() != null) {
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
                     }
-                });
-
-                if (HelperCalander.isPersianUnicode) {
-                    holder.username.setGravity(Gravity.RIGHT);
-                } else {
-                    holder.username.setGravity(Gravity.LEFT);
                 }
+            });
 
-                holder.username.setText(registeredInfo.getDisplayName());
-                if (item.isHasComment()) {
-                    if (item.getComment() == null || item.getComment().isEmpty()) {
-                        holder.comment.setText(context.getResources().getString(R.string.comment_waiting));
-                        new RequestGeoGetComment().getComment(item.getUserId());
-                    } else {
-                        holder.comment.setText(item.getComment());
-                    }
-                } else {
-                    holder.comment.setText(context.getResources().getString(R.string.comment_no));
-                }
-
-                holder.distance.setText(String.format(G.context.getString(R.string.distance), item.getDistance()));
-                if (HelperCalander.isPersianUnicode) {
-                    holder.distance.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.distance.getText().toString()));
-                }
-
-                avatarHandler.getAvatar(new ParamWithAvatarType(holder.avatar, item.getUserId()).avatarType(AvatarHandler.AvatarType.USER));
+            if (HelperCalander.isPersianUnicode) {
+                holder.username.setGravity(Gravity.RIGHT);
+            } else {
+                holder.username.setGravity(Gravity.LEFT);
             }
+
+            holder.username.setText(registeredInfo.getDisplayName());
+            if (item.isHasComment()) {
+                if (item.getComment() == null || item.getComment().isEmpty()) {
+                    holder.comment.setText(context.getResources().getString(R.string.comment_waiting));
+                    new RequestGeoGetComment().getComment(item.getUserId());
+                } else {
+                    holder.comment.setText(item.getComment());
+                }
+            } else {
+                holder.comment.setText(context.getResources().getString(R.string.comment_no));
+            }
+
+            holder.distance.setText(String.format(G.context.getString(R.string.distance), item.getDistance()));
+            if (HelperCalander.isPersianUnicode) {
+                holder.distance.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.distance.getText().toString()));
+            }
+
+            avatarHandler.getAvatar(new ParamWithAvatarType(holder.avatar, item.getUserId()).avatarType(AvatarHandler.AvatarType.USER));
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {

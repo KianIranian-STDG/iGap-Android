@@ -391,7 +391,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         if (G.ISRealmOK) {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (realmUserInfo != null) {
                     String token = realmUserInfo.getPushNotificationToken();
@@ -402,7 +402,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         });
                     }
                 }
-            }
+            });
 
             RealmUserInfo userInfo = DbManager.getInstance().doRealmTask(realm -> {
                 return realm.where(RealmUserInfo.class).findFirst();
@@ -1519,7 +1519,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -1535,7 +1535,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 }
             });
-        }
+        });
 
         /**
          * don't send update status for own message

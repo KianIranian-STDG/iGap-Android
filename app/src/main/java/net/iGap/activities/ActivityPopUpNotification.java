@@ -44,6 +44,7 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -208,8 +209,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         color = mList.get(position).color;
         txtName.setText(mList.get(position).name);
 
-
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, mList.get(position).senderId);
             if (realmRegisteredInfo != null) {
                 if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
@@ -222,7 +222,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             }
 
             setAvatar(realmRegisteredInfo, realm);
-        }
+        });
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////

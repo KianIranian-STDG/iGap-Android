@@ -337,7 +337,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                     s = "98" + s;
                 contacts.get(i).setPhone(s);
             }
-            try (Realm realm = Realm.getDefaultInstance()) {
+            return DbManager.getInstance().doRealmTask(realm -> {
                 RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
 
 
@@ -357,7 +357,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                 }
 
                 return slc;
-            }
+            });
         }
 
         @Override

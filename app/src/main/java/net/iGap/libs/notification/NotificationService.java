@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.activities.ActivityMain;
@@ -49,7 +50,7 @@ public class NotificationService extends FirebaseMessagingService {
         }
 
         if (remoteMessage.getData().containsKey(MESSAGE_ID)) {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -88,7 +89,7 @@ public class NotificationService extends FirebaseMessagingService {
                         }
                     }
                 });
-            }
+            });
         }
     }
 

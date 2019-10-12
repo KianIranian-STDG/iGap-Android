@@ -19,6 +19,7 @@ import android.util.Log;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperPermission;
@@ -56,8 +57,8 @@ public class Contacts {
      * @return List<StructContactInfo>
      */
     public static List<StructContactInfo> retrieve(String filter) {
-        ArrayList<StructContactInfo> items = new ArrayList<>();
-        try (Realm realm = Realm.getDefaultInstance()) {
+        return DbManager.getInstance().doRealmTask((DbManager.RealmTaskWithReturn<List<StructContactInfo>>) realm -> {
+            ArrayList<StructContactInfo> items = new ArrayList<>();
             RealmResults<RealmContacts> contacts;
             if (filter == null) {
                 contacts = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
@@ -91,10 +92,8 @@ public class Contacts {
                 }
                 lastHeader = header;
             }
-
-        }
-
-        return items;
+            return items;
+        });
     }
 
 

@@ -12,6 +12,7 @@ package net.iGap.response;
 
 import android.os.Looper;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperUploadFile;
@@ -66,7 +67,7 @@ public class FileUploadStatusResponse extends MessageHandler {
             return;
         }
 
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -84,7 +85,7 @@ public class FileUploadStatusResponse extends MessageHandler {
                     }
                 }
             });
-        }
+        });
     }
 }
 

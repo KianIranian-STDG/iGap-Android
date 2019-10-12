@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -110,8 +111,7 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
             holder.payTime.setBackgroundColor(Color.parseColor(G.appBarColor));
             holder.titleTxt.setBackgroundColor(Color.parseColor(G.appBarColor));
         }
-
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo mRealmRegisteredInfoFrom = RealmRegisteredInfo.getRegistrationInfo(realm, realmMoneyTransfer.getFromUserId());
             RealmRegisteredInfo mRealmRegisteredInfoTo = RealmRegisteredInfo.getRegistrationInfo(realm, realmMoneyTransfer.getToUserId());
 
@@ -148,7 +148,7 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
             if (realmMoneyTransfer.getDescription() == null || realmMoneyTransfer.getDescription().isEmpty()) {
                 holder.descriptionRoot.setVisibility(View.GONE);
             }
-        }
+        });
     }
 
     @NotNull

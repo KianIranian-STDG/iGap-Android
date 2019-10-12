@@ -1,5 +1,6 @@
 package net.iGap.helper;
 
+import net.iGap.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmDataUsage;
 
@@ -64,7 +65,7 @@ public class HelperDataUsage {
 
     public static void insertDataUsage(ProtoGlobal.RoomMessageType type, boolean conectivityType, boolean isDownloaded) {
         new Thread(() -> {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(realm1 -> {
 
                     RealmResults<RealmDataUsage> realmDataUsage = realm1.where(RealmDataUsage.class).equalTo("connectivityType", conectivityType).findAll();
@@ -201,7 +202,7 @@ public class HelperDataUsage {
                     }
 
                 });
-            }
+            });
 
         }).start();
 
@@ -308,7 +309,7 @@ public class HelperDataUsage {
 
     public static void initializeRealmDataUsage() {
         String[] typeList = {"IMAGE", "VIDEO", "AUDIO", "FILE", "UNRECOGNIZED"};
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             for (int i = 0; i < typeList.length; i++) {
                 int finalI = i;
                 realm.executeTransaction(new Realm.Transaction() {
@@ -355,12 +356,12 @@ public class HelperDataUsage {
                 });
 
             }
-        }
+        });
 
     }
 
     public static void clearUsageRealm(boolean connectivityType) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             if (connectivityType) {
                 RealmResults<RealmDataUsage> wifiRealmList = realm.where(RealmDataUsage.class).equalTo("connectivityType", true).findAll();
                 for (RealmDataUsage usage : wifiRealmList) {
@@ -394,7 +395,7 @@ public class HelperDataUsage {
 
             }
             clearStatics();
-        }
+        });
     }
 
     private static void clearStatics() {

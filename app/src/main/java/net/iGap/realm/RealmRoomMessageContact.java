@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.DbManager;
 import net.iGap.helper.HelperString;
 import net.iGap.module.AppUtils;
 import net.iGap.module.StringListParcelConverter;
@@ -105,15 +106,15 @@ public class RealmRoomMessageContact extends RealmObject {
     }
 
     public void addPhone(String phone) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             phones.add(RealmString.string(realm, phone));
-        }
+        });
     }
 
     public void addEmail(String email) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             phones.add(RealmString.string(realm, email));
-        }
+        });
     }
 
     public String getLastPhoneNumber() {

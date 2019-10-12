@@ -39,6 +39,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
@@ -1010,13 +1011,15 @@ public class HelperToolbar {
         String phoneNumber = "0";
 
         try {
-            Realm realm = Realm.getDefaultInstance();
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (userInfo != null) {
-                phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
-            }else {
-                phoneNumber = ActivityMain.userPhoneNumber.substring(2) ;
-            }
+            phoneNumber = DbManager.getInstance().doRealmTask(realm -> {
+                RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (userInfo != null) {
+                    return userInfo.getUserInfo().getPhoneNumber().substring(2);
+                } else {
+                    return ActivityMain.userPhoneNumber.substring(2) ;
+                }
+            });
+
         }catch (Exception e){
             //maybe exception was for realm substring
             try{

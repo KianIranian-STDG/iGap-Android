@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -62,8 +63,7 @@ public class LogWalletCardToCard extends AbstractMessage<LogWalletCardToCard, Lo
         String iGapSkyBlue = "#E642D4F4";
         holder.requestTime.setBackgroundColor(Color.parseColor(iGapSkyBlue));
         holder.titleTxt.setBackgroundColor(Color.parseColor(iGapSkyBlue));
-
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo mRealmRegisteredInfoFrom = RealmRegisteredInfo.getRegistrationInfo(realm, realmRoomMessageWalletCardToCard.getFromUserId());
 
             String persianCalender = HelperCalander.checkHijriAndReturnTime(realmRoomMessageWalletCardToCard.getRequestTime()) + " " + "-" + " " +
@@ -98,7 +98,7 @@ public class LogWalletCardToCard extends AbstractMessage<LogWalletCardToCard, Lo
             holder.rrn.setText(rrn);
             holder.requestTime.setText(persianCalender);
 
-        }
+        });
     }
 
     @NotNull

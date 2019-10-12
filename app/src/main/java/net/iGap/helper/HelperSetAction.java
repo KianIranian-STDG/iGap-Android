@@ -10,6 +10,7 @@
 package net.iGap.helper;
 
 import net.iGap.Config;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
@@ -95,15 +96,18 @@ public class HelperSetAction {
             if (roomId == 0 || messageId == 0) {
                 return;
             }
-            try (Realm realm = Realm.getDefaultInstance()) {
+            chatType = DbManager.getInstance().doRealmTask(realm -> {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null && realmRoom.getType() != null) {
-                    chatType = realmRoom.getType();
+                    return realmRoom.getType();
                 } else {
-                    return;
+                    return null;
                 }
-            }
+            });
 
+            if (chatType == null) {
+                return;
+            }
         }
 
         /**

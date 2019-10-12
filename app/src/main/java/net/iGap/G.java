@@ -433,19 +433,21 @@ public class G extends ApplicationContext {
 
     public static void refreshRealmUi() {
         if (Looper.myLooper() == Looper.getMainLooper()) {
-            try (Realm realm = Realm.getDefaultInstance()) {
-                realm.refresh();
-            }
+            refreshUiRealm();
         } else {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    try (Realm realm = Realm.getDefaultInstance()) {
-                        realm.refresh();
-                    }
+                    refreshUiRealm();
                 }
             });
         }
+    }
+
+    private static void refreshUiRealm() {
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.refresh();
+        });
     }
 
     public static int getTheme2BackgroundColor() {

@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.proto.ProtoClientSearchUsername;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -36,7 +37,7 @@ public class ClientSearchUsernameResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder builder = (ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder) message;
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             for (final ProtoClientSearchUsername.ClientSearchUsernameResponse.Result item : builder.getResultList()) {
 
                 if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.USER) {
@@ -58,7 +59,7 @@ public class ClientSearchUsernameResponse extends MessageHandler {
                     }
                 }
             }
-        }
+        });
         if (G.onClientSearchUserName != null) {
             G.onClientSearchUserName.OnGetList(builder);
         }

@@ -11,6 +11,7 @@
 package net.iGap.helper;
 
 import net.iGap.Config;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.proto.ProtoGlobal;
@@ -53,22 +54,22 @@ public class HelperGetAction {
         if (latestAction == null) {
             return null;
         } else {
-            int count = 0;
-            StructAction latestStruct = null;
-            Iterator<StructAction> iterator1 = structActions.iterator();
-            ArrayList<Long> userIds = new ArrayList<>();
-            while (iterator1.hasNext()) {
-                StructAction struct = iterator1.next();
-                if (struct.roomId == roomId && struct.action == latestAction) {
-                    if (!userIds.contains(struct.userId)) {
-                        userIds.add(struct.userId);
-                        latestStruct = struct;
-                        count++;
+            return DbManager.getInstance().doRealmTask(realm -> {
+                int count = 0;
+                StructAction latestStruct = null;
+                Iterator<StructAction> iterator1 = structActions.iterator();
+                ArrayList<Long> userIds = new ArrayList<>();
+                while (iterator1.hasNext()) {
+                    StructAction struct = iterator1.next();
+                    if (struct.roomId == roomId && struct.action == latestAction) {
+                        if (!userIds.contains(struct.userId)) {
+                            userIds.add(struct.userId);
+                            latestStruct = struct;
+                            count++;
+                        }
                     }
                 }
-            }
-            if (count == 1) {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                if (count == 1) {
                     RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, latestStruct.userId);
                     if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName().length() > 0) {
                         String action;
@@ -82,14 +83,11 @@ public class HelperGetAction {
                     } else {
                         return null;
                     }
-                }
 
+                } else if (count < Config.GROUP_SHOW_ACTIONS_COUNT) {
 
-            } else if (count < Config.GROUP_SHOW_ACTIONS_COUNT) {
+                    StringBuilder concatenatedNames = new StringBuilder();
 
-                StringBuilder concatenatedNames = new StringBuilder();
-
-                try (Realm realm = Realm.getDefaultInstance()) {
                     Iterator<StructAction> iterator = structActions.iterator();
                     while (iterator.hasNext()) {
                         StructAction struct = iterator.next();
@@ -100,29 +98,30 @@ public class HelperGetAction {
                             }
                         }
                     }
-                }
 
-                if ((concatenatedNames.length() == 0) || concatenatedNames.length() == 0) {
-                    return null;
-                }
-                concatenatedNames = new StringBuilder(concatenatedNames.substring(0, concatenatedNames.length() - 1));
+                    if ((concatenatedNames.length() == 0) || concatenatedNames.length() == 0) {
+                        return null;
+                    }
+                    concatenatedNames = new StringBuilder(concatenatedNames.substring(0, concatenatedNames.length() - 1));
 
-                if (HelperCalander.isPersianUnicode) {
+                    if (HelperCalander.isPersianUnicode) {
 
-                    return "\u200F" + concatenatedNames + " " + HelperConvertEnumToString.convertActionEnum(latestAction);
+                        return "\u200F" + concatenatedNames + " " + HelperConvertEnumToString.convertActionEnum(latestAction);
 
+                    } else {
+                        return concatenatedNames + " " + G.fragmentActivity.getResources().getString(R.string.are) + " " + convertActionEnum(latestAction);
+                    }
                 } else {
-                    return concatenatedNames + " " + G.fragmentActivity.getResources().getString(R.string.are) + " " + convertActionEnum(latestAction);
-                }
-            } else {
-                if (HelperCalander.isPersianUnicode) {
+                    if (HelperCalander.isPersianUnicode) {
 
-                    return "\u200F" + count + " " + G.fragmentActivity.getResources().getString(R.string.members_are) + " " + convertActionEnum(latestAction);
-                } else {
+                        return "\u200F" + count + " " + G.fragmentActivity.getResources().getString(R.string.members_are) + " " + convertActionEnum(latestAction);
+                    } else {
 
-                    return count + " " + G.fragmentActivity.getResources().getString(R.string.members_are) + " " + convertActionEnum(latestAction);
+                        return count + " " + G.fragmentActivity.getResources().getString(R.string.members_are) + " " + convertActionEnum(latestAction);
+                    }
                 }
-            }
+            });
+
         }
     }
 

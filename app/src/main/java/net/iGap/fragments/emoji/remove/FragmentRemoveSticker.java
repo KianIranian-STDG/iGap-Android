@@ -22,6 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
@@ -207,8 +208,7 @@ public class FragmentRemoveSticker extends BaseFragment {
                                                 @Override
                                                 public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
                                                     if (response.body() != null && response.body().isSuccess()) {
-
-                                                        try (Realm realm = Realm.getDefaultInstance()) {
+                                                        DbManager.getInstance().doRealmTask(realm -> {
                                                             realm.executeTransactionAsync(new Realm.Transaction() {
                                                                 @Override
                                                                 public void execute(Realm realm) {
@@ -220,7 +220,7 @@ public class FragmentRemoveSticker extends BaseFragment {
                                                                 updateAdapter();
                                                                 FragmentChat.onUpdateSticker.update();
                                                             });
-                                                        }
+                                                        });
                                                     } else {
                                                         progressBar.setVisibility(View.GONE);
 

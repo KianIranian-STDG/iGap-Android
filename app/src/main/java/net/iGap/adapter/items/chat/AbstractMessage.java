@@ -1941,135 +1941,136 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     public void onBotBtnClick(View v, ButtonEntity buttonEntity) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            if (v.getId() == ButtonActionType.USERNAME_LINK) {
-                //TODO: fixed this and do not use G.currentActivity
-                HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
-            } else if (v.getId() == ButtonActionType.BOT_ACTION) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            try {
+                if (v.getId() == ButtonActionType.USERNAME_LINK) {
+                    //TODO: fixed this and do not use G.currentActivity
+                    HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
+                } else if (v.getId() == ButtonActionType.BOT_ACTION) {
 
-                long messageId = System.currentTimeMillis();
-                RealmRoomMessage roomMessage = new RealmRoomMessage();
-                roomMessage.setMessageId(messageId);
-                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-                roomMessage.setRoomId(mMessage.getRoomId());
-                roomMessage.setMessage(((ArrayList<String>) v.getTag()).get(1));
-                roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                roomMessage.setUserId(G.userId);
-                roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+                    long messageId = System.currentTimeMillis();
+                    RealmRoomMessage roomMessage = new RealmRoomMessage();
+                    roomMessage.setMessageId(messageId);
+                    roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+                    roomMessage.setRoomId(mMessage.getRoomId());
+                    roomMessage.setMessage(((ArrayList<String>) v.getTag()).get(1));
+                    roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                    roomMessage.setUserId(G.userId);
+                    roomMessage.setCreateTime(TimeUtils.currentLocalTime());
 
-                if (((ArrayList<String>) v.getTag()).get(2) != null) {
-                    RealmAdditional additional = new RealmAdditional();
-                    additional.setId(AppUtils.makeRandomId());
-                    additional.setAdditionalData(((ArrayList<String>) v.getTag()).get(2));
-                    additional.setAdditionalType(3);
-                    roomMessage.setRealmAdditional(additional);
-                }
-
-                new Thread(() -> {
-                    try (Realm realm12 = Realm.getDefaultInstance()) {
-                        realm12.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(roomMessage));
+                    if (((ArrayList<String>) v.getTag()).get(2) != null) {
+                        RealmAdditional additional = new RealmAdditional();
+                        additional.setId(AppUtils.makeRandomId());
+                        additional.setAdditionalData(((ArrayList<String>) v.getTag()).get(2));
+                        additional.setAdditionalType(3);
+                        roomMessage.setRealmAdditional(additional);
                     }
-                }).start();
 
-                G.chatSendMessageUtil.build(type, mMessage.getRoomId(), roomMessage).sendMessage(messageId + "");
-                messageClickListener.sendFromBot(roomMessage);
-
-            } else if (v.getId() == ButtonActionType.JOIN_LINK) {
-                //TODO: fixed this and do not use G.currentActivity
-                HelperUrl.checkAndJoinToRoom(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(14));
-
-            } else if (v.getId() == ButtonActionType.WEB_LINK) {
-                HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0));
-
-            } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {
-                messageClickListener.sendFromBot(((ArrayList<String>) v.getTag()).get(0));
-            } else if (v.getId() == ButtonActionType.REQUEST_PHONE) {
-                try {
-                    new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_number).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Long identity = System.currentTimeMillis();
-
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
-                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.getRoomId(), identity, realmUserInfo.getUserInfo().getPhoneNumber(), null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                    G.chatSendMessageUtil.build(type, mMessage.getRoomId(), realmRoomMessage).sendMessage(identity + "");
-                                    messageClickListener.sendFromBot(realmRoomMessage);
-                                }
-                            });
+                    new Thread(() -> {
+                        try (Realm realm12 = Realm.getDefaultInstance()) {
+                            realm12.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(roomMessage));
                         }
-                    }).show();
+                    }).start();
 
+                    G.chatSendMessageUtil.build(type, mMessage.getRoomId(), roomMessage).sendMessage(messageId + "");
+                    messageClickListener.sendFromBot(roomMessage);
 
-                } catch (Exception e) {
-                }
+                } else if (v.getId() == ButtonActionType.JOIN_LINK) {
+                    //TODO: fixed this and do not use G.currentActivity
+                    HelperUrl.checkAndJoinToRoom(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(14));
 
-            } else if (v.getId() == ButtonActionType.REQUEST_LOCATION) {
-                try {
-                    new MaterialDialog.Builder(G.currentActivity).title(R.string.access_location).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                } else if (v.getId() == ButtonActionType.WEB_LINK) {
+                    HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0));
 
-                            if (G.locationListener != null) {
-                                isLocationFromBot = true;
-                                G.locationListener.requestLocation();
+                } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {
+                    messageClickListener.sendFromBot(((ArrayList<String>) v.getTag()).get(0));
+                } else if (v.getId() == ButtonActionType.REQUEST_PHONE) {
+                    try {
+                        new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_number).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Long identity = System.currentTimeMillis();
+
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
+                                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.getRoomId(), identity, realmUserInfo.getUserInfo().getPhoneNumber(), null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                        G.chatSendMessageUtil.build(type, mMessage.getRoomId(), realmRoomMessage).sendMessage(identity + "");
+                                        messageClickListener.sendFromBot(realmRoomMessage);
+                                    }
+                                });
                             }
-                        }
-                    }).show();
+                        }).show();
 
 
-                } catch (Exception e) {
-                }
-
-
-            } else if (v.getId() == ButtonActionType.PAY_DIRECT) {
-                JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                Log.wtf(this.getClass().getName(), "tag: " + ((ArrayList<String>) v.getTag()).get(0));
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getRoomId()).findFirst();
-                long peerId;
-                if (room != null && room.getChatRoom() != null) {
-                    peerId = room.getChatRoom().getPeerId();
-                } else {
-                    peerId = mMessage.getUserId();
-                }
-                new HelperFragment(G.currentActivity.getSupportFragmentManager()).loadPayment(room.getTitle(), jsonObject.getString("token"), new PaymentCallBack() {
-                    @Override
-                    public void onPaymentFinished(PaymentResult result) {
-
+                    } catch (Exception e) {
                     }
-                });
-            } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
-                JSONObject rootJsonObject = new JSONObject(buttonEntity.getJsonObject());
-                JSONObject valueObject = rootJsonObject.getJSONObject("value");
 
-                String cardNumber = valueObject.getString("cardNumber");
-                int amount = valueObject.getInt("amount");
-                long userId = valueObject.getLong("userId");
+                } else if (v.getId() == ButtonActionType.REQUEST_LOCATION) {
+                    try {
+                        new MaterialDialog.Builder(G.currentActivity).title(R.string.access_location).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                CardToCardHelper.NewCallCardToCard(G.currentActivity, userId, amount, cardNumber);
+                                if (G.locationListener != null) {
+                                    isLocationFromBot = true;
+                                    G.locationListener.requestLocation();
+                                }
+                            }
+                        }).show();
 
-            } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.BILL_MENU.getNumber()) {
-                try {
+
+                    } catch (Exception e) {
+                    }
+
+
+                } else if (v.getId() == ButtonActionType.PAY_DIRECT) {
                     JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                    new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills, jsonObject)).setReplace(false).load();
-                } catch (JSONException e) {
-                    new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills)).setReplace(false).load();
+                    Log.wtf(this.getClass().getName(), "tag: " + ((ArrayList<String>) v.getTag()).get(0));
+                    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getRoomId()).findFirst();
+                    long peerId;
+                    if (room != null && room.getChatRoom() != null) {
+                        peerId = room.getChatRoom().getPeerId();
+                    } else {
+                        peerId = mMessage.getUserId();
+                    }
+                    new HelperFragment(G.currentActivity.getSupportFragmentManager()).loadPayment(room.getTitle(), jsonObject.getString("token"), new PaymentCallBack() {
+                        @Override
+                        public void onPaymentFinished(PaymentResult result) {
+
+                        }
+                    });
+                } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
+                    JSONObject rootJsonObject = new JSONObject(buttonEntity.getJsonObject());
+                    JSONObject valueObject = rootJsonObject.getJSONObject("value");
+
+                    String cardNumber = valueObject.getString("cardNumber");
+                    int amount = valueObject.getInt("amount");
+                    long userId = valueObject.getLong("userId");
+
+                    CardToCardHelper.NewCallCardToCard(G.currentActivity, userId, amount, cardNumber);
+
+                } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.BILL_MENU.getNumber()) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
+                        new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills, jsonObject)).setReplace(false).load();
+                    } catch (JSONException e) {
+                        new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills)).setReplace(false).load();
+                    }
+                } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.TRAFFIC_BILL_MENU.getNumber()) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
+                        new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills_crime, jsonObject)).setReplace(false).load();
+                    } catch (JSONException e) {
+                        new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills_crime)).setReplace(false).load();
+                    }
                 }
-            } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.TRAFFIC_BILL_MENU.getNumber()) {
-                try {
-                    JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                    new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills_crime, jsonObject)).setReplace(false).load();
-                } catch (JSONException e) {
-                    new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills_crime)).setReplace(false).load();
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
-        }
+        });
 
         /**
          * The data was sent via the button via the view tag. Right now I only do this for the card due to lack of time with the new object

@@ -914,8 +914,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         G.onGetProfileWallpaper = list -> {
 
             G.isNeedToCheckProfileWallpaper = false;
-
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
 
                 if (realmWallpaper != null) {
@@ -930,7 +929,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                     RealmWallpaper.updateField(list, "", ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE);
                     getProfileWallpaper(realm);
                 }
-            }
+            });
         };
 
         new RequestInfoWallpaper().infoWallpaper(ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER);

@@ -26,6 +26,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -277,14 +278,14 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         }
 
         private void getContactInfo(String userPhoneNumber) {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 contactId = RealmRegisteredInfo.getUserInfo(realm, userPhoneNumber);
 
                 if (contactId > 0)
                     contactStatus = IN_CONTACT_AND_HAVE_IGAP;
                 else
                     contactStatus = NOT_CONTACT_AND_HAVE_NOT_IGAP;
-            }
+            });
 
             Log.i("aabolfazl", "getContactInfo: " + contactStatus);
         }

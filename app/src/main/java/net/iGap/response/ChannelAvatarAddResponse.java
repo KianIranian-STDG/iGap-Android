@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.proto.ProtoChannelAvatarAdd;
 import net.iGap.realm.RealmAvatar;
@@ -35,16 +36,14 @@ public class ChannelAvatarAddResponse extends MessageHandler {
         super.handler();
 
         final ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder builder = (ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder) message;
-
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     RealmAvatar.putOrUpdate(realm, builder.getRoomId(), builder.getAvatar());
                 }
             });
-        }
-
+        });
         G.handler.post(new Runnable() {
             @Override
             public void run() {

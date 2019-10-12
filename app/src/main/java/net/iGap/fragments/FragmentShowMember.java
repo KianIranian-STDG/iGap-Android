@@ -238,8 +238,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-
-                            try (Realm realm = Realm.getDefaultInstance()) {
+                            DbManager.getInstance().doRealmTask(realm -> {
                                 realm.executeTransactionAsync(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
@@ -271,15 +270,15 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                                             }
                                         }
 
-                                }
-                            }, new Realm.Transaction.OnSuccess() {
-                                @Override
-                                public void onSuccess() {
-                                    fillItem();
+                                    }
+                                }, new Realm.Transaction.OnSuccess() {
+                                    @Override
+                                    public void onSuccess() {
+                                        fillItem();
 
-                                }
+                                    }
+                                });
                             });
-                        }
                     }});
                 } else {
                     mCurrentUpdateCount++;
@@ -987,7 +986,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         }
 
         StructContactInfo convertRealmToStruct(RealmMember realmMember) {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            return DbManager.getInstance().doRealmTask(realm -> {
                 String role = realmMember.getRole();
                 long id = realmMember.getPeerId();
                 RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, id);
@@ -1002,8 +1001,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                     s.userID = userId;
                     return s;
                 }
-            }
-            return null;
+
+                return null;
+            });
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {

@@ -1013,13 +1013,13 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     }
 
     public void saveDataToLocal(final List<ProtoGlobal.RoomMessage> RoomMessages, final long roomId) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(realm1 -> {
                 for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
                     RealmRoomMessage.putOrUpdate(realm1, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
                 }
             });
-        }
+        });
     }
 
     //********************************************************************************************

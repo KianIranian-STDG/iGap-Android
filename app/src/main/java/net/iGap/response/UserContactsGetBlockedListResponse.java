@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.DbManager;
 import net.iGap.interfaces.OnInfo;
 import net.iGap.proto.ProtoUserContactsGetBlockedList;
 import net.iGap.realm.RealmContacts;
@@ -42,7 +43,7 @@ public class UserContactsGetBlockedListResponse extends MessageHandler {
 
         ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.Builder builder = (ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.Builder) message;
         List<ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User> list = builder.getUserList();
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             /**
              * reset blocked user in RealmRegisteredInfo and realm contact
              */
@@ -73,7 +74,7 @@ public class UserContactsGetBlockedListResponse extends MessageHandler {
                 });
             }
 
-        }
+        });
     }
 
 

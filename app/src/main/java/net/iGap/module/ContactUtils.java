@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperPermission;
@@ -317,7 +318,7 @@ public final class ContactUtils {
                 @Override
                 public void Allow() throws IOException {
                     new Thread(() -> {
-                        try (Realm realm = Realm.getDefaultInstance()) {
+                        DbManager.getInstance().doRealmTask(realm -> {
                             realm.executeTransaction(realm1 -> {
 
                                 final RealmResults<RealmContacts> realmContacts = realm1.where(RealmContacts.class).findAll();
@@ -340,7 +341,7 @@ public final class ContactUtils {
 
                                 G.handler.postDelayed(() -> dialog[0].dismiss(), 500);
                             });
-                        }
+                        });
                     }).start();
                 }
 

@@ -13,6 +13,7 @@ package net.iGap.module;
 import android.text.format.DateUtils;
 
 import net.iGap.Config;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -137,7 +138,7 @@ public class LastSeenTimeUtil {
      */
 
     private static synchronized void updateLastSeenTime() {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             ArrayList<Long> userIdList = new ArrayList<>();
             for (Iterator<Map.Entry<Long, Long>> it = hashMapLastSeen.entrySet().iterator(); it.hasNext(); ) {
                 Map.Entry<Long, Long> entry = it.next();
@@ -167,8 +168,7 @@ public class LastSeenTimeUtil {
                 hashMapLastSeen.remove(userId);
             }
             userIdList.clear();
-
-        }
+        });
 
         if (hashMapLastSeen.size() > 0) {
             G.handler.postDelayed(new Runnable() {

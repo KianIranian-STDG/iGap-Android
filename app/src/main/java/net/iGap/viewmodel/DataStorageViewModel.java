@@ -9,6 +9,7 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.DbManager;
 import net.iGap.R;
 import net.iGap.module.FileUtils;
 import net.iGap.module.MusicPlayer;
@@ -58,10 +59,9 @@ public class DataStorageViewModel extends ViewModel {
         }
 
         clearCacheSize.set(new FileUtils().getFileTotalSize());
-
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             cleanUpSize.set(FileUtils.formatFileSize(new File(realm.getConfiguration().getPath()).length()));
-        }
+        });
 
         showLayoutSdk.set(FileUtils.getSdCardPathList().size() > 0 ? View.VISIBLE : View.GONE);
         isSdkEnable.set(sharedPreferences.getInt(SHP_SETTING.KEY_SDK_ENABLE, 0) != 0);
@@ -353,7 +353,7 @@ public class DataStorageViewModel extends ViewModel {
     }
 
     public void clearAll() {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransactionAsync(realm1 -> {
                 RealmRoomMessage.ClearAllMessage(realm1);
                 RealmRoom.clearAllScrollPositions();
@@ -361,7 +361,7 @@ public class DataStorageViewModel extends ViewModel {
                 cleanUpSize.set(FileUtils.formatFileSize(new File(realm.getConfiguration().getPath()).length()));
                 MusicPlayer.closeLayoutMediaPlayer();
             });
-        }
+        });
     }
 
     public void onClickSdkEnable() {

@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -44,7 +45,7 @@ public class SignalingOfferResponse extends MessageHandler {
             String callerSdp = builder.getCallerSdp();
             Long callerUserID = builder.getCallerUserId();
             net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type type = builder.getType();
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
 
                 if (realmCallConfig == null) {
@@ -54,7 +55,7 @@ public class SignalingOfferResponse extends MessageHandler {
                         G.iSignalingOffer.onOffer(callerUserID, type, callerSdp);
                     }
                 }
-            }
+            });
         }
     }
 

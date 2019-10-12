@@ -256,7 +256,7 @@ public class MyInfoWindow extends InfoWindow {
     }
 
     /*public void onOpen(Object arg0) {
-    try (Realm realm = Realm.getDefaultInstance()) {
+    DbManager.getInstance().doRealmTask(realm-> {
      RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
         if (realmRegisteredInfo == null) {
             return;

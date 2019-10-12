@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.proto.ProtoGroupSetAction;
@@ -34,8 +35,7 @@ public class GroupSetActionResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoGroupSetAction.GroupSetActionResponse.Builder builder = (ProtoGroupSetAction.GroupSetActionResponse.Builder) message;
-
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             if (G.userId != builder.getUserId()) {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
@@ -54,7 +54,7 @@ public class GroupSetActionResponse extends MessageHandler {
                     G.onSetActionInRoom.onSetAction(builder.getRoomId(), builder.getUserId(), builder.getAction());
                 }
             }
-        }
+        });
     }
 
     @Override

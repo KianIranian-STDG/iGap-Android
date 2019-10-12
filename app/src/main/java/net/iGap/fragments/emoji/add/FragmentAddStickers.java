@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructSticker;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
@@ -175,14 +176,14 @@ public class FragmentAddStickers extends BaseFragment {
             if (!capitalCities.containsKey(item.getAvatarToken())) {
                 capitalCities.put(item.getAvatarToken(), item);
             }
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 RealmStickers realmStickers = RealmStickers.checkStickerExist(item.getId(), realm);
                 if (realmStickers == null) {
                     holder.txtRemove.setVisibility(View.VISIBLE);
                 } else if (realmStickers.isFavorite()) {
                     holder.txtRemove.setVisibility(View.GONE);
                 }
-            }
+            });
             String path = HelperDownloadSticker.createPathFile(item.getAvatarToken(), item.getAvatarName());
             if (!new File(path).exists()) {
                 HelperDownloadSticker.stickerDownload(item.getAvatarToken(), item.getName(), item.getAvatarSize(), ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
@@ -276,7 +277,7 @@ public class FragmentAddStickers extends BaseFragment {
                                                     @Override
                                                     public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
                                                         if (response.body() != null && response.body().isSuccess()) {
-                                                            try (Realm realm = Realm.getDefaultInstance()) {
+                                                            DbManager.getInstance().doRealmTask(realm -> {
                                                                 realm.executeTransactionAsync(new Realm.Transaction() {
                                                                     @Override
                                                                     public void execute(Realm realm) {
@@ -298,7 +299,7 @@ public class FragmentAddStickers extends BaseFragment {
                                                                     }
                                                                     notifyDataSetChanged();
                                                                 });
-                                                            }
+                                                            });
                                                         } else {
                                                             progressBar.setVisibility(View.GONE);
                                                         }

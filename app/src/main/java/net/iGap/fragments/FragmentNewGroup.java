@@ -45,6 +45,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -466,11 +467,11 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     }
 
     private void showInitials() {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             imgProfileHelper.setVisibility(View.GONE);
             imgCircleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
-        }
+        });
     }
 
     private void setImage(final String imagePath) {

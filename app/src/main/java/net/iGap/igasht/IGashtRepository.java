@@ -1,5 +1,6 @@
 package net.iGap.igasht;
 
+import net.iGap.DbManager;
 import net.iGap.api.IgashtApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
@@ -167,7 +168,7 @@ public class IGashtRepository {
     }
 
     public void registeredOrder(ResponseCallback<RegisterTicketResponse> callback) {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             igashtApi.registerOrder(new IGashtOrder(realm.where(RealmUserInfo.class).findFirst().getUserInfo().getPhoneNumber(),
                     1,
                     selectedProvince.getId(),
@@ -193,7 +194,7 @@ public class IGashtRepository {
                     callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
                 }
             });
-        }
+        });
     }
 
     public void getTicketQRCode(String voucherNumber, ResponseCallback<String> callback) {

@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityRegistration;
@@ -45,7 +46,7 @@ public final class HelperLogout {
                 pendingRequest.remove(0);
                 FragmentMain.mOffset = 0;
                 signOutWallet();
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -76,8 +77,7 @@ public final class HelperLogout {
                             MusicPlayer.closeLayoutMediaPlayer();
                         }
                     });
-                }
-
+                });
             }
         });
     }

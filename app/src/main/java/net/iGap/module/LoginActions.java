@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import com.google.gson.Gson;
 
 import net.iGap.Config;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperLogout;
@@ -113,12 +114,12 @@ public class LoginActions {
             @Override
             public void run() {
                 if (G.isSecure) {
-                    try (Realm realm = Realm.getDefaultInstance()) {
+                    DbManager.getInstance().doRealmTask(realm -> {
                         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                         if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
                             new RequestUserLogin().userLogin(userInfo.getToken());
                         }
-                    }
+                    });
                 } else {
                     login();
                 }
@@ -127,17 +128,21 @@ public class LoginActions {
     }
 
     private static void getUserInfo() {
-        final long userId;
-        try (Realm realm = Realm.getDefaultInstance()) {
-            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (realmUserInfo == null) {
-                throw new Exception("Empty Exception");
+        final Long userId;
+        userId = DbManager.getInstance().doRealmTask(realm -> {
+            try {
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (realmUserInfo == null) {
+                    throw new Exception("Empty Exception");
+                }
+                return realmUserInfo.getUserId();
+            } catch (Exception e) {
+                HelperLogout.logout();
+                return null;
             }
-            userId = realmUserInfo.getUserId();
-        } catch (Exception e) {
-            HelperLogout.logout();
+        });
+        if (userId == null)
             return;
-        }
 
         new RequestUserInfo().userInfo(userId);
     }

@@ -12,6 +12,7 @@ package net.iGap.response;
 
 import android.os.Looper;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperConnectionState;
@@ -99,12 +100,11 @@ public class UserLoginResponse extends MessageHandler {
          * get Signaling Configuration
          * (( hint : call following request after set G.userLogin=true ))
          */
-
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             if (G.needGetSignalingConfiguration || realm.where(RealmCallConfig.class).findFirst() == null) {
                 new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
-        }
+        });
 
         WebSocketClient.waitingForReconnecting = false;
         WebSocketClient.allowForReconnecting = true;
@@ -124,12 +124,12 @@ public class UserLoginResponse extends MessageHandler {
         super.timeOut();
 
         if (G.isSecure) {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
                     new RequestUserLogin().userLogin(userInfo.getToken());
                 }
-            }
+            });
         } else {
             WebSocketClient.getInstance().disconnect();
         }

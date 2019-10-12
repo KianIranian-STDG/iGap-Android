@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
@@ -48,7 +49,7 @@ public class CallSelectFragment extends BottomSheetDialogFragment {
         if (G.userLogin) {
 
             if (!G.isInCall) {
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
 
                     if (realmCallConfig == null) {
@@ -80,7 +81,7 @@ public class CallSelectFragment extends BottomSheetDialogFragment {
                         }
 
                     }
-                }
+                });
             }
         } else {
 

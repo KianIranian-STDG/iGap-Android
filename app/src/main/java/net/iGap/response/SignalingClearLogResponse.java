@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.DbManager;
 import net.iGap.proto.ProtoSignalingClearLog;
 import net.iGap.realm.RealmCallLog;
 import net.iGap.realm.RealmCallLogFields;
@@ -40,7 +41,7 @@ public class SignalingClearLogResponse extends MessageHandler {
         if (builderRequest.getClearId() != 0) {
             RealmCallLog.clearCallLog(builder.getClearId());
         } else {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -53,7 +54,7 @@ public class SignalingClearLogResponse extends MessageHandler {
                         }
                     }
                 });
-            }
+            });
         }
 
 

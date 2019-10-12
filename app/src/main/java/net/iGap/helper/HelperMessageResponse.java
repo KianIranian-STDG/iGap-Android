@@ -10,6 +10,7 @@
 
 package net.iGap.helper;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoGlobal;
@@ -33,8 +34,7 @@ public class HelperMessageResponse {
 
 
     public static void handleMessage(final long roomId, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType, final ProtoResponse.Response response, final String identity) {
-
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -129,6 +129,6 @@ public class HelperMessageResponse {
                  */
                 G.chatSendMessageUtil.onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
             }
-        }
+        });
     }
 }

@@ -19,6 +19,7 @@ import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.ios.IosEmojiProvider;
 
 import net.iGap.Config;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -106,7 +107,7 @@ public final class StartupActions {
         new Thread(HelperUploadFile::new).start();
 
         if (realmConfiguration()) {
-            try (Realm realm = Realm.getDefaultInstance()) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(@NotNull Realm realm) {
@@ -138,7 +139,7 @@ public final class StartupActions {
                         }
                     }
                 });
-            }
+            });
 
             new Thread(() -> checkDataUsage()).start();
             new Thread(() -> mainUserInfo()).start();
@@ -149,11 +150,11 @@ public final class StartupActions {
     }
 
     private void checkDataUsage() {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmResults<RealmDataUsage> realmDataUsage = realm.where(RealmDataUsage.class).findAll();
             if (realmDataUsage.size() == 0)
                 HelperDataUsage.initializeRealmDataUsage();
-        }
+        });
     }
 
     private void manageTime() {
@@ -550,7 +551,7 @@ public final class StartupActions {
      * fill main user info in global variables
      */
     private void mainUserInfo() {
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
 
             if (userInfo != null && userInfo.getUserRegistrationState()) {
@@ -567,7 +568,7 @@ public final class StartupActions {
                 }
 
             }
-        }
+        });
     }
 
     /**

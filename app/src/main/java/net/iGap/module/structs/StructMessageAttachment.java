@@ -15,6 +15,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.Nullable;
 
+import net.iGap.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAttachmentFields;
@@ -141,7 +142,7 @@ public class StructMessageAttachment implements Parcelable {
 
     public void setLocalFilePath(final long messageId, @Nullable final String path) {
         this.localFilePath = path;
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
             if (realmAttachment == null) {
                 realm.executeTransaction(new Realm.Transaction() {
@@ -161,7 +162,7 @@ public class StructMessageAttachment implements Parcelable {
                     });
                 }
             }
-        }
+        });
     }
 
     @Nullable
@@ -171,7 +172,7 @@ public class StructMessageAttachment implements Parcelable {
 
     public void setLocalThumbnailPath(final long messageId, @Nullable final String localPath) {
         this.localThumbnailPath = localPath;
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTask(realm -> {
             final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
             if (realmAttachment == null) {
                 realm.executeTransaction(new Realm.Transaction() {
@@ -189,7 +190,7 @@ public class StructMessageAttachment implements Parcelable {
                     }
                 });
             }
-        }
+        });
     }
 
     public boolean isFileExistsOnLocal() {

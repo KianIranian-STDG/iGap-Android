@@ -205,7 +205,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                 new RequestChatGetRoom().chatGetRoom(userId, new RequestChatGetRoom.OnChatRoomReady() {
                     @Override
                     public void onReady(ProtoGlobal.Room room) {
-                        try (Realm realm = Realm.getDefaultInstance()) {
+                        DbManager.getInstance().doRealmTask(realm -> {
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm) {
@@ -213,7 +213,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                                     realmRoom1.setDeleted(true);
                                 }
                             });
-                        }
+                        });
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {

@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.interfaces.OnInfo;
 import net.iGap.proto.ProtoGeoGetNearbyDistance;
@@ -43,7 +44,7 @@ public class GeoGetNearbyDistanceResponse extends MessageHandler {
                 RealmRegisteredInfo.getRegistrationInfo(result.getUserId(), new OnInfo() {
                     @Override
                     public void onInfo(Long registeredId) {
-                        try (Realm realm = Realm.getDefaultInstance()) {
+                        DbManager.getInstance().doRealmTask(realm -> {
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm) {
@@ -54,7 +55,7 @@ public class GeoGetNearbyDistanceResponse extends MessageHandler {
                                     realm.copyToRealmOrUpdate(geoNearbyDistance);
                                 }
                             });
-                        }
+                        });
                     }
                 });
             }

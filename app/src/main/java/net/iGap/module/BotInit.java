@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityPopUpNotification;
@@ -111,7 +112,7 @@ public class BotInit implements MakeButtons.OnClickListener {
 
                 for (int i = 0; i < builder.getPromoteList().size(); i++)
                     promoteIds.add(builder.getPromoteList().get(i).getId());
-                try (Realm realm = Realm.getDefaultInstance()) {
+                DbManager.getInstance().doRealmTask(realm -> {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -182,7 +183,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                             new RequestClientPinRoom().pinRoom(realmRoom.getId(), true);
                         }
                     }
-                }
+                });
             }
 
         };
@@ -537,98 +538,101 @@ public class BotInit implements MakeButtons.OnClickListener {
 
     @Override
     public void onClick(View v, ButtonEntity buttonEntity) {
-        try (Realm realm = Realm.getDefaultInstance()) {
-            if (v.getId() == ButtonActionType.USERNAME_LINK) {
-                //TODO: fixed this and do not use G.currentActivity
-                HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
-            } else if (v.getId() == ButtonActionType.BOT_ACTION) {
-                try {
-                    Long identity = System.currentTimeMillis();
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, ((ArrayList<String>) v.getTag()).get(1), ((ArrayList<String>) v.getTag()).get(2), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
-                            G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
-                            if (G.onBotClick != null) {
-                                G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
-                            }
-                        }
-                    });
-                } catch (Exception e) {
-                }
-            } else if (v.getId() == ButtonActionType.JOIN_LINK) {
-                HelperUrl.checkAndJoinToRoom(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(14));
-            } else if (v.getId() == ButtonActionType.WEB_LINK) {
-                HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0));
-            } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {
-                G.onBotClick.onBotCommandText(((ArrayList<String>) v.getTag()).get(0), ButtonActionType.WEBVIEW_LINK);
-            } else if (v.getId() == ButtonActionType.REQUEST_PHONE) {
-                try {
-                    new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_number).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Long identity = System.currentTimeMillis();
-
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
-                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                    G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
-                                    if (G.onBotClick != null) {
-                                        G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
-                                    }
+        DbManager.getInstance().doRealmTask(realm -> {
+            try {
+                if (v.getId() == ButtonActionType.USERNAME_LINK) {
+                    //TODO: fixed this and do not use G.currentActivity
+                    HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
+                } else if (v.getId() == ButtonActionType.BOT_ACTION) {
+                    try {
+                        Long identity = System.currentTimeMillis();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, ((ArrayList<String>) v.getTag()).get(1), ((ArrayList<String>) v.getTag()).get(2), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
+                                if (G.onBotClick != null) {
+                                    G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
                                 }
-                            });
-                        }
-                    }).show();
-
-
-                } catch (Exception e) {
-                }
-
-            } else if (v.getId() == ButtonActionType.REQUEST_LOCATION) {
-                try {
-                    new MaterialDialog.Builder(G.currentActivity).title(R.string.access_location).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Boolean response = false;
-                            if (G.locationListener != null) {
-                                isLocationFromBot = true;
-                                G.locationListener.requestLocation();
                             }
+                        });
+                    } catch (Exception e) {
+                    }
+                } else if (v.getId() == ButtonActionType.JOIN_LINK) {
+                    HelperUrl.checkAndJoinToRoom(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(14));
+                } else if (v.getId() == ButtonActionType.WEB_LINK) {
+                    HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0));
+                } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {
+                    G.onBotClick.onBotCommandText(((ArrayList<String>) v.getTag()).get(0), ButtonActionType.WEBVIEW_LINK);
+                } else if (v.getId() == ButtonActionType.REQUEST_PHONE) {
+                    try {
+                        new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_number).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Long identity = System.currentTimeMillis();
 
-              /*              G.locationListenerResponse = new LocationListenerResponse() {
-                                @Override
-                                public void setLocationResponse(Double latitude, Double longitude) {
-                                    Long identity = System.currentTimeMillis();
-                                    realm.executeTransaction(new Realm.Transaction() {
-                                        @Override
-                                        public void execute(Realm realm) {
-                                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, latitude + "," + longitude, ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                            G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
-                                            if (G.onBotClick != null) {
-                                                G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
-                                            }
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
+                                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                        G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
+                                        if (G.onBotClick != null) {
+                                            G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
                                         }
-                                    });
+                                    }
+                                });
+                            }
+                        }).show();
+
+
+                    } catch (Exception e) {
+                    }
+
+                } else if (v.getId() == ButtonActionType.REQUEST_LOCATION) {
+                    try {
+                        new MaterialDialog.Builder(G.currentActivity).title(R.string.access_location).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Boolean response = false;
+                                if (G.locationListener != null) {
+                                    isLocationFromBot = true;
+                                    G.locationListener.requestLocation();
                                 }
-                            };*/
+
+          /*              G.locationListenerResponse = new LocationListenerResponse() {
+                            @Override
+                            public void setLocationResponse(Double latitude, Double longitude) {
+                                Long identity = System.currentTimeMillis();
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, latitude + "," + longitude, ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                        G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
+                                        if (G.onBotClick != null) {
+                                            G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
+                                        }
+                                    }
+                                });
+                            }
+                        };*/
 
 
-                        }
-                    }).show();
+                            }
+                        }).show();
 
 
-                } catch (Exception e) {
+                    } catch (Exception e) {
+                    }
+
+
                 }
 
-
+            } catch (Exception e) {
+                Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
             }
+        });
 
-        } catch (Exception e) {
-            Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
-        }
     }
 
     class StructRowBotAction {
