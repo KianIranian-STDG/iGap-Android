@@ -532,7 +532,7 @@ public class RoomListCell extends FrameLayout {
         if (room.getActionState() != null && room.getActionStateUserId() != userId) {
 
             SpannableString typingSpannableString = new SpannableString(room.getActionState());
-            typingSpannableString.setSpan(new ForegroundColorSpan(new Theme().getButtonColor(lastMessageTv.getContext())), 0, room.getActionState().length(), 0);
+            typingSpannableString.setSpan(new ForegroundColorSpan(new Theme().getAccentColor(lastMessageTv.getContext())), 0, room.getActionState().length(), 0);
 
             builder.append(typingSpannableString);
 

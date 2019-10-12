@@ -238,8 +238,8 @@
         <item name="iGapBottomNavigationIconStart">#cc96ca</item>
         <item name="iGapBottomNavigationIconEnd">#aa5c9f</item>
 
-        <item name="iGapReceivedMessageTextColor">#eeeeee</item>
-        <item name="iGapReceivedOtherTextColor">#cccccc</item>
+        <item name="iGapReceivedMessageTextColor">#424242</item>
+        <item name="iGapReceivedOtherTextColor">#8A8787</item>
         <item name="iGapReceivedReplayColor">#DBADDB</item>
 
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
