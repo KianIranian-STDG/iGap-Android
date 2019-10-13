@@ -62,11 +62,7 @@ public class AccountManager {
 
     public void addAccount(AccountUser accountUser) {
         if (accountUser.getDbName() == null) {
-            if (userAccountList.size() == 0) {
-                accountUser.setDbName(defaultDBName);
-            } else {
-                accountUser.setDbName(accountUser.getName() + accountUser.getId() + ".realm");
-            }
+            accountUser.setDbName(getDbName());
         }
         userAccountList.add(accountUser);
         sharedPreferences.edit().putString("userList", new Gson().toJson(userAccountList, new TypeToken<List<AccountUser>>() {
@@ -76,5 +72,16 @@ public class AccountManager {
 
     public boolean isFirstAccount() {
         return userAccountList.size() == 0;
+    }
+
+    private String getDbName() {
+        switch (userAccountList.size()) {
+            case 0:
+                return defaultDBName;
+            case 1:
+                return "iGapLocalDatabaseEncrypted2.realm";
+            default:
+                return "iGapLocalDatabaseEncrypted3.realm";
+        }
     }
 }
