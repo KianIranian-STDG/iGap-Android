@@ -83,7 +83,7 @@ public class FragmentLanguage extends BaseFragment {
 
         viewModel.getRefreshActivityForChangeLanguage().observe(getViewLifecycleOwner(), language -> {
             if (getActivity() instanceof ActivityEnhanced && language != null) {
-                G.updateResources(getActivity());
+                G.updateResources(getActivity().getBaseContext());
                 ((ActivityEnhanced) getActivity()).onRefreshActivity(false, language);
                 if (getActivity() instanceof ActivityRegistration) {
                     getActivity().onBackPressed();
