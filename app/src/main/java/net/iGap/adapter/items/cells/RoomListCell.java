@@ -264,7 +264,6 @@ public class RoomListCell extends FrameLayout {
                 setTextSize(statusTv, R.dimen.standardTextSize);
                 addView(statusTv);
                 haveStatus = true;
-                haveBadge = false;
             }
             ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.UNRECOGNIZED;
             if (room.getLastMessage().getStatus() != null) {
