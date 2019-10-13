@@ -16,10 +16,9 @@
 
     <LinearLayout
         android:id="@+id/rootFragmentSecurity"
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
         android:layoutDirection="ltr"
         android:orientation="vertical">
 
@@ -44,9 +43,7 @@
                 android:visibility="@{fragmentSecurityViewModel.rootSetAdditionPassword ,default = visible}">
 
 
-                <TextView
-                    style="?textSubColorSettingTheme"
-                    fontPath="fonts/IRANSansMobile.ttf"
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp44"
@@ -56,14 +53,13 @@
                     android:paddingLeft="@dimen/dp20"
                     android:paddingRight="@dimen/dp20"
                     android:text="@string/two_step_verification_description"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/dp14"
-                    android:textStyle="normal"
-
-                    />
+                    android:textStyle="normal" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/tsv_txtSetAdditionPassword"
-                    style="?iGapButton"
+                    style="@style/iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp60"
@@ -77,18 +73,13 @@
 
             <LinearLayout
                 android:id="@+id/root_ChangePassword"
-                style="?backgroundColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="@{fragmentSecurityViewModel.rootChangePassword ,default=gone}"
-
-                >
+                android:visibility="@{fragmentSecurityViewModel.rootChangePassword ,default=gone}">
 
                 <TextView
                     android:id="@+id/tsv_changePassword"
-                    style="?textTitleColorSettingTheme"
-                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp40"
                     android:layout_marginTop="@dimen/dp4"
@@ -97,14 +88,13 @@
                     android:paddingLeft="@dimen/dp10"
                     android:paddingRight="@dimen/dp10"
                     android:text="@string/Change_password"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14"
                     android:textStyle="normal"
                     android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/tsv_changeHint"
-                    style="?textTitleColorSettingTheme"
-                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp40"
                     android:layout_marginTop="@dimen/dp4"
@@ -113,14 +103,13 @@
                     android:paddingLeft="@dimen/dp10"
                     android:paddingRight="@dimen/dp10"
                     android:text="@string/Change_hint"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14"
                     android:textStyle="normal"
                     android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/tsv_turnPasswordOff"
-                    style="?textTitleColorSettingTheme"
-                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp40"
                     android:layout_marginTop="@dimen/dp4"
@@ -129,14 +118,13 @@
                     android:paddingLeft="@dimen/dp10"
                     android:paddingRight="@dimen/dp10"
                     android:text="@string/turn_Password_off"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14"
                     android:textStyle="normal"
                     android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/tsv_setRecoveryEmail"
-                    style="?textTitleColorSettingTheme"
-                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp40"
                     android:layout_marginTop="@dimen/dp4"
@@ -145,6 +133,7 @@
                     android:paddingLeft="@dimen/dp10"
                     android:paddingRight="@dimen/dp10"
                     android:text="@string/change_email_recovery"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14"
                     android:textStyle="normal"
                     android:visibility="@{fragmentSecurityViewModel.setRecoveryEmail}"
@@ -153,10 +142,7 @@
 
                 <TextView
                     android:id="@+id/tsv_setConfirmedEmail"
-                    style="?textTitleColorSettingTheme"
-                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
-
                     android:layout_height="@dimen/dp40"
                     android:layout_marginTop="@dimen/dp4"
                     android:gravity="center_vertical|start"
@@ -164,14 +150,13 @@
                     android:paddingLeft="@dimen/dp10"
                     android:paddingRight="@dimen/dp10"
                     android:text="@string/set_unconfirmed_email"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14"
                     android:textStyle="normal"
                     android:visibility="@{fragmentSecurityViewModel.setConfirmedEmail}" />
 
                 <TextView
                     android:id="@+id/tsv_setRecoveryQuestion"
-                    style="?textTitleColorSettingTheme"
-                    fontPath="fonts/IRANSansMobile.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp40"
                     android:layout_marginTop="@dimen/dp4"
@@ -180,6 +165,7 @@
                     android:paddingLeft="@dimen/dp10"
                     android:paddingRight="@dimen/dp10"
                     android:text="@string/Change_question_recovery"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14"
                     android:textStyle="normal"
                     android:visibility="visible" />
@@ -198,18 +184,18 @@
             android:visibility="@{fragmentSecurityViewModel.rootCheckPassword , default=gone}">
 
             <TextView
-                style="?textTitleColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp32"
                 android:gravity="center"
                 android:text="@string/please_enter_your_password"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp16" />
 
 
             <EditText
                 android:id="@+id/setPassword_edtCheckPassword"
-                style="?hintColorSettingTheme"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp32"
@@ -250,17 +236,17 @@
             android:visibility="@{fragmentSecurityViewModel.rootChangeHint ,default=gone}">
 
             <TextView
-                style="?textTitleColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp32"
                 android:gravity="center"
                 android:text="@string/please_create_hint_for_your_password"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp16" />
 
             <EditText
                 android:id="@+id/tsv_edtChangeHint"
-                style="?hintColorSettingTheme"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp32"
@@ -281,17 +267,17 @@
             android:visibility="@{fragmentSecurityViewModel.rootQuestionPassword ,default=gone}">
 
             <TextView
-                style="?textTitleColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp24"
                 android:gravity="center"
                 android:text="@string/password_Question_title_one"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp18" />
 
             <EditText
                 android:id="@+id/tsv_edtSetQuestionPassOne"
-                style="?hintColorSettingTheme"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp32"
@@ -304,7 +290,7 @@
 
             <EditText
                 android:id="@+id/tsv_edtSetAnswerPassOne"
-                style="?hintColorSettingTheme"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp32"
@@ -316,19 +302,19 @@
                 android:textSize="@dimen/dp13" />
 
             <TextView
-                style="?textTitleColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp24"
                 android:gravity="center"
                 android:text="@string/password_Question_title_two"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp18"
 
                 />
 
             <EditText
                 android:id="@+id/tsv_edtSetQuestionPassTwo"
-                style="?hintColorSettingTheme"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp32"
@@ -341,7 +327,7 @@
 
             <EditText
                 android:id="@+id/tsv_edtSetAnswerPassTwo"
-                style="?hintColorSettingTheme"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp32"
@@ -355,7 +341,6 @@
                 />
 
             <TextView
-                style="?textTitleColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp24"
@@ -365,6 +350,7 @@
                 android:layout_marginRight="@dimen/dp32"
                 android:gravity="center"
                 android:text="@string/confirm_email_text"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp14"
 
                 />
@@ -380,18 +366,18 @@
             android:visibility="@{fragmentSecurityViewModel.rootChangeEmail ,default=gone}">
 
             <TextView
-                style="?textTitleColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp32"
                 android:gravity="center"
                 android:text="@string/your_email"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp16" />
 
 
             <EditText
                 android:id="@+id/tsv_edtSetEmail"
-                style="?hintColorSettingTheme"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp32"
@@ -406,7 +392,6 @@
                 android:textSize="@dimen/dp13" />
 
             <TextView
-                style="?textTitleColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp32"
@@ -416,6 +401,7 @@
                 android:layout_marginRight="@dimen/dp32"
                 android:gravity="left|start"
                 android:text="@string/your_email_desc"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -428,18 +414,18 @@
             android:visibility="@{fragmentSecurityViewModel.rootConfirmedEmail ,default=gone}">
 
             <TextView
-                style="?textTitleColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp32"
                 android:gravity="center"
                 android:text="@string/please_enter_confirm_code"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp16" />
 
 
             <EditText
                 android:id="@+id/tsv_edtConfirmedEmail"
-                style="?hintColorSettingTheme"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp32"
@@ -455,7 +441,6 @@
                 android:textSize="@dimen/dp13" />
 
             <TextView
-                style="?textTitleColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp24"
@@ -465,6 +450,7 @@
                 android:layout_marginRight="@dimen/dp32"
                 android:gravity="center"
                 android:text="@string/confirm_email_text"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/dp14"
 
                 />

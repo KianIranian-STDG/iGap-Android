@@ -18,7 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.popularChannel.PopularChannelHomeAdapter;
-import net.iGap.fragments.BaseFragment;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.model.popularChannel.Category;
@@ -26,8 +26,8 @@ import net.iGap.model.popularChannel.Channel;
 import net.iGap.model.popularChannel.Slide;
 import net.iGap.viewmodel.PopularChannelHomeViewModel;
 
-public class PopularChannelHomeFragment extends BaseFragment implements ToolbarListener {
-    private PopularChannelHomeViewModel viewModel;
+public class PopularChannelHomeFragment extends BaseAPIViewFrag implements ToolbarListener {
+    private PopularChannelHomeViewModel popularChannelHomeViewModel;
     private PopularChannelHomeAdapter adapter;
 
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -37,7 +37,8 @@ public class PopularChannelHomeFragment extends BaseFragment implements ToolbarL
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(PopularChannelHomeViewModel.class);
+        popularChannelHomeViewModel = ViewModelProviders.of(this).get(PopularChannelHomeViewModel.class);
+        viewModel = popularChannelHomeViewModel;
     }
 
     @Nullable
@@ -52,9 +53,9 @@ public class PopularChannelHomeFragment extends BaseFragment implements ToolbarL
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupViews();
-        viewModel.onStartFragment(this);
+        popularChannelHomeViewModel.onStartFragment(this);
 
-        viewModel.getFirstPageMutableLiveData().observe(getViewLifecycleOwner(), parentChannel -> {
+        popularChannelHomeViewModel.getFirstPageMutableLiveData().observe(getViewLifecycleOwner(), parentChannel -> {
             if (parentChannel != null)
                 adapter.setData(parentChannel.getData());
         });
@@ -62,26 +63,26 @@ public class PopularChannelHomeFragment extends BaseFragment implements ToolbarL
         adapter.setCallBack(new PopularChannelHomeAdapter.OnFavoriteChannelCallBack() {
             @Override
             public void onCategoryClick(Category category) {
-                viewModel.onMoreClick(category.getId(), G.isAppRtl ? category.getTitle() : category.getTitleEn(), PopularChannelHomeFragment.this);
+                popularChannelHomeViewModel.onMoreClick(category.getId(), G.isAppRtl ? category.getTitle() : category.getTitleEn(), PopularChannelHomeFragment.this);
             }
 
             @Override
             public void onChannelClick(Channel channel) {
-                viewModel.onChannelClick(channel, PopularChannelHomeFragment.this);
+                popularChannelHomeViewModel.onChannelClick(channel, PopularChannelHomeFragment.this);
             }
 
             @Override
             public void onSlideClick(Slide slide) {
-                viewModel.onSlideClick(PopularChannelHomeFragment.this, slide);
+                popularChannelHomeViewModel.onSlideClick(PopularChannelHomeFragment.this, slide);
             }
 
             @Override
             public void onMoreClick(String moreId, String title) {
-                viewModel.onMoreClick(moreId, title, PopularChannelHomeFragment.this);
+                popularChannelHomeViewModel.onMoreClick(moreId, title, PopularChannelHomeFragment.this);
             }
         });
 
-        viewModel.getProgressMutableLiveData().observe(getViewLifecycleOwner(), progress -> {
+        popularChannelHomeViewModel.getProgressMutableLiveData().observe(getViewLifecycleOwner(), progress -> {
             if (progress != null && progress)
                 swipeRefreshLayout.setRefreshing(true);
             else
@@ -89,16 +90,16 @@ public class PopularChannelHomeFragment extends BaseFragment implements ToolbarL
         });
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            viewModel.getFirstPage();
+            popularChannelHomeViewModel.getFirstPage();
         });
 
-        viewModel.getEmptyViewMutableLiveData().observe(getViewLifecycleOwner(), visibility -> {
+        popularChannelHomeViewModel.getEmptyViewMutableLiveData().observe(getViewLifecycleOwner(), visibility -> {
             if (visibility != null)
                 epmtyView.setVisibility(visibility);
         });
 
         epmtyView.setOnClickListener(v -> {
-            viewModel.getFirstPage();
+            popularChannelHomeViewModel.getFirstPage();
         });
     }
 

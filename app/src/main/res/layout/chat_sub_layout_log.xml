@@ -13,13 +13,13 @@
         android:layout_margin="@dimen/dp12"
         android:background="@drawable/recangle_gray_tranceparent"
         android:gravity="center"
-        android:paddingBottom="@dimen/dp4"
         android:paddingLeft="@dimen/dp24"
-        android:paddingRight="@dimen/dp24"
         android:paddingTop="@dimen/dp4"
+        android:paddingRight="@dimen/dp24"
+        android:paddingBottom="@dimen/dp4"
         android:singleLine="false"
         android:text="Log"
         android:textAllCaps="false"
-        style="?textTitleColorSettingTheme"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/dp12" />
 </FrameLayout>

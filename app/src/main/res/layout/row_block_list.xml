@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp70"
-    android:id="@+id/item"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layoutDirection="locale"
     android:paddingLeft="@dimen/dp20"
@@ -15,41 +15,41 @@
         android:id="@+id/imageView"
         android:layout_width="@dimen/dp48"
         android:layout_height="@dimen/dp48"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <net.iGap.module.CustomTextViewMedium
         android:id="@+id/title"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp10"
+        android:layout_marginRight="@dimen/dp10"
         android:gravity="center_vertical|left"
         android:singleLine="true"
         android:text="Name"
-        android:layout_marginLeft="@dimen/dp10"
-        android:layout_marginRight="@dimen/dp10"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/largeTextSize"
-        app:layout_constraintVertical_bias="0"
-        app:layout_constraintStart_toEndOf="@id/imageView"
+        app:layout_constraintBottom_toTopOf="@id/subtitle"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageView"
         app:layout_constraintTop_toTopOf="@id/imageView"
-        app:layout_constraintBottom_toTopOf="@id/subtitle" />
+        app:layout_constraintVertical_bias="0" />
 
     <net.iGap.module.CustomTextViewMedium
         android:id="@+id/subtitle"
-        style="?textSubColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center_vertical|left"
         android:singleLine="true"
         android:text="@string/last_seen_recently"
+        android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/standardTextSize"
-        app:layout_constraintVertical_bias="1"
-        app:layout_constraintStart_toStartOf="@id/title"
-        app:layout_constraintEnd_toEndOf="@id/title"
         app:layout_constraintBottom_toBottomOf="@id/imageView"
-        app:layout_constraintTop_toBottomOf="@id/subtitle" />
+        app:layout_constraintEnd_toEndOf="@id/title"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/subtitle"
+        app:layout_constraintVertical_bias="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

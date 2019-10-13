@@ -15,18 +15,18 @@
         android:gravity="center"
         android:text="@string/md_gap_eye_off"
         android:textAppearance="@style/TextIconAppearance_toolbar"
-        style="?textTitleColorSettingTheme" />
+        android:textColor="?iGapTitleTextColor"/>
 
     <TextView
         android:id="@+id/txtMapRegister"
-        fontPath="fonts/IRANSansMobile_Bold.ttf"
+        android:fontFamily="@font/main_font_bold"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_weight="1"
         android:gravity="start|center_vertical"
         android:text="@string/turn_off_map"
-        style="?textTitleColorSettingTheme"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/dp16" />
 
     <net.iGap.module.CustomToggleButton

@@ -39,6 +39,8 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
@@ -121,7 +123,7 @@ public class ActivityPaint extends ActivityEnhanced {
         });
 
         TextView tvSend = (TextView) findViewById(R.id.textView_send);
-        tvSend.setTextColor(Color.parseColor(G.attachmentColor));
+      //  tvSend.setTextColor(Color.parseColor(G.attachmentColor));
         tvSend.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -138,8 +140,8 @@ public class ActivityPaint extends ActivityEnhanced {
                 setPaintClear();
             }
         });
-        Typeface typefaceEraser = G.typeface_Fontico;
-        tvEraser.setTypeface(typefaceEraser);
+
+        tvEraser.setTypeface(ResourcesCompat.getFont(tvEraser.getContext() , R.font.font_icon_old));
 
         TextView tvPaint = (TextView) findViewById(R.id.textView_paintsize);
         tvPaint.setOnClickListener(new OnClickListener() {

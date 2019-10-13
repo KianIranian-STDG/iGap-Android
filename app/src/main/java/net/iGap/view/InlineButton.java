@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -34,7 +35,7 @@ public class InlineButton extends FrameLayout {
         textView.setTextColor(getResources().getColor(R.color.whit_background));
         setTextSize(textView, R.dimen.standardTextSize);
         textView.setAllCaps(false);
-        textView.setTypeface(G.typeface_IRANSansMobile);
+        textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
         textView.setText("دکمه ی شیشه ای");
         textView.setGravity(Gravity.CENTER);
 

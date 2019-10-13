@@ -10,12 +10,11 @@
 
     <TextView
         android:id="@+id/tv_item_popular_title"
-        style="?textTitleColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
         android:layout_margin="@dimen/dp2"
-        android:fontFamily="@font/main_font"
+        android:textColor="?attr/iGapPrimaryTextColor"
         android:textSize="@dimen/smallTextSize" />
 
     <RelativeLayout
@@ -30,8 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true">
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true">
 
             <ImageView
                 android:id="@+id/iv_item_popular_more"
@@ -41,6 +40,7 @@
                 android:layout_marginStart="@dimen/dp2"
                 android:layout_marginEnd="@dimen/dp2"
                 android:adjustViewBounds="true"
+                android:tint="?attr/iGapTitleTextColor"
                 app:srcCompat="@drawable/ic_more_popular_channel" />
         </FrameLayout>
 
@@ -49,11 +49,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/frame_more_one"
-            android:orientation="horizontal"
-            android:padding="@dimen/dp4"
             android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@+id/frame_more_one" />
+            android:layout_toStartOf="@+id/frame_more_one"
+            android:layout_toLeftOf="@+id/frame_more_one"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp4" />
 
     </RelativeLayout>
 </LinearLayout>

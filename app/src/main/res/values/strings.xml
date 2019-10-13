@@ -117,8 +117,8 @@
     <string name="mute">Mute</string>
     <string name="unmute">Unmute</string>
     <string name="mute_notification">Mute Notification</string>
-    <string name="pin_to_top">Pin to top</string>
-    <string name="Unpin_to_top">UnPin from top</string>
+    <string name="pin_to_top">Pin To Top</string>
+    <string name="Unpin_to_top">UnPin From Top</string>
     <string name="unmute_notification">Unmute Notification</string>
     <string name="clear_history">Clear History</string>
     <string name="delete_chat">Delete Chat</string>
@@ -647,7 +647,7 @@
     <string name="times">Times</string>
     <string name="info">Info</string>
     <string name="description">Description</string>
-    <string name="type_message">Type your message</string>
+    <string name="type_message">Message...</string>
     <string name="place">Place</string>
     <string name="minutes">Minutes</string>
     <string name="channel_link">Channel Link</string>
@@ -1227,6 +1227,7 @@ Want to get it?</string>
     <string name="do_not_send">Don\'t Send</string>
     <string name="save_data_in_sd_card">Save data in sd card</string>
     <string name="are_you_sure">Are you sure</string>
+    <string name="are_you_sure_request">Are you sure you want to submit your request?</string>
     <string name="are_you_sure_edit_contact">Are you sure to edit contact?</string>
     <string name="change_storage_place">Change storage place</string>
     <string name="other_files">Other Files</string>
@@ -1829,7 +1830,7 @@ Want to get it?</string>
     <string name="charge_amount">Charge amount</string>
     <string name="buy_internet_package_title">Buy Internet Package</string>
     <string name="charity_title">Charity</string>
-    <string name="charity_confirm">You have set the %s Rial to help charity %s</string>
+    <string name="charity_confirm">You have set the %1$s Rial to help charity %2$s</string>
     <string name="disk_and_network_usage">Disk and Network Usage</string>
     <string name="cache">Cache</string>
     <string name="auto_play_media">Auto-play Media</string>
@@ -1902,7 +1903,7 @@ Want to get it?</string>
     <string name="copy_link_title">Copy Link</string>
     <string name="location_dialog_message">Do you want to use your location?</string>
     <string name="forward_slash">/</string>
-    <string name="reaction_message_detail">Add names of the admins to the messages they post.</string>
+    <string name="reaction_message_detail">show a vote section for every channel\'\s posts for members.</string>
     <string name="all">All</string>
     <string name="missed">Missed</string>
     <string name="incoming">Incoming</string>
@@ -1935,7 +1936,7 @@ Want to get it?</string>
     <string name="igasht_ticket_type_title">Specify the type of ticket</string>
     <string name="igasht_enter_ticket_count_title">تعداد بازدید کننده را وارد کنید.</string>
     <string name="igasht_add_ticket_count_button_title">ثبت</string>
-    <string name="igasht_order_ticket_title">%s for %d person</string>
+    <string name="igasht_order_ticket_title">%1$s for %2$d person</string>
     <string name="igasht_favorites_title">Favorites</string>
     <string name="igasht_history_title">History</string>
     <string name="igasht_total_ticket_price">Total Price: %d Rials</string>
@@ -2241,8 +2242,23 @@ Want to get it?</string>
     <string name="kuknos_RecoverySK_CheckPIN">I want to set a PIN code for extra security.</string>
     <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
+    <string name="default_theme_title">Default</string>
+    <string name="dark_theme_title">Dark</string>
+    <string name="red_theme_title">Red</string>
+    <string name="pink_theme_title">Pink</string>
+    <string name="purple_theme_title">Purple</string>
+    <string name="blue_theme_title">Blue</string>
+    <string name="green_theme_title">Green</string>
+    <string name="amber_theme_title">Yellow</string>
+    <string name="orange_theme_title">Orange</string>
+    <string name="gray_theme_title">Dark Gray</string>
     <string name="error_ivand_limit_gift">Unfortunately, the set gifts have come to an end.</string>
     <string name="referral_error_yourself">It is not possible to register your number as a referral.</string>
+    <string name="iland">iLand</string>
+    <string name="all_calls">Calls</string>
+    <string name="open_url">Open Link</string>
+    <string name="url_copied">Link Copied</string>
+    <string name="message_is_long">رسالتك طويلة جدًا. \n سيتم إخفاء الرسالة</string>
 
     <!--<string name="news_latest">Latest</string>
     <string name="news_MHits">Most-Watched</string>

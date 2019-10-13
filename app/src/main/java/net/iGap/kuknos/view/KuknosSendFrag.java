@@ -84,7 +84,6 @@ public class KuknosSendFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosSToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         binding.fragKuknosSWalletAddressET.setImeOptions(EditorInfo.IME_ACTION_NEXT);

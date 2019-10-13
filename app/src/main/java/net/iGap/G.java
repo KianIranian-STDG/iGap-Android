@@ -133,33 +133,6 @@ public class G extends ApplicationContext {
     public static String CHAT_MESSAGE_TIME = "H:mm";
     public static String selectedLanguage = null;
     public static String symmetricMethod;
-    public static String appBarColor; // default color
-    public static String bubbleChatSend; // default color
-    public static String bubbleChatReceive; // default color
-    public static String fabBottom; // default color
-    public static String bubbleChatMusic; // default color
-    public static String textChatMusic;
-    public static String notificationColor;
-    public static String toggleButtonColor;
-    public static String roomSenderTextColor;
-    public static String SeenTickColor;
-    public static String attachmentColor;
-    public static String roomMessageTypeColor;
-    //    public static String iconColorBottomSheet;
-    public static String progressColor;
-    public static String headerTextColor;
-    public static String backgroundTheme;
-    public static String backgroundTheme_2;
-    public static String logLineTheme;
-    public static String voteIconTheme;
-    public static String textTitleTheme;
-    public static String textBubble;
-    public static String linkColor;
-    public static String txtIconCheck;
-    //    public static String textBubbleSend;
-    public static String textSubTheme;
-    public static String tintImage;
-    public static String lineBorder;
     public static Ipromote ipromote;
     //    public static String menuBackgroundColor;
     public static String authorHash;
@@ -197,7 +170,6 @@ public class G extends ApplicationContext {
     public static boolean isMplActive = false;
     public static boolean isWalletActive = false;
     public static boolean isWalletRegister = false;
-    public static boolean isDarkTheme = false;
     public static int themeColor;
     public static String selectedTabInMainActivity = "";
     public static int ivSize;
@@ -385,17 +357,11 @@ public class G extends ApplicationContext {
     public static ISignalingGetCallLog iSignalingGetCallLog;
     public static ISignalingCallBack iSignalingCallBack;
     public static ISignalingErrore iSignalingErrore;
-    public static Typeface typeface_IRANSansMobile;
-    public static Typeface typeface_IRANSansMobile_Bold;
-    public static Typeface typeface_Fontico;
-    public static Typeface typeface_FonticonNew;
-    public static Typeface typeface_neuropolitical;
-    public static Typeface typeface_iGap;
     public static boolean isPassCode;
     public static OneFragmentIsOpen oneFragmentIsOpen;
     public static boolean isFragmentMapActive = false; // for check network
     public static boolean isRestartActivity = false; // for check passCode
-    public static boolean isFirstPassCode = true; // for check passCode
+    public static boolean isFirstPassCode = true; // for check passCodeG.backgroundTheme
     public static boolean isTimeWhole = false;
     public static Account iGapAccount;
     public static Card selectedCard = null;
@@ -455,14 +421,6 @@ public class G extends ApplicationContext {
         }
     }
 
-    public static int getTheme2BackgroundColor() {
-        return makeColorTransparent100(backgroundTheme_2);
-    }
-
-    public static int getThemeBackgroundColor() {
-        return makeColorTransparent100(backgroundTheme);
-    }
-
     public static Context updateResources(Context baseContext) {
         if (G.selectedLanguage == null) {
             G.selectedLanguage = Locale.getDefault().getLanguage();
@@ -507,7 +465,7 @@ public class G extends ApplicationContext {
         // dont remove below line please
         if (!BuildConfig.DEBUG && BuildConfig.Store.length() > 1) {
             Metrix.getInstance().setStore(BuildConfig.Store);
-            Metrix.getInstance().setAppSecret(1,1728320174, 43612053, 1626881868, 580653578);
+            Metrix.getInstance().setAppSecret(1, 1728320174, 43612053, 1626881868, 580653578);
         }
 
         new Thread(new Runnable() {

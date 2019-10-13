@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_chatRoom_bottom_view"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/iGapChatSendMessageBackground"
+    android:clickable="true"
     android:gravity="bottom"
-    android:minHeight="54dp"
     android:layoutDirection="ltr"
-    android:clickable="true">
+    android:minHeight="54dp"
+    android:orientation="horizontal">
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_chatRoom_emoji"
@@ -22,10 +23,12 @@
 
     <net.iGap.module.EmojiEditTextE
         android:id="@+id/et_chatRoom_writeMessage"
+        style="@style/iGapEditTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/dp8"
+        android:layout_weight="1"
         android:background="@drawable/backround_chatroom_edittext"
         android:gravity="bottom"
         android:hint="@string/type_message"
@@ -35,10 +38,8 @@
         android:paddingTop="@dimen/dp4"
         android:paddingRight="@dimen/dp8"
         android:paddingBottom="@dimen/dp4"
-        style="?hintColorSettingTheme"
         android:textSize="@dimen/standardTextSize"
-        app:emojiSize="@dimen/xlargeTextSize"
-        android:layout_margin="@dimen/dp8" />
+        app:emojiSize="@dimen/xlargeTextSize" />
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_chatRoom_botAction"
@@ -51,10 +52,9 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/btn_chatRoom_send"
-        style="@style/myIconTextViewStyle"
-        android:layout_width="@dimen/dp48"
-        android:layout_height="@dimen/dp48"
-        android:gravity="center"
+        style="@style/primaryIconTextViewStyle"
+        android:layout_width="@dimen/dp44"
+        android:layout_height="@dimen/dp44"
         android:padding="@dimen/dp8"
         android:text="@string/md_send_button"
         android:visibility="gone" />
@@ -63,8 +63,8 @@
         android:id="@+id/ll_chatRoom_send"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:minWidth="@dimen/dp88"
         android:layout_marginRight="@dimen/dp4"
+        android:minWidth="@dimen/dp88"
         android:orientation="horizontal"
         android:visibility="visible">
 
@@ -73,26 +73,26 @@
             style="@style/myIconTextViewStyleGray"
             android:layout_width="@dimen/dp44"
             android:layout_height="@dimen/dp44"
-            android:padding="@dimen/dp8"
             android:layout_gravity="center_vertical"
-            android:visibility="gone"
-            android:text="@string/financial_send_money_icon" />
+            android:padding="@dimen/dp8"
+            android:text="@string/financial_send_money_icon"
+            android:visibility="gone" />
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/vtn_chatRoom_attach"
             style="@style/myIconTextViewStyleGray"
-            android:layout_gravity="center_vertical"
             android:layout_width="@dimen/dp44"
             android:layout_height="@dimen/dp44"
+            android:layout_gravity="center_vertical"
             android:padding="@dimen/dp8"
             android:text="@string/md_attachment_clip" />
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/btn_chatRoom_mic"
-            android:layout_gravity="center_vertical"
             style="@style/myIconTextViewStyleGray"
             android:layout_width="@dimen/dp44"
             android:layout_height="@dimen/dp44"
+            android:layout_gravity="center_vertical"
             android:padding="@dimen/dp8"
             android:text="@string/md_voice_message_microphone_button" />
 

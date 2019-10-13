@@ -29,6 +29,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -40,7 +41,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityEnhanced;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.FragmentUserProfileBinding;
@@ -50,6 +51,7 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.HelperWallet;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
@@ -58,10 +60,10 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SoftKeyboard;
+import net.iGap.module.StatusBarUtil;
 import net.iGap.viewmodel.UserProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
-import org.paygear.WalletActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -100,6 +102,10 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         super.onViewCreated(view, savedInstanceState);
         Log.wtf(this.getClass().getName(), "onViewCreated");
 
+        if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
+        }
+
         viewModel.changeUserProfileWallpaper.observe(getViewLifecycleOwner(), drawable -> {
             if (drawable != null) {
                 binding.fupBgAvatar.setImageDrawable(drawable);
@@ -126,22 +132,8 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         });
 
         viewModel.goToWalletPage.observe(getViewLifecycleOwner(), phoneNumber -> {
-            if (phoneNumber != null) {
-                Intent intent = new Intent(getActivity(), WalletActivity.class);
-                intent.putExtra("Language", "fa");
-                intent.putExtra("Mobile", phoneNumber);
-                intent.putExtra("PrimaryColor", G.appBarColor);
-                intent.putExtra("DarkPrimaryColor", G.appBarColor);
-                intent.putExtra("AccentColor", G.appBarColor);
-                intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
-                intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-                intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-                intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-                intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
-                intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-                intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
-                startActivityForResult(intent, ActivityMain.WALLET_REQUEST_CODE);
+            if (getContext() != null && phoneNumber != null) {
+                new HelperWallet().goToWallet(getContext(), phoneNumber, false);
             }
         });
 
@@ -283,9 +275,25 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        viewModel.resetApp.observe(getViewLifecycleOwner(), isReset -> {
-            if (getActivity() instanceof ActivityEnhanced && isReset != null && isReset) {
-                ((ActivityEnhanced) getActivity()).onRefreshActivity(true, "");
+        viewModel.getUpdateNewTheme().observe(getViewLifecycleOwner(), isUpdate -> {
+            if (getActivity() != null && isUpdate != null && isUpdate) {
+                Fragment frg;
+                frg = getActivity().getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.detach(frg);
+                ft.attach(frg);
+                ft.commit();
+            }
+        });
+
+        viewModel.getUpdateTwoPaneView().observe(getViewLifecycleOwner(), isUpdate -> {
+            if (getActivity() != null && isUpdate != null && isUpdate) {
+                Fragment frg;
+                frg = getActivity().getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.detach(frg);
+                ft.attach(frg);
+                ft.commit();
             }
         });
 
@@ -300,7 +308,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 new MaterialDialog.Builder(getActivity())
                         .cancelable(false)
                         .title(R.string.app_version_change_log).titleGravity(GravityEnum.CENTER)
-                        .titleColor(getResources().getColor(R.color.green))
+                        .titleColor(new Theme().getPrimaryColor(getActivity()))
                         .content(R.string.updated_version_title)
                         .contentGravity(GravityEnum.CENTER)
                         .positiveText(R.string.ok).itemsGravity(GravityEnum.START).show();
@@ -312,7 +320,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 new MaterialDialog.Builder(getActivity())
                         .cancelable(false)
                         .title(R.string.app_version_change_log).titleGravity(GravityEnum.CENTER)
-                        .titleColor(Color.parseColor("#f44336"))
+                        .titleColor(new Theme().getPrimaryColor(getActivity()))
                         .content(body)
                         .contentGravity(GravityEnum.CENTER)
                         .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive((dialog, which) -> {
@@ -324,20 +332,11 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        binding.fupBtnDarkMode.setOnClickListener(v -> {
-            binding.darkTheme.setChecked(!G.isDarkTheme);
-            viewModel.onThemeClick(G.isDarkTheme);
-        });
-
-        binding.fupUserBio.setSelected(true);
-
         viewModel.getShowDialogSelectCountry().observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null && isShow) {
                 showCountryDialog();
             }
         });
-
-        viewModel.showReferralErrorLiveData.postValue(false);
 
         Log.wtf(this.getClass().getName(), "onViewCreated");
     }
@@ -492,11 +491,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             final TextView txtTitle = dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
             SearchView edtSearchView = dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
             LinearLayout rootView = dialogChooseCountry.findViewById(R.id.country_root);
-            if (G.isDarkTheme) {
-                rootView.setBackground(getResources().getDrawable(R.drawable.dialog_background_dark));
-            } else {
-                rootView.setBackground(getResources().getDrawable(R.drawable.dialog_background));
-            }
+            rootView.setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.dialog_background), getContext(), R.attr.rootBackgroundColor));
 
             txtTitle.setOnClickListener(view -> {
                 edtSearchView.setIconified(false);
@@ -585,6 +580,10 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         return viewModel.checkEditModeForOnBackPressed();
     }
 
+    @Override
+    public void scrollToTopOfList() {
+        //no thing -> its for scroll list if available
+    }
 
     @Override
     public void profileImageAdd(String path) {

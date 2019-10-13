@@ -36,6 +36,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -46,6 +47,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityNewGroupBinding;
 import net.iGap.helper.GoToChatActivity;
@@ -210,9 +212,9 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
         fragmentNewGroupViewModel.goToCreateChannelPage.observe(this, data -> {
             if (getActivity() != null && data != null) {
-                if (!getActivity().isFinishing()) {
+                /*if (!getActivity().isFinishing()) {
                     getActivity().getSupportFragmentManager().popBackStack();
-                }
+                }*/
                 if (G.iTowPanModDesinLayout != null) {
                     G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
                 }
@@ -418,20 +420,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         });
 
         //=======================name of group
-        edtGroupName = fragmentNewGroupBinding.ngEdtNewGroup;
-        final View ViewGroupName = fragmentNewGroupBinding.ngViewNewGroup;
-        edtGroupName.setPadding(0, 8, 0, 8);
-        edtGroupName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-
-                if (b) {
-                    ViewGroupName.setBackgroundColor(Color.parseColor(G.appBarColor));
-                } else {
-                    ViewGroupName.setBackgroundColor(Color.parseColor(G.lineBorder));
-                }
-            }
-        });
 
         //=======================description group
         edtDescription = fragmentNewGroupBinding.ngEdtDescription;
@@ -803,18 +791,10 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                     txtPhone.setGravity(Gravity.RIGHT);
                 }
 
-                if (G.isDarkTheme) {
-                    txtName.setTextColor(context.getResources().getColor(R.color.gray_300));
-                    txtPhone.setTextColor(context.getResources().getColor(R.color.white));
-                } else {
-                    txtName.setTextColor(context.getResources().getColor(R.color.black));
-                    txtPhone.setTextColor(context.getResources().getColor(R.color.gray_4c));
-                }
-
                 txtPhone.setVisibility(View.INVISIBLE);
                 chSelected.setVisibility(View.GONE);
                 btnRemove.setVisibility(View.VISIBLE);
-                btnRemove.setTypeface(G.typeface_IRANSansMobile);
+                btnRemove.setTypeface(ResourcesCompat.getFont(btnRemove.getContext() , R.font.main_font));
                 txtName.setText(data.displayName);
                 avatarHandler.getAvatar(new ParamWithAvatarType(imgAvatar, data.peerId).avatarType(AvatarHandler.AvatarType.USER));
 

@@ -66,7 +66,7 @@ public class IGashtLocationViewModel extends BaseIGashtViewModel<BaseIGashtRespo
         showLoadingView.set(View.VISIBLE);
         showMainView.set(View.GONE);
         showViewRefresh.set(View.GONE);
-        repository.getLocationListWithProvince(this);
+        repository.getLocationListWithProvince(this,this);
     }
 
     @Override

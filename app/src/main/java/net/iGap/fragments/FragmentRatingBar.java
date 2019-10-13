@@ -24,6 +24,7 @@ import android.widget.RatingBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -97,9 +98,9 @@ public class FragmentRatingBar extends BaseFragment {
         }).build();
         View view = dialog.getView();
 
-        dialog.getTitleView().setTypeface(G.typeface_IRANSansMobile);
-        dialog.getActionButton(DialogAction.NEGATIVE).setTypeface(G.typeface_IRANSansMobile);
-        dialog.getActionButton(DialogAction.POSITIVE).setTypeface(G.typeface_IRANSansMobile);
+        dialog.getTitleView().setTypeface(ResourcesCompat.getFont(dialog.getContext() , R.font.main_font));
+        dialog.getActionButton(DialogAction.NEGATIVE).setTypeface(ResourcesCompat.getFont(dialog.getContext() , R.font.main_font));
+        dialog.getActionButton(DialogAction.POSITIVE).setTypeface(ResourcesCompat.getFont(dialog.getContext() , R.font.main_font));
 
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);

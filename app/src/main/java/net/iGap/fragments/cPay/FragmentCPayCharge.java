@@ -13,9 +13,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.cPay.CPayChargeSpinnerAdapter;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentCpayChargeBinding;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCPay;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -23,9 +24,9 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentCPayChargeViewModel;
 
 
-public class FragmentCPayCharge extends BaseFragment implements ToolbarListener {
+public class FragmentCPayCharge extends BaseAPIViewFrag implements ToolbarListener {
 
-    private FragmentCPayChargeViewModel viewModel;
+    private FragmentCPayChargeViewModel cPayChargeViewModel;
     private FragmentCpayChargeBinding binding;
     private String plaqueText;
 
@@ -43,13 +44,14 @@ public class FragmentCPayCharge extends BaseFragment implements ToolbarListener 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(FragmentCPayChargeViewModel.class);
+        cPayChargeViewModel = ViewModelProviders.of(this).get(FragmentCPayChargeViewModel.class);
+        viewModel = cPayChargeViewModel;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cpay_charge, container, false);
-        binding.setViewModel(viewModel);
+        binding.setViewModel(cPayChargeViewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -67,8 +69,10 @@ public class FragmentCPayCharge extends BaseFragment implements ToolbarListener 
             popBackStackFragment();
         }
 
-        viewModel.setPlaque(plaqueText);
-        viewModel.getRequestAmountFromServer();
+        cPayChargeViewModel.setPlaque(plaqueText);
+        cPayChargeViewModel.getRequestAmountFromServer();
+
+        binding.plaqueBg.setBackground(new Theme().tintDrawable(binding.plaqueBg.getBackground(),getContext(),R.attr.iGapCardViewColor));
         initPlaque();
         setupSpinner();
         initCallback();
@@ -77,28 +81,28 @@ public class FragmentCPayCharge extends BaseFragment implements ToolbarListener 
 
     private void initCallback() {
 
-        viewModel.getEditTextVisibilityListener().observe(getViewLifecycleOwner(), isVisible -> {
+        cPayChargeViewModel.getEditTextVisibilityListener().observe(getViewLifecycleOwner(), isVisible -> {
             if (isVisible == null) return;
             binding.edtAmount.setVisibility(isVisible ? View.VISIBLE : View.GONE);
         });
 
-        viewModel.getLoaderListener().observe(getViewLifecycleOwner(), isVisible -> {
+        cPayChargeViewModel.getLoaderListener().observe(getViewLifecycleOwner(), isVisible -> {
             if (isVisible == null) return;
             binding.loaderAmount.setVisibility(isVisible ? View.VISIBLE : View.GONE);
             binding.txtCredit.setVisibility(isVisible ? View.INVISIBLE : View.VISIBLE);
         });
 
-        viewModel.getMessageToUser().observe(getViewLifecycleOwner(), resID -> {
+        cPayChargeViewModel.getMessageToUser().observe(getViewLifecycleOwner(), resID -> {
             if (resID == null) return;
             Toast.makeText(getActivity(), getString(resID), Toast.LENGTH_LONG).show();
         });
 
-        viewModel.getMessageToUserText().observe(getViewLifecycleOwner(), s -> {
+        cPayChargeViewModel.getMessageToUserText().observe(getViewLifecycleOwner(), s -> {
             if (s == null) return;
             Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
         });
 
-        viewModel.getChargePaymentStateListener().observe(getViewLifecycleOwner(), token -> {
+        cPayChargeViewModel.getChargePaymentStateListener().observe(getViewLifecycleOwner(), token -> {
             if (getActivity() == null) return;
             if (token == null) {
                 Toast.makeText(getContext(), getString(R.string.wallet_error_server), Toast.LENGTH_LONG).show();

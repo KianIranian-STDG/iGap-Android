@@ -30,14 +30,14 @@
             app:queryHint=""
             app:searchHintIcon="@null" />
 
-        <net.iGap.module.HeaderTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/rg_txt_titleToolbar"
-            style="?textSubColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="left|center_vertical"
             android:paddingLeft="@dimen/dp24"
             android:text="@string/rg_Select_Country"
+            android:textColor="?colorPrimary"
             android:textSize="@dimen/dp20"
             android:textStyle="bold" />
 
@@ -45,9 +45,9 @@
 
     <View
         android:id="@+id/rg_borderButton"
-        style="?lineColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:background="?iGapDividerLine"
         android:visibility="gone" />
 
     <ListView
@@ -63,9 +63,9 @@
         android:scrollbarThumbVertical="@color/rg_start_background" />
 
     <View
-        style="?lineColorSettingTheme"
         android:layout_width="match_parent"
-        android:layout_height="1dp" />
+        android:layout_height="1dp"
+        android:background="?iGapDividerLine" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -86,7 +86,7 @@
         <!--android:textSize="@dimen/sp14"-->
         <!--android:textStyle="bold" />-->
 
-        <net.iGap.module.HeaderTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/rg_txt_okDialog"
             android:layout_width="@dimen/dp60"
             android:layout_height="@dimen/dp36"
@@ -94,7 +94,7 @@
             android:background="@android:color/transparent"
             android:gravity="center"
             android:text="@string/B_cancel"
-            android:textColor="@color/toolbar_background"
+            android:textColor="?colorPrimary"
             android:textSize="@dimen/dp14"
             android:textStyle="bold" />
 

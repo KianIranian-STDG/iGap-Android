@@ -23,10 +23,13 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentCallAction;
 import net.iGap.fragments.FragmentContactsProfile;
@@ -53,29 +56,16 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        if (G.isDarkTheme) {
-            AppUtils.setImageDrawable(holder.contactImage, R.drawable.gray_contact);
-            holder.contactName.setTextColor(holder.itemView.getResources().getColor(R.color.gray10));
-            holder.contactNumberTv.setTextColor(holder.itemView.getResources().getColor(R.color.gray_9d));
-        } else {
-            AppUtils.setImageDrawable(holder.contactImage, R.drawable.black_contact);
-            holder.contactName.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-            holder.contactNumberTv.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-        }
+        holder.contactName.setTextColor(new Theme().getSendMessageTextColor(holder.getContext()));
+        holder.contactNumberTv.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
     }
 
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
-        if (G.isDarkTheme) {
-            AppUtils.setImageDrawable(holder.contactImage, R.drawable.gray_contact);
-            holder.contactName.setTextColor(holder.itemView.getResources().getColor(R.color.gray10));
-            holder.contactNumberTv.setTextColor(holder.itemView.getResources().getColor(R.color.gray_9d));
-        } else {
-            AppUtils.setImageDrawable(holder.contactImage, R.drawable.black_contact);
-            holder.contactName.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-            holder.contactNumberTv.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-        }
+
+        holder.contactName.setTextColor(new Theme().getReceivedMessageColor(holder.getContext()));
+        holder.contactNumberTv.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
     }
 
     @Override
@@ -132,17 +122,16 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             contactImage = new AppCompatImageView(getContext());
             contactImage.setId(R.id.iv_contactItem_contact);
             contactImage.setContentDescription(null);
+            contactImage.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.gray_contact), getContext(), R.attr.colorPrimaryDark));
 
             contactName = new AppCompatTextView(getContext());
             contactName.setId(R.id.tv_contactItem_contactName);
-            contactName.setTextColor(Color.parseColor(G.textBubble));
             ViewMaker.setTextSize(contactName, R.dimen.dp14);
             ViewMaker.setTypeFace(contactName);
 
             contactNumberTv = new AppCompatTextView(getContext());
             contactNumberTv.setId(R.id.tv_contactItem_contactNumber);
             ViewMaker.setTypeFace(contactNumberTv);
-            contactNumberTv.setTextColor(Color.parseColor(G.textBubble));
 
 
             /**
@@ -157,7 +146,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             viewContactBtn.setTextSize(12);
             viewContactBtn.setTextColor(getColor(R.color.md_blue_500));
             viewContactBtn.setAllCaps(false);
-            viewContactBtn.setTypeface(G.typeface_IRANSansMobile);
+            viewContactBtn.setTypeface(ResourcesCompat.getFont(viewContactBtn.getContext() , R.font.main_font));
 
 
             /**
@@ -172,7 +161,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             contactWithUserBtn.setTextSize(10);
             contactWithUserBtn.setTextColor(getColor(R.color.grayNew));
             contactWithUserBtn.setAllCaps(false);
-            contactWithUserBtn.setTypeface(G.typeface_IRANSansMobile);
+            contactWithUserBtn.setTypeface(ResourcesCompat.getFont(viewContactBtn.getContext() , R.font.main_font));
 
 
             /**

@@ -81,7 +81,6 @@ public class KuknosRecieveFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosRcToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         Button copyBtn = binding.fragKuknosRcCopy;

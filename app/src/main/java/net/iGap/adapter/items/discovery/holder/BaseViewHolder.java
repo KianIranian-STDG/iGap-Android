@@ -21,11 +21,15 @@ import com.bumptech.glide.request.target.Target;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
+import net.iGap.api.apiService.ApiInitializer;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorHandler;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
@@ -74,6 +78,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static net.iGap.G.context;
+import static net.iGap.G.needGetSignalingConfiguration;
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
@@ -190,17 +196,17 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                         Intent intent = new Intent(activity, WalletActivity.class);
                         intent.putExtra("Language", "fa");
                         intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
-                        intent.putExtra("PrimaryColor", G.appBarColor);
-                        intent.putExtra("DarkPrimaryColor", G.appBarColor);
-                        intent.putExtra("AccentColor", G.appBarColor);
-                        intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
+                        intent.putExtra("PrimaryColor", new Theme().getPrimaryColor(activity));
+                        intent.putExtra("DarkPrimaryColor",new Theme().getPrimaryColor(activity));
+                        intent.putExtra("AccentColor",new Theme().getPrimaryColor(activity));
+                        intent.putExtra("IS_DARK_THEME", G.themeColor == Theme.DARK);
                         intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-                        intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-                        intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                        intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-                        intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
-                        intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-                        intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                        intent.putExtra(WalletActivity.PROGRESSBAR,new Theme().getAccentColor(activity));
+                        intent.putExtra(WalletActivity.LINE_BORDER, new Theme().getDividerColor(activity));
+                        intent.putExtra(WalletActivity.BACKGROUND,new Theme().getRootColor(activity));
+                        intent.putExtra(WalletActivity.BACKGROUND_2, new Theme().getRootColor(activity));
+                        intent.putExtra(WalletActivity.TEXT_TITLE, new Theme().getTitleTextColor(activity));
+                        intent.putExtra(WalletActivity.TEXT_SUB_TITLE, new Theme().getSubTitleColor(activity));
                         if (discoveryField.value.equals("QR_USER_WALLET")) {
                             intent.putExtra("isScan", true);
                         } else {
@@ -313,7 +319,18 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 CardToCardHelper.CallCardToCard(activity);
                 break;
             case IVANDSCORE:
-                ActivityMain.doIvandScore(discoveryField.value, activity);
+                new MaterialDialog.Builder(activity)
+                        .content(R.string.are_you_sure_request)
+                        .positiveText(R.string.yes)
+                        .negativeText(R.string.no)
+                        .onPositive((dialog, which) -> {
+                            dialog.dismiss();
+                            ActivityMain.doIvandScore(discoveryField.value, activity);
+                        })
+                        .onNegative((dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
                 break;
             case NONE:
                 break;
@@ -349,38 +366,43 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case INVITE_FRIEND:
-                new HelperFragment(activity.getSupportFragmentManager(), new LocalContactFragment()).setReplace(false).load(true);
+                try {
+                    HelperPermission.getContactPermision(activity, new OnGetPermission() {
+                        @Override
+                        public void Allow() {
+                            new HelperFragment(activity.getSupportFragmentManager(), new LocalContactFragment()).setReplace(false).load(true);
+                        }
+
+                        @Override
+                        public void deny() {
+
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
 
         }
     }
 
     private static void sendRequestGetCharityPaymentToken(FragmentActivity activity, String charityId, int charityAmount) {
-        new RetrofitFactory().getCharityRetrofit().sendRequestGetCharity(charityId, charityAmount).enqueue(new Callback<MciPurchaseResponse>() {
+        new ApiInitializer<MciPurchaseResponse>().initAPI(new RetrofitFactory().getCharityRetrofit().sendRequestGetCharity(charityId, charityAmount), null, new ResponseCallback<MciPurchaseResponse>() {
             @Override
-            public void onResponse(@NotNull Call<MciPurchaseResponse> call, @NotNull Response<MciPurchaseResponse> response) {
+            public void onSuccess(MciPurchaseResponse data) {
                 HelperUrl.closeDialogWaiting();
-                if (response.isSuccessful()) {
-                    new HelperFragment(activity.getSupportFragmentManager()).loadPayment(activity.getString(R.string.charity_title), response.body().getToken(), new PaymentCallBack() {
-                        @Override
-                        public void onPaymentFinished(PaymentResult result) {
+                new HelperFragment(activity.getSupportFragmentManager()).loadPayment(activity.getString(R.string.charity_title), data.getToken(), new PaymentCallBack() {
+                    @Override
+                    public void onPaymentFinished(PaymentResult result) {
 
-                        }
-                    });
-                } else {
-                    try {
-                        HelperError.showSnackMessage(new ErrorHandler().getError(response.code(), response.errorBody().string()).getMessage(), false);
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
-                }
+                });
             }
 
             @Override
-            public void onFailure(@NotNull Call<MciPurchaseResponse> call, @NotNull Throwable t) {
+            public void onError(ErrorModel error) {
                 HelperUrl.closeDialogWaiting();
-                t.printStackTrace();
-                HelperError.showSnackMessage(activity.getString(R.string.connection_error), false);
+                HelperError.showSnackMessage(error.getMessage(), false);
             }
         });
     }

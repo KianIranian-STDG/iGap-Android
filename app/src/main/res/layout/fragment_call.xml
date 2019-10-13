@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="?backgroundColorSettingTheme"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layoutDirection="locale">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/fc_layout_toolbar"
@@ -27,8 +26,8 @@
             android:id="@+id/fc_layout_multi_select"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layoutDirection="locale"
+            android:orientation="horizontal"
             android:visibility="gone">
 
             <TextView
@@ -82,12 +81,12 @@
                 android:layoutDirection="locale"
                 android:orientation="horizontal">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fc_btn_all_calls"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="@drawable/round_button_selected_bg"
+                    android:background="?attr/iGapButtonSelector"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -96,7 +95,7 @@
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
                     android:text="@string/all"
-                    android:textColor="@color/white"
+                    android:textColor="@color/button_text_color_selector"
                     android:textSize="@dimen/smallTextSize" />
 
                 <TextView
@@ -104,7 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="@drawable/round_button_disabled_bg"
+                    android:background="?attr/iGapButtonSelector"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -113,7 +112,7 @@
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
                     android:text="@string/missed"
-                    android:textColor="@color/gray_4c"
+                    android:textColor="@color/button_text_color_selector"
                     android:textSize="@dimen/smallTextSize" />
 
 
@@ -122,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="@drawable/round_button_disabled_bg"
+                    android:background="?attr/iGapButtonSelector"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -131,7 +130,7 @@
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
                     android:text="@string/incoming"
-                    android:textColor="@color/gray_4c"
+                    android:textColor="@color/button_text_color_selector"
                     android:textSize="@dimen/smallTextSize" />
 
                 <TextView
@@ -139,7 +138,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="@drawable/round_button_disabled_bg"
+                    android:background="?attr/iGapButtonSelector"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -148,7 +147,7 @@
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
                     android:text="@string/un_answered"
-                    android:textColor="@color/gray_4c"
+                    android:textColor="@color/button_text_color_selector"
                     android:textSize="@dimen/smallTextSize" />
 
 
@@ -157,7 +156,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/round_buttons_margin"
-                    android:background="@drawable/round_button_disabled_bg"
+                    android:background="?attr/iGapButtonSelector"
                     android:gravity="center"
                     android:minWidth="@dimen/round_button_max_width"
                     android:paddingLeft="@dimen/round_buttons_large_padding"
@@ -166,7 +165,7 @@
                     android:paddingBottom="@dimen/round_buttons_small_padding"
                     android:singleLine="true"
                     android:text="@string/outgoing"
-                    android:textColor="@color/gray_4c"
+                    android:textColor="@color/button_text_color_selector"
                     android:textSize="@dimen/smallTextSize" />
 
             </LinearLayout>
@@ -217,13 +216,13 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textEmptyCal"
-        style="?textTitleColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp20"
         android:layout_marginBottom="@dimen/dp52"
         android:text="@string/empty_call"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/dp18"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

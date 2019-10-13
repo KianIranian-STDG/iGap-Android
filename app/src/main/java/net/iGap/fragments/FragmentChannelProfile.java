@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,6 +30,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityProfileChannelBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
@@ -50,6 +53,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
@@ -186,11 +191,11 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
                 TextInputLayout inputChannelLink = new TextInputLayout(getActivity());
                 MEditText edtLink = new MEditText(getActivity());
-                edtLink.setHint(getString(R.string.channel_public_hint_revoke));
-                edtLink.setTypeface(G.typeface_IRANSansMobile);
+                edtLink.setHint(R.string.channel_public_hint_revoke);
+                edtLink.setTypeface(ResourcesCompat.getFont(edtLink.getContext() , R.font.main_font));
                 edtLink.setText(link);
                 edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
-                Utils.darkModeHandler(edtLink);
+                edtLink.setTextColor(new Theme().getTitleTextColor(getActivity()));
                 edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                 edtLink.setPadding(0, 8, 0, 8);
                 edtLink.setEnabled(false);
@@ -200,7 +205,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
                 TextView txtLink = new AppCompatTextView(getActivity());
                 txtLink.setText(Config.IGAP_LINK_PREFIX + link);
-                Utils.darkModeHandlerGray(txtLink);
+                txtLink.setTextColor(new Theme().getTitleTextColor(getActivity()));
 
                 viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -214,7 +219,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(R.string.channel_link)
                         .positiveText(R.string.array_Copy)
                         .customView(layoutChannelLink, true)
-                        .widgetColor(Color.parseColor(G.appBarColor))
+                        .widgetColor(new Theme().getAccentColor(getContext()))
                         .negativeText(R.string.B_cancel)
                         .onPositive((dialog1, which) -> {
                             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
@@ -247,7 +252,21 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
             }
         });
 
-        binding.description.setMovementMethod(LinkMovementMethod.getInstance());
+        BetterLinkMovementMethod
+                .linkify(Linkify.ALL, binding.description)
+                .setOnLinkClickListener((tv, url) -> {
+                    return false;
+                })
+                .setOnLinkLongClickListener((tv, url) -> {
+                        if (HelperUrl.isTextLink(url)){
+                            G.isLinkClicked = true ;
+
+                            HelperUrl.openLinkDialog(getActivity() , url);
+                        }
+                    return true;
+                });
+
+        //binding.description.setMovementMethod(LinkMovementMethod.getInstance());
 
         AppUtils.setProgresColler(binding.loading);
 

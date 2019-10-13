@@ -7,10 +7,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_beepTunes_main"
-        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar"
+        android:background="?rootBackgroundColor"
         android:clipToPadding="false"
         android:paddingTop="@dimen/dp26"
         android:paddingBottom="100dp"

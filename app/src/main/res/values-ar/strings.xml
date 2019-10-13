@@ -1161,7 +1161,7 @@
 
     <string name="description">التفاصيل</string>
 
-    <string name="type_message">كتابة الرسالة </string>
+    <string name="type_message">رسالة...</string>
 
     <string name="place">المكان </string>
 
@@ -2136,6 +2136,7 @@
     <string name="do_not_send">لا ترسل</string>
     <string name="save_data_in_sd_card">حفظ المعلومات على البطاقة الجانبية</string>
     <string name="are_you_sure">هل أنت متأكد؟</string>
+    <string name="are_you_sure_request">هل أنت متأكد أنك تريد تسجيل طلبك؟</string>
     <string name="are_you_sure_edit_contact">هل أنت متأكد من تحرير الاتصال؟</string>
     <string name="change_storage_place">تغيير موقع التخزين</string>
     <string name="other_files">ملفات اخرى</string>
@@ -2977,4 +2978,11 @@
 
     <string name="error_ivand_limit_gift">لسوء الحظ ، فإن الهدايا مجموعة قد انتهت.</string>
     <string name="referral_error_yourself">لا يمكن تسجيل رقمك كمرجع.</string>
+    <string name="iland">آیلند</string>
+    <string name="all_calls">المكالمات</string>
+    <string name="open_url">رابط مفتوح</string>
+    <string name="url_copied">تم نسخ الرابط</string>
+    <string name="charity_confirm">شما مبلغ %s ریال جهت کمک به خیریه %s در نظر گرفته اید.</string>
+    <string name="default_theme_title">السمة الافتراضية</string>
+    <string name="message_is_long">Your message is too long  Message will covert to</string>
 </resources>

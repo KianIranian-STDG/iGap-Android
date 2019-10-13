@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -21,6 +22,7 @@ import com.google.gson.Gson;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
@@ -73,7 +75,7 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
         titleTextView.setText(R.string.add_sticker);
 
         tabLayout = view.findViewById(R.id.tab_layout);
-        tabLayout.setSelectedTabIndicatorColor(getContext().getResources().getColor(R.color.setting_items_value_color));
+        tabLayout.setSelectedTabIndicatorColor(new Theme().getAccentColor(getContext()));
         viewPager = view.findViewById(R.id.pager);
 
         adapter = new SectionPagerAdapter(getActivity().getSupportFragmentManager(), new StickerCategory[0]);
@@ -159,13 +161,8 @@ public class FragmentSettingAddStickers extends FragmentToolBarBack {
             TextView tv = new TextView(getContext());
             tv.setText(tabLayout.getTabAt(i).getText());
             tv.setGravity(Gravity.CENTER);
-            tv.setTypeface(G.typeface_IRANSansMobile);
-
-            if (G.isDarkTheme) {
-                tv.setTextColor(G.context.getResources().getColor(R.color.white));
-            } else {
-                tv.setTextColor(G.context.getResources().getColor(R.color.black));
-            }
+            tv.setTypeface(ResourcesCompat.getFont(tv.getContext(), R.font.main_font));
+            tv.setTextColor(new Theme().getTitleTextColor(tv.getContext()));
             tabLayout.getTabAt(i).setCustomView(tv);
         }
     }

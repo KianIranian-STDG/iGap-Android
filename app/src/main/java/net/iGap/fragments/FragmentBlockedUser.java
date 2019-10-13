@@ -41,6 +41,8 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestUserContactsUnblock;
 
+import org.jetbrains.annotations.NotNull;
+
 import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
@@ -128,9 +130,10 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
             super(realmResults, true);
         }
 
+        @NotNull
         @Override
         public BlockListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = inflater.inflate(R.layout.row_block_list, viewGroup, false);
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_block_list, viewGroup, false);
             return new ViewHolder(v);
         }
 
@@ -146,8 +149,6 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
 
             viewHolder.title.setText(registeredInfo.getDisplayName());
 
-            viewHolder.title.setTextColor(Color.parseColor(G.textTitleTheme));
-            viewHolder.subtitle.setTextColor(Color.parseColor(G.textSubTheme));
             viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(registeredInfo.getId(), registeredInfo.getLastSeen(), false));
             if (HelperCalander.isPersianUnicode) {
                 viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());

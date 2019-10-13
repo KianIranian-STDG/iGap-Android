@@ -23,7 +23,10 @@ import android.widget.LinearLayout;
 import androidx.annotation.ColorInt;
 import androidx.annotation.IntRange;
 
+import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
+
 
 /**
  * set color for status bar
@@ -40,9 +43,18 @@ public class StatusBarUtil {
 
     public static void setColor(Activity activity, @ColorInt int color, @IntRange(from = 0, to = 255) int statusBarAlpha) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             activity.getWindow().setStatusBarColor(calculateStatusColor(color, statusBarAlpha));
+            activity.getWindow().setNavigationBarColor(new Theme().getDividerColor(activity));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                View decor = activity.getWindow().getDecorView() ;
+                if (G.themeColor != Theme.DARK){
+                    decor.setSystemUiVisibility(decor.getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                }else {
+                    decor.setSystemUiVisibility(0);
+                }
+            }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();

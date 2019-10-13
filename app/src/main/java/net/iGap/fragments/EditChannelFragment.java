@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -210,7 +211,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
                 avatarHandler.getAvatar(new ParamWithAvatarType(binding.channelAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
         });
 
-        setUpEmojiPopup();
+        setEmojiColor();
 
     }
 
@@ -362,7 +363,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             edtUserName.setTextDirection(View.TEXT_DIRECTION_LTR);
         }
-        edtUserName.setTypeface(G.typeface_IRANSansMobile);
+        edtUserName.setTypeface(ResourcesCompat.getFont(edtUserName.getContext() , R.font.main_font));
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
 
         /*if (isPopup) {*/
@@ -387,7 +388,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
         layoutUserName.addView(inputUserName, layoutParams);
 
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(new Theme().getPrimaryColor(getContext())).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -507,10 +508,9 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
             String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
             new RequestChannelUpdateUsername().channelUpdateUsername(viewModel.roomId, userName);
         });
-
         edtUserName.setOnFocusChangeListener((view, b) -> {
             if (b) {
-                viewUserName.setBackgroundColor(Color.parseColor(G.appBarColor));
+                viewUserName.setBackgroundColor(new Theme().getAccentColor(getContext()));
             } else {
                 viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
             }
@@ -643,22 +643,8 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
         }).show();
     }*/
 
-    private void setUpEmojiPopup() {
-        switch (G.themeColor) {
-            case Theme.BLUE_GREY_COMPLETE:
-            case Theme.INDIGO_COMPLETE:
-            case Theme.BROWN_COMPLETE:
-            case Theme.GREY_COMPLETE:
-            case Theme.TEAL_COMPLETE:
-            case Theme.DARK:
-                setEmojiColor(G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);
-                break;
-            default:
-                setEmojiColor(Color.parseColor("#eceff1"), "#61000000", "#61000000");
-        }
-    }
 
-    private void setEmojiColor(int BackgroundColor, String iconColor, String dividerColor) {
+    private void setEmojiColor() {
         emojiPopup = EmojiPopup.Builder.fromRootView(binding.root)
                 .setOnEmojiBackspaceClickListener(v -> {
 
@@ -666,9 +652,9 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
                 .setOnSoftKeyboardOpenListener(keyBoardHeight -> {
                 }).setOnEmojiPopupDismissListener(() -> isEmojiShow = false)
                 .setOnSoftKeyboardCloseListener(() -> emojiPopup.dismiss())
-                .setBackgroundColor(BackgroundColor)
-                .setIconColor(Color.parseColor(iconColor))
-                .setDividerColor(Color.parseColor(dividerColor))
+                .setBackgroundColor(new Theme().getRootColor(getContext()))
+                .setIconColor(new Theme().getTitleTextColor(getContext()))
+                .setDividerColor(new Theme().getTitleTextColor(getContext()))
                 .build(binding.channelNameEditText);
     }
 

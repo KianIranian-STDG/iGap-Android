@@ -3,36 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/view_toolbar_root_constraint"
     android:layout_width="match_parent"
-    android:layoutDirection="ltr"
+    android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:layout_height="wrap_content">
+    android:layoutDirection="ltr">
 
     <LinearLayout
-        android:orientation="vertical"
         android:id="@+id/view_toolbar_player_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar"
-        android:background="@drawable/shape_toolbar_player">
+        android:background="@drawable/shape_toolbar_player"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <include
             android:id="@+id/view_toolbar_layout_player_music"
+            layout="@layout/music_layout_small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/music_layout_small"
-            android:visibility="gone"
-            android:layout_marginTop="@dimen/toolbar_search_box_size" />
+            android:layout_marginTop="@dimen/toolbar_search_box_size"
+            android:visibility="gone" />
 
         <include
             android:id="@+id/view_toolbar_layout_strip_call"
+            layout="@layout/chat_sub_layout_strip_call"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/chat_sub_layout_strip_call"
-            android:visibility="gone"
-            android:layout_marginTop="@dimen/toolbar_search_box_size" />
+            android:layout_marginTop="@dimen/toolbar_search_box_size"
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -61,6 +61,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/view_toolbar_btn_right_1"
+            style="@style/myIconToolbarStyle"
             android:layout_width="@dimen/toolbar_icon_size"
             android:layout_height="@dimen/toolbar_icon_size"
             android:layout_marginTop="4dp"
@@ -68,18 +69,17 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="10dp"
             android:visibility="gone"
-            style="@style/myIconToolbarStyle"
             app:layout_constraintBottom_toTopOf="@id/groupAvatar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/view_toolbar_btn_right_2"
+            style="@style/myIconToolbarStyle"
             android:layout_width="@dimen/toolbar_icon_size"
             android:layout_height="@dimen/toolbar_icon_size"
             android:layout_marginEnd="1dp"
             android:layout_marginRight="1dp"
-            style="@style/myIconToolbarStyle"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/view_toolbar_btn_right_1"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_1"
@@ -87,11 +87,11 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/view_toolbar_btn_right_3"
+            style="@style/myIconToolbarStyle"
             android:layout_width="@dimen/toolbar_icon_size"
             android:layout_height="@dimen/toolbar_icon_size"
             android:layout_marginEnd="1dp"
             android:layout_marginRight="1dp"
-            style="@style/myIconToolbarStyle"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/view_toolbar_btn_right_1"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_2"
@@ -99,28 +99,28 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/view_toolbar_btn_right_4"
+            style="@style/myIconToolbarStyle"
             android:layout_width="@dimen/toolbar_icon_size"
             android:layout_height="@dimen/toolbar_icon_size"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="1dp"
             android:visibility="gone"
-            style="@style/myIconToolbarStyle"
             app:layout_constraintBottom_toBottomOf="@id/view_toolbar_btn_right_1"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_3"
             app:layout_constraintTop_toTopOf="@id/view_toolbar_btn_right_1" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/view_toolbar_btn_left"
+            style="@style/myIconToolbarStyle"
             android:layout_width="@dimen/toolbar_icon_size"
             android:layout_height="@dimen/toolbar_icon_size"
             android:layout_marginStart="4dp"
             android:layout_marginLeft="4dp"
             android:layout_marginTop="8dp"
-            android:visibility="visible"
-            style="@style/myIconToolbarStyle"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
             android:textSize="@dimen/dp22"
-            android:layout_marginBottom="10dp"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/groupAvatar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -134,7 +134,6 @@
             android:layout_marginLeft="8dp"
             android:layout_toEndOf="@id/view_toolbar_btn_left"
             android:layout_toRightOf="@id/view_toolbar_btn_left"
-            android:fontFamily="@font/main_font"
             android:text="1"
             android:textColor="@color/white"
             android:textSize="16sp"
@@ -149,18 +148,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/main_font"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
+            android:maxLength="28"
+            android:singleLine="true"
             android:text="@string/app_name"
             android:textColor="@color/white"
             android:textSize="19sp"
             android:textStyle="bold"
             android:visibility="gone"
-            android:maxLength="28"
-            android:singleLine="true"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -173,7 +171,6 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:fontFamily="@font/main_font"
             android:text="Your calling now"
             android:textColor="#fff"
             android:textSize="@dimen/smallTextSize"
@@ -187,14 +184,14 @@
             android:id="@+id/view_toolbar_user_chat_avatar_layout"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/view_toolbar_btn_left"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginEnd="8dp"
-            android:visibility="visible">
+            android:layout_marginRight="8dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/view_toolbar_btn_left"
+            app:layout_constraintTop_toTopOf="parent">
 
             <net.iGap.module.CircleImageView
                 android:id="@+id/view_toolbar_user_chat_avatar"
@@ -229,31 +226,30 @@
 
         <LinearLayout
             android:id="@+id/view_toolbar_chat_layout_userName"
-            android:visibility="visible"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            app:layout_constraintVertical_chainStyle="spread"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/view_toolbar_chat_txt_seen_status"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_3"
             app:layout_constraintStart_toEndOf="@+id/view_toolbar_user_chat_avatar_layout"
-            app:layout_constraintTop_toTopOf="@+id/view_toolbar_user_chat_avatar_layout">
+            app:layout_constraintTop_toTopOf="@+id/view_toolbar_user_chat_avatar_layout"
+            app:layout_constraintVertical_chainStyle="spread">
 
 
             <net.iGap.module.EmojiTextViewE
                 android:id="@+id/view_toolbar_chat_txt_userName"
-                fontPath="fonts/IRANSansMobile_Bold.ttf"
+                android:fontFamily="@font/main_font_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lineSpacingMultiplier=".8"
                 android:maxWidth="150dp"
                 android:paddingBottom="2dp"
-                android:fontFamily="@font/main_font"
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textSize="@dimen/standardTextSize"
@@ -261,11 +257,11 @@
 
             <TextView
                 android:id="@+id/view_toolbar_chat_txt_verify"
+                style="@style/myIconTextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingLeft="8dp"
-                style="@style/myIconTextViewStyle"
                 android:text="@string/verify_icon"
                 android:textAppearance="@style/TextIconAppearance.all"
                 android:textColor="@color/verify_color"
@@ -274,11 +270,11 @@
 
             <TextView
                 android:id="@+id/view_toolbar_chat_txt_isMute"
+                style="@style/myIconTextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingLeft="8dp"
-                style="@style/myIconTextViewStyle"
                 android:text="@string/mute_icon"
                 android:textAppearance="@style/TextIconAppearance.all"
                 android:textColor="@android:color/white"
@@ -303,16 +299,15 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:fontFamily="@font/main_font"
             android:text="Last seen recently"
             android:textColor="@color/white"
             android:textSize="@dimen/smallTextSize"
             android:visibility="visible"
-            app:layout_constraintVertical_chainStyle="spread"
-            app:layout_constraintTop_toBottomOf="@id/view_toolbar_chat_layout_userName"
+            app:layout_constraintBottom_toBottomOf="@+id/view_toolbar_user_chat_avatar_layout"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_3"
             app:layout_constraintStart_toStartOf="@id/view_toolbar_chat_layout_userName"
-            app:layout_constraintBottom_toBottomOf="@+id/view_toolbar_user_chat_avatar_layout" />
+            app:layout_constraintTop_toBottomOf="@id/view_toolbar_chat_layout_userName"
+            app:layout_constraintVertical_chainStyle="spread" />
 
         <!--Group Detail-->
         <net.iGap.module.CircleImageView
@@ -330,12 +325,12 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/largeTextSize"
             android:layout_marginLeft="@dimen/dp16"
             android:layout_marginRight="@dimen/dp16"
-            android:textColor="@color/white"
-            android:visibility="gone"
             android:gravity="left"
+            android:textColor="@color/white"
+            android:textSize="@dimen/largeTextSize"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/groupMemberCount"
             app:layout_constraintLeft_toRightOf="@id/groupAvatar"
             app:layout_constraintRight_toRightOf="parent"
@@ -343,13 +338,13 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/groupMemberCount"
-            android:textSize="@dimen/smallTextSize"
             style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:visibility="gone"
             android:gravity="left"
+            android:textColor="@color/white"
+            android:textSize="@dimen/smallTextSize"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/groupAvatar"
             app:layout_constraintLeft_toLeftOf="@id/groupName"
             app:layout_constraintRight_toRightOf="@id/groupName"
@@ -374,18 +369,17 @@
 
         <EditText
             android:id="@+id/view_toolbar_search_layout_edt_input"
+            style="@style/iGapEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:paddingRight="35dp"
-            android:paddingLeft="35dp"
             android:background="@android:color/transparent"
-            android:fontFamily="@font/main_font"
             android:gravity="center"
             android:hint="@string/search"
+            android:paddingLeft="35dp"
+            android:paddingRight="35dp"
             android:singleLine="true"
-            style="?hintColorSettingTheme"
             android:textSize="@dimen/standardTextSize"
             android:visibility="gone" />
 
@@ -395,15 +389,15 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:fontFamily="@font/main_font"
             android:gravity="center"
             android:text="@string/search"
-            style="?textSubColorSettingTheme"
+            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:visibility="visible" />
 
         <TextView
             android:id="@+id/view_toolbar_search_layout_btn_clear"
+            style="@style/myIconTextViewStyle"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
@@ -413,7 +407,6 @@
             android:gravity="center"
             android:padding="3dp"
             android:text="@string/close_icon"
-            style="@style/myIconTextViewStyle"
             android:textSize="@dimen/largeTextSize"
             android:visibility="gone" />
 
@@ -435,7 +428,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:fontFamily="@font/main_font"
         android:lines="1"
         android:text="@string/user_name"
         android:textColor="@color/black"

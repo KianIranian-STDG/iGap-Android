@@ -24,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.helper.HelperCalander;
 
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ public class ArcMenu extends FrameLayout {
 
     public void setBackgroundTintColor() {
 
-        fabMenu.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        fabMenu.setBackgroundTintList(ColorStateList.valueOf(new Theme().getButtonColor(getContext())));
     }
 
 
@@ -91,7 +92,7 @@ public class ArcMenu extends FrameLayout {
         }
 
         //  mColorStateList = attr.getColorStateList(R.styleable.ArcMenu_menu_color);
-        mColorStateList = ColorStateList.valueOf(Color.parseColor(G.appBarColor));
+        mColorStateList = ColorStateList.valueOf(new Theme().getPrimaryColor(getContext()));
 
         mFinalRadius = attr.getDimension(R.styleable.ArcMenu_menu_radius, resources.getDimension(R.dimen.dp100));
         mElevation = attr.getDimension(R.styleable.ArcMenu_menu_elevation, resources.getDimension(R.dimen.dp6));

@@ -41,7 +41,7 @@ public class ChatItemWithTextHolder extends NewChatItemHolder {
         layoutMessageContainer = ViewMaker.getTextView();
         layoutMessageContainer.addView(messageView);
 
-        BtnContainer = new LinearLayout(G.context);
+        BtnContainer = new LinearLayout(getContext());
         BtnContainer.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams layout_327 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         BtnContainer.setLayoutParams(layout_327);
@@ -63,7 +63,16 @@ public class ChatItemWithTextHolder extends NewChatItemHolder {
         messageView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                itemView.performLongClick();
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!G.isLinkClicked) {
+                            itemView.performLongClick();
+                        }else {
+                            G.isLinkClicked = false ;
+                        }
+                    }
+                }, 15);
                 return true;
             }
         });

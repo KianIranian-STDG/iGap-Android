@@ -27,16 +27,17 @@ import com.google.android.gms.security.ProviderInstaller;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentUniversalPaymentBinding;
 
-public class PaymentFragment extends Fragment {
+public class PaymentFragment extends BaseAPIViewFrag {
 
     private static String TOKEN = "Payment_Token";
     private static String TYPE = "Payment_Type";
 
-    private PaymentViewModel viewModel;
     private FragmentUniversalPaymentBinding binding;
     private PaymentCallBack callBack;
+    private PaymentViewModel paymentViewModel;
 
     public static PaymentFragment getInstance(String type, String token, PaymentCallBack paymentCallBack) {
         PaymentFragment fragment = new PaymentFragment();
@@ -55,7 +56,7 @@ public class PaymentFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(
+        paymentViewModel = ViewModelProviders.of(
                 this,
                 new ViewModelProvider.Factory() {
                     @NonNull
@@ -69,13 +70,14 @@ public class PaymentFragment extends Fragment {
                     }
                 }
         ).get(PaymentViewModel.class);
+        viewModel = paymentViewModel;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_universal_payment, container, false);
-        binding.setViewModel(viewModel);
+        binding.setViewModel(paymentViewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -84,14 +86,14 @@ public class PaymentFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel.getGoBack().observe(getViewLifecycleOwner(), paymentResult -> {
+        paymentViewModel.getGoBack().observe(getViewLifecycleOwner(), paymentResult -> {
             if (getActivity() != null && paymentResult != null) {
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
                 callBack.onPaymentFinished(paymentResult);
             }
         });
 
-        viewModel.getGoToWebPage().observe(getViewLifecycleOwner(), webLink -> {
+        paymentViewModel.getGoToWebPage().observe(getViewLifecycleOwner(), webLink -> {
             if (getActivity() != null && webLink != null) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webLink));
                 Bundle bundle = new Bundle();
@@ -101,7 +103,7 @@ public class PaymentFragment extends Fragment {
             }
         });
 
-        viewModel.getNeedUpdateGooglePlay().observe(getViewLifecycleOwner(), isNeed -> {
+        paymentViewModel.getNeedUpdateGooglePlay().observe(getViewLifecycleOwner(), isNeed -> {
             if (getActivity() != null && isNeed != null && isNeed) {
                 try {
                     if (getActivity() != null) {
@@ -121,7 +123,7 @@ public class PaymentFragment extends Fragment {
 
     public void setPaymentResult(Payment paymentModel) {
         Log.wtf(this.getClass().getName(), "setPaymentResult");
-        viewModel.setPaymentResult(paymentModel);
+        paymentViewModel.setPaymentResult(paymentModel);
     }
 
     //ToDo: create base view for fragment with request

@@ -41,6 +41,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.FragmentRegistrationNicknameBinding;
@@ -99,7 +100,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
         ProgressBar prgWait = binding.prg;
         AppUtils.setProgresColler(prgWait);
 
-        AndroidUtils.setBackgroundShapeColor(binding.puProfileCircleImage, Color.parseColor(G.appBarColor));
+        AndroidUtils.setBackgroundShapeColor(binding.puProfileCircleImage,new Theme().getPrimaryColor(getContext()));
 
         viewModel.progressValue.observe(getViewLifecycleOwner(), integer -> {
             if (integer != null) {

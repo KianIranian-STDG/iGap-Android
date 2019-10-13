@@ -52,4 +52,14 @@ public class HelperPreferences {
         editor.putBoolean(key, value);
         editor.apply();
     }
+
+    public String readString(String preferencesName, String key) {
+        return getSharedPreferencesInstance(preferencesName).getString(key, "-1");
+    }
+
+    public void putString(String preferencesName, String key, String value) {
+        SharedPreferences.Editor editor = getSharedPreferencesInstance(preferencesName).edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
 }

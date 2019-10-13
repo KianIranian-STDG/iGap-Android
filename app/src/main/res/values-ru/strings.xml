@@ -1120,7 +1120,7 @@
 
     <string name="description">Пояснение</string>
 
-    <string name="type_message">Написать сообщение</string>
+    <string name="type_message">сообщение...</string>
 
     <string name="place">Местоположение</string>
 
@@ -2127,6 +2127,8 @@
     <string name="save_data_in_sd_card">Сохранить информацию на боковой карте</string>
 
     <string name="are_you_sure">Вы уверены?</string>
+
+    <string name="are_you_sure_request">Вы уверены, что хотите сделать этот запрос?</string>
 
     <string name="change_storage_place">Изменить место хранения</string>
 
@@ -3576,6 +3578,8 @@
 
     <string name="popular_channel">Развлекательные каналы</string>
     <string name="edit_contact">Изменить контакт</string>
+    <string name="open_url">открытый URL</string>
+    <string name="url_copied">ссылка скопирована</string>
 
 
 </resources>

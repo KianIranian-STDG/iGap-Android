@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -39,6 +41,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityGroupProfileBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
@@ -67,6 +70,8 @@ import net.iGap.request.RequestGroupUpdateUsername;
 import net.iGap.viewmodel.FragmentGroupProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
+
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
@@ -258,7 +263,18 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
             }
         });
 
-        binding.description.setMovementMethod(LinkMovementMethod.getInstance());
+        BetterLinkMovementMethod
+                .linkify(Linkify.ALL, binding.description)
+                .setOnLinkClickListener((tv, url) -> {
+                    return false;
+                })
+                .setOnLinkLongClickListener((tv, url) -> {
+                    if (HelperUrl.isTextLink(url)){
+                        G.isLinkClicked = true ;
+                        HelperUrl.openLinkDialog(getActivity() , url);
+                    }
+                    return true;
+                });
 
         viewModel.groupDescription.observe(getViewLifecycleOwner(), groupDescription -> {
             if (getActivity() != null && groupDescription != null) {
@@ -284,7 +300,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 TextInputLayout inputGroupLink = new TextInputLayout(getActivity());
                 MEditText edtLink = new MEditText(getActivity());
                 edtLink.setHint(getString(R.string.group_link_hint_revoke));
-                edtLink.setTypeface(G.typeface_IRANSansMobile);
+                edtLink.setTypeface(ResourcesCompat.getFont(edtLink.getContext() , R.font.main_font));
                 edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
                 edtLink.setText(link);
                 edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
@@ -311,7 +327,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(R.string.group_link)
                         .positiveText(R.string.array_Copy)
                         .customView(layoutGroupLink, true)
-                        .widgetColor(Color.parseColor(G.appBarColor))
+                        .widgetColor(new Theme().getPrimaryColor(getContext()))
                         .negativeText(R.string.no)
                         .onPositive((dialog1, which) -> {
                             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
@@ -494,7 +510,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             edtUserName.setTextDirection(View.TEXT_DIRECTION_LTR);
         }
-        edtUserName.setTypeface(G.typeface_IRANSansMobile);
+        edtUserName.setTypeface(ResourcesCompat.getFont(edtUserName.getContext() , R.font.main_font));
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, getContext().getResources().getDimension(R.dimen.dp14));
         //TODO: fixed this and this will set viewModel
         if (viewModel.isPopup) {
@@ -526,7 +542,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         layoutUserName.addView(progressBar);
 
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(getContext()).title(R.string.st_username).positiveText(R.string.save).customView(layoutUserName, true).widgetColor(Color.parseColor(G.appBarColor)).negativeText(R.string.B_cancel).build();
+                new MaterialDialog.Builder(getContext()).title(R.string.st_username).positiveText(R.string.save).customView(layoutUserName, true).widgetColor(new Theme().getAccentColor(getContext())).negativeText(R.string.B_cancel).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -671,24 +687,16 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
             }
         });
 
-        edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    viewUserName.setBackgroundColor(Color.parseColor(G.appBarColor));
-                } else {
-                    viewUserName.setBackgroundColor(getContext().getResources().getColor(R.color.line_edit_text));
-                }
+        edtUserName.setOnFocusChangeListener((view, b) -> {
+            if (b) {
+                viewUserName.setBackgroundColor(new Theme().getAccentColor(getContext()));
+            } else {
+                viewUserName.setBackgroundColor(getContext().getResources().getColor(R.color.line_edit_text));
             }
         });
 
         // check each word with server
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                hideKeyboard();
-            }
-        });
+        dialog.setOnDismissListener(dialog1 -> hideKeyboard());
 
         dialog.show();
     }

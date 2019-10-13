@@ -11,7 +11,6 @@
 package net.iGap.adapter.items.chat;
 
 import android.animation.ValueAnimator;
-import android.graphics.Color;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,6 +26,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
@@ -34,7 +34,6 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.libs.audio.AudioWave;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AppUtils;
 import net.iGap.module.FontIconTextView;
@@ -300,22 +299,32 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        holder.txt_Timer.setTextColor(Color.parseColor(G.textTitleTheme));
-        holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
+        holder.txt_Timer.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
+        holder.author.setTextColor(new Theme().getSendMessageOtherTextColor(holder.getContext()));
+
+        ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.UNRECOGNIZED;
+        if (mMessage.status != null) {
+            try {
+                status = ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (status == ProtoGlobal.RoomMessageStatus.LISTENED) {
+            holder.listenView.setVisibility(View.GONE);
+        } else {
+            holder.listenView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
 
-        if (type == ProtoGlobal.Room.Type.CHANNEL) {
-            holder.txt_Timer.setTextColor(Color.parseColor(G.textTitleTheme));
-            holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
-        } else {
-
-            holder.txt_Timer.setTextColor(holder.itemView.getResources().getColor(R.color.grayNewDarker));
-            holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
-        }
+        holder.txt_Timer.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.author.setTextColor(new Theme().getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.listenView.setVisibility(View.GONE);
     }
 
     @NotNull
@@ -340,39 +349,39 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         private ConstraintLayout rootView;
         private ConstraintSet set;
         private AudioWave waveView;
+        private View listenView;
 
         public ViewHolder(View view) {
             super(view);
 
-            thumbnail = new AppCompatImageView(G.context);
+            thumbnail = new AppCompatImageView(view.getContext());
             thumbnail.setId(R.id.thumbnail);
             AppUtils.setImageDrawable(thumbnail, R.drawable.microphone_icon);
-            progress = getProgressBar(0);
+            progress = getProgressBar(view.getContext(), 0);
 
-            author = new AppCompatTextView(G.context);
+            author = new AppCompatTextView(view.getContext());
             author.setId(R.id.cslv_txt_author);
-            author.setTextColor(Color.parseColor(G.textBubble));
             author.setSingleLine(true);
             setTextSize(author, R.dimen.standardTextSize);
             author.setMaxLines(2);
             setTypeFace(author);
 
 
-            btnPlayMusic = new FontIconTextView(G.context);
+            btnPlayMusic = new FontIconTextView(view.getContext());
             btnPlayMusic.setId(R.id.csla_btn_play_music);
             btnPlayMusic.setBackgroundResource(0);
             btnPlayMusic.setGravity(Gravity.CENTER);
             btnPlayMusic.setText(R.string.play_icon);
-            btnPlayMusic.setTextColor(getColor(R.color.voice_item));
             setTextSize(btnPlayMusic, R.dimen.dp36);
 
-            txt_Timer = new AppCompatTextView(G.context);
+            txt_Timer = new AppCompatTextView(view.getContext());
             txt_Timer.setId(R.id.csla_txt_timer);
-            txt_Timer.setTextColor(getColor(R.color.gray));
             setTextSize(txt_Timer, R.dimen.verySmallTextSize);
             setTypeFace(txt_Timer);
-            Utils.darkModeHandler(txt_Timer);
 
+            listenView = new View(view.getContext());
+            listenView.setBackground(getResources().getDrawable(R.drawable.shape_voice_item_listen));
+            listenView.setId(R.id.view_listen);
 
             rootView = new ConstraintLayout(getContext());
             set = new ConstraintSet();
@@ -386,10 +395,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             byte[] soundBytes = hexStringToByteArray(value + value);
 
-            if (G.isDarkTheme)
-                waveView.setWaveColor(getColor(R.color.voice_item_dark));
-            else
-                waveView.setWaveColor(getColor(R.color.voice_item));
+            waveView.setWaveColor(getColor(R.color.voice_item_dark));
 
             waveView.setScaledData(soundBytes);
             waveView.setChunkHeight(dpToPx(16));
@@ -412,6 +418,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             set.constrainWidth(waveView.getId(), dpToPx(190));
             set.constrainHeight(waveView.getId(), dpToPx(30));
 
+            set.constrainWidth(listenView.getId(), LayoutCreator.dp(4));
+            set.constrainHeight(listenView.getId(), LayoutCreator.dp(4));
+
             set.connect(waveView.getId(), ConstraintSet.LEFT, btnPlayMusic.getId(), ConstraintSet.RIGHT, dpToPx(4));
             set.centerVertically(waveView.getId(), ConstraintSet.PARENT_ID);
             rootView.addView(waveView);
@@ -424,6 +433,11 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             set.connect(progress.getId(), ConstraintSet.RIGHT, btnPlayMusic.getId(), ConstraintSet.RIGHT);
             set.connect(progress.getId(), ConstraintSet.LEFT, btnPlayMusic.getId(), ConstraintSet.LEFT);
             rootView.addView(progress);
+
+            set.connect(listenView.getId(), ConstraintSet.LEFT, txt_Timer.getId(), ConstraintSet.RIGHT, LayoutCreator.dp(8));
+            set.connect(listenView.getId(), ConstraintSet.TOP, txt_Timer.getId(), ConstraintSet.TOP);
+            set.connect(listenView.getId(), ConstraintSet.BOTTOM, txt_Timer.getId(), ConstraintSet.BOTTOM);
+            rootView.addView(listenView);
 
             set.constrainWidth(txt_Timer.getId(), ConstraintSet.WRAP_CONTENT);
             set.constrainHeight(txt_Timer.getId(), ConstraintSet.WRAP_CONTENT);

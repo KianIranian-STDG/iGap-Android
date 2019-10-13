@@ -45,10 +45,10 @@ import java.util.List;
 import java.util.Map;
 
 import io.fotoapparat.Fotoapparat;
+import io.fotoapparat.selector.ResolutionSelectorsKt;
 
 import static android.content.Context.MODE_PRIVATE;
-import static io.fotoapparat.parameter.selector.LensPositionSelectors.back;
-import static io.fotoapparat.parameter.selector.SizeSelectors.biggestSize;
+import static io.fotoapparat.selector.LensPositionSelectorsKt.back;
 import static net.iGap.fragments.FragmentChat.getAllShownImagesPath;
 
 public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
@@ -104,11 +104,7 @@ public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
 
     @Override
     public int getTheme() {
-        if (G.isDarkTheme) {
-            return R.style.BaseBottomSheetDialog;
-        } else {
-            return R.style.BaseBottomSheetDialogLight;
-        }
+        return R.style.BaseBottomSheetDialog;
     }
 
     @NonNull
@@ -203,7 +199,7 @@ public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
                                         @Override
                                         public void run() {*/
                                     fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into(view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                            .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                            .photoResolution(ResolutionSelectorsKt.highestResolution())   // we want to have the biggest photo possible
                                             .lensPosition(back())       // we want back camera
                                             .build();
 
@@ -246,7 +242,7 @@ public class SelectImageBottomSheetDialog extends BottomSheetDialogFragment {
                                         @Override
                                         public void run() {*/
                                     fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into(view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                            .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                            .photoResolution(ResolutionSelectorsKt.highestResolution())   // we want to have the biggest photo possible
                                             .lensPosition(back())       // we want back camera
                                             .build();
 

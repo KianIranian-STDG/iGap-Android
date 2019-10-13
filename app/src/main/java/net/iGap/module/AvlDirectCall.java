@@ -25,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -155,7 +156,7 @@ public class AvlDirectCall extends LinearLayout {
         textView.setPadding(0, -(ViewMaker.i_Dp(R.dimen.dp6)), 0, -(ViewMaker.i_Dp(R.dimen.dp6)));
         textView.setText(R.string.md_expand_arrow);
         textView.setVisibility(INVISIBLE);
-        textView.setTypeface(G.typeface_Fontico);
+        textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.font_icon));
 
 
         return textView;

@@ -167,9 +167,6 @@ public class FragmentChooseCountry extends BaseFragment implements ToolbarListen
             CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
             textView.setText(items.get(position).getName().toUpperCase().substring(0, 1));
             textView.setPadding(getDimen(R.dimen.dp20), getDimen(R.dimen.dp20), getDimen(R.dimen.dp20), getDimen(R.dimen.dp20));
-
-            if (G.isDarkTheme)
-                textView.setTextColor(G.context.getResources().getColor(R.color.white));
         }
 
         private int getDimen(int id) {

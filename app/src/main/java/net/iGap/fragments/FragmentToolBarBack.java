@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -51,11 +52,8 @@ public abstract class FragmentToolBarBack extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         titleTextView = view.findViewById(R.id.title);
-        titleTextView.setTypeface(G.typeface_IRANSansMobile);
+        titleTextView.setTypeface(ResourcesCompat.getFont(titleTextView.getContext() , R.font.main_font));
         appBarLayout = view.findViewById(R.id.ac_appBarLayout);
-        if (G.isDarkTheme) {
-            appBarLayout.setBackground(G.context.getResources().getDrawable(R.drawable.shape_toolbar_background_dark));
-        }
         menu_item1 = view.findViewById(R.id.menu_item1);
         menu_item1.setVisibility(View.GONE);
 

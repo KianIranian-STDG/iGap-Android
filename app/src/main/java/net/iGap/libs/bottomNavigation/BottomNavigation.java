@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
@@ -15,9 +16,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.libs.bottomNavigation.Event.OnBottomNavigationBadge;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
 import net.iGap.libs.bottomNavigation.Util.Utils;
@@ -52,13 +51,8 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     private void parseAttr(AttributeSet attributeSet) {
         if (attributeSet != null) {
             TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.BottomNavigation);
-
             try {
-                if (G.isDarkTheme) {
-                    backgroundColor = getContext().getResources().getColor(R.color.navigation_dark_mode_bg);
-                } else {
-                    backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color, getResources().getColor(R.color.background_color));
-                }
+                backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color, getResources().getColor(R.color.background_color));
                 cornerRadius = typedArray.getInt(R.styleable.BottomNavigation_corner_radius, 0);
             } finally {
                 typedArray.recycle();
@@ -91,6 +85,10 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
             onSelectedItemChanged();
             if (onItemChangeListener != null) {
                 onItemChangeListener.onSelectedItemChanged(tabItems.get(position).getPosition());
+            }
+        } else {
+            if (onItemChangeListener != null) {
+                onItemChangeListener.onSelectAgain(tabItems.get(position).getPosition());
             }
         }
     }
@@ -171,11 +169,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
 
     private void onSelectedItemChanged() {
         for (int i = 0; i < tabItems.size(); i++) {
-            if (tabItems.get(i).getPosition() == selectedItemPosition) {
-                tabItems.get(i).setSelectedItem(true);
-            } else {
-                tabItems.get(i).setSelectedItem(false);
-            }
+            tabItems.get(i).setSelectedItem(tabItems.get(i).getPosition() == selectedItemPosition);
         }
     }
 
@@ -184,6 +178,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     }
 
     public void setDefaultItem(int defaultItem) {
+        Log.wtf(this.getClass().getName(), "default tab: " + defaultItem);
         this.defaultItem = defaultItem;
         this.selectedItemPosition = defaultItem;
     }
@@ -199,28 +194,9 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected {
     }
 
     public void setOnBottomNavigationBadge(int unreadCount, int callCount) {
-        for (int i = 0; i < tabItems.size(); i++) {
-            TabItem tabItem = tabItems.get(i);
-            tabItem.setBadgeColor(badgeColor);
-
-            switch (i) {
-                case 0:
-                    tabItem.setBadgeCount(0);
-                    break;
-                case 1:
-                    tabItem.setBadgeCount(callCount);
-                    break;
-                case 2:
-                    tabItem.setBadgeCount(unreadCount);
-                    break;
-                case 3:
-                    tabItem.setBadgeCount(0);
-                    break;
-                case 4:
-                    tabItem.setBadgeCount(0);
-                    break;
-            }
-        }
+        TabItem tabItem = tabItems.get(2);
+        tabItem.setBadgeColor(badgeColor);
+        tabItem.setBadgeCount(unreadCount);
     }
 
     public int getCurrentTab() {

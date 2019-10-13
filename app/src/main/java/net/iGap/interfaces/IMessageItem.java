@@ -45,4 +45,6 @@ public interface IMessageItem {
     boolean getShowVoteChannel();
 
     void sendFromBot(Object realmRoomMessage);
+
+    void onOpenLinkDialog(String url);
 }

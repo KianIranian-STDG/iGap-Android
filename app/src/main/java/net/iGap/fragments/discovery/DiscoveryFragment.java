@@ -353,6 +353,11 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     }
 
     @Override
+    public void scrollToTopOfList() {
+        if (rcDiscovery != null) rcDiscovery.smoothScrollToPosition(0);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         needToCrawl = false;

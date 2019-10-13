@@ -21,18 +21,18 @@
             android:src="@color/color_default_discovery_cards"
             android:adjustViewBounds="true" />
 
-        <net.iGap.module.MaterialDesignTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/type1_tick0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
             android:padding="4dp"
-            android:text="@string/md_tick"
+            android:text="@string/check_icon"
             android:visibility="gone"
             android:textColor="@color/white"
             android:background="@color/tick_background_color"
-            android:textAppearance="@style/TextIconAppearance_toolbar" />
+            style="@style/myIconTextViewStyle"/>
 
     </androidx.cardview.widget.CardView>
 

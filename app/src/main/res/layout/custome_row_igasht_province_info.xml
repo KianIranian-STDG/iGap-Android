@@ -18,11 +18,11 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/locationCount"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:padding="@dimen/dp2"
+        android:textColor="?iGapTitleTextColor"
         app:layout_constraintBottom_toBottomOf="@+id/provinceIcon"
         app:layout_constraintEnd_toEndOf="@id/provinceName"
         app:layout_constraintStart_toStartOf="@+id/provinceName"
@@ -30,11 +30,11 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/provinceName"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:padding="@dimen/dp2"
+        android:textColor="?iGapTitleTextColor"
         app:layout_constraintBottom_toTopOf="@id/locationCount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/provinceIcon"

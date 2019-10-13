@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -18,14 +17,11 @@
 
     <LinearLayout
         android:id="@+id/rootFragmentLanguage"
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:orientation="vertical"
-        tools:context="net.iGap.fragments.FragmentLanguage"
         android:layoutDirection="ltr"
-        tools:ignore="MissingPrefix">
+        android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -35,11 +31,11 @@
                 android:id="@+id/asn_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp60"
-                android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
                 android:layoutDirection="ltr"
                 android:padding="0dp"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp">
+                <!--                android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -67,12 +63,12 @@
                     </net.iGap.libs.rippleeffect.RippleView>
 
                     <TextView
-                        fontPath="fonts/IRANSansMobile_Bold.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentTop="true"
                         android:layout_toEndOf="@+id/stns_ripple_back"
                         android:layout_toRightOf="@+id/stns_ripple_back"
+                        android:fontFamily="@font/main_font_bold"
                         android:gravity="center"
                         android:text="@string/app_theme"
                         android:textColor="@color/whit_background"
@@ -93,8 +89,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layoutDirection="ltr">
+                android:layoutDirection="ltr"
+                android:orientation="vertical">
 
 
                 <LinearLayout
@@ -105,16 +101,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Custom"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -124,18 +119,16 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <net.iGap.module.MaterialDesignTextView
-                        style="?iconColorMenuTheme"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:minWidth="@dimen/dp32"
                         android:text="@string/md_settings_cogwheel_button"
-                        android:textAppearance="@style/TextIconAppearance.menu"
                         android:textSize="@dimen/dp16" />
 
                     <ImageView
@@ -151,9 +144,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -163,16 +156,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Default"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -182,9 +174,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_default_1"
@@ -200,9 +192,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -212,16 +204,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Dark"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -231,18 +222,16 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <net.iGap.module.MaterialDesignTextView
-                        style="?iconColorMenuTheme"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:minWidth="@dimen/dp32"
                         android:text="@string/md_settings_cogwheel_button"
-                        android:textAppearance="@style/TextIconAppearance.menu"
                         android:textSize="@dimen/dp16" />
 
                     <ImageView
@@ -259,9 +248,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -271,16 +260,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Blue Grey (Full Set)"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -290,9 +278,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_BlueGreyComplete"
@@ -308,9 +296,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -320,16 +308,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Indigo (Full Set)"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -339,9 +326,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_indigoComplete"
@@ -357,9 +344,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -369,16 +356,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Brown (Full Set)"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -388,9 +374,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_BrownComplete"
@@ -406,9 +392,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -418,16 +404,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Teal (Full Set)"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -437,9 +422,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_TealComplete"
@@ -455,9 +440,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -467,16 +452,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Grey (Full Set)"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -486,9 +470,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_GreyComplete"
@@ -504,9 +488,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -516,16 +500,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Red"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -535,9 +518,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_red_1"
@@ -553,9 +536,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
 
                 <LinearLayout
@@ -566,16 +549,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Pink"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -585,9 +567,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_pink_1"
@@ -603,9 +585,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -615,16 +597,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Purple"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -634,9 +615,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_Purple_1"
@@ -652,9 +633,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -664,16 +645,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Deep Purple"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -683,9 +663,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_deep_purple_1"
@@ -701,9 +681,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
 
                 <LinearLayout
@@ -714,16 +694,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Indigo"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -733,9 +712,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_Indigo"
@@ -751,9 +730,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -763,16 +742,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Blue"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -782,9 +760,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_blue"
@@ -800,9 +778,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -812,16 +790,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Light Blue"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -831,9 +808,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_light_blue"
@@ -849,9 +826,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -861,16 +838,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Cyan"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -880,9 +856,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_cyan"
@@ -898,9 +874,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -910,16 +886,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Teal"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -929,9 +904,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_teal"
@@ -947,9 +922,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -959,16 +934,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Green"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -978,9 +952,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_green"
@@ -996,9 +970,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1008,16 +982,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Light Green"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1027,9 +1000,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_light_green"
@@ -1045,9 +1018,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1057,16 +1030,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Lime"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1076,9 +1048,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_lime"
@@ -1093,9 +1065,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1105,16 +1077,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Yellow"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1124,9 +1095,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_yellow"
@@ -1142,9 +1113,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1154,16 +1125,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Amber"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1173,9 +1143,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_amber"
@@ -1191,9 +1161,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1202,16 +1172,15 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Orange"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1221,9 +1190,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_orange"
@@ -1239,9 +1208,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1251,16 +1220,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Deep Orange"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1270,9 +1238,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_deep_orange"
@@ -1288,9 +1256,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1300,16 +1268,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Brown"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1319,9 +1286,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_brown"
@@ -1337,9 +1304,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1349,16 +1316,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Grey"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1368,9 +1334,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_grey"
@@ -1386,9 +1352,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1398,16 +1364,15 @@
 
 
                     <TextView
-                        style="?textTitleColorSettingTheme"
-                        fontPath="fonts/IRANSansMobile.ttf"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/dp48"
                         android:layout_weight="1"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="@dimen/dp16"
-                        android:paddingRight="@dimen/dp16"
                         android:paddingTop="@dimen/dp4"
+                        android:paddingRight="@dimen/dp16"
                         android:text="Blue Grey"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp15"
                         android:textStyle="normal" />
 
@@ -1417,9 +1382,9 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
-                        android:visibility="gone"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
-                        android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+                        android:visibility="gone" />
+                    <!--                    android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"-->
 
                     <ImageView
                         android:id="@+id/theme_blue_grey"
@@ -1435,9 +1400,9 @@
                 </LinearLayout>
 
                 <View
-                    style="?lineColorSettingTheme"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine" />
 
 
             </LinearLayout>

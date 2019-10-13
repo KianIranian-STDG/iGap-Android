@@ -3,11 +3,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".fragments.cPay.FragmentCPayEdit">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/fce_toolbar"
@@ -32,11 +30,11 @@
 
         <TextView
             android:id="@+id/fce_lbl_plaque"
-            style="?textSubColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp32"
             android:text="@string/cars_plaque"
+            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +42,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_add_car_"
-            style="?iGapButton"
+            style="@style/iGapButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp32"
@@ -57,7 +55,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/fce_edt_nationalId"
-            style="?hintColorSettingTheme"
+            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp32"
@@ -77,7 +75,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/fce_edt_name"
-            style="?hintColorSettingTheme"
+            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp32"
@@ -98,7 +96,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/fce_edt_family"
-            style="?hintColorSettingTheme"
+            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp32"

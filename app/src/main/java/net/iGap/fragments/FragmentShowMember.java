@@ -761,10 +761,10 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             this.userId = userId;
         }
 
+        @NotNull
         @Override
         public MemberAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = inflater.inflate(R.layout.contact_item_group_profile, viewGroup, false);
-            return new ViewHolder(v);
+            return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.contact_item_group_profile, viewGroup, false));
         }
 
         @Override
@@ -790,7 +790,12 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                                                 // bagi:// dont uncomment below line it has some bug
                                                 //new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();
                                             } else {
-                                                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString())).setReplace(false).load();
+                                                long roomId = RealmRoom.getRoomIdByPeerId(mContact.peerId);
+                                                if (roomId != 0) {
+                                                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(roomId, mContact.peerId, GROUP.toString())).setReplace(false).load();
+                                                }else {
+                                                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, mContact.peerId, "Others")).setReplace(false).load();
+                                                }
                                             }
                                             break;
                                         case SELECT_FOR_ADD_MODERATOR:
@@ -896,7 +901,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             holder.title.setText(mContact.displayName);
 
-            checkTheme(holder);
             setRoleStarColor(holder.roleStar, mContact);
 
             avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, mContact.peerId).avatarType(AvatarHandler.AvatarType.USER));
@@ -941,16 +945,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 holder.btnMenu.setVisibility(View.GONE);
             }
         }
-
-        private void checkTheme(ViewHolder holder) {
-
-            Utils.darkModeHandler(holder.btnMenu);
-            Utils.darkModeHandler(holder.title);
-            Utils.darkModeHandlerGray(holder.subtitle);
-            Utils.darkModeHandlerGray(holder.topLine);
-
-        }
-
         private void showPopup(ViewHolder holder, final StructContactInfo mContact) {
             holder.btnMenu.setVisibility(View.VISIBLE);
 

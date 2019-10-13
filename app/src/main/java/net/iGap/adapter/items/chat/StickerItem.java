@@ -100,10 +100,10 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
         public ViewHolder(View view) {
             super(view);
 
-            FrameLayout frameLayout = new FrameLayout(G.context);
+            FrameLayout frameLayout = new FrameLayout(getContext());
             frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
-            image = new ReserveSpaceRoundedImageView(G.context);
+            image = new ReserveSpaceRoundedImageView(getContext());
             image.setId(R.id.thumbnail);
             image.setScaleType(ImageView.ScaleType.FIT_XY);
             image.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
@@ -113,7 +113,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
             frameLayout.addView(image);
             image.reserveSpace(180, 180, ProtoGlobal.Room.Type.CHAT);
 
-            progress = getProgressBar(0);
+            progress = getProgressBar(view.getContext(), 0);
             frameLayout.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
 
         }

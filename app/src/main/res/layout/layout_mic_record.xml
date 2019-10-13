@@ -15,8 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
             android:layout_gravity="bottom"
-            android:orientation="vertical"
-            style="?backgroundColorSettingTheme" />
+            android:background="?attr/rootBackgroundColor"
+            android:orientation="vertical" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,8 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:text="00:00"
-                    android:fontFamily="@font/main_font"
-                    style="?textTitleColorSettingTheme"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14" />
 
                 <TextView
@@ -54,9 +53,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="left"
-                    android:fontFamily="@font/main_font"
                     android:text="99"
-                    style="?textTitleColorSettingTheme"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14" />
             </LinearLayout>
 
@@ -73,9 +71,8 @@
                     android:layout_marginRight="@dimen/dp8"
                     android:layout_weight="1"
                     android:gravity="right|center"
-                    android:fontFamily="@font/main_font"
                     android:text="@string/slide_to_cancel_en"
-                    style="?textTitleColorSettingTheme"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14" />
 
                 <LinearLayout
@@ -101,15 +98,13 @@
 
                     <net.iGap.module.MaterialDesignTextView
                         android:id="@+id/lmr_btn_mic_layout"
-                        style="@style/myIconTextViewStyle"
+                        style="@style/baseFontIcon"
                         android:layout_width="@dimen/dp68"
                         android:layout_height="@dimen/dp68"
                         android:layout_gravity="bottom"
-                        android:background="@drawable/circle_mic"
-                        android:gravity="center"
+                        android:background="?attr/iGapAvatarBackground"
                         android:padding="@dimen/dp8"
                         android:text="@string/md_voice_message_microphone_button"
-                        android:textAppearance="@style/TextIconAppearance.all"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/dp26" />
                 </LinearLayout>

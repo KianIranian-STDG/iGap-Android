@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="?backgroundColorSettingTheme"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layoutDirection="locale">
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:id="@+id/viewpager"
@@ -18,7 +17,8 @@
     <net.iGap.libs.bottomNavigation.BottomNavigation
         android:id="@+id/bn_main_bottomNavigation"
         android:layout_width="0dp"
-        android:layout_height="54dp"
+        android:layout_height="56dp"
+        app:background_color="?attr/iGapDividerLine"
         app:corner_radius="35"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/viewpager"
@@ -29,6 +29,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="center"
+            app:item_text="@string/contacts"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_contacts_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_contacts_off_darkmode"
             app:selected_icon="@drawable/ic_bottomnavigation_contact_on"
@@ -39,6 +41,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="center"
+            app:item_text="@string/all_calls"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_call_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_call_off_darkmode"
             app:selected_icon="@drawable/ic_bottomnavigation_call_on"
@@ -49,6 +53,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="center"
+            app:item_text="@string/chat"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_chat_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_chat_off_darkmode"
             app:selected_icon="@drawable/ic_bottomnavigation_chat_on"
@@ -59,6 +65,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="center"
+            app:item_text="@string/iland"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_discovery_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_discovery_off_darkmode"
             app:selected_icon="@drawable/ic_bottomnavigation_discovery_on"
@@ -69,6 +77,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="center"
+            app:item_text="@string/settings"
+            app:item_text_size="@dimen/dp10"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_setting_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_setting_off_darkmode"
             app:selected_icon="@drawable/ic_bottomnavigation_setting_on"

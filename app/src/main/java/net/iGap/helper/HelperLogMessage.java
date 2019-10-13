@@ -10,7 +10,7 @@
 
 package net.iGap.helper;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -22,6 +22,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.interfaces.OnChatGetRoom;
@@ -76,7 +77,7 @@ public class HelperLogMessage {
         return SerializationUtils.serialize(log);
     }
 
-    public static SpannableStringBuilder deserializeLog(byte[] logs, boolean withLink) {
+    public static SpannableStringBuilder deserializeLog(Context context, byte[] logs, boolean withLink) {
 
 
         if (logs == null) {
@@ -85,7 +86,7 @@ public class HelperLogMessage {
         try {
             StructMyLog log = (StructMyLog) SerializationUtils.deserialize(logs);
             if (log != null) {
-                return extractLog(log, withLink);
+                return extractLog(context, log, withLink);
             }
         } catch (Exception e) {
             HelperLog.setErrorLog(e);
@@ -95,13 +96,13 @@ public class HelperLogMessage {
         return new SpannableStringBuilder("");
     }
 
-    private static SpannableStringBuilder extractLog(StructMyLog log, boolean withLink) throws InvalidProtocolBufferException {
+    private static SpannableStringBuilder extractLog(Context context, StructMyLog log, boolean withLink) throws InvalidProtocolBufferException {
         try (Realm realm = Realm.getDefaultInstance()) {
             String authorName = getAuthorName(log, realm);
             String targetName = getTargetName(log, realm);
             String finalTypeRoom = getRoomTypeString(log, realm);
             String LogMessageTypeString = getLogTypeString(ProtoGlobal.RoomMessageLog.parseFrom(log.messageLog).getType(), ProtoGlobal.RoomMessage.Author.parseFrom(log.author));
-            return getLogMessage(authorName, targetName, finalTypeRoom, LogMessageTypeString, log, withLink);
+            return getLogMessage(context, authorName, targetName, finalTypeRoom, LogMessageTypeString, log, withLink);
         }
 
     }
@@ -225,7 +226,7 @@ public class HelperLogMessage {
         return "";
     }
 
-    private static SpannableStringBuilder getLogMessage(String authorName, String targetName, String finalTypeRoom, String LogMessageTypeString, StructMyLog log, boolean withLink) throws InvalidProtocolBufferException {
+    private static SpannableStringBuilder getLogMessage(Context context, String authorName, String targetName, String finalTypeRoom, String LogMessageTypeString, StructMyLog log, boolean withLink) throws InvalidProtocolBufferException {
 
 //        if (authorName == null || authorName.length() == 0) {
 //            return "";
@@ -253,9 +254,9 @@ public class HelperLogMessage {
         SpannableStringBuilder strBuilder = new SpannableStringBuilder();
 
         strBuilder.append("\u200E");
-        insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+        insertClickSpanLink(context, strBuilder, authorName, isAuthorUser, authorId);
         strBuilder.append(LogMessageTypeString);
-        insertClickSpanLink(strBuilder, targetName, true, targetId);
+        insertClickSpanLink(context, strBuilder, targetName, true, targetId);
 
         switch (ProtoGlobal.RoomMessageLog.parseFrom(log.messageLog).getType()) {
 
@@ -264,10 +265,10 @@ public class HelperLogMessage {
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.append(finalTypeRoom);
                     strBuilder.append(G.context.getString(R.string.prefix));
-                    insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+                    insertClickSpanLink(context, strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(LogMessageTypeString);
                 } else {
-                    insertClickSpanLink(strBuilder, targetName, true, targetId);
+                    insertClickSpanLink(context, strBuilder, targetName, true, targetId);
                     strBuilder.append(LogMessageTypeString);
                     strBuilder.append(finalTypeRoom);
                 }
@@ -277,9 +278,9 @@ public class HelperLogMessage {
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.clear();
                     strBuilder.append("\u200F");
-                    insertClickSpanLink(strBuilder, targetName, true, targetId);
+                    insertClickSpanLink(context, strBuilder, targetName, true, targetId);
                     strBuilder.append(G.context.getString(R.string.prefix));
-                    insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+                    insertClickSpanLink(context, strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(LogMessageTypeString);
                 }
                 break;
@@ -287,7 +288,7 @@ public class HelperLogMessage {
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.clear();
                     strBuilder.append("\u200F");
-                    insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+                    insertClickSpanLink(context, strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(finalTypeRoom);
                     strBuilder.append(LogMessageTypeString);
                 }
@@ -301,14 +302,14 @@ public class HelperLogMessage {
                 } else {
                     strBuilder.append(finalTypeRoom);
                     strBuilder.append(LogMessageTypeString);
-                    insertClickSpanLink(strBuilder, targetName, true, targetId);
+                    insertClickSpanLink(context, strBuilder, targetName, true, targetId);
                 }
                 break;
             case MEMBER_JOINED_BY_INVITE_LINK:
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.clear();
                     strBuilder.append("\u200F");
-                    insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+                    insertClickSpanLink(context, strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(LogMessageTypeString);
                     strBuilder.append(finalTypeRoom);
                     strBuilder.append(G.context.getString(R.string.MEMBER_ADDED));
@@ -319,7 +320,7 @@ public class HelperLogMessage {
                     strBuilder.clear();
                     strBuilder.append(finalTypeRoom);
                     strBuilder.append(G.context.getString(R.string.prefix));
-                    insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+                    insertClickSpanLink(context, strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(LogMessageTypeString);
                 }
                 break;
@@ -340,9 +341,9 @@ public class HelperLogMessage {
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.clear();
                     strBuilder.append("\u200F");
-                    insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+                    insertClickSpanLink(context, strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(LogMessageTypeString);
-                    insertClickSpanLink(strBuilder, targetName, true, targetId);
+                    insertClickSpanLink(context, strBuilder, targetName, true, targetId);
                 }
                 break;
             case UNRECOGNIZED:
@@ -365,7 +366,7 @@ public class HelperLogMessage {
     }
 
 
-    private static void insertClickSpanLink(SpannableStringBuilder strBuilder, String message, final boolean isUser, final long id) {
+    private static void insertClickSpanLink(Context context, SpannableStringBuilder strBuilder, String message, final boolean isUser, final long id) {
 
         if (message.length() == 0) {
             return;
@@ -392,12 +393,8 @@ public class HelperLogMessage {
 
                 @Override
                 public void updateDrawState(TextPaint ds) {
-                    if (G.isDarkTheme) {
-                        ds.linkColor = Color.parseColor(G.textTitleTheme);
-                    } else {
-                        ds.linkColor = Color.DKGRAY;
-                    }
-
+                    //ToDo: fixed it and pass color to this function
+                    ds.linkColor = new Theme().getLinkColor(context);
                     super.updateDrawState(ds);
                 }
             };

@@ -4,10 +4,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.api.errorhandler.ResponseCallback;
+import net.iGap.api.apiService.ResponseCallback;
 
-public abstract class BaseCPayViewModel<T> extends ViewModel implements ResponseCallback<T> {
+public abstract class BaseCPayViewModel<T> extends BaseAPIViewModel implements ResponseCallback<T> {
 
     private MutableLiveData<Integer> msgToUser = new MutableLiveData<>();
     private MutableLiveData<String> msgToUserString = new MutableLiveData<>();

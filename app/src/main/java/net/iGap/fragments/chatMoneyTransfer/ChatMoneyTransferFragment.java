@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -107,9 +108,6 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
         TextView userNameTvCard = rootView.findViewById(R.id.tv_cardToCard_userName);
         cancelBtnCard = rootView.findViewById(R.id.btn_cardToCard_cancel);
         Button confirmBtnCard = rootView.findViewById(R.id.btn_cardToCard_confirm);
-        TextView transferToTvCard = rootView.findViewById(R.id.tv_cardToCard_transferTo);
-        TextView amountTvCard = view.findViewById(R.id.tv_chat_card_amountText);
-        TextView cardNumberTvCard = view.findViewById(R.id.et_chat_card_cardNumberTv);
         TextView bankNameTv = view.findViewById(R.id.tv_chat_card_bankName);
         amountEtCard = view.findViewById(R.id.et_chat_card_cardamount);
         cardNumberEtCard = view.findViewById(R.id.et_chat_card_cardNumber);
@@ -121,19 +119,8 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
         userAvatarIvCard.setImageDrawable(drawable);
         userNameTvCard.setText(userName);
 
-        walletTransferIv.setTypeface(G.typeface_FonticonNew);
-        cardToCardIv.setTypeface(G.typeface_FonticonNew);
-
-        Utils.darkModeHandler(layoutContainer);
-        Utils.darkModeHandler(creditTv);
-        Utils.darkModeHandler(userNameTv);
-        Utils.darkModeHandler(transferToTv);
-        Utils.darkModeHandler(userNameTv);
-        Utils.darkModeHandler(cardToCardIv);
-        Utils.darkModeHandler(walletTransferIv);
-        Utils.darkModeHandler(rootView);
-
-        creditTv.setTextColor(Utils.darkModeHandler(getContext()));
+        walletTransferIv.setTypeface(ResourcesCompat.getFont(walletTransferIv.getContext() , R.font.font_icon));
+        cardToCardIv.setTypeface(ResourcesCompat.getFont(cardToCardIv.getContext() , R.font.font_icon));
 
         /**
          * because add fragment in other fragment can not use getFragmentManager
@@ -168,9 +155,9 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
                 }
             } else {
                 if (cardNumberEtCard.getText().toString().trim().length() <= 19) {
-                    Toast.makeText(getContext(), getContext().getResources().getString(R.string.cardtocard_cardnumber_error), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.cardtocard_cardnumber_error, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getContext(), getContext().getResources().getString(R.string.cardtocard_cartnumber_error), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.cardtocard_cartnumber_error, Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -190,17 +177,12 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() >= 7) {
-                    bankNameTv.setText(bankName(cardNumberEtCard.getText().toString().replace("-", "")));
+                    bankNameTv.setText(bankName(cardNumberEtCard.getEditableText().toString().replace("-", "")));
                 } else {
                     bankNameTv.setText("");
                 }
             }
         });
-
-        amountEtCard.setTextColor(Utils.darkModeHandler(getContext()));
-        cardNumberEtCard.setTextColor(Utils.darkModeHandler(getContext()));
-        descEtCard.setTextColor(Utils.darkModeHandler(getContext()));
-
     }
 
     @Override
@@ -282,17 +264,6 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
             fadeIn.setDuration(300);
             transferRootViewCard.setAnimation(fadeIn);
         });
-
-        TextView cardToCardTv = rootView.findViewById(R.id.tv_moneyAction_cardToCard);
-        TextView sendMoneyTv = rootView.findViewById(R.id.tv_moneyAction_money);
-
-        if (G.isDarkTheme) {
-            cardToCardTv.setTextColor(getResources().getColor(R.color.white));
-            sendMoneyTv.setTextColor(getResources().getColor(R.color.white));
-        } else {
-            cardToCardTv.setTextColor(getResources().getColor(R.color.black));
-            sendMoneyTv.setTextColor(getResources().getColor(R.color.black));
-        }
     }
 
     private void sendMoneyClicked() {
@@ -310,60 +281,56 @@ public class ChatMoneyTransferFragment extends BottomSheetDialogFragment {
 
     @Override
     public int getTheme() {
-        if (G.isDarkTheme) {
-            return R.style.CardToCardBottomSheetDialog;
-        } else {
-            return R.style.CardToCardBottomSheetDialogLight;
-        }
+        return R.style.CardToCardBottomSheetDialog;
     }
 
     private String bankName(String cardNumber) {
         if (cardNumber.startsWith("603799"))
-            return getContext().getResources().getString(R.string.bank_melli);
+            return getString(R.string.bank_melli);
         else if (cardNumber.startsWith("589210"))
-            return getContext().getResources().getString(R.string.bank_sepah);
+            return getString(R.string.bank_sepah);
         else if (cardNumber.startsWith("627648"))
-            return getContext().getResources().getString(R.string.bank_tosee_saderat);
+            return getString(R.string.bank_tosee_saderat);
         else if (cardNumber.startsWith("627961"))
-            return getContext().getResources().getString(R.string.bank_sanato_madan);
+            return getString(R.string.bank_sanato_madan);
         else if (cardNumber.startsWith("603770"))
-            return getContext().getResources().getString(R.string.bank_keshavarzi);
+            return getString(R.string.bank_keshavarzi);
         else if (cardNumber.startsWith("628023"))
-            return getContext().getResources().getString(R.string.bank_maskan);
+            return getString(R.string.bank_maskan);
         else if (cardNumber.startsWith("627760"))
-            return getContext().getResources().getString(R.string.bank_post_bank);
+            return getString(R.string.bank_post_bank);
         else if (cardNumber.startsWith("502908"))
-            return getContext().getResources().getString(R.string.bank_tosee_taavon);
+            return getString(R.string.bank_tosee_taavon);
         else if (cardNumber.startsWith("627412"))
-            return getContext().getResources().getString(R.string.bank_eghtesad_novin);
+            return getString(R.string.bank_eghtesad_novin);
         else if (cardNumber.startsWith("622106"))
-            return getContext().getResources().getString(R.string.bank_parsian);
+            return getString(R.string.bank_parsian);
         else if (cardNumber.startsWith("502229"))
-            return getContext().getResources().getString(R.string.bank_pasargad);
+            return getString(R.string.bank_pasargad);
         else if (cardNumber.startsWith("627488"))
-            return getContext().getResources().getString(R.string.bank_karafarin);
+            return getString(R.string.bank_karafarin);
         else if (cardNumber.startsWith("621986"))
-            return getContext().getResources().getString(R.string.bank_saman);
+            return getString(R.string.bank_saman);
         else if (cardNumber.startsWith("639346"))
-            return getContext().getResources().getString(R.string.bank_sina);
+            return getString(R.string.bank_sina);
         else if (cardNumber.startsWith("639607"))
-            return getContext().getResources().getString(R.string.bank_sarmayeh);
+            return getString(R.string.bank_sarmayeh);
         else if (cardNumber.startsWith("502806"))
-            return getContext().getResources().getString(R.string.bank_shahr);
+            return getString(R.string.bank_shahr);
         else if (cardNumber.startsWith("502938"))
-            return getContext().getResources().getString(R.string.bank_dey);
+            return getString(R.string.bank_dey);
         else if (cardNumber.startsWith("603769"))
-            return getContext().getResources().getString(R.string.bank_saderat);
+            return getString(R.string.bank_saderat);
         else if (cardNumber.startsWith("610433"))
-            return getContext().getResources().getString(R.string.bank_mellat);
+            return getString(R.string.bank_mellat);
         else if (cardNumber.startsWith("627353"))
-            return getContext().getResources().getString(R.string.bank_tejarat);
+            return getString(R.string.bank_tejarat);
         else if (cardNumber.startsWith("585983"))
-            return getContext().getResources().getString(R.string.bank_tejarat);
+            return getString(R.string.bank_tejarat);
         else if (cardNumber.startsWith("627381"))
-            return getContext().getResources().getString(R.string.bank_ansar);
+            return getString(R.string.bank_ansar);
         else if (cardNumber.startsWith("639370"))
-            return getContext().getResources().getString(R.string.bank_mehr_eghtesad);
+            return getString(R.string.bank_mehr_eghtesad);
         else
             return "";
     }

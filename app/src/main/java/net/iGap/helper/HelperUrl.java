@@ -42,6 +42,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityEnhanced;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.dialog.BottomSheetItemClickCallback;
@@ -55,12 +56,14 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnClientCheckInviteLink;
+import net.iGap.interfaces.OnClientGetRoomResponse;
 import net.iGap.interfaces.OnClientJoinByInviteLink;
 import net.iGap.interfaces.OnClientResolveUsername;
 import net.iGap.libs.Tuple;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructMessageOption;
+import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoClientResolveUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -70,6 +73,7 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientCheckInviteLink;
+import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestClientGetRoomHistory;
 import net.iGap.request.RequestClientJoinByInviteLink;
 import net.iGap.request.RequestClientResolveUsername;
@@ -86,6 +90,7 @@ import io.realm.Realm;
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
+import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
@@ -117,7 +122,7 @@ public class HelperUrl {
 
         if (withAtSign) strBuilder = analaysAtSign(activity, strBuilder);
 
-        if (withHash) strBuilder = analaysHash(strBuilder, messageID);
+        if (withHash) strBuilder = analaysHash(activity, strBuilder, messageID);
 
         String newText = text.toLowerCase();
 
@@ -132,7 +137,7 @@ public class HelperUrl {
             } else if (str.contains(igapResolve)) {
                 insertIgapResolveLink(activity, strBuilder, count, count + str.length());
             } else if (isTextLink(str)) {
-                insertLinkSpan(strBuilder, count, count + str.length(), withClickable);
+                insertLinkSpan(activity, strBuilder, count, count + str.length(), withClickable);
             }
             count += str.length() + 1;
         }
@@ -159,7 +164,7 @@ public class HelperUrl {
         return false;
     }
 
-    private static boolean isTextLink(String text) {
+    public static boolean isTextLink(String text) {
         Pattern p = Pattern.compile("((http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.([a-zA-Z0-9\\&\\.\\/\\?\\:@\\-_=#])*");
         Matcher m = p.matcher(text);
         if (m.find()) {
@@ -198,7 +203,7 @@ public class HelperUrl {
         return false;
     }
 
-    private static void insertLinkSpan(final SpannableStringBuilder strBuilder, final int start, final int end, final boolean withclickable) {
+    private static void insertLinkSpan(Context context, SpannableStringBuilder strBuilder, final int start, final int end, final boolean withclickable) {
 
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
@@ -218,7 +223,7 @@ public class HelperUrl {
 
                     G.isLinkClicked = true;
                     boolean openLocalWebPage;
-                    SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+                    SharedPreferences sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
 
                     int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
 
@@ -239,13 +244,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-//                if (G.isDarkTheme) {
-//                    ds.linkColor = LinkColorDark;
-//                } else {
-//                    ds.linkColor = LinkColor;
-//                }
-                ds.linkColor = Color.parseColor(G.linkColor);
-
+                ds.linkColor = new Theme().getLinkColor(context);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -288,9 +287,10 @@ public class HelperUrl {
     }
 
     public static void openBrowser(String url) {
+        //todo: fixed it and do not user G.currentActivity
         final CustomTabsHelperFragment mCustomTabsHelperFragment = CustomTabsHelperFragment.attachTo(G.currentActivity);
 
-        int mColorPrimary = Color.parseColor(G.appBarColor);
+        int mColorPrimary = new Theme().getAccentColor(G.currentActivity);
         final Uri PROJECT_URI = Uri.parse(url);
 
         CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(mColorPrimary).setShowTitle(true).build();
@@ -347,14 +347,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-//                if (G.isDarkTheme) {
-//                    ds.linkColor = LinkColorDark;
-//                } else {
-//                    ds.linkColor = LinkColor;
-//                }
-
-                ds.linkColor = Color.parseColor(G.linkColor);
-
+                ds.linkColor = new Theme().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -363,7 +356,7 @@ public class HelperUrl {
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    private static void insertIgapBot(final SpannableStringBuilder strBuilder, final int start, final int end) {
+    private static void insertIgapBot(Context context, SpannableStringBuilder strBuilder, final int start, final int end) {
 
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
@@ -377,7 +370,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Color.parseColor(G.linkColor);
+                ds.linkColor = new Theme().getLinkColor(context);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -416,12 +409,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-//                if (G.isDarkTheme) {
-//                    ds.linkColor = LinkColorDark;
-//                } else {
-//                    ds.linkColor = LinkColor;
-//                }
-                ds.linkColor = Color.parseColor(G.linkColor);
+                ds.linkColor = new Theme().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -441,7 +429,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Color.parseColor(G.linkColor);
+                ds.linkColor = new Theme().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -484,7 +472,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                ds.linkColor = Color.parseColor(G.linkColor);
+                ds.linkColor = new Theme().getLinkColor(activity);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -493,7 +481,7 @@ public class HelperUrl {
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    private static SpannableStringBuilder analaysHash(SpannableStringBuilder builder, String messageID) {
+    private static SpannableStringBuilder analaysHash(Context context, SpannableStringBuilder builder, String messageID) {
 
         if (builder == null) return builder;
 
@@ -520,7 +508,7 @@ public class HelperUrl {
             if (isHash) {
                 if (!(s.matches("\\w") || s.equals("-"))) {
                     if (tmp.length() > 0) {
-                        insertHashLink(tmp, builder, start, messageID);
+                        insertHashLink(context, tmp, builder, start, messageID);
                     }
 
                     tmp = "";
@@ -532,13 +520,13 @@ public class HelperUrl {
         }
 
         if (isHash) {
-            if (tmp.length() > 0) insertHashLink(tmp, builder, start, messageID);
+            if (tmp.length() > 0) insertHashLink(context, tmp, builder, start, messageID);
         }
 
         return builder;
     }
 
-    private static void insertHashLink(final String text, SpannableStringBuilder builder, int start, final String messageID) {
+    private static void insertHashLink(Context context, String text, SpannableStringBuilder builder, int start, final String messageID) {
 
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
@@ -551,12 +539,8 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-//                if (G.isDarkTheme) {
-//                    ds.linkColor = LinkColorDark;
-//                } else {
-//                    ds.linkColor = LinkColor;
-//                }
-                ds.linkColor = Color.parseColor(G.linkColor);
+                //ToDo: fixed it and pass color to this function
+                ds.linkColor = new Theme().getLinkColor(context);
 
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
@@ -629,12 +613,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-//                if (G.isDarkTheme) {
-//                    ds.linkColor = LinkColorDark;
-//                } else {
-//                    ds.linkColor = LinkColor;
-//                }
-                ds.linkColor = Color.parseColor(G.linkColor);
+                ds.linkColor = new Theme().getLinkColor(activity);
 
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
@@ -668,7 +647,7 @@ public class HelperUrl {
                 try {
                     switch (type) {
                         case "hash":
-                            insertHashLink(text.substring(start + 1, end), strBuilder, start, messageID);
+                            insertHashLink(activity, text.substring(start + 1, end), strBuilder, start, messageID);
                             break;
                         case "atSighn":
                             insertAtSignLink(activity, text.substring(start + 1, end), strBuilder, start);
@@ -680,10 +659,10 @@ public class HelperUrl {
                             insertIgapResolveLink(activity, strBuilder, start, end);
                             break;
                         case "bot":
-                            insertIgapBot(strBuilder, start, end);
+                            insertIgapBot(activity, strBuilder, start, end);
                             break;
                         case "webLink":
-                            insertLinkSpan(strBuilder, start, end, true);
+                            insertLinkSpan(activity, strBuilder, start, end, true);
                             break;
                         case "digitLink":
                             insertDigitLink(activity, strBuilder, start, end);
@@ -1174,6 +1153,89 @@ public class HelperUrl {
         }
     }
 
+    public static void goToActivityFromFCM(FragmentActivity activity, final long roomId, final long peerId) {
+
+        if (roomId != FragmentChat.lastChatRoomId) {
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+
+                        if (realmRoom != null) {
+                            // room with given roomID exists.
+                            new GoToChatActivity(realmRoom.getId()).startActivity(activity);
+                        }
+                        else if (peerId > 0){
+                            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+                            if (realmRoom != null) {
+                                new GoToChatActivity(realmRoom.getId()).startActivity(activity);
+                            }
+                            else {
+                                G.onChatGetRoom = new OnChatGetRoom() {
+                                    @Override
+                                    public void onChatGetRoom(final ProtoGlobal.Room room) {
+                                        try (Realm realm1 = Realm.getDefaultInstance()) {
+                                            realm1.executeTransaction(new Realm.Transaction() {
+                                                @Override
+                                                public void execute(Realm realm) {
+                                                    if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
+                                                        RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
+                                                        realmRoom1.setDeleted(true);
+                                                    } else {
+                                                        RealmRoom.putOrUpdate(room, realm);
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        G.handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity(activity);
+                                                G.onChatGetRoom = null;
+                                            }
+                                        }, 500);
+                                    }
+
+                                    @Override
+                                    public void onChatGetRoomTimeOut() {
+
+                                    }
+
+                                    @Override
+                                    public void onChatGetRoomError(int majorCode, int minorCode) {
+
+                                    }
+                                };
+                                new RequestChatGetRoom().chatGetRoom(peerId);
+                            }
+                        }
+                        else {
+                            G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
+                                @Override
+                                public void onClientGetRoomResponse(ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, RequestClientGetRoom.IdentityClientGetRoom identity) {
+                                    G.onClientGetRoomResponse = null;
+                                    G.handler.postDelayed(() -> {
+                                        new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity(activity);
+                                        G.onChatGetRoom = null;
+                                    }, 500);
+                                }
+
+                                @Override
+                                public void onError(int majorCode, int minorCode) {
+
+                                }
+
+                                @Override
+                                public void onTimeOut() {
+
+                                }
+                            };
+                            new RequestClientGetRoom().clientGetRoom(roomId, null);
+                            Toast.makeText(activity, "Please Wait...", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
+    }
+
     private static void goToChat(FragmentActivity activity, final ProtoGlobal.RegisteredUser user, final ChatEntry chatEntery, long messageId) {
         long id = user.getId();
         try (Realm realm = Realm.getDefaultInstance()) {
@@ -1313,8 +1375,7 @@ public class HelperUrl {
         });
     }
 
-    public static void getLinkinfo(Intent intent, FragmentActivity activity) {
-
+    public static void getLinkInfo(Intent intent, FragmentActivity activity) {
         String action = intent.getAction();
 
         if (action == null || intent.getData() == null) return;
@@ -1388,7 +1449,7 @@ public class HelperUrl {
                                 activity.startActivity(intent);
                             } else if (items.get(position).equals(activity.getString(R.string.add_to_contact))) {
                                 FragmentAddContact fragment = FragmentAddContact.newInstance(
-                                        text , FragmentAddContact.ContactMode.ADD
+                                        text, FragmentAddContact.ContactMode.ADD
                                 );
                                 new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
                             } else if (items.get(position).equals(activity.getString(R.string.verify_register_sms))) {
@@ -1410,6 +1471,41 @@ public class HelperUrl {
 
     }
 
+    public static void openLinkDialog(FragmentActivity fa , String mUrl){
+        String url = mUrl ;
+        if (!url.startsWith("https://") && !url.startsWith("http://")) {
+            url = "http://" + mUrl;
+        }
+        String finalUrl = url;
+
+        List<String> items = new ArrayList<>();
+        items.add(fa.getString(R.string.copy_item_dialog));
+        items.add(fa.getString(R.string.open_url));
+
+        new BottomSheetFragment().setTitle(url).setData(items, -1, new BottomSheetItemClickCallback() {
+            @Override
+            public void onClick(int position) {
+                if (items.get(position).equals(fa.getString(R.string.copy_item_dialog))) {
+
+                    ClipboardManager clipboard = (ClipboardManager) fa.getSystemService(CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("Copied Url", finalUrl);
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(fa, R.string.url_copied, Toast.LENGTH_SHORT).show();
+
+                } else if (items.get(position).equals(fa.getString(R.string.open_url))) {
+
+                    SharedPreferences sharedPreferences = fa.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
+                    if (sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1) == 1&& !HelperUrl.isNeedOpenWithoutBrowser(finalUrl)) {
+                        HelperUrl.openBrowser(finalUrl); //internal chrome
+                    } else {
+                        HelperUrl.openWithoutBrowser(finalUrl);//external intent
+                    }
+
+                }
+            }
+        }).show(fa.getSupportFragmentManager(), "bottom sheet");
+    }
 
     //************************************  go to room by urlLink   *********************************************************************
 

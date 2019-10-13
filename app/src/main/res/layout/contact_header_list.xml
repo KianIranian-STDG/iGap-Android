@@ -5,7 +5,7 @@
 
     <net.iGap.module.CustomTextViewMedium
         android:id="@+id/contact_header_txt"
-        fontPath="fonts/IRANSansMobile_Bold.ttf"
+        android:fontFamily="@font/main_font_bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp10"

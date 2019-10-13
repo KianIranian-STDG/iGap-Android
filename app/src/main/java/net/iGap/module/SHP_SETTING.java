@@ -200,6 +200,8 @@ public class SHP_SETTING {
     public static final String EXCEED_CONTACTS_DIALOG = "EXCEED_CONTACTS_DIALOG";
     public static final String EXCEED_CONTACTS_CHUNK = "EXCEED_CONTACTS_CHUNK";
     public static final String EXCEED_CONTACTS_NUMBER = "EXCEED_CONTACTS_NUMBER";
+    public static final String REGISTER_NUMBER = "REGISTER_USER_NUMBER";
+    public static final String REGISTER_USERNAME = "REGISTER_USERNAME";
 
 }
 

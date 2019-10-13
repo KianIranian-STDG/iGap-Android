@@ -10,12 +10,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layoutDirection="locale"
-        tools:context=".fragments.cPay.FragmentCPay">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/fsp_toolbar"
@@ -29,7 +26,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_add_car"
-            style="?iGapButton"
+            style="@style/iGapButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp20"
@@ -42,56 +39,55 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_add_car_"
-            style="?iGapButtonStroke"
+            style="@style/iGapButtonStroke"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp20"
             android:layout_marginTop="@dimen/dp20"
+            android:layout_marginRight="@dimen/dp20"
             android:onClick="@{()-> viewModel.onAddCarClick()}"
             android:text="@string/add_car"
-            android:layout_marginRight="@dimen/dp20"
-            android:layout_marginLeft="@dimen/dp20"
+            app:layout_constraintBottom_toTopOf="@id/btn_inquiry"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/btn_inquiry" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_inquiry"
-            style="?iGapButton"
+            style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
+            android:layout_marginEnd="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp10"
             android:layout_marginBottom="@dimen/dp32"
             android:onClick="@{()-> viewModel.onInquiryClick()}"
             android:text="@string/inquiry"
-            android:layout_marginEnd="@dimen/dp10"
-            android:layout_marginRight="@dimen/dp10"
-            app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_charge"
+            app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="@id/btn_add_car_" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_charge"
-            style="?iGapButton"
+            style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp10"
+            android:layout_marginLeft="@dimen/dp10"
             android:onClick="@{()-> viewModel.onChargeClicked()}"
             android:text="@string/charge"
-            android:layout_marginLeft="@dimen/dp10"
-            android:layout_marginStart="@dimen/dp10"
-            app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintEnd_toEndOf="@id/btn_add_car_"
+            app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toEndOf="@id/btn_inquiry"
             app:layout_constraintTop_toTopOf="@id/btn_inquiry" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_no_car"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp40"
-            android:fontFamily="@font/main_font"
             android:text="@string/there_is_no_car_available"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -99,11 +95,11 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/lbl_plaques"
-            style="?textSubColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp20"
             android:text="@string/cars_plaque"
+            android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -115,10 +111,10 @@
             android:layout_height="0dp"
             android:layout_marginLeft="@dimen/dp20"
             android:layout_marginTop="@dimen/dp10"
-            android:layout_marginBottom="@dimen/dp16"
             android:layout_marginRight="@dimen/dp20"
-            android:scrollbars="vertical"
+            android:layout_marginBottom="@dimen/dp16"
             android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbars="vertical"
             app:layout_constraintBottom_toTopOf="@id/btn_add_car_"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -129,10 +125,10 @@
             style="@style/myIconTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{()-> viewModel.onRetryClicked()}"
             android:text="@string/retry_icon"
             android:textSize="@dimen/dp32"
             android:visibility="gone"
-            android:onClick="@{()-> viewModel.onRetryClicked()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

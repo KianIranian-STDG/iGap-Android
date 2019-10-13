@@ -85,16 +85,18 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
 
     @Override
     public int getTheme() {
-        if (G.isDarkTheme) {
-            return R.style.BaseBottomSheetDialog;
-        } else {
-            return R.style.BaseBottomSheetDialogLight;
-        }
+        return R.style.BaseBottomSheetDialog;
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new BottomSheetDialog(requireContext(), getTheme());
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        //No call for super(). Bug on API Level > 11.
+//        super.onSaveInstanceState(outState);
     }
 }

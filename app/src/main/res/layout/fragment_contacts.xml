@@ -2,11 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/menu_parent_layout"
-    style="?backgroundColorSettingTheme"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true"
-    android:layoutDirection="locale">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/frg_contact_ll_toolbar_layout"
@@ -46,13 +44,12 @@
 
         <TextView
             android:id="@+id/fc_selected_mode_txt_counter"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/fc_selected_mode_btn_cancel"
             android:layout_toRightOf="@id/fc_selected_mode_btn_cancel"
-            android:fontFamily="@font/main_font"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -94,7 +91,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/inviteFriendsTitle"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp10"
@@ -104,6 +100,7 @@
         android:singleLine="true"
         android:text="@string/Invite_Friends"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toEndOf="@id/menu_layout_inviteFriend"
         app:layout_constraintStart_toEndOf="@id/inviteFriendsIcon"
@@ -134,7 +131,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/newChannelTitle"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp10"
@@ -144,6 +140,7 @@
         android:singleLine="true"
         android:text="@string/new_channel"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toEndOf="@id/menu_layout_add_new_channel"
         app:layout_constraintStart_toEndOf="@id/newChannelIcon"
@@ -174,7 +171,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/newGroupTitle"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp10"
@@ -184,6 +180,7 @@
         android:singleLine="true"
         android:text="@string/new_group"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toEndOf="@id/menu_layout_add_new_group"
         app:layout_constraintStart_toEndOf="@id/newGroupIcon"
@@ -215,7 +212,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/secretChatTitle"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp10"
@@ -224,7 +220,7 @@
         android:padding="@dimen/dp10"
         android:singleLine="true"
         android:text="@string/secret_chat"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toEndOf="@id/menu_layout_btn_secret_chat"
         app:layout_constraintStart_toEndOf="@id/secretChatIcon"
@@ -256,7 +252,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/newGroupCallTitle"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp10"
@@ -265,6 +260,7 @@
         android:padding="@dimen/dp10"
         android:singleLine="true"
         android:text="@string/new_group_call"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toEndOf="@id/menu_layout_new_group_call"
         app:layout_constraintStart_toEndOf="@id/newGroupCallIcon"
@@ -296,7 +292,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/addContactTitle"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp10"
@@ -305,6 +300,7 @@
         android:padding="@dimen/dp10"
         android:singleLine="true"
         android:text="@string/menu_add_contact"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toEndOf="@id/menu_layout_add_new_contact"
         app:layout_constraintStart_toEndOf="@id/addContactIcon"
@@ -337,7 +333,6 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/dialNumberTitle"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp10"
@@ -346,6 +341,7 @@
         android:padding="@dimen/dp10"
         android:singleLine="true"
         android:text="@string/dial_number"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintEnd_toEndOf="@id/menu_layout_btn_dial_number"
         app:layout_constraintStart_toEndOf="@id/dialNumberIcon"
@@ -366,26 +362,24 @@
 
     <View
         android:id="@+id/divider"
-        style="?lineColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginLeft="@dimen/dp10"
         android:layout_marginTop="@dimen/dp10"
         android:layout_marginRight="@dimen/dp10"
+        android:background="?iGapDividerLine"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/menu_layout_btn_dial_number" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clipToPadding="false"
         android:paddingLeft="@dimen/dp8"
         android:paddingRight="@dimen/dp8"
         android:paddingBottom="@dimen/dp20"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -393,13 +387,13 @@
 
     <ProgressBar
         android:id="@+id/fc_loader_main"
-        android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/recycler_view"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/recycler_view"
+        app:layout_constraintEnd_toEndOf="@id/recycler_view"
         app:layout_constraintStart_toStartOf="@id/recycler_view"
-        app:layout_constraintEnd_toEndOf="@id/recycler_view" />
+        app:layout_constraintTop_toTopOf="@id/recycler_view" />
 
     <net.iGap.module.FastScroller
         android:id="@+id/fs_contact_fastScroller"

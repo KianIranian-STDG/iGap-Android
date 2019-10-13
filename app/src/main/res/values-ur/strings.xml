@@ -561,7 +561,7 @@
     <string name = "times">کاتەکان</string>
     <string name = "info">زانیاری</string>
     <string name = "description">ڕوونکردنەوەکان</string>
-    <string name = "type_message">نووسینی پەیام</string>
+    <string name = "type_message">پەیام...</string>
     <string name = "place">شوێن</string>
     <string name = "minutes">خولەکەکان</string>
     <string name = "channel_link">پەیوەندی کەناڵ</string>
@@ -1065,6 +1065,7 @@
     <string name = "verify_user">بەکاربەری پشتڕاستکراوە</string>
     <string name = "save_data_in_sd_card">خەزنکردنی زانیاری لە کارتی لاوەکیدا</string>
     <string name = "are_you_sure">دڵنیایت؟</string>
+    <string name = "are_you_sure_request">دڵنیایت؟</string>
     <string name = "change_storage_place">گۆڕینی شوێنی خەزنکردن</string>
     <string name = "other_files">فایلەکانی تر</string>
     <string name = "title_import_contact_limit">هۆشدار: خەریکی ئەپلۆدکردنی لیستەی بەردەنگەکان</string>

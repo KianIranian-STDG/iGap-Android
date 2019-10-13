@@ -49,15 +49,16 @@ import com.google.android.gms.security.ProviderInstaller;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.vanniktech.emoji.sticker.struct.StructSticker;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.dialog.SubmitScoreDialog;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentChat;
@@ -67,7 +68,6 @@ import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
-import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.GoToChatActivity;
@@ -122,7 +122,6 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.realm.RealmStickers;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.realm.RealmWallpaper;
 import net.iGap.realm.RealmWallpaperFields;
@@ -133,7 +132,6 @@ import net.iGap.request.RequestWalletGetAccessToken;
 import net.iGap.request.RequestWalletIdMapping;
 import net.iGap.viewmodel.FragmentIVandProfileViewModel;
 
-import org.jetbrains.annotations.NotNull;
 import org.paygear.RaadApp;
 import org.paygear.fragment.PaymentHistoryFragment;
 
@@ -143,9 +141,6 @@ import java.util.List;
 
 import io.realm.Realm;
 import ir.pec.mpl.pecpayment.view.PaymentInitiator;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
@@ -373,12 +368,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             long roomId = extras.getLong(ActivityMain.openChat);
             if (!FragmentLanguage.languageChanged && roomId > 0) { // if language changed not need check enter to chat
-                GoToChatActivity goToChatActivity = new GoToChatActivity(roomId);
+//                GoToChatActivity goToChatActivity = new GoToChatActivity(roomId);
+                // TODO this change is duo to room null bug. if it works server must change routine.
                 long peerId = extras.getLong("PeerID");
-                if (peerId > 0) {
-                    goToChatActivity.setPeerID(peerId);
-                }
-                goToChatActivity.startActivity(this);
+                new HelperUrl().goToActivityFromFCM(this, roomId, peerId);
+//                if (peerId > 0) {
+//                    goToChatActivity.setPeerID(peerId);
+//                }
+//                goToChatActivity.startActivity(this);
             }
             FragmentLanguage.languageChanged = false;
 
@@ -646,11 +643,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             boolean isDefaultBg = sharedPreferences.getBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
             if (isDefaultBg) {
-                if (G.isDarkTheme) {
-                    sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
-                } else {
-                    getWallpaperAsDefault();
-                }
+                sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
             }
 
         } else {
@@ -750,7 +743,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         };
     }
 
-    private void getWallpaperAsDefault() {
+    /*private void getWallpaperAsDefault() {
         try {
             RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
             if (realmWallpaper != null) {
@@ -791,9 +784,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             e3.printStackTrace();
         }
 
-    }
+    }*/
 
-    private void setDefaultBackground(String bigImagePath) {
+    /*private void setDefaultBackground(String bigImagePath) {
         String finalPath = "";
         try {
             finalPath = HelperSaveFile.saveInPrivateDirectory(this, bigImagePath);
@@ -804,9 +797,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, finalPath);
         editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
         editor.apply();
-    }
+    }*/
 
-    private void getImageListFromServer() {
+    /*private void getImageListFromServer() {
         Log.e("wallpaper", "request in main ");
         G.onGetWallpaper = new OnGetWallpaper() {
             @Override
@@ -823,7 +816,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         };
 
         new RequestInfoWallpaper().infoWallpaper(ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND);
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1069,11 +1062,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void checkGoogleUpdate() {
-        if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
-            Log.wtf(this.getClass().getName(), "installIfNeeded");
-            ProviderInstaller.installIfNeededAsync(this, this);
-            Log.wtf(this.getClass().getName(), "installIfNeeded");
-        }
+        Log.wtf(this.getClass().getName(), "installIfNeeded");
+        ProviderInstaller.installIfNeededAsync(this, this);
+        Log.wtf(this.getClass().getName(), "installIfNeeded");
     }
 
     //*******************************************************************************************************************************************
@@ -1338,10 +1329,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
                     }
                 }
-            } else {
+            }
+            else {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                     if (!(getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment)) {
-                        super.onBackPressed();
+                        List fragmentList = getSupportFragmentManager().getFragments();
+                        boolean handled = false;
+                        try {
+                            // because some of our fragments are NOT extended from BaseFragment
+                            handled = ((BaseFragment) fragmentList.get(fragmentList.size() - 1)).onBackPressed();
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (!handled) {
+                            super.onBackPressed();
+                        }
                     }
                 } else {
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
@@ -1354,7 +1357,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 }
             }
-        } else {
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -1418,10 +1422,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 Intent intentTemp = new Intent();
                 intentTemp.putExtra(DEEP_LINK, data.getQuery());
                 handleDeepLink(intentTemp);
+            } else {
+                HelperUrl.getLinkInfo(intent, ActivityMain.this);
             }
-        } else {
-            HelperUrl.getLinkinfo(intent, ActivityMain.this);
         }
+
         getIntent().setData(null);
 
         //ActivityMain.setMediaLayout();

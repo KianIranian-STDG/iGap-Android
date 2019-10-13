@@ -4,7 +4,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
 
-import net.iGap.G;
+import androidx.core.content.res.ResourcesCompat;
+
+import net.iGap.R;
+import net.iGap.R;
 
 public class FontIconTextView extends androidx.appcompat.widget.AppCompatTextView {
     public FontIconTextView(Context context) {
@@ -23,7 +26,7 @@ public class FontIconTextView extends androidx.appcompat.widget.AppCompatTextVie
     }
 
     private void init() {
-        setTypeface(G.typeface_FonticonNew);
+        setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icon));
         setGravity(Gravity.CENTER);
     }
 }
