@@ -94,6 +94,7 @@ import com.google.gson.JsonSyntaxException;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+import com.squareup.picasso.Picasso;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
@@ -2345,7 +2346,8 @@ public class FragmentChat extends BaseFragment
                 }
             }
         } else {
-            imgBackGround.setImageResource(R.drawable.chat_default_background_pattern);
+            Picasso.get().load(R.drawable.chat_default_background_pattern).fit().centerCrop().into(imgBackGround);
+            /*imgBackGround.setImageResource(R.drawable.chat_default_background_pattern);*/
         }
 
     }
