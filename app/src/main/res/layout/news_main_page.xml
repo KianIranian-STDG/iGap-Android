@@ -1,6 +1,5 @@
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Container"
         android:layout_width="match_parent"
@@ -10,7 +9,7 @@
         <!-- TODO clean min height-->
 
         <LinearLayout
-            android:id="@+id/toolbar"
+            android:id="@+id/Toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -29,7 +28,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            app:layout_constraintTop_toBottomOf="@+id/Toolbar">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,14 +52,12 @@
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rcGroup"
-                    android:paddingLeft="@dimen/dp4"
-                    android:paddingRight="@dimen/dp4"
-                    android:paddingBottom="@dimen/dp4"
-                    android:paddingTop="@dimen/dp14"
+                    android:id="@+id/rcMain"
+                    android:paddingBottom="@dimen/dp8"
+                    android:paddingTop="@dimen/dp4"
                     android:clipToPadding="false"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
             </LinearLayout>
 

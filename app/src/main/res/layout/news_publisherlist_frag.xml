@@ -1,6 +1,7 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Container"
         android:layout_width="match_parent"
@@ -60,11 +61,12 @@
                     android:paddingTop="@dimen/dp14"
                     android:clipToPadding="false"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
             </LinearLayout>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
         <ProgressBar
             android:id="@+id/ProgressV"

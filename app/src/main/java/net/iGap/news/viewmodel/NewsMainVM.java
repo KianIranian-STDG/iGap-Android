@@ -2,40 +2,42 @@ package net.iGap.news.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.news.repository.MainRepo;
 import net.iGap.news.repository.model.NewsError;
-import net.iGap.news.repository.model.NewsGroup;
+import net.iGap.news.repository.model.NewsFirstPage;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class NewsGroupListVM extends BaseAPIViewModel {
+public class NewsMainVM extends BaseAPIViewModel {
 
-    private MutableLiveData<NewsGroup> mGroups;
+    private MutableLiveData<List<NewsFirstPage>> mainList;
+    private List<NewsFirstPage> temp;
     private MutableLiveData<NewsError> error;
     private MutableLiveData<Boolean> progressState;
     private MainRepo repo;
 
-    public NewsGroupListVM() {
-        mGroups = new MutableLiveData<>();
+    public NewsMainVM() {
+        mainList = new MutableLiveData<>();
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
         repo = new MainRepo();
+        temp = new ArrayList<>();
     }
 
-    public void getData() {
-        repo.getNewsGroups(this, new ResponseCallback<NewsGroup>() {
+    public void getNews() {
+        repo.getMainPage(this, new ResponseCallback<List<NewsFirstPage>>() {
             @Override
-            public void onSuccess(NewsGroup data) {
-                mGroups.setValue(data);
+            public void onSuccess(List<NewsFirstPage> data) {
+                mainList.setValue(data);
             }
 
             @Override
-            public void onError(ErrorModel errorM) {
-                error.setValue(new NewsError(true, "", "", R.string.news_serverError));
+            public void onError(ErrorModel error) {
+
             }
 
             @Override
@@ -45,19 +47,12 @@ public class NewsGroupListVM extends BaseAPIViewModel {
         });
     }
 
-    private NewsGroup addFakeData() {
-        NewsGroup temp = new NewsGroup();
-        temp.setGroups(new ArrayList<>());
-        temp.getGroups().addAll(temp.getFake());
-        return temp;
+    public MutableLiveData<List<NewsFirstPage>> getMainList() {
+        return mainList;
     }
 
-    public MutableLiveData<NewsGroup> getmGroups() {
-        return mGroups;
-    }
-
-    public void setmGroups(MutableLiveData<NewsGroup> mGroups) {
-        this.mGroups = mGroups;
+    public void setMainList(MutableLiveData<List<NewsFirstPage>> mainList) {
+        this.mainList = mainList;
     }
 
     public MutableLiveData<NewsError> getError() {

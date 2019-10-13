@@ -229,14 +229,14 @@ dependencies {
     }
     implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
     implementation 'com.github.KianIranian-STDG:MessageProgress:1.0.1'
-    releaseImplementation 'com.github.KianIranian-STDG:Proto:protoMain14'
-    release_IranImplementation 'com.github.KianIranian-STDG:Proto:protoMain14'
-    release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protoMain14'
-    release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain14'
-    release_CharImplementation 'com.github.KianIranian-STDG:Proto:protoMain14'
-    release_GooglePlayImplementation 'com.github.KianIranian-STDG:Proto:protoMain14'
-    release_BazaarImplementation 'com.github.KianIranian-STDG:Proto:protoMain14'
-    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta14'
+    releaseImplementation 'com.github.KianIranian-STDG:Proto:protoMain15'
+    release_IranImplementation 'com.github.KianIranian-STDG:Proto:protoMain15'
+    release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protoMain15'
+    release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain15'
+    release_CharImplementation 'com.github.KianIranian-STDG:Proto:protoMain15'
+    release_GooglePlayImplementation 'com.github.KianIranian-STDG:Proto:protoMain15'
+    release_BazaarImplementation 'com.github.KianIranian-STDG:Proto:protoMain15'
+    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta15'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1' // don't upgrade this lib to version 4
@@ -270,6 +270,7 @@ dependencies {
     implementation 'com.github.stellar:java-stellar-sdk:0.9.0'
 //  this lib is used for MPL
     implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.github.smarteist:autoimageslider:1.3.2'
 }
 
 configurations.all {

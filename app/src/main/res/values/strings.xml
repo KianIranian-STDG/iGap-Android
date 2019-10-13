@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Check connect to internet Page introduce app -->
     <string name="text_i_introduce_page1">i</string>
     <string name="text_line_1_introduce_page1">Gap</string>
@@ -2260,4 +2260,41 @@ Want to get it?</string>
     <string name="url_copied">Link Copied</string>
     <string name="message_is_long">رسالتك طويلة جدًا. \n سيتم إخفاء الرسالة</string>
 
+    <!--<string name="news_latest">Latest</string>
+    <string name="news_MHits">Most-Watched</string>
+    <string name="news_ergent">Most_Read</string>
+    <string name="news_emptyList">There is no item to show. \n Pull down to refresh.</string>
+    <string name="news_mainTitle">IGap News</string>
+    <string name="news_serverError">Something went wrong. Please try again.</string>
+    <string name="news_groupTitle">News Group</string>
+    <string name="news_share">Share this news with your friends.</string>
+    <string name="news_comment">Comments</string>
+    <string name="news_write_comment">Write comment</string>
+    <string name="news_related_news">Related News</string>-->
+
+    <string name="news_MHits" tools:ignore="ExtraTranslation">پربازدیدترین</string>
+    <string name="news_comment" tools:ignore="ExtraTranslation">نظرات</string>
+    <string name="news_emptyList" tools:ignore="ExtraTranslation">هیچ موردی برای نمایش موجود نیست. \n برای بارگزاری مجدد صفحه را به سمت پایین بکشید.</string>
+    <string name="news_ergent" tools:ignore="ExtraTranslation">پربحث ترین</string>
+    <string name="news_groupTitle" tools:ignore="ExtraTranslation">گروه های خبری</string>
+    <string name="news_latest" tools:ignore="ExtraTranslation">آخرین خبرها</string>
+    <string name="news_mainTitle" tools:ignore="ExtraTranslation">اخبار آیگپ</string>
+    <string name="news_related_news" tools:ignore="ExtraTranslation">اخبار مرتبط</string>
+    <string name="news_share" tools:ignore="ExtraTranslation">اشتراک گذاری خبر</string>
+    <string name="news_write_comment" tools:ignore="ExtraTranslation">نظر شما چیست؟</string>
+    <string name="news_no_comment" tools:ignore="ExtraTranslation">هیچ نظری ثبت نشده است.</string>
+    <string name="news_serverError" tools:ignore="ExtraTranslation">Something went wrong. Please try again.</string>
+    <string name="news_add_comment_title" tools:ignore="ExtraTranslation">ثبت نظر</string>
+    <string name="news_add_comment_author" tools:ignore="ExtraTranslation">نام</string>
+    <string name="news_add_comment_email" tools:ignore="ExtraTranslation">ایمیل</string>
+    <string name="news_add_comment_comment" tools:ignore="ExtraTranslation">دیدگاه شما</string>
+    <string name="news_add_comment_submit" tools:ignore="ExtraTranslation">ثبت</string>
+    <string name="news_add_comment_load" tools:ignore="ExtraTranslation">در حال ارسال</string>
+    <string name="news_add_comment_success" tools:ignore="ExtraTranslation">ثبت شد.</string>
+    <string name="news_add_comment_fail" tools:ignore="ExtraTranslation">خطا!</string>
+    <string name="news_add_comment_successToast" tools:ignore="ExtraTranslation">نظر شما با موفقیت ثبت شد.</string>
+    <string name="news_add_comment_errorAuthor" tools:ignore="ExtraTranslation">لطفا نام خود را وارد کنید.</string>
+    <string name="news_add_comment_errorEmail" tools:ignore="ExtraTranslation">لطفا ایمیل خود را وارد کنید.</string>
+    <string name="news_add_comment_errorEmail2" tools:ignore="ExtraTranslation">فرمت ایمیل وارد شده صحیح نیست.</string>
+    <string name="news_add_comment_errorComment" tools:ignore="ExtraTranslation">لطفا نظر خود را وارد کنید.</string>
 </resources>

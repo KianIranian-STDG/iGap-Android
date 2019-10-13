@@ -9,9 +9,6 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,37 +17,36 @@ import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
-import net.iGap.databinding.NewsGrouplistFragBinding;
-import net.iGap.helper.HelperFragment;
+import net.iGap.databinding.NewsPublisherlistFragBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.news.repository.model.NewsGroup;
-import net.iGap.news.view.Adapter.NewsGroupAdapter;
-import net.iGap.news.viewmodel.NewsGroupListVM;
+import net.iGap.news.repository.model.NewsPublisher;
+import net.iGap.news.view.Adapter.NewsPublisherAdapter;
+import net.iGap.news.viewmodel.NewsPublisherListVM;
 
-import java.util.Objects;
+import java.util.List;
 
-public class NewsGroupListFrag extends BaseAPIViewFrag {
+public class NewsPublisherListFrag extends BaseAPIViewFrag {
 
-    private NewsGrouplistFragBinding binding;
-    private NewsGroupListVM newsVM;
+    private NewsPublisherlistFragBinding binding;
+    private NewsPublisherListVM newsVM;
 
 
-    public static NewsGroupListFrag newInstance() {
-        return new NewsGroupListFrag();
+    public static NewsPublisherListFrag newInstance() {
+        return new NewsPublisherListFrag();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        newsVM = ViewModelProviders.of(this).get(NewsGroupListVM.class);
+        newsVM = ViewModelProviders.of(this).get(NewsPublisherListVM.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.news_grouplist_frag, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.news_publisherlist_frag, container, false);
 //        binding.setViewmodel(newsVM);
         binding.setLifecycleOwner(this);
         this.viewModel = newsVM;
@@ -74,21 +70,20 @@ public class NewsGroupListFrag extends BaseAPIViewFrag {
                         popBackStackFragment();
                     }
                 })
-                .setDefaultTitle(getResources().getString(R.string.news_groupTitle))
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.toolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        binding.rcGroup.setHasFixedSize(true);
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        binding.rcGroup.setLayoutManager(layoutManager);
-
         binding.pullToRefresh.setOnRefreshListener(() -> {
             newsVM.getData();
             binding.noItemInListError.setVisibility(View.GONE);
         });
+
+        binding.rcGroup.setHasFixedSize(true);
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        binding.rcGroup.setLayoutManager(layoutManager);
 
         newsVM.getData();
         onErrorObserver();
@@ -115,26 +110,11 @@ public class NewsGroupListFrag extends BaseAPIViewFrag {
     }
 
     private void onDataChanged() {
-        newsVM.getmGroups().observe(getViewLifecycleOwner(), this::initMainRecycler);
+        newsVM.getmData().observe(getViewLifecycleOwner(), this::initMainRecycler);
     }
 
-    private void initMainRecycler(NewsGroup data) {
-        NewsGroupAdapter adapter = new NewsGroupAdapter(data);
-        adapter.setCallBack(news -> {
-            FragmentManager fragmentManager = getChildFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            Fragment fragment = fragmentManager.findFragmentByTag(NewsGroupPagerFrag.class.getName());
-                if (fragment == null) {
-                    fragment = NewsGroupPagerFrag.newInstance();
-                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                }
-            Bundle args = new Bundle();
-            args.putString("GroupID", news.getId());
-            args.putString("GroupTitle", news.getTitle());
-            args.putString("GroupPic", news.getImage());
-            fragment.setArguments(args);
-            new HelperFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), fragment).setReplace(false).load();
-        });
+    private void initMainRecycler(List<NewsPublisher> data) {
+        NewsPublisherAdapter adapter = new NewsPublisherAdapter(data);
         binding.rcGroup.setAdapter(adapter);
     }
 

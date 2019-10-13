@@ -7,30 +7,32 @@ import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.news.repository.MainRepo;
+import net.iGap.news.repository.model.NewsApiArg;
 import net.iGap.news.repository.model.NewsError;
-import net.iGap.news.repository.model.NewsGroup;
+import net.iGap.news.repository.model.NewsList;
 
 import java.util.ArrayList;
 
-public class NewsGroupListVM extends BaseAPIViewModel {
+public class NewsListVM extends BaseAPIViewModel {
 
-    private MutableLiveData<NewsGroup> mGroups;
+    private MutableLiveData<NewsList> mData;
     private MutableLiveData<NewsError> error;
     private MutableLiveData<Boolean> progressState;
     private MainRepo repo;
+    private NewsApiArg apiArg;
 
-    public NewsGroupListVM() {
-        mGroups = new MutableLiveData<>();
+    public NewsListVM() {
+        mData = new MutableLiveData<>();
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
         repo = new MainRepo();
     }
 
-    public void getData() {
-        repo.getNewsGroups(this, new ResponseCallback<NewsGroup>() {
+    public void getData(NewsApiArg arg) {
+        repo.getNewsList(arg, this, new ResponseCallback<NewsList>() {
             @Override
-            public void onSuccess(NewsGroup data) {
-                mGroups.setValue(data);
+            public void onSuccess(NewsList data) {
+                mData.setValue(data);
             }
 
             @Override
@@ -45,19 +47,27 @@ public class NewsGroupListVM extends BaseAPIViewModel {
         });
     }
 
-    private NewsGroup addFakeData() {
-        NewsGroup temp = new NewsGroup();
-        temp.setGroups(new ArrayList<>());
-        temp.getGroups().addAll(temp.getFake());
+    private NewsList addFakeData() {
+        NewsList temp = new NewsList();
+        temp.setNews(new ArrayList<>());
+        temp.getNews().addAll(temp.getFake());
         return temp;
     }
 
-    public MutableLiveData<NewsGroup> getmGroups() {
-        return mGroups;
+    public MutableLiveData<NewsList> getmData() {
+        return mData;
     }
 
-    public void setmGroups(MutableLiveData<NewsGroup> mGroups) {
-        this.mGroups = mGroups;
+    public void setmData(MutableLiveData<NewsList> mData) {
+        this.mData = mData;
+    }
+
+    public NewsApiArg getApiArg() {
+        return apiArg;
+    }
+
+    public void setApiArg(NewsApiArg apiArg) {
+        this.apiArg = apiArg;
     }
 
     public MutableLiveData<NewsError> getError() {

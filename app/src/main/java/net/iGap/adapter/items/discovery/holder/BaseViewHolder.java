@@ -59,6 +59,7 @@ import net.iGap.interfaces.OnGetPermission;
 import net.iGap.internetpackage.BuyInternetPackageFragment;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.news.view.NewsMainFrag;
 import net.iGap.payment.PaymentCallBack;
 import net.iGap.payment.PaymentResult;
 import net.iGap.realm.RealmUserInfo;
@@ -172,6 +173,16 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case PHONE_BILL_MENU:/** tested **/
                 new HelperFragment(activity.getSupportFragmentManager(), new FragmentPaymentInquiryTelephone()).setReplace(false).load();
+                /*NewsMainFrag frag = new NewsMainFrag();
+                if (!discoveryField.value.equals(""))
+                    frag.setSpecificNewsID(discoveryField.value);
+                new HelperFragment(activity.getSupportFragmentManager(), frag).setReplace(false).load();*/
+                break;
+            case NEWS:
+                NewsMainFrag frag = new NewsMainFrag();
+                if (!discoveryField.value.equals(""))
+                    frag.setSpecificNewsID(discoveryField.value);
+                new HelperFragment(activity.getSupportFragmentManager(), frag).setReplace(false).load();
                 break;
             case MOBILE_BILL_MENU:/** tested **/
                 new HelperFragment(activity.getSupportFragmentManager(), new FragmentPaymentInquiryMobile()).setReplace(false).load();

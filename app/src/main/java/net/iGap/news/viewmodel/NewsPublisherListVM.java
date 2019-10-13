@@ -8,29 +8,29 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.news.repository.MainRepo;
 import net.iGap.news.repository.model.NewsError;
-import net.iGap.news.repository.model.NewsGroup;
+import net.iGap.news.repository.model.NewsPublisher;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class NewsGroupListVM extends BaseAPIViewModel {
+public class NewsPublisherListVM extends BaseAPIViewModel {
 
-    private MutableLiveData<NewsGroup> mGroups;
+    private MutableLiveData<List<NewsPublisher>> mData;
     private MutableLiveData<NewsError> error;
     private MutableLiveData<Boolean> progressState;
     private MainRepo repo;
 
-    public NewsGroupListVM() {
-        mGroups = new MutableLiveData<>();
+    public NewsPublisherListVM() {
+        mData = new MutableLiveData<>();
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
         repo = new MainRepo();
     }
 
     public void getData() {
-        repo.getNewsGroups(this, new ResponseCallback<NewsGroup>() {
+        repo.getNewsPublishers(0, 50, this, new ResponseCallback<List<NewsPublisher>>() {
             @Override
-            public void onSuccess(NewsGroup data) {
-                mGroups.setValue(data);
+            public void onSuccess(List<NewsPublisher> data) {
+                mData.setValue(data);
             }
 
             @Override
@@ -45,19 +45,12 @@ public class NewsGroupListVM extends BaseAPIViewModel {
         });
     }
 
-    private NewsGroup addFakeData() {
-        NewsGroup temp = new NewsGroup();
-        temp.setGroups(new ArrayList<>());
-        temp.getGroups().addAll(temp.getFake());
-        return temp;
+    public MutableLiveData<List<NewsPublisher>> getmData() {
+        return mData;
     }
 
-    public MutableLiveData<NewsGroup> getmGroups() {
-        return mGroups;
-    }
-
-    public void setmGroups(MutableLiveData<NewsGroup> mGroups) {
-        this.mGroups = mGroups;
+    public void setmData(MutableLiveData<List<NewsPublisher>> mData) {
+        this.mData = mData;
     }
 
     public MutableLiveData<NewsError> getError() {
