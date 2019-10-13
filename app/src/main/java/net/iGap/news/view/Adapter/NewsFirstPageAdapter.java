@@ -1,11 +1,14 @@
 package net.iGap.news.view.Adapter;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -155,6 +158,18 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter{
             btn1.setText(mData.get(position).getmBtns().get(0).getTitle());
             btn2.setText(mData.get(position).getmBtns().get(1).getTitle());
 
+            Drawable buttonDrawable = btn1.getBackground();
+            buttonDrawable = DrawableCompat.wrap(buttonDrawable);
+            //the color is a direct color int and not a color resource
+            DrawableCompat.setTint(buttonDrawable, Color.parseColor(mData.get(position).getmBtns().get(0).getColor()));
+            btn1.setBackground(buttonDrawable);
+
+            Drawable buttonDrawable2 = btn2.getBackground();
+            buttonDrawable2 = DrawableCompat.wrap(buttonDrawable2);
+            //the color is a direct color int and not a color resource
+            DrawableCompat.setTint(buttonDrawable2, Color.parseColor(mData.get(position).getmBtns().get(1).getColor()));
+            btn2.setBackground(buttonDrawable2);
+
             btn1.setOnClickListener(v -> callBack.onButtonClick(mData.get(position).getmBtns().get(0)));
             btn2.setOnClickListener(v -> callBack.onButtonClick(mData.get(position).getmBtns().get(1)));
         }
@@ -172,6 +187,13 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter{
 
         void initSingleBTN(int position) {
             btn1.setText(mData.get(position).getmBtns().get(0).getTitle());
+
+            Drawable buttonDrawable = btn1.getBackground();
+            buttonDrawable = DrawableCompat.wrap(buttonDrawable);
+            //the color is a direct color int and not a color resource
+            DrawableCompat.setTint(buttonDrawable, Color.parseColor(mData.get(position).getmBtns().get(0).getColor()));
+            btn1.setBackground(buttonDrawable);
+
             btn1.setOnClickListener(v -> callBack.onButtonClick(mData.get(position).getmBtns().get(0)));
         }
 

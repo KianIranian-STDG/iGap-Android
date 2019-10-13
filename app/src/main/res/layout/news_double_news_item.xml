@@ -28,7 +28,6 @@
             android:layout_height="match_parent">
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
                 android:id="@+id/category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -58,7 +57,6 @@
                 app:layout_constraintLeft_toRightOf="@+id/source"/>
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
                 android:id="@+id/source"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,6 +67,7 @@
                 android:gravity="center|right"
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginRight="@dimen/dp8"
+                android:textColor="?attr/iGapTitleTextColor"
                 app:layout_constraintRight_toLeftOf="@+id/category"
                 app:layout_constraintTop_toTopOf="parent"/>
 
@@ -89,7 +88,6 @@
                 app:layout_constraintBottom_toTopOf="@+id/rootTitle"/>
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
                 android:id="@+id/rootTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -103,13 +101,13 @@
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginRight="@dimen/dp8"
                 android:layout_marginLeft="@dimen/dp8"
+                android:textColor="?attr/iGapTitleTextColor"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/image"
                 app:layout_constraintBottom_toTopOf="@+id/title"/>
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -158,7 +156,6 @@
             android:layout_height="match_parent">
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
                 android:id="@+id/category1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -188,7 +185,6 @@
                 app:layout_constraintLeft_toRightOf="@+id/source1"/>
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
                 android:id="@+id/source1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -199,6 +195,7 @@
                 android:gravity="center|right"
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginRight="@dimen/dp8"
+                android:textColor="?attr/iGapTitleTextColor"
                 app:layout_constraintRight_toLeftOf="@+id/category1"
                 app:layout_constraintTop_toTopOf="parent"/>
 
@@ -219,7 +216,6 @@
                 app:layout_constraintBottom_toTopOf="@+id/rootTitle1"/>
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
                 android:id="@+id/rootTitle1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -233,13 +229,13 @@
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginRight="@dimen/dp8"
                 android:layout_marginLeft="@dimen/dp8"
+                android:textColor="?attr/iGapTitleTextColor"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/image1"
                 app:layout_constraintBottom_toTopOf="@+id/title1"/>
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
                 android:id="@+id/title1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

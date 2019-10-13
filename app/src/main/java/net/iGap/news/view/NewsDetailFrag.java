@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,13 +24,11 @@ import com.smarteist.autoimageslider.SliderAnimations;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsDetailPageBinding;
-import net.iGap.dialog.payment.CompleteListener;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.news.repository.model.NewsComment;
 import net.iGap.news.repository.model.NewsDetail;
 import net.iGap.news.repository.model.NewsList;
@@ -40,7 +37,7 @@ import net.iGap.news.view.Adapter.NewsDetailRelatedCardsAdapter;
 import net.iGap.news.view.Adapter.NewsDetailSliderAdapter;
 import net.iGap.news.viewmodel.NewsDetailVM;
 
-public class NewsDetailFrag extends BaseFragment {
+public class NewsDetailFrag extends BaseAPIViewFrag {
 
     private NewsDetailPageBinding binding;
     private NewsDetailVM newsMainVM;
@@ -62,6 +59,7 @@ public class NewsDetailFrag extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.news_detail_page, container, false);
         binding.setViewmodel(newsMainVM);
         binding.setLifecycleOwner(this);
+        this.viewModel = newsMainVM;
 
         return attachToSwipeBack(binding.getRoot());
     }
@@ -86,7 +84,6 @@ public class NewsDetailFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.Toolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         binding.shareNews.setOnClickListener(v -> Toast.makeText(getContext(), "share", Toast.LENGTH_SHORT).show());
@@ -99,7 +96,7 @@ public class NewsDetailFrag extends BaseFragment {
 
         binding.shareNewsBTN.setOnClickListener(v -> {
             Intent sendIntent = new Intent(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, newsMainVM.getData().getValue().getTitle() + "\n" + newsMainVM.getData().getValue().getLead() + "\n" + "تاریخ انتشار: " + newsMainVM.getData().getValue().getDate() + "\n" + "لینک: " + newsMainVM.getData().getValue().getLink());
+            sendIntent.putExtra(Intent.EXTRA_TEXT, newsMainVM.getData().getValue().getTitle() + "\n" + newsMainVM.getData().getValue().getLead() + "\n" + "تاریخ انتشار: " + newsMainVM.getData().getValue().getDate() + "\n" + "قدرت گرفته از آیگپ" + "\n" + "این خبر را در آیگپ بخوانید: " + "igap://discovery/38" + "\n" + "لینک خبر: " + newsMainVM.getData().getValue().getLink());
             sendIntent.setType("text/plain");
             startActivity(Intent.createChooser(sendIntent, "Share via"));
         });
@@ -107,13 +104,13 @@ public class NewsDetailFrag extends BaseFragment {
         binding.writeComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    NewsAddCommentBottomSheetFrag bottomSheetFragment = new NewsAddCommentBottomSheetFrag().setData(arg.getString("NewsID"), new CompleteListener() {
-                        @Override
-                        public void onCompleted() {
-                            Toast.makeText(getContext(), R.string.news_add_comment_successToast, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    bottomSheetFragment.show(getFragmentManager(), "AddCommentBottomSheet");
+                NewsAddCommentBottomSheetFrag bottomSheetFragment = new NewsAddCommentBottomSheetFrag().setData(arg.getString("NewsID"), new NewsAddCommentBottomSheetFrag.CompleteListener() {
+                            @Override
+                            public void onCompleted() {
+                                Toast.makeText(getContext(), R.string.news_add_comment_successToast, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                bottomSheetFragment.show(getFragmentManager(), "AddCommentBottomSheet");
             }
         });
 

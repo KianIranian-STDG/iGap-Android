@@ -19,19 +19,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsGrouplistFragBinding;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.news.repository.model.NewsGroup;
 import net.iGap.news.view.Adapter.NewsGroupAdapter;
 import net.iGap.news.viewmodel.NewsGroupListVM;
 
 import java.util.Objects;
 
-public class NewsGroupListFrag extends BaseFragment {
+public class NewsGroupListFrag extends BaseAPIViewFrag {
 
     private NewsGrouplistFragBinding binding;
     private NewsGroupListVM newsVM;
@@ -54,6 +53,7 @@ public class NewsGroupListFrag extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.news_grouplist_frag, container, false);
 //        binding.setViewmodel(newsVM);
         binding.setLifecycleOwner(this);
+        this.viewModel = newsVM;
 
         return binding.getRoot();
     }
@@ -78,7 +78,6 @@ public class NewsGroupListFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.toolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         binding.rcGroup.setHasFixedSize(true);

@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.news.repository.model.NewsList;
 
 import java.util.ArrayList;
@@ -160,7 +161,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         private void setColor() {
-            if (G.isDarkTheme) {
+            if (G.themeColor == Theme.DARK) {
                 changeToDark();
                 return;
             }

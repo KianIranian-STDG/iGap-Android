@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.news.repository.model.NewsFPList;
 import net.iGap.news.repository.model.NewsFirstPage;
 
@@ -152,7 +153,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         private void changeToNormal() {
-            if (G.isDarkTheme) {
+            if (G.themeColor == Theme.DARK) {
                 changeToNormalDark();
                 return;
             }
@@ -217,7 +218,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
             else {
                 // Red
-                changeToRed(mData.getmNews().get(position*2).getNews().get(0).getColor());
+                changeToRed(0, mData.getmNews().get(position*2).getNews().get(0).getColor());
             }
 
             if ((position*2+1) >= mData.getmNews().size())
@@ -239,24 +240,27 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
             else {
                 // Red
-                changeToRed(mData.getmNews().get(position*2+1).getNews().get(0).getColor());
+                changeToRed(1, mData.getmNews().get(position*2+1).getNews().get(0).getColor());
             }
         }
 
-        private void changeToRed(String color) {
-            category.setTextColor(Color.WHITE);
-            source.setTextColor(Color.WHITE);
-            title.setTextColor(Color.WHITE);
-            container.setCardBackgroundColor(Color.parseColor(color));
-
-            category1.setTextColor(Color.WHITE);
-            source1.setTextColor(Color.WHITE);
-            title1.setTextColor(Color.WHITE);
-            container1.setCardBackgroundColor(Color.parseColor(color));
+        private void changeToRed(int cell, String color) {
+            if (cell == 0) {
+                category.setTextColor(Color.WHITE);
+                source.setTextColor(Color.WHITE);
+                title.setTextColor(Color.WHITE);
+                container.setCardBackgroundColor(Color.parseColor(color));
+            }
+            else {
+                category1.setTextColor(Color.WHITE);
+                source1.setTextColor(Color.WHITE);
+                title1.setTextColor(Color.WHITE);
+                container1.setCardBackgroundColor(Color.parseColor(color));
+            }
         }
 
         private void changeToNormal() {
-            if (G.isDarkTheme) {
+            if (G.themeColor == Theme.DARK) {
                 changeToNormalDark();
                 return;
             }
@@ -330,7 +334,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
             else {
                 // Red
-                changeToRed(mData.getmNews().get(position*3).getNews().get(0).getColor());
+                changeToRed(0, mData.getmNews().get(position*3).getNews().get(0).getColor());
             }
 
             if (position*3+1>mData.getmNews().size())
@@ -349,7 +353,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
             else {
                 // Red
-                changeToRed(mData.getmNews().get(position*3+1).getNews().get(0).getColor());
+                changeToRed(1, mData.getmNews().get(position*3+1).getNews().get(0).getColor());
             }
 
             if (position*3+2>mData.getmNews().size())
@@ -368,22 +372,26 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
             else {
                 // Red
-                changeToRed(mData.getmNews().get(position*3+2).getNews().get(0).getColor());
+                changeToRed(2, mData.getmNews().get(position*3+2).getNews().get(0).getColor());
             }
         }
-        private void changeToRed(String color) {
-            category.setTextColor(Color.WHITE);
-            container.setCardBackgroundColor(Color.parseColor(color));
-
-            category1.setTextColor(Color.WHITE);
-            container1.setCardBackgroundColor(Color.parseColor(color));
-
-            category2.setTextColor(Color.WHITE);
-            container2.setCardBackgroundColor(Color.parseColor(color));
+        private void changeToRed(int cell, String color) {
+            if (cell == 0) {
+                category.setTextColor(Color.WHITE);
+                container.setCardBackgroundColor(Color.parseColor(color));
+            }
+            else if (cell == 1) {
+                category1.setTextColor(Color.WHITE);
+                container1.setCardBackgroundColor(Color.parseColor(color));
+            }
+            else {
+                category2.setTextColor(Color.WHITE);
+                container2.setCardBackgroundColor(Color.parseColor(color));
+            }
         }
 
         private void changeToNormal() {
-            if (G.isDarkTheme) {
+            if (G.themeColor == Theme.DARK) {
                 changeToNormalDark();
                 return;
             }

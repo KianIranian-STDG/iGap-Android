@@ -1,22 +1,16 @@
 package net.iGap.news.viewmodel;
 
-import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
-import net.iGap.kuknos.service.model.ErrorM;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.news.repository.DetailRepo;
-import net.iGap.news.repository.model.NewsComment;
 import net.iGap.news.repository.model.NewsDetail;
-import net.iGap.news.repository.model.NewsError;
-import net.iGap.news.repository.model.NewsList;
 
-public class NewsAddCommentVM extends ViewModel {
+public class NewsAddCommentVM extends BaseAPIViewModel {
 
     private MutableLiveData<Boolean> complete = new MutableLiveData<>();
 
@@ -80,22 +74,17 @@ public class NewsAddCommentVM extends ViewModel {
 
     private void sendData() {
         progress.set(R.string.news_add_comment_load);
-        repo.postNewsComment(newsID, comment.get(), author.get(), email.get(), new ApiResponse<NewsDetail>() {
+        repo.postNewsComment(newsID, comment.get(), author.get(), email.get(), this, new ResponseCallback<NewsDetail>() {
             @Override
-            public void onResponse(NewsDetail newsDetail) {
+            public void onSuccess(NewsDetail data) {
                 progress.set(R.string.news_add_comment_success);
                 complete.setValue(true);
             }
 
             @Override
-            public void onFailed(String error) {
+            public void onError(ErrorModel error) {
                 progress.set(R.string.news_add_comment_fail);
                 complete.setValue(false);
-            }
-
-            @Override
-            public void setProgressIndicator(boolean visibility) {
-
             }
         });
     }

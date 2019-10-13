@@ -1,17 +1,18 @@
 package net.iGap.news.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.news.repository.MainRepo;
 import net.iGap.news.repository.model.NewsError;
 import net.iGap.news.repository.model.NewsGroup;
 
 import java.util.ArrayList;
 
-public class NewsGroupListVM extends ViewModel {
+public class NewsGroupListVM extends BaseAPIViewModel {
 
     private MutableLiveData<NewsGroup> mGroups;
     private MutableLiveData<NewsError> error;
@@ -26,16 +27,15 @@ public class NewsGroupListVM extends ViewModel {
     }
 
     public void getData() {
-        repo.getNewsGroups(new ApiResponse<NewsGroup>() {
+        repo.getNewsGroups(this, new ResponseCallback<NewsGroup>() {
             @Override
-            public void onResponse(NewsGroup newsGroup) {
-                mGroups.setValue(newsGroup);
+            public void onSuccess(NewsGroup data) {
+                mGroups.setValue(data);
             }
 
             @Override
-            public void onFailed(String errorM) {
-                mGroups.setValue(addFakeData());
-//                error.setValue(new NewsError(true, "", "", R.string.news_serverError));
+            public void onError(ErrorModel errorM) {
+                error.setValue(new NewsError(true, "", "", R.string.news_serverError));
             }
 
             @Override

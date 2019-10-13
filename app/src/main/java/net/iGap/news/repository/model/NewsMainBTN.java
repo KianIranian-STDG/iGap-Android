@@ -35,6 +35,8 @@ public class NewsMainBTN {
     }
 
     public String getColor() {
+        if (!color.startsWith("#"))
+            color = "#" + color;
         return color;
     }
 
@@ -43,6 +45,8 @@ public class NewsMainBTN {
     }
 
     public String getLink() {
+        if (!link.startsWith("http"))
+            link = "http:\\" + link;
         return link;
     }
 

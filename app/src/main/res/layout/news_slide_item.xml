@@ -19,7 +19,6 @@
         app:layout_constraintBottom_toTopOf="@+id/sliderTitle"/>
 
     <androidx.appcompat.widget.AppCompatTextView
-        style="?textTitleColorSettingTheme"
         android:id="@+id/sliderTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,7 +39,6 @@
         app:layout_constraintBottom_toTopOf="@+id/sliderDesc"/>
 
     <androidx.appcompat.widget.AppCompatTextView
-        style="?textTitleColorSettingTheme"
         android:id="@+id/sliderDesc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,6 +53,7 @@
         android:layout_marginLeft="@dimen/dp16"
         android:layout_marginTop="@dimen/dp8"
         android:layout_marginBottom="@dimen/dp8"
+        android:textColor="?attr/iGapTitleTextColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

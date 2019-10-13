@@ -1,6 +1,5 @@
 package net.iGap.news.view.Adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +51,6 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         void initView(int position) {
-            Log.d("amini", "initView: ");
             author.setText(mData.getComments().get(position).getAuthor());
             comment.setText(mData.getComments().get(position).getBody());
         }

@@ -1,7 +1,6 @@
 package net.iGap.news.view;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsListFragBinding;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.news.repository.model.NewsApiArg;
 import net.iGap.news.repository.model.NewsList;
@@ -26,7 +25,7 @@ import net.iGap.news.view.Adapter.NewsListAdapter;
 import net.iGap.news.view.Adapter.PaginationScrollListener;
 import net.iGap.news.viewmodel.NewsListVM;
 
-public class NewsListFrag extends BaseFragment {
+public class NewsListFrag extends BaseAPIViewFrag {
 
     private NewsListFragBinding binding;
     private NewsListVM newsVM;
@@ -55,6 +54,7 @@ public class NewsListFrag extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.news_list_frag, container, false);
 //        binding.setViewmodel(newsVM);
         binding.setLifecycleOwner(this);
+        this.viewModel = newsVM;
 
         return binding.getRoot();
     }

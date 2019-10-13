@@ -2,17 +2,18 @@ package net.iGap.news.viewmodel;
 
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.api.apiService.ApiResponse;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.news.repository.DetailRepo;
 import net.iGap.news.repository.model.NewsComment;
 import net.iGap.news.repository.model.NewsDetail;
 import net.iGap.news.repository.model.NewsError;
 import net.iGap.news.repository.model.NewsList;
 
-public class NewsDetailVM extends ViewModel {
+public class NewsDetailVM extends BaseAPIViewModel {
 
     private MutableLiveData<NewsDetail> data;
     private MutableLiveData<NewsComment> comments;
@@ -54,9 +55,9 @@ public class NewsDetailVM extends ViewModel {
 
     public void getDataFromServer(String newsID) {
         this.newsID = Integer.parseInt(newsID);
-        repo.getNewsDetail(this.newsID, new ApiResponse<NewsDetail>() {
+        repo.getNewsDetail(this.newsID, this, new ResponseCallback<NewsDetail>() {
             @Override
-            public void onResponse(NewsDetail newsDetail) {
+            public void onSuccess(NewsDetail newsDetail) {
                 data.setValue(newsDetail);
                 title.set(newsDetail.getLead());
                 rootTitle.set(newsDetail.getTitle());
@@ -71,8 +72,8 @@ public class NewsDetailVM extends ViewModel {
             }
 
             @Override
-            public void onFailed(String errorM) {
-                error.setValue(new NewsError(true, "", "", R.string.news_serverError));
+            public void onError(ErrorModel errorM) {
+                error.setValue(new NewsError(true, "", errorM.getMessage(), R.string.news_serverError));
             }
 
             @Override
@@ -83,17 +84,15 @@ public class NewsDetailVM extends ViewModel {
     }
 
     private void getNewsComment() {
-        repo.getNewsComment(newsID, 1, 3, new ApiResponse<NewsComment>() {
+        repo.getNewsComment(newsID, 1, 3, this, new ResponseCallback<NewsComment>() {
             @Override
-            public void onResponse(NewsComment newsComment) {
-                comments.setValue(newsComment);
+            public void onSuccess(NewsComment data) {
+                comments.setValue(data);
             }
 
             @Override
-            public void onFailed(String error) {
-                NewsComment temp = new NewsComment();
-                temp.setComments(temp.getFakeData());
-                comments.setValue(temp);
+            public void onError(ErrorModel error) {
+
             }
 
             @Override
@@ -104,14 +103,14 @@ public class NewsDetailVM extends ViewModel {
     }
 
     private void getRelatedNewsS() {
-        repo.getRelatedNews(newsID, new ApiResponse<NewsList>() {
+        repo.getRelatedNews(newsID, this, new ResponseCallback<NewsList>() {
             @Override
-            public void onResponse(NewsList newsList) {
-                relatedNews.setValue(newsList);
+            public void onSuccess(NewsList data) {
+                relatedNews.setValue(data);
             }
 
             @Override
-            public void onFailed(String error) {
+            public void onError(ErrorModel error) {
                 relatedNews.setValue(null);
             }
 

@@ -16,18 +16,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsPublisherlistFragBinding;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.news.repository.model.NewsPublisher;
 import net.iGap.news.view.Adapter.NewsPublisherAdapter;
 import net.iGap.news.viewmodel.NewsPublisherListVM;
 
 import java.util.List;
 
-public class NewsPublisherListFrag extends BaseFragment {
+public class NewsPublisherListFrag extends BaseAPIViewFrag {
 
     private NewsPublisherlistFragBinding binding;
     private NewsPublisherListVM newsVM;
@@ -50,6 +49,7 @@ public class NewsPublisherListFrag extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.news_publisherlist_frag, container, false);
 //        binding.setViewmodel(newsVM);
         binding.setLifecycleOwner(this);
+        this.viewModel = newsVM;
 
         return binding.getRoot();
     }
@@ -73,7 +73,6 @@ public class NewsPublisherListFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.toolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         binding.pullToRefresh.setOnRefreshListener(() -> {

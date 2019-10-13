@@ -6,6 +6,7 @@
     <data>
 
         <import type="net.iGap.G" />
+        <import type="net.iGap.Theme" />
 
     </data>
 
@@ -31,7 +32,7 @@
             app:layout_constraintDimensionRatio="3:1"
             app:cardCornerRadius="6dp"
             app:cardUseCompatPadding="true"
-            app:cardBackgroundColor="@{G.isDarkTheme ? @color/chat_item_receive_dark : @color/kuknos_WH_itembg}">
+            app:cardBackgroundColor="@{G.themeColor == Theme.DARK ? @color/chat_item_receive_dark : @color/kuknos_WH_itembg}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -54,7 +55,6 @@
                     app:layout_constraintWidth_percent="0.3"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -86,7 +86,6 @@
 
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/source"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -103,7 +102,6 @@
                     app:layout_constraintVertical_chainStyle="spread"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -113,13 +111,13 @@
                     android:justificationMode="inter_word"
                     android:gravity="center"
                     android:layout_marginLeft="@dimen/dp8"
+                    android:textColor="?attr/iGapTitleTextColor"
                     app:layout_constraintTop_toTopOf="@+id/source"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintVertical_chainStyle="packed"/>
 
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/rootTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -132,13 +130,13 @@
                     android:gravity="center|right"
                     android:layout_marginTop="@dimen/dp8"
                     android:layout_marginLeft="@dimen/dp8"
+                    android:textColor="?attr/iGapTitleTextColor"
                     app:layout_constraintRight_toRightOf="@+id/source"
                     app:layout_constraintTop_toBottomOf="@+id/source"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintBottom_toTopOf="@+id/title"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

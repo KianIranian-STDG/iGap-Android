@@ -16,10 +16,8 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.NewsAddAccountBottomSheetDialogBinding;
-import net.iGap.dialog.payment.CompleteListener;
 import net.iGap.news.viewmodel.NewsAddCommentVM;
 
 public class NewsAddCommentBottomSheetFrag extends BottomSheetDialogFragment {
@@ -33,6 +31,12 @@ public class NewsAddCommentBottomSheetFrag extends BottomSheetDialogFragment {
         this.completeListener = completeListener;
         this.newsID = newsID;
         return this;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme);
     }
 
     @Nullable
@@ -116,18 +120,13 @@ public class NewsAddCommentBottomSheetFrag extends BottomSheetDialogFragment {
         });
     }
 
-    @Override
-    public int getTheme() {
-        if (G.isDarkTheme) {
-            return R.style.BaseBottomSheetDialog;
-        } else {
-            return R.style.BaseBottomSheetDialogLight;
-        }
-    }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new BottomSheetDialog(requireContext(), getTheme());
+    }
+
+    interface CompleteListener {
+        void onCompleted();
     }
 }

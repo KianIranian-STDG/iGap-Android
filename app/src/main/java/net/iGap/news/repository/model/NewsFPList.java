@@ -92,9 +92,9 @@ public class NewsFPList {
         }
 
         public String getColor() {
-            if (color.startsWith("#"))
-                return color;
-            return "#000";
+            if (!color.startsWith("#"))
+                color = "#" + color;
+            return color;
         }
 
         public void setColor(String color) {

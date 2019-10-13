@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.news.repository.model.NewsList;
 
 public class NewsDetailRelatedCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -72,7 +73,7 @@ public class NewsDetailRelatedCardsAdapter extends RecyclerView.Adapter<Recycler
 
         void initDoubleVH(int position) {
 
-            if (G.isDarkTheme)
+            if (G.themeColor == Theme.DARK)
                 changeToNormalDark();
 
             if (position*2 >= mData.getNews().size())

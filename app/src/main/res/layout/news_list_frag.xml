@@ -5,7 +5,7 @@
         android:id="@+id/Container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme">
+        style="@style/IGapRootViewStyle">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/pullToRefresh"

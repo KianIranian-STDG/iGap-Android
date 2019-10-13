@@ -1,18 +1,14 @@
 package net.iGap.news.repository;
 
-import net.iGap.api.apiService.ApiResponse;
+import net.iGap.api.apiService.HandShakeCallback;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.news.repository.api.NewsAPIRepository;
 import net.iGap.news.repository.model.NewsApiArg;
 import net.iGap.news.repository.model.NewsComment;
 import net.iGap.news.repository.model.NewsDetail;
-import net.iGap.news.repository.model.NewsFPList;
-import net.iGap.news.repository.model.NewsGroup;
 import net.iGap.news.repository.model.NewsList;
-import net.iGap.news.repository.model.NewsPublisher;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserProfileGetEmail;
-
-import java.util.List;
 
 import io.realm.Realm;
 
@@ -26,20 +22,20 @@ public class DetailRepo {
         updateUserInfo();
     }
 
-    public void getNewsDetail(int newsID, ApiResponse<NewsDetail> apiResponse) {
-        repository.getNewsDetail(newsID, apiResponse);
+    public void getNewsDetail(int newsID, HandShakeCallback handShakeCallback, ResponseCallback<NewsDetail> apiResponse) {
+        repository.getNewsDetail(newsID, handShakeCallback, apiResponse);
     }
 
-    public void getNewsComment(int newsID, int start, int display, ApiResponse<NewsComment> apiResponse) {
-        repository.getNewsComment(newsID, start, display, apiResponse);
+    public void getNewsComment(int newsID, int start, int display, HandShakeCallback handShakeCallback, ResponseCallback<NewsComment> apiResponse) {
+        repository.getNewsComment(newsID, start, display, handShakeCallback, apiResponse);
     }
 
-    public void postNewsComment(String newsID, String comment, String author, String email, ApiResponse<NewsDetail> apiResponse) {
-        repository.postNewsComment(newsID, comment, author, email, apiResponse);
+    public void postNewsComment(String newsID, String comment, String author, String email, HandShakeCallback handShakeCallback, ResponseCallback<NewsDetail> apiResponse) {
+        repository.postNewsComment(newsID, comment, author, email, handShakeCallback, apiResponse);
     }
 
-    public void getRelatedNews(int newsID, ApiResponse<NewsList> apiResponse) {
-        repository.getNewsList(new NewsApiArg(1, 5, newsID, NewsApiArg.NewsType.RELATED_NEWS), apiResponse);
+    public void getRelatedNews(int newsID, HandShakeCallback handShakeCallback, ResponseCallback<NewsList> apiResponse) {
+        repository.getNewsList(new NewsApiArg(1, 5, newsID, NewsApiArg.NewsType.RELATED_NEWS), handShakeCallback, apiResponse);
     }
 
     public String getUserFirstName() {

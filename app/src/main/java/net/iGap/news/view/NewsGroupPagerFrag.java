@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.ViewPager;
 
@@ -18,12 +19,12 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.databinding.NewsGrouptabFragBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.view.adapter.TabAdapter;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.news.repository.model.NewsApiArg;
 
 import java.util.Objects;
@@ -76,7 +77,6 @@ public class NewsGroupPagerFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.Toolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         Picasso.get()
@@ -116,9 +116,9 @@ public class NewsGroupPagerFrag extends BaseFragment {
             TextView tv = new TextView(getContext());
             tv.setText(Objects.requireNonNull(tabLayout.getTabAt(i)).getText());
             tv.setGravity(Gravity.CENTER);
-            tv.setTypeface(G.typeface_IRANSansMobile);
+            tv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
 
-            if (G.isDarkTheme) {
+            if (G.themeColor == Theme.DARK) {
                 tv.setTextColor(G.context.getResources().getColor(R.color.white));
             } else {
                 tv.setTextColor(G.context.getResources().getColor(R.color.black));

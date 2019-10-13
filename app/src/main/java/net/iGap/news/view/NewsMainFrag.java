@@ -20,13 +20,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsMainPageBinding;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.news.repository.model.NewsFPList;
 import net.iGap.news.repository.model.NewsFirstPage;
@@ -38,10 +37,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class NewsMainFrag extends BaseFragment {
+public class NewsMainFrag extends BaseAPIViewFrag {
 
     private NewsMainPageBinding binding;
     private NewsMainVM newsMainVM;
+
+    private String specificNewsID = null;
 
     public static NewsMainFrag newInstance() {
         return new NewsMainFrag();
@@ -60,6 +61,7 @@ public class NewsMainFrag extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.news_main_page, container, false);
 //        binding.setViewmodel(newsMainVM);
         binding.setLifecycleOwner(this);
+        this.viewModel = newsMainVM;
 
         return binding.getRoot();
     }
@@ -69,6 +71,9 @@ public class NewsMainFrag extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
+
+        if (specificNewsID != null && !specificNewsID.equals(""))
+            openNewsDetail(specificNewsID);
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -83,7 +88,6 @@ public class NewsMainFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.Toolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         binding.rcMain.setHasFixedSize(true);
@@ -141,37 +145,48 @@ public class NewsMainFrag extends BaseFragment {
 
             @Override
             public void onNewsCategoryClick(NewsFPList group) {
-                FragmentManager fragmentManager = getChildFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Fragment fragment = fragmentManager.findFragmentByTag(NewsGroupPagerFrag.class.getName());
-                if (fragment == null) {
-                    fragment = NewsGroupPagerFrag.newInstance();
-                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                }
-                Bundle args = new Bundle();
-                args.putString("GroupID", group.getCatID());
-                args.putString("GroupTitle", group.getCategory());
-                args.putString("GroupPic", group.getNews().get(0).getContents().getImage().get(0).getOriginal());
-                fragment.setArguments(args);
-                new HelperFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), fragment).setReplace(false).load();
+                openGroupNews(group);
             }
 
             @Override
             public void onSliderClick(NewsFPList.NewsContent slide) {
-                FragmentManager fragmentManager = getChildFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Fragment fragment = fragmentManager.findFragmentByTag(NewsDetailFrag.class.getName());
-                if (fragment == null) {
-                    fragment = NewsDetailFrag.newInstance();
-                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                }
-                Bundle args = new Bundle();
-                args.putString("NewsID", slide.getId());
-                fragment.setArguments(args);
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                openNewsDetail(slide.getId());
             }
         });
         binding.rcMain.setAdapter(adapter);
     }
 
+    private void openGroupNews(NewsFPList group) {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment fragment = fragmentManager.findFragmentByTag(NewsGroupPagerFrag.class.getName());
+        if (fragment == null) {
+            fragment = NewsGroupPagerFrag.newInstance();
+            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+        }
+        Bundle args = new Bundle();
+        args.putString("GroupID", group.getCatID());
+        args.putString("GroupTitle", group.getCategory());
+        args.putString("GroupPic", group.getNews().get(0).getContents().getImage().get(0).getOriginal());
+        fragment.setArguments(args);
+        new HelperFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), fragment).setReplace(false).load();
+    }
+
+    private void openNewsDetail(String newsID) {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment fragment = fragmentManager.findFragmentByTag(NewsDetailFrag.class.getName());
+        if (fragment == null) {
+            fragment = NewsDetailFrag.newInstance();
+            fragmentTransaction.addToBackStack(fragment.getClass().getName());
+        }
+        Bundle args = new Bundle();
+        args.putString("NewsID", newsID);
+        fragment.setArguments(args);
+        new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+    }
+
+    public void setSpecificNewsID(String specificNewsID) {
+        this.specificNewsID = specificNewsID;
+    }
 }
