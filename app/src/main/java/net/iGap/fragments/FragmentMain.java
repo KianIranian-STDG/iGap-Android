@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,7 +116,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private ConstraintSet constraintSet;
     private TextView selectedItemCountTv;
     private RecyclerView multiSelectRv;
-    private SelectedItemAdapter selectedItemAdapter;
+    /*private SelectedItemAdapter selectedItemAdapter;*/
     private View selectedItemView;
 
     public static FragmentMain newInstance(MainType mainType) {
@@ -162,18 +163,12 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         multiSelectRv = view.findViewById(R.id.rv_main_selectedItem);
         selectedItemView = view.findViewById(R.id.amr_layout_selected_root);
 
-        /*if (G.twoPaneMode && G.isLandscape) {
-            mHelperToolbar = HelperToolbar.create()
-                    .setContext(getContext())
-                    .setTabletIcons(R.string.add_icon, R.string.edit_icon, R.string.search_icon)
-                    .setTabletMode(true)
-                    .setListener(this);
-            layoutToolbar.addView(mHelperToolbar.getView());
-            RealmUserInfo userInfo = getRealmFragmentMain().where(RealmUserInfo.class).findFirst();
-            mHelperToolbar.getTabletUserName().setText(userInfo.getUserInfo().getDisplayName());
-            mHelperToolbar.getTabletUserPhone().setText(userInfo.getUserInfo().getPhoneNumber());
-            avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getTabletUserAvatar(), userInfo.getUserId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
-        } else {*/
+        multiSelectRv.setLayoutManager(new LinearLayoutManager(multiSelectRv.getContext(), RecyclerView.HORIZONTAL, false));
+        /*if (selectedItemAdapter == null) {
+            selectedItemAdapter = new SelectedItemAdapter();
+        }*/
+        multiSelectRv.setAdapter(new SelectedItemAdapter()/*selectedItemAdapter*/);
+
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.edit_icon)
@@ -188,7 +183,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         layoutToolbar.addView(mHelperToolbar.getView());
         mHelperToolbar.registerTimerBroadcast();
         mHelperToolbar.getLeftButton().setVisibility(View.GONE);
-        /*}*/
 
 
         onChatCellClickedInEditMode = (item, position, status) -> {
@@ -204,20 +198,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 return;
             }
 
-            if (selectedItemAdapter == null) {
-                multiSelectRv.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-                selectedItemAdapter = new SelectedItemAdapter();
-                multiSelectRv.setAdapter(selectedItemAdapter);
+            ((SelectedItemAdapter)multiSelectRv.getAdapter()).setItemsList(setMultiSelectAdapterItem(item, mSelectedRoomList.size() == 1));
 
-            }
-
-            if (mSelectedRoomList.size() == 1) {
-                selectedItemAdapter.setItemsList(setMultiSelectAdapterItem(item, true));
-            } else {
-                selectedItemAdapter.setItemsList(setMultiSelectAdapterItem(item, false));
-            }
-
-            selectedItemAdapter.setCallBack(action -> {
+            ((SelectedItemAdapter)multiSelectRv.getAdapter()).setCallBack(action -> {
                 switch (action) {
                     case 0:
                         pinToTop(item.getId(), item.isPinned());
@@ -230,7 +213,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                         clearHistory(item.getId(), true);
                         break;
                     case 3:
-                        deleteChat(item, true);
+                        confirmActionForRemoveItem(item);
                         break;
                     case 4:
                         readAllRoom();
@@ -253,6 +236,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             });
 
             refreshChatList(position, false);
+            Log.wtf(this.getClass().getName(), "count item: " + multiSelectRv.getAdapter().getItemCount());
         };
 
         if (MusicPlayer.playerStateChangeListener != null) {
@@ -1041,6 +1025,17 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                         disableMultiSelect();
 
                     }
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void confirmActionForRemoveItem(RealmRoom item) {
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.delete_chat))
+                .content(getString(R.string.are_you_sure_request)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+                    deleteChat(item, true);
                 })
                 .onNegative((dialog, which) -> dialog.dismiss())
                 .show();

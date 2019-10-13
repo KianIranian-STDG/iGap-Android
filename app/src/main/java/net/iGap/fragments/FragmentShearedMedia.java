@@ -576,7 +576,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         textView.setSingleLine(true);
 
         textView.setBackgroundResource(new Theme().getButtonSelectorBackground(textView.getContext()));
-        textView.setTextColor(ContextCompat.getColor(textView.getContext(), R.color.button_text_color_selector));
+        textView.setTextColor(ContextCompat.getColorStateList(textView.getContext(), R.color.button_text_color_selector));
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         if (pos == 0 || pos == mSharedTypesList.size() + 1) {

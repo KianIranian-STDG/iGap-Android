@@ -1005,8 +1005,7 @@ public class HelperToolbar {
     private void onScannerClickListener() {
         String phoneNumber = "0";
 
-        try {
-            Realm realm = Realm.getDefaultInstance();
+        try (Realm realm = Realm.getDefaultInstance()) {
             RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
             if (userInfo != null) {
                 phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
@@ -1025,7 +1024,7 @@ public class HelperToolbar {
         if (!G.isWalletRegister) {
             new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
         } else {
-            new HelperWallet().goToWallet(mContext, "0" + phoneNumber);
+            new HelperWallet().goToWallet(mContext, "0" + phoneNumber,true);
         }
     }
 

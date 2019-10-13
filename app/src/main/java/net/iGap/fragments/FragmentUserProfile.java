@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -13,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,11 +103,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         Log.wtf(this.getClass().getName(), "onViewCreated");
 
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            TypedValue tV = new TypedValue();
-            TypedArray aa = getContext().obtainStyledAttributes(tV.data, new int[]{R.attr.colorPrimaryDark});
-            int clr = aa.getColor(0, 0);
-            aa.recycle();
-            StatusBarUtil.setColor(getActivity(), clr, 50);
+            StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
         }
 
         viewModel.changeUserProfileWallpaper.observe(getViewLifecycleOwner(), drawable -> {
@@ -139,7 +133,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
 
         viewModel.goToWalletPage.observe(getViewLifecycleOwner(), phoneNumber -> {
             if (getContext() != null && phoneNumber != null) {
-                new HelperWallet().goToWallet(getContext(), phoneNumber);
+                new HelperWallet().goToWallet(getContext(), phoneNumber, false);
             }
         });
 

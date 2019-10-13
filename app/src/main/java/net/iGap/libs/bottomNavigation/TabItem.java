@@ -1,6 +1,7 @@
 package net.iGap.libs.bottomNavigation;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -12,7 +13,6 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
@@ -72,7 +72,19 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
 
         textView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
         textView.setText(text);
-        textView.setTextColor(ContextCompat.getColor(getContext(), R.color.bottom_navigation_text_color));
+
+        int[][] states = new int[][]{
+                new int[]{android.R.attr.state_selected}, // selected
+                new int[]{-android.R.attr.state_selected}, // none
+        };
+
+        int[] colors = new int[]{
+                new Theme().getAccentColor(textView.getContext()),
+                new Theme().getSubTitleColor(textView.getContext())
+        };
+
+        ColorStateList myList = new ColorStateList(states, colors);
+        textView.setTextColor(myList);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 9);
 
         addView(imageView);
