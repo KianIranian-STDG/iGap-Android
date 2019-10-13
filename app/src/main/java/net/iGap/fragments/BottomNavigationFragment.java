@@ -27,6 +27,7 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnUnreadChange;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
+import net.iGap.news.view.NewsMainFrag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     private static final int DISCOVERY_FRAGMENT = 3;
     private static final int PROFILE_FRAGMENT = 4;
     private static final int POPULAR_CHANNEL_FRAGMENT = 5;
+    private static final int NEWS_FRAGMENT = 6;
 
     public static final String DEEP_LINK_DISCOVERY = "discovery";
     public static final String DEEP_LINK_CONTACT = "contact";
@@ -46,6 +48,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     public static final String DEEP_LINK_CALL = "call";
     public static final String DEEP_LINK_PROFILE = "profile";
     public static final String DEEP_LINK_POPULAR = "favoritechannel";
+    public static final String DEEP_LINK_NEWS = "news";
 
     //Todo: create viewModel for this it was test class and become main class :D
     private BottomNavigation bottomNavigation;
@@ -297,6 +300,10 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 onDeepLinkValid.linkValid(address[0]);
                 setCrawlerMap(POPULAR_CHANNEL_FRAGMENT, address);
                 break;
+            case DEEP_LINK_NEWS:
+                onDeepLinkValid.linkValid(address[0]);
+                setCrawlerMap(NEWS_FRAGMENT, address);
+                break;
             default:
                 onDeepLinkValid.linkInvalid(address[0]);
                 break;
@@ -360,6 +367,22 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                         } else {
                             new HelperFragment(getFragmentManager(), new PopularChannelHomeFragment()).setReplace(false).load();
                         }
+                    break;
+                case NEWS_FRAGMENT:
+                    if (uri != null) {
+                        NewsMainFrag frag = new NewsMainFrag();
+                        switch (uri.length) {
+                            case 2:
+                                frag.setSpecificGroupID(uri[1]);
+                                break;
+                            case 3:
+                                frag.setSpecificNewsID(uri[2]);
+                                break;
+                            default:
+                                break;
+                        }
+                        new HelperFragment(getFragmentManager(), frag).setReplace(false).load();
+                    }
                     break;
                 case PROFILE_FRAGMENT:
                     bottomNavigation.setCurrentItem(PROFILE_FRAGMENT);
