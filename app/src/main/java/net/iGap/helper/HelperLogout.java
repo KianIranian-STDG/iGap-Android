@@ -87,5 +87,8 @@ public final class HelperLogout {
         G.isPassCode = false;
         G.isSaveToGallery = false;
         G.showSenderNameInGroup = false;
+        G.themeColor = Theme.DEFAULT;
+        SharedPreferences sharedPreferencesLogout = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+        sharedPreferencesLogout.edit().putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true).apply();
     }
 }
