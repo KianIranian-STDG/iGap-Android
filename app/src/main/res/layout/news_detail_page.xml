@@ -12,35 +12,21 @@
             type="net.iGap.news.viewmodel.NewsDetailVM" />
     </data>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/IGapRootViewStyle"
         android:id="@+id/Container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- TODO clean min height-->
-
-        <LinearLayout
-            android:id="@+id/Toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </LinearLayout>
-
         <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:fillViewport="true"
+            android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Toolbar"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -67,7 +53,7 @@
                     android:src="@mipmap/news_temp_banner"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
-                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp18"
                     android:layout_marginStart="@dimen/dp16"
                     android:layout_marginRight="@dimen/dp16"
                     android:layout_marginEnd="@dimen/dp16"
@@ -82,7 +68,7 @@
                     android:id="@+id/banner_slider"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp18"
                     android:layout_marginStart="@dimen/dp8"
                     android:layout_marginRight="@dimen/dp8"
                     android:layout_marginEnd="@dimen/dp8"
@@ -512,5 +498,16 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
-    </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <LinearLayout
+            android:id="@+id/Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:minHeight="@dimen/toolbar_height"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
