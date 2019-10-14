@@ -42,16 +42,39 @@
                 android:layout_height="match_parent"
                 android:paddingBottom="@dimen/dp20">
 
+                <net.iGap.module.CircleImageView
+                    android:id="@+id/billImage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:src="@drawable/bill_elc_pec"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintWidth_percent="0.25"
+                    app:layout_constraintVertical_bias="0.05"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/cardHolder"
+                    app:layout_constraintEnd_toEndOf="@+id/cardHolder"/>
+
+                <view
+                    android:id="@+id/baseLine"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:visibility="invisible"
+                    app:layout_constraintTop_toTopOf="@+id/billImage"
+                    app:layout_constraintBottom_toBottomOf="@+id/billImage"
+                    app:layout_constraintStart_toStartOf="@+id/billImage"
+                    app:layout_constraintEnd_toEndOf="@+id/billImage"/>
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardHolder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp16"
                     android:layout_marginStart="@dimen/dp16"
                     android:layout_marginEnd="@dimen/dp16"
                     android:layout_marginRight="@dimen/dp16"
                     android:layout_marginLeft="@dimen/dp16"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.5"
+                    app:layout_constraintTop_toTopOf="@+id/baseLine"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:cardUseCompatPadding="true"
@@ -62,11 +85,22 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
+                        <view
+                            android:id="@+id/baseLine2"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:visibility="invisible"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintDimensionRatio="2:1"
+                            app:layout_constraintWidth_percent="0.25"/>
+
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/billTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp16"
+                            android:layout_marginTop="@dimen/dp8"
                             android:layout_marginStart="@dimen/dp8"
                             android:layout_marginEnd="@dimen/dp8"
                             android:justificationMode="inter_word"
@@ -77,7 +111,7 @@
                             android:ellipsize="end"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toBottomOf="@+id/baseLine2"/>
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/billIdHolder"
@@ -177,46 +211,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cardHolder"
                     app:layout_constraintBottom_toTopOf="@+id/searchBill"/>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/searchBill"
-                    style="@style/iGapButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:minHeight="58dp"
-                    android:onClick="@{()->viewmodel.onSubmit()}"
-                    android:text="Search Bills"
-                    android:textSize="@dimen/dp16"
-                    android:visibility="visible"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:layout_marginStart="@dimen/dp16"
-                    android:layout_marginEnd="@dimen/dp16"
-                    android:layout_marginRight="@dimen/dp16"
-                    android:layout_marginLeft="@dimen/dp16"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/MyElecBillList"
-                    app:layout_constraintBottom_toTopOf="@+id/KontorInfo" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/KontorInfo"
-                    style="@style/iGapButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:minHeight="58dp"
-                    android:onClick="@{()->viewmodel.onSubmit()}"
-                    android:text="Electricity Branching Info"
-                    android:textSize="@dimen/dp16"
-                    android:visibility="visible"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:layout_marginStart="@dimen/dp16"
-                    android:layout_marginEnd="@dimen/dp16"
-                    android:layout_marginRight="@dimen/dp16"
-                    android:layout_marginLeft="@dimen/dp16"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/searchBill"
-                    app:layout_constraintBottom_toBottomOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
