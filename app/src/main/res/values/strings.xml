@@ -2260,4 +2260,7 @@ Want to get it?</string>
     <string name="url_copied">Link Copied</string>
     <string name="message_is_long">رسالتك طويلة جدًا. \n سيتم إخفاء الرسالة</string>
 
+    <string name="elecBill_Entry_lengthError">Bill ID must be 13 character.</string>
+    <string name="elecBill_Entry_barcodeError">Barcode scan failed. Please try again.</string>
+    <string name="elecBill_Entry_companyError">We only support Electricity Bill.</string>
 </resources>

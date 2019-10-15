@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="net.iGap.kuknos.viewmodel.KuknosLoginVM" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/Container"
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- TODO clean min height-->
+
+        <LinearLayout
+            android:id="@+id/Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/sky_blue"
+            android:minHeight="48dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Toolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/dp20">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/billName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp32"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:minHeight="48dp"
+                    android:hint="Bill's name *"
+                    android:textColorHint="?iGapHintTextColor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/billNameET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:gravity="start"
+                        android:inputType="text"
+                        android:minHeight="48dp"
+                        android:text="@={viewmodel.userNum}"
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/dp18" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/billId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:minHeight="48dp"
+                    android:hint="Bill's ID *"
+                    android:textColorHint="?iGapHintTextColor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/billName">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/billidET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:gravity="start"
+                        android:inputType="numberDecimal"
+                        android:minHeight="48dp"
+                        android:text="@={viewmodel.userNum}"
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/dp18" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/billMobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:minHeight="48dp"
+                    android:hint="Your Mobile Number *"
+                    android:textColorHint="?iGapHintTextColor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/billId">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/billMobileET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:gravity="start"
+                        android:inputType="text"
+                        android:minHeight="48dp"
+                        android:enabled="false"
+                        android:text="@={viewmodel.userNum}"
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/dp18" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/billUserID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:minHeight="48dp"
+                    android:hint="Your National ID"
+                    android:textColorHint="?iGapHintTextColor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/billMobile">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/billUserIDET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:gravity="start"
+                        android:inputType="text"
+                        android:minHeight="48dp"
+                        android:text="@={viewmodel.userNum}"
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/dp18" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/billEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:minHeight="48dp"
+                    android:hint="Your Email"
+                    android:textColorHint="?iGapHintTextColor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/billUserID">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/billEmailET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:gravity="start"
+                        android:inputType="text"
+                        android:minHeight="48dp"
+                        android:text="@={viewmodel.userNum}"
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/dp18" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/submitBill"
+                    style="@style/iGapButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="58dp"
+                    android:onClick="@{()->viewmodel.onSubmit()}"
+                    android:text="Add bill"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="visible"
+                    android:layout_marginTop="@dimen/dp32"
+                    android:layout_marginStart="@dimen/dp32"
+                    android:layout_marginEnd="@dimen/dp32"
+                    android:layout_marginRight="@dimen/dp32"
+                    android:layout_marginLeft="@dimen/dp32"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/billEmail"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -6,10 +6,12 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 
 public class PermissionHelper {
 
     private Activity activity;
+    private Fragment fragment;
     public final static int CameraAndVoicePermissionRequestCode = 100;
     public final static int VoicePermissionRequestCode = 110;
     public final static int CameraPermissionRequestCode = 120;
@@ -17,6 +19,11 @@ public class PermissionHelper {
 
     public PermissionHelper(Activity activity) {
         this.activity = activity;
+    }
+
+    public PermissionHelper(Activity activity, Fragment fragment) {
+        this.activity = activity;
+        this.fragment = fragment;
     }
 
     public boolean grantCameraAndVoicePermission() {
@@ -44,7 +51,10 @@ public class PermissionHelper {
         if (hasPermissions(Permissions)) {
             return true;
         } else {
-            ActivityCompat.requestPermissions(activity, Permissions, CameraPermissionRequestCode);
+            if (fragment != null)
+                fragment.requestPermissions(Permissions, CameraPermissionRequestCode);
+            else
+                ActivityCompat.requestPermissions(activity, Permissions, CameraPermissionRequestCode);
             return false;
         }
     }

@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewmodel"
             type="net.iGap.kuknos.viewmodel.KuknosLoginVM" />
@@ -55,7 +54,7 @@
                     app:layout_constraintStart_toStartOf="@+id/cardHolder"
                     app:layout_constraintEnd_toEndOf="@+id/cardHolder"/>
 
-                <view
+                <View
                     android:id="@+id/baseLine"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
@@ -85,7 +84,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <view
+                        <View
                             android:id="@+id/baseLine2"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
