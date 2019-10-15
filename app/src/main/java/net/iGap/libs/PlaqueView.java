@@ -41,6 +41,7 @@ public class PlaqueView extends ConstraintLayout {
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.PlaqueView);
         isEditable = typedArray.getBoolean(R.styleable.PlaqueView_pv_edit_mode, true);
+        typedArray.recycle();
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.view_plaque_layout, this);
