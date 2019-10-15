@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,18 +25,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.transition.TransitionManager;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -50,8 +46,6 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermission;
-import net.iGap.helper.HelperUrl;
-import net.iGap.helper.HelperWallet;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
@@ -69,8 +63,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.BIND_ABOVE_CLIENT;
-import static net.iGap.module.AttachFile.getFilePathFromUriAndCheckForAndroid7;
+
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 public class FragmentUserProfile extends BaseMainFragments implements FragmentEditImage.OnImageEdited {
@@ -93,11 +86,11 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_profile, container, false);
+        viewModel.isEditProfile.setValue(true);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.frame_edit, FragmentProfile.newInstance(), null).commit();
         binding.editProfile.setOnClickListener(view -> {
-            FragmentTransaction fragmentTransaction1 = getChildFragmentManager().beginTransaction();
-            fragmentTransaction1.replace(R.id.frame_edit, FragmentEditProfile.newInstance(), null).commit();
+            new HelperFragment(getParentFragment().getFragmentManager(), FragmentEditProfile.newInstance()).setResourceContainer(R.id.frame_edit).setReplace(true).load();
         });
         viewModel.init();
         binding.setViewModel(viewModel);
