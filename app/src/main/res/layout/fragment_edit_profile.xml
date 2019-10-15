@@ -11,7 +11,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="@dimen/dp32">
+            android:paddingTop="@dimen/dp32"
+            style="@style/IGapRootViewStyle">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/countryCode"
