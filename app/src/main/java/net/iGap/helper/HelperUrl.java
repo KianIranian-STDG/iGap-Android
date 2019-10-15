@@ -268,9 +268,8 @@ public class HelperUrl {
     private static void openEmail(Context context ,String email) {
 
         try{
-            Intent intent = new Intent(Intent.ACTION_SENDTO);
-            intent.setDataAndType(Uri.parse("mailto:" + email),"plain/text");
-            context.startActivity(intent);
+            Intent intent = new Intent(Intent.ACTION_SENDTO , Uri.fromParts("mailto" , email , null));
+            context.startActivity(Intent.createChooser(intent , context.getString(R.string.email)));
         }catch (ActivityNotFoundException e){
             HelperError.showSnackMessage(context.getString(R.string.device_dosenot_support) , false);
         }
