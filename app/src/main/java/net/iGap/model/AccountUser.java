@@ -1,38 +1,47 @@
 package net.iGap.model;
 
-import androidx.annotation.NonNull;
+import android.util.Log;
 
-import net.iGap.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class AccountUser {
     //ToDo: should be review and change and remove not use item
     private long id;
     private String dbName;
     private String name;
+    private String phoneNumber;
     private String avatarPath;
     private String initialString;
     private String avatarColor;
     private int unReadMessageCount;
     private boolean isActive;
-    private transient boolean isAddNew ; // flag for show add new or not
+    private boolean isAssigned; // flag for show add new or not
 
-    public AccountUser() {
+    public AccountUser(long id) {
+        this.id = id;
     }
 
-    public AccountUser(long id, String dbName, String name, String avatarPath, String initialString, String avatarColor, int unReadMessageCount) {
+    public AccountUser(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public AccountUser(long id, String dbName, String name, String phoneNumber, String avatarPath, String initialString, String avatarColor, int unReadMessageCount, boolean isAssigned) {
         this.id = id;
         this.dbName = dbName;
         this.name = name;
+        this.phoneNumber = phoneNumber;
         this.avatarPath = avatarPath;
         this.initialString = initialString;
         this.avatarColor = avatarColor;
         this.unReadMessageCount = unReadMessageCount;
+        this.isAssigned = isAssigned;
     }
 
 
-    public AccountUser(boolean isAddNew , String name) {
+    public AccountUser(boolean isAddNew, String name) {
         this.name = name;
-        this.isAddNew = isAddNew;
+        this.isAssigned = isAddNew;
     }
 
 
@@ -100,25 +109,43 @@ public class AccountUser {
         isActive = active;
     }
 
-    public boolean isAddNew() {
-        return isAddNew;
+    public boolean isAssigned() {
+        return isAssigned;
     }
 
-    public void setAddNew(boolean addNew) {
-        isAddNew = addNew;
+    public void setAssigned(boolean assigned) {
+        isAssigned = assigned;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof AccountUser) {
+            Log.wtf(this.getClass().getName(),"id: "+id);
+            Log.wtf(this.getClass().getName(),"obj id: "+((AccountUser) obj).getId());
+            return id == ((AccountUser) obj).getId();
+        }
+        return super.equals(obj);
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "id: " + id +
-                "dbName: " + dbName +
-                "name: " + name +
-                "avatarPath: " + avatarPath +
-                "initialString: " + initialString +
-                "avatarColor: " + avatarColor +
-                "unReadMessageCount: " + unReadMessageCount +
-                "isActive: " + isActive +
-                "isAddNew: " + isAddNew;
+        return "id: " + id + "\n" +
+                "dbName: " + dbName + "\n" +
+                "name: " + name + "\n" +
+                "avatarPath: " + avatarPath + "\n" +
+                "initialString: " + initialString + "\n" +
+                "avatarColor: " + avatarColor + "\n" +
+                "unReadMessageCount: " + unReadMessageCount + "\n" +
+                "isActive: " + isActive + "\n" +
+                "isAssigned: " + isAssigned;
     }
 }

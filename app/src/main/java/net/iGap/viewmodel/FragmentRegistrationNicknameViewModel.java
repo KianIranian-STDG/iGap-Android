@@ -256,10 +256,12 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
                             user.getId(),
                             null,
                             user.getDisplayName(),
+                            String.valueOf(user.getPhone()),
                             null,
                             user.getInitials(),
                             user.getColor(),
-                            0
+                            0,
+                            true
                     ));
                     G.displayName = user.getDisplayName();
                     prgVisibility.set(View.GONE);

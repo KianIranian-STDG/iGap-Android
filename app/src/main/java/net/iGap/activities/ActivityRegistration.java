@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -51,7 +52,6 @@ public class ActivityRegistration extends ActivityEnhanced {
         }).get(RegistrationViewModel.class);
 
         viewModel.goToMainPage().observe(this, data -> {
-            Log.wtf(this.getClass().getName(), "go main page observe");
             if (data != null) {
                 if (data.isShowDialogDisableTwoStepVerification()) {
                     new DefaultRoundDialog(this)
@@ -62,6 +62,12 @@ public class ActivityRegistration extends ActivityEnhanced {
                 } else {
                     goToMainPage(data.getUserId());
                 }
+            }
+        });
+
+        viewModel.getExistUser().observe(this, isExist -> {
+            if (isExist != null && isExist) {
+                Toast.makeText(this, "this user exist", Toast.LENGTH_SHORT).show();
             }
         });
 

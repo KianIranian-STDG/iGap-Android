@@ -23,16 +23,15 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
     private List<AccountUser> mAccountsList = new ArrayList<>();
     private AccountDialogListener mListener;
     private AvatarHandler mAvatarHandler;
-    private Context mContext ;
 
     public void setAccountsList(List<AccountUser> accounts) {
 
         this.mAccountsList.addAll(accounts);
 
         //if account count was 2 or 1 , add blank account to show add new view
-        if (mAccountsList.size() != 3) {
+        /*if (mAccountsList.size() != 3) {
             mAccountsList.add(new AccountUser(true , mContext.getString(R.string.add_new_account)));
-        }
+        }*/
 
         notifyDataSetChanged();
     }
@@ -41,15 +40,14 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
         this.mListener = listener;
     }
 
-    public void setAvatarHandler(AvatarHandler avatarHandler , Context context) {
+    public void setAvatarHandler(AvatarHandler avatarHandler) {
         this.mAvatarHandler = avatarHandler;
-        this.mContext = context ;
     }
 
     @NonNull
     @Override
     public AccountViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        RowDilogAccountBinding binding = DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.row_dilog_account, parent, false);
+        RowDilogAccountBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.row_dilog_account, parent, false);
         return new AccountViewHolder(binding);
     }
 
@@ -79,14 +77,14 @@ public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAd
             binding.setIsRtl(G.isAppRtl);
             binding.executePendingBindings();
 
-            if (account.isAddNew()) {
+            if (account.isAssigned()) {
                 binding.avatar.setImageResource(R.drawable.add_chat_background);
             } else {
                 mAvatarHandler.getAvatar(new ParamWithAvatarType(binding.avatar, account.getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
             }
 
             binding.root.setOnClickListener(v -> {
-                if (account.isAddNew()) {
+                if (!account.isAssigned()) {
                     mListener.onNewAccountClick();
                 } else {
                     mListener.onAccountClick(account.getId());

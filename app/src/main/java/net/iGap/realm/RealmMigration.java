@@ -20,6 +20,8 @@ import io.realm.FieldAttribute;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
 
+import static net.iGap.Config.REALM_SCHEMA_VERSION;
+
 public class RealmMigration implements io.realm.RealmMigration {
 
     @Override
@@ -648,13 +650,25 @@ public class RealmMigration implements io.realm.RealmMigration {
                             userId,
                             null,
                             userInfo.getString("displayName"),
+                            userInfo.getString("phoneNumber"),
                             userImageAvatarPath,
                             userInfo.getString("initials"),
                             userInfo.getString("color"),
-                            0)
+                            0,
+                            true)
                     );
                 }
             }
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return REALM_SCHEMA_VERSION;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof RealmMigration);
     }
 }

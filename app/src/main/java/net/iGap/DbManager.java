@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Looper;
 import android.util.Base64;
+import android.util.Log;
 
 import net.iGap.helper.HelperLog;
 import net.iGap.realm.RealmMigration;
@@ -20,6 +21,7 @@ import static net.iGap.Config.REALM_SCHEMA_VERSION;
 public class DbManager {
 
     private Realm uiRealm;
+    private RealmConfiguration configuration;
 
     private static final DbManager ourInstance = new DbManager();
 
@@ -28,6 +30,7 @@ public class DbManager {
     }
 
     private DbManager() {
+        configuration = getConfiguration();
     }
 
     private Realm getUiRealm() {
@@ -38,7 +41,8 @@ public class DbManager {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             throw new IllegalStateException("You must open realm in ui thread.");
         }
-        this.uiRealm = Realm.getInstance(getConfiguration());
+        Realm.setDefaultConfiguration(configuration);
+        this.uiRealm = Realm.getDefaultInstance();
     }
 
     public void closeUiRealm() {
@@ -49,7 +53,14 @@ public class DbManager {
         uiRealm.close();
     }
 
-    public RealmConfiguration getConfiguration() {
+    public void changeRealmConfiguration(){
+        configuration = null;
+        configuration = getConfiguration();
+        Realm.setDefaultConfiguration(configuration);
+        this.uiRealm = Realm.getDefaultInstance();
+    }
+
+    private RealmConfiguration getConfiguration() {
         SharedPreferences sharedPreferences = G.context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
         String stringArray = sharedPreferences.getString("myByteArray", null);
         if (stringArray == null) {
@@ -63,13 +74,14 @@ public class DbManager {
 
         byte[] mKey = Base64.decode(sharedPreferences.getString("myByteArray", null), Base64.DEFAULT);
 
-        RealmConfiguration oldConfig = new RealmConfiguration.Builder().name(AccountManager.getInstance().getCurrentUser().getDbName())
+        RealmConfiguration oldConfig = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm")
                 .schemaVersion(REALM_SCHEMA_VERSION)
                 .compactOnLaunch()
                 .migration(new RealmMigration()).build();
         RealmConfiguration newConfig;
+        Log.wtf(this.getClass().getName(), "Db name: " + AccountManager.getInstance().getCurrentUser().getDbName());
         newConfig = new RealmConfiguration.Builder()
-                .name(net.iGap.AccountManager.defaultDBName)
+                .name(AccountManager.getInstance().getCurrentUser().getDbName())
                 .encryptionKey(mKey)
                 .compactOnLaunch(new CompactOnLaunchCallback() {
                     @Override
@@ -94,11 +106,11 @@ public class DbManager {
         } else {
             Realm realm = null;
             /*try {*/
-                realm = Realm.getInstance(oldConfig);
-                realm.writeEncryptedCopyTo(newRealmFile, mKey);
-                realm.close();
-                Realm.deleteRealm(oldConfig);
-                return newConfig;
+            realm = Realm.getInstance(oldConfig);
+            realm.writeEncryptedCopyTo(newRealmFile, mKey);
+            realm.close();
+            Realm.deleteRealm(oldConfig);
+            return newConfig;
             /*} catch (OutOfMemoryError oom) {
                 //TODO : what is that, exception in catch, realm may be null and close it
                 realm.close();
@@ -116,7 +128,7 @@ public class DbManager {
         if (Looper.myLooper() == Looper.getMainLooper() && getUiRealm() != null && !getUiRealm().isClosed()) {
             return realmTask.doTask(getUiRealm());
         } else {
-            try (Realm realm = Realm.getInstance(getConfiguration())) {
+            try (Realm realm = Realm.getDefaultInstance()) {
                 return realmTask.doTask(realm);
             }
         }
@@ -126,7 +138,7 @@ public class DbManager {
         if (Looper.myLooper() == Looper.getMainLooper() && getUiRealm() != null && !getUiRealm().isClosed()) {
             realmTask.doTask(getUiRealm());
         } else {
-            try (Realm realm = Realm.getInstance(getConfiguration())) {
+            try (Realm realm = Realm.getDefaultInstance()) {
                 realmTask.doTask(realm);
             }
         }

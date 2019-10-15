@@ -33,6 +33,10 @@ public class RegistrationViewModel extends ViewModel {
         return repository.getGoToMainPage();
     }
 
+    public SingleLiveEvent<Boolean> getExistUser(){
+        return repository.getLoginExistUser();
+    }
+
     public SingleLiveEvent<Long> goToWelcomePage() {
         return repository.getGoToWelcomePage();
     }

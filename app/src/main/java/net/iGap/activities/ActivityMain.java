@@ -70,7 +70,6 @@ import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
-import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCalculateKeepMedia;
 import net.iGap.helper.HelperDownloadFile;
@@ -180,6 +179,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private boolean isNeedToRegister = false;
     private int retryConnectToWallet = 0;
     public static String userPhoneNumber;
+    private MyPhonStateService myPhonStateService;
+    private BroadcastReceiver audioManagerReciver;
 
     public static void setMediaLayout() {
         try {
@@ -265,7 +266,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onDestroy() {
         super.onDestroy();
         if (G.ISRealmOK) {
+            if (myPhonStateService != null) {
+                unregisterReceiver(myPhonStateService);
+            }
 
+            if (audioManagerReciver != null) {
+                unregisterReceiver(audioManagerReciver);
+            }
             if (G.imageLoader != null) {
                 G.imageLoader.clearMemoryCache();
             }
@@ -385,9 +392,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         detectDeviceType();
 
-        Log.wtf(this.getClass().getName(),"userList Size: " + AccountManager.getInstance().getUserAccountList().size());
-        for (int i=0 ; i< AccountManager.getInstance().getUserAccountList().size();i++){
-            Log.wtf(this.getClass().getName(),"user: "+ AccountManager.getInstance().getUserAccountList().get(i).toString());
+        Log.wtf(this.getClass().getName(), "userList Size: " + AccountManager.getInstance().getUserAccountList().size());
+        for (int i = 0; i < AccountManager.getInstance().getUserAccountList().size(); i++) {
+            Log.wtf(this.getClass().getName(), "user: " + AccountManager.getInstance().getUserAccountList().get(i).toString());
         }
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         if (G.ISRealmOK) {
@@ -438,7 +445,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             initTabStrip(getIntent());
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PHONE_STATE");
-            MyPhonStateService myPhonStateService = new MyPhonStateService();
+            myPhonStateService = new MyPhonStateService();
 
             //add it for handle ssl handshake error
             checkGoogleUpdate();
@@ -456,7 +463,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     AudioManager.RINGER_MODE_CHANGED_ACTION);
 
 
-            BroadcastReceiver audioManagerReciver = new BroadcastReceiver() {
+            audioManagerReciver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     //code...
@@ -1254,22 +1261,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
-        Log.wtf(this.getClass().getName(),"onBackPressed");
+        Log.wtf(this.getClass().getName(), "onBackPressed");
         if (G.ISRealmOK) {
             if (G.onBackPressedWebView != null) {
-                Log.wtf(this.getClass().getName(),"onBackPressedWebView");
+                Log.wtf(this.getClass().getName(), "onBackPressedWebView");
                 if (G.onBackPressedWebView.onBack()) {
                     return;
                 }
             }
 
             if (G.onBackPressedExplorer != null) {
-                Log.wtf(this.getClass().getName(),"onBackPressedExplorer");
+                Log.wtf(this.getClass().getName(), "onBackPressedExplorer");
                 if (G.onBackPressedExplorer.onBack()) {
                     return;
                 }
             } else if (G.onBackPressedChat != null) {
-                Log.wtf(this.getClass().getName(),"onBackPressedChat");
+                Log.wtf(this.getClass().getName(), "onBackPressedChat");
                 if (G.onBackPressedChat.onBack()) {
                     return;
                 }
@@ -1922,5 +1929,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public Fragment getFragment(String fragmentTag) {
         return getSupportFragmentManager().findFragmentByTag(fragmentTag);
+    }
+
+    public void updateUiForChangeAccount() {
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        initTabStrip(getIntent());
     }
 }

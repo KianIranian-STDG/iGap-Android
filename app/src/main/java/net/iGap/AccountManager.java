@@ -2,6 +2,7 @@ package net.iGap;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -43,8 +44,13 @@ public class AccountManager {
         }.getType());
         if (userAccountList == null) {
             userAccountList = new ArrayList<>();
+            AccountUser accountUser = new AccountUser(false, "test");
+            accountUser.setDbName(getDbName());
+            userAccountList.add(accountUser);
+            currentUser = accountUser;
+        } else {
+            currentUser = gson.fromJson(sharedPreferences.getString("currentUser", ""), AccountUser.class);
         }
-        currentUser = gson.fromJson(sharedPreferences.getString("currentUser", ""), AccountUser.class);
     }
 
     public List<AccountUser> getUserAccountList() {
@@ -61,17 +67,42 @@ public class AccountManager {
     }
 
     public void addAccount(AccountUser accountUser) {
+        AccountUser tmp = userAccountList.remove(userAccountList.size() - 1);
         if (accountUser.getDbName() == null) {
             accountUser.setDbName(getDbName());
         }
-        userAccountList.add(accountUser);
+        userAccountList.add(userAccountList.size(), accountUser);
+        tmp.setDbName(getDbName());
+        userAccountList.add(tmp);
         sharedPreferences.edit().putString("userList", new Gson().toJson(userAccountList, new TypeToken<List<AccountUser>>() {
         }.getType())).apply();
         setCurrentUser(accountUser);
+        for (int i = 0; i < userAccountList.size(); i++) {
+            Log.wtf(this.getClass().getName(), "account: " + userAccountList.get(i).toString());
+        }
     }
 
-    public boolean isFirstAccount() {
-        return userAccountList.size() == 0;
+    public boolean isExistThisAccount(long userId) {
+        return userAccountList.contains(new AccountUser(userId));
+    }
+
+    public boolean isExistThisAccount(String phoneNumber) {
+        Log.wtf(this.getClass().getName(), "contains: " + userAccountList.contains(new AccountUser(phoneNumber)));
+        for (int i = 0; i < userAccountList.size(); i++) {
+            Log.wtf(this.getClass().getName(), "account: " + userAccountList.get(i).toString());
+        }
+        return userAccountList.contains(new AccountUser(phoneNumber));
+    }
+
+    public void changeCurrentUserForAddAccount() {
+        currentUser = userAccountList.get(userAccountList.size() - 1);
+    }
+
+    public void changeCurrentUserAccount(long userId) {
+        int t = userAccountList.indexOf(new AccountUser(userId));
+        if (t != -1) {
+            currentUser = userAccountList.get(t);
+        }
     }
 
     private String getDbName() {

@@ -45,8 +45,6 @@ import net.iGap.request.RequestWrapper;
 
 import java.util.List;
 
-import io.realm.Realm;
-
 public class RegisterRepository {
 
     private static RegisterRepository instance;
@@ -66,6 +64,7 @@ public class RegisterRepository {
     private boolean forgetTwoStepVerification = false;
 
     private SingleLiveEvent<GoToMainFromRegister> goToMainPage = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> loginExistUser = new SingleLiveEvent<>();
     private SingleLiveEvent<Long> goToWelcomePage = new SingleLiveEvent<>();
 
     //if need sharePreference pass it in constructor
@@ -87,6 +86,10 @@ public class RegisterRepository {
 
     public SingleLiveEvent<GoToMainFromRegister> getGoToMainPage() {
         return goToMainPage;
+    }
+
+    public SingleLiveEvent<Boolean> getLoginExistUser() {
+        return loginExistUser;
     }
 
     public SingleLiveEvent<Long> getGoToWelcomePage() {
@@ -143,21 +146,33 @@ public class RegisterRepository {
 
     public void inRegisterMode(MutableLiveData<Boolean> hideDialogQRCode, MutableLiveData<Long> goToTwoStepVerificationPage) {
         G.onPushLoginToken = (tokenQrCode, userNameR, userIdR, authorHashR) -> {
-            token = tokenQrCode;
-            G.displayName = userName = userNameR;
-            new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
-            G.userId = userId = userIdR;
-            G.authorHash = authorHash = authorHashR;
-            hideDialogQRCode.postValue(true);
-            userLogin(token);
+            if (AccountManager.getInstance().isExistThisAccount(userIdR)) {
+                Log.wtf(this.getClass().getName(), "Exist");
+                loginExistUser.postValue(true);
+            } else {
+                Log.wtf(this.getClass().getName(), "not Exist");
+                token = tokenQrCode;
+                G.displayName = userName = userNameR;
+                new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
+                G.userId = userId = userIdR;
+                G.authorHash = authorHash = authorHashR;
+                hideDialogQRCode.postValue(true);
+                userLogin(token);
+            }
         };
 
         G.onPushTwoStepVerification = (userNameR, userIdR, authorHashR) -> {
-            G.displayName = userName = userNameR;
-            new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
-            G.userId = userId = userIdR;
-            G.authorHash = authorHash = authorHashR;
-            goToTwoStepVerificationPage.postValue(userIdR);
+            if (AccountManager.getInstance().isExistThisAccount(userIdR)) {
+                Log.wtf(this.getClass().getName(), "Exist");
+                loginExistUser.postValue(true);
+            } else {
+                Log.wtf(this.getClass().getName(), "not Exist");
+                G.displayName = userName = userNameR;
+                new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
+                G.userId = userId = userIdR;
+                G.authorHash = authorHash = authorHashR;
+                goToTwoStepVerificationPage.postValue(userIdR);
+            }
         };
     }
 
@@ -239,22 +254,26 @@ public class RegisterRepository {
         RequestWrapper requestWrapper = new RequestWrapper(100, builder, new OnUserRegistration() {
             @Override
             public void onRegister(String userNameR, long userIdR, ProtoUserRegister.UserRegisterResponse.Method methodValue, List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, String authorHashR, boolean callMethodSupported) {
-                /*isCallMethodSupported = callMethodSupported;*/
-                //because is new ui verification code number is 5 and number not not use it more
-                /*digitCount = verifyCodeDigitCount;*/
-                regexFetchCodeVerification = regex;
-                userName = userNameR;
-                new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
-                userId = userIdR;
-                authorHash = authorHashR;
-                G.smsNumbers = smsNumbersR;
+                if (AccountManager.getInstance().isExistThisAccount(userId)) {
+                    loginExistUser.setValue(true);
+                } else {
+                    /*isCallMethodSupported = callMethodSupported;*/
+                    //because is new ui verification code number is 5 and number not not use it more
+                    /*digitCount = verifyCodeDigitCount;*/
+                    regexFetchCodeVerification = regex;
+                    userName = userNameR;
+                    new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
+                    userId = userIdR;
+                    authorHash = authorHashR;
+                    G.smsNumbers = smsNumbersR;
                 /*SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("callingCode", callingCode);
                 editor.putString("countryName", countryName);
                 editor.putString("pattern", pattern);
                 editor.putString("regex", regex);
                 editor.apply();*/
-                callback.onSuccess();
+                    callback.onSuccess();
+                }
             }
 
             @Override
@@ -360,15 +379,21 @@ public class RegisterRepository {
                         G.displayName = user.getDisplayName();
                         G.userId = user.getId();
                         G.onUserInfoResponse = null;
-                        AccountManager.getInstance().addAccount(new AccountUser(
-                                user.getId(),
-                                null,
-                                user.getDisplayName(),
-                                null,
-                                user.getInitials(),
-                                user.getColor(),
-                                0));
-                        goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
+                        if (AccountManager.getInstance().isExistThisAccount(user.getId())) {
+                            loginExistUser.setValue(true);
+                        } else {
+                            AccountManager.getInstance().addAccount(new AccountUser(
+                                    user.getId(),
+                                    null,
+                                    user.getDisplayName(),
+                                    String.valueOf(user.getPhone()),
+                                    null,
+                                    user.getInitials(),
+                                    user.getColor(),
+                                    0,
+                                    true));
+                            goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
+                        }
                     });
                 });
 

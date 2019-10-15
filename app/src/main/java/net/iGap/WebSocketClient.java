@@ -367,6 +367,7 @@ public class WebSocketClient {
 
     public static void connectNewAccount() {
         changeAccountTime = false;
+
         reconnect(true);
     }
 }

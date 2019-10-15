@@ -23,6 +23,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -208,6 +209,7 @@ public class FragmentRegister extends BaseFragment {
         });
 
         fragmentRegisterViewModel.goToTwoStepVerificationPage.observe(getViewLifecycleOwner(), userId -> {
+            Log.wtf(this.getClass().getName(), "goToTwoStepVerificationPage");
             if (getActivity() instanceof ActivityRegistration && userId != null) {
                 if (dialogQrCode != null && dialogQrCode.isShowing()) {
                     dialogQrCode.dismiss();
