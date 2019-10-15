@@ -2258,7 +2258,7 @@ Want to get it?</string>
     <string name="iland">iLand</string>
     <string name="all_calls">Calls</string>
     <string name="open_url">Open Link</string>
-    <string name="url_copied">Link Copied</string>
+    <string name="copied">Copied</string>
     <string name="message_is_long">رسالتك طويلة جدًا. \n سيتم إخفاء الرسالة</string>
 
 </resources>

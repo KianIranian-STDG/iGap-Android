@@ -203,6 +203,13 @@ public class HelperUrl {
         return false;
     }
 
+    private static boolean isTextEmail(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
     private static void insertLinkSpan(Context context, SpannableStringBuilder strBuilder, final int start, final int end, final boolean withclickable) {
 
         ClickableSpan clickable = new ClickableSpan() {
@@ -222,23 +229,28 @@ public class HelperUrl {
                 if (withclickable) {
 
                     G.isLinkClicked = true;
-                    boolean openLocalWebPage;
-                    SharedPreferences sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
-
-                    int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
-
                     String mUrl = strBuilder.toString().substring(start, end).trim();
 
-                    if (!mUrl.startsWith("https://") && !mUrl.startsWith("http://")) {
-                        mUrl = "http://" + mUrl;
-                    }
+                    if (isTextEmail(mUrl)){
 
-                    if (checkedInappBrowser == 1 && !isNeedOpenWithoutBrowser(mUrl)) {
-                        openBrowser(mUrl); //internal chrome
-                    } else {
-                        openWithoutBrowser(mUrl);//external intent
-                    }
+                        openEmail(context , mUrl);
 
+                    }else { //text is url
+
+                        SharedPreferences sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+                        int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
+
+                        if (!mUrl.startsWith("https://") && !mUrl.startsWith("http://")) {
+                            mUrl = "http://" + mUrl;
+                        }
+
+                        if (checkedInappBrowser == 1 && !isNeedOpenWithoutBrowser(mUrl)) {
+                            openBrowser(mUrl); //internal chrome
+                        } else {
+                            openWithoutBrowser(mUrl);//external intent
+                        }
+
+                    }
                 }
             }
 
@@ -251,6 +263,18 @@ public class HelperUrl {
         };
 
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    private static void openEmail(Context context ,String email) {
+
+        try{
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setDataAndType(Uri.parse("mailto:" + email),"plain/text");
+            context.startActivity(intent);
+        }catch (ActivityNotFoundException e){
+            HelperError.showSnackMessage(context.getString(R.string.device_dosenot_support) , false);
+        }
+
     }
 
     public static boolean isNeedOpenWithoutBrowser(String url) {
@@ -1473,15 +1497,19 @@ public class HelperUrl {
 
     public static void openLinkDialog(FragmentActivity fa , String mUrl){
         String url = mUrl ;
-        if (!url.startsWith("https://") && !url.startsWith("http://")) {
-            url = "http://" + mUrl;
-        }
-        String finalUrl = url;
-
         List<String> items = new ArrayList<>();
         items.add(fa.getString(R.string.copy_item_dialog));
-        items.add(fa.getString(R.string.open_url));
 
+        if (isTextEmail(url)) {
+            items.add(fa.getString(R.string.email));
+        }else {
+            if (!url.startsWith("https://") && !url.startsWith("http://")) {
+                url = "http://" + mUrl;
+            }
+            items.add(fa.getString(R.string.open_url));
+        }
+
+        String finalUrl = url;
         new BottomSheetFragment().setTitle(url).setData(items, -1, new BottomSheetItemClickCallback() {
             @Override
             public void onClick(int position) {
@@ -1490,7 +1518,7 @@ public class HelperUrl {
                     ClipboardManager clipboard = (ClipboardManager) fa.getSystemService(CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText("Copied Url", finalUrl);
                     clipboard.setPrimaryClip(clip);
-                    Toast.makeText(fa, R.string.url_copied, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(fa, R.string.copied, Toast.LENGTH_SHORT).show();
 
                 } else if (items.get(position).equals(fa.getString(R.string.open_url))) {
 
@@ -1502,6 +1530,8 @@ public class HelperUrl {
                         HelperUrl.openWithoutBrowser(finalUrl);//external intent
                     }
 
+                }else if (items.get(position).equals(fa.getString(R.string.email))){
+                    openEmail(fa , finalUrl);
                 }
             }
         }).show(fa.getSupportFragmentManager(), "bottom sheet");

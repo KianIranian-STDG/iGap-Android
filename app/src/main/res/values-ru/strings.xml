@@ -3580,7 +3580,7 @@
     <string name="popular_channel">Развлекательные каналы</string>
     <string name="edit_contact">Изменить контакт</string>
     <string name="open_url">открытый URL</string>
-    <string name="url_copied">ссылка скопирована</string>
+    <string name="copied">скопирована</string>
 
 
 </resources>
