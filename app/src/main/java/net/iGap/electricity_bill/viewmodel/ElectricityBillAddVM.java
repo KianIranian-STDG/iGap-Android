@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.helper.HelperNumerical;
+import net.iGap.electricity_bill.repository.AddRepo;
 
 public class ElectricityBillAddVM extends BaseAPIViewModel {
 
@@ -35,13 +35,15 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
 
     private MutableLiveData<Boolean> goBack;
 
+    private AddRepo repo = new AddRepo();
+
     public ElectricityBillAddVM() {
 
         billID = new ObservableField<>();
         billIDError = new ObservableField<>();
         billIDErrorEnable = new ObservableField<>(false);
 
-        billPhone = new ObservableField<>();
+        billPhone = new ObservableField<>(repo.getUserNum());
         billPhoneError = new ObservableField<>();
         billPhoneErrorEnable = new ObservableField<>(false);
 
@@ -53,7 +55,7 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
         billUserIDError = new ObservableField<>();
         billUserIDErrorEnable = new ObservableField<>(false);
 
-        billEmail = new ObservableField<>();
+        billEmail = new ObservableField<>(repo.getUserEmail());
         billEmailError = new ObservableField<>();
         billEmailErrorEnable = new ObservableField<>(false);
 
@@ -100,7 +102,7 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
             billPhoneErrorEnable.set(true);
             return false;
         }
-        if (!billPhone.get().startsWith("09")) {
+        if (!(billPhone.get().startsWith("09") || billPhone.get().startsWith("98"))) {
             billPhoneError.set(R.string.elecBill_Entry_phoneFormatError);
             billPhoneErrorEnable.set(true);
             return false;

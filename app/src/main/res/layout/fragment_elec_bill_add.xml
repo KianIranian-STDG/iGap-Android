@@ -148,7 +148,7 @@
                         android:gravity="start"
                         android:inputType="phone"
                         android:minHeight="48dp"
-                        android:enabled="true"
+                        android:enabled="false"
                         android:text="@={viewmodel.billPhone}"
                         android:textColor="?iGapTitleTextColor"
                         android:digits="0123456789"

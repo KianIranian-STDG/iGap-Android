@@ -1,10 +1,6 @@
 package net.iGap.electricity_bill.view;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,26 +9,16 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
-import net.iGap.databinding.FragmentElecBillMainBinding;
 import net.iGap.databinding.FragmentElecBillPayBinding;
 import net.iGap.electricity_bill.repository.model.Bill;
-import net.iGap.electricity_bill.viewmodel.ElectricityBillAddVM;
-import net.iGap.electricity_bill.viewmodel.ElectricityBillMainVM;
 import net.iGap.electricity_bill.viewmodel.ElectricityBillPayVM;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.helper.PermissionHelper;
 import net.iGap.interfaces.ToolbarListener;
-
-import static net.iGap.activities.ActivityMain.electricityBillRequestCodeQrCode;
 
 public class ElectricityBillPayFrag extends BaseAPIViewFrag {
 

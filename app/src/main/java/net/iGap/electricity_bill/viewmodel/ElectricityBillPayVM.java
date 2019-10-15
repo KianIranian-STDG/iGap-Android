@@ -3,13 +3,8 @@ package net.iGap.electricity_bill.viewmodel;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.helper.HelperNumerical;
-
-import yogesh.firzen.mukkiasevaigal.S;
 
 public class ElectricityBillPayVM extends BaseAPIViewModel {
 
