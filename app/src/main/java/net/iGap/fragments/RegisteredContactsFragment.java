@@ -725,7 +725,11 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         }
 
         public String getBubbleText(int position) {
-            return usersList.get(position).getDisplay_name().substring(0, 1).toUpperCase();
+            if (usersList.size() > position) {
+                return usersList.get(position).getDisplay_name().substring(0, 1).toUpperCase();
+            }else {
+                return "-";
+            }
         }
 
         @Override
