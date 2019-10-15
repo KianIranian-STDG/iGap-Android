@@ -271,7 +271,7 @@ public class FragmentEditImage extends BaseFragment {
             @Override
             public void onClick(View v) {
                 AndroidUtils.closeKeyboard(v);
-                if (getActivity() != null) {
+                if (getActivity() != null && itemGalleryList.size() > 0) {
                     if (!isNicknamePage) {
                         new HelperFragment(getActivity().getSupportFragmentManager(), FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path)).setReplace(false).load();
                     } else {
