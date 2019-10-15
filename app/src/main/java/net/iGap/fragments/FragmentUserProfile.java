@@ -69,6 +69,8 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.BIND_ABOVE_CLIENT;
+import static net.iGap.module.AttachFile.getFilePathFromUriAndCheckForAndroid7;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 public class FragmentUserProfile extends BaseMainFragments implements FragmentEditImage.OnImageEdited {
@@ -91,16 +93,22 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_profile, container, false);
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.frame_edit, FragmentProfile.newInstance(), null).commit();
+        binding.editProfile.setOnClickListener(view -> {
+            FragmentTransaction fragmentTransaction1 = getChildFragmentManager().beginTransaction();
+            fragmentTransaction1.replace(R.id.frame_edit, FragmentEditProfile.newInstance(), null).commit();
+        });
         viewModel.init();
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.wtf(this.getClass().getName(), "onViewCreated");
 
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
@@ -114,111 +122,10 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        viewModel.goToAddMemberPage.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (getActivity() != null && aBoolean != null && aBoolean) {
-                try {
-                    Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-            }
-        });
-
-        viewModel.goToWalletAgreementPage.observe(getViewLifecycleOwner(), phoneNumber -> {
-            if (getActivity() != null && phoneNumber != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
-            }
-        });
-
-        viewModel.goToWalletPage.observe(getViewLifecycleOwner(), phoneNumber -> {
-            if (getContext() != null && phoneNumber != null) {
-                new HelperWallet().goToWallet(getContext(), phoneNumber, false);
-            }
-        });
-
-        viewModel.shareInviteLink.observe(getViewLifecycleOwner(), link -> {
-            if (link != null) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, link);
-                sendIntent.setType("text/plain");
-                Intent openInChooser = Intent.createChooser(sendIntent, "Open in...");
-                startActivity(openInChooser);
-            }
-        });
-
-        viewModel.goToScannerPage.observe(getViewLifecycleOwner(), go -> {
-            if (go != null && go) {
-                try {
-                    HelperPermission.getCameraPermission(getActivity(), new OnGetPermission() {
-                        @Override
-                        public void Allow() throws IllegalStateException {
-                            IntentIntegrator integrator = new IntentIntegrator(getActivity());
-                            integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-                            integrator.setRequestCode(ActivityMain.requestCodeQrCode);
-                            integrator.setBeepEnabled(false);
-                            integrator.setPrompt("");
-                            integrator.initiateScan();
-                        }
-
-                        @Override
-                        public void deny() {
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        viewModel.checkLocationPermission.observe(getViewLifecycleOwner(), isCheck -> {
-            if (isCheck != null && isCheck) {
-                try {
-                    HelperPermission.getLocationPermission(getActivity(), new OnGetPermission() {
-                        @Override
-                        public void Allow() {
-                            viewModel.haveLocationPermission();
-                        }
-
-                        @Override
-                        public void deny() {
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        viewModel.goToIGapMapPage.observe(getViewLifecycleOwner(), isGo -> {
-            if (getActivity() != null && isGo != null && isGo) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).setReplace(false).load();
-            }
-        });
-
-        viewModel.goToFAQPage.observe(getViewLifecycleOwner(), link -> {
-            if (link != null) {
-                HelperUrl.openBrowser(link);
-            }
-        });
-
-        viewModel.goToSettingPage.observe(getViewLifecycleOwner(), go -> {
-            if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();
-            }
-        });
-
         viewModel.goToShowAvatarPage.observe(getViewLifecycleOwner(), userId -> {
             if (getActivity() != null && userId != null) {
                 FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-            }
-        });
-
-        viewModel.goToUserScorePage.observe(getViewLifecycleOwner(), go -> {
-            if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentUserScore()).setReplace(false).load();
             }
         });
 
@@ -248,24 +155,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         viewModel.goToChatPage.observe(getViewLifecycleOwner(), data -> {
             if (getActivity() != null && data != null) {
                 new GoToChatActivity(data.getRoomId()).setPeerID(data.getPeerId()).startActivity(getActivity());
-            }
-        });
-
-        viewModel.isEditProfile.observe(getViewLifecycleOwner(), isEditProfile -> {
-            if (isEditProfile != null) {
-                if (!isEditProfile) {
-                    hideKeyboard();
-                }
-                ConstraintSet set = new ConstraintSet();
-                set.clone(binding.root);
-                set.setVisibility(binding.editProfileView.getId(), isEditProfile ? View.VISIBLE : View.GONE);
-                set.setVisibility(binding.profileViewGroup.getId(), isEditProfile ? View.GONE : View.VISIBLE);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    TransitionManager.beginDelayedTransition(binding.root);
-                    set.applyTo(binding.root);
-                } else {
-                    set.applyTo(binding.root);
-                }
             }
         });
 
@@ -338,7 +227,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        Log.wtf(this.getClass().getName(), "onViewCreated");
     }
 
     @Override

@@ -375,6 +375,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onEditProfileClick() {
+
+
         if (isEditProfile.getValue() != null && isEditProfile.getValue()) {
             if (editProfileIcon.get() == R.string.check_icon) {
                 submitData();
