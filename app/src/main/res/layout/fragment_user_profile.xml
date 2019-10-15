@@ -78,7 +78,7 @@
                 android:background="?attr/iGapAvatarBackground"
                 android:onClick="@{()->viewModel.onAddImageClick()}"
                 android:text="@string/add_icon_without_circle_font"
-                android:visibility="gone"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@id/fup_user_image"
                 app:layout_constraintEnd_toEndOf="@id/fup_user_image"
                 app:layout_constraintStart_toEndOf="@id/fup_user_image" />
