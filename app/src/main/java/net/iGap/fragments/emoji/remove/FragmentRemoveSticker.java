@@ -190,20 +190,21 @@ public class FragmentRemoveSticker extends BaseFragment {
                     txtRemove.setOnClickListener(v -> {
 
                         if (getActivity() == null) return;
+                        int pos = getAdapterPosition() ;
 
                         new MaterialDialog.Builder(getActivity())
                                 .title(getResources().getString(R.string.remove_sticker))
                                 .content(getResources().getString(R.string.remove_sticker_text))
                                 .positiveText(getString(R.string.yes))
                                 .negativeText(getString(R.string.no))
-                                .onPositive((dialog, which) -> removeStickerByApi(getAdapterPosition()))
+                                .onPositive((dialog, which) -> removeStickerByApi(pos))
                                 .show();
                     });
             }
 
             private void removeStickerByApi(int pos) {
 
-                if (pos >= 0 && mData.size() > pos) {
+                if ( mData.size() > pos) {
 
                     progressBar.setVisibility(View.VISIBLE);
                     mAPIService.removeSticker(mData.get(pos).getId()).enqueue(new Callback<StructStickerResult>() {
