@@ -161,6 +161,7 @@
     <string name="am_contact">Contact</string>
     <string name="just_wait_en">Please Wait</string>
     <string name="device_dosenot_camera_en">This device does not have a camera.</string>
+    <string name="device_dosenot_support">This device does not have an app for this action.</string>
     <string name="do_you_want_to_turn_on_gps">Your GPS is off, do you want to turn it on?</string>
     <string name="picture_is_saved_en">The Picture was Saved.</string>
     <string name="select_picture_en">Select Picture</string>
