@@ -4729,7 +4729,9 @@ public class FragmentChat extends BaseFragment
                 dialogReport(true, messageId);
             }
         });
-        bottomSheetFragment.show(getFragmentManager(), "bottomSheet");
+        if (getFragmentManager() != null) {
+            bottomSheetFragment.show(getFragmentManager(), "bottomSheet");
+        }
     }
 
     private void editTextRequestFocus(EditText editText) {
