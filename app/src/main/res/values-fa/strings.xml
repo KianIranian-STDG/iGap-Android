@@ -2256,4 +2256,19 @@
     <string name="elecBill_pay_billBranchInfo">اطلاعات انشعاب</string>
     <string name="elecBill_pay_billAddBillList">اضافه کردن به لیست قبض های من</string>
     <string name="elecBill_pay_billImage">دریافت تصویر قبض</string>
+    <string name="elecBill_Entry_nameError">لطفا نام انتخابی قبض را وارد کنید. برای مثال خانه</string>
+    <string name="elecBill_Entry_billIDError">لطفا شناسه قبض را وارد نمایید.</string>
+    <string name="elecBill_Entry_phoneError">لطفا شماره تلفن خود را وارد نمایید.</string>
+    <string name="elecBill_Entry_phoneLengthError">طول شماره تلفن شما باید از 11 رقم باشد.</string>
+    <string name="elecBill_Entry_phoneFormatError">شماره تلفن شما باید با 09 شروع شده باشد.</string>
+    <string name="elecBill_Entry_userIDError">لطفا کد ملی خود را وارد نمایید.</string>
+    <string name="elecBill_Entry_userIDLengthError">طول کد ملی شما کافی نیست.</string>
+    <string name="elecBill_Entry_emailFormatError">ساختار ایمیل شما صحیح نیست.</string>
+    <string name="elecBill_add_form">لطفا موارد خواسته شده را تکمیل کنید.</string>
+    <string name="elecBill_add_name">نام قبض *</string>
+    <string name="elecBill_add_billID">شناسه قبض *</string>
+    <string name="elecBill_add_phone">شماره تلفن شما *</string>
+    <string name="elecBill_add_UserNID">کد ملی شما *</string>
+    <string name="elecBill_add_Email">آدرس ایمیل شما</string>
+    <string name="elecBill_add_addBtn">اضافه کردن قبض</string>
 </resources>

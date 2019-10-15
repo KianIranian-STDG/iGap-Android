@@ -24,8 +24,10 @@ import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBillMainBinding;
 import net.iGap.databinding.FragmentElecBillPayBinding;
 import net.iGap.electricity_bill.repository.model.Bill;
+import net.iGap.electricity_bill.viewmodel.ElectricityBillAddVM;
 import net.iGap.electricity_bill.viewmodel.ElectricityBillMainVM;
 import net.iGap.electricity_bill.viewmodel.ElectricityBillPayVM;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.interfaces.ToolbarListener;
@@ -34,7 +36,7 @@ import static net.iGap.activities.ActivityMain.electricityBillRequestCodeQrCode;
 
 public class ElectricityBillPayFrag extends BaseAPIViewFrag {
 
-    public enum btnActions {PAY_BILL, BRANCH_INFO}
+    public enum btnActions {PAY_BILL, BRANCH_INFO, ADD_LIST}
 
     private FragmentElecBillPayBinding binding;
     private ElectricityBillPayVM elecBillVM;
@@ -111,11 +113,18 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
         onBtnClickManger(btnActions.BRANCH_INFO);
     }
 
+    public void onAddToListBtnClick() {
+        onBtnClickManger(btnActions.ADD_LIST);
+    }
+
     private void onBtnClickManger(btnActions actions) {
         switch (actions) {
             case PAY_BILL:
                 break;
             case BRANCH_INFO:
+                break;
+            case ADD_LIST:
+                new HelperFragment(getFragmentManager(), ElectricityBillAddFrag.newInstance(elecBillVM.getBillID().get())).setReplace(false).load();
                 break;
         }
     }

@@ -361,7 +361,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:minHeight="58dp"
-                    android:onClick="@{()->viewmodel.addToList()}"
+                    android:onClick="@{()->fragment.onAddToListBtnClick()}"
                     android:text="@string/elecBill_pay_billAddBillList"
                     android:textSize="@dimen/dp16"
                     android:visibility="visible"

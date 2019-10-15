@@ -32,10 +32,6 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
 
     }
 
-    public void addToList() {
-
-    }
-
     public void showBillImage() {
 
     }
