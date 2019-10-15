@@ -2239,4 +2239,21 @@
     <string name="url_copied">لینک کپی شد.</string>
     <string name="message_is_long">پیام شما طولانی است.\nپیام تبدیل خواهد شد به</string>
 
+    <string name="elecBill_Entry_lengthError">شناسه قبض باید 13 کاراکتر باشد.</string>
+    <string name="elecBill_Entry_barcodeError">اسکن بارکد انجام نشد. لطفا دوباره تلاش کنید.</string>
+    <string name="elecBill_Entry_companyError">از این بخش تنها برای پرداخت قبض برق استفاده کنید.</string>
+    <string name="elecBill_main_billTitle">استعلام و پرداخت سریع قبض برق</string>
+    <string name="elecBill_main_billIDHint">شناسه قبض</string>
+    <string name="elecBill_main_billPay">استعلام</string>
+    <string name="elecBill_main_billMyList">قبض های من</string>
+    <string name="elecBill_main_billSearch">جستجوی قبض</string>
+    <string name="elecBill_main_billBranchInfo">اطلاعات انشعاب</string>
+    <string name="elecBill_pay_billID">شناسه قبض</string>
+    <string name="elecBill_pay_billPayID">شناسه پرداخت قبض</string>
+    <string name="elecBill_pay_billPrice">مبلغ پایان دوره</string>
+    <string name="elecBill_pay_billTime">مهلت پرداخت</string>
+    <string name="elecBill_pay_billPay">پرداخت</string>
+    <string name="elecBill_pay_billBranchInfo">اطلاعات انشعاب</string>
+    <string name="elecBill_pay_billAddBillList">اضافه کردن به لیست قبض های من</string>
+    <string name="elecBill_pay_billImage">دریافت تصویر قبض</string>
 </resources>

@@ -2263,4 +2263,19 @@ Want to get it?</string>
     <string name="elecBill_Entry_lengthError">Bill ID must be 13 character.</string>
     <string name="elecBill_Entry_barcodeError">Barcode scan failed. Please try again.</string>
     <string name="elecBill_Entry_companyError">We only support Electricity Bill.</string>
+    <string name="elecBill_main_billTitle">Inquiry Electricity Bill and quick pay</string>
+    <string name="elecBill_main_billIDHint">Electricity Bill Number</string>
+    <string name="elecBill_main_billPay">Inquiry My Bill</string>
+    <string name="elecBill_main_billMyList">My Electricity Bills</string>
+    <string name="elecBill_main_billSearch">Search Bills</string>
+    <string name="elecBill_main_billBranchInfo">Electricity Branching Info</string>
+    <string name="elecBill_pay_billID">Bill ID</string>
+    <string name="elecBill_pay_billPayID">Bill Pay ID</string>
+    <string name="elecBill_pay_billPrice">Total due</string>
+    <string name="elecBill_pay_billTime">Time Limit</string>
+    <string name="elecBill_pay_billPay">Pay</string>
+    <string name="elecBill_pay_billBranchInfo">Electricity Branching Info</string>
+    <string name="elecBill_pay_billAddBillList">Add to my Bill\'s list</string>
+    <string name="elecBill_pay_billImage">Show bill\'s image</string>
+
 </resources>

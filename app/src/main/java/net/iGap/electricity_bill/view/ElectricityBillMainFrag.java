@@ -23,6 +23,7 @@ import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBillMainBinding;
 import net.iGap.electricity_bill.viewmodel.ElectricityBillMainVM;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.interfaces.ToolbarListener;
@@ -98,10 +99,10 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag {
             }
         });
 
-        elecBillVM.getGoToBillDetailFrag().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-
+        elecBillVM.getGoToBillDetailFrag().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                elecBillVM.getProgressVisibility().set(View.GONE);
+                new HelperFragment(getFragmentManager(), ElectricityBillPayFrag.newInstance(elecBillVM.getBillID().get(), elecBillVM.getBillPayID(), elecBillVM.getBillPrice())).setReplace(false).load();
             }
         });
     }

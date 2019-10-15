@@ -36,6 +36,7 @@ public class ElectricityBillMainVM extends BaseAPIViewModel {
             activateError(R.string.elecBill_Entry_lengthError);
             return;
         }
+        progressVisibility.set(View.VISIBLE);
         goToBillDetailFrag.setValue(true);
     }
 
@@ -55,7 +56,7 @@ public class ElectricityBillMainVM extends BaseAPIViewModel {
                 }
                 billID.set(billId);
                 billPayID = payId;
-                billPrice = new HelperNumerical().getCommaSeparatedPrice((Integer.parseInt(price) * 1000));
+                billPrice = new HelperNumerical().getCommaSeparatedPrice((Integer.parseInt(price) * 1000)) + " ریال";
                 goToBillDetailFrag.setValue(true);
             }
             else {
