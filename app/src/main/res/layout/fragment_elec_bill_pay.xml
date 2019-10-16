@@ -24,7 +24,6 @@
             android:id="@+id/Toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/sky_blue"
             android:minHeight="48dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
