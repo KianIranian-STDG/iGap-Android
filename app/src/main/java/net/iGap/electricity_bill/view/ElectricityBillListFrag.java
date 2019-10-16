@@ -1,27 +1,37 @@
 package net.iGap.electricity_bill.view;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import net.iGap.Config;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBillListBinding;
 import net.iGap.electricity_bill.repository.model.Bill;
 import net.iGap.electricity_bill.view.adapter.ElectricityBillListAdapter;
 import net.iGap.electricity_bill.viewmodel.ElectricityBillListVM;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
 import java.util.List;
+
+import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class ElectricityBillListFrag extends BaseAPIViewFrag {
 
@@ -88,7 +98,32 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
         ElectricityBillListAdapter adapter = new ElectricityBillListAdapter(getContext(), bills, new ElectricityBillListAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position, Actoin btnAction) {
-                Log.d(TAG, "onClick: ");
+                Bill temp = elecBillVM.getmData().getValue().get(position);
+                switch (btnAction) {
+                    case PAY:
+                        break;
+                    case EDIT:
+                        new HelperFragment(getFragmentManager(), ElectricityBillAddFrag.newInstance()).setReplace(false).load();
+                        break;
+                    case DELETE:
+                        final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                                .title(R.string.elecBill_deleteBill_title)
+                                .content(R.string.elecBill_deleteBill_desc)
+                                .positiveText(R.string.elecBill_deleteBill_pos)
+                                .negativeText(R.string.elecBill_deleteBill_neg)
+                                .positiveColor(getContext().getResources().getColor(R.color.red))
+                                .widgetColor(new Theme().getAccentColor(getContext()))
+                                .onPositive((dialog1, which) -> {
+                                    Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                                    elecBillVM.deleteItem(position);
+                                })
+                                .build();
+                        dialog.show();
+                        break;
+                    case SHOW_DETAIL:
+                        new HelperFragment(getFragmentManager(), ElectricityBillPayFrag.newInstance(temp.getID(), temp.getPayID(), temp.getPrice())).setReplace(false).load();
+                        break;
+                }
             }
         });
         binding.billRecycler.setAdapter(adapter);
@@ -106,8 +141,19 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
     private void onBtnClickManger(btnActions actions) {
         switch (actions) {
             case ADD_NEW_BILL:
+                new HelperFragment(getFragmentManager(), ElectricityBillAddFrag.newInstance()).setReplace(false).load();
                 break;
             case DELETE_ACCOUNT:
+                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                        .title(R.string.elecBill_deleteAccount_title)
+                        .content(R.string.elecBill_deleteAccount_desc)
+                        .positiveText(R.string.elecBill_deleteAccount_pos)
+                        .negativeText(R.string.elecBill_deleteAccount_neg)
+                        .positiveColor(getContext().getResources().getColor(R.color.red))
+                        .widgetColor(new Theme().getAccentColor(getContext()))
+                        .onPositive((dialog1, which) -> Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show())
+                        .build();
+                dialog.show();
                 break;
         }
     }

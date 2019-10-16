@@ -34,6 +34,12 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
         mData.setValue(tempData);
     }
 
+    public void deleteItem(int position) {
+        List<Bill> tempData = mData.getValue();
+        tempData.remove(position);
+        mData.setValue(tempData);
+    }
+
     public MutableLiveData<List<Bill>> getmData() {
         return mData;
     }

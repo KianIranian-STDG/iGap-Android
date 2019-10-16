@@ -2274,4 +2274,12 @@
     <string name="elecBill_cell_showDetail">جزئیات</string>
     <string name="elecBill_cell_addNewBill">اضافه کردن قبض جدید</string>
     <string name="elecBill_cell_deleteAccount">حذف حساب کاربری</string>
+    <string name="elecBill_deleteBill_title">حذف قبض</string>
+    <string name="elecBill_deleteBill_desc">آیا از حذف این قبض اطمینان دارید؟</string>
+    <string name="elecBill_deleteBill_pos">حذف</string>
+    <string name="elecBill_deleteBill_neg">قبض حذف نشود.</string>
+    <string name="elecBill_deleteAccount_title">حذف حساب کاربری</string>
+    <string name="elecBill_deleteAccount_desc">آیا از حذف حساب کاربری خود اطمینان دارید؟</string>
+    <string name="elecBill_deleteAccount_pos">حذف حساب</string>
+    <string name="elecBill_deleteAccount_neg">لغو حذف حساب من</string>
 </resources>

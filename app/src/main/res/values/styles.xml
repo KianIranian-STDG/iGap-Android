@@ -266,6 +266,7 @@
         <item name="strokeWidth">2dp</item>
         <item name="android:textColor">?iGapButtonTextColor</item>
         <item name="strokeColor">?iGapButtonColor</item>
+        <item name="rippleColor">?iGapButtonColor</item>
     </style>
 
     <style name="iGapButtonStroke" parent="BaseIGapStrokeButtonStyle">

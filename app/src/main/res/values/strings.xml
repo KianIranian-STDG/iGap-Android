@@ -2295,5 +2295,13 @@ Want to get it?</string>
     <string name="elecBill_cell_showDetail">Detail</string>
     <string name="elecBill_cell_addNewBill">Add new bill</string>
     <string name="elecBill_cell_deleteAccount">Delete Account</string>
+    <string name="elecBill_deleteBill_title">Delete Bill</string>
+    <string name="elecBill_deleteBill_desc">Are you sure to delete this bill?</string>
+    <string name="elecBill_deleteBill_pos">Delete</string>
+    <string name="elecBill_deleteBill_neg">No, don\'t delete.</string>
+    <string name="elecBill_deleteAccount_title">Delete Account</string>
+    <string name="elecBill_deleteAccount_desc">Are you sure to delete your account?</string>
+    <string name="elecBill_deleteAccount_pos">Delete</string>
+    <string name="elecBill_deleteAccount_neg">No, don\'t delete.</string>
 
 </resources>
