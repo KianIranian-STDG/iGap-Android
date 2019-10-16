@@ -58,7 +58,7 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag {
         binding.setLifecycleOwner(this);
         this.viewModel = elecBillVM;
 
-        return binding.getRoot();
+        return attachToSwipeBack(binding.getRoot());
 
     }
 
