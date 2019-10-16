@@ -26,7 +26,7 @@
             android:button="@drawable/check_box_background"
             android:clickable="false" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <net.iGap.module.CircleImageView
             android:id="@+id/iv_itemContactCall_profileImage"
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"

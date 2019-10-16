@@ -179,51 +179,53 @@ public class FragmentRemoveSticker extends BaseFragment {
                 //GradientDrawable backgroundGradient = (GradientDrawable) txtRemove.getBackground();
                 //backgroundGradient.setColor(Color.parseColor(G.appBarColor));
 
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentDetailStickers.newInstance(mData.get(getAdapterPosition()).getStickers())).setReplace(false).load();
-                        }
+                itemView.setOnClickListener(v -> {
+                    if (getActivity() != null) {
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentDetailStickers.newInstance(mData.get(getAdapterPosition()).getStickers())).setReplace(false).load();
                     }
                 });
 
                 if (progressBar.getVisibility() == View.GONE)
-                    txtRemove.setOnClickListener(new View.OnClickListener() {
+
+                    txtRemove.setOnClickListener(v -> {
+
+                        if (getActivity() == null) return;
+                        int pos = getAdapterPosition() ;
+
+                        new MaterialDialog.Builder(getActivity())
+                                .title(getResources().getString(R.string.remove_sticker))
+                                .content(getResources().getString(R.string.remove_sticker_text))
+                                .positiveText(getString(R.string.yes))
+                                .negativeText(getString(R.string.no))
+                                .onPositive((dialog, which) -> removeStickerByApi(pos))
+                                .show();
+                    });
+            }
+
+            private void removeStickerByApi(int pos) {
+
+                if ( mData.size() > pos) {
+
+                    progressBar.setVisibility(View.VISIBLE);
+                    mAPIService.removeSticker(mData.get(pos).getId()).enqueue(new Callback<StructStickerResult>() {
                         @Override
-                        public void onClick(View v) {
+                        public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
+                            progressBar.setVisibility(View.GONE);
+                            if (response.body() != null && response.body().isSuccess()) {
+                                RealmStickers.updateFavorite(mData.get(pos).getId(), false);
+                                mData.remove(pos);
+                                updateAdapter();
+                                FragmentChat.onUpdateSticker.update();
+                            }
+                        }
 
-                            new MaterialDialog.Builder(getActivity())
-                                    .title(getResources().getString(R.string.remove_sticker))
-                                    .content(getResources().getString(R.string.remove_sticker_text))
-                                    .positiveText(getString(R.string.yes))
-                                    .negativeText(getString(R.string.no))
-                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                        @Override
-                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                            progressBar.setVisibility(View.VISIBLE);
-                                            mAPIService.removeSticker(mData.get(getAdapterPosition()).getId()).enqueue(new Callback<StructStickerResult>() {
-                                                @Override
-                                                public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
-                                                    progressBar.setVisibility(View.GONE);
-                                                    if (response.body() != null && response.body().isSuccess()) {
-                                                        RealmStickers.updateFavorite(mData.get(getAdapterPosition()).getId(), false);
-                                                        mData.remove(getAdapterPosition());
-                                                        updateAdapter();
-                                                        FragmentChat.onUpdateSticker.update();
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onFailure(Call<StructStickerResult> call, Throwable t) {
-                                                    progressBar.setVisibility(View.GONE);
-                                                }
-                                            });
-                                        }
-                                    })
-                                    .show();
+                        @Override
+                        public void onFailure(Call<StructStickerResult> call, Throwable t) {
+                            progressBar.setVisibility(View.GONE);
                         }
                     });
+
+                }
             }
         }
     }

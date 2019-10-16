@@ -54,6 +54,7 @@ import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnUserContactDelete;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.Contacts;
 import net.iGap.module.EmojiTextViewE;
@@ -75,7 +76,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Case;
 import io.realm.Realm;
 
@@ -725,7 +725,11 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         }
 
         public String getBubbleText(int position) {
-            return usersList.get(position).getDisplay_name().substring(0, 1).toUpperCase();
+            if (usersList.size() > position) {
+                return usersList.get(position).getDisplay_name().substring(0, 1).toUpperCase();
+            }else {
+                return "-";
+            }
         }
 
         @Override

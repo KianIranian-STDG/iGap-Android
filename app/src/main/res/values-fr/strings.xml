@@ -128,6 +128,7 @@
     <string name="delete_text">Etes-vous sûr de vouloir supprimer ce contact?</string>
     <string name="just_wait_en">S\'il vous plaît attendez.</string>
     <string name="device_dosenot_camera_en">cet appareil n\'a pas de caméra</string>
+    <string name="device_dosenot_support">Cet appareil n\'a pas d\'application pour cette action</string>
     <string name="do_you_want_to_turn_on_gps">Le GPS est désactivé , vous voulez l\'activer?</string>
     <string name="picture_is_saved_en">l\'image a été enregistrée </string>
     <string name="select_picture_en">choix d\'image</string>
@@ -1971,7 +1972,7 @@
     <string name="iland">iLand</string>
     <string name="all_calls">des appels</string>
     <string name="open_url">ouvrir le lien</string>
-    <string name="url_copied">lien copié</string>
+    <string name="copied">copié</string>
     <string name="default_theme_title">thème par défaut</string>
     <string name="dark_theme_title">Thème sombre</string>
     <string name="message_is_long">Votre message est trop long. \n Le message sera converti en</string>
