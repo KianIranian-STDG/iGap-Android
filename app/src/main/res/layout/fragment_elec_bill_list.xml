@@ -3,9 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewmodel"
-            type="net.iGap.electricity_bill.viewmodel.ElectricityBillAddVM" />
+            type="net.iGap.electricity_bill.viewmodel.ElectricityBillListVM" />
+
+        <variable
+            name="fragment"
+            type="net.iGap.electricity_bill.view.ElectricityBillListFrag" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -47,8 +52,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:minHeight="58dp"
-                    android:onClick="@{()->viewmodel.addBill()}"
-                    android:text="Add new bill"
+                    android:onClick="@{()->fragment.onAddNewBillBtnClick()}"
+                    android:text="@string/elecBill_cell_addNewBill"
                     android:textSize="@dimen/dp16"
                     android:visibility="visible"
                     android:layout_marginTop="@dimen/dp16"
@@ -62,6 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintTop_toBottomOf="@+id/addNewBill"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
@@ -85,8 +91,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:minHeight="58dp"
-                    android:onClick="@{()->viewmodel.addBill()}"
-                    android:text="Delete Account"
+                    android:onClick="@{()->fragment.onDeleteAccountBtnClick()}"
+                    android:text="@string/elecBill_cell_deleteAccount"
                     android:textSize="@dimen/dp16"
                     android:visibility="visible"
                     android:layout_marginTop="@dimen/dp16"

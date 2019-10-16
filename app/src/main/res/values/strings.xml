@@ -2292,5 +2292,8 @@ Want to get it?</string>
     <string name="elecBill_add_UserNID">Your National ID *</string>
     <string name="elecBill_add_Email">Your Email Address</string>
     <string name="elecBill_add_addBtn">Add bill</string>
+    <string name="elecBill_cell_showDetail">Detail</string>
+    <string name="elecBill_cell_addNewBill">Add new bill</string>
+    <string name="elecBill_cell_deleteAccount">Delete Account</string>
 
 </resources>

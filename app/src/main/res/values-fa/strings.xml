@@ -2271,4 +2271,7 @@
     <string name="elecBill_add_UserNID">کد ملی شما *</string>
     <string name="elecBill_add_Email">آدرس ایمیل شما</string>
     <string name="elecBill_add_addBtn">اضافه کردن قبض</string>
+    <string name="elecBill_cell_showDetail">جزئیات</string>
+    <string name="elecBill_cell_addNewBill">اضافه کردن قبض جدید</string>
+    <string name="elecBill_cell_deleteAccount">حذف حساب کاربری</string>
 </resources>

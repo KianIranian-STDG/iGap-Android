@@ -169,7 +169,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/MyElecBillList"
-                    style="@style/iGapButton"
+                    style="@style/iGapOutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:minHeight="58dp"
@@ -191,7 +191,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/searchBill"
-                    style="@style/iGapButton"
+                    style="@style/iGapOutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:minHeight="58dp"
@@ -219,7 +219,7 @@
                     android:onClick="@{()->fragment.onBranchInfoBtnClick()}"
                     android:text="@string/elecBill_main_billBranchInfo"
                     android:textSize="@dimen/dp16"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:layout_marginTop="@dimen/dp8"
                     android:layout_marginStart="@dimen/dp16"
                     android:layout_marginEnd="@dimen/dp16"

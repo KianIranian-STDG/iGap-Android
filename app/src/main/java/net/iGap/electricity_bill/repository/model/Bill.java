@@ -2,16 +2,27 @@ package net.iGap.electricity_bill.repository.model;
 
 public class Bill {
 
+    private String title;
     private String ID;
     private String payID;
     private String price;
     private String dueTime;
+    private boolean loading;
 
     public Bill(String ID, String payID, String price, String dueTime) {
         this.ID = ID;
         this.payID = payID;
         this.price = price;
         this.dueTime = dueTime;
+    }
+
+    public Bill(String title, String ID, String payID, String price, String dueTime, boolean loading) {
+        this.title = title;
+        this.ID = ID;
+        this.payID = payID;
+        this.price = price;
+        this.dueTime = dueTime;
+        this.loading = loading;
     }
 
     public String getID() {
@@ -44,5 +55,21 @@ public class Bill {
 
     public void setDueTime(String dueTime) {
         this.dueTime = dueTime;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public boolean isLoading() {
+        return loading;
+    }
+
+    public void setLoading(boolean loading) {
+        this.loading = loading;
     }
 }
