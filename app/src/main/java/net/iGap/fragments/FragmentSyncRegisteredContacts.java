@@ -38,6 +38,7 @@ import net.iGap.interfaces.OnPhoneContact;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FastScroller;
@@ -409,11 +410,9 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
         private List<RealmContacts> usersList;
         private int count;
-        private LayoutInflater inflater;
 
 
         ContactListAdapter2(List<RealmContacts> contacts) {
-            inflater = LayoutInflater.from(G.context);
             count = contacts.size();
             usersList = contacts;
         }
@@ -430,7 +429,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int i) {
 
-            View v = inflater.inflate(R.layout.item_contact_chat, viewGroup, false);
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_contact_chat, viewGroup, false);
             return new ViewHolder(v);
         }
 
@@ -487,7 +486,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
         public class ViewHolder extends RecyclerView.ViewHolder {
 
-            private de.hdodenhof.circleimageview.CircleImageView image;
+            private CircleImageView image;
             private EmojiTextViewE title;
             private TextView subtitle;
             private RealmContacts realmContacts;
