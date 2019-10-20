@@ -194,6 +194,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp4"
                 android:text="@string/am_file"
+                android:textSize="@dimen/dp10"
                 android:textColor="?iGapPrimaryIconTextColor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="@id/txtFile"
