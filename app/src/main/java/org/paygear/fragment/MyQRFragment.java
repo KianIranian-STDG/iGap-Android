@@ -133,17 +133,18 @@ public class MyQRFragment extends Fragment {
         ((NavigationBarActivity) getActivity()).broadcastMessageToPreviousFragment(
                 MyQRFragment.this, null, ScannerFragment.class);
     }
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
+
+    private Uri getImageUri(Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
+        return path != null ? Uri.parse(path) : null;
     }
 
     private void share(Bitmap bitmap) {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, getImageUri(getContext(),bitmap));
+        shareIntent.putExtra(Intent.EXTRA_STREAM, getImageUri(bitmap));
         shareIntent.setType("image/jpeg");
         startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.my_qr)));
 
