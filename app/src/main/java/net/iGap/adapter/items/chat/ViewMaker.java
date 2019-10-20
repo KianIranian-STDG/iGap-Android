@@ -419,8 +419,8 @@ public class ViewMaker {
         fcsl_txt_name.setSingleLine(true);
         fcsl_txt_name.setTextColor(new Theme().getTitleTextColor(context));
 
-        setTextSize(fcsl_txt_name, R.dimen.dp15);
-        fcsl_txt_name.setTypeface(ResourcesCompat.getFont(fcsl_txt_name.getContext(), R.font.main_font_bold));
+        setTextSize(fcsl_txt_name, R.dimen.standardTextSize);
+        fcsl_txt_name.setTypeface(ResourcesCompat.getFont(fcsl_txt_name.getContext(), R.font.main_font));
         LinearLayout.LayoutParams layout_415 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_415.gravity = Gravity.START;
         fcsl_txt_name.setLayoutParams(layout_415);
@@ -437,7 +437,7 @@ public class ViewMaker {
         fcsl_txt_time_info.setSingleLine(true);
         fcsl_txt_time_info.setText("(4) 9:24 am");
         fcsl_txt_time_info.setTextColor(new Theme().getSubTitleColor(context));
-        setTextSize(fcsl_txt_time_info, R.dimen.dp12);
+        setTextSize(fcsl_txt_time_info, R.dimen.smallTextSize);
         fcsl_txt_time_info.setTypeface(ResourcesCompat.getFont(fcsl_txt_time_info.getContext(), R.font.main_font));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             fcsl_txt_time_info.setTextDirection(View.TEXT_DIRECTION_LOCALE);
