@@ -10,20 +10,24 @@
 
 package net.iGap.helper;
 
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.Theme;
-import net.iGap.activities.ActivityRegistration;
+import net.iGap.WebSocketClient;
 import net.iGap.fragments.FragmentMain;
+import net.iGap.interfaces.OnUserSessionLogout;
+import net.iGap.model.AccountUser;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
-import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.request.RequestUserSessionLogout;
+
+import org.jetbrains.annotations.NotNull;
 
 import io.realm.Realm;
 
@@ -39,50 +43,79 @@ public final class HelperLogout {
     /**
      * truncate realm and go to ActivityIntroduce for register again
      */
-    public static void logout() {
-        G.handler.post(new Runnable() {
+    private void logout() {
+        pendingRequest.remove(0);
+        FragmentMain.mOffset = 0;
+        signOutWallet();
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(@NotNull Realm realm) {
+                    realm.deleteAll();
+                }
+            });
+            AppUtils.cleanBadge();
+            new LoginActions();
+        });
+    }
+
+    public void logoutAllUser(LogOutUserCallBack logOutUserCallBack) {
+
+    }
+
+    private boolean logoutUser(AccountUser accountUser) {
+        Log.wtf(this.getClass().getName(), "logoutUser");
+        if (accountUser.isAssigned()) {
+            boolean tmp = AccountManager.getInstance().removeUser(accountUser);
+            logout();
+            if (!tmp) {
+                clearPreferences();
+                resetStaticField();
+            }
+            Log.wtf(this.getClass().getName(), "tmp: " + tmp);
+            return tmp;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean logoutUser() {
+        return logoutUser(AccountManager.getInstance().getCurrentUser());
+    }
+
+    public void logoutUserWithRequest(LogOutUserCallBack logOutUserCallBack) {
+        Log.wtf(this.getClass().getName(), "logoutUserWithRequest");
+        new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
             @Override
-            public void run() {
-                pendingRequest.remove(0);
-                FragmentMain.mOffset = 0;
-                signOutWallet();
-                DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            realm.deleteAll();
-                        }
-                    }, () -> {
-                        clearPreferences();
-                        resetStaticField();
+            public void onUserSessionLogout() {
+                Log.wtf(this.getClass().getName(), "onUserSessionLogout");
+                G.userLogin = false;
+                WebSocketClient.disconnectSocket();
+                logOutUserCallBack.onLogOut(logoutUser(AccountManager.getInstance().getCurrentUser()));
+                /*new LoginActions();*/
+            }
 
-                        AppUtils.cleanBadge();
-                        new LoginActions();
-                        Intent intent = new Intent(G.context, ActivityRegistration.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        G.context.startActivity(intent);
-                        if (G.currentActivity != null) {
-                            G.currentActivity.finish();
-                        }
+            @Override
+            public void onError() {
+                Log.wtf(this.getClass().getName(), "onError");
+                logOutUserCallBack.onError();
+            }
 
-                        try {
-                            NotificationManager nMgr = (NotificationManager) G.context.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                            nMgr.cancelAll();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-
-                        if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
-                            MusicPlayer.stopSound();
-                            MusicPlayer.closeLayoutMediaPlayer();
-                        }
-                    });
-                });
+            @Override
+            public void onTimeOut() {
+                Log.wtf(this.getClass().getName(), "onTimeOut");
+                logOutUserCallBack.onError();
             }
         });
     }
 
-    private static void clearPreferences() {
+    public interface LogOutUserCallBack {
+        void onLogOut(boolean haveAnotherAccount);
+
+        void onError();
+    }
+
+    private void clearPreferences() {
         SharedPreferences sharedPreferencesFile = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         sharedPreferencesFile.edit().clear().apply();
 
@@ -91,7 +124,7 @@ public final class HelperLogout {
     }
 
 
-    private static void resetStaticField() {
+    private void resetStaticField() {
         Theme.setThemeColor();
         G.userLogin = false;
         G.isTimeWhole = false;

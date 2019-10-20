@@ -12,6 +12,7 @@ package net.iGap.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -54,6 +55,7 @@ import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.WebSocketClient;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.dialog.SubmitScoreDialog;
 import net.iGap.eventbus.EventListener;
@@ -397,6 +399,28 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             Log.wtf(this.getClass().getName(), "user: " + AccountManager.getInstance().getUserAccountList().get(i).toString());
         }
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
+        G.logoutAccount.observe(this, haveOtherAccount -> {
+            if (haveOtherAccount != null) {
+                if (haveOtherAccount) {
+                    //toDo: handel notification for logout user
+                    updateUiForChangeAccount();
+                } else {
+                    try {
+                        NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                        nMgr.cancelAll();
+                    } catch (Exception e) {
+                        e.getStackTrace();
+                    }
+                    if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+                        MusicPlayer.stopSound();
+                        MusicPlayer.closeLayoutMediaPlayer();
+                    }
+                    startActivity(new Intent(this, ActivityRegistration.class));
+                    finish();
+                }
+            }
+        });
         if (G.ISRealmOK) {
             DbManager.getInstance().doRealmTask(realm -> {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -502,9 +526,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
             if (deleteFolderBackground) {
                 deleteContentFolderChatBackground();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
-                editor.apply();
+                sharedPreferences.edit().putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false).apply();
             }
 
             if (G.twoPaneMode) {
@@ -1932,7 +1954,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void updateUiForChangeAccount() {
+        DbManager.getInstance().changeRealmConfiguration();
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         initTabStrip(getIntent());
+        WebSocketClient.connectNewAccount();
     }
 }

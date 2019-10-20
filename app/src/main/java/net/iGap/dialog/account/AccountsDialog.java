@@ -23,10 +23,16 @@ import net.iGap.WebSocketClient;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentBottomSheetDialogBinding;
+import net.iGap.fragments.FragmentMain;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.model.AccountUser;
 
+import org.paygear.RaadApp;
+
 import java.util.List;
+
+import static net.iGap.request.RequestClientGetRoomList.pendingRequest;
+import static org.paygear.utils.Utils.signOutWallet;
 
 public class AccountsDialog extends BottomSheetDialogFragment {
 
@@ -57,9 +63,11 @@ public class AccountsDialog extends BottomSheetDialogFragment {
                 if (getActivity() instanceof ActivityMain && AccountManager.getInstance().getCurrentUser().getId() != id) {
                     WebSocketClient.disconnectSocket();
                     DbManager.getInstance().closeUiRealm();
+                    signOutWallet();
                     AccountManager.getInstance().changeCurrentUserAccount(id);
-                    DbManager.getInstance().changeRealmConfiguration();
-                    WebSocketClient.connectNewAccount();
+                    RaadApp.onCreate(getContext());
+                    pendingRequest.remove(0);
+                    FragmentMain.mOffset = 0;
                     ((ActivityMain) getActivity()).updateUiForChangeAccount();
                     dismiss();
                 }
@@ -70,10 +78,14 @@ public class AccountsDialog extends BottomSheetDialogFragment {
                 if (getActivity() != null) {
                     WebSocketClient.disconnectSocket();
                     DbManager.getInstance().closeUiRealm();
+                    pendingRequest.remove(0);
+                    FragmentMain.mOffset = 0;
+                    signOutWallet();
                     AccountManager.getInstance().changeCurrentUserForAddAccount();
                     DbManager.getInstance().changeRealmConfiguration();
                     startActivity(new Intent(getActivity(), ActivityRegistration.class));
                     getActivity().finish();
+                    RaadApp.onCreate(getContext());
                     WebSocketClient.connectNewAccount();
                 }
             }

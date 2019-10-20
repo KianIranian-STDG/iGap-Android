@@ -1,5 +1,7 @@
 package net.iGap.fragments;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
+import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentSettingBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperError;
@@ -28,6 +31,7 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AppUtils;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.FragmentSettingViewModel;
 
@@ -143,6 +147,30 @@ public class FragmentSetting extends BaseFragment {
         viewModel.goBack.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
                 getActivity().onBackPressed();
+            }
+        });
+
+        viewModel.getUpdateForOtherAccount().observe(getViewLifecycleOwner(), isNeedUpdate -> {
+            if (getActivity() instanceof ActivityMain && isNeedUpdate != null && isNeedUpdate) {
+                //ToDO: handel remove notification for logout account
+                ((ActivityMain) getActivity()).updateUiForChangeAccount();
+            }
+        });
+
+        viewModel.getGoToRegisterPage().observe(getViewLifecycleOwner(), isGo -> {
+            if (getActivity() != null && isGo != null && isGo) {
+                try {
+                    NotificationManager nMgr = (NotificationManager) getActivity().getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    nMgr.cancelAll();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+                if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+                    MusicPlayer.stopSound();
+                    MusicPlayer.closeLayoutMediaPlayer();
+                }
+                startActivity(new Intent(getActivity(), ActivityRegistration.class));
+                getActivity().finish();
             }
         });
 

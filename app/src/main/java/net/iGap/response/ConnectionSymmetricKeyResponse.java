@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import android.util.Log;
+
 import com.neovisionaries.ws.client.WebSocket;
 
 import net.iGap.Config;
@@ -50,7 +52,7 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
             }
 
         } else if (statusNumber == Config.ACCEPT) {
-
+            Log.wtf(this.getClass().getName(),"statusNumber: ACCEPT");
             /**
              * when secure is false set useMask true otherwise set false
              */
@@ -61,6 +63,7 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
             String sm = builder.getSymmetricMethod();
             G.symmetricMethod = sm.split("-")[2];
             if (G.onSecuring == null) {
+                Log.wtf(this.getClass().getName(),"G.onSecuring is null");
                 new LoginActions();
             }
             G.onSecuring.onSecure();

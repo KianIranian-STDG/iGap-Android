@@ -61,7 +61,7 @@ public class HelperError {
                 break;
             case 109:
                 error = G.fragmentActivity.getResources().getString(R.string.E_109);
-                HelperLogout.logout();
+                G.logoutAccount.postValue(new HelperLogout().logoutUser());
                 break;
             case 110:
                 if (BuildConfig.DEBUG)
@@ -69,7 +69,7 @@ public class HelperError {
                 break;
             case 111:
                 if (minorCode != 4) {
-                    HelperLogout.logout();
+                    G.logoutAccount.postValue(new HelperLogout().logoutUser());
                 } else {
                     error = G.fragmentActivity.getResources().getString(R.string.E_111);
                 }

@@ -410,6 +410,7 @@ public class G extends ApplicationContext {
     public static boolean isNeedToCheckProfileWallpaper = false;
 
     public static MutableLiveData<ConnectionState> connectionStateMutableLiveData = new MutableLiveData<>();
+    public static MutableLiveData<Boolean> logoutAccount = new MutableLiveData<>();
 
     private static int makeColorTransparent100(String color) {
         if (color.length() == 9) {
@@ -497,7 +498,6 @@ public class G extends ApplicationContext {
         //init account manager for handle multi account
         AccountManager.initial(this);
 
-        RaadApp.onCreate(getApplicationContext());
         LooperThreadHelper.getInstance();
 
         Metrix.initialize(this, "jpbnabzrmeqvxme");
@@ -524,7 +524,7 @@ public class G extends ApplicationContext {
             @Override
             public void run() {
                 RaadApp.onCreate(getApplicationContext());
-                Raad.init(getApplicationContext());
+                /*Raad.init(getApplicationContext());*/
                 WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
             }
         }).start();

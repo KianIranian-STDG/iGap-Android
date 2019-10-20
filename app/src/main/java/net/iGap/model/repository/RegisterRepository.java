@@ -312,7 +312,12 @@ public class RegisterRepository {
             @Override
             public void onLoginError(int majorCode, int minorCode) {
                 if (majorCode == 111 && minorCode == 4) {
-                    HelperLogout.logout();
+                    //ToDo: handle have logOut result
+                    if (new HelperLogout().logoutUser()) {
+
+                    } else {
+
+                    }
                 } else if (majorCode == 111) {
                     G.handler.post(() -> {
                         //requestLogin();

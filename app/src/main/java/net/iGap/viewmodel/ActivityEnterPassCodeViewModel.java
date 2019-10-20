@@ -15,7 +15,6 @@ import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableInt;
@@ -28,10 +27,9 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperPreferences;
-import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.request.RequestUserSessionLogout;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -62,6 +60,7 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     private MutableLiveData<Integer> showErrorMessage = new MutableLiveData<>();
     private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
     private MutableLiveData<Boolean> clearPassword = new MutableLiveData<>();
+    private SingleLiveEvent<Boolean> goToRegisterPage = new SingleLiveEvent<>();
 
     // Variable used for storing the key in the Android Keystore container
     private static final String KEY_NAME = "androidHive";
@@ -191,23 +190,19 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     public void forgetPassword() {
         G.isPassCode = false;
         hideKeyword.setValue(true);
-        new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
+        new HelperLogout().logoutAllUser(new HelperLogout.LogOutUserCallBack() {
             @Override
-            public void onUserSessionLogout() {
-                /*goBack.setValue(false);*/
-                Log.wtf(this.getClass().getName(), "onUserSessionLogout");
-                HelperLogout.logout();
-                Log.wtf(this.getClass().getName(), "onUserSessionLogout");
+            public void onLogOut(boolean haveAnotherAccount) {
+                if (!haveAnotherAccount) {
+                    goToRegisterPage.postValue(true);
+                } else {
+                    showErrorMessage.postValue(R.string.error);
+                }
             }
 
             @Override
             public void onError() {
-                showErrorMessage.setValue(R.string.error);
-            }
-
-            @Override
-            public void onTimeOut() {
-
+                showErrorMessage.postValue(R.string.error);
             }
         });
     }

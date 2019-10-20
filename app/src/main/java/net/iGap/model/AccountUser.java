@@ -128,8 +128,6 @@ public class AccountUser {
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof AccountUser) {
-            Log.wtf(this.getClass().getName(),"id: "+id);
-            Log.wtf(this.getClass().getName(),"obj id: "+((AccountUser) obj).getId());
             return id == ((AccountUser) obj).getId();
         }
         return super.equals(obj);

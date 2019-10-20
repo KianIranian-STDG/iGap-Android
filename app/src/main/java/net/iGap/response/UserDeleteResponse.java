@@ -35,7 +35,7 @@ public class UserDeleteResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        HelperLogout.logout();
+        G.logoutAccount.postValue(new HelperLogout().logoutUser());
         deleteRecursive(new File(G.DIR_APP));
         if (G.onUserDelete != null) {
             G.onUserDelete.onUserDeleteResponse();

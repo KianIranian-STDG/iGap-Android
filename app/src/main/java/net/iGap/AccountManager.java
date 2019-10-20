@@ -12,6 +12,7 @@ import net.iGap.model.AccountUser;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AccountManager {
@@ -19,7 +20,10 @@ public class AccountManager {
     private static AccountManager ourInstance = null;
 
     private SharedPreferences sharedPreferences;
+
+    //first item is fake user for handel add new user
     private List<AccountUser> userAccountList;
+    private List<String> DbNameList = Arrays.asList("iGapLocalDatabaseEncrypted3.realm", "iGapLocalDatabaseEncrypted2.realm", defaultDBName);
     private AccountUser currentUser;
     public static final String defaultDBName = "iGapLocalDatabaseEncrypted.realm";
 
@@ -61,21 +65,23 @@ public class AccountManager {
         return currentUser;
     }
 
-    public void setCurrentUser(AccountUser currentUser) {
+    private void setCurrentUser(AccountUser currentUser) {
         sharedPreferences.edit().putString("currentUser", new Gson().toJson(currentUser, AccountUser.class)).apply();
         this.currentUser = currentUser;
     }
 
+    private void setUserList() {
+        sharedPreferences.edit().putString("userList", new Gson().toJson(userAccountList, new TypeToken<List<AccountUser>>() {
+        }.getType())).apply();
+    }
+
     public void addAccount(AccountUser accountUser) {
-        AccountUser tmp = userAccountList.remove(userAccountList.size() - 1);
         if (accountUser.getDbName() == null) {
             accountUser.setDbName(getDbName());
         }
         userAccountList.add(userAccountList.size(), accountUser);
-        tmp.setDbName(getDbName());
-        userAccountList.add(tmp);
-        sharedPreferences.edit().putString("userList", new Gson().toJson(userAccountList, new TypeToken<List<AccountUser>>() {
-        }.getType())).apply();
+        userAccountList.get(0).setDbName(getDbName());
+        setUserList();
         setCurrentUser(accountUser);
         for (int i = 0; i < userAccountList.size(); i++) {
             Log.wtf(this.getClass().getName(), "account: " + userAccountList.get(i).toString());
@@ -86,33 +92,50 @@ public class AccountManager {
         return userAccountList.contains(new AccountUser(userId));
     }
 
-    public boolean isExistThisAccount(String phoneNumber) {
-        Log.wtf(this.getClass().getName(), "contains: " + userAccountList.contains(new AccountUser(phoneNumber)));
-        for (int i = 0; i < userAccountList.size(); i++) {
-            Log.wtf(this.getClass().getName(), "account: " + userAccountList.get(i).toString());
-        }
-        return userAccountList.contains(new AccountUser(phoneNumber));
-    }
-
     public void changeCurrentUserForAddAccount() {
-        currentUser = userAccountList.get(userAccountList.size() - 1);
+        currentUser = userAccountList.get(0);
     }
 
     public void changeCurrentUserAccount(long userId) {
         int t = userAccountList.indexOf(new AccountUser(userId));
         if (t != -1) {
             currentUser = userAccountList.get(t);
+            setCurrentUser(currentUser);
+        } else {
+            Log.wtf(this.getClass().getName(), "not exist this user");
+        }
+    }
+
+    // return true if have current user after remove accountUser
+    public boolean removeUser(AccountUser accountUser) {
+        if (accountUser.isAssigned()) {
+            if (userAccountList.contains(accountUser)) {
+                userAccountList.remove(accountUser);
+                currentUser = userAccountList.get(userAccountList.size() - 1);
+                setUserList();
+                setCurrentUser(currentUser);
+                return currentUser.isAssigned();
+            } else {
+                return false;
+            }
+        } else {
+            return false;
         }
     }
 
     private String getDbName() {
-        switch (userAccountList.size()) {
-            case 0:
-                return defaultDBName;
-            case 1:
-                return "iGapLocalDatabaseEncrypted2.realm";
-            default:
-                return "iGapLocalDatabaseEncrypted3.realm";
+        for (int i = DbNameList.size() - 1; i > -1; i--) {
+            boolean isExist = false;
+            for (int j = 0; j < userAccountList.size(); j++) {
+                if (userAccountList.get(j).isAssigned() && userAccountList.get(j).getDbName().equals(DbNameList.get(i))) {
+                    isExist = true;
+                    break;
+                }
+            }
+            if (!isExist) {
+                return DbNameList.get(i);
+            }
         }
+        return defaultDBName;
     }
 }
