@@ -147,7 +147,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
 
             viewHolder.title.setText(registeredInfo.getDisplayName());
 
-            viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(registeredInfo.getId(), registeredInfo.getLastSeen(), false));
+            viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(viewHolder.subtitle.getContext() ,registeredInfo.getId(), registeredInfo.getLastSeen(), false));
             if (HelperCalander.isPersianUnicode) {
                 viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
             }

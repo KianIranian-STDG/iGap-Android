@@ -778,7 +778,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 }
 
                 viewHolder.title.setText(contact.getDisplay_name());
-                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(contact.getId(), contact.getLast_seen(), false));
+                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(viewHolder.subtitle.getContext() ,contact.getId(), contact.getLast_seen(), false));
 
                 if (selectedList.containsKey(usersList.get(i).getPhone())) {
                     viewHolder.animateCheckBox.setVisibility(View.VISIBLE);

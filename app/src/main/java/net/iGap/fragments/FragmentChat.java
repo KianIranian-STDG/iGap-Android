@@ -1784,7 +1784,7 @@ public class FragmentChat extends BaseFragment
                 } else {
                     if (userStatus != null) {
                         if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true, false));
+                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext() ,chatPeerId, userTime, true, false));
                         } else {
                             txtLastSeen.setText(userStatus);
                         }
@@ -4901,7 +4901,7 @@ public class FragmentChat extends BaseFragment
                         } else {
                             if (userStatus != null) {
                                 if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true, false));
+                                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext() ,chatPeerId, userTime, true, false));
                                 } else {
                                     txtLastSeen.setText(userStatus);
                                 }
@@ -5212,7 +5212,7 @@ public class FragmentChat extends BaseFragment
                     } else {
                         if (status != null && txtLastSeen != null) {
                             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                                txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, time, true, false));
+                                txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext() ,chatPeerId, time, true, false));
                             } else {
                                 txtLastSeen.setText(status);
                             }
@@ -5265,7 +5265,7 @@ public class FragmentChat extends BaseFragment
                 } else {
                     if (userStatus != null) {
                         if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true, false));
+                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext() ,chatPeerId, userTime, true, false));
                         } else {
                             txtLastSeen.setText(userStatus);
                         }

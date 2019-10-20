@@ -74,7 +74,7 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
 
                 if (realmRegisteredInfo.getStatus() != null) {
                     if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                        holder.subtitle.setText(LastSeenTimeUtil.computeTime(mContact.peerId, realmRegisteredInfo.getLastSeen(), false));
+                        holder.subtitle.setText(LastSeenTimeUtil.computeTime(holder.subtitle.getContext() ,mContact.peerId, realmRegisteredInfo.getLastSeen(), false));
                     } else {
                         holder.subtitle.setText(realmRegisteredInfo.getStatus());
                     }

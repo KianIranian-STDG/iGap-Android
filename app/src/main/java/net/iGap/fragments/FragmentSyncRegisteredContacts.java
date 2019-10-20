@@ -453,7 +453,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                 viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_4c));
 
                 viewHolder.title.setText(contact.getDisplay_name());
-                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(contact.getId(), contact.getLast_seen(), false));
+                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(viewHolder.subtitle.getContext() ,contact.getId(), contact.getLast_seen(), false));
 
                 setAvatar(viewHolder, contact.getId());
 

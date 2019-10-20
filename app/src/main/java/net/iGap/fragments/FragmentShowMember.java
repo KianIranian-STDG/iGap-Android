@@ -907,7 +907,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             if (mContact.status != null) {
                 if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                    holder.subtitle.setText(LastSeenTimeUtil.computeTime(mContact.peerId, mContact.lastSeen, false));
+                    holder.subtitle.setText(LastSeenTimeUtil.computeTime(holder.subtitle.getContext() ,mContact.peerId, mContact.lastSeen, false));
                 } else {
                     holder.subtitle.setText(mContact.status);
                 }

@@ -201,7 +201,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, mList.get(position).senderId);
             if (realmRegisteredInfo != null) {
                 if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
+                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext() ,realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
                 } else {
                     txtLastSeen.setText(realmRegisteredInfo.getStatus());
                 }
