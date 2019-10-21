@@ -254,8 +254,8 @@ public class RegisterRepository {
         RequestWrapper requestWrapper = new RequestWrapper(100, builder, new OnUserRegistration() {
             @Override
             public void onRegister(String userNameR, long userIdR, ProtoUserRegister.UserRegisterResponse.Method methodValue, List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, String authorHashR, boolean callMethodSupported) {
-                if (AccountManager.getInstance().isExistThisAccount(userId)) {
-                    loginExistUser.setValue(true);
+                if (AccountManager.getInstance().isExistThisAccount(userIdR)) {
+                    loginExistUser.postValue(true);
                 } else {
                     /*isCallMethodSupported = callMethodSupported;*/
                     //because is new ui verification code number is 5 and number not not use it more

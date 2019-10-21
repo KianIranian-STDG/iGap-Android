@@ -164,6 +164,12 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
             }
         });
 
+        viewModel.getGoToRegisterPage().observe(this, isGo -> {
+            if (isGo != null && isGo) {
+                
+            }
+        });
+
         binding.patternLockView.addPatternLockListener(new PatternLockViewListener() {
             @Override
             public void onStarted() {

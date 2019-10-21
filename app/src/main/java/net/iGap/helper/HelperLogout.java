@@ -59,8 +59,13 @@ public final class HelperLogout {
         });
     }
 
-    public void logoutAllUser(LogOutUserCallBack logOutUserCallBack) {
-
+    public boolean logoutAllUser() {
+        boolean tmp = logoutUser(AccountManager.getInstance().getCurrentUser());
+        if (tmp) {
+            return logoutAllUser();
+        } else {
+            return false;
+        }
     }
 
     private boolean logoutUser(AccountUser accountUser) {

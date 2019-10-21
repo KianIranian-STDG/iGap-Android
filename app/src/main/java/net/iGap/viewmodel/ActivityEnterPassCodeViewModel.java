@@ -15,6 +15,7 @@ import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableInt;
@@ -151,6 +152,10 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
         return clearPassword;
     }
 
+    public SingleLiveEvent<Boolean> getGoToRegisterPage() {
+        return goToRegisterPage;
+    }
+
     public void afterTextChanged(String s) {
         if (realmUserInfo.getKindPassCode() == PIN) {
             if (s.length() == 4) {
@@ -190,21 +195,9 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     public void forgetPassword() {
         G.isPassCode = false;
         hideKeyword.setValue(true);
-        new HelperLogout().logoutAllUser(new HelperLogout.LogOutUserCallBack() {
-            @Override
-            public void onLogOut(boolean haveAnotherAccount) {
-                if (!haveAnotherAccount) {
-                    goToRegisterPage.postValue(true);
-                } else {
-                    showErrorMessage.postValue(R.string.error);
-                }
-            }
-
-            @Override
-            public void onError() {
-                showErrorMessage.postValue(R.string.error);
-            }
-        });
+        boolean t = new HelperLogout().logoutAllUser();
+        Log.wtf(this.getClass().getName(), "forgetPassword: " + t);
+        goToRegisterPage.postValue(!t);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
