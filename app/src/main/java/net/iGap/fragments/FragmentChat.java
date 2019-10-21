@@ -142,7 +142,6 @@ import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.databinding.PaymentDialogBinding;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.ChatAttachmentPopup;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
@@ -6217,16 +6216,17 @@ public class FragmentChat extends BaseFragment
                                 if (HelperGetDataFromOtherApp.sharedList.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
                                     final String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
                                     mainVideoPath = sharedData.address;
-                                    if (mainVideoPath == null) {
-                                        return;
+                                    if (mainVideoPath == null) return;
+
+                                    if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
+                                        Intent intent = new Intent(G.fragmentActivity, ActivityTrimVideo.class);
+                                        intent.putExtra("PATH", mainVideoPath);
+                                        startActivityForResult(intent, AttachFile.request_code_trim_video);
+                                    }else {
+                                        G.handler.postDelayed(() -> new VideoCompressor().execute(mainVideoPath, savePathVideoCompress), 200);
+                                        sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
                                     }
-                                    G.handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
-                                        }
-                                    }, 200);
-                                    sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
+
                                 } else {
                                     compressedPath.put(sharedData.address, true);
                                     sendMessage(request_code_VIDEO_CAPTURED, sharedData.address);
