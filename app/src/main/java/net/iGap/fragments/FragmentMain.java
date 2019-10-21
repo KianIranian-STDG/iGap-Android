@@ -971,6 +971,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     public void revertToolbarFromForwardMode() {
         FragmentChat.mForwardMessages = null;
         HelperGetDataFromOtherApp.hasSharedData = false ;
+        HelperGetDataFromOtherApp.sharedList.clear();
         mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
         mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
         mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);

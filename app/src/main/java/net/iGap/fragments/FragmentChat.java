@@ -4340,6 +4340,21 @@ public class FragmentChat extends BaseFragment
         items.add(getString(R.string.forward_item_dialog));
         items.add(getString(R.string.delete_item_dialog));
 
+        //check and remove share base on type and download state
+        if (!roomMessageType.toString().equals("LOCATION") && !roomMessageType.toString().equals("TEXT") && !roomMessageType.toString().equals("CONTACT")) {
+
+            String filepath_;
+            if (message.forwardedFrom != null) {
+                filepath_ = message.forwardedFrom.getAttachment().getLocalFilePath() != null ? message.forwardedFrom.getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(message.forwardedFrom.getAttachment().getCacheId(), message.forwardedFrom.getAttachment().getName(), roomMessageType);
+            } else {
+                filepath_ = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
+            }
+
+            if (!new File(filepath_).exists()) {
+                items.remove(getString(R.string.share_item_dialog));
+            }
+        }
+
 
         if (roomMessageType.toString().contains("IMAGE") || roomMessageType.toString().contains("VIDEO") || roomMessageType.toString().contains("GIF")) {
             items.add(getString(R.string.save_to_gallery));
@@ -6204,6 +6219,7 @@ public class FragmentChat extends BaseFragment
                     }
 
                     boolean isOpenEditImageFragment = false ;
+                    boolean isAllowToClearChatEditText = true ;
                     for (HelperGetDataFromOtherApp.SharedData sharedData : HelperGetDataFromOtherApp.sharedList) {
 
                         edtChat.setText(sharedData.message);
@@ -6222,6 +6238,7 @@ public class FragmentChat extends BaseFragment
                                         Intent intent = new Intent(G.fragmentActivity, ActivityTrimVideo.class);
                                         intent.putExtra("PATH", mainVideoPath);
                                         startActivityForResult(intent, AttachFile.request_code_trim_video);
+                                        isAllowToClearChatEditText = false;
                                     }else {
                                         G.handler.postDelayed(() -> new VideoCompressor().execute(mainVideoPath, savePathVideoCompress), 200);
                                         sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
@@ -6246,7 +6263,7 @@ public class FragmentChat extends BaseFragment
                                 break;
                         }
 
-                        edtChat.setText("");
+                        if (isAllowToClearChatEditText) edtChat.setText("");
                     }
 
                     if (isOpenEditImageFragment && getActivity() != null) {
@@ -6314,20 +6331,20 @@ public class FragmentChat extends BaseFragment
                 case "VOICE":
                 case "AUDIO":
                 case "AUDIO_TEXT":
-                    intent.setType("audio/*");
                     AppUtils.shareItem(intent, messageInfo);
+                    intent.setType("audio/*");
                     chooserDialogText = G.fragmentActivity.getResources().getString(R.string.share_audio_file);
                     break;
                 case "IMAGE":
                 case "IMAGE_TEXT":
-                    intent.setType("image/*");
                     AppUtils.shareItem(intent, messageInfo);
+                    intent.setType("image/*");
                     chooserDialogText = G.fragmentActivity.getResources().getString(R.string.share_image);
                     break;
                 case "VIDEO":
                 case "VIDEO_TEXT":
-                    intent.setType("video/*");
                     AppUtils.shareItem(intent, messageInfo);
+                    intent.setType("video/*");
                     chooserDialogText = G.fragmentActivity.getResources().getString(R.string.share_video_file);
                     break;
                 case "FILE":
@@ -6345,23 +6362,20 @@ public class FragmentChat extends BaseFragment
                         } else {
                             mimeType = "application/*" + mimeType;
                         }
-                        intent.setType(mimeType);
                         intent.putExtra(Intent.EXTRA_STREAM, uri);
+                        intent.setType(mimeType);
                         chooserDialogText = G.fragmentActivity.getResources().getString(R.string.share_file);
                     } else {
 
                         isShareOk = false;
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(context, R.string.file_not_download_yet, Toast.LENGTH_SHORT).show();
-                            }
-                        });
                     }
                     break;
             }
 
-            if (!isShareOk) return;
+            if (!isShareOk){
+                G.handler.post(() -> Toast.makeText(context, R.string.file_not_download_yet, Toast.LENGTH_SHORT).show());
+                return;
+            }
 
             startActivity(Intent.createChooser(intent, chooserDialogText));
         } catch (Exception e) {
