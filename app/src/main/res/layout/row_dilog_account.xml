@@ -1,90 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp70"
+    android:background="?android:selectableItemBackground"
+    android:orientation="vertical">
 
-    <data>
+    <net.iGap.module.CircleImageView
+        android:id="@+id/avatar"
+        android:layout_width="@dimen/dp60"
+        android:layout_height="@dimen/dp60"
+        android:layout_margin="@dimen/dp10"
+        app:srcCompat="@drawable/add_chat_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <import type="android.view.Gravity"/>
-        <import type="android.view.View" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/name"
+        style="?textTitleColorSettingTheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp10"
+        android:fontFamily="@font/main_font"
+        android:singleLine="true"
+        android:text="@{account.name}"
+        android:textSize="@dimen/largeTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/avatar"
+        app:layout_constraintEnd_toStartOf="@id/unreadMessageCount"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        app:layout_constraintTop_toTopOf="@id/avatar" />
 
-        <variable
-            name="account"
-            type="net.iGap.model.AccountUser" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/checked"
+        style="@style/greenIconTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp12"
+        android:text="@string/check_icon"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/avatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/avatar" />
 
-        <variable
-            name="isRtl"
-            type="Boolean" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/unreadMessageCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp12"
+        android:background="@drawable/background_badge"
+        android:gravity="center"
+        android:maxLength="3"
+        android:padding="@dimen/dp4"
+        android:textColor="@color/white"
+        android:textSize="@dimen/verySmallTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/checked"
+        app:layout_constraintEnd_toStartOf="@id/checked"
+        app:layout_constraintTop_toTopOf="@id/checked" />
 
-    </data>
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/root"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp70"
-        android:background="?android:selectableItemBackground">
-
-        <net.iGap.module.CircleImageView
-            android:id="@+id/avatar"
-            android:layout_width="@dimen/dp60"
-            android:layout_height="@dimen/dp60"
-            android:layout_margin="@dimen/dp10"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            style="?textTitleColorSettingTheme"
-            android:fontFamily="@font/main_font"
-            android:singleLine="true"
-            android:layout_margin="@dimen/dp10"
-            android:textSize="@dimen/largeTextSize"
-            android:text="@{account.name}"
-            android:gravity="@{isRtl ? Gravity.RIGHT : Gravity.LEFT}"
-            app:layout_constraintStart_toEndOf="@id/avatar"
-            app:layout_constraintTop_toTopOf="@id/avatar"
-            app:layout_constraintBottom_toBottomOf="@id/avatar"
-            app:layout_constraintEnd_toStartOf="@id/unread" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/checked"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/myIconTextViewStyle"
-            android:text="@string/check_icon"
-            android:visibility="@{account.active ? View.VISIBLE : View.INVISIBLE , default = invisible}"
-            android:textColor="@color/setting_items_value_color"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="@dimen/dp12"
-            app:layout_constraintTop_toTopOf="@id/avatar"
-            app:layout_constraintBottom_toBottomOf="@id/avatar" />
-
-        <LinearLayout
-            android:id="@+id/unread"
-            android:layout_width="@dimen/dp22"
-            android:layout_height="@dimen/dp22"
-            app:layout_constraintEnd_toStartOf="@id/checked"
-            app:layout_constraintTop_toTopOf="@id/checked"
-            app:layout_constraintBottom_toBottomOf="@id/checked"
-            android:visibility="@{account.unReadMessageCount == 0 ? View.INVISIBLE : View.VISIBLE , default = invisible}"
-            android:layout_margin="@dimen/dp12"
-            android:orientation="horizontal"
-            android:background="@drawable/background_badge">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:maxLength="3"
-                android:text="@{account.unReadMessageCount >= 100 ? `+99` : String.valueOf(account.unReadMessageCount)}"
-                android:textSize="@dimen/verySmallTextSize" />
-
-        </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>

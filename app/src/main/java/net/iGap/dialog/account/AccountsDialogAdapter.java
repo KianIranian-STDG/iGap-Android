@@ -1,96 +1,103 @@
 package net.iGap.dialog.account;
 
-import android.content.Context;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.RowDilogAccountBinding;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.model.AccountUser;
+import net.iGap.module.CircleImageView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAdapter.AccountViewHolder> {
 
-    private List<AccountUser> mAccountsList = new ArrayList<>();
+    private List<AccountUser> mAccountsList;
     private AccountDialogListener mListener;
     private AvatarHandler mAvatarHandler;
+    private int currentUserPosition;
 
-    public void setAccountsList(List<AccountUser> accounts) {
-
-        this.mAccountsList.addAll(accounts);
-
-        //if account count was 2 or 1 , add blank account to show add new view
-        /*if (mAccountsList.size() != 3) {
-            mAccountsList.add(new AccountUser(true , mContext.getString(R.string.add_new_account)));
-        }*/
-
-        notifyDataSetChanged();
-    }
-
-    public void setListener(AccountDialogListener listener) {
+    public AccountsDialogAdapter(AvatarHandler mAvatarHandler, AccountDialogListener listener) {
+        this.mAccountsList = new ArrayList<>();
+        this.mAccountsList.addAll(AccountManager.getInstance().getUserAccountList());
+        Collections.reverse(mAccountsList);
+        for (int i = 0; i < mAccountsList.size(); i++) {
+            Log.wtf(this.getClass().getName(), "account: " + mAccountsList.get(i).toString());
+        }
+        this.mAvatarHandler = mAvatarHandler;
+        this.currentUserPosition = mAccountsList.indexOf(AccountManager.getInstance().getCurrentUser());
         this.mListener = listener;
-    }
-
-    public void setAvatarHandler(AvatarHandler avatarHandler) {
-        this.mAvatarHandler = avatarHandler;
     }
 
     @NonNull
     @Override
     public AccountViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        RowDilogAccountBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.row_dilog_account, parent, false);
-        return new AccountViewHolder(binding);
+        return new AccountViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_dilog_account, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull AccountViewHolder holder, int position) {
-        holder.bindView(mAccountsList.get(holder.getAdapterPosition()));
-
+        holder.username.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
+        if (currentUserPosition == position) {
+            holder.currentUserView.setVisibility(View.VISIBLE);
+        } else {
+            holder.currentUserView.setVisibility(View.INVISIBLE);
+        }
+        if (mAccountsList.get(position).isAssigned()) {
+            mAvatarHandler.getAvatar(new ParamWithAvatarType(holder.userAvatar, mAccountsList.get(position).getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
+            holder.username.setText(mAccountsList.get(position).getName());
+            holder.messageUnreadCount.setVisibility(View.VISIBLE);
+            String t;
+            if (mAccountsList.get(position).getUnReadMessageCount() > 99) {
+                t = "+99";
+                holder.messageUnreadCount.setVisibility(View.VISIBLE);
+            } else if (mAccountsList.get(position).getUnReadMessageCount() == 0) {
+                t = "";
+                holder.messageUnreadCount.setVisibility(View.INVISIBLE);
+            } else {
+                t = String.valueOf(mAccountsList.get(position).getUnReadMessageCount());
+                holder.messageUnreadCount.setVisibility(View.VISIBLE);
+            }
+            holder.messageUnreadCount.setText(t);
+        } else {
+            holder.userAvatar.setImageResource(R.drawable.add_chat_background);
+            holder.username.setText(R.string.add_new_account);
+            holder.messageUnreadCount.setVisibility(View.INVISIBLE);
+        }
+        holder.itemView.setOnClickListener(v -> mListener.onAccountClick(mAccountsList.get(holder.getAdapterPosition()).isAssigned(), mAccountsList.get(holder.getAdapterPosition()).getId()));
     }
 
     @Override
     public int getItemCount() {
-        return mAccountsList.size();
+        return mAccountsList.size() > 3 ? 3 : mAccountsList.size();
     }
 
     class AccountViewHolder extends RecyclerView.ViewHolder {
 
-        RowDilogAccountBinding binding;
+        private CircleImageView userAvatar;
+        private AppCompatTextView username;
+        private AppCompatTextView messageUnreadCount;
+        private View currentUserView;
 
-        public AccountViewHolder(@NonNull RowDilogAccountBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
+        public AccountViewHolder(@NonNull View itemView) {
+            super(itemView);
 
-        }
-
-        public void bindView(AccountUser account) {
-            binding.setAccount(account);
-            binding.setIsRtl(G.isAppRtl);
-            binding.executePendingBindings();
-
-            if (account.isAssigned()) {
-                binding.avatar.setImageResource(R.drawable.add_chat_background);
-            } else {
-                mAvatarHandler.getAvatar(new ParamWithAvatarType(binding.avatar, account.getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
-            }
-
-            binding.root.setOnClickListener(v -> {
-                if (!account.isAssigned()) {
-                    mListener.onNewAccountClick();
-                } else {
-                    mListener.onAccountClick(account.getId());
-                }
-            });
-
+            userAvatar = itemView.findViewById(R.id.avatar);
+            username = itemView.findViewById(R.id.name);
+            messageUnreadCount = itemView.findViewById(R.id.unreadMessageCount);
+            currentUserView = itemView.findViewById(R.id.checked);
         }
     }
 }

@@ -11,6 +11,7 @@ package net.iGap.activities;
 
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -166,7 +167,8 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
 
         viewModel.getGoToRegisterPage().observe(this, isGo -> {
             if (isGo != null && isGo) {
-                
+                startActivity(new Intent(ActivityEnterPassCode.this, ActivityRegistration.class));
+                onBackPressed();
             }
         });
 

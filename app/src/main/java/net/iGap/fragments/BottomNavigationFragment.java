@@ -119,12 +119,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     private void openAccountsDialog() {
         new AccountsDialog().setData(bottomNavigation.getAvatarHandler(), new AccountDialogListener() {
             @Override
-            public void onAccountClick(long id) {
-
-            }
-
-            @Override
-            public void onNewAccountClick() {
+            public void onAccountClick(boolean isAssigned, long id) {
 
             }
         }).show(getActivity().getSupportFragmentManager(), "account");

@@ -359,12 +359,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         if (getActivity() != null) {
             new AccountsDialog().setData(avatarHandler, new AccountDialogListener() {
                 @Override
-                public void onAccountClick(long id) {
-
-                }
-
-                @Override
-                public void onNewAccountClick() {
+                public void onAccountClick(boolean isAssigned, long id) {
 
                 }
             }).show(getActivity().getSupportFragmentManager(), "account");
