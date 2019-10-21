@@ -168,6 +168,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
     public SingleLiveEvent<Integer> showError = new SingleLiveEvent<>();
     public MutableLiveData<Drawable> changeUserProfileWallpaper = new MutableLiveData<>();
+    public MutableLiveData<Boolean> setCurrentFragment = new MutableLiveData<>();
 
     private Realm mRealm;
     private RealmUserInfo userInfo;
@@ -199,8 +200,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         updateUserInfoUI();
         if (checkValidationForRealm(userInfo)) {
             userInfo.addChangeListener(realmModel -> {
-                Log.wtf("view Model", "call updateUserInfoUI from =realmUserInfo change listener");
-                Log.wtf("view Model", "1");
                 userInfo = (RealmUserInfo) realmModel;
                 updateUserInfoUI();
             });
@@ -226,6 +225,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void init() {
+        setCurrentFragment.setValue(isEditMode());
         isDarkMode.set(G.themeColor == Theme.DARK);
         //set credit amount
         if (G.selectedCard != null) {
@@ -254,7 +254,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     }
 
-    private void updateUserInfoUI() {
+    public void updateUserInfoUI() {
         if (checkValidationForRealm(userInfo)) {
             userId = userInfo.getUserId();
             phoneNumber = userInfo.getUserInfo().getPhoneNumber();
@@ -375,21 +375,22 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onEditProfileClick() {
-
-
-        if (isEditProfile.getValue() != null && isEditProfile.getValue()) {
+        if (isEditMode()) {
             if (editProfileIcon.get() == R.string.check_icon) {
-                submitData();
+                isEditProfile.setValue(true);
             } else {
-                editProfileIcon.set(R.string.edit_icon);
                 isEditProfile.setValue(false);
             }
+            editProfileIcon.set(R.string.edit_icon);
+            isEditProfile.setValue(false);
         } else {
             editProfileIcon.set(R.string.close_icon);
             isEditProfile.setValue(true);
             getReferral();
         }
+        setCurrentFragment.setValue(isEditProfile.getValue());
     }
+
 
     public void onCloudMessageClick() {
         showLoading.set(View.VISIBLE);
