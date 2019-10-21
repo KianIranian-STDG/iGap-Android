@@ -23,7 +23,7 @@ public class NewsDetail {
     private String date;
     @SerializedName("lead")
     private String lead;
-    @SerializedName("externalLink")
+    @SerializedName("internalLink")
     private String link;
     @SerializedName("alias")
     private String alias;
