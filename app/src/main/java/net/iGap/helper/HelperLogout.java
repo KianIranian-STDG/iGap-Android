@@ -60,12 +60,10 @@ public final class HelperLogout {
     }
 
     public boolean logoutAllUser() {
-        WebSocketClient.disconnectSocket();
         boolean tmp = logoutUser(AccountManager.getInstance().getCurrentUser());
         if (tmp) {
             return logoutAllUser();
         } else {
-            WebSocketClient.connectNewAccount();
             return false;
         }
     }

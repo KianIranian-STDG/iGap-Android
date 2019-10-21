@@ -195,9 +195,7 @@ public class ActivityEnterPassCodeViewModel extends ViewModel {
     public void forgetPassword() {
         G.isPassCode = false;
         hideKeyword.setValue(true);
-        boolean t = new HelperLogout().logoutAllUser();
-        Log.wtf(this.getClass().getName(), "forgetPassword: " + t);
-        goToRegisterPage.postValue(!t);
+        goToRegisterPage.postValue(!new HelperLogout().logoutAllUser());
     }
 
     @TargetApi(Build.VERSION_CODES.M)
