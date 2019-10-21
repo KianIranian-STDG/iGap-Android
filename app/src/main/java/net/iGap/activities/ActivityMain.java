@@ -357,6 +357,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         new HelperGetDataFromOtherApp(this, intent);
+        //check has shared data if true setup main fragment (room list) ui
+        Fragment fragmentBottomNav = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragmentBottomNav instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragmentBottomNav).checkHasSharedData(true);//set true just for checking state
+        }
 
         if (intent.getAction() != null && intent.getAction().equals("net.iGap.activities.OPEN_ACCOUNT")) {
             new HelperFragment(getSupportFragmentManager(), new FragmentSetting()).load();
@@ -1917,6 +1922,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).setForwardMessage(enable);
+        }
+    }
+
+    public void checkHasSharedData(boolean enable) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragment).checkHasSharedData(enable);
         }
     }
 

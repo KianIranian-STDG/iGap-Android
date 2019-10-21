@@ -6194,6 +6194,10 @@ public class FragmentChat extends BaseFragment
             public void run() {
                 if (HelperGetDataFromOtherApp.hasSharedData) {
                     HelperGetDataFromOtherApp.hasSharedData = false;
+                    //update main room list ui after share done
+                    if (getActivity() instanceof ActivityMain){
+                        ((ActivityMain) getActivity()).checkHasSharedData(false);
+                    }
 
                     for (HelperGetDataFromOtherApp.SharedData sharedData : HelperGetDataFromOtherApp.sharedList) {
 
