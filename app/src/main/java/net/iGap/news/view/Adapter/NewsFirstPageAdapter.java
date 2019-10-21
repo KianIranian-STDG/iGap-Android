@@ -27,8 +27,8 @@ import java.util.List;
 public class NewsFirstPageAdapter extends RecyclerView.Adapter{
 
     private static final int Slider = 5;
-    private static final int doubleButton = 3;
-    private static final int singleButton = 4;
+    private static final int doubleButton = 4;
+    private static final int singleButton = 3;
     private List<NewsFirstPage> mData;
     private onClickListener callBack;
 

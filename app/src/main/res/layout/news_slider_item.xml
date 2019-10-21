@@ -18,7 +18,7 @@
         android:layout_marginEnd="@dimen/dp8"
         android:layout_marginRight="@dimen/dp8"
         android:layout_marginLeft="@dimen/dp8"
-        android:layout_marginBottom="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp2"
         app:cardCornerRadius="6dp"
         app:cardUseCompatPadding="true">
 
