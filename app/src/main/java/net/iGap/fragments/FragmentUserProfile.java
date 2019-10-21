@@ -106,10 +106,14 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             if (!viewModel.setCurrentFragment.getValue()) {
                 FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_edit, FragmentProfile.newInstance(), null).commit();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, 0,0,android.R.anim.fade_out);
+                fragmentTransaction.addToBackStack(null);
                 binding.addAvatar.setVisibility(View.GONE);
             } else {
                 FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_edit, FragmentEditProfile.newInstance(), null).commit();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                fragmentTransaction.addToBackStack(null);
                 binding.addAvatar.setVisibility(View.VISIBLE);
             }
         });
