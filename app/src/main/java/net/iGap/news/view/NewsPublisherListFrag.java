@@ -72,8 +72,7 @@ public class NewsPublisherListFrag extends BaseAPIViewFrag {
                 })
                 .setLogoShown(true);
 
-        LinearLayout toolbarLayout = binding.toolbar;
-        toolbarLayout.addView(mHelperToolbar.getView());
+        binding.toolbar.addView(mHelperToolbar.getView());
 
         binding.pullToRefresh.setOnRefreshListener(() -> {
             newsVM.getData();

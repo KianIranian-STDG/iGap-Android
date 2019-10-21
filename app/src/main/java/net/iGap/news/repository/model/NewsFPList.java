@@ -94,6 +94,8 @@ public class NewsFPList {
         public String getColor() {
             if (!color.startsWith("#"))
                 color = "#" + color;
+            if (!(color.length() == 7 || color.length() == 4))
+                return "#000";
             return color;
         }
 

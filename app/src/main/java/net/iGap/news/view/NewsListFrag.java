@@ -144,8 +144,13 @@ public class NewsListFrag extends BaseAPIViewFrag {
     }
 
     private void initMainRecycler(NewsList data) {
+
         if (currentPage != 0)
             adapter.removeLoading();
+
+        if (data.getNews() == null || data.getNews().size() == 0)
+            return;
+
         adapter.addItems(data);
 
         // check weather is last page or not

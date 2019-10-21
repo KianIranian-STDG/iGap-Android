@@ -74,16 +74,17 @@ public class NewsGroupPagerFrag extends BaseFragment {
                     }
                 })
                 .setDefaultTitle(arg.getString("GroupTitle"))
+                .setRoundBackground(false) // cause of imageView below toolbar use flat toolbar is better than round
                 .setLogoShown(true);
 
-        LinearLayout toolbarLayout = binding.Toolbar;
-        toolbarLayout.addView(mHelperToolbar.getView());
+        binding.Toolbar.addView(mHelperToolbar.getView());
 
-        Picasso.get()
-//                .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-                .load(arg.getString("GroupPic"))
-                .placeholder(R.mipmap.news_temp_banner)
-                .into(binding.groupImage);
+        if (!arg.getString("GroupPic").equals(""))
+            Picasso.get()
+    //                .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
+                    .load(arg.getString("GroupPic"))
+                    .placeholder(R.mipmap.news_temp_banner)
+                    .into(binding.groupImage);
 
         ViewPager viewPager = binding.secondaryLayout.viewPager;
         tabLayout = binding.secondaryLayout.pagerTabLayout;

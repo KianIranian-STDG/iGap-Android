@@ -32,7 +32,7 @@ public class NewsSliderAdapter extends SliderViewAdapter {
 
     @Override
     public int getCount() {
-        return data.size();
+        return data.get(0).getNews().size();
     }
 
     class SliderVH extends SliderViewAdapter.ViewHolder {
@@ -49,7 +49,7 @@ public class NewsSliderAdapter extends SliderViewAdapter {
         }
 
         void initView(int position) {
-            NewsFPList.NewsContent temp = data.get(position).getNews().get(0).getContents();
+            NewsFPList.NewsContent temp = data.get(0).getNews().get(position).getContents();
             textViewTitle.setText(temp.getTitle());
             textViewDescription.setText(temp.getLead());
             imageViewBackground.setOnClickListener(v -> callBack.onSliderClick(temp));

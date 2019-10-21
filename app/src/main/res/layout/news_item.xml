@@ -63,7 +63,7 @@
                     android:textSize="@dimen/dp12"
                     android:justificationMode="inter_word"
                     android:gravity="center"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:layout_marginRight="@dimen/dp8"
                     app:layout_constraintBottom_toBottomOf="@+id/image"
                     app:layout_constraintRight_toRightOf="@+id/image"
@@ -79,7 +79,7 @@
                     android:textSize="@dimen/dp20"
                     android:gravity="center"
                     android:layout_marginLeft="@dimen/dp8"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     app:layout_constraintTop_toTopOf="@+id/view"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
                     app:layout_constraintRight_toLeftOf="@+id/view"/>

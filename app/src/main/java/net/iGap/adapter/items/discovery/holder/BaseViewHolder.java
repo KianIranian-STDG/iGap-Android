@@ -172,11 +172,11 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case PHONE_BILL_MENU:/** tested **/
-                new HelperFragment(activity.getSupportFragmentManager(), new FragmentPaymentInquiryTelephone()).setReplace(false).load();
-                /*NewsMainFrag frag = new NewsMainFrag();
+//                new HelperFragment(activity.getSupportFragmentManager(), new FragmentPaymentInquiryTelephone()).setReplace(false).load();
+                NewsMainFrag frag2 = new NewsMainFrag();
                 if (!discoveryField.value.equals(""))
-                    frag.setSpecificNewsID(discoveryField.value);
-                new HelperFragment(activity.getSupportFragmentManager(), frag).setReplace(false).load();*/
+                    frag2.setSpecificNewsID(discoveryField.value);
+                new HelperFragment(activity.getSupportFragmentManager(), frag2).setReplace(false).load();
                 break;
             case NEWS:
                 NewsMainFrag frag = new NewsMainFrag();

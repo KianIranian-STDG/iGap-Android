@@ -43,6 +43,7 @@ public class NewsMainFrag extends BaseAPIViewFrag {
     private NewsMainVM newsMainVM;
 
     private String specificNewsID = null;
+    private String specificGroupID = null;
 
     public static NewsMainFrag newInstance() {
         return new NewsMainFrag();
@@ -72,7 +73,9 @@ public class NewsMainFrag extends BaseAPIViewFrag {
 
         super.onViewCreated(view, savedInstanceState);
 
-        if (specificNewsID != null && !specificNewsID.equals(""))
+        if (specificGroupID != null && !specificGroupID.equals("")&& !specificGroupID.equals("showDetail"))
+            openGroupNews(new NewsFPList("IGap News", specificGroupID, null));
+        else if (specificNewsID != null && !specificNewsID.equals(""))
             openNewsDetail(specificNewsID);
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
@@ -167,7 +170,10 @@ public class NewsMainFrag extends BaseAPIViewFrag {
         Bundle args = new Bundle();
         args.putString("GroupID", group.getCatID());
         args.putString("GroupTitle", group.getCategory());
-        args.putString("GroupPic", group.getNews().get(0).getContents().getImage().get(0).getOriginal());
+        if (group.getNews() == null)
+            args.putString("GroupPic", "");
+        else
+            args.putString("GroupPic", group.getNews().get(0).getContents().getImage().get(0).getOriginal());
         fragment.setArguments(args);
         new HelperFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), fragment).setReplace(false).load();
     }
@@ -188,5 +194,9 @@ public class NewsMainFrag extends BaseAPIViewFrag {
 
     public void setSpecificNewsID(String specificNewsID) {
         this.specificNewsID = specificNewsID;
+    }
+
+    public void setSpecificGroupID(String specificGroupID) {
+        this.specificGroupID = specificGroupID;
     }
 }

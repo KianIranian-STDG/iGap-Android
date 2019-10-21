@@ -96,7 +96,7 @@ public class NewsDetailFrag extends BaseAPIViewFrag {
 
         binding.shareNewsBTN.setOnClickListener(v -> {
             Intent sendIntent = new Intent(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, newsMainVM.getData().getValue().getTitle() + "\n" + newsMainVM.getData().getValue().getLead() + "\n" + "تاریخ انتشار: " + newsMainVM.getData().getValue().getDate() + "\n" + "قدرت گرفته از آیگپ" + "\n" + "این خبر را در آیگپ بخوانید: " + "igap://discovery/38" + "\n" + "لینک خبر: " + newsMainVM.getData().getValue().getLink());
+            sendIntent.putExtra(Intent.EXTRA_TEXT, newsMainVM.getData().getValue().getTitle() + "\n" + newsMainVM.getData().getValue().getLead() + "\n" + "تاریخ انتشار: " + newsMainVM.getData().getValue().getDate() + "\n" + "قدرت گرفته از آیگپ" + "\n" + "این خبر را در آیگپ بخوانید: " + "igap://news/showDetail/" + arg.getString("NewsID") + "\n" + "لینک خبر: " + newsMainVM.getData().getValue().getLink());
             sendIntent.setType("text/plain");
             startActivity(Intent.createChooser(sendIntent, "Share via"));
         });

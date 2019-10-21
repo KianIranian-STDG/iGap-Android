@@ -1,5 +1,7 @@
 package net.iGap.news.viewmodel;
 
+import android.view.View;
+
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
@@ -30,6 +32,7 @@ public class NewsDetailVM extends BaseAPIViewModel {
     private ObservableField<String> source;
     private ObservableField<String> tag;
     private ObservableField<String> date;
+    private ObservableField<Integer> viewVisibility;
 
     private int newsID = -1;
     private DetailRepo repo;
@@ -51,6 +54,7 @@ public class NewsDetailVM extends BaseAPIViewModel {
         source = new ObservableField<>("منبع خبری");
         tag = new ObservableField<>("ورزشی، اجتماعی و...");
         date = new ObservableField<>("دو ساعت پیش");
+        viewVisibility = new ObservableField<>(View.VISIBLE);
     }
 
     public void getDataFromServer(String newsID) {
@@ -61,11 +65,17 @@ public class NewsDetailVM extends BaseAPIViewModel {
                 data.setValue(newsDetail);
                 title.set(newsDetail.getLead());
                 rootTitle.set(newsDetail.getTitle());
-                viewNum.set(newsDetail.getView());
+                if (newsDetail.getView().equals("0"))
+                    viewVisibility.set(View.GONE);
+                else
+                    viewNum.set(newsDetail.getView());
                 commentNum.set(newsDetail.getView());
                 source.set(newsDetail.getSource());
-                tag.set("برچسب ها: " + newsDetail.getTags());
-                date.set("تاریخ انتشار: " + newsDetail.getDate());
+                if (newsDetail.getTags() == null || newsDetail.getTags().equals("null"))
+                    tag.set("");
+                else
+                    tag.set("برچسب ها: " + newsDetail.getTags());
+                date.set(newsDetail.getDate());
 
                 getNewsComment();
                 getRelatedNewsS();
@@ -239,5 +249,13 @@ public class NewsDetailVM extends BaseAPIViewModel {
 
     public void setProgressStateRelated(MutableLiveData<Boolean> progressStateRelated) {
         this.progressStateRelated = progressStateRelated;
+    }
+
+    public ObservableField<Integer> getViewVisibility() {
+        return viewVisibility;
+    }
+
+    public void setViewVisibility(ObservableField<Integer> viewVisibility) {
+        this.viewVisibility = viewVisibility;
     }
 }

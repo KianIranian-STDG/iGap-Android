@@ -36,7 +36,7 @@ public class NewsAddCommentBottomSheetFrag extends BottomSheetDialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme);
+//        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme);
     }
 
     @Nullable
@@ -118,6 +118,11 @@ public class NewsAddCommentBottomSheetFrag extends BottomSheetDialogFragment {
 
             }
         });
+    }
+
+    @Override
+    public int getTheme() {
+        return R.style.BaseBottomSheetDialog;
     }
 
     @NonNull
