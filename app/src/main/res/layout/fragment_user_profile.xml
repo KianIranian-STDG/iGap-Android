@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.UserProfileViewModel" />
@@ -78,7 +79,7 @@
                 android:background="?attr/iGapAvatarBackground"
                 android:onClick="@{()->viewModel.onAddImageClick()}"
                 android:text="@string/add_icon_without_circle_font"
-                android:visibility="invisible"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/fup_user_image"
                 app:layout_constraintEnd_toEndOf="@id/fup_user_image"
                 app:layout_constraintStart_toEndOf="@id/fup_user_image" />

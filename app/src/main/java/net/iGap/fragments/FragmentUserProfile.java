@@ -86,18 +86,13 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_profile, container, false);
-        viewModel.isEditProfile.setValue(true);
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.frame_edit, FragmentProfile.newInstance(), null).commit();
-        binding.editProfile.setOnClickListener(view -> {
-            new HelperFragment(getParentFragment().getFragmentManager(), FragmentEditProfile.newInstance()).setResourceContainer(R.id.frame_edit).setReplace(true).load();
-        });
         viewModel.init();
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -106,7 +101,20 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
         }
-
+        binding.editProfile.setOnClickListener(view1 -> {
+            viewModel.onEditProfileClick();
+            if (viewModel.setCurrentFragment.getValue()) {
+                FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_edit, FragmentEditProfile.newInstance(), null).commit();
+                fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_in);
+                binding.addAvatar.setVisibility(View.VISIBLE);
+            } else {
+                FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_edit, FragmentProfile.newInstance(), null).commit();
+                fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_in);
+                binding.addAvatar.setVisibility(View.GONE);
+            }
+        });
         viewModel.changeUserProfileWallpaper.observe(getViewLifecycleOwner(), drawable -> {
             if (drawable != null) {
                 binding.fupBgAvatar.setImageDrawable(drawable);
