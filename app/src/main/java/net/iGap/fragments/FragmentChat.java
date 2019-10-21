@@ -4341,7 +4341,11 @@ public class FragmentChat extends BaseFragment
         items.add(getString(R.string.delete_item_dialog));
 
         //check and remove share base on type and download state
-        if (!roomMessageType.toString().equals("LOCATION") && !roomMessageType.toString().equals("TEXT") && !roomMessageType.toString().equals("CONTACT")) {
+        if (roomMessageType.toString().equals("LOCATION")){
+
+            items.remove(getString(R.string.share_item_dialog));
+
+        }else if (!roomMessageType.toString().equals("TEXT") && !roomMessageType.toString().equals("CONTACT")) {
 
             String filepath_;
             if (message.forwardedFrom != null) {
@@ -6213,10 +6217,6 @@ public class FragmentChat extends BaseFragment
             public void run() {
                 if (HelperGetDataFromOtherApp.hasSharedData) {
                     HelperGetDataFromOtherApp.hasSharedData = false;
-                    //update main room list ui after share done
-                    if (getActivity() instanceof ActivityMain){
-                        ((ActivityMain) getActivity()).checkHasSharedData(false);
-                    }
 
                     boolean isOpenEditImageFragment = false ;
                     boolean isAllowToClearChatEditText = true ;
@@ -6274,6 +6274,10 @@ public class FragmentChat extends BaseFragment
                     }
 
                     HelperGetDataFromOtherApp.sharedList.clear();
+                    //update main room list ui after share done
+                    if (getActivity() instanceof ActivityMain){
+                        ((ActivityMain) getActivity()).checkHasSharedData(false);
+                    }
 
                 }
             }
@@ -6320,10 +6324,10 @@ public class FragmentChat extends BaseFragment
                     intent.putExtra(Intent.EXTRA_TEXT, messageContact);
                     break;
                 case "LOCATION":
+                    intent.setType("image/*");
                     String imagePathPosition = messageInfo.forwardedFrom != null ?
                             AppUtils.getLocationPath(messageInfo.forwardedFrom.getLocation().getLocationLat(), messageInfo.forwardedFrom.getLocation().getLocationLong()) :
                             AppUtils.getLocationPath(messageInfo.location.getLocationLat(), messageInfo.location.getLocationLong());
-                    intent.setType("image/*");
                     if (imagePathPosition != null) {
                         intent.putExtra(Intent.EXTRA_STREAM, AppUtils.createtUri(new File(imagePathPosition)));
                     }
