@@ -103,18 +103,17 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         }
         binding.editProfile.setOnClickListener(view1 -> {
             viewModel.onEditProfileClick();
-            if (viewModel.setCurrentFragment.getValue()) {
-                FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frame_edit, FragmentEditProfile.newInstance(), null).commit();
-                fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_in);
-                binding.addAvatar.setVisibility(View.VISIBLE);
-            } else {
+            if (!viewModel.setCurrentFragment.getValue()) {
                 FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_edit, FragmentProfile.newInstance(), null).commit();
-                fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_in);
                 binding.addAvatar.setVisibility(View.GONE);
+            } else {
+                FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_edit, FragmentEditProfile.newInstance(), null).commit();
+                binding.addAvatar.setVisibility(View.VISIBLE);
             }
         });
+
         viewModel.changeUserProfileWallpaper.observe(getViewLifecycleOwner(), drawable -> {
             if (drawable != null) {
                 binding.fupBgAvatar.setImageDrawable(drawable);
@@ -165,14 +164,9 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        viewModel.getUpdateNewTheme().observe(getViewLifecycleOwner(), isUpdate -> {
-            if (getActivity() != null && isUpdate != null && isUpdate) {
-                Fragment frg;
-                frg = getActivity().getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.detach(frg);
-                ft.attach(frg);
-                ft.commit();
+        viewModel.showError.observe(getViewLifecycleOwner(), message -> {
+            if (message != null) {
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -184,41 +178,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 ft.detach(frg);
                 ft.attach(frg);
                 ft.commit();
-            }
-        });
-
-        viewModel.showError.observe(getViewLifecycleOwner(), message -> {
-            if (message != null) {
-                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        viewModel.showDialogBeLastVersion.observe(getViewLifecycleOwner(), isShow -> {
-            if (getActivity() != null && isShow != null && isShow) {
-                new MaterialDialog.Builder(getActivity())
-                        .cancelable(false)
-                        .title(R.string.app_version_change_log).titleGravity(GravityEnum.CENTER)
-                        .titleColor(new Theme().getPrimaryColor(getActivity()))
-                        .content(R.string.updated_version_title)
-                        .contentGravity(GravityEnum.CENTER)
-                        .positiveText(R.string.ok).itemsGravity(GravityEnum.START).show();
-            }
-        });
-
-        viewModel.showDialogUpdate.observe(getViewLifecycleOwner(), body -> {
-            if (getActivity() != null && body != null) {
-                new MaterialDialog.Builder(getActivity())
-                        .cancelable(false)
-                        .title(R.string.app_version_change_log).titleGravity(GravityEnum.CENTER)
-                        .titleColor(new Theme().getPrimaryColor(getActivity()))
-                        .content(body)
-                        .contentGravity(GravityEnum.CENTER)
-                        .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive((dialog, which) -> {
-                    String url = "http://d.igap.net/update";
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
-                }).negativeText(R.string.cancel).show();
             }
         });
 
