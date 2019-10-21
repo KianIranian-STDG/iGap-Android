@@ -35,7 +35,7 @@ public class FragmentEditProfile extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+        viewModel = ViewModelProviders.of(getParentFragment(), new ViewModelProvider.Factory() {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
