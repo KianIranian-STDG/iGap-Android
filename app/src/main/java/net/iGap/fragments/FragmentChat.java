@@ -3062,6 +3062,33 @@ public class FragmentChat extends BaseFragment
 
         };
 
+        FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
+            @Override
+            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
+                listPathString = null;
+                listPathString = new ArrayList<>();
+
+                if (textImageList.size() == 0) {
+                    return;
+                }
+
+                ArrayList<StructBottomSheet> itemList = new ArrayList<StructBottomSheet>();
+                for (Map.Entry<String, StructBottomSheet> items : textImageList.entrySet()) {
+                    itemList.add(items.getValue());
+                }
+
+                Collections.sort(itemList);
+
+                for (StructBottomSheet item : itemList) {
+                    edtChat.setText(item.getText());
+                    listPathString.add(item.getPath());
+                    latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
+                    ll_attach_text.setVisibility(View.VISIBLE);
+                    imvSendButton.performClick();
+                }
+            }
+        };
+
         imvAttachFileButton.setOnClickListener(view -> {
             if (mAttachmentPopup == null) initPopupAttachment();
             mAttachmentPopup.setMessagesLayoutHeight(recyclerView.getMeasuredHeight());
@@ -3194,6 +3221,10 @@ public class FragmentChat extends BaseFragment
 
         if (getActivity() == null) return;
 
+        //clear at first time to load image gallery
+        FragmentEditImage.itemGalleryList.clear();
+        FragmentEditImage.textImageList.clear();
+
         mAttachmentPopup = ChatAttachmentPopup.create()
                 .setContext(getActivity())
                 .setRootView(rootView)
@@ -3205,32 +3236,6 @@ public class FragmentChat extends BaseFragment
                 .setListener(FragmentChat.this)
                 .build();
 
-        FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
-            @Override
-            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
-                listPathString = null;
-                listPathString = new ArrayList<>();
-
-                if (textImageList.size() == 0) {
-                    return;
-                }
-
-                ArrayList<StructBottomSheet> itemList = new ArrayList<StructBottomSheet>();
-                for (Map.Entry<String, StructBottomSheet> items : textImageList.entrySet()) {
-                    itemList.add(items.getValue());
-                }
-
-                Collections.sort(itemList);
-
-                for (StructBottomSheet item : itemList) {
-                    edtChat.setText(item.getText());
-                    listPathString.add(item.getPath());
-                    latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
-                    ll_attach_text.setVisibility(View.VISIBLE);
-                    imvSendButton.performClick();
-                }
-            }
-        };
     }
 
     private void removeEditedMessage() {
@@ -6199,6 +6204,7 @@ public class FragmentChat extends BaseFragment
                         ((ActivityMain) getActivity()).checkHasSharedData(false);
                     }
 
+                    boolean isOpenEditImageFragment = false ;
                     for (HelperGetDataFromOtherApp.SharedData sharedData : HelperGetDataFromOtherApp.sharedList) {
 
                         edtChat.setText(sharedData.message);
@@ -6233,11 +6239,20 @@ public class FragmentChat extends BaseFragment
                                 sendMessage(AttachFile.request_code_pic_audi, sharedData.address);
                                 break;
                             case image:
-                                sendMessage(AttachFile.request_code_TAKE_PICTURE, sharedData.address);
+                                //maybe share data was more than one ... add to list then after for open edit image
+                                FragmentEditImage.insertItemList(sharedData.address, false);
+                                isOpenEditImageFragment = true ;
+                                //sendMessage(AttachFile.request_code_TAKE_PICTURE, sharedData.address);
                                 break;
                         }
 
                         edtChat.setText("");
+                    }
+
+                    if (isOpenEditImageFragment && getActivity() != null) {
+                        isOpenEditImageFragment = false ;
+                        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, FragmentEditImage.itemGalleryList.size()-1);
+                        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                     }
 
                     HelperGetDataFromOtherApp.sharedList.clear();
