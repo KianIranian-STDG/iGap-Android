@@ -24,7 +24,7 @@ import retrofit2.http.Query;
 public interface ElecBillApi {
 
     @GET("get-companies")
-    Call<CompanyList.Company> getCompanies();
+    Call<CompanyList> getCompanies();
 
     @POST("add-bill")
     Call<ElectricityResponseModel<String>> addBill(@Field("bill_identifier") String billID, @Field("mobile_number") String mobileNum,

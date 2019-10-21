@@ -2,8 +2,8 @@ package net.iGap.electricity_bill.repository.model;
 
 public class Bill {
 
-    private String title;
     private String ID;
+    private String title;
     private String payID;
     private String price;
     private String dueTime;
