@@ -121,7 +121,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private ObservableLong currentCredit = new ObservableLong(0);
     private ObservableField<String> currentScore = new ObservableField<>("0");
     private ObservableBoolean isDarkMode = new ObservableBoolean(false);
-    private ObservableInt editProfileIcon = new ObservableInt(R.string.edit_icon);
+    public ObservableInt editProfileIcon = new ObservableInt(R.string.edit_icon);
     private ObservableField<String> name = new ObservableField<>("");
     private ObservableField<String> userName = new ObservableField<>("");
     private ObservableField<String> bio = new ObservableField<>("");
@@ -376,17 +376,17 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public void onEditProfileClick() {
         if (isEditMode()) {
-            if (editProfileIcon.get() == R.string.check_icon) {
-                isEditProfile.setValue(true);
-            } else {
-                isEditProfile.setValue(false);
-            }
             editProfileIcon.set(R.string.edit_icon);
             isEditProfile.setValue(false);
         } else {
             editProfileIcon.set(R.string.close_icon);
             isEditProfile.setValue(true);
-            getReferral();
+            if (editProfileIcon.get() == R.string.close_icon) {
+                isEditProfile.setValue(true);
+            } else {
+                isEditProfile.setValue(false);
+            }
+
         }
         setCurrentFragment.setValue(isEditProfile.getValue());
     }
