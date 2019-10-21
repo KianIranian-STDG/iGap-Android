@@ -32,7 +32,6 @@ public class FragmentEditProfile extends BaseFragment {
         return fragment;
     }
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +42,6 @@ public class FragmentEditProfile extends BaseFragment {
                 return (T) new UserProfileViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), avatarHandler);
             }
         }).get(UserProfileViewModel.class);
-
-
     }
 
     @Nullable
@@ -55,10 +52,13 @@ public class FragmentEditProfile extends BaseFragment {
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
+
+
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
+
 }
