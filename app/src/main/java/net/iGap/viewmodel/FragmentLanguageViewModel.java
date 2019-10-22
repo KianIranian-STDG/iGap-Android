@@ -227,14 +227,14 @@ public class FragmentLanguageViewModel extends ViewModel {
 
         switch (G.selectedLanguage){
             case "fa":
-                sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, 1).apply();
+            case "ur"://kurdi
+                sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, 1).apply();//shamsi
                 break;
             case "ar":
-            case "ur":
-                sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, 2).apply();
+                sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, 2).apply();//hijri
                 break;
             default:
-                sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, 0).apply();
+                sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, 0).apply();//miladi
         }
 
         if (G.onDateChanged != null) {
