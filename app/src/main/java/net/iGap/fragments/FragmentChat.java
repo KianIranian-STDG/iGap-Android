@@ -2345,8 +2345,8 @@ public class FragmentChat extends BaseFragment
                 }
             }
         } else {
-            Picasso.get().load(R.drawable.chat_default_background_pattern).fit().centerCrop().into(imgBackGround);
-            /*imgBackGround.setImageResource(R.drawable.chat_default_background_pattern);*/
+            /*Picasso.get().load(R.drawable.chat_default_background_pattern).fit().centerCrop().into(imgBackGround);*/
+            imgBackGround.setImageResource(R.drawable.chat_default_background_pattern);
         }
 
     }
