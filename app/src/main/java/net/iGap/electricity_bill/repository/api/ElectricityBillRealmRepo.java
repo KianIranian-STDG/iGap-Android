@@ -1,16 +1,16 @@
-package net.iGap.electricity_bill.repository;
+package net.iGap.electricity_bill.repository.api;
 
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserProfileGetEmail;
 
 import io.realm.Realm;
 
-public class AddRepo {
+public class ElectricityBillRealmRepo {
 
     private Realm realm;
     private RealmUserInfo userInfo;
 
-    public AddRepo() {
+    public ElectricityBillRealmRepo() {
         updateUserInfo();
     }
 
@@ -23,10 +23,6 @@ public class AddRepo {
     }
 
     // Realm and Data
-
-    public void deleteAccount() {
-        userInfo.deleteKuknos();
-    }
 
     private void updateUserInfo() {
         userInfo = getRealm().where(RealmUserInfo.class).findFirst();

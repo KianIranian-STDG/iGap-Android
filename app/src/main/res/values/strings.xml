@@ -2305,4 +2305,9 @@ Want to get it?</string>
     <string name="elecBill_deleteAccount_pos">Delete</string>
     <string name="elecBill_deleteAccount_neg">No, don\'t delete.</string>
 
+    <string name="elecBill_image_Directory">IGap - Electricity Bill</string>
+    <string name="elecBill_image_success">Download is complete.</string>
+    <string name="elecBill_image_fail">Download has failed.</string>
+    <string name="elecBill_image_open">Open File</string>
+    <string name="elecBill_image_close">Dismiss</string>
 </resources>

@@ -47,7 +47,7 @@ public class ApiServiceProvider {
 
     public static ElecBillApi getElecBillClient() {
         if (elecApi == null) {
-            elecApi = factory.getKuknosRetrofit().create(ElecBillApi.class);
+            elecApi = factory.getElecBillRetrofit().create(ElecBillApi.class);
         }
         return elecApi;
     }

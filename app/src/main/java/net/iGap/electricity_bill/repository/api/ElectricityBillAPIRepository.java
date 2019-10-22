@@ -27,57 +27,58 @@ import retrofit2.Response;
 public class ElectricityBillAPIRepository {
 
     private ElecBillApi apiService = ApiServiceProvider.getElecBillClient();
+    private ElectricityBillRealmRepo realmRepo = new ElectricityBillRealmRepo();
 
     public void getNewsGroup(HandShakeCallback handShakeCallback, ResponseCallback<CompanyList> apiResponse) {
         new ApiInitializer<CompanyList>().initAPI(apiService.getCompanies(), handShakeCallback, apiResponse);
     }
 
     public void addBill(BillRegister info, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<String>> apiResponse) {
-        new ApiInitializer<ElectricityResponseModel<String>>().initAPI(apiService.addBill(info.getID(), info.getMobileNum(),
+        new ApiInitializer<ElectricityResponseModel<String>>().initAPI(apiService.addBill(info.getID(), realmRepo.getUserNum(),
                 info.getNID(), info.getEmail(), info.getTitle(), info.isSMSEnable(), info.isPrintEnable(), info.isEmailEnable(),
                 info.isAppEnable()), handShakeCallback, apiResponse);
     }
 
     public void editBill(BillRegister info, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<String>> apiResponse) {
-        new ApiInitializer<ElectricityResponseModel<String>>().initAPI(apiService.editBill(info.getID(), info.getMobileNum(),
+        new ApiInitializer<ElectricityResponseModel<String>>().initAPI(apiService.editBill(info.getID(), realmRepo.getUserNum(),
                 info.getNID(), info.getEmail(), info.getTitle(), info.isSMSEnable(), info.isPrintEnable(), info.isEmailEnable(),
                 info.isAppEnable()), handShakeCallback, apiResponse);
     }
 
     public void deleteBill(BillRegister info, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<String>> apiResponse) {
-        new ApiInitializer<ElectricityResponseModel<String>>().initAPI(apiService.deleteBill(info.getID(), info.getMobileNum(),
+        new ApiInitializer<ElectricityResponseModel<String>>().initAPI(apiService.deleteBill(info.getID(), realmRepo.getUserNum(),
                 info.getNID()), handShakeCallback, apiResponse);
     }
 
-    public void getBillList(String phoneNum, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<BillData>> apiResponse) {
-        new ApiInitializer<ElectricityResponseModel<BillData>>().initAPI(apiService.getBillList(phoneNum), handShakeCallback, apiResponse);
+    public void getBillList(HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<BillData>> apiResponse) {
+        new ApiInitializer<ElectricityResponseModel<BillData>>().initAPI(apiService.getBillList(realmRepo.getUserNum()), handShakeCallback, apiResponse);
     }
 
-    public void deleteAccount(String phoneNum, String NID, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<String>> apiResponse) {
-        new ApiInitializer<ElectricityResponseModel<String>>().initAPI(apiService.deleteAccount(phoneNum, NID), handShakeCallback, apiResponse);
+    public void deleteAccount(String NID, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<String>> apiResponse) {
+        new ApiInitializer<ElectricityResponseModel<String>>().initAPI(apiService.deleteAccount(realmRepo.getUserNum(), NID), handShakeCallback, apiResponse);
     }
 
-    public void getBranchInfo(String billID, String phoneNum, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<BranchData>> apiResponse) {
-        new ApiInitializer<ElectricityResponseModel<BranchData>>().initAPI(apiService.getBranchInfo(billID, phoneNum), handShakeCallback, apiResponse);
+    public void getBranchInfo(String billID, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<BranchData>> apiResponse) {
+        new ApiInitializer<ElectricityResponseModel<BranchData>>().initAPI(apiService.getBranchInfo(billID, realmRepo.getUserNum()), handShakeCallback, apiResponse);
     }
 
-    public void getBranchDebit(String billID, String phoneNum, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<BranchDebit>> apiResponse) {
-        new ApiInitializer<ElectricityResponseModel<BranchDebit>>().initAPI(apiService.getBranchDebit(billID, phoneNum), handShakeCallback, apiResponse);
+    public void getBranchDebit(String billID, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<BranchDebit>> apiResponse) {
+        new ApiInitializer<ElectricityResponseModel<BranchDebit>>().initAPI(apiService.getBranchDebit(billID, realmRepo.getUserNum()), handShakeCallback, apiResponse);
     }
 
     public void searchBills(String serialNum, String companyCode, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseList<BranchData>> apiResponse) {
         new ApiInitializer<ElectricityResponseList<BranchData>>().initAPI(apiService.searchBills(serialNum, companyCode), handShakeCallback, apiResponse);
     }
 
-    public void getSaleBills(String billID, String phoneNum, String fromYear, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseList<SaleBill>> apiResponse) {
-        new ApiInitializer<ElectricityResponseList<SaleBill>>().initAPI(apiService.getSaleBills(billID, phoneNum, fromYear), handShakeCallback, apiResponse);
+    public void getSaleBills(String billID, String fromYear, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseList<SaleBill>> apiResponse) {
+        new ApiInitializer<ElectricityResponseList<SaleBill>>().initAPI(apiService.getSaleBills(billID, realmRepo.getUserNum(), fromYear), handShakeCallback, apiResponse);
     }
 
-    public void getPaiedBills(String billID, String phoneNum, String fromYear, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseList<PaidBill>> apiResponse) {
-        new ApiInitializer<ElectricityResponseList<PaidBill>>().initAPI(apiService.getPaiedBills(billID, phoneNum, fromYear), handShakeCallback, apiResponse);
+    public void getPaiedBills(String billID, String fromYear, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseList<PaidBill>> apiResponse) {
+        new ApiInitializer<ElectricityResponseList<PaidBill>>().initAPI(apiService.getPaiedBills(billID, realmRepo.getUserNum(), fromYear), handShakeCallback, apiResponse);
     }
 
-    public void getLastBill(String billID, String phoneNum, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<LastBillData>> apiResponse) {
-        new ApiInitializer<ElectricityResponseModel<LastBillData>>().initAPI(apiService.getLastBill(billID, phoneNum), handShakeCallback, apiResponse);
+    public void getLastBill(String billID, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<LastBillData>> apiResponse) {
+        new ApiInitializer<ElectricityResponseModel<LastBillData>>().initAPI(apiService.getLastBill(billID, realmRepo.getUserNum()), handShakeCallback, apiResponse);
     }
 }

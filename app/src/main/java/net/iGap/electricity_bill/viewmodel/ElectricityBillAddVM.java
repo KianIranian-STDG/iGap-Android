@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.electricity_bill.repository.AddRepo;
+import net.iGap.electricity_bill.repository.api.ElectricityBillRealmRepo;
 
 public class ElectricityBillAddVM extends BaseAPIViewModel {
 
@@ -35,7 +35,7 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
 
     private MutableLiveData<Boolean> goBack;
 
-    private AddRepo repo = new AddRepo();
+    private ElectricityBillRealmRepo repo = new ElectricityBillRealmRepo();
 
     public ElectricityBillAddVM() {
 

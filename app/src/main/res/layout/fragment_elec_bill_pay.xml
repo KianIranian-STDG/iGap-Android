@@ -307,7 +307,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:minHeight="58dp"
-                    android:onClick="@{()->fragment.onPayBtnClick()}"
+                    android:onClick="@{()->viewmodel.payBill()}"
+                    android:enabled="@{viewmodel.payBtnEnable}"
                     android:text="@string/elecBill_pay_billPay"
                     android:textSize="@dimen/dp16"
                     android:visibility="visible"
@@ -391,6 +392,20 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/add_to_list"/>
+
+                <ProgressBar
+                    android:id="@+id/ProgressDownloadImageV"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:elevation="2dp"
+                    android:visibility="@{viewmodel.progressVisibilityDownload}"
+                    app:layout_constraintBottom_toBottomOf="@+id/showBillImage"
+                    app:layout_constraintEnd_toEndOf="@+id/showBillImage"
+                    app:layout_constraintStart_toStartOf="@+id/showBillImage"
+                    app:layout_constraintTop_toTopOf="@+id/showBillImage"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintWidth_percent="0.1"
+                    app:layout_constraintHorizontal_bias="0.05" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
