@@ -426,8 +426,8 @@ public class G extends ApplicationContext {
             G.selectedLanguage = Locale.getDefault().getLanguage();
         }
 
-        //todo :// for release 2.0.5 to skip default lang when device locale was russian or kurdish
-        if (selectedLanguage.equals("ru") || selectedLanguage.equals("ur"))
+        //todo :// for release 2.0.5 to skip default lang when device locale was  kurdish
+        if ( selectedLanguage.equals("ur"))
             G.selectedLanguage = "en";
 
         Locale locale = new Locale(G.selectedLanguage);
