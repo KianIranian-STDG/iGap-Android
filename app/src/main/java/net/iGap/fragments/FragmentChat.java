@@ -4341,7 +4341,7 @@ public class FragmentChat extends BaseFragment
         items.add(getString(R.string.delete_item_dialog));
 
         //check and remove share base on type and download state
-        if (roomMessageType.toString().equals("LOCATION")){
+        if (roomMessageType.toString().equals("LOCATION") || roomMessageType.toString().equals("VOICE")){
 
             items.remove(getString(R.string.share_item_dialog));
 
