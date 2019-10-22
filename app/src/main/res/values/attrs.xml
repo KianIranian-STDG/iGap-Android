@@ -192,4 +192,10 @@
         <attr name="color_unchecked_stroke" format="color" />
         <attr name="small_tick" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="RadiusImageView">
+        <attr name="riv_radius" format="dimension"/>
+        <attr name="riv_radius_right_side" format="boolean"/>
+    </declare-styleable>
+
 </resources>
