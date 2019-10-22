@@ -95,11 +95,11 @@ public class NewsGroupPagerFrag extends BaseFragment {
         adapter.addFragment(frag, getResources().getString(R.string.news_latest));
 
         NewsListFrag frag2 = new NewsListFrag();
-        frag2.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.FEATURED_GROUP));
+        frag2.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.MOST_HITS));
         adapter.addFragment(frag2, getResources().getString(R.string.news_MHits));
 
         NewsListFrag frag3 = new NewsListFrag();
-        frag3.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.ERGENT_GROUP));
+        frag3.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.CONTROVERSIAL_NEWS));
         adapter.addFragment(frag3, getResources().getString(R.string.news_ergent));
 
         viewPager.setAdapter(adapter);
