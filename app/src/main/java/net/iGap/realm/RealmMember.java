@@ -359,6 +359,25 @@ public class RealmMember extends RealmObject {
         return searchMember;
     }
 
+    public static RealmResults<RealmMember> filterMember(Realm realm, long roomId , long userId){
+
+        RealmResults<RealmMember> searchMember = emptyResult(realm);
+
+        try {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null){
+                RealmQuery<RealmMember> query = realmRoom.getGroupRoom().getMembers().where();
+                query = query.equalTo(RealmMemberFields.PEER_ID, userId);
+                searchMember = query.findAll();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return searchMember ;
+
+    }
+
     /**
      * make empty result for avoid from null state
      */

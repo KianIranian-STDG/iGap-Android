@@ -70,6 +70,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isNeedResume = true ;
         viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
@@ -144,6 +145,11 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
             }
         });
 
+        viewModel.closePageImediatly.observe(getViewLifecycleOwner() , isClose -> {
+            if (isClose == null || !isClose) return;
+            popBackStackFragment();
+        });
+
         viewModel.showDialogChatHistory.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
                 showDialog();
@@ -178,6 +184,12 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
         setUpEmojiPopup();
         setAvatar();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.updateGroupRole();
     }
 
     @Override
