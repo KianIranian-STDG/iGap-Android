@@ -208,6 +208,7 @@
     <string name="close_icon">\ue919</string>
     <string name="language_icon">\ue953</string>
     <string name="camera_icon">\ue913</string>
+    <string name="camera2_icon">\ue950</string>
     <string name="mute_icon">\ue964</string>
     <string name="verify_icon">\ue910</string>
     <string name="flag_icon">\ue949</string>
