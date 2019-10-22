@@ -271,8 +271,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 } else if (userGender == ProtoGlobal.Gender.FEMALE) {
                     currentGender = R.id.female;
                 }
-            } else {
-                currentGender = -1;
             }
             gender.set(currentGender);
             name.set(currentName);
@@ -373,38 +371,40 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public ObservableInt getShowLoading() {
         return showLoading;
     }
-//
-//    public void onEditProfileClick() {
-//        if (isEditProfile.getValue() != null && isEditProfile.getValue()) {
-//            editProfileIcon.set(R.string.edit_icon);
-//            isEditProfile.setValue(false);
-//        } else {
-//            editProfileIcon.set(R.string.close_icon);
-//            isEditProfile.setValue(true);
-//            if (editProfileIcon.get() == R.string.close_icon) {
-//                isEditProfile.setValue(true);
-//            } else {
-//                isEditProfile.setValue(false);
-//            }
-//
-//        }
-//        setCurrentFragment.setValue(isEditProfile.getValue());
-//    }
+
     public void onEditProfileClick() {
         if (isEditProfile.getValue() != null && isEditProfile.getValue()) {
-            if (editProfileIcon.get() == R.string.check_icon) {
-                submitData();
-            } else {
-                editProfileIcon.set(R.string.edit_icon);
-                isEditProfile.setValue(false);
-            }
+            editProfileIcon.set(R.string.edit_icon);
+            isEditProfile.setValue(false);
+            submitData();
         } else {
             editProfileIcon.set(R.string.close_icon);
             isEditProfile.setValue(true);
-            getReferral();
+            if (editProfileIcon.get() == R.string.close_icon) {
+                isEditProfile.setValue(true);
+            } else {
+                isEditProfile.setValue(false);
+                getReferral();
+            }
+
         }
         setCurrentFragment.setValue(isEditProfile.getValue());
     }
+//    public void onEditProfileClick() {
+//        if (isEditProfile.getValue() != null && isEditProfile.getValue()) {
+//            if (editProfileIcon.get() == R.string.check_icon) {
+//                submitData();
+//            } else {
+//                editProfileIcon.set(R.string.edit_icon);
+//                isEditProfile.setValue(false);
+//            }
+//        } else {
+//            editProfileIcon.set(R.string.close_icon);
+//            isEditProfile.setValue(true);
+//            getReferral();
+//        }
+//        setCurrentFragment.setValue(isEditProfile.getValue());
+//    }
 
     public void onCloudMessageClick() {
         showLoading.set(View.VISIBLE);
@@ -631,13 +631,15 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public void onCheckedListener(int checkedId) {
         if (isEditMode()) {
             if (checkedId != currentGender) {
+                gender.set(checkedId);
                 editProfileIcon.set(R.string.check_icon);
             } else {
                 if (currentName.equals(name.get())) {
                     if (currentUserName.equals(userName.get())) {
                         if (currentUserEmail.equals(email.get())) {
                             if (currentBio.equals(bio.get())) {
-                                editProfileIcon.set(R.string.close_icon);
+                                if (currentBio.equals(gender.get())){
+                                    editProfileIcon.set(R.string.close_icon);}
                             }
                         }
                     }

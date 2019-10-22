@@ -32,7 +32,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
@@ -103,18 +102,16 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         }
         binding.editProfile.setOnClickListener(view1 -> {
             viewModel.onEditProfileClick();
-            if (!viewModel.setCurrentFragment.getValue()) {
+            if (viewModel.setCurrentFragment.getValue()) {
                 FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frame_edit, FragmentProfile.newInstance(), null).commit();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, 0,0,android.R.anim.fade_out);
-                fragmentTransaction.addToBackStack(null);
-                binding.addAvatar.setVisibility(View.GONE);
-            } else {
-                FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frame_edit, FragmentEditProfile.newInstance(), null).commit();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.frame_edit, FragmentEditProfile.newInstance(), null).setCustomAnimations(R.anim.fade_in,R.anim.fade_out).commit();
                 fragmentTransaction.addToBackStack(null);
                 binding.addAvatar.setVisibility(View.VISIBLE);
+            } else {
+                FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_edit, FragmentProfile.newInstance(), null).setCustomAnimations(R.anim.fade_in,R.anim.fade_out).commit();
+                fragmentTransaction.addToBackStack(null);
+                binding.addAvatar.setVisibility(View.GONE);
             }
         });
 
