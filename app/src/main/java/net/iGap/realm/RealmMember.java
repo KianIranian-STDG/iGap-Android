@@ -359,14 +359,20 @@ public class RealmMember extends RealmObject {
         return searchMember;
     }
 
-    public static RealmResults<RealmMember> filterMember(Realm realm, long roomId , long userId){
+    public static RealmResults<RealmMember> filterMember(Realm realm , long roomId , long userId){
 
         RealmResults<RealmMember> searchMember = emptyResult(realm);
 
         try {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
             if (realmRoom != null){
-                RealmQuery<RealmMember> query = realmRoom.getGroupRoom().getMembers().where();
+                RealmQuery<RealmMember> query;
+                if (realmRoom.getType() == GROUP) {
+                    query = realmRoom.getGroupRoom().getMembers().where();
+                } else {
+                    query = realmRoom.getChannelRoom().getMembers().where();
+                }
+
                 query = query.equalTo(RealmMemberFields.PEER_ID, userId);
                 searchMember = query.findAll();
             }

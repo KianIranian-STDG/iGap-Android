@@ -664,7 +664,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             //}
         }
 
-        realmMemberMe = RealmMember.filterMember(mRealm, mRoomID , G.userId);
+        realmMemberMe = RealmMember.filterMember(mRealm , mRoomID , G.userId);
         realmMemberMe.addChangeListener((realmMembers1, changeSet) -> {
             try {
                 mMainRole = realmMembers1.get(0).getRole();
@@ -1051,7 +1051,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
     @Override
     public void onDestroy() {
-        realmMemberMe.removeAllChangeListeners();
+        if (realmMemberMe != null) realmMemberMe.removeAllChangeListeners();
         super.onDestroy();
     }
 

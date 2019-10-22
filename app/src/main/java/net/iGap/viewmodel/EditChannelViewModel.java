@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.databinding.ActivityMediaPlayerLandBindingImpl;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperUploadFile;
@@ -64,9 +65,12 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     public MutableLiveData<Boolean> goToChatRoom = new MutableLiveData<>();
     public MutableLiveData<Boolean> onSignClickListener = new MutableLiveData<>();
     public MutableLiveData<Boolean> onReactionMessageClickListener = new MutableLiveData<>();
+    public MutableLiveData<Boolean> closePageImediatly = new MutableLiveData<>();
 
     public MutableLiveData<Long> channelAvatarUpdatedLiveData = new MutableLiveData<>();
     private MutableLiveData<Integer> showUploadProgressLiveData = new MutableLiveData<>();
+
+    private RealmChannelRoom realmChannelRoom;
 
     public long roomId;
     public ChannelChatRole role;
@@ -119,7 +123,7 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
             goBack.setValue(true);
             return;
         }
-        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+        realmChannelRoom = realmRoom.getChannelRoom();
         /*initials = realmRoom.getInitials();*/
         role = realmChannelRoom.getRole();
         isPrivate = realmChannelRoom.isPrivate();
@@ -203,6 +207,15 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
         /*attachFile = new AttachFile(G.fragmentActivity);*/
     }
 
+
+    public void updateGroupRole(){
+        if (realmChannelRoom == null) return;
+        role = realmChannelRoom.getRole();
+        if (role.toString().equals(ProtoGlobal.ChannelRoom.Role.MEMBER.toString()) ||
+                role.toString().equals(ProtoGlobal.ChannelRoom.Role.MODERATOR.toString())){
+            closePageImediatly.setValue(true);
+        }
+    }
 
     public void chooseImage() {
         if (role == ChannelChatRole.OWNER || role == ChannelChatRole.ADMIN) {

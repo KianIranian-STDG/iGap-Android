@@ -258,6 +258,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
     }
 
     public void updateGroupRole(){
+        if (realmGroupRoom == null) return;
         role = realmGroupRoom.getRole();
         if (role.toString().equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString()) ||
                 role.toString().equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())){
