@@ -149,7 +149,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         binding.toolbarMore.setOnClickListener(v -> viewModel.onClickRippleMenu());
         binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
         binding.toolbarEdit.setOnClickListener(v -> {
-            if (getActivity() != null) {
+            if (getActivity() != null && viewModel.checkIsEditableAndReturnState()) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), EditGroupFragment.newInstance(viewModel.roomId)).setReplace(false).load();
             }
         });
@@ -367,6 +367,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
     @Override
     public void onResume() {
         super.onResume();
+        viewModel.checkGroupIsEditable();
         showAvatar();
     }
 

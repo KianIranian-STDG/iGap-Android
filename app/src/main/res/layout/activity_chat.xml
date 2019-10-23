@@ -16,6 +16,7 @@
             android:id="@+id/chl_img_view_chat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:adjustViewBounds="true"
             android:background="?attr/iGapDefaultChatBackground"
             android:scaleType="centerCrop" />
 
@@ -135,6 +136,7 @@
                 android:id="@+id/ac_ll_attach_text"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
+                android:background="?attr/rootBackgroundColor"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal"

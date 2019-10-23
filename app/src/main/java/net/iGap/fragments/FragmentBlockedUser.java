@@ -10,12 +10,12 @@
 
 package net.iGap.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,7 +34,6 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnBlockStateChanged;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.FastScroller;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -47,7 +46,6 @@ import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
-import static net.iGap.G.inflater;
 
 public class FragmentBlockedUser extends BaseFragment implements OnBlockStateChanged, ToolbarListener {
 
@@ -149,7 +147,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
 
             viewHolder.title.setText(registeredInfo.getDisplayName());
 
-            viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(registeredInfo.getId(), registeredInfo.getLastSeen(), false));
+            viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(viewHolder.subtitle.getContext() ,registeredInfo.getId(), registeredInfo.getLastSeen(), false));
             if (HelperCalander.isPersianUnicode) {
                 viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
             }
@@ -196,8 +194,8 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
         public class ViewHolder extends RecyclerView.ViewHolder {
 
             protected CircleImageView image;
-            protected CustomTextViewMedium title;
-            protected CustomTextViewMedium subtitle;
+            protected TextView title;
+            protected TextView subtitle;
             RealmRegisteredInfo realmRegisteredInfo;
             private boolean isOpenDialog = false;
             private View root;

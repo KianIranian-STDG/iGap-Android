@@ -11,6 +11,7 @@
 package net.iGap.module.structs;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class StructListOfContact implements Comparable<StructListOfContact> {
 
@@ -70,5 +71,13 @@ public class StructListOfContact implements Comparable<StructListOfContact> {
     @Override
     public int compareTo(@NonNull StructListOfContact o) {
         return this.displayName.compareTo(o.displayName);
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof StructListOfContact){
+            return this.phone.equals(((StructListOfContact) obj).phone);
+        }
+        return super.equals(obj);
     }
 }

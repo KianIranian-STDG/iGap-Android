@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -190,7 +189,6 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         if (active != isActive) {
             active = isActive;
         }
-        Log.wtf(this.getClass().getName(), "setSelectedItem: " + isActive);
         textView.setSelected(isActive);
         if (isDarkTheme) {
             if (active) {

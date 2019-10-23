@@ -6,14 +6,14 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.api.repository.CPayRepository;
 import net.iGap.model.cPay.UserPlaquesModel;
 
-public class FragmentSeePayViewModel extends BaseCPayViewModel<UserPlaquesModel> {
+public class FragmentCPayViewModel extends BaseCPayViewModel<UserPlaquesModel> {
 
     private MutableLiveData<Boolean> onAddClickListener = new MutableLiveData<>();
     private MutableLiveData<Boolean> onInquiryClickListener = new MutableLiveData<>();
     private MutableLiveData<Boolean> onChargeClickListener = new MutableLiveData<>();
     private MutableLiveData<UserPlaquesModel> plaquesReceiverListener = new MutableLiveData<>();
 
-    public FragmentSeePayViewModel() {
+    public FragmentCPayViewModel() {
         getPlaqueListByApi();
     }
 

@@ -26,13 +26,13 @@
             android:button="@drawable/check_box_background"
             android:clickable="false" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <net.iGap.module.CircleImageView
             android:id="@+id/iv_itemContactChat_profileImage"
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:layout_marginStart="@dimen/dp16"
             android:layout_marginLeft="@dimen/dp16"
-            android:src="?attr/iGapAvatarBackground" />
+            app:srcCompat="?attr/iGapAvatarBackground" />
 
 
     </LinearLayout>
@@ -50,7 +50,6 @@
         android:text="user name"
         android:textColor="?attr/iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
-        android:textStyle="bold"
         app:emojiSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toTopOf="@+id/tv_itemContactChat_userPhoneNumber"
         app:layout_constraintEnd_toEndOf="parent"

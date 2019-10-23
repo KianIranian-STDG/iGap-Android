@@ -13,7 +13,6 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -47,7 +46,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityNewGroupBinding;
 import net.iGap.helper.GoToChatActivity;
@@ -531,15 +529,15 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
     private void startChannelRoom(long roomId) {
         fragmentNewGroupViewModel.hideProgressBar();
+        FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
+        Bundle bundle = new Bundle();
+        bundle.putLong("ROOMID", roomId);
+        bundle.putString("INVITE_LINK", fragmentNewGroupViewModel.mInviteLink);
+        bundle.putString("TOKEN", fragmentNewGroupViewModel.token);
+        fragmentCreateChannel.setArguments(bundle);
+        popBackStackFragment();
+        popBackStackFragment();
         if (getActivity() != null) {
-            FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
-            Bundle bundle = new Bundle();
-            bundle.putLong("ROOMID", roomId);
-            bundle.putString("INVITE_LINK", fragmentNewGroupViewModel.mInviteLink);
-            bundle.putString("TOKEN", fragmentNewGroupViewModel.token);
-            fragmentCreateChannel.setArguments(bundle);
-            popBackStackFragment();
-            popBackStackFragment();
             new HelperFragment(getActivity().getSupportFragmentManager(), fragmentCreateChannel).load();
         }
     }
@@ -733,17 +731,15 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     private class SelectedContactAdapter extends RecyclerView.Adapter<SelectedContactAdapter.ViewHolderSelectedContact> {
 
         private List<StructContactInfo> mItems = new ArrayList<>();
-        private LayoutInflater inflater;
 
         public SelectedContactAdapter() {
-            inflater = LayoutInflater.from(context);
         }
 
         @NonNull
         @Override
         public ViewHolderSelectedContact onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-            View view = inflater.inflate(R.layout.item_contact_chat, viewGroup, false);
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_contact_chat, viewGroup, false);
 
             return new ViewHolderSelectedContact(view);
         }
@@ -767,7 +763,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
             private EmojiTextViewE txtName;
             private TextView txtPhone;
-            private de.hdodenhof.circleimageview.CircleImageView imgAvatar;
+            private CircleImageView imgAvatar;
             private TextView btnRemove;
             private CheckBox chSelected;
 

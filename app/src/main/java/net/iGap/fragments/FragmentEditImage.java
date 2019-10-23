@@ -92,6 +92,7 @@ public class FragmentEditImage extends BaseFragment {
     public static HashMap<String, StructBottomSheet> textImageList = new HashMap<>();
     public static ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<StructBottomSheet>();
     private OnImageEdited onProfileImageEdited;
+    private boolean isOpenForShareImages = false ;
 
     public void setOnProfileImageEdited(OnImageEdited onProfileImageEdited) {
         this.onProfileImageEdited = onProfileImageEdited;
@@ -196,7 +197,7 @@ public class FragmentEditImage extends BaseFragment {
                 if (getActivity() != null) {
                     new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
                 }
-                if (G.openBottomSheetItem != null && isChatPage)
+                if (G.openBottomSheetItem != null && isChatPage && !isOpenForShareImages)
                     G.openBottomSheetItem.openBottomSheet(false);
             }
         });
@@ -271,7 +272,7 @@ public class FragmentEditImage extends BaseFragment {
             @Override
             public void onClick(View v) {
                 AndroidUtils.closeKeyboard(v);
-                if (getActivity() != null) {
+                if (getActivity() != null && itemGalleryList.size() > 0) {
                     if (!isNicknamePage) {
                         new HelperFragment(getActivity().getSupportFragmentManager(), FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path)).setReplace(false).load();
                     } else {
@@ -425,6 +426,10 @@ public class FragmentEditImage extends BaseFragment {
         });
     }
 
+    public void setIsOpenForShareImages(boolean isShare){
+        this.isOpenForShareImages = isShare;
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -520,7 +525,7 @@ public class FragmentEditImage extends BaseFragment {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK && getActivity() != null) {
                     AndroidUtils.closeKeyboard(v);
                     new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
-                    if (G.openBottomSheetItem != null && isChatPage)
+                    if (G.openBottomSheetItem != null && isChatPage && !isOpenForShareImages)
                         G.openBottomSheetItem.openBottomSheet(false);
                     return true;
                 }

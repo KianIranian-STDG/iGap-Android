@@ -237,6 +237,18 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }
     }
 
+    public void checkHasSharedData(boolean enable) {
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentMain.class.getName());
+
+        if (fragment instanceof FragmentMain) {
+            if (enable) {
+                ((FragmentMain) fragment).checkHasSharedData();
+            }else {
+                ((FragmentMain) fragment).revertToolbarFromForwardMode();
+            }
+        }
+    }
+
     public void autoLinkCrawler(String uri, DiscoveryFragment.CrawlerStruct.OnDeepValidLink onDeepLinkValid) {
         if (uri.equals("")) {
             onDeepLinkValid.linkInvalid(uri);
