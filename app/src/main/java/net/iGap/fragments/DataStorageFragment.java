@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -220,6 +221,7 @@ public class DataStorageFragment extends BaseFragment {
                 txtTitle.setText(R.string.clean_up_chat_rooms);
 
                 TextView iconTitle = dialogView.findViewById(R.id.iconDialogTitle);
+                iconTitle.setTypeface(ResourcesCompat.getFont(iconTitle.getContext() , R.font.font_icon_old));
                 iconTitle.setText(R.string.md_clean_up);
 
                 TextView txtContent = dialogView.findViewById(R.id.txtDialogContent);
