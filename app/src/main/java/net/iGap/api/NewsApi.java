@@ -8,10 +8,12 @@ import net.iGap.news.repository.model.NewsGroup;
 import net.iGap.news.repository.model.NewsList;
 import net.iGap.news.repository.model.NewsPN;
 import net.iGap.news.repository.model.NewsPublisher;
+import net.iGap.news.repository.model.NewsSubmitComment;
 
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -54,9 +56,9 @@ public interface NewsApi {
     @GET("getNewsComments/igap/")
     Call<NewsComment> getNewsComment(@Query("articleId") int newsID, @Query("page") int page, @Query("perpage") int display);
 
-    @FormUrlEncoded
     @POST("setComment/igap/")
-    Call<NewsDetail> postNewsComment(@Field("articleid") String newsID, @Field("comment") String comment, @Field("author") String author, @Field("email") String email);
+//    Call<NewsDetail> postNewsComment(@Field("articleid") String newsID, @Field("comment") String comment, @Field("author") String author, @Field("email") String email);
+    Call<NewsDetail> postNewsComment(@Body NewsSubmitComment comment);
 
     @GET("getSources/igap/")
     Call<List<NewsPublisher>> getNewsPublishers(@Query("page") int page, @Query("perpage") int display);

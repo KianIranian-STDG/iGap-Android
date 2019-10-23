@@ -13,6 +13,7 @@ import net.iGap.news.repository.model.NewsGroup;
 import net.iGap.news.repository.model.NewsList;
 import net.iGap.news.repository.model.NewsPN;
 import net.iGap.news.repository.model.NewsPublisher;
+import net.iGap.news.repository.model.NewsSubmitComment;
 
 import java.util.List;
 
@@ -107,7 +108,7 @@ public class NewsAPIRepository {
     }
 
     public void postNewsComment(String newsID, String comment, String author, String email, HandShakeCallback handShakeCallback, ResponseCallback<NewsDetail> apiResponse) {
-        new ApiInitializer<NewsDetail>().initAPI(apiService.postNewsComment(newsID, comment, author, email), handShakeCallback, apiResponse);
+        new ApiInitializer<NewsDetail>().initAPI(apiService.postNewsComment(new NewsSubmitComment(newsID, comment, author, email)), handShakeCallback, apiResponse);
     }
 
     public void getNewsPublishers(int start, int display, HandShakeCallback handShakeCallback, ResponseCallback<List<NewsPublisher>> apiResponse) {
