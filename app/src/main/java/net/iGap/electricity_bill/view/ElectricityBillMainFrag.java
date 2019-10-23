@@ -101,7 +101,7 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag {
         elecBillVM.getGoToBillDetailFrag().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 elecBillVM.getProgressVisibility().set(View.GONE);
-                new HelperFragment(getFragmentManager(), ElectricityBillPayFrag.newInstance(elecBillVM.getBillID().get(), elecBillVM.getBillPayID(), elecBillVM.getBillPrice())).setReplace(false).load();
+                new HelperFragment(getFragmentManager(), ElectricityBillPayFrag.newInstance(elecBillVM.getBillID().get(), elecBillVM.getBillPayID(), elecBillVM.getBillPrice(), false)).setReplace(false).load();
             }
         });
     }

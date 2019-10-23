@@ -119,4 +119,27 @@ public class BillData {
         }
     }
 
+    public List<BillDataModel> getBillData() {
+        return billData;
+    }
+
+    public void setBillData(List<BillDataModel> billData) {
+        this.billData = billData;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getNID() {
+        return NID;
+    }
+
+    public void setNID(int NID) {
+        this.NID = NID;
+    }
 }

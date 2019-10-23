@@ -2310,4 +2310,6 @@ Want to get it?</string>
     <string name="elecBill_image_fail">Download has failed.</string>
     <string name="elecBill_image_open">Open File</string>
     <string name="elecBill_image_close">Dismiss</string>
+    <string name="elecBill_edit_saveBtn">Save Changes</string>
+    <string name="elecBill_edit_Btn">Edit Bill</string>
 </resources>

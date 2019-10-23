@@ -27,6 +27,12 @@ public class BranchDebit {
     @SerializedName("lastupdatetime")
     private String lastUpdateTime;
 
+    private boolean loading;
+
+    public BranchDebit() {
+        loading = true;
+    }
+
     public String getBillID() {
         return billID;
     }
@@ -113,5 +119,13 @@ public class BranchDebit {
 
     public void setLastUpdateTime(String lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
+    }
+
+    public boolean isLoading() {
+        return loading;
+    }
+
+    public void setLoading(boolean loading) {
+        this.loading = loading;
     }
 }

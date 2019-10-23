@@ -4,6 +4,7 @@ import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
@@ -75,6 +76,10 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
     }
 
     public void payBill (){
+        if (Long.parseLong(billPrice.get()) < 1000) {
+            return;
+        }
+
         progressVisibilityPay.set(View.VISIBLE);
         payBtnEnable.set(false);
 
@@ -86,7 +91,6 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
             } else {
                 // error
             }
-
         };
 
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();

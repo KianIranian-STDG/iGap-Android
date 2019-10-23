@@ -7,7 +7,13 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
+import net.iGap.electricity_bill.repository.api.ElectricityBillAPIRepository;
 import net.iGap.electricity_bill.repository.api.ElectricityBillRealmRepo;
+import net.iGap.electricity_bill.repository.model.BillMessage;
+import net.iGap.electricity_bill.repository.model.BillRegister;
+import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
 
 public class ElectricityBillAddVM extends BaseAPIViewModel {
 
@@ -34,8 +40,11 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
     private ObservableField<Integer> progressVisibility;
 
     private MutableLiveData<Boolean> goBack;
+    private MutableLiveData<BillMessage> message;
 
     private ElectricityBillRealmRepo repo = new ElectricityBillRealmRepo();
+    private BillRegister info;
+    private boolean editMode = false;
 
     public ElectricityBillAddVM() {
 
@@ -61,6 +70,13 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
 
         progressVisibility = new ObservableField<>(View.GONE);
         goBack = new MutableLiveData<>(false);
+        message = new MutableLiveData<>();
+
+        info = new BillRegister();
+        info.setEmailEnable(false);
+        info.setAppEnable(false);
+        info.setPrintEnable(false);
+        info.setSMSEnable(false);
     }
 
     public void addBill() {
@@ -69,11 +85,47 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
             progressVisibility.set(View.GONE);
             return;
         }
-        sendAndSaveData();
+        info.setID(billID.get());
+        info.setMobileNum(billPhone.get());
+        info.setNID(billUserID.get());
+        info.setTitle(billName.get());
+
+        if (editMode)
+            editAndSaveData();
+        else
+            sendAndSaveData();
     }
 
     private void sendAndSaveData() {
+        new ElectricityBillAPIRepository().addBill(info, this, new ResponseCallback<ElectricityResponseModel<String>>() {
+            @Override
+            public void onSuccess(ElectricityResponseModel<String> data) {
+                if (data.getStatus() == 200)
+                    message.setValue(new BillMessage(false, "موفقیت", data.getMessage(), 0));
+                goBack.setValue(true);
+            }
 
+            @Override
+            public void onError(ErrorModel error) {
+
+            }
+        });
+    }
+
+    private void editAndSaveData() {
+        new ElectricityBillAPIRepository().editBill(info, this, new ResponseCallback<ElectricityResponseModel<String>>() {
+            @Override
+            public void onSuccess(ElectricityResponseModel<String> data) {
+                if (data.getStatus() == 200)
+                    message.setValue(new BillMessage(false, "موفقیت", data.getMessage(), 0));
+                goBack.setValue(true);
+            }
+
+            @Override
+            public void onError(ErrorModel error) {
+
+            }
+        });
     }
 
     private boolean checkData() {
@@ -123,6 +175,8 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
                 billEmailErrorEnable.set(true);
                 return false;
             }
+            info.setEmail(billEmail.get());
+            info.setEmailEnable(true);
         }
         return true;
     }
@@ -253,5 +307,29 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
 
     public void setBillEmailErrorEnable(ObservableField<Boolean> billEmailErrorEnable) {
         this.billEmailErrorEnable = billEmailErrorEnable;
+    }
+
+    public MutableLiveData<Boolean> getGoBack() {
+        return goBack;
+    }
+
+    public void setGoBack(MutableLiveData<Boolean> goBack) {
+        this.goBack = goBack;
+    }
+
+    public MutableLiveData<BillMessage> getMessage() {
+        return message;
+    }
+
+    public void setMessage(MutableLiveData<BillMessage> message) {
+        this.message = message;
+    }
+
+    public boolean isEditMode() {
+        return editMode;
+    }
+
+    public void setEditMode(boolean editMode) {
+        this.editMode = editMode;
     }
 }

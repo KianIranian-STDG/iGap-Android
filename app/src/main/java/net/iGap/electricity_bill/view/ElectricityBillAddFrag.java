@@ -1,5 +1,6 @@
 package net.iGap.electricity_bill.view;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,11 +12,14 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBillAddBinding;
+import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.electricity_bill.repository.model.BillMessage;
 import net.iGap.electricity_bill.viewmodel.ElectricityBillAddVM;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -24,7 +28,8 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
 
     private FragmentElecBillAddBinding binding;
     private ElectricityBillAddVM elecBillVM;
-    private String billID;
+    private String billID, billTitle, nationalID;
+    private boolean editMode = false;
     private static final String TAG = "ElectricityBillAddFrag";
 
     public static ElectricityBillAddFrag newInstance() {
@@ -32,16 +37,29 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
         return Frag;
     }
 
-    public static ElectricityBillAddFrag newInstance(String billID) {
-        ElectricityBillAddFrag Frag = new ElectricityBillAddFrag(billID);
+    public static ElectricityBillAddFrag newInstance(String billID, boolean editMode) {
+        ElectricityBillAddFrag Frag = new ElectricityBillAddFrag(billID, editMode);
         return Frag;
     }
 
-    public ElectricityBillAddFrag(String billID) {
+    public static ElectricityBillAddFrag newInstance(String billID, String billTitle, String nationalID, boolean editMode) {
+        ElectricityBillAddFrag Frag = new ElectricityBillAddFrag(billID, billTitle, nationalID, editMode);
+        return Frag;
+    }
+
+    public ElectricityBillAddFrag(String billID, boolean editMode) {
         this.billID = billID;
+        this.editMode = editMode;
     }
 
     public ElectricityBillAddFrag() {
+    }
+
+    public ElectricityBillAddFrag(String billID, String billTitle, String nationalID, boolean editMode) {
+        this.billID = billID;
+        this.billTitle = billTitle;
+        this.nationalID = nationalID;
+        this.editMode = editMode;
     }
 
     @Override
@@ -49,6 +67,11 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
         super.onCreate(savedInstanceState);
         elecBillVM = ViewModelProviders.of(this).get(ElectricityBillAddVM.class);
         elecBillVM.getBillID().set(billID);
+        if (editMode) {
+            elecBillVM.getBillName().set(billTitle);
+            elecBillVM.getBillUserID().set(nationalID);
+            elecBillVM.setEditMode(editMode);
+        }
     }
 
     @Nullable
@@ -83,7 +106,24 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
         LinearLayout toolbarLayout = binding.Toolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
+        elecBillVM.getMessage().observe(getViewLifecycleOwner(), new Observer<BillMessage>() {
+            @Override
+            public void onChanged(BillMessage billMessage) {
+                showDialog(billMessage.getTitle(), billMessage.getMessage(), R.string.ok);
+            }
+        });
+
+        elecBillVM.getGoBack().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean)
+                    popBackStackFragment();
+            }
+        });
         cancelErrorWhileTyping();
+
+        if (editMode)
+            binding.submitBill.setText(getResources().getString(R.string.elecBill_edit_saveBtn));
     }
 
     private void cancelErrorWhileTyping() {
@@ -169,5 +209,12 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
         });
     }
 
+    private void showDialog(String title, String message, int btnRes) {
+        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
+        defaultRoundDialog.setTitle(title);
+        defaultRoundDialog.setMessage(message);
+        defaultRoundDialog.setPositiveButton(getResources().getString(btnRes), (dialog, id) -> dialog.dismiss());
+        defaultRoundDialog.show();
+    }
 
 }

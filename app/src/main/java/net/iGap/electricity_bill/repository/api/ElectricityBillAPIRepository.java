@@ -35,7 +35,7 @@ public class ElectricityBillAPIRepository {
         }
     }
 
-    public void getNewsGroup(HandShakeCallback handShakeCallback, ResponseCallback<CompanyList> apiResponse) {
+    public void getCompanies(HandShakeCallback handShakeCallback, ResponseCallback<CompanyList> apiResponse) {
         new ApiInitializer<CompanyList>().initAPI(apiService.getCompanies(), handShakeCallback, apiResponse);
     }
 

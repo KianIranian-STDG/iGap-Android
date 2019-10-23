@@ -43,27 +43,27 @@ import static net.iGap.G.context;
 
 public class ElectricityBillPayFrag extends BaseAPIViewFrag {
 
-    private int gone;
-
     public enum btnActions {BRANCH_INFO, ADD_LIST}
 
     private FragmentElecBillPayBinding binding;
     private ElectricityBillPayVM elecBillVM;
     private Bill bill;
+    private boolean editMode = false;
     private static final String TAG = "ElectricityBillPayFrag";
 
-    public static ElectricityBillPayFrag newInstance(String billID, String billPayID, String billPrice) {
-        ElectricityBillPayFrag Frag = new ElectricityBillPayFrag(new Bill(billID, billPayID, billPrice, null));
+    public static ElectricityBillPayFrag newInstance(String billID, String billPayID, String billPrice, boolean editMode) {
+        ElectricityBillPayFrag Frag = new ElectricityBillPayFrag(new Bill(billID, billPayID, billPrice, null), editMode);
         return Frag;
     }
 
-    public static ElectricityBillPayFrag newInstance(String billID) {
-        ElectricityBillPayFrag Frag = new ElectricityBillPayFrag(new Bill(billID, null, null, null));
+    public static ElectricityBillPayFrag newInstance(String billID, boolean editMode) {
+        ElectricityBillPayFrag Frag = new ElectricityBillPayFrag(new Bill(billID, null, null, null), editMode);
         return Frag;
     }
 
-    private ElectricityBillPayFrag(Bill bill) {
+    private ElectricityBillPayFrag(Bill bill, boolean editMode) {
         this.bill = bill;
+        this.editMode = editMode;
     }
 
     @Override
@@ -114,6 +114,8 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
         toolbarLayout.addView(mHelperToolbar.getView());
 
         elecBillVM.getBillImage().observe(getViewLifecycleOwner(), data -> downloadFile());
+        if (editMode)
+            binding.addToList.setText(getResources().getString(R.string.elecBill_edit_Btn));
     }
 
     public void onBranchInfoBtnClick() {
@@ -127,9 +129,10 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
     private void onBtnClickManger(btnActions actions) {
         switch (actions) {
             case BRANCH_INFO:
+                new HelperFragment(getFragmentManager(), ElectricityBranchInfoListFrag.newInstance(elecBillVM.getBillID().get())).setReplace(false).load();
                 break;
             case ADD_LIST:
-                new HelperFragment(getFragmentManager(), ElectricityBillAddFrag.newInstance(elecBillVM.getBillID().get())).setReplace(false).load();
+                new HelperFragment(getFragmentManager(), ElectricityBillAddFrag.newInstance(elecBillVM.getBillID().get(), editMode)).setReplace(false).load();
                 break;
         }
     }

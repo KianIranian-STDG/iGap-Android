@@ -14,20 +14,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.electricity_bill.repository.model.Bill;
+import net.iGap.electricity_bill.repository.model.BillData;
+import net.iGap.electricity_bill.repository.model.BranchDebit;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ElectricityBillListAdapter extends RecyclerView.Adapter<ElectricityBillListAdapter.ViewHolder> {
 
-    private ArrayList<Bill> mdata;
+    private Map<BillData.BillDataModel, BranchDebit> mdata;
+    private List<BillData.BillDataModel> bill;
+    private List<BranchDebit> debits;
     private Context context;
     private OnItemClickListener clickListener;
 
-    public ElectricityBillListAdapter(Context context, List<Bill> data, OnItemClickListener clickListener) {
-        if (this.mdata == null)
-            this.mdata = new ArrayList<>();
-        this.mdata.addAll(data);
+    public ElectricityBillListAdapter(Context context, Map<BillData.BillDataModel, BranchDebit> data, OnItemClickListener clickListener) {
+        this.mdata = new HashMap<>();
+        this.mdata.putAll(data);
+        this.bill = new ArrayList<>(mdata.keySet());
+        this.debits = new ArrayList<>(mdata.values());
         this.context = context;
         this.clickListener = clickListener;
     }
@@ -75,20 +82,21 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
         }
 
         void initView(int position) {
-            if (!mdata.get(position).isLoading()) {
+            if (!mdata.get(bill.get(position)).isLoading()) {
                 progressPID.setVisibility(View.GONE);
                 progressP.setVisibility(View.GONE);
                 progressT.setVisibility(View.GONE);
 
-                title.setText(mdata.get(position).getTitle());
-                billID.setText(mdata.get(position).getID());
-                billPayID.setText(mdata.get(position).getPayID());
-                billPrice.setText(mdata.get(position).getPrice());
-                billTime.setText(mdata.get(position).getDueTime());
+                title.setText(bill.get(position).getBillTitle());
+                billID.setText(bill.get(position).getBillID());
+
+                billPayID.setText(mdata.get(bill.get(position)).getPaymentID());
+                billPrice.setText(mdata.get(bill.get(position)).getTotalBillDebt());
+                billTime.setText(mdata.get(bill.get(position)).getPaymentDeadLineDate());
             }
 
             pay.setOnClickListener(v -> {
-                if (!mdata.get(position).isLoading()) {
+                if (!mdata.get(bill.get(position)).isLoading()) {
                     clickListener.onClick(position, OnItemClickListener.Actoin.PAY);
                 }
                 else

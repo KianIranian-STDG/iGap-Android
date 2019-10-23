@@ -6,11 +6,8 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.electricity_bill.viewmodel.ElectricityBillListVM" />
+            type="net.iGap.electricity_bill.viewmodel.ElectricityBranchInfoListVM" />
 
-        <variable
-            name="fragment"
-            type="net.iGap.electricity_bill.view.ElectricityBillListFrag" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,22 +41,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingBottom="@dimen/dp20">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/addNewBill"
-                    style="@style/iGapOutlinedButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:minHeight="58dp"
-                    android:onClick="@{()->fragment.onAddNewBillBtnClick()}"
-                    android:text="@string/elecBill_cell_addNewBill"
-                    android:textSize="@dimen/dp16"
-                    android:visibility="visible"
-                    android:layout_marginTop="@dimen/dp16"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="0.7"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/billRecycler"

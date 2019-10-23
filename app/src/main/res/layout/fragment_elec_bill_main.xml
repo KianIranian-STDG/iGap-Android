@@ -125,6 +125,7 @@
                             android:text="@string/scan_qr_code_icon"
                             android:textSize="@dimen/dp48"
                             android:onClick="@{()->fragment.onQRScanBtnClick()}"
+                            android:background="?attr/selectableItemBackgroundBorderless"
                             app:layout_constraintEnd_toStartOf="@+id/billIdHolder"
                             app:layout_constraintTop_toTopOf="@+id/billIdHolder"
                             app:layout_constraintBottom_toBottomOf="@+id/billIdHolder"
