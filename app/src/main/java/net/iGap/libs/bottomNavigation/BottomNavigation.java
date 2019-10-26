@@ -12,14 +12,17 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewOutlineProvider;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.AccountManager;
-import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
@@ -30,6 +33,8 @@ import net.iGap.module.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.iGap.G.isDarkTheme;
 
 public class BottomNavigation extends LinearLayout implements OnItemSelected, View.OnClickListener, View.OnLongClickListener {
 
@@ -64,7 +69,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
             TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.BottomNavigation);
 
             try {
-                if (G.isDarkTheme) {
+                if (isDarkTheme) {
                     backgroundColor = getContext().getResources().getColor(R.color.navigation_dark_mode_bg);
                 } else {
                     backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color, getResources().getColor(R.color.background_color));
@@ -92,14 +97,17 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
                     tabItems.add(tabItem);
                     tabItem.setOnTabItemSelected(this);
                 } else {
-                    avatarImageView = (CircleImageView) getChildAt(4);
+                    avatarImageView = (CircleImageView) ((FrameLayout) getChildAt(4)).getChildAt(0);
+                    TextView textView = (TextView) ((FrameLayout) getChildAt(4)).getChildAt(1);
+                    textView.setTextColor(Color.parseColor(isDarkTheme ? "#AAA9A9" : "#FF4F4F4F"));
+                    textView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
                     avatarImageView.setOnLongClickListener(this);
                     avatarImageView.setOnClickListener(this);
-                    avatarImageView.setBorderColor(Color.parseColor(G.isDarkTheme ? "#868686" : "#FF696969"));
+                    avatarImageView.setBorderColor(Color.parseColor(isDarkTheme ? "#868686" : "#FF696969"));
                 }
             }
         } catch (Exception e) {
-            Log.e(getClass().getName(), "setupChildren: ", e);
+            e.printStackTrace();
         }
     }
 
@@ -128,7 +136,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(backgroundColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            canvas.drawPath(roundedRect(0, 0, getWidth(), getHeight(), cornerRadius, cornerRadius, true), paint);
+            canvas.drawPath(roundedRect(0, 0, getWidth(), getHeight(), LayoutCreator.dpToPx((int) cornerRadius), LayoutCreator.dpToPx((int) cornerRadius), true), paint);
             super.dispatchDraw(canvas);
         } else {
             super.dispatchDraw(canvas);

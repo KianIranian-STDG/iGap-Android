@@ -2983,4 +2983,5 @@
     <string name="url_copied">تم نسخ الرابط</string>
     <string name="message_is_long">Your message is too long  Message will covert to</string>
     <string name="add_new_account">أضف حساب جديد</string>
+    <string name="profile">الشخصي</string>
 </resources>

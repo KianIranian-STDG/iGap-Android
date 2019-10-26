@@ -2229,5 +2229,6 @@
     <string name="url_copied">لینک کپی شد.</string>
     <string name="message_is_long">پیام شما طولانی است.\nپیام تبدیل خواهد شد به</string>
     <string name="add_new_account">افزودن حساب جدید</string>
+    <string name="profile">نمایه</string>
 
 </resources>
