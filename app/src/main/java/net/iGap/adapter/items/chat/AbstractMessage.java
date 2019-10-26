@@ -49,6 +49,7 @@ import com.google.gson.reflect.TypeToken;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -1955,7 +1956,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     roomMessage.setRoomId(mMessage.getRoomId());
                     roomMessage.setMessage(((ArrayList<String>) v.getTag()).get(1));
                     roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                    roomMessage.setUserId(G.userId);
+                    roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
                     roomMessage.setCreateTime(TimeUtils.currentLocalTime());
 
                     if (((ArrayList<String>) v.getTag()).get(2) != null) {

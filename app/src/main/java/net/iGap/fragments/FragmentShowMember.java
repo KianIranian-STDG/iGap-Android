@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -704,7 +705,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             } else {
                 showMemberMode = ShowMemberMode.SELECT_FOR_ADD_MODERATOR;
             }
-            FragmentShowMember fragment1 = FragmentShowMember.newInstance4(fragment, mRoomID, role, G.userId, SelectedRole, true, isGroup, false, showMemberMode);
+            FragmentShowMember fragment1 = FragmentShowMember.newInstance4(fragment, mRoomID, role, AccountManager.getInstance().getCurrentUser().getId(), SelectedRole, true, isGroup, false, showMemberMode);
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment1).setReplace(false).load(false);
         }
     }

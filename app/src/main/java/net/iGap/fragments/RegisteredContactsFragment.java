@@ -37,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -898,7 +899,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     if (!isMultiSelect) {
                         if (isCallAction) {
                             long userId = realmContacts.getId();
-                            if (userId != 134 && G.userId != userId) {
+                            if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
 
 
                                 new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {
@@ -968,7 +969,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
                 btnVoiceCall.setOnClickListener(v -> {
                     long userId = realmContacts.getId();
-                    if (userId != 134 && G.userId != userId) {
+                    if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
                         CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
                         popBackStackFragment();
                     }
@@ -979,7 +980,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     if (!isMultiSelect) {
                         if (isCallAction) {
                             long userId = realmContacts.getId();
-                            if (userId != 134 && G.userId != userId) {
+                            if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
                                 CallSelectFragment callSelectFragment = CallSelectFragment.getInstance(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
                                 callSelectFragment.show(getFragmentManager(), null);
                             }

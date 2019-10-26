@@ -33,6 +33,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.textfield.TextInputLayout;
 import com.vanniktech.emoji.EmojiPopup;
 
+import net.iGap.AccountManager;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -319,7 +320,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
 
     private void showListForCustomRole(String SelectedRole) {
         if (getActivity() != null) {
-            FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), G.userId, SelectedRole, false, false);
+            FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), AccountManager.getInstance().getCurrentUser().getId(), SelectedRole, false, false);
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         }
     }

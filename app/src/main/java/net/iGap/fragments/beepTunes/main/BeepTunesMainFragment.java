@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -125,7 +126,7 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
                 .setRightSmallAvatarShown(true)
                 .setLeftIcon(R.string.back_icon);
         viewGroup.addView(helperToolbar.getView());
-        avatarHandler.getAvatar(new ParamWithAvatarType(helperToolbar.getAvatarSmall(), G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
+        avatarHandler.getAvatar(new ParamWithAvatarType(helperToolbar.getAvatarSmall(), AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
     }
 
     @Override

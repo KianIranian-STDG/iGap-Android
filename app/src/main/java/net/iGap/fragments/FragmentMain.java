@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.AccountManager;
 import net.iGap.Config;
 import net.iGap.DbManager;
 import net.iGap.G;
@@ -950,7 +951,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
                 if (!G.fragmentActivity.isFinishing()) {
                     long peerId = realmRoom.getChatRoom() != null ? realmRoom.getChatRoom().getPeerId() : 0;
-                    boolean isCloud = peerId > 0 && peerId == G.userId;
+                    boolean isCloud = peerId > 0 && peerId == AccountManager.getInstance().getCurrentUser().getId();
 
                     int pinCount = DbManager.getInstance().doRealmTask(realm -> {
                         return realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_PINNED, true).findAll().size();

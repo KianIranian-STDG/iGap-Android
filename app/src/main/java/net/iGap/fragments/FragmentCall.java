@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -651,7 +652,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
                         if (canclick) {
                             long userId = callLog.getUser().getId();
 
-                            if (userId != 134 && G.userId != userId) {
+                            if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
                                 CallSelectFragment callSelectFragment = CallSelectFragment.getInstance(userId, false, ProtoSignalingOffer.SignalingOffer.Type.valueOf(callLog.getType()));
                                 callSelectFragment.show(getFragmentManager(), null);
                             }

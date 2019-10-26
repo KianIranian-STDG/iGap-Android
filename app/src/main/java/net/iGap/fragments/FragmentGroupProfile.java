@@ -38,6 +38,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.textfield.TextInputLayout;
 
+import net.iGap.AccountManager;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -205,7 +206,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
         viewModel.goToShowMemberPage.observe(getViewLifecycleOwner(), type -> {
             if (getActivity() != null && type != null) {
-                FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), G.userId, type, viewModel.isNeedgetContactlist, true);
+                FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), AccountManager.getInstance().getCurrentUser().getId(), type, viewModel.isNeedgetContactlist, true);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         });

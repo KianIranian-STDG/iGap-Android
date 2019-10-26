@@ -25,6 +25,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
 
+import net.iGap.AccountManager;
 import net.iGap.BuildConfig;
 import net.iGap.DbManager;
 import net.iGap.G;
@@ -1061,7 +1062,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     @Override
     public void onUserInfoMyClient() {
-        setUserAvatar.setValue(G.userId);
+        setUserAvatar.setValue(AccountManager.getInstance().getCurrentUser().getId());
     }
 
     @Override

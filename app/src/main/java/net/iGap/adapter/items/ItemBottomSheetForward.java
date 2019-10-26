@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hanks.library.AnimateCheckBox;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -86,7 +87,7 @@ public class ItemBottomSheetForward extends AbstractItem<ItemBottomSheetForward,
             avatarType = AvatarHandler.AvatarType.ROOM;
         }
 
-        if (G.userId == mInfo.getPeer_id()) {
+        if (AccountManager.getInstance().getCurrentUser().getId() == mInfo.getPeer_id()) {
             avatarHandler.removeImageViewFromHandler(imageView);
             imageView.setImageResource(R.drawable.ic_cloud_space_blue);
         } else {

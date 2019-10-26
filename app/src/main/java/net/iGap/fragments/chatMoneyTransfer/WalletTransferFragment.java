@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.eventbus.EventListener;
@@ -266,7 +267,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         payment.price = Long.parseLong(mPrice[0]);
         Intent intent = new Intent(context, WalletActivity.class);
         intent.putExtra("Language", "fa");
-        intent.putExtra("Mobile", "0" + G.userId);
+        intent.putExtra("Mobile", "0" + AccountManager.getInstance().getCurrentUser().getId());
         intent.putExtra("IsP2P", true);
         intent.putExtra("Payment", payment);
         intent.putExtra("PrimaryColor", G.appBarColor);

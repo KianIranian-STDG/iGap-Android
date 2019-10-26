@@ -12,6 +12,7 @@ package net.iGap.response;
 
 import androidx.annotation.NonNull;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.adapter.items.chat.AbstractMessage;
@@ -28,8 +29,6 @@ import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserInfo;
 
 import io.realm.Realm;
-
-import static net.iGap.G.userId;
 
 public class UserInfoResponse extends MessageHandler {
 
@@ -79,7 +78,7 @@ public class UserInfoResponse extends MessageHandler {
                 return;
             }
         }
-        if ((builder.getUser().getId() == userId)) {
+        if ((builder.getUser().getId() == AccountManager.getInstance().getCurrentUser().getId())) {
             if (G.onUserInfoMyClient != null) {
                 G.onUserInfoMyClient.onUserInfoMyClient();
             }

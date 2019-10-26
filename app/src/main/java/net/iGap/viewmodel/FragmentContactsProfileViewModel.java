@@ -9,6 +9,7 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -165,7 +166,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             }
         }*/
         /*items.add(G.fragmentActivity.getString(R.string.clear_history));*/
-        if (G.userId != userId && !disableDeleteContact) {
+        if (AccountManager.getInstance().getCurrentUser().getId() != userId && !disableDeleteContact) {
             items.add(G.fragmentActivity.getString(R.string.delete_contact));
             items.add(G.fragmentActivity.getString(R.string.edit_contact));
         }
@@ -311,7 +312,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
             isShowReportView.set(false);
         }
 
-        if (userId == G.userId) {
+        if (userId == AccountManager.getInstance().getCurrentUser().getId()) {
             cloudVisibility.postValue(true);
         } else
             cloudVisibility.postValue(false);
@@ -330,7 +331,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                 }
             });
             isBot = registeredInfo.isBot();
-            if (isBot || userId == G.userId) {
+            if (isBot || userId == AccountManager.getInstance().getCurrentUser().getId()) {
                 callVisibility.setValue(View.GONE);
                 menuVisibility.setValue(View.GONE);
                 videoCallVisibility.setValue(View.GONE);
@@ -416,7 +417,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         }
 
         //todo: fixed it two times check it and first and her
-        if (userId != 134 && G.userId != userId) {
+        if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
             RealmCallConfig callConfig = DbManager.getInstance().doRealmTask(realm -> {
                 return realm.where(RealmCallConfig.class).findFirst();
             });
@@ -464,7 +465,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         }
 
         setUserStatus(userStatus, lastSeenValue);
-        setAvatar.setValue(userId != G.userId);
+        setAvatar.setValue(userId != AccountManager.getInstance().getCurrentUser().getId());
         //todo: change it
         FragmentShearedMedia.getCountOfSharedMedia(shearedId);
 
@@ -487,9 +488,9 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
 
     public void onImageClick() {
-        if (userId == G.userId) return; //dont work when profile was cloud
+        if (userId == AccountManager.getInstance().getCurrentUser().getId()) return; //dont work when profile was cloud
         if (DbManager.getInstance().doRealmTask(realm -> { return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst(); }) != null) {
-            goToShowAvatarPage.setValue(userId == G.userId);
+            goToShowAvatarPage.setValue(userId == AccountManager.getInstance().getCurrentUser().getId());
         }
     }
 
@@ -506,7 +507,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
                     if (user.getDisplayName() != null && !user.getDisplayName().equals("")) {
                         contactName.setValue(user.getDisplayName());
                     }
-                    setAvatar.setValue(userId != G.userId);
+                    setAvatar.setValue(userId != AccountManager.getInstance().getCurrentUser().getId());
                 }
             });
         }
@@ -527,7 +528,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                setAvatar.setValue(userId != G.userId);
+                setAvatar.setValue(userId != AccountManager.getInstance().getCurrentUser().getId());
                 contactName.setValue(firstName + " " + lastName);
             }
         });

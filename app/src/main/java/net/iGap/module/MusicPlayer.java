@@ -49,6 +49,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -690,7 +691,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 });
                 if (realmRoomMessage != null) {
                     if (realmRoomMessage.getUserId() != 0) {
-                        if (realmRoomMessage.getUserId() == G.userId) {
+                        if (realmRoomMessage.getUserId() == AccountManager.getInstance().getCurrentUser().getId()) {
                             voiceName = G.context.getResources().getString(R.string.you);
                         } else {
                             voiceName = RealmRegisteredInfo.getNameWithId(realmRoomMessage.getUserId());

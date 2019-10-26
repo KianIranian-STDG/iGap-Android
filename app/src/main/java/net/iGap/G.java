@@ -206,7 +206,6 @@ public class G extends ApplicationContext {
     public static int maxChatBox = 0;
     public static int bothChatDeleteTime = DEFAULT_BOTH_CHAT_DELETE_TIME;
     public static long currentTime;
-    public static long userId;
     public static String serverHashContact = null;
     public static String localHashContact = null;
     public static long latestHearBeatTime = System.currentTimeMillis();

@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.AccountManager;
 import net.iGap.proto.ProtoUserProfileGetBio;
 import net.iGap.realm.RealmRegisteredInfo;
 
@@ -31,7 +32,7 @@ public class UserProfileGetBioResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoUserProfileGetBio.UserProfileGetBioResponse.Builder builder = (ProtoUserProfileGetBio.UserProfileGetBioResponse.Builder) message;
-        RealmRegisteredInfo.updateBio(builder.getBio());
+        RealmRegisteredInfo.updateBio(AccountManager.getInstance().getCurrentUser().getId(), builder.getBio());
     }
 
     @Override

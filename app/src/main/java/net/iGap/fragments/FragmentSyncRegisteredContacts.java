@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -516,7 +517,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                     if (!isMultiSelect) {
                         if (isCallAction) {
                             long userId = realmContacts.getId();
-                            if (userId != 134 && G.userId != userId) {
+                            if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
 
 
                                 new MaterialDialog.Builder(G.fragmentActivity).items(R.array.calls).itemsCallback(new MaterialDialog.ListCallback() {

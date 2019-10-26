@@ -15,6 +15,7 @@ import android.os.Parcelable;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.interfaces.IChatItemAttachment;
@@ -32,10 +33,7 @@ import net.iGap.realm.RealmRoomMessageFields;
 
 import org.parceler.Parcels;
 
-import io.realm.Realm;
 import io.realm.RealmObjectChangeListener;
-
-import static net.iGap.G.userId;
 
 /**
  * chat message struct info
@@ -68,7 +66,7 @@ public class StructMessageInfo implements Parcelable {
     }
 
     public MyType.SendType getSendType() {
-        if (this.realmRoomMessage.getUserId() == userId) {
+        if (this.realmRoomMessage.getUserId() == AccountManager.getInstance().getCurrentUser().getId()) {
             return MyType.SendType.send;
         } else {
            return MyType.SendType.recvive;

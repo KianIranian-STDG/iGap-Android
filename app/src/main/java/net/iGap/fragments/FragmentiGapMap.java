@@ -55,6 +55,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -127,7 +128,6 @@ import io.realm.Sort;
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.URL_MAP;
 import static net.iGap.G.context;
-import static net.iGap.G.userId;
 import static net.iGap.R.id.st_fab_gps;
 
 public class FragmentiGapMap extends BaseFragment implements ToolbarListener, OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnMapUsersGet, OnGeoGetComment, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
@@ -243,7 +243,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
             }
             return bitmap1;
         });
-        return new BitmapDrawable(context.getResources(), drawAvatar(bitmap, markerColor, userId == G.userId));
+        return new BitmapDrawable(context.getResources(), drawAvatar(bitmap, markerColor, userId == AccountManager.getInstance().getCurrentUser().getId()));
     }
 
     private static Bitmap getInitials(Realm realm, long userId) {
@@ -710,7 +710,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
 
         page = 1;
-        new RequestGeoGetComment().getComment(userId);
+        new RequestGeoGetComment().getComment(AccountManager.getInstance().getCurrentUser().getId());
     }
 
     private void initToolbar(View view) {
@@ -1357,7 +1357,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
         OverlayItem overlayItem = new OverlayItem("title", "City", geoPoint);
 
         //Drawable drawable = context.getResources().getDrawable(R.drawable.location_current);
-        overlayItem.setMarker(avatarMark(G.userId, MarkerColor.GRAY)); // marker color is not important in this line because for mineAvatar will be unused.
+        overlayItem.setMarker(avatarMark(AccountManager.getInstance().getCurrentUser().getId(), MarkerColor.GRAY)); // marker color is not important in this line because for mineAvatar will be unused.
 
         ArrayList<OverlayItem> overlayItemArrayList = new ArrayList<>();
         overlayItemArrayList.add(overlayItem);
@@ -1410,7 +1410,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
             @Override
             public void run() {
                 for (final ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result result : results) {
-                    if (G.userId != result.getUserId()) { // don't show mine
+                    if (AccountManager.getInstance().getCurrentUser().getId() != result.getUserId()) { // don't show mine
                         RealmRegisteredInfo.getRegistrationInfo(result.getUserId(), new OnInfo() {
                             @Override
                             public void onInfo(Long registeredId) {
@@ -1534,7 +1534,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                     getCoordinateLoop(0, false);
                     editor.putBoolean(SHP_SETTING.REGISTER_STATUS, true);
                     editor.apply();
-                    new RequestGeoGetComment().getComment(userId);
+                    new RequestGeoGetComment().getComment(AccountManager.getInstance().getCurrentUser().getId());
                 } else {
                     editor.putBoolean(SHP_SETTING.REGISTER_STATUS, false);
                     editor.apply();
@@ -1564,7 +1564,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
             @Override
             public void run() {
                 txtComment = comment;
-                if (G.userId == userIdR && comment.length() > 0) {
+                if (AccountManager.getInstance().getCurrentUser().getId() == userIdR && comment.length() > 0) {
                     edtMessageGps.setText(comment);
                     txtSendMessageGps.setText(G.context.getString(R.string.close_icon));
                     if (G.isDarkTheme) {

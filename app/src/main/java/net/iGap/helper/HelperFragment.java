@@ -114,8 +114,6 @@ public class HelperFragment {
     }
 
     public void load(boolean checkStack) {
-        Log.wtf(this.getClass().getName(), "load");
-        Log.wtf(this.getClass().getName(), "fragment: " + fragment.getClass().getName());
         if (fragment == null) {
             return;
         }
@@ -163,7 +161,6 @@ public class HelperFragment {
             resourceContainer = getResContainer(tag);
         }
 
-        Log.wtf(this.getClass().getName(), "resourceContainer: " + resourceContainer);
         if (addToBackStack) {
             fragmentTransaction.addToBackStack(tag);
         }
@@ -266,7 +263,6 @@ public class HelperFragment {
 
     public void popBackStack(int count) {
         for (int i = 0; i < count; i++) {
-            Log.wtf(this.getClass().getName(), "fragment: " + fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1 - i).getName());
             fragmentManager.popBackStackImmediate();
         }
     }

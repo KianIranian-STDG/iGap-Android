@@ -51,6 +51,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -144,7 +145,6 @@ import ir.pec.mpl.pecpayment.view.PaymentInitiator;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
-import static net.iGap.G.userId;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
 
@@ -1571,7 +1571,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         /**
          * don't send update status for own message
          */
-        if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != userId) {
+        if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
             // user has received the message, so I make a new delivered update status request
             // todo:please check in group and channel that user is joined
 
@@ -1956,12 +1956,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void updateUiForChangeAccount() {
+        Log.wtf(this.getClass().getName(),"updateUiForChangeAccount");
         DbManager.getInstance().changeRealmConfiguration();
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         if (G.twoPaneMode) {
             getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
-        initTabStrip(getIntent());
         WebSocketClient.connectNewAccount();
+        initTabStrip(getIntent());
     }
 }

@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupLeft;
@@ -37,7 +38,7 @@ public class GroupLeftResponse extends MessageHandler {
         long roomId = builder.getRoomId();
         long memberId = builder.getMemberId();
 
-        if (G.userId == memberId) {
+        if (AccountManager.getInstance().getCurrentUser().getId() == memberId) {
             RealmRoom.deleteRoom(roomId);
 
             if (G.onGroupLeft != null) {

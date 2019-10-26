@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -78,7 +79,7 @@ public class MyInfoWindow extends InfoWindow {
         /**
          * don't show dialog for mine user
          */
-        if (userId == G.userId) {
+        if (userId == AccountManager.getInstance().getCurrentUser().getId()) {
             return;
         }
 

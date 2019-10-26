@@ -17,6 +17,7 @@ import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.AccountManager;
 import net.iGap.helper.HelperLogout;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
@@ -97,6 +98,7 @@ public class FragmentSettingViewModel extends ViewModel {
             public void onLogOut(boolean haveAnotherAccount) {
                 Log.wtf(this.getClass().getName(), "haveAnotherAccount: " + haveAnotherAccount);
                 showLoading.postValue(View.GONE);
+                Log.wtf(this.getClass().getName(), "current user: " + AccountManager.getInstance().getCurrentUser().toString());
                 if (haveAnotherAccount) {
                     updateForOtherAccount.postValue(true);
                 } else {

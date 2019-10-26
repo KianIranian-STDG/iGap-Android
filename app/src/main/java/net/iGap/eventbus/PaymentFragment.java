@@ -28,6 +28,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.PaymentDialogBinding;
@@ -244,7 +245,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                                                     payment.price = Long.parseLong(mPrice[0]);
                                                     Intent intent = new Intent(context, WalletActivity.class);
                                                     intent.putExtra("Language", "fa");
-                                                    intent.putExtra("Mobile", "0" + G.userId);
+                                                    intent.putExtra("Mobile", "0" + AccountManager.getInstance().getCurrentUser().getId());
                                                     intent.putExtra("IsP2P", true);
                                                     intent.putExtra("Payment", payment);
                                                     intent.putExtra("PrimaryColor", G.appBarColor);
@@ -444,7 +445,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         final AppCompatEditText newPassWord = new AppCompatEditText(G.fragmentActivity);
         newPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password));
         newPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        newPassWord.setTypeface(ResourcesCompat.getFont(layoutNickname.getContext() , R.font.main_font));
+        newPassWord.setTypeface(ResourcesCompat.getFont(layoutNickname.getContext(), R.font.main_font));
         newPassWord.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
         newPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         newPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
@@ -467,7 +468,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         final AppCompatEditText confirmPassWord = new AppCompatEditText(G.fragmentActivity);
         confirmPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_re_enter_your_password));
         confirmPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        confirmPassWord.setTypeface(ResourcesCompat.getFont(layoutNickname.getContext() , R.font.main_font));
+        confirmPassWord.setTypeface(ResourcesCompat.getFont(layoutNickname.getContext(), R.font.main_font));
         confirmPassWord.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
         confirmPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         confirmPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
@@ -598,7 +599,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         final AppCompatEditText newPassWord = new AppCompatEditText(G.fragmentActivity);
         newPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password));
         newPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        newPassWord.setTypeface(ResourcesCompat.getFont(newPassWord.getContext() , R.font.main_font));
+        newPassWord.setTypeface(ResourcesCompat.getFont(newPassWord.getContext(), R.font.main_font));
         newPassWord.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
         newPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         newPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());

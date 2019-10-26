@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 
 import com.vanniktech.emoji.EmojiUtils;
 
+import net.iGap.AccountManager;
 import net.iGap.Config;
 import net.iGap.DbManager;
 import net.iGap.G;
@@ -142,7 +143,7 @@ public class RealmRoomMessage extends RealmObject {
                 .in(RealmRoomMessageFields.STATUS, new String[]{ProtoGlobal.RoomMessageStatus.SENT.toString(), ProtoGlobal.RoomMessageStatus.DELIVERED.toString()})
                 .equalTo(RealmRoomMessageFields.DELETED, false)
                 .notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash)
-                .notEqualTo(RealmRoomMessageFields.USER_ID, G.userId)
+                .notEqualTo(RealmRoomMessageFields.USER_ID, AccountManager.getInstance().getCurrentUser().getId())
                 .notEqualTo(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.LOG.toString())
                 .findAll().sort(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
     }
@@ -242,7 +243,7 @@ public class RealmRoomMessage extends RealmObject {
                                 /**
                                  * don't send seen for own message
                                  */
-                                if (roomMessage.getUserId() != G.userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
+                                if (roomMessage.getUserId() != AccountManager.getInstance().getCurrentUser().getId() && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
                                     roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
                                     RealmClientCondition.addOfflineSeen(realm1, realmClientCondition, roomMessage.getMessageId());
 
@@ -997,7 +998,7 @@ public class RealmRoomMessage extends RealmObject {
             RealmRoomMessage.isEmojiInText(roomMessage, message);
             roomMessage.setRoomId(roomId);
             roomMessage.setShowMessage(true);
-            roomMessage.setUserId(G.userId);
+            roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
             roomMessage.setAuthorHash(G.authorHash);
             roomMessage.setCreateTime(currentTime);
             if (additinalData != null) {
@@ -1046,7 +1047,7 @@ public class RealmRoomMessage extends RealmObject {
         roomMessage.setRoomId(roomId);
         roomMessage.setMessage(message);
         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-        roomMessage.setUserId(G.userId);
+        roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
         roomMessage.setCreateTime(TimeUtils.currentLocalTime());
 
         return roomMessage;
@@ -1063,7 +1064,7 @@ public class RealmRoomMessage extends RealmObject {
         roomMessage.setRoomId(roomId);
         roomMessage.setMessage(message);
         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-        roomMessage.setUserId(G.userId);
+        roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
         roomMessage.setCreateTime(TimeUtils.currentLocalTime());
         if (additionalData != null)
             roomMessage.setRealmAdditional(RealmAdditional.put(realm, additionalData, additionalTaype));
@@ -1078,7 +1079,7 @@ public class RealmRoomMessage extends RealmObject {
         roomMessage.setRoomId(roomId);
         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
         roomMessage.setAttachment(messageId, filepath, 0, 0, 0, null, duration, LocalFileType.FILE);
-        roomMessage.setUserId(G.userId);
+        roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
         roomMessage.setCreateTime(updateTime);
         return roomMessage;
     }
@@ -1110,7 +1111,7 @@ public class RealmRoomMessage extends RealmObject {
             forwardedMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
             forwardedMessage.setRoomId(roomId);
             forwardedMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-            forwardedMessage.setUserId(G.userId);
+            forwardedMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
             forwardedMessage.setShowMessage(true);
         }
     }
@@ -1369,8 +1370,7 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public boolean isSenderMe() {
-        boolean output = getUserId() == G.userId;
-        return output;
+        return getUserId() == AccountManager.getInstance().getCurrentUser().getId();
     }
 
     public boolean isAuthorMe() {

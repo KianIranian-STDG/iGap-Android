@@ -25,6 +25,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.vanniktech.emoji.EmojiPopup;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -288,7 +289,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
     private void showListForCustomRole(String SelectedRole) {
         if (getActivity() != null) {
-            FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), G.userId, SelectedRole, false, true);
+            FragmentShowMember fragment = FragmentShowMember.newInstance2(this, viewModel.roomId, viewModel.role.toString(), AccountManager.getInstance().getCurrentUser().getId(), SelectedRole, false, true);
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         }
     }

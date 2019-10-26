@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.interfaces.OnInfo;
@@ -40,7 +41,7 @@ public class GeoGetNearbyDistanceResponse extends MessageHandler {
         ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Builder builder = (ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Builder) message;
 
         for (final ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Result result : builder.getResultList()) {
-            if (G.userId != result.getUserId()) { // don't show my account
+            if (AccountManager.getInstance().getCurrentUser().getId() != result.getUserId()) { // don't show my account
                 RealmRegisteredInfo.getRegistrationInfo(result.getUserId(), new OnInfo() {
                     @Override
                     public void onInfo(Long registeredId) {

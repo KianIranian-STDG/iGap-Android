@@ -11,6 +11,7 @@
 
 package net.iGap.module;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.interfaces.OnClientGetRoomHistoryResponse;
@@ -416,7 +417,7 @@ public final class MessageLoader {
          * send seen status to server when get message from server
          */
         for (RealmRoomMessage realmRoomMessage : roomMessages) {
-            if (realmRoomMessage.getUserId() != G.userId && !realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+            if (realmRoomMessage.getUserId() != AccountManager.getInstance().getCurrentUser().getId() && !realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
                 G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, realmRoomMessage.getMessageId(), status);
             }
         }

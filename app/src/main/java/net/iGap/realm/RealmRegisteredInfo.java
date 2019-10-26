@@ -27,8 +27,6 @@ import io.realm.RealmObject;
 import io.realm.Sort;
 import io.realm.annotations.PrimaryKey;
 
-import static net.iGap.G.userId;
-
 public class RealmRegisteredInfo extends RealmObject {
     @PrimaryKey
     private long id;
@@ -153,7 +151,7 @@ public class RealmRegisteredInfo extends RealmObject {
         });
     }
 
-    public static void updateBio(final String bio) {
+    public static void updateBio(long userId, final String bio) {
         DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override

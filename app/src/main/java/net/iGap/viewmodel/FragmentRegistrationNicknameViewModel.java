@@ -86,7 +86,7 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
         DbManager.getInstance().doRealmTask(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo != null) {
-                RealmAvatar.deleteAvatarWithOwnerId(G.userId);
+                RealmAvatar.deleteAvatarWithOwnerId(AccountManager.getInstance().getCurrentUser().getId());
             }
         });
 
@@ -278,12 +278,12 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
                 showRequestError.setValue(R.string.error);
             }
         };
-        new RequestUserInfo().userInfo(G.userId);
+        new RequestUserInfo().userInfo(AccountManager.getInstance().getCurrentUser().getId());
     }
 
     @Override
     public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
-        avatarHandler.avatarAdd(G.userId, pathImageUser, avatar, avatarPath -> G.handler.post(() -> {
+        avatarHandler.avatarAdd(AccountManager.getInstance().getCurrentUser().getId(), pathImageUser, avatar, avatarPath -> G.handler.post(() -> {
             existAvatar = true;
             prgVisibility.set(View.GONE);
             showCameraImage.set(View.GONE);

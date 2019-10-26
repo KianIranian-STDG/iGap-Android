@@ -178,6 +178,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     }
 
     private void getTermsAndConditionData() {
+        Log.wtf(this.getClass().getName(), "getTermsAndConditionData");
         if (G.socketConnection) {
             repository.getTermsOfServiceBody(new RegisterRepository.RepositoryCallback<String>() {
                 @Override
@@ -202,6 +203,7 @@ public class FragmentRegisterViewModel extends ViewModel {
 
                         @Override
                         public void onError() {
+                            Log.wtf(this.getClass().getName(), "onError");
                             isShowLoading.set(View.INVISIBLE);
                             showRetryView.set(View.VISIBLE);
                         }

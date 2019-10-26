@@ -109,6 +109,7 @@ import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 import com.vanniktech.emoji.sticker.struct.StructSticker;
 
+import net.iGap.AccountManager;
 import net.iGap.Config;
 import net.iGap.DbManager;
 import net.iGap.G;
@@ -1675,7 +1676,7 @@ public class FragmentChat extends BaseFragment
          * because in first time room not exist in RealmRoom and value is false always.
          * so just need to check this value with chatPeerId
          */
-        if (chatPeerId == G.userId) {
+        if (chatPeerId == AccountManager.getInstance().getCurrentUser().getId()) {
             isCloudRoom = true;
         }
 
@@ -1690,7 +1691,7 @@ public class FragmentChat extends BaseFragment
         if (isChatReadOnly) {
             viewAttachFile.setVisibility(View.GONE);
             (rootView.findViewById(R.id.chl_recycler_view_chat)).setPadding(0, 0, 0, 0);
-        } else if (chatType == CHAT && G.userId != chatPeerId && !isBot) {
+        } else if (chatType == CHAT && AccountManager.getInstance().getCurrentUser().getId() != chatPeerId && !isBot) {
             // gone or visible view call
             RealmCallConfig callConfig = DbManager.getInstance().doRealmTask(realm -> {
                 return realm.where(RealmCallConfig.class).findFirst();
@@ -3355,7 +3356,7 @@ public class FragmentChat extends BaseFragment
         JsonObject valueObject = new JsonObject();
         valueObject.addProperty("cardNumber", mplCardNumber);
         valueObject.addProperty("amount", mplAmount);
-        valueObject.addProperty("userId", G.userId);
+        valueObject.addProperty("userId", AccountManager.getInstance().getCurrentUser().getId());
 
         JsonObject rootObject = new JsonObject();
         rootObject.addProperty("label", "Card to Card");
@@ -4102,7 +4103,7 @@ public class FragmentChat extends BaseFragment
         realmAttachment.setDuration(duration);
 
         roomMessage.setAttachment(realmAttachment);
-        roomMessage.setUserId(G.userId);
+        roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
         roomMessage.setCreateTime(updateTime);
 
         HelperUploadFile.startUploadTaskChat(mRoomId, chatType, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, getWrittenMessage(), 0, new HelperUploadFile.UpdateListener() {
@@ -4514,7 +4515,7 @@ public class FragmentChat extends BaseFragment
             } else if (realmRoom.getReadOnly()) {
                 items.remove(getString(R.string.replay_item_dialog));
             } else {
-                if (message.realmRoomMessage.getUserId() != G.userId) {
+                if (message.realmRoomMessage.getUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
                     items.remove(getString(R.string.edit_item_dialog));
                 }
             }
@@ -4586,7 +4587,7 @@ public class FragmentChat extends BaseFragment
                 }
                 final ArrayList<Long> messageIds = new ArrayList<>();
                 messageIds.add(message.realmRoomMessage.getMessageId());
-                if (chatType == ProtoGlobal.Room.Type.CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 && message.realmRoomMessage.getUserId()== G.userId) {
+                if (chatType == ProtoGlobal.Room.Type.CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 && message.realmRoomMessage.getUserId()== AccountManager.getInstance().getCurrentUser().getId()) {
                     // show both Delete check box
                     String delete;
                     String textCheckBox = G.context.getResources().getString(R.string.st_checkbox_delete) + " " + title;
@@ -5817,7 +5818,7 @@ public class FragmentChat extends BaseFragment
                         roomMessage.setRoomId(mRoomId);
                         roomMessage.setMessage(st.getName());
                         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-                        roomMessage.setUserId(G.userId);
+                        roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
                         roomMessage.setCreateTime(TimeUtils.currentLocalTime());
 
                         RealmAdditional realmAdditional = new RealmAdditional();
@@ -6564,7 +6565,7 @@ public class FragmentChat extends BaseFragment
                 RealmContacts realmContacts = DbManager.getInstance().doRealmTask(realm -> {
                     return realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
                 });
-                if (realmRegisteredInfo != null && realmRegisteredInfo.getId() != G.userId) {
+                if (realmRegisteredInfo != null && realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
                     if (phoneNumber == null) {
                         if (realmContacts == null && chatType == CHAT && !isChatReadOnly) {
                             initSpamBarLayout(realmRegisteredInfo);
@@ -6572,7 +6573,7 @@ public class FragmentChat extends BaseFragment
                         }
                     }
 
-                    if (realmRegisteredInfo.getId() != G.userId) {
+                    if (realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
                         if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
 
                             if (realmRegisteredInfo.isBlockUser()) {
@@ -6588,7 +6589,7 @@ public class FragmentChat extends BaseFragment
                         }
                     }
 
-                    if (realmContacts != null && realmRegisteredInfo.getId() != G.userId) {
+                    if (realmContacts != null && realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
                         if (realmContacts.isBlockUser()) {
                             if (!realmRegisteredInfo.getDoNotshowSpamBar()) {
                                 initSpamBarLayout(realmRegisteredInfo);
@@ -7004,7 +7005,7 @@ public class FragmentChat extends BaseFragment
                     final String count = list.size() + "";
 
 
-                    if (chatType == ProtoGlobal.Room.Type.CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 && mAdapter.getSelectedItems().iterator().next().mMessage.getUserId() == G.userId) {
+                    if (chatType == ProtoGlobal.Room.Type.CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 && mAdapter.getSelectedItems().iterator().next().mMessage.getUserId() == AccountManager.getInstance().getCurrentUser().getId()) {
                         // show both Delete check box
 
                         String delete;
@@ -7308,7 +7309,7 @@ public class FragmentChat extends BaseFragment
         long duration = 0;
         long fileSize = 0;
         int[] imageDimens = {0, 0};
-        final long senderID = G.userId;
+        final long senderID = AccountManager.getInstance().getCurrentUser().getId();
 
         /**
          * check if path is uri detect real path from uri
@@ -7735,7 +7736,7 @@ public class FragmentChat extends BaseFragment
         roomMessage.setCreateTime(TimeUtils.currentLocalTime());
         roomMessage.setMessageType(ProtoGlobal.RoomMessageType.LOCATION);
         roomMessage.setRoomId(mRoomId);
-        roomMessage.setUserId(G.userId);
+        roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
         roomMessage.setAuthorHash(G.authorHash);
         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
 

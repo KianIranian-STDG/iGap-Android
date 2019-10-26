@@ -84,7 +84,6 @@ import static net.iGap.G.isSaveToGallery;
 import static net.iGap.G.notificationColor;
 import static net.iGap.G.selectedLanguage;
 import static net.iGap.G.toggleButtonColor;
-import static net.iGap.G.userId;
 import static net.iGap.G.userTextSize;
 
 /**
@@ -554,8 +553,6 @@ public final class StartupActions {
             RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
 
             if (userInfo != null && userInfo.getUserRegistrationState()) {
-
-                userId = userInfo.getUserId();
                 G.isPassCode = userInfo.isPassCode();
 
                 if (userInfo.getAuthorHash() != null) {

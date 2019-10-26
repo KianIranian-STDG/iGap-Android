@@ -21,6 +21,7 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -234,17 +235,17 @@ public class FragmentChannelProfileViewModel extends ViewModel
     }
 
     public void onSubscribersClick() {
-        goToShowMemberList.setValue(new GoToShowMemberModel(roomId, role.toString(), G.userId, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString(), isNeedGetMemberList));
+        goToShowMemberList.setValue(new GoToShowMemberModel(roomId, role.toString(), AccountManager.getInstance().getCurrentUser().getId(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString(), isNeedGetMemberList));
         isNeedGetMemberList = false;
     }
 
     public void onAdministratorsClick() {
-        goToShowMemberList.setValue(new GoToShowMemberModel(roomId, role.toString(), G.userId, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString(), isNeedGetMemberList));
+        goToShowMemberList.setValue(new GoToShowMemberModel(roomId, role.toString(), AccountManager.getInstance().getCurrentUser().getId(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString(), isNeedGetMemberList));
         isNeedGetMemberList = false;
     }
 
     public void onModeratorClick() {
-        goToShowMemberList.setValue(new GoToShowMemberModel(roomId, role.toString(), G.userId, ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString(), isNeedGetMemberList));
+        goToShowMemberList.setValue(new GoToShowMemberModel(roomId, role.toString(), AccountManager.getInstance().getCurrentUser().getId(), ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString(), isNeedGetMemberList));
         isNeedGetMemberList = false;
     }
 
