@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,8 +43,7 @@ import retrofit2.Response;
 import static org.paygear.utils.RSAUtils.getRSA;
 
 public class WalletPasswordFragment extends BaseFragment {
-    private static final String TAG = "aabolfazlWalletPassword";
-    private View rootView;
+
     private ProgressBar progressBar;
     private Button confirmBtn;
     private Button cancelBtn;
@@ -56,19 +54,13 @@ public class WalletPasswordFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_send_money_password, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_send_money_password, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        passwordEt = rootView.findViewById(R.id.et_enterPassword);
-        confirmBtn.setText(getContext().getResources().getString(R.string.pay));
-        TextView descriptionTv = rootView.findViewById(R.id.tv_moneyAction_description);
-
-        passwordEt.setTextColor(darkModeHandler());
-        descriptionTv.setTextColor(darkModeHandler());
-        darkModeHandler(rootView);
+        passwordEt = view.findViewById(R.id.et_enterPassword);
+        confirmBtn.setText(R.string.pay);
     }
 
     @Override
@@ -108,7 +100,7 @@ public class WalletPasswordFragment extends BaseFragment {
                         dialog.dismiss();
                         sendPost(response.body().callbackUrl, paymentAuth.token);
                         G.cardamount -= response.body().amount;
-                    }, G.appBarColor);
+                    }, "");
                     dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
                     cancelBtn.performClick();
                 }
@@ -168,22 +160,6 @@ public class WalletPasswordFragment extends BaseFragment {
         }
 
         return getRSA(publicKey, cardInfoJson);
-    }
-
-    private void darkModeHandler(View view) {
-        if (G.isDarkTheme) {
-            view.setBackgroundColor(getContext().getResources().getColor(R.color.background_setting_dark));
-        } else {
-            view.setBackgroundColor(getContext().getResources().getColor(R.color.white));
-        }
-    }
-
-    private int darkModeHandler() {
-        if (G.isDarkTheme) {
-            return getContext().getResources().getColor(R.color.white);
-        } else {
-            return getContext().getResources().getColor(R.color.black);
-        }
     }
 
     private void dismissProgress() {

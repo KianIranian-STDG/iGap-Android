@@ -1,5 +1,6 @@
 package net.iGap.adapter;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -75,10 +77,14 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
             subtitle.setText(contact.getPhone());
 
             rootView.setOnClickListener(v -> {
-                Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + contact.getPhone()));
-                smsIntent.putExtra("sms_body", context.getResources().getString(R.string.invitation_message) + "+" + ActivityMain.userPhoneNumber);
-                smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                G.context.startActivity(smsIntent);
+                try {
+                    Intent smsIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + contact.getPhone()));
+                    smsIntent.putExtra("sms_body", context.getResources().getString(R.string.invitation_message) + "+" + ActivityMain.userPhoneNumber);
+                    smsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    G.context.startActivity(smsIntent);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(context, context.getString(R.string.device_dosenot_support), Toast.LENGTH_SHORT).show();
+                }
             });
         }
     }

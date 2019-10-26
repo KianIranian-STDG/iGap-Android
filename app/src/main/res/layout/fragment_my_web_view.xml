@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="?backgroundColorSettingTheme"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,12 +11,11 @@
         android:layout_height="wrap_content"
         android:minHeight="@dimen/toolbar_height"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        style="?backgroundColorSettingTheme"
         android:id="@+id/pullToRefresh"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -25,7 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fwv_layout_toolbar">
 
-        <WebView xmlns:android="http://schemas.android.com/apk/res/android"
+        <WebView
             android:id="@+id/webView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -36,11 +35,11 @@
         android:id="@+id/full"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/webViewError"
@@ -50,8 +49,8 @@
         android:layout_gravity="center"
         android:padding="4dp"
         android:text="@string/retry_icon"
-        android:visibility="gone"
         android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

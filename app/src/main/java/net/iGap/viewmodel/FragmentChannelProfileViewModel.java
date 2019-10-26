@@ -388,6 +388,22 @@ public class FragmentChannelProfileViewModel extends ViewModel
         showLoading.set(View.VISIBLE);
     }
 
+    public void checkChannelIsEditable() {
+        if (mRoom == null) return;
+        role = mRoom.getChannelRoom().getRole();
+        editButtonVisibility.setValue(isEditable() ? View.VISIBLE : View.GONE);
+        showMemberList.set(isEditable() ? View.VISIBLE : View.GONE);
+    }
+
+    private boolean isEditable() {
+        return role == ChannelChatRole.ADMIN || role == ChannelChatRole.OWNER;
+    }
+
+    public boolean checkIsEditableAndReturnState() {
+        checkChannelIsEditable();
+        return isEditable();
+    }
+
     //****** show admin or moderator list
 
     private void initRecycleView() {

@@ -81,11 +81,7 @@ public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
 
     @Override
     public int getTheme() {
-        if (G.isDarkTheme) {
-            return R.style.BaseBottomSheetDialog;
-        } else {
-            return R.style.BaseBottomSheetDialogLight;
-        }
+        return R.style.BaseBottomSheetDialog;
     }
 
     @FunctionalInterface

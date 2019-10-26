@@ -39,7 +39,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 
@@ -321,7 +320,14 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
                         }
                     }
                     if (!helpIndex) {
-                        slc.add(contacts.get(i));
+                        if (isSearch) {
+                            slc.add(contacts.get(i));
+                        } else {
+                            if (!phoneContactsList.contains(contacts.get(i))) {
+                                slc.add(contacts.get(i));
+                            }
+                        }
+
                     }
                 }
                 return slc;

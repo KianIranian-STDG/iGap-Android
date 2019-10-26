@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 
@@ -21,8 +20,6 @@ public class Type2ViewHolder extends BaseViewHolder {
         img1 = itemView.findViewById(R.id.type2_img1);
         card0 = itemView.findViewById(R.id.type2_card0);
         card1 = itemView.findViewById(R.id.type2_card1);
-        card0.setCardBackgroundColor(G.getThemeBackgroundColor());
-        card1.setCardBackgroundColor(G.getThemeBackgroundColor());
     }
 
     @Override

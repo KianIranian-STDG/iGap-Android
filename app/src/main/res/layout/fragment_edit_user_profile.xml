@@ -13,20 +13,17 @@
     </data>
 
     <androidx.core.widget.NestedScrollView
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:layoutDirection="locale">
+        android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/root"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layoutDirection="locale">
+            android:layout_height="match_parent">
 
             <TextView
-                style="?hintColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 

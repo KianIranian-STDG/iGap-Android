@@ -27,7 +27,6 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosRestoreVM;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 
 public class KuknosRestoreFrag extends BaseFragment {
 
@@ -73,7 +72,6 @@ public class KuknosRestoreFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosRToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
         binding.fragKuknosIdPINCheck.setChecked(false);
 

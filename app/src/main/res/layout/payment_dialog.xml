@@ -35,7 +35,7 @@
                     android:id="@+id/dialog_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+                    android:background="?attr/iGapToolbarBackground"
                     android:padding="@dimen/dp8">
 
                     <LinearLayout
@@ -94,7 +94,6 @@
 
                             <net.iGap.module.CustomTextViewMedium
                                 android:id="@+id/amountCard"
-                                style="?textTitleColorSettingTheme"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -107,7 +106,7 @@
 
                             <View
                                 android:id="@+id/bottomLine"
-                                style="?lineColorSettingTheme"
+                                android:background="?iGapDividerLine"
                                 android:layout_width="match_parent"
                                 android:layout_height="1px"
                                 android:visibility="gone" />
@@ -197,7 +196,7 @@
                         </LinearLayout>
 
                         <com.google.android.material.button.MaterialButton
-                            style="?iGapButton"
+                            style="@style/iGapButton"
                             android:id="@+id/pay_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

@@ -11,7 +11,6 @@
 package net.iGap.fragments;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -163,5 +162,9 @@ public class BaseFragment extends SwipeBackFragment {
         } catch (Exception e) {
             //nothing
         }
+    }
+
+    public boolean onBackPressed() {
+        return false;
     }
 }

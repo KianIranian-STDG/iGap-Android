@@ -14,7 +14,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -134,7 +133,6 @@ public class FragmentContactsProfile extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        checkTheme();
         initialToolbar();
 
         userAvatarImageView = binding.toolbarAvatar;
@@ -635,13 +633,6 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields
 
     private void checkViewsState() {
         if (isCollapsed) startAlphaAnimation(binding.toolbarFabChat, 0, View.INVISIBLE);
-    }
-
-    private void checkTheme() {
-
-        if (G.isDarkTheme) {
-            binding.toolbarFabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.navigation_dark_mode_bg)));
-        }
     }
 
     private void initialToolbar() {

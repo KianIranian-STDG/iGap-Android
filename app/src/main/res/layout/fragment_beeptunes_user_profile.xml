@@ -35,7 +35,6 @@
 
         <TextView
             android:id="@+id/tv_userProfile_userName"
-            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -44,6 +43,7 @@
             android:layout_marginRight="8dp"
             android:layoutDirection="ltr"
             android:text="Abolfazl Abbasi"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/iv_userProfile_userImage"
@@ -81,17 +81,16 @@
 
         <net.iGap.module.FontIconTextView
             android:id="@+id/fontIconTextView2"
-            style="?textTitleColorSettingTheme"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:text="@string/icon_music"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="25dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -100,6 +99,7 @@
             android:layout_marginRight="8dp"
             android:gravity="center_vertical"
             android:text="@string/beeptunes_purchase_song"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -116,17 +116,16 @@
 
         <net.iGap.module.FontIconTextView
             android:id="@+id/fontIconTextView3"
-            style="?textTitleColorSettingTheme"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:text="@string/icon_beeptunes_sync"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="25dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -137,6 +136,7 @@
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical"
             android:text="@string/beeptunes_sync_song"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -153,17 +153,16 @@
 
         <net.iGap.module.FontIconTextView
             android:id="@+id/fontIconTextView4"
-            style="?textTitleColorSettingTheme"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:text="@string/icon_beeptunes_like"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="25dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -174,6 +173,7 @@
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical"
             android:text="@string/beeptunesـfavorite_song"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -189,6 +189,8 @@ public class FragmentShowAvatars extends BaseFragment {
         RippleView rippleMenu = view.findViewById(R.id.asi_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(rippleView -> {
 
+            if (getContext() == null) return;
+
             List<String> items = new ArrayList<>();
 
             switch (from) {

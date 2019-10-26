@@ -43,7 +43,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/rg_confirm_text_register"
-                android:textColor="@{Color.parseColor(G.textTitleTheme),default=@color/toolbar_background}"
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="16sp"
                 android:visibility="@{fragmentRegisterViewModel.viewVisibility}"
                 app:layout_constraintBottom_toTopOf="@id/rg_btn_choseCountry"
@@ -197,7 +197,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/registerButton"
-                style="?iGapButton"
+                style="@style/iGapButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:enabled="@{fragmentRegisterViewModel.btnStartEnable }"

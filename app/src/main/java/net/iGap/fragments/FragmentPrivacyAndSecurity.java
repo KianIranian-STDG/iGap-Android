@@ -86,8 +86,6 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
 
         });
 
-        fragmentPrivacyAndSecurityBinding.stpsRippleBack.setOnRippleCompleteListener(rippleView -> popBackStackFragment());
-
         new RequestUserProfileGetSelfRemove().userProfileGetSelfRemove();
 
         fragmentPrivacyAndSecurityViewModel.goToBlockedUserPage.observe(getViewLifecycleOwner(), go -> {

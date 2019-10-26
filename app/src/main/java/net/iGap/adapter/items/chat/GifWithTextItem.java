@@ -19,7 +19,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
@@ -31,8 +30,6 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.enums.SendingStep;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 import java.io.File;
 import java.util.List;
@@ -176,16 +173,16 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             super(view);
 
             boolean withText = true;
-            FrameLayout frameLayout = new FrameLayout(G.context);
+            FrameLayout frameLayout = new FrameLayout(view.getContext());
             frameLayout.setLayoutParams(new LinearLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
-            image = new ReserveSpaceGifImageView(G.context);
+            image = new ReserveSpaceGifImageView(view.getContext());
             image.setId(R.id.thumbnail);
             FrameLayout.LayoutParams layout_758 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             image.setLayoutParams(layout_758);
 
             frameLayout.addView(image);
-            progress = getProgressBar(0);
+            progress = getProgressBar(view.getContext(), 0);
 
             frameLayout.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
 

@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ac_ll_parent"
-    style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:layoutDirection="ltr"
-    tools:ignore="MissingPrefix">
+    android:focusable="true"
+    android:layoutDirection="ltr">
 
     <RelativeLayout
-        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/chl_img_view_chat"
-            style="?backgroundColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="?attr/iGapDefaultChatBackground"
             android:scaleType="centerCrop" />
 
         <LinearLayout
@@ -101,17 +99,16 @@
                     android:orientation="vertical"
                     android:visibility="gone">
 
-
                     <net.iGap.module.MaterialDesignTextView
                         android:id="@+id/ac_txt_down_navigation"
+                        style="@style/baseFontIcon"
                         android:layout_width="@dimen/dp44"
                         android:layout_height="@dimen/dp44"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/dp12"
-                        android:background="@drawable/circle_mic"
+                        android:background="?attr/iGapAvatarBackground"
                         android:gravity="center"
                         android:text="@string/md_downwards_arrow"
-                        style="@style/myIconToolbarStyle"
                         android:textColor="@color/white" />
 
                 </FrameLayout>
@@ -139,10 +136,10 @@
                 android:id="@+id/ac_ll_attach_text"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
+                android:background="?attr/rootBackgroundColor"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal"
-                style="?backgroundColorSettingTheme"
                 android:visibility="gone">
 
 
@@ -150,12 +147,12 @@
                     android:id="@+id/ac_txt_file_neme_for_sending"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp8"
                     android:layout_weight="1"
                     android:singleLine="true"
                     android:text="New Text"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/dp8"
-                    style="?textTitleColorSettingTheme"
+                    android:textColor="?attr/iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
                 <net.iGap.module.MaterialDesignTextView
@@ -170,7 +167,6 @@
 
             <LinearLayout
                 android:id="@+id/ac_ll_hash_navigation"
-                style="?backgroundColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
                 android:clickable="true"
@@ -191,7 +187,6 @@
 
                 <TextView
                     android:id="@+id/ac_txt_hash_counter"
-                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -199,6 +194,7 @@
                     android:padding="@dimen/dp8"
                     android:singleLine="true"
                     android:text="0 of 0"
+                    android:textColor="?attr/iGapTitleTextColor"
                     android:textSize="@dimen/dp16" />
 
 
@@ -220,13 +216,13 @@
 
                     <net.iGap.module.MaterialDesignTextView
                         android:id="@+id/ac_btn_hash_close"
+                        style="@style/baseFontIcon"
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
-                        style="@style/myIconTextViewStyle"
                         android:text="@string/md_close_button"
-                        android:textColor="#dededd" />
+                        android:textColor="?attr/iGapTitleTextColor" />
 
 
                 </LinearLayout>
@@ -259,7 +255,6 @@
 
             <LinearLayout
                 android:id="@+id/ac_ll_join"
-                style="?backgroundColorSettingTheme"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
                 android:clickable="true"
@@ -282,29 +277,27 @@
                 android:id="@+id/chl_ll_channel_footer"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp52"
+                android:background="?attr/selectableItemBackground"
                 android:orientation="vertical"
                 android:visibility="gone">
 
 
                 <LinearLayout
-
-                    style="?backgroundColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentBottom="true"
+                    android:background="?attr/iGapButtonColor"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/chl_txt_mute_channel"
-                        style="?textTitleColorSettingTheme"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:textSize="@dimen/dp16"
-
-                        />
+                        android:textColor="?attr/iGapPrimaryTextColor"
+                        android:textSize="@dimen/dp16" />
                 </LinearLayout>
 
             </RelativeLayout>
@@ -322,8 +315,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ac_toolbars_container"
-                android:background="@drawable/shape_multi_select_bg"
                 android:layout_marginTop="-14dp"
+                android:background="@drawable/shape_multi_select_bg"
                 android:paddingTop="@dimen/dp10">
 
                 <RelativeLayout
@@ -347,7 +340,6 @@
 
                         <TextView
                             android:id="@+id/ac_layout_selected_txt_counter"
-                            style="?textTitleColorSettingTheme"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="10dp"
@@ -355,6 +347,7 @@
                             android:gravity="bottom"
                             android:paddingBottom="5dp"
                             android:text=""
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
@@ -442,7 +435,7 @@
                     android:id="@+id/ac_ll_search_message"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/toolbar_height"
-                    android:background="@drawable/shape_toolbar_background"
+                    android:background="?attr/iGapToolbarBackground"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingStart="@dimen/dp8"
@@ -475,11 +468,11 @@
 
                         <net.iGap.module.MaterialDesignTextView
                             android:id="@+id/ac_btn_clear_message_search"
+                            style="@style/myIconToolbarStyle"
                             android:layout_width="@dimen/toolbar_icon_size"
                             android:layout_height="match_parent"
                             android:background="@null"
-                            android:text="@string/md_close_button"
-                            style="@style/myIconToolbarStyle" />
+                            android:text="@string/md_close_button" />
                     </net.iGap.libs.rippleeffect.RippleView>
 
                 </LinearLayout>
@@ -499,10 +492,11 @@
             android:id="@+id/cardFloatingTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_below="@id/fc_layout_top"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp6"
             android:visibility="gone"
+            app:cardBackgroundColor="?attr/iGapDividerLine"
             app:cardCornerRadius="5dp">
 
             <RelativeLayout
@@ -514,7 +508,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/background_log_time"
                     android:maxLines="1"
                     android:paddingLeft="@dimen/dp16"
                     android:paddingTop="@dimen/dp4"
@@ -523,10 +516,8 @@
                     android:singleLine="true"
                     android:text="Today"
                     android:textAllCaps="false"
-                    android:textColor="@color/text_log_time"
-                    android:textSize="@dimen/dp12"
-
-                    />
+                    android:textColor="?attr/iGapTitleTextColor"
+                    android:textSize="@dimen/dp12" />
 
 
             </RelativeLayout>

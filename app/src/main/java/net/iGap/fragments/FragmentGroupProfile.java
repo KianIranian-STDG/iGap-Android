@@ -3,15 +3,12 @@ package net.iGap.fragments;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
-import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.util.TypedValue;
@@ -41,6 +38,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityGroupProfileBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
@@ -148,7 +146,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         binding.toolbarMore.setOnClickListener(v -> viewModel.onClickRippleMenu());
         binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
         binding.toolbarEdit.setOnClickListener(v -> {
-            if (getActivity() != null) {
+            if (getActivity() != null && viewModel.checkIsEditableAndReturnState()) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), EditGroupFragment.newInstance(viewModel.roomId)).setReplace(false).load();
             }
         });
@@ -326,7 +324,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(R.string.group_link)
                         .positiveText(R.string.array_Copy)
                         .customView(layoutGroupLink, true)
-                        .widgetColor(Color.parseColor(G.appBarColor))
+                        .widgetColor(new Theme().getPrimaryColor(getContext()))
                         .negativeText(R.string.no)
                         .onPositive((dialog1, which) -> {
                             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
@@ -366,6 +364,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
     @Override
     public void onResume() {
         super.onResume();
+        viewModel.checkGroupIsEditable();
         showAvatar();
     }
 
@@ -541,7 +540,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         layoutUserName.addView(progressBar);
 
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(getContext()).title(R.string.st_username).positiveText(R.string.save).customView(layoutUserName, true).widgetColor(Color.parseColor(G.appBarColor)).negativeText(R.string.B_cancel).build();
+                new MaterialDialog.Builder(getContext()).title(R.string.st_username).positiveText(R.string.save).customView(layoutUserName, true).widgetColor(new Theme().getAccentColor(getContext())).negativeText(R.string.B_cancel).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -686,24 +685,16 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
             }
         });
 
-        edtUserName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    viewUserName.setBackgroundColor(Color.parseColor(G.appBarColor));
-                } else {
-                    viewUserName.setBackgroundColor(getContext().getResources().getColor(R.color.line_edit_text));
-                }
+        edtUserName.setOnFocusChangeListener((view, b) -> {
+            if (b) {
+                viewUserName.setBackgroundColor(new Theme().getAccentColor(getContext()));
+            } else {
+                viewUserName.setBackgroundColor(getContext().getResources().getColor(R.color.line_edit_text));
             }
         });
 
         // check each word with server
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                hideKeyboard();
-            }
-        });
+        dialog.setOnDismissListener(dialog1 -> hideKeyboard());
 
         dialog.show();
     }

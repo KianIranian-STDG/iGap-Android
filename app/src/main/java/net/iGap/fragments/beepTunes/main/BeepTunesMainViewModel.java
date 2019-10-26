@@ -1,19 +1,15 @@
 package net.iGap.fragments.beepTunes.main;
 
-import android.util.Log;
-import android.view.View;
-
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.BeepTunesApi;
+import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.ApiServiceProvider;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.module.api.beepTunes.FirstPage;
 import net.iGap.viewmodel.BaseViewModel;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class BeepTunesMainViewModel extends BaseViewModel {
     private static final String TAG = "aabolfazlBeepTunes";
@@ -29,22 +25,20 @@ public class BeepTunesMainViewModel extends BaseViewModel {
     }
 
     private void getFirsPage() {
-        progressMutableLiveData.postValue(View.VISIBLE);
-        apiService.getFirstPage().enqueue(new Callback<FirstPage>() {
+        new ApiInitializer<FirstPage>().initAPI(apiService.getFirstPage(), this, new ResponseCallback<FirstPage>() {
             @Override
-            public void onResponse(Call<FirstPage> call, Response<FirstPage> response) {
-                if (response.isSuccessful()) {
-                    firstPageMutableLiveData.postValue(response.body());
-                } else {
-                    // TODO: 7/15/19 exception message
-                }
-                progressMutableLiveData.postValue(View.GONE);
+            public void onSuccess(FirstPage data) {
+                firstPageMutableLiveData.postValue(data);
             }
 
             @Override
-            public void onFailure(Call<FirstPage> call, Throwable t) {
-                progressMutableLiveData.postValue(View.GONE);
-                Log.i(TAG, "get first page: " + t.getMessage());
+            public void onError(ErrorModel error) {
+
+            }
+
+            @Override
+            public void setProgressIndicator(boolean visibility) {
+                progressMutableLiveData.postValue(visibility ? 0 : 1);
             }
         });
     }

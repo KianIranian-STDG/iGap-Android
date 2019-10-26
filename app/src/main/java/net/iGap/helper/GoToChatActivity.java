@@ -18,8 +18,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 
-import io.realm.Realm;
-
 public class GoToChatActivity {
 
     private final String TAG = this.getClass().getName();
@@ -111,6 +109,10 @@ public class GoToChatActivity {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     HelperGetDataFromOtherApp.hasSharedData = false;
+                    //revert main rooms list from share mode
+                    if (activity instanceof ActivityMain) {
+                        ((ActivityMain) activity).checkHasSharedData(false);
+                    }
                 }
             }).neutralText(R.string.another_room).onNeutral(new MaterialDialog.SingleButtonCallback() {
                 @Override

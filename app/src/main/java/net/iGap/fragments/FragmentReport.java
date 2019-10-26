@@ -1,7 +1,6 @@
 package net.iGap.fragments;
 
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.helper.HelperError;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.proto.ProtoClientRoomReport;
@@ -47,7 +47,7 @@ public class FragmentReport extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.asn_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        view.findViewById(R.id.asn_toolbar).setBackgroundColor(new Theme().getAccentColor(getContext()));
 
         Bundle extras = getArguments();
         if (extras != null) {

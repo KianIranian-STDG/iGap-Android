@@ -16,7 +16,6 @@ import android.util.AttributeSet;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.Emojione;
 
@@ -24,21 +23,21 @@ public class MaterialDesignTextView extends AppCompatTextView {
 
     public MaterialDesignTextView(Context context) {
         super(context);
-        init(context);
+        init();
     }
 
     public MaterialDesignTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init();
     }
 
     public MaterialDesignTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(context);
+        init();
     }
 
-    private void init(Context context) {
-        setTypeface(ResourcesCompat.getFont(getContext() , R.font.font_icon));
+    private void init() {
+        setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icon));
         setText(getText());
     }
 

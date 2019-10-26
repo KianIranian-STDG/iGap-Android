@@ -10,6 +10,10 @@ import javax.net.ssl.SSLHandshakeException;
 public class ErrorHandler {
 
     public ErrorModel getError(int responseCode, String error) {
+
+        if (responseCode == 401) {
+            return new ErrorModel("001", "Expired Token", true);
+        }
         if (error != null) {
             if (responseCode < 501) {
                 return new GsonBuilder().create().fromJson(error, ErrorModel.class);

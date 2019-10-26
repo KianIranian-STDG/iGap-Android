@@ -182,6 +182,8 @@ public class FragmentGroupProfileViewModel extends ViewModel {
 
                         groupName.postValue(realmRoom.getTitle());
                         groupDescription.postValue(realmRoom.getGroupRoom().getDescription());
+                        //role = realmRoom.getGroupRoom().getRole();
+                        //showEditButton.setValue(isEditable());
 
                         if (HelperCalander.isPersianUnicode) {
                             countText = HelperCalander.convertToUnicodeFarsiNumber(countText);
@@ -377,6 +379,21 @@ public class FragmentGroupProfileViewModel extends ViewModel {
 
     public void onLeaveGroupClick() {
         showDialogLeaveGroup.setValue(true);
+    }
+
+    public void checkGroupIsEditable() {
+        if (realmRoom == null) return;
+        role = realmRoom.getGroupRoom().getRole();
+        showEditButton.setValue(isEditable());
+    }
+
+    private boolean isEditable() {
+        return role == GroupChatRole.ADMIN || role == GroupChatRole.OWNER;
+    }
+
+    public boolean checkIsEditableAndReturnState() {
+        checkGroupIsEditable();
+        return isEditable();
     }
 
     public void setTextGroupLik() {

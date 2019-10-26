@@ -21,7 +21,6 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.viewmodel.KuknosEntryOptionVM;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 
 public class KuknosEntryOptionFrag extends BaseFragment {
 
@@ -68,7 +67,6 @@ public class KuknosEntryOptionFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosEToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         onNewTObserver();

@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.IVandActivityViewHolder;
 import net.iGap.adapter.items.ProgressBarViewHolder;
@@ -31,11 +30,10 @@ public class IVandActivityAdapter extends RecyclerView.Adapter<RecyclerView.View
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        LayoutInflater layoutInflater = LayoutInflater.from(G.context);
         if (i == TYPE_LOADING_MORE_ITEM) {
-            return new ProgressBarViewHolder(layoutInflater.inflate(R.layout.item_ivand_activity_loading, viewGroup, false));
+            return new ProgressBarViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_ivand_activity_loading, viewGroup, false));
         } else {
-            return new IVandActivityViewHolder(layoutInflater.inflate(R.layout.item_ivand_activity, viewGroup, false));
+            return new IVandActivityViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_ivand_activity, viewGroup, false));
         }
     }
 

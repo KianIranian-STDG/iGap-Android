@@ -12,9 +12,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fragNewsPContainer"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme">
+        android:layout_height="match_parent">
 
         <!-- TODO clean min height-->
 
@@ -22,9 +22,9 @@
             android:id="@+id/fragNewsPToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:minHeight="48dp"
             android:background="@color/sky_blue"
+            android:minHeight="48dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -42,13 +42,13 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcGroup"
-                android:paddingLeft="@dimen/dp4"
-                android:paddingRight="@dimen/dp4"
-                android:paddingBottom="@dimen/dp4"
-                android:paddingTop="@dimen/dp14"
-                android:clipToPadding="false"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingLeft="@dimen/dp4"
+                android:paddingTop="@dimen/dp14"
+                android:paddingRight="@dimen/dp4"
+                android:paddingBottom="@dimen/dp4" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

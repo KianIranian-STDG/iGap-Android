@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingLeft="8dp"
     android:paddingTop="8dp"
-    android:paddingRight="8dp"
-    android:paddingLeft="8dp">
+    android:paddingRight="8dp">
 
     <TextView
         android:id="@+id/tv_itemMplTransAction_time"
-        style="?textTitleColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/smallTextSize"
         app:layout_constraintBottom_toBottomOf="@+id/tv_itemMplTransAction_orderId"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,10 +24,10 @@
 
     <TextView
         android:id="@+id/tv_itemMplTransAction_date"
-        style="?textTitleColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/smallTextSize"
         app:layout_constraintBottom_toBottomOf="@+id/tv_itemMplTransAction_type"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,10 +38,10 @@
 
     <TextView
         android:id="@+id/tv_itemMplTransAction_type"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Card To Card"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toTopOf="@+id/tv_itemMplTransAction_orderId"
         app:layout_constraintEnd_toStartOf="@+id/tv_itemMplTransAction_date"
@@ -51,11 +51,11 @@
 
     <TextView
         android:id="@+id/tv_itemMplTransAction_orderId"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="54654621352"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/smallTextSize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_itemMplTransAction_time"

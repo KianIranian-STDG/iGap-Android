@@ -29,12 +29,11 @@
 
         <View
             android:id="@+id/view10"
-            style="?backgroundColorSettingTheme"
             android:layout_width="1dp"
             android:layout_height="0dp"
-            android:background="@color/gray"
             android:layout_marginTop="@dimen/dp4"
             android:layout_marginBottom="@dimen/dp4"
+            android:background="@color/gray"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toBottomOf="@+id/priceTitle"
             app:layout_constraintEnd_toStartOf="@id/priceTitle"
@@ -45,9 +44,9 @@
             android:id="@+id/view11"
             android:layout_width="1dp"
             android:layout_height="0dp"
-            android:background="@color/gray"
             android:layout_marginTop="@dimen/dp4"
             android:layout_marginBottom="@dimen/dp4"
+            android:background="@color/gray"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toBottomOf="@id/priceTitle"
             app:layout_constraintEnd_toStartOf="@id/countTitle"
@@ -56,12 +55,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/priceTitle"
-            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="@dimen/dp8"
             android:text="@string/price"
+            android:textColor="?iGapTitleTextColor"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/countTitle"
@@ -70,12 +69,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/countTitle"
-            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="@dimen/dp8"
             android:text="@string/igasht_count_title"
+            android:textColor="?iGapTitleTextColor"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toBottomOf="@id/priceTitle"
             app:layout_constraintEnd_toStartOf="@id/priceTitle"
@@ -85,12 +84,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/serviceTitle"
-            style="?textTitleColorSettingTheme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="@dimen/dp8"
             android:text="@string/igasht_service_title"
+            android:textColor="?iGapTitleTextColor"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toBottomOf="@id/priceTitle"
             app:layout_constraintEnd_toStartOf="@id/countTitle"
@@ -100,13 +99,13 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/totalPrice"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp4"
             android:layout_marginBottom="@dimen/dp4"
             android:padding="@dimen/dp4"
             android:text="@{@string/igasht_total_ticket_price(viewModel.totalPrice)}"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:textStyle="bold"
             android:visibility="@{viewModel.showMainView}"
@@ -143,7 +142,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/payButton"
-            style="?iGapButton"
+            style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp16"

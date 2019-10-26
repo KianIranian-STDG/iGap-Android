@@ -2,7 +2,6 @@ package org.paygear.fragment;
 
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,14 +10,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.fragment.app.Fragment;
-import androidx.core.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.core.view.ViewCompat;
+import androidx.fragment.app.Fragment;
 
 import net.iGap.R;
 import net.iGap.helper.HelperToolbar;
@@ -133,17 +133,18 @@ public class MyQRFragment extends Fragment {
         ((NavigationBarActivity) getActivity()).broadcastMessageToPreviousFragment(
                 MyQRFragment.this, null, ScannerFragment.class);
     }
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
+
+    private Uri getImageUri(Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
+        return path != null ? Uri.parse(path) : null;
     }
 
     private void share(Bitmap bitmap) {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, getImageUri(getContext(),bitmap));
+        shareIntent.putExtra(Intent.EXTRA_STREAM, getImageUri(bitmap));
         shareIntent.setType("image/jpeg");
         startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.my_qr)));
 

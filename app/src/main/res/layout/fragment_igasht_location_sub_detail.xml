@@ -20,29 +20,29 @@
         android:layout_marginTop="@dimen/dp2"
         android:layout_marginEnd="@dimen/dp6"
         android:layout_marginBottom="@dimen/dp6"
-        android:paddingBottom="@dimen/dp16"
-        android:clipToPadding="false">
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/dp16">
 
         <net.iGap.module.RadiusImageView
             android:id="@+id/itemImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            app:riv_corner_radius="@dimen/dp8"
             android:layout_marginTop="@dimen/dp4"
             android:adjustViewBounds="true"
+            android:scaleType="fitXY"
             app:imageUrl="@{viewModel.locationDetail.getMainPicture()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:riv_corner_radius="@dimen/dp8" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/subTitle"
-            style="?textTitleColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp8"
             android:text="@{viewModel.locationDetail.locationName}"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,18 +50,18 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/null_txt"
-            style="?textTitleColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp8"
+            android:gravity="center"
             android:text="@string/noDetail_textView"
-            android:visibility="@{viewModel.showText}"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
+            android:visibility="@{viewModel.showText}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:gravity="center" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/view4"
@@ -77,16 +77,16 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/subDetail"
-            style="?textTitleColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp4"
-            android:layout_marginTop="@dimen/dp4"
             android:layout_marginStart="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginTop="@dimen/dp4"
             android:layout_marginEnd="@dimen/dp8"
             android:layout_marginRight="@dimen/dp8"
-            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginBottom="@dimen/dp4"
             android:text="@{viewModel.locationDetail.workingTime}"
+            android:textColor="?iGapTitleTextColor"
             app:layout_constraintEnd_toEndOf="@+id/view4"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/view4"
@@ -94,16 +94,16 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/subTitle2"
-            style="?textTitleColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp4"
-            android:layout_marginTop="@dimen/dp4"
             android:layout_marginStart="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginTop="@dimen/dp4"
             android:layout_marginEnd="@dimen/dp8"
             android:layout_marginRight="@dimen/dp8"
-            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginBottom="@dimen/dp4"
             android:text="@{viewModel.locationDetail.closingTimes}"
+            android:textColor="?iGapTitleTextColor"
             app:layout_constraintEnd_toEndOf="@+id/subDetail"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/subDetail"
@@ -113,9 +113,9 @@
             android:id="@+id/view1"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="@color/gray_300"
             android:layout_marginTop="@dimen/dp8"
             android:layout_marginBottom="@dimen/dp8"
+            android:background="@color/gray_300"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintEnd_toEndOf="@+id/subTitle2"
             app:layout_constraintStart_toStartOf="@+id/subTitle2"
@@ -123,16 +123,16 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/subDetail2"
-            style="?textTitleColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp4"
-            android:layout_marginTop="@dimen/dp4"
             android:layout_marginStart="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginTop="@dimen/dp4"
             android:layout_marginEnd="@dimen/dp8"
             android:layout_marginRight="@dimen/dp8"
-            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginBottom="@dimen/dp4"
             android:text="@{viewModel.locationDetail.attentions}"
+            android:textColor="?iGapTitleTextColor"
             app:layout_constraintEnd_toEndOf="@id/view1"
             app:layout_constraintStart_toStartOf="@id/view1"
             app:layout_constraintTop_toBottomOf="@+id/view1" />
@@ -151,16 +151,16 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/subTitle3"
-            style="?textTitleColorSettingTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp4"
-            android:layout_marginTop="@dimen/dp4"
             android:layout_marginStart="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginTop="@dimen/dp4"
             android:layout_marginEnd="@dimen/dp8"
             android:layout_marginRight="@dimen/dp8"
-            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginBottom="@dimen/dp4"
             android:text="@{viewModel.locationDetail.content}"
+            android:textColor="?iGapTitleTextColor"
             app:layout_constraintEnd_toEndOf="@+id/view2"
             app:layout_constraintStart_toStartOf="@+id/view2"
             app:layout_constraintTop_toBottomOf="@+id/view2" />
@@ -168,31 +168,31 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp8"
             android:background="@drawable/shape_igasht_strokegray"
+            android:padding="@dimen/dp4"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/subTitle3"
-            android:layout_marginTop="@dimen/dp8"
-            android:padding="@dimen/dp4"
-            android:visibility="@{viewModel.showMainView}">
+            app:layout_constraintTop_toBottomOf="@id/subTitle3">
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginEnd="@dimen/dp8"
+                android:layout_marginStart="@dimen/dp8"
                 android:layout_marginLeft="@dimen/dp8"
+                android:layout_marginEnd="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp8"
-                android:layout_marginStart="@dimen/dp8">
+                android:gravity="center_vertical">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_parking"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/parking_textView"
                     android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2" />
+                    android:layout_weight="2"
+                    android:text="@string/parking_textView"
+                    android:textColor="?iGapTitleTextColor" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/check_parking"
@@ -206,19 +206,19 @@
 
                 <View
                     android:layout_width="0.5dp"
-                    android:background="@color/gray_300"
                     android:layout_height="@dimen/dp32"
+                    android:layout_gravity="center_vertical"
                     android:layout_margin="@dimen/dp4"
-                    android:layout_gravity="center_vertical" />
+                    android:background="@color/gray_300" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_wifi"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/wifi_textView"
                     android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2" />
+                    android:layout_weight="2"
+                    android:text="@string/wifi_textView"
+                    android:textColor="?iGapTitleTextColor" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/check_wifi"
@@ -234,26 +234,26 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="@color/gray_300"
-                android:layout_margin="@dimen/dp4" />
+                android:layout_margin="@dimen/dp4"
+                android:background="@color/gray_300" />
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginEnd="@dimen/dp8"
+                android:layout_marginStart="@dimen/dp8"
                 android:layout_marginLeft="@dimen/dp8"
+                android:layout_marginEnd="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp8"
-                android:layout_marginStart="@dimen/dp8">
+                android:gravity="center_vertical">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_resturant"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/Restaurant_textView"
                     android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2" />
+                    android:layout_weight="2"
+                    android:text="@string/Restaurant_textView"
+                    android:textColor="?iGapTitleTextColor" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/cheked_resturant"
@@ -267,19 +267,19 @@
 
                 <View
                     android:layout_width="0.5dp"
-                    android:background="@color/gray_300"
                     android:layout_height="@dimen/dp32"
+                    android:layout_gravity="center_vertical"
                     android:layout_margin="@dimen/dp4"
-                    android:layout_gravity="center_vertical" />
+                    android:background="@color/gray_300" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_coffeeShop"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/coffeeShop_textView"
                     android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2" />
+                    android:layout_weight="2"
+                    android:text="@string/coffeeShop_textView"
+                    android:textColor="?iGapTitleTextColor" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/cheked_coffeeShop"
@@ -295,26 +295,26 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="@color/gray_300"
-                android:layout_margin="@dimen/dp4" />
+                android:layout_margin="@dimen/dp4"
+                android:background="@color/gray_300" />
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginEnd="@dimen/dp8"
+                android:layout_marginStart="@dimen/dp8"
                 android:layout_marginLeft="@dimen/dp8"
+                android:layout_marginEnd="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp8"
-                android:layout_marginStart="@dimen/dp8">
+                android:gravity="center_vertical">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_wheelchair"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/wheelchair_textView"
                     android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2" />
+                    android:layout_weight="2"
+                    android:text="@string/wheelchair_textView"
+                    android:textColor="?iGapTitleTextColor" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/check_wheelchair"
@@ -328,19 +328,19 @@
 
                 <View
                     android:layout_width="0.5dp"
-                    android:background="@color/gray_300"
                     android:layout_height="@dimen/dp32"
+                    android:layout_gravity="center_vertical"
                     android:layout_margin="@dimen/dp4"
-                    android:layout_gravity="center_vertical" />
+                    android:background="@color/gray_300" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_PrayerRoom"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/prayerRoom_textView"
                     android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2" />
+                    android:layout_weight="2"
+                    android:text="@string/prayerRoom_textView"
+                    android:textColor="?iGapTitleTextColor" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/check_PrayerRoom"
@@ -356,26 +356,26 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="@color/gray_300"
-                android:layout_margin="@dimen/dp4" />
+                android:layout_margin="@dimen/dp4"
+                android:background="@color/gray_300" />
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginEnd="@dimen/dp8"
+                android:layout_marginStart="@dimen/dp8"
                 android:layout_marginLeft="@dimen/dp8"
+                android:layout_marginEnd="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp8"
-                android:layout_marginStart="@dimen/dp8">
+                android:gravity="center_vertical">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/text_wc"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/parking_textView"
                     android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2" />
+                    android:layout_weight="2"
+                    android:text="@string/parking_textView"
+                    android:textColor="?iGapTitleTextColor" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/check_wc"
@@ -390,16 +390,16 @@
                 <View
                     android:layout_width="0.5dp"
                     android:layout_height="@dimen/dp32"
-                    android:background="@color/gray_300"
+                    android:layout_gravity="center_vertical"
                     android:layout_margin="@dimen/dp4"
-                    android:layout_gravity="center_vertical" />
+                    android:background="@color/gray_300" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2" />
+                    android:layout_weight="2"
+                    android:textColor="?iGapTitleTextColor" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     style="@style/baseFontIcon"

@@ -6,11 +6,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import net.iGap.activities.ActivityMain;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 
-public abstract class IGashtBaseView<G> extends Fragment {
+public abstract class IGashtBaseView<G> extends BaseAPIViewFrag {
 
     protected BaseIGashtViewModel<G> viewModel;
 

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textSize="@dimen/standardTextSize"
-    style="?backgroundColorSettingTheme_2"
+    style="?rootBackgroundColor"
     app:chip_backgroundColor="@color/white"
     app:chip_deletable="true"
     app:chip_deleteIconColor="@color/gray_5c"

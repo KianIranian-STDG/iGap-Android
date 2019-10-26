@@ -3,7 +3,6 @@ package org.paygear.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
-import androidx.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -11,16 +10,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.core.view.ViewCompat;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -36,9 +25,22 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.cardview.widget.CardView;
+import androidx.core.view.ViewCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import net.cachapa.expandablelayout.ExpandableLayout;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.databinding.FragmentCardsBinding;
 import net.iGap.databinding.OtpDialogBinding;
 import net.iGap.helper.HelperToolbar;
@@ -788,7 +790,7 @@ public class CardsFragment extends Fragment implements ToolbarListener , OnFragm
 
             if (total == 0) {
                 view.findViewById(R.id.bals_layout).setVisibility(View.VISIBLE);
-                view.findViewById(R.id.balance_layout).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
+                view.findViewById(R.id.balance_layout).getBackground().setColorFilter(new PorterDuffColorFilter(new Theme().getPrimaryColor(getContext()), PorterDuff.Mode.SRC_IN));
             }
 
         }

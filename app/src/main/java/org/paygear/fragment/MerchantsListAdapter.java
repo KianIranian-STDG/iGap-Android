@@ -3,9 +3,6 @@ package org.paygear.fragment;
 
 import android.content.Context;
 import android.graphics.Color;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +10,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.squareup.picasso.Picasso;
 
-import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.databinding.MerchantsListItemBinding;
 
@@ -80,7 +81,7 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
             AppCompatTextView textView = new AppCompatTextView(parent.getContext());
             textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             textView.setPadding(ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10), ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10));
-            textView.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
+            textView.setBackgroundColor(new Theme().getRootColor(textView.getContext()));
             textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
             textView.setGravity(Gravity.START);
 

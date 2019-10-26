@@ -3,13 +3,11 @@ package net.iGap.libs.bottomNavigation;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.FrameLayout;
@@ -22,6 +20,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.AccountManager;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
@@ -33,8 +32,6 @@ import net.iGap.module.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static net.iGap.G.isDarkTheme;
 
 public class BottomNavigation extends LinearLayout implements OnItemSelected, View.OnClickListener, View.OnLongClickListener {
 
@@ -50,6 +47,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
     private CircleImageView avatarImageView;
 
     private AvatarHandler avatarHandler;
+    private TextView textView;
 
     public BottomNavigation(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -67,13 +65,8 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
     private void parseAttr(AttributeSet attributeSet) {
         if (attributeSet != null) {
             TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.BottomNavigation);
-
             try {
-                if (isDarkTheme) {
-                    backgroundColor = getContext().getResources().getColor(R.color.navigation_dark_mode_bg);
-                } else {
-                    backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color, getResources().getColor(R.color.background_color));
-                }
+                backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color, getResources().getColor(R.color.background_color));
                 cornerRadius = typedArray.getInt(R.styleable.BottomNavigation_corner_radius, 0);
             } finally {
                 typedArray.recycle();
@@ -98,12 +91,11 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
                     tabItem.setOnTabItemSelected(this);
                 } else {
                     avatarImageView = (CircleImageView) ((FrameLayout) getChildAt(4)).getChildAt(0);
-                    TextView textView = (TextView) ((FrameLayout) getChildAt(4)).getChildAt(1);
-                    textView.setTextColor(Color.parseColor(isDarkTheme ? "#AAA9A9" : "#FF4F4F4F"));
+                    textView = (TextView) ((FrameLayout) getChildAt(4)).getChildAt(1);
                     textView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
                     avatarImageView.setOnLongClickListener(this);
                     avatarImageView.setOnClickListener(this);
-                    avatarImageView.setBorderColor(Color.parseColor(isDarkTheme ? "#868686" : "#FF696969"));
+                    avatarImageView.setBorderColor(new Theme().getPrimaryColor(getContext()));
                 }
             }
         } catch (Exception e) {
@@ -216,14 +208,11 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
     private void onSelectedItemChanged() {
         try {
             for (int i = 0; i < tabItems.size(); i++) {
-                if (tabItems.get(i).getPosition() == selectedItemPosition) {
-                    tabItems.get(i).setSelectedItem(true);
-                } else {
-                    tabItems.get(i).setSelectedItem(false);
-                }
+                tabItems.get(i).setSelectedItem(tabItems.get(i).getPosition() == selectedItemPosition);
             }
+            textView.setSelected(selectedItemPosition == 4);
         } catch (Exception e) {
-            Log.e(getClass().getName(), "onSelectedItemChanged: ", e);
+            e.printStackTrace();
         }
     }
 

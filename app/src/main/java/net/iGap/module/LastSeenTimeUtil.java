@@ -10,6 +10,7 @@
 
 package net.iGap.module;
 
+import android.content.Context;
 import android.text.format.DateUtils;
 
 import net.iGap.Config;
@@ -27,8 +28,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import io.realm.Realm;
-
 public class LastSeenTimeUtil {
     private static HashMap<Long, Long> hashMapLastSeen = new HashMap<>();
 
@@ -43,25 +42,25 @@ public class LastSeenTimeUtil {
      * @param lastSeen time in second state(not millis)
      * @param update   if set true time updating after each Config.LAST_SEEN_DELAY_CHECKING time and send callback to onLastSeenUpdateTiming
      */
-    public static String computeTime(long userId, long lastSeen, boolean update, boolean ltr) {
+    public static String computeTime(Context context, long userId, long lastSeen, boolean update, boolean ltr) {
         if (timeOut(lastSeen * DateUtils.SECOND_IN_MILLIS)) {
-            return computeDays(lastSeen, ltr);
+            return computeDays(context, lastSeen, ltr);
         } else {
             if (update) {
                 hashMapLastSeen.put(userId, lastSeen);
-                updateLastSeenTime();
+                updateLastSeenTime(context);
             }
             return getMinute(lastSeen);
         }
     }
 
-    public static String computeTime(long userId, long lastSeen, boolean update) {
+    public static String computeTime(Context context, long userId, long lastSeen, boolean update) {
         if (timeOut(lastSeen * DateUtils.SECOND_IN_MILLIS)) {
-            return computeDays(lastSeen, true);
+            return computeDays(context, lastSeen, true);
         } else {
             if (update) {
                 hashMapLastSeen.put(userId, lastSeen);
-                updateLastSeenTime();
+                updateLastSeenTime(context);
             }
             return getMinute(lastSeen);
         }
@@ -74,7 +73,7 @@ public class LastSeenTimeUtil {
      * @return exactly time if is lower than one days otherwise return days
      */
 
-    private static String computeDays(long beforeMillis, boolean ltr) {
+    private static String computeDays(Context context, long beforeMillis, boolean ltr) {
 
         String time = "";
 
@@ -91,36 +90,35 @@ public class LastSeenTimeUtil {
                     date.setTimeInMillis(beforeMillis * DateUtils.SECOND_IN_MILLIS);
 
                     if (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) != date.get(Calendar.DAY_OF_YEAR)) {
-                        time = G.fragmentActivity.getResources().getString(R.string.yesterday) + " " + time;
+                        time = context.getResources().getString(R.string.yesterday) + " " + time;
                     }
 
                     break;
                 case 1:
-                    //time = G.fragmentActivity.getResources().getString(R.string.last_seen) + " " + G.fragmentActivity.getResources().getString(R.string.yesterday) + " " + exactlyTime;
-                    time = G.fragmentActivity.getResources().getString(R.string.yesterday) + " " + exactlyTime;
+                    time = context.getResources().getString(R.string.yesterday) + " " + exactlyTime;
                     break;
                 case 2:
-                    time = G.fragmentActivity.getResources().getString(R.string.two_day);//+ exactlyTime
+                    time = context.getResources().getString(R.string.two_day);//+ exactlyTime
                     break;
                 case 3:
-                    time = G.fragmentActivity.getResources().getString(R.string.three_day);//+ exactlyTime
+                    time = context.getResources().getString(R.string.three_day);//+ exactlyTime
                     break;
                 case 4:
-                    time = G.fragmentActivity.getResources().getString(R.string.four_day);// + exactlyTime
+                    time = context.getResources().getString(R.string.four_day);// + exactlyTime
                     break;
                 case 5:
-                    time = G.fragmentActivity.getResources().getString(R.string.five_day);// + exactlyTime
+                    time = context.getResources().getString(R.string.five_day);// + exactlyTime
                     break;
                 case 6:
-                    time = G.fragmentActivity.getResources().getString(R.string.six_day);// + exactlyTime
+                    time = context.getResources().getString(R.string.six_day);// + exactlyTime
                     break;
                 case 7:
-                    time = G.fragmentActivity.getResources().getString(R.string.last_week);
+                    time = context.getResources().getString(R.string.last_week);
                     break;
             }
         } else {
             if (beforeMillis == 0) {
-                time = G.fragmentActivity.getResources().getString(R.string.last_seen_recently);
+                time = context.getResources().getString(R.string.last_seen_recently);
             } else {
                 time = HelperCalander.checkHijriAndReturnTime(beforeMillis) + " " + exactlyTime;
             }
@@ -137,7 +135,7 @@ public class LastSeenTimeUtil {
      * check lastSeen time and send to callback
      */
 
-    private static synchronized void updateLastSeenTime() {
+    private static synchronized void updateLastSeenTime(Context context) {
         DbManager.getInstance().doRealmTask(realm -> {
             ArrayList<Long> userIdList = new ArrayList<>();
             for (Iterator<Map.Entry<Long, Long>> it = hashMapLastSeen.entrySet().iterator(); it.hasNext(); ) {
@@ -149,7 +147,7 @@ public class LastSeenTimeUtil {
                     if (realmRegisteredInfo.getStatus() != null && realmRegisteredInfo.getMainStatus() != null && !realmRegisteredInfo.getStatus().equals("online") && !realmRegisteredInfo.getStatus().equals("آنلاین") && !realmRegisteredInfo.getMainStatus().equals(ProtoGlobal.RegisteredUser.Status.LONG_TIME_AGO.toString())) {
                         String showLastSeen;
                         if (timeOut(realmRegisteredInfo.getLastSeen() * DateUtils.SECOND_IN_MILLIS)) {
-                            showLastSeen = computeDays(realmRegisteredInfo.getLastSeen(), true);
+                            showLastSeen = computeDays(context, realmRegisteredInfo.getLastSeen(), true);
                             userIdList.add(userId);
                         } else {
                             showLastSeen = getMinute(realmRegisteredInfo.getLastSeen());
@@ -174,7 +172,7 @@ public class LastSeenTimeUtil {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    updateLastSeenTime();
+                    updateLastSeenTime(context);
                 }
             }, Config.LAST_SEEN_DELAY_CHECKING);
         }

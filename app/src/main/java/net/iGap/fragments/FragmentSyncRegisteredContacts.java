@@ -37,8 +37,8 @@ import net.iGap.interfaces.OnContactsGetList;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnPhoneContact;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FastScroller;
@@ -58,7 +58,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Case;
-import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
@@ -106,7 +105,6 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
         //Toolbar Initial
         LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
-        Utils.darkModeHandler(toolbarLayout);
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setSearchBoxShown(true)
@@ -408,11 +406,9 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
         private List<RealmContacts> usersList;
         private int count;
-        private LayoutInflater inflater;
 
 
         ContactListAdapter2(List<RealmContacts> contacts) {
-            inflater = LayoutInflater.from(G.context);
             count = contacts.size();
             usersList = contacts;
         }
@@ -429,7 +425,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int i) {
 
-            View v = inflater.inflate(R.layout.item_contact_chat, viewGroup, false);
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_contact_chat, viewGroup, false);
             return new ViewHolder(v);
         }
 
@@ -453,7 +449,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                 viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_4c));
 
                 viewHolder.title.setText(contact.getDisplay_name());
-                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(contact.getId(), contact.getLast_seen(), false));
+                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(viewHolder.subtitle.getContext(), contact.getId(), contact.getLast_seen(), false));
 
                 setAvatar(viewHolder, contact.getId());
 
@@ -486,7 +482,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
         public class ViewHolder extends RecyclerView.ViewHolder {
 
-            private de.hdodenhof.circleimageview.CircleImageView image;
+            private CircleImageView image;
             private EmojiTextViewE title;
             private TextView subtitle;
             private RealmContacts realmContacts;

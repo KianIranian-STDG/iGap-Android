@@ -5,18 +5,19 @@ import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.model.popularChannel.Category;
 import net.iGap.model.popularChannel.Channel;
@@ -81,7 +82,7 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
                     sliderViewHolder = (SliderViewHolder) viewHolder;
                     bannerScale = data.get(i).getInfo().getScale();
                     String[] scales = bannerScale.split(":");
-                    float height = Resources.getSystem().getDisplayMetrics().widthPixels * 0.9f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+                    float height = viewHolder.itemView.getMeasuredWidth()/*Resources.getSystem().getDisplayMetrics().widthPixels*/ * 0.9f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
                     sliderViewHolder.itemView.getLayoutParams().height = Math.round(height);
                     sliderViewHolder.bindSlid(data.get(i).getSlides(), data.get(i).getInfo().getPlaybackTime());
                     break;
@@ -194,12 +195,8 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
 
             RelativeLayout relativeLayoutRow = itemView.findViewById(R.id.rl_item_pop_rows);
             LinearLayout linearLayoutRow = itemView.findViewById(R.id.ll_item_pop_rows);
-            ImageView imageViewMore = itemView.findViewById(R.id.iv_item_popular_more);
-            if (G.isDarkTheme) {
-                relativeLayoutRow.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.shape_favorite_channel_all_them));
-                linearLayoutRow.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.shape_favorite_channel_dark_them));
-                imageViewMore.setColorFilter(itemView.getContext().getResources().getColor(R.color.navigation_dark_mode_bg));
-            }
+            linearLayoutRow.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.shape_favorite_channel_dark_them), itemView.getContext(), R.attr.iGapSendMessageOtherTextColor));
+            relativeLayoutRow.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.shape_favorite_channel_all_them), itemView.getContext(), R.attr.iGapDividerLine));
         }
     }
 

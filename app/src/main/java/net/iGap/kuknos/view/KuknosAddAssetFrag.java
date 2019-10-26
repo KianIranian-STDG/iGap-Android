@@ -30,7 +30,6 @@ import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.view.adapter.AddAssetAdvAdapter;
 import net.iGap.kuknos.view.adapter.AddAssetCurrentAdapter;
 import net.iGap.kuknos.viewmodel.KuknosAddAssetVM;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 
 import org.stellar.sdk.responses.AccountResponse;
 import org.stellar.sdk.responses.AssetResponse;
@@ -85,7 +84,6 @@ public class KuknosAddAssetFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosAddAToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         binding.fragKuknosAddARecyclerAdv.setHasFixedSize(true);

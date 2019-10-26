@@ -31,7 +31,6 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
@@ -253,10 +252,6 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
                 .setLeftIcon(R.string.back_icon);
 
         toolBarContainer.addView(toolbar.getView());
-
-        Utils.setCardsBackground(statusRootView, R.color.white, R.color.toolbar_search_box_dark_bg);
-        Utils.setCardsBackground(rvContainer, R.color.white, R.color.toolbar_search_box_dark_bg);
-
     }
 
     private void setStatus(int status) {

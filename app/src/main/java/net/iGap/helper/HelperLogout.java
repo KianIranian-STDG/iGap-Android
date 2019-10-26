@@ -17,7 +17,6 @@ import android.util.Log;
 import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
-import net.iGap.Theme;
 import net.iGap.WebSocketClient;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.interfaces.OnUserSessionLogout;
@@ -130,12 +129,10 @@ public final class HelperLogout {
 
 
     private void resetStaticField() {
-        Theme.setThemeColor();
         G.userLogin = false;
         G.isTimeWhole = false;
         G.isFirstPassCode = false;
         G.isPassCode = false;
-        G.isDarkTheme = false;
         G.isSaveToGallery = false;
         G.showSenderNameInGroup = false;
     }

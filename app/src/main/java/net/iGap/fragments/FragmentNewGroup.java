@@ -13,7 +13,6 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -90,8 +89,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import io.realm.Realm;
 
 import static net.iGap.G.context;
 import static net.iGap.module.AttachFile.isInAttach;
@@ -212,9 +209,9 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
         fragmentNewGroupViewModel.goToCreateChannelPage.observe(this, data -> {
             if (getActivity() != null && data != null) {
-                if (!getActivity().isFinishing()) {
+                /*if (!getActivity().isFinishing()) {
                     getActivity().getSupportFragmentManager().popBackStack();
-                }
+                }*/
                 if (G.iTowPanModDesinLayout != null) {
                     G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
                 }
@@ -420,20 +417,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         });
 
         //=======================name of group
-        edtGroupName = fragmentNewGroupBinding.ngEdtNewGroup;
-        final View ViewGroupName = fragmentNewGroupBinding.ngViewNewGroup;
-        edtGroupName.setPadding(0, 8, 0, 8);
-        edtGroupName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-
-                if (b) {
-                    ViewGroupName.setBackgroundColor(Color.parseColor(G.appBarColor));
-                } else {
-                    ViewGroupName.setBackgroundColor(Color.parseColor(G.lineBorder));
-                }
-            }
-        });
 
         //=======================description group
         edtDescription = fragmentNewGroupBinding.ngEdtDescription;
@@ -545,15 +528,15 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
     private void startChannelRoom(long roomId) {
         fragmentNewGroupViewModel.hideProgressBar();
+        FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
+        Bundle bundle = new Bundle();
+        bundle.putLong("ROOMID", roomId);
+        bundle.putString("INVITE_LINK", fragmentNewGroupViewModel.mInviteLink);
+        bundle.putString("TOKEN", fragmentNewGroupViewModel.token);
+        fragmentCreateChannel.setArguments(bundle);
+        popBackStackFragment();
+        popBackStackFragment();
         if (getActivity() != null) {
-            FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
-            Bundle bundle = new Bundle();
-            bundle.putLong("ROOMID", roomId);
-            bundle.putString("INVITE_LINK", fragmentNewGroupViewModel.mInviteLink);
-            bundle.putString("TOKEN", fragmentNewGroupViewModel.token);
-            fragmentCreateChannel.setArguments(bundle);
-            popBackStackFragment();
-            popBackStackFragment();
             new HelperFragment(getActivity().getSupportFragmentManager(), fragmentCreateChannel).load();
         }
     }
@@ -747,17 +730,15 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     private class SelectedContactAdapter extends RecyclerView.Adapter<SelectedContactAdapter.ViewHolderSelectedContact> {
 
         private List<StructContactInfo> mItems = new ArrayList<>();
-        private LayoutInflater inflater;
 
         public SelectedContactAdapter() {
-            inflater = LayoutInflater.from(context);
         }
 
         @NonNull
         @Override
         public ViewHolderSelectedContact onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-            View view = inflater.inflate(R.layout.item_contact_chat, viewGroup, false);
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_contact_chat, viewGroup, false);
 
             return new ViewHolderSelectedContact(view);
         }
@@ -781,7 +762,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
             private EmojiTextViewE txtName;
             private TextView txtPhone;
-            private de.hdodenhof.circleimageview.CircleImageView imgAvatar;
+            private CircleImageView imgAvatar;
             private TextView btnRemove;
             private CheckBox chSelected;
 
@@ -803,14 +784,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                 } else {
                     txtName.setGravity(Gravity.RIGHT);
                     txtPhone.setGravity(Gravity.RIGHT);
-                }
-
-                if (G.isDarkTheme) {
-                    txtName.setTextColor(context.getResources().getColor(R.color.gray_300));
-                    txtPhone.setTextColor(context.getResources().getColor(R.color.white));
-                } else {
-                    txtName.setTextColor(context.getResources().getColor(R.color.black));
-                    txtPhone.setTextColor(context.getResources().getColor(R.color.gray_4c));
                 }
 
                 txtPhone.setVisibility(View.INVISIBLE);

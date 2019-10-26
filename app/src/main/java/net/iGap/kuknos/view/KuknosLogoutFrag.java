@@ -27,7 +27,6 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosLogoutVM;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 
 public class KuknosLogoutFrag extends BaseFragment {
 
@@ -76,7 +75,6 @@ public class KuknosLogoutFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosLogoutToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         onNextPage();

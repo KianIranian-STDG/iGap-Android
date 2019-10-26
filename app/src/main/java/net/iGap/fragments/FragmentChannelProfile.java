@@ -2,10 +2,8 @@ package net.iGap.fragments;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -30,6 +28,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityProfileChannelBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
@@ -38,7 +37,6 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnChannelAvatarDelete;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MEditText;
@@ -123,7 +121,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
         binding.toolbarMore.setOnClickListener(v -> showPopUp());
         binding.toolbarEdit.setOnClickListener(v -> {
-            if (getActivity() != null) {
+            if (getActivity() != null && viewModel.checkIsEditableAndReturnState()) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), EditChannelFragment.newInstance(viewModel.roomId)).setReplace(false).load();
             }
         });
@@ -190,11 +188,11 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
                 TextInputLayout inputChannelLink = new TextInputLayout(getActivity());
                 MEditText edtLink = new MEditText(getActivity());
-                edtLink.setHint(getString(R.string.channel_public_hint_revoke));
+                edtLink.setHint(R.string.channel_public_hint_revoke);
                 edtLink.setTypeface(ResourcesCompat.getFont(edtLink.getContext() , R.font.main_font));
                 edtLink.setText(link);
                 edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
-                Utils.darkModeHandler(edtLink);
+                edtLink.setTextColor(new Theme().getTitleTextColor(getActivity()));
                 edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
                 edtLink.setPadding(0, 8, 0, 8);
                 edtLink.setEnabled(false);
@@ -204,7 +202,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
                 TextView txtLink = new AppCompatTextView(getActivity());
                 txtLink.setText(Config.IGAP_LINK_PREFIX + link);
-                Utils.darkModeHandlerGray(txtLink);
+                txtLink.setTextColor(new Theme().getTitleTextColor(getActivity()));
 
                 viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -218,7 +216,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(R.string.channel_link)
                         .positiveText(R.string.array_Copy)
                         .customView(layoutChannelLink, true)
-                        .widgetColor(Color.parseColor(G.appBarColor))
+                        .widgetColor(new Theme().getAccentColor(getContext()))
                         .negativeText(R.string.B_cancel)
                         .onPositive((dialog1, which) -> {
                             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
@@ -353,6 +351,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
     public void onResume() {
         super.onResume();
         setAvatar();
+        viewModel.checkChannelIsEditable();
         viewModel.onResume();
     }
 

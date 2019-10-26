@@ -10,12 +10,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:layoutDirection="locale">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -29,7 +26,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/mobileNumberIcon"
-            style="@style/greenIconTextViewStyle"
+            style="@style/primaryIconTextViewStyle"
             android:layout_width="@dimen/dp44"
             android:layout_height="@dimen/dp44"
             android:layout_marginStart="@dimen/dp16"
@@ -45,7 +42,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/phoneNumberEditText"
-            style="?hintColorSettingTheme"
+            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp44"
             android:layout_marginStart="@dimen/dp8"
@@ -82,7 +79,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/materialButton"
-            style="?iGapButton"
+            style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp12"

@@ -16,14 +16,13 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
-import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.databinding.FragmentKuknosTradePagerBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.view.adapter.TabAdapter;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 
 public class KuknosTradePagerFrag extends BaseFragment {
 
@@ -73,7 +72,6 @@ public class KuknosTradePagerFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.kuknosTradePagerToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         viewPager = binding.kuknosTradePager;
@@ -97,13 +95,8 @@ public class KuknosTradePagerFrag extends BaseFragment {
             TextView tv = new TextView(getContext());
             tv.setText(tabLayout.getTabAt(i).getText());
             tv.setGravity(Gravity.CENTER);
-            tv.setTypeface(ResourcesCompat.getFont(tv.getContext() , R.font.main_font));
-
-            if (G.isDarkTheme) {
-                tv.setTextColor(G.context.getResources().getColor(R.color.white));
-            } else {
-                tv.setTextColor(G.context.getResources().getColor(R.color.black));
-            }
+            tv.setTypeface(ResourcesCompat.getFont(tv.getContext(), R.font.main_font));
+            tv.setTextColor(new Theme().getTitleTextColor(tv.getContext()));
             tabLayout.getTabAt(i).setCustomView(tv);
         }
     }

@@ -4,9 +4,10 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 
-import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 
 public class DefaultRoundDialog extends AlertDialog.Builder {
 
@@ -17,7 +18,7 @@ public class DefaultRoundDialog extends AlertDialog.Builder {
     @Override
     public AlertDialog show() {
         AlertDialog dialog = this.create();
-        dialog.getWindow().setBackgroundDrawable(getContext().getResources().getDrawable(G.isDarkTheme ? R.drawable.dialog_background_dark : R.drawable.dialog_background));
+        dialog.getWindow().setBackgroundDrawable(new Theme().tintDrawable(ContextCompat.getDrawable(getContext(), R.drawable.dialog_background_dark), getContext(), R.attr.rootBackgroundColor));
         dialog.show();
         return dialog;
     }

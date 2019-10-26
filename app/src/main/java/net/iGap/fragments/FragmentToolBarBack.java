@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.MyAppBarLayout;
@@ -54,9 +53,6 @@ public abstract class FragmentToolBarBack extends BaseFragment {
         titleTextView = view.findViewById(R.id.title);
         titleTextView.setTypeface(ResourcesCompat.getFont(titleTextView.getContext() , R.font.main_font));
         appBarLayout = view.findViewById(R.id.ac_appBarLayout);
-        if (G.isDarkTheme) {
-            appBarLayout.setBackground(G.context.getResources().getDrawable(R.drawable.shape_toolbar_background_dark));
-        }
         menu_item1 = view.findViewById(R.id.menu_item1);
         menu_item1.setVisibility(View.GONE);
 

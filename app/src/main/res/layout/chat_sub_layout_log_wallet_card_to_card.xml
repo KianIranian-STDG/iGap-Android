@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/dp52"
-    android:layout_marginRight="@dimen/dp52"
     android:layout_marginTop="@dimen/dp4"
+    android:layout_marginRight="@dimen/dp52"
     android:layout_marginBottom="@dimen/dp4"
     android:orientation="vertical"
     android:paddingBottom="@dimen/dp4"
@@ -18,19 +18,19 @@
         android:id="@+id/chatSubLayoutLogWalletCardToCard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        style="?backgroundColorSettingTheme">
+        android:background="?rootBackgroundColor"
+        android:orientation="vertical">
 
         <net.iGap.module.CustomTextViewMedium
             android:id="@+id/titleTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="#E642D4F4"
             android:gravity="center"
             android:paddingTop="@dimen/dp6"
             android:paddingBottom="@dimen/dp6"
             android:text="انتقال وجه"
-            android:background="#E642D4F4"
             android:textColor="@color/white"
             android:textSize="@dimen/dp15" />
 
@@ -44,23 +44,22 @@
 
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/wallet_from"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/fromUserId"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="hasan"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -79,26 +78,25 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                style="?lineColorSettingTheme" />
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/wallet_amount"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/amount"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="1000 Rial"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -116,26 +114,25 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                style="?lineColorSettingTheme" />
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/card_number_source"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/cardNumber"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="6037691596470623"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -152,26 +149,25 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                style="?lineColorSettingTheme" />
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/source_bank"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/SourceBank"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="صادرات"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -188,26 +184,24 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                style="?lineColorSettingTheme" />
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/card_number_dest"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
-
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/cardNumberDest"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="602666656565"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -224,26 +218,25 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                style="?lineColorSettingTheme" />
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/destination_bank"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/DestBank"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="پارسیان"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -261,26 +254,25 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                style="?lineColorSettingTheme" />
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/crad_to_card_dest_name"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/toUserId"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="ali"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -298,26 +290,25 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                style="?lineColorSettingTheme" />
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/cardToCardTrace"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/traceNumber"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="121214212"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -335,26 +326,25 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                style="?lineColorSettingTheme" />
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/WalletRrnNumber"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/rrn"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="515155"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
@@ -363,10 +353,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="#E642D4F4"
             android:gravity="center"
             android:paddingTop="@dimen/dp6"
             android:paddingBottom="@dimen/dp6"
-            android:background="#E642D4F4"
             android:text="انتقال وجه"
             android:textColor="@color/white"
             android:textSize="@dimen/dp15" />

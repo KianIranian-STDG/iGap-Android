@@ -2,7 +2,6 @@ package net.iGap.adapter.items.poll;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -100,7 +99,7 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        LayoutInflater layoutInflater = LayoutInflater.from(context.getApplicationContext());
+        LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
         switch (i) {
             case -1:
                 return new TypeChartViewHolder(this, layoutInflater.inflate(R.layout.item_poll_chart, viewGroup, false));

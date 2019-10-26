@@ -23,7 +23,6 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.view.adapter.WalletHistoryRAdapter;
 import net.iGap.kuknos.viewmodel.KuknosWHistoryVM;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 
 import org.stellar.sdk.responses.Page;
 import org.stellar.sdk.responses.operations.OperationResponse;
@@ -75,7 +74,6 @@ public class KuknosWHistoryFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosWHToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         binding.kuknosWHistoryRecycler.setHasFixedSize(true);

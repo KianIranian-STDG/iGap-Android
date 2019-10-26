@@ -20,7 +20,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            style="?textTitleColorSettingTheme"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/smallTextSize"
             app:layout_constraintEnd_toStartOf="@+id/imageView2"
             app:layout_constraintStart_toStartOf="parent"
