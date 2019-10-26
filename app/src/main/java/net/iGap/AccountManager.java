@@ -77,6 +77,10 @@ public class AccountManager {
         return userAccountList.get(currentUser);
     }
 
+    public AccountUser getUser(long userId){
+        return userAccountList.get(userAccountList.indexOf(new AccountUser(userId)));
+    }
+
     private void setCurrentUserInSharedPreferences() {
         sharedPreferences.edit().putInt("currentUser", this.currentUser).apply();
     }

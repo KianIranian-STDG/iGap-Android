@@ -66,6 +66,12 @@ public class DbManager {
         }
     }
 
+    public void doRealmTask(RealmTask realmTask, long userId) {
+        try (Realm realm = Realm.getInstance(AccountManager.getInstance().getUser(userId).getRealmConfiguration())) {
+            realmTask.doTask(realm);
+        }
+    }
+
     @FunctionalInterface
     public interface RealmTaskWithReturn<T> {
         T doTask(Realm realm);

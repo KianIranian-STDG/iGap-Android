@@ -69,9 +69,10 @@ public final class HelperLogout {
 
     private boolean logoutUser(AccountUser accountUser) {
         Log.wtf(this.getClass().getName(), "logoutUser");
+        Log.wtf(this.getClass().getName(), "user: "+accountUser.getName());
         if (accountUser.isAssigned()) {
-            boolean tmp = AccountManager.getInstance().removeUser(accountUser);
             logout();
+            boolean tmp = AccountManager.getInstance().removeUser(accountUser);
             if (!tmp) {
                 clearPreferences();
                 resetStaticField();
