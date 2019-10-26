@@ -1,9 +1,6 @@
 package net.iGap.electricity_bill.view;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +10,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.Config;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBillListBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
-import net.iGap.electricity_bill.repository.model.Bill;
 import net.iGap.electricity_bill.repository.model.BillData;
 import net.iGap.electricity_bill.repository.model.BranchDebit;
 import net.iGap.electricity_bill.view.adapter.ElectricityBillListAdapter;
@@ -36,8 +30,6 @@ import net.iGap.interfaces.ToolbarListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class ElectricityBillListFrag extends BaseAPIViewFrag {
 

@@ -6,38 +6,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.api.apiService.BaseAPIViewFrag;
-import net.iGap.databinding.FragmentElecBillListBinding;
 import net.iGap.databinding.FragmentElecSearchListBinding;
-import net.iGap.dialog.topsheet.TopSheetDialog;
-import net.iGap.electricity_bill.repository.model.BillData;
 import net.iGap.electricity_bill.repository.model.BranchData;
-import net.iGap.electricity_bill.repository.model.BranchDebit;
 import net.iGap.electricity_bill.repository.model.CompanyList;
-import net.iGap.electricity_bill.view.adapter.ElectricityBillListAdapter;
 import net.iGap.electricity_bill.view.adapter.ElectricityBillSearchCompanySpinnerAdapter;
 import net.iGap.electricity_bill.view.adapter.ElectricityBillSearchListAdapter;
-import net.iGap.electricity_bill.viewmodel.ElectricityBillListVM;
 import net.iGap.electricity_bill.viewmodel.ElectricityBillSearchListVM;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ElectricityBillSearchListFrag extends BaseAPIViewFrag {
 

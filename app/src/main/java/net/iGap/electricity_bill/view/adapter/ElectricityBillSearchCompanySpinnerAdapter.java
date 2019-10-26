@@ -1,23 +1,14 @@
 package net.iGap.electricity_bill.view.adapter;
 
 import android.content.Context;
-import android.graphics.Typeface;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import com.squareup.picasso.Picasso;
 
 import net.iGap.R;
 import net.iGap.electricity_bill.repository.model.CompanyList;
-
-import org.stellar.sdk.responses.AccountResponse;
 
 import java.util.ArrayList;
 import java.util.List;

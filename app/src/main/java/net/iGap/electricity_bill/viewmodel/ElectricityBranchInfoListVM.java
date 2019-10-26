@@ -5,21 +5,12 @@ import android.view.View;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.G;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.electricity_bill.repository.api.ElectricityBillAPIRepository;
-import net.iGap.electricity_bill.repository.model.BillData;
-import net.iGap.electricity_bill.repository.model.BillRegister;
 import net.iGap.electricity_bill.repository.model.BranchData;
-import net.iGap.electricity_bill.repository.model.BranchDebit;
 import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
-import net.iGap.request.RequestMplGetBillToken;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ElectricityBranchInfoListVM extends BaseAPIViewModel {
 

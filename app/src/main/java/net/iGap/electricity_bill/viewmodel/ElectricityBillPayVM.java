@@ -1,17 +1,12 @@
 package net.iGap.electricity_bill.viewmodel;
 
-import android.os.Environment;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
-import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
@@ -20,12 +15,6 @@ import net.iGap.electricity_bill.repository.model.BranchDebit;
 import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
 import net.iGap.electricity_bill.repository.model.LastBillData;
 import net.iGap.request.RequestMplGetBillToken;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import shadow.com.google.common.io.Files;
 
 public class ElectricityBillPayVM extends BaseAPIViewModel {
 

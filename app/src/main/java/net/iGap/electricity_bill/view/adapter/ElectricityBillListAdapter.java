@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.electricity_bill.repository.model.Bill;
 import net.iGap.electricity_bill.repository.model.BillData;
 import net.iGap.electricity_bill.repository.model.BranchDebit;
 

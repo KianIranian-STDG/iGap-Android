@@ -6,22 +6,18 @@ import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
-import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.electricity_bill.repository.api.ElectricityBillAPIRepository;
-import net.iGap.electricity_bill.repository.model.Bill;
 import net.iGap.electricity_bill.repository.model.BillData;
 import net.iGap.electricity_bill.repository.model.BillRegister;
 import net.iGap.electricity_bill.repository.model.BranchDebit;
 import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
-import net.iGap.helper.HelperNumerical;
 import net.iGap.request.RequestMplGetBillToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ElectricityBillListVM extends BaseAPIViewModel {
