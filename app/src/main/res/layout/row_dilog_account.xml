@@ -12,20 +12,18 @@
         android:layout_width="@dimen/dp60"
         android:layout_height="@dimen/dp60"
         android:layout_margin="@dimen/dp10"
-        app:srcCompat="@drawable/add_chat_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/add_chat_background" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/name"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp10"
-        android:fontFamily="@font/main_font"
         android:singleLine="true"
-        android:text="@{account.name}"
+        android:textColor="?attr/iGapTitleTextColor"
         android:textSize="@dimen/largeTextSize"
         app:layout_constraintBottom_toBottomOf="@id/avatar"
         app:layout_constraintEnd_toStartOf="@id/unreadMessageCount"
@@ -34,7 +32,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/checked"
-        style="@style/greenIconTextViewStyle"
+        style="@style/primaryIconTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp12"

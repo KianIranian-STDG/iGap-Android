@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetAction;
+import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
@@ -117,7 +119,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private ConstraintSet constraintSet;
     private TextView selectedItemCountTv;
     private RecyclerView multiSelectRv;
-    private SelectedItemAdapter selectedItemAdapter;
+    /*private SelectedItemAdapter selectedItemAdapter;*/
     private View selectedItemView;
 
     public static FragmentMain newInstance(MainType mainType) {
@@ -163,18 +165,12 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         multiSelectRv = view.findViewById(R.id.rv_main_selectedItem);
         selectedItemView = view.findViewById(R.id.amr_layout_selected_root);
 
-        /*if (G.twoPaneMode && G.isLandscape) {
-            mHelperToolbar = HelperToolbar.create()
-                    .setContext(getContext())
-                    .setTabletIcons(R.string.add_icon, R.string.edit_icon, R.string.search_icon)
-                    .setTabletMode(true)
-                    .setListener(this);
-            layoutToolbar.addView(mHelperToolbar.getView());
-            RealmUserInfo userInfo = getRealmFragmentMain().where(RealmUserInfo.class).findFirst();
-            mHelperToolbar.getTabletUserName().setText(userInfo.getUserInfo().getDisplayName());
-            mHelperToolbar.getTabletUserPhone().setText(userInfo.getUserInfo().getPhoneNumber());
-            avatarHandler.getAvatar(new ParamWithAvatarType(mHelperToolbar.getTabletUserAvatar(), userInfo.getUserId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
-        } else {*/
+        multiSelectRv.setLayoutManager(new LinearLayoutManager(multiSelectRv.getContext(), RecyclerView.HORIZONTAL, false));
+        /*if (selectedItemAdapter == null) {
+            selectedItemAdapter = new SelectedItemAdapter();
+        }*/
+        multiSelectRv.setAdapter(new SelectedItemAdapter()/*selectedItemAdapter*/);
+
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.edit_icon)
@@ -189,7 +185,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         layoutToolbar.addView(mHelperToolbar.getView());
         mHelperToolbar.registerTimerBroadcast();
         mHelperToolbar.getLeftButton().setVisibility(View.GONE);
-        /*}*/
 
 
         onChatCellClickedInEditMode = (item, position, status) -> {
@@ -205,20 +200,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 return;
             }
 
-            if (selectedItemAdapter == null) {
-                multiSelectRv.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-                selectedItemAdapter = new SelectedItemAdapter();
-                multiSelectRv.setAdapter(selectedItemAdapter);
+            ((SelectedItemAdapter) multiSelectRv.getAdapter()).setItemsList(setMultiSelectAdapterItem(item, mSelectedRoomList.size() == 1));
 
-            }
-
-            if (mSelectedRoomList.size() == 1) {
-                selectedItemAdapter.setItemsList(setMultiSelectAdapterItem(item, true));
-            } else {
-                selectedItemAdapter.setItemsList(setMultiSelectAdapterItem(item, false));
-            }
-
-            selectedItemAdapter.setCallBack(action -> {
+            ((SelectedItemAdapter) multiSelectRv.getAdapter()).setCallBack(action -> {
                 switch (action) {
                     case 0:
                         pinToTop(item.getId(), item.isPinned());
@@ -254,6 +238,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             });
 
             refreshChatList(position, false);
+            Log.wtf(this.getClass().getName(), "count item: " + multiSelectRv.getAdapter().getItemCount());
         };
 
         if (MusicPlayer.playerStateChangeListener != null) {
@@ -271,11 +256,12 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         mRecyclerView = view.findViewById(R.id.cl_recycler_view_contact);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setItemViewCacheSize(0);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
         initRecycleView();
 
-        //check is available forward message
+        //check is available forward,shared message
         setForwardMessage(true);
+        checkHasSharedData();
 
         //just check at first time page loaded
         notifyChatRoomsList();
@@ -493,7 +479,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             @Override
             public boolean onLongClick(RoomListCell roomListCell, RealmRoom realmRoom, int position) {
 
-                if (!isChatMultiSelectEnable && FragmentChat.mForwardMessages == null) {
+                if (!isChatMultiSelectEnable && FragmentChat.mForwardMessages == null && !HelperGetDataFromOtherApp.hasSharedData) {
                     enableMultiSelect();
                     selectedItemCountTv.setVisibility(View.VISIBLE);
                     multiSelectRv.setVisibility(View.VISIBLE);
@@ -899,8 +885,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     @Override
     public void onLeftIconClickListener(View view) {
-        if (!(G.isLandscape && G.twoPaneMode) && FragmentChat.mForwardMessages != null) {
-            revertToolbarFromForwardMode();
+        if (!(G.isLandscape && G.twoPaneMode)) {
+            if (FragmentChat.mForwardMessages != null || HelperGetDataFromOtherApp.hasSharedData)
+                revertToolbarFromForwardMode();
         }
 
         if (isChatMultiSelectEnable) {
@@ -1003,6 +990,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     public void revertToolbarFromForwardMode() {
         FragmentChat.mForwardMessages = null;
+        HelperGetDataFromOtherApp.hasSharedData = false;
+        HelperGetDataFromOtherApp.sharedList.clear();
         mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
         mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
         mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
@@ -1036,8 +1025,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
         try {
             if (getActivity() != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment)
-                        .setReplace(false).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         } catch (Exception e) {
             e.getStackTrace();
@@ -1138,7 +1126,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         if (isChatMultiSelectEnable) {
             onLeftIconClickListener(null);
             return false;
-        } else if (FragmentChat.mForwardMessages != null) {
+        } else if (FragmentChat.mForwardMessages != null || HelperGetDataFromOtherApp.hasSharedData) {
             revertToolbarFromForwardMode();
             return false;
         } else {
@@ -1197,5 +1185,21 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             }
         }
 
+    }
+
+    public void checkHasSharedData() {
+
+        if (!(G.isLandscape && G.twoPaneMode)) {
+            if (HelperGetDataFromOtherApp.hasSharedData) {
+                mHelperToolbar.setDefaultTitle(getString(R.string.send_message_to) + "...");
+                mHelperToolbar.getRightButton().setVisibility(View.GONE);
+                mHelperToolbar.getScannerButton().setVisibility(View.GONE);
+                if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+                mHelperToolbar.getLeftButton().setVisibility(View.VISIBLE);
+                mHelperToolbar.setLeftIcon(R.string.back_icon);
+            } else {
+                revertToolbarFromForwardMode();
+            }
+        }
     }
 }

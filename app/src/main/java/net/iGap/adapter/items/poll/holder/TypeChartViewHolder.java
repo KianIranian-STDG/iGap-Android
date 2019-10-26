@@ -1,14 +1,12 @@
 package net.iGap.adapter.items.poll.holder;
 
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -18,8 +16,8 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
-import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.poll.PollAdapter;
 import net.iGap.helper.HelperCalander;
@@ -56,8 +54,8 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
         chart.setDoubleTapToZoomEnabled(false);
 
         XAxis xAxis = chart.getXAxis();
-        xAxis.setTextColor(Color.parseColor(G.textTitleTheme));
-        xAxis.setTypeface(ResourcesCompat.getFont(chart.getContext() , R.font.main_font));
+        xAxis.setTextColor(new Theme().getTitleTextColor(chart.getContext()));
+        xAxis.setTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.main_font));
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextSize(ViewMaker.dpToPixel(4));
         xAxis.setDrawGridLines(false);
@@ -93,13 +91,11 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
 
         set1 = new BarDataSet(barEntries, "Data Set");
         ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(Color.parseColor(G.appBarColor));
-        int[] a = new int[1];
-        a[0] = Color.parseColor(G.appBarColor);
+        colors.add(new Theme().getAccentColor(chart.getContext()));
         set1.setColors(colors);
         set1.setDrawValues(true);
-        set1.setValueTypeface(ResourcesCompat.getFont(chart.getContext() , R.font.main_font));
-        set1.setValueTextColor(Color.parseColor(G.textTitleTheme));
+        set1.setValueTypeface(ResourcesCompat.getFont(chart.getContext(), R.font.main_font));
+        set1.setValueTextColor(new Theme().getTitleTextColor(chart.getContext()));
         set1.setValueTextSize(ViewMaker.dpToPixel(4));
         set1.setValueFormatter(new ValueFormatter() {
             @Override
@@ -112,7 +108,7 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
                     DecimalFormat df = new DecimalFormat();
                     df.setMaximumFractionDigits(2);
                     myValue = df.format(value);
-                }catch (Exception e){
+                } catch (Exception e) {
                     myValue = String.valueOf((long) Math.floor(value));
 
                 }

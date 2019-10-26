@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 
@@ -19,7 +18,6 @@ public class TypeUnknownViewHolder extends BaseViewHolder {
         super(itemView, activity);
         txt0 = itemView.findViewById(R.id.unknown_text);
         card0 = itemView.findViewById(R.id.unknown_card);
-        card0.setCardBackgroundColor(G.getThemeBackgroundColor());
     }
 
     @Override

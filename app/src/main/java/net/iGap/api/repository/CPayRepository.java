@@ -3,9 +3,10 @@ package net.iGap.api.repository;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.CPayApi;
+import net.iGap.api.apiService.ApiInitializer;
+import net.iGap.api.apiService.HandShakeCallback;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.api.errorhandler.ErrorHandler;
-import net.iGap.api.errorhandler.ResponseCallback;
 import net.iGap.model.cPay.CPayWalletAmountModel;
 import net.iGap.model.cPay.ChargeWalletBodyModel;
 import net.iGap.model.cPay.ChargeWalletModel;
@@ -14,14 +15,6 @@ import net.iGap.model.cPay.PlaqueInfoModel;
 import net.iGap.model.cPay.RegisterPlaqueBodyModel;
 import net.iGap.model.cPay.RegisterPlaqueModel;
 import net.iGap.model.cPay.UserPlaquesModel;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CPayRepository {
 
@@ -40,123 +33,34 @@ public class CPayRepository {
         return instance;
     }
 
-    public void getPlaqueInfo(PlaqueBodyModel body, ResponseCallback<PlaqueInfoModel> callback) {
+    public void getPlaqueInfo(PlaqueBodyModel body, HandShakeCallback handShakeCallback, ResponseCallback<PlaqueInfoModel> callback) {
 
-        api.getPlaqueInfo(body).enqueue(new Callback<PlaqueInfoModel>() {
-            @Override
-            public void onResponse(Call<PlaqueInfoModel> call, Response<PlaqueInfoModel> response) {
-                if (response.isSuccessful()) {
-                    callback.onSuccess(response.body());
-                } else {
-                    try {
-                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PlaqueInfoModel> call, Throwable t) {
-                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
-            }
-        });
+        new ApiInitializer<PlaqueInfoModel>().initAPI(api.getPlaqueInfo(body), handShakeCallback, callback);
 
     }
 
-    public void getAllUserPlaques(ResponseCallback<UserPlaquesModel> callback) {
+    public void getAllUserPlaques(HandShakeCallback handShakeCallback, ResponseCallback<UserPlaquesModel> callback) {
 
-        api.getUserPlaques().enqueue(new Callback<UserPlaquesModel>() {
-            @Override
-            public void onResponse(Call<UserPlaquesModel> call, Response<UserPlaquesModel> response) {
-                if (response.isSuccessful()) {
-                    callback.onSuccess(response.body());
-                } else {
-                    try {
-                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserPlaquesModel> call, Throwable t) {
-                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
-            }
-        });
+        new ApiInitializer<UserPlaquesModel>().initAPI(api.getUserPlaques(), handShakeCallback, callback);
 
     }
 
-    public void registerNewPlaque(RegisterPlaqueBodyModel body, ResponseCallback<RegisterPlaqueModel> callback) {
+    public void registerNewPlaque(RegisterPlaqueBodyModel body, HandShakeCallback handShakeCallback, ResponseCallback<RegisterPlaqueModel> callback) {
 
-        api.getRegisterNewPlaque(body).enqueue(new Callback<RegisterPlaqueModel>() {
-            @Override
-            public void onResponse(@NotNull Call<RegisterPlaqueModel> call, @NotNull Response<RegisterPlaqueModel> response) {
-                if (response.isSuccessful()) {
-                    callback.onSuccess(response.body());
-                } else {
-                    try {
-                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RegisterPlaqueModel> call, Throwable t) {
-                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
-
-            }
-        });
+        new ApiInitializer<RegisterPlaqueModel>().initAPI(api.getRegisterNewPlaque(body), handShakeCallback, callback);
 
     }
 
-    public void getWalletAmount(PlaqueBodyModel body, ResponseCallback<CPayWalletAmountModel> callback) {
+    public void getWalletAmount(PlaqueBodyModel body, HandShakeCallback handShakeCallback, ResponseCallback<CPayWalletAmountModel> callback) {
 
-        api.getCPayWalletAmount(body).enqueue(new Callback<CPayWalletAmountModel>() {
-            @Override
-            public void onResponse(Call<CPayWalletAmountModel> call, Response<CPayWalletAmountModel> response) {
-                if (response.isSuccessful()) {
-                    callback.onSuccess(response.body());
-                } else {
-                    try {
-                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+        new ApiInitializer<CPayWalletAmountModel>().initAPI(api.getCPayWalletAmount(body), handShakeCallback, callback);
 
-            @Override
-            public void onFailure(Call<CPayWalletAmountModel> call, Throwable t) {
-                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
-            }
-        });
     }
 
-    public void getChargeWallet(ChargeWalletBodyModel body, ResponseCallback<ChargeWalletModel> callback) {
+    public void getChargeWallet(ChargeWalletBodyModel body, HandShakeCallback handShakeCallback, ResponseCallback<ChargeWalletModel> callback) {
 
-        api.getChargeWallet(body).enqueue(new Callback<ChargeWalletModel>() {
-            @Override
-            public void onResponse(Call<ChargeWalletModel> call, Response<ChargeWalletModel> response) {
-                if (response.isSuccessful()) {
-                    callback.onSuccess(response.body());
-                } else {
-                    try {
-                        callback.onError(new ErrorHandler().getError(response.code(), response.errorBody().string()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+        new ApiInitializer<ChargeWalletModel>().initAPI(api.getChargeWallet(body), handShakeCallback, callback);
 
-            @Override
-            public void onFailure(Call<ChargeWalletModel> call, Throwable t) {
-                callback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
-            }
-        });
     }
 
     public MutableLiveData<Boolean> getPlaquesChangeListener() {

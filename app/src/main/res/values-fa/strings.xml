@@ -167,6 +167,7 @@
 
     <string name="just_wait_en">"لطفاً منتظر باشید."</string>
     <string name="device_dosenot_camera_en">"این دستگاه دوربین ندارد."</string>
+    <string name="device_dosenot_support">"دستگاه شما برنامه ای برای انجام این کار ندارد."</string>
     <string name="do_you_want_to_turn_on_gps">"سیستم مکان‌یاب جهانی (GPS) شما خاموش است، آیا مایلید آن را روشن کنید؟"</string>
     <string name="picture_is_saved_en">"تصویر ذخیره شده است."</string>
     <string name="select_picture_en">"انتخاب تصویر"</string>
@@ -2209,7 +2210,16 @@
     <string name="prayerRoom_textView">نمازخانه</string>
     <string name="user_edited">کاربر ویرایش شد.</string>
     <string name="edit_contact">ویرایش مخاطب</string>
-
+    <string name="default_theme_title">پیش فرض</string>
+    <string name="dark_theme_title">تاریک</string>
+    <string name="red_theme_title">قرمز</string>
+    <string name="pink_theme_title">صورتی</string>
+    <string name="purple_theme_title">بنفش</string>
+    <string name="blue_theme_title">آبی</string>
+    <string name="green_theme_title">سبز</string>
+    <string name="amber_theme_title">زرد</string>
+    <string name="orange_theme_title">نارنجی</string>
+    <string name="gray_theme_title">طوسی تیره</string>
 
     <array name="onboard_titles">
         <item>کیف پول موبایلی</item>
@@ -2226,8 +2236,9 @@
     <string name="iland">آیلند</string>
     <string name="all_calls">تماس ها</string>
     <string name="open_url">باز کردن لینک</string>
-    <string name="url_copied">لینک کپی شد.</string>
+    <string name="copied">کپی شد.</string>
     <string name="message_is_long">پیام شما طولانی است.\nپیام تبدیل خواهد شد به</string>
     <string name="add_new_account">افزودن حساب جدید</string>
+    <string name="profile">نمایه</string>
 
 </resources>

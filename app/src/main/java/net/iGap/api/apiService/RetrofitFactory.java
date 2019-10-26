@@ -4,18 +4,17 @@ import android.os.Build;
 import android.util.Log;
 
 import net.iGap.BuildConfig;
-import net.iGap.G;
 import net.iGap.api.CPayApi;
 import net.iGap.api.CharityApi;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.net.ssl.SSLContext;
 
 import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.TlsVersion;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -32,7 +31,8 @@ public class RetrofitFactory {
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(httpLoggingInterceptor);
         }
-        builder.addInterceptor(chain -> {
+        builder.addInterceptor(new IgapRetrofitInterceptor());
+        /*builder.addInterceptor(chain -> {
             Request original = chain.request();
             Request request = original.newBuilder()
                     .header("Authorization", G.getApiToken())
@@ -40,9 +40,12 @@ public class RetrofitFactory {
                     .method(original.method(), original.body())
                     .build();
             return chain.proceed(request);
-        });
-
-        httpClient = enableTls12OnPreLollipop(builder).build();
+        });*/
+        ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                .tlsVersions(TlsVersion.TLS_1_2)
+                .build();
+        httpClient = builder.connectionSpecs(Collections.singletonList(spec)).build();
+//        httpClient = enableTls12OnPreLollipop(builder).build();
     }
 
     Retrofit getBeepTunesRetrofit() {

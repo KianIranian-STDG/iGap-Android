@@ -25,8 +25,10 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
+import net.iGap.api.apiService.ApiInitializer;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.api.errorhandler.ErrorHandler;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
@@ -51,6 +53,7 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.HelperWallet;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.internetpackage.BuyInternetPackageFragment;
@@ -62,19 +65,11 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
 import net.iGap.request.RequestGeoGetConfiguration;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.paygear.WalletActivity;
 
 import java.io.IOException;
 
-import io.realm.Realm;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 import static net.iGap.viewmodel.FragmentIVandProfileViewModel.scanBarCode;
@@ -179,33 +174,12 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                         String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
                         if (!G.isWalletRegister) {
-                            if (discoveryField.value.equals("QR_USER_WALLET")) {
-                                new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), true)).load();
-                            } else {
-                                new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), false)).load();
-                            }
-                        } else {
 
-                            Intent intent = new Intent(activity, WalletActivity.class);
-                            intent.putExtra("Language", "fa");
-                            intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
-                            intent.putExtra("PrimaryColor", G.appBarColor);
-                            intent.putExtra("DarkPrimaryColor", G.appBarColor);
-                            intent.putExtra("AccentColor", G.appBarColor);
-                            intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
-                            intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-                            intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-                            intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                            intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-                            intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
-                            intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-                            intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
-                            if (discoveryField.value.equals("QR_USER_WALLET")) {
-                                intent.putExtra("isScan", true);
-                            } else {
-                                intent.putExtra("isScan", true);
-                            }
-                            G.currentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
+                            new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), discoveryField.value.equals("QR_USER_WALLET"))).load();
+                        } else {
+                            boolean goToScanner = true;/*discoveryField.value.equals("QR_USER_WALLET")*/
+                            new HelperWallet().goToWallet(
+                                    G.currentActivity, "0" + phoneNumber.substring(2), goToScanner);
                         }
                     });
                 break;
@@ -377,31 +351,22 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     private static void sendRequestGetCharityPaymentToken(FragmentActivity activity, String charityId, int charityAmount) {
-        new RetrofitFactory().getCharityRetrofit().sendRequestGetCharity(charityId, charityAmount).enqueue(new Callback<MciPurchaseResponse>() {
+        new ApiInitializer<MciPurchaseResponse>().initAPI(new RetrofitFactory().getCharityRetrofit().sendRequestGetCharity(charityId, charityAmount), null, new ResponseCallback<MciPurchaseResponse>() {
             @Override
-            public void onResponse(@NotNull Call<MciPurchaseResponse> call, @NotNull Response<MciPurchaseResponse> response) {
+            public void onSuccess(MciPurchaseResponse data) {
                 HelperUrl.closeDialogWaiting();
-                if (response.isSuccessful()) {
-                    new HelperFragment(activity.getSupportFragmentManager()).loadPayment(activity.getString(R.string.charity_title), response.body().getToken(), new PaymentCallBack() {
-                        @Override
-                        public void onPaymentFinished(PaymentResult result) {
+                new HelperFragment(activity.getSupportFragmentManager()).loadPayment(activity.getString(R.string.charity_title), data.getToken(), new PaymentCallBack() {
+                    @Override
+                    public void onPaymentFinished(PaymentResult result) {
 
-                        }
-                    });
-                } else {
-                    try {
-                        HelperError.showSnackMessage(new ErrorHandler().getError(response.code(), response.errorBody().string()).getMessage(), false);
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
-                }
+                });
             }
 
             @Override
-            public void onFailure(@NotNull Call<MciPurchaseResponse> call, @NotNull Throwable t) {
+            public void onError(ErrorModel error) {
                 HelperUrl.closeDialogWaiting();
-                t.printStackTrace();
-                HelperError.showSnackMessage(activity.getString(R.string.connection_error), false);
+                HelperError.showSnackMessage(error.getMessage(), false);
             }
         });
     }

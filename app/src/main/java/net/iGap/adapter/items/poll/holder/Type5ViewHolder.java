@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.poll.PollAdapter;
 import net.iGap.adapter.items.poll.PollItem;
@@ -24,10 +23,6 @@ public class Type5ViewHolder extends BaseViewHolder {
         card0 = itemView.findViewById(R.id.type5_card0);
         card1 = itemView.findViewById(R.id.type5_card1);
         card2 = itemView.findViewById(R.id.type5_card2);
-        card0.setCardBackgroundColor(G.getThemeBackgroundColor());
-        card1.setCardBackgroundColor(G.getThemeBackgroundColor());
-        card2.setCardBackgroundColor(G.getThemeBackgroundColor());
-
 
         tick0 = itemView.findViewById(R.id.type5_tick0);
         tick1 = itemView.findViewById(R.id.type5_tick1);

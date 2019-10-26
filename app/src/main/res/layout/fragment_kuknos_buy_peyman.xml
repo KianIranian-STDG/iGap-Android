@@ -10,9 +10,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme">
+        android:layout_height="match_parent">
 
         <!-- TODO clean min height-->
 
@@ -20,9 +20,9 @@
             android:id="@+id/fragKuknosBuyPToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:minHeight="48dp"
             android:background="@color/sky_blue"
+            android:minHeight="48dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -34,9 +34,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPToolbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,35 +46,34 @@
                 android:paddingBottom="@dimen/dp20">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosBuyPTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="50dp"
                     android:text="@string/kuknos_buyP_title"
-                    android:textStyle="bold"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp18"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.7" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosBuyPMessage"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="@string/kuknos_buyP_message"
-                    android:textSize="@dimen/dp16"
                     android:justificationMode="inter_word"
+                    android:text="@string/kuknos_buyP_message"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPTitle"
                     app:layout_constraintWidth_percent="0.7" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosBuyPAmountHolder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -86,41 +85,40 @@
                     app:layout_constraintWidth_percent="0.7">
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        style="?textTitleColorSettingTheme"
                         android:id="@+id/fragKuknosBuyPAmount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:afterTextChanged="@{()->viewmodel.updateSum()}"
+                        android:digits="0123456789"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="@string/kuknos_buyP_amount"
+                        android:imeOptions="actionDone"
+                        android:inputType="numberDecimal"
                         android:lines="1"
                         android:maxLines="1"
                         android:minHeight="48dp"
-                        android:ems="10"
-                        android:afterTextChanged="@{()->viewmodel.updateSum()}"
-                        android:hint="@string/kuknos_buyP_amount"
                         android:text="@={viewmodel.amount}"
-                        android:textSize="@dimen/dp18"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-                        android:imeOptions="actionDone"
-                        android:digits="0123456789" />
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/dp18" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosBuyPSumTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/kuknos_buyP_sumTitle"
-                    android:textSize="@dimen/dp18"
                     android:layout_marginEnd="@dimen/dp10"
                     android:layout_marginRight="@dimen/dp10"
-                    app:layout_constraintEnd_toStartOf="@+id/fragKuknosBuyPSum"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/fragKuknosBuyPSum"
+                    android:text="@string/kuknos_buyP_sumTitle"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp18"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosBuyPSum"
-                    app:layout_constraintHorizontal_chainStyle="packed" />
+                    app:layout_constraintEnd_toStartOf="@+id/fragKuknosBuyPSum"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosBuyPSum" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosBuyPSum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -128,6 +126,7 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:text="@={viewmodel.sum}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp18"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosBuyPSumCurrency"
@@ -135,35 +134,35 @@
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPAmountHolder" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosBuyPSumCurrency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/kuknos_buyP_sumCurrency"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp18"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosBuyPSum"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/fragKuknosBuyPSum"
-                    app:layout_constraintTop_toTopOf="@+id/fragKuknosBuyPSum"
-                    app:layout_constraintBottom_toBottomOf="@+id/fragKuknosBuyPSum" />
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosBuyPSum" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/fragKuknosBuyPSumGroup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:constraint_referenced_ids="fragKuknosBuyPSum,fragKuknosBuyPSumTitle,fragKuknosBuyPSumCurrency"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    app:constraint_referenced_ids="fragKuknosBuyPSum,fragKuknosBuyPSumTitle,fragKuknosBuyPSumCurrency" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="?iGapButton"
                     android:id="@+id/fragKuknosBuyPSubmit"
+                    style="@style/iGapButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:minHeight="58dp"
+                    android:onClick="@{()->viewmodel.onSubmitBtn()}"
                     android:text="@string/kuknos_buyP_btn"
                     android:textSize="@dimen/dp16"
-                    android:onClick="@{()->viewmodel.onSubmitBtn()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPSum"
@@ -175,22 +174,22 @@
                     android:layout_height="0dp"
                     android:elevation="2dp"
                     android:visibility="visible"
-                    app:layout_constraintTop_toTopOf="@+id/fragKuknosBuyPSubmit"
-                    app:layout_constraintStart_toStartOf="@+id/fragKuknosBuyPSubmit"
-                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosBuyPSubmit"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosBuyPSubmit"
+                    app:layout_constraintEnd_toEndOf="@+id/fragKuknosBuyPSubmit"
+                    app:layout_constraintHeight_percent="0.06"
                     app:layout_constraintHorizontal_bias="0.05"
-                    app:layout_constraintHeight_percent="0.06" />
+                    app:layout_constraintStart_toStartOf="@+id/fragKuknosBuyPSubmit"
+                    app:layout_constraintTop_toTopOf="@+id/fragKuknosBuyPSubmit" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/fragKuknosBuyPPS"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
-                    android:text="@string/kuknos_buyP_desc"
-                    android:textSize="14dp"
                     android:justificationMode="inter_word"
+                    android:text="@string/kuknos_buyP_desc"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="14dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyPSubmit"

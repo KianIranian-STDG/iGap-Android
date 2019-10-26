@@ -11,7 +11,6 @@
 package net.iGap.fragments;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.Editable;
@@ -39,6 +38,7 @@ import com.mikepenz.fastadapter.listeners.OnClickListener;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.items.SearchItamIGap;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperUrl;
@@ -108,7 +108,7 @@ public class FragmentIgapSearch extends BaseFragment {
         }, 150);
 
         loadingProgressBar = view.findViewById(R.id.sfl_progress_loading);
-        loadingProgressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(G.progressColor), PorterDuff.Mode.SRC_IN);
+        loadingProgressBar.getIndeterminateDrawable().setColorFilter(new Theme().getAccentColor(getContext()), PorterDuff.Mode.SRC_IN);
 
         edtSearch = view.findViewById(R.id.sfl_edt_search);
 

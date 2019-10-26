@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,12 +20,12 @@ import androidx.fragment.app.FragmentTransaction;
 import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoWalletPaymentInit;
 import net.iGap.request.RequestWalletPaymentInit;
@@ -55,8 +54,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
 
     private final String[] mPrice = {""};
     private View rootView;
-    private EditText amountEt;
-    private EditText descriptionEt;
+    private EditText amountEt, descriptionEt;
     private Button confirmBtn;
     private Card selectedCard = null;
     private Long userId;
@@ -69,6 +67,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_send_money_detail, container, false);
+        rootView.setBackgroundColor(new Theme().getRootColor(getContext()));
         return rootView;
     }
 
@@ -76,14 +75,6 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         amountEt = rootView.findViewById(R.id.et_moneyAction_amount);
         descriptionEt = rootView.findViewById(R.id.et_moneyAction_description);
-        TextView amountTextTv = rootView.findViewById(R.id.tv_moneyAction_amountText);
-        TextView descriptionTv = rootView.findViewById(R.id.tv_moneyAction_description);
-        amountEt.setTextColor(Utils.darkModeHandler(getContext()));
-        descriptionEt.setTextColor(Utils.darkModeHandler(getContext()));
-        amountTextTv.setTextColor(Utils.darkModeHandler(getContext()));
-        descriptionTv.setTextColor(Utils.darkModeHandler(getContext()));
-
-        Utils.darkModeHandler(rootView);
 
         confirmBtn.setOnClickListener(v -> {
             if (mPrice[0] != null && !mPrice[0].isEmpty()) {
@@ -270,15 +261,15 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         intent.putExtra("Mobile", "0" + AccountManager.getInstance().getCurrentUser().getId());
         intent.putExtra("IsP2P", true);
         intent.putExtra("Payment", payment);
-        intent.putExtra("PrimaryColor", G.appBarColor);
-        intent.putExtra("DarkPrimaryColor", G.appBarColor);
-        intent.putExtra("AccentColor", G.appBarColor);
-        intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-        intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-        intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-        intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
-        intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-        intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+        intent.putExtra("PrimaryColor", new Theme().getPrimaryColor(getContext()));
+        intent.putExtra("DarkPrimaryColor", new Theme().getPrimaryColor(getContext()));
+        intent.putExtra("AccentColor", new Theme().getPrimaryColor(getContext()));
+        intent.putExtra(WalletActivity.PROGRESSBAR, new Theme().getAccentColor(getContext()));
+        intent.putExtra(WalletActivity.LINE_BORDER, new Theme().getDividerColor(getContext()));
+        intent.putExtra(WalletActivity.BACKGROUND, new Theme().getRootColor(getContext()));
+        intent.putExtra(WalletActivity.BACKGROUND_2, new Theme().getRootColor(getContext()));
+        intent.putExtra(WalletActivity.TEXT_TITLE, new Theme().getTitleTextColor(getContext()));
+        intent.putExtra(WalletActivity.TEXT_SUB_TITLE, new Theme().getSubTitleColor(getContext()));
         startActivityForResult(intent, 66);
         cancelBtn.performClick();
     }

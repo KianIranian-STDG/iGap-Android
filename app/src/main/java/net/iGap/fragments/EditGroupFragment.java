@@ -3,7 +3,6 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -71,6 +70,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isNeedResume = true;
         viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
@@ -145,6 +145,11 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
             }
         });
 
+        viewModel.closePageImediatly.observe(getViewLifecycleOwner(), isClose -> {
+            if (isClose == null || !isClose) return;
+            popBackStackFragment();
+        });
+
         viewModel.showDialogChatHistory.observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
                 showDialog();
@@ -179,6 +184,12 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
         setUpEmojiPopup();
         setAvatar();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.updateGroupRole();
     }
 
     @Override
@@ -336,21 +347,10 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     }
 
     private void setUpEmojiPopup() {
-        switch (G.themeColor) {
-            case Theme.BLUE_GREY_COMPLETE:
-            case Theme.INDIGO_COMPLETE:
-            case Theme.BROWN_COMPLETE:
-            case Theme.GREY_COMPLETE:
-            case Theme.TEAL_COMPLETE:
-            case Theme.DARK:
-                setEmojiColor(G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);
-                break;
-            default:
-                setEmojiColor(Color.parseColor("#eceff1"), "#61000000", "#61000000");
-        }
+        setEmojiColor(new Theme().getRootColor(getContext()), new Theme().getTitleTextColor(getContext()), new Theme().getTitleTextColor(getContext()));
     }
 
-    private void setEmojiColor(int BackgroundColor, String iconColor, String dividerColor) {
+    private void setEmojiColor(int BackgroundColor, int iconColor, int dividerColor) {
         emojiPopup = EmojiPopup.Builder.fromRootView(binding.root)
                 .setOnEmojiBackspaceClickListener(v -> {
 
@@ -359,8 +359,8 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                 }).setOnEmojiPopupDismissListener(() -> isEmojiShow = false)
                 .setOnSoftKeyboardCloseListener(() -> emojiPopup.dismiss())
                 .setBackgroundColor(BackgroundColor)
-                .setIconColor(Color.parseColor(iconColor))
-                .setDividerColor(Color.parseColor(dividerColor))
+                .setIconColor(iconColor)
+                .setDividerColor(dividerColor)
                 .build(binding.groupNameEditText);
 
     }

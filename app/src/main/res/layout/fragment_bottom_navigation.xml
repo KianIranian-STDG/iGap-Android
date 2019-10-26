@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="?backgroundColorSettingTheme"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layoutDirection="locale">
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:id="@+id/viewpager"
@@ -19,7 +18,8 @@
         android:id="@+id/bn_main_bottomNavigation"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        app:corner_radius="35"
+        app:background_color="?attr/iGapDividerLine"
+        app:corner_radius="15"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/viewpager"
         app:layout_constraintStart_toStartOf="@id/viewpager">
@@ -72,14 +72,32 @@
             app:selected_icon="@drawable/ic_bottomnavigation_discovery_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_discovery_off" />
 
-        <net.iGap.module.CircleImageView
-            android:id="@+id/ti_main_setting"
+        <FrameLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:padding="16dp"
-            app:civ_border_width="1dp"
-            app:civ_border_padding="2dp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <net.iGap.module.CircleImageView
+                android:id="@+id/ti_main_setting"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="4dp"
+                android:layout_marginTop="6dp"
+                app:civ_border_width="1dp"
+                android:layout_gravity="center_horizontal"
+                app:civ_border_padding="2dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:textSize="9dp"
+                android:gravity="center"
+                android:layout_gravity="bottom"
+                android:textColor="@color/bottom_navigation_text_color"
+                android:layout_marginBottom="4dp"
+                android:layout_height="wrap_content"
+                android:text="@string/profile" />
+        </FrameLayout>
 
     </net.iGap.libs.bottomNavigation.BottomNavigation>
 

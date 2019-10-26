@@ -21,24 +21,26 @@ import net.iGap.interfaces.ToolbarListener;
 public class FragmentIgashtBarcodeScan extends IGashtBaseView {
 
     private FragmentIgashtBarcodeScanerBinding binding;
+    private IGashtBarcodeScannerViewModel iGashtBarcodeScannerViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+        iGashtBarcodeScannerViewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                 return (T) new IGashtBarcodeScannerViewModel(getArguments() != null ? getArguments().getString("voucher_number") : "");
             }
         }).get(IGashtBarcodeScannerViewModel.class);
+        viewModel = iGashtBarcodeScannerViewModel;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_barcode_scaner, container, false);
-        binding.setViewModel((IGashtBarcodeScannerViewModel) viewModel);
+        binding.setViewModel(iGashtBarcodeScannerViewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
     }
@@ -60,7 +62,7 @@ public class FragmentIgashtBarcodeScan extends IGashtBaseView {
                     }
                 }).getView());
 
-        ((IGashtBarcodeScannerViewModel) viewModel).getShowQRCodeImage().observe(getViewLifecycleOwner(), imageBitmap -> {
+        iGashtBarcodeScannerViewModel.getShowQRCodeImage().observe(getViewLifecycleOwner(), imageBitmap -> {
             if (imageBitmap != null) {
                 binding.barCodeImage.setImageBitmap(imageBitmap);
             }

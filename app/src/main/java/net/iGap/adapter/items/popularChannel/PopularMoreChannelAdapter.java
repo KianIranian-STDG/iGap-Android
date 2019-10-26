@@ -4,17 +4,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.ImageLoadingService;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.popularChannel.Channel;
 
 import java.util.ArrayList;
@@ -82,13 +79,6 @@ public class PopularMoreChannelAdapter extends RecyclerView.Adapter<PopularMoreC
                 if (callBack != null)
                     callBack.onChannelClick(channel);
             });
-
-            CardView root = itemView.findViewById(R.id.card_item_pop_grid);
-            Utils.setCardsBackground(root, R.color.white, R.color.gray_6c);
-            LinearLayout linearLayout = itemView.findViewById(R.id.ll_item_pop_card_info);
-            if (G.isDarkTheme) {
-                linearLayout.setBackgroundResource(R.drawable.shape_favorite_channel_dark_item_them);
-            }
         }
 
     }

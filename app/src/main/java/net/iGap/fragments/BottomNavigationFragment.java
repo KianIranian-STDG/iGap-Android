@@ -2,7 +2,6 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.dialog.account.AccountDialogListener;
 import net.iGap.dialog.account.AccountsDialog;
@@ -29,7 +29,6 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnUnreadChange;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
-import net.iGap.model.AccountUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,9 +54,12 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     private String crawlerMap;
     private DiscoveryFragment.CrawlerStruct crawlerStruct;
 
+    private int currentTab = -1;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setTheme();
         G.onUnreadChange = this;
         return inflater.inflate(R.layout.fragment_bottom_navigation, container, false);
     }
@@ -88,7 +90,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         super.onViewCreated(view, savedInstanceState);
 
         bottomNavigation = view.findViewById(R.id.bn_main_bottomNavigation);
-        bottomNavigation.setDefaultItem(2);
+        bottomNavigation.setDefaultItem(currentTab == -1 ? 2 : currentTab);
         bottomNavigation.setOnItemChangeListener(new OnItemChangeListener() {
             @Override
             public void onSelectedItemChanged(int i) {
@@ -103,7 +105,6 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 }
             }
         });
-        bottomNavigation.setCurrentItem(2);
 
         bottomNavigation.setProfileOnLongClickListener(v -> {
             openAccountsDialog();
@@ -128,6 +129,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
 
     private void loadFragment(int position) {
+        currentTab = position;
         hideKeyboard();
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -136,10 +138,8 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         switch (position) {
             case 0:
                 fragment = fragmentManager.findFragmentByTag(RegisteredContactsFragment.class.getName());
-                //fragment = fragmentManager.findFragmentByTag(KuknosLoginFrag.class.getName());
                 if (fragment == null) {
                     fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
-                    //fragment = KuknosLoginFrag.newInstance();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 if (!(current instanceof FragmentMain)) {
@@ -254,6 +254,17 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }
     }
 
+    public void checkHasSharedData(boolean enable) {
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentMain.class.getName());
+
+        if (fragment instanceof FragmentMain) {
+            if (enable) {
+                ((FragmentMain) fragment).checkHasSharedData();
+            } else {
+                ((FragmentMain) fragment).revertToolbarFromForwardMode();
+            }
+        }
+    }
 
     public void autoLinkCrawler(String uri, DiscoveryFragment.CrawlerStruct.OnDeepValidLink onDeepLinkValid) {
         if (uri.equals("")) {
@@ -324,7 +335,6 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }
     }
 
-
     private void setCrawlerMap(int position, String[] uri) {
 
         try {
@@ -390,7 +400,6 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }
     }
 
-
     private void hideKeyboard() {
         if (getActivity() != null) {
             View view = getActivity().getCurrentFocus();
@@ -410,6 +419,12 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
         if (fragment instanceof RegisteredContactsFragment) {
             ((RegisteredContactsFragment) fragment).loadContacts();
+        }
+    }
+
+    private void setTheme() {
+        if (getContext() != null) {
+            getContext().getTheme().applyStyle(new Theme().getTheme(getContext()), true);
         }
     }
 }

@@ -2,7 +2,6 @@ package net.iGap.fragments;
 
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +19,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.databinding.FragmentNotificationAndSoundBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperNotification;
@@ -66,7 +66,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
         setupToolbar();
 
-        fragmentNotificationAndSoundBinding.asnToolbar.setBackgroundColor(Color.parseColor(G.appBarColor));
+        fragmentNotificationAndSoundBinding.asnToolbar.setBackgroundColor(new Theme().getAccentColor(getContext()));
 
         fragmentNotificationAndSoundBinding.stnsRippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override

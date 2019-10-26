@@ -59,6 +59,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -76,8 +77,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import io.realm.Realm;
 
 import static net.iGap.G.isLocationFromBot;
 import static net.iGap.R.id.mf_fragment_map_view;
@@ -205,7 +204,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
         Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.ic_circle_shape);
         if (mDrawableSkip != null) {
-            mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
+            mDrawableSkip.setColorFilter(new PorterDuffColorFilter(new Theme().getPrimaryColor(getContext()), PorterDuff.Mode.SRC_IN));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 rvIcon.setBackground(mDrawableSkip);
             }
@@ -230,17 +229,17 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
         txtDistance.setText(getResources().getString(R.string.calculation));
 
-        txtUserName.setTextColor(Color.parseColor(G.appBarColor));
+        txtUserName.setTextColor(new Theme().getPrimaryColor(getContext()));
 
-        accuracy.setTextColor(Color.parseColor(G.appBarColor));
-        txtDistance.setTextColor(Color.parseColor(G.appBarColor));
+        accuracy.setTextColor(new Theme().getPrimaryColor(getContext()));
+        txtDistance.setTextColor(new Theme().getPrimaryColor(getContext()));
 
 
-        //rvSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
-        txtTitle.setTextColor(Color.parseColor(G.appBarColor));
+        rvSendPosition.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
+        txtTitle.setTextColor(new Theme().getPrimaryColor(getContext()));
 
         fabOpenMap = view.findViewById(R.id.mf_fab_openMap);
-        fabOpenMap.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        fabOpenMap.setBackgroundTintList(ColorStateList.valueOf(new Theme().getButtonColor(getContext())));
         fabOpenMap.setColorFilter(Color.WHITE);
 
         bundle = getArguments();
@@ -290,7 +289,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         rvSendPosition = view.findViewById(R.id.mf_rv_send_position);
 
 
-        //  rvSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
+        rvSendPosition.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
 
         if (mode == Mode.sendPosition) {
             fabOpenMap.hide();

@@ -16,7 +16,6 @@ import androidx.databinding.DataBindingUtil;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentBottomSheetDialogBinding;
 import net.iGap.dialog.BottomSheetItemClickCallback;
@@ -85,11 +84,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
 
     @Override
     public int getTheme() {
-        if (G.isDarkTheme) {
-            return R.style.BaseBottomSheetDialog;
-        } else {
-            return R.style.BaseBottomSheetDialogLight;
-        }
+        return R.style.BaseBottomSheetDialog;
     }
 
     @NonNull

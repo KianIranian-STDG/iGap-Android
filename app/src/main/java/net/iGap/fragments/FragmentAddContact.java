@@ -50,7 +50,6 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.CountryReader;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructListOfContact;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsEdit;
 
@@ -475,7 +474,8 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
     public void onContactEditError(int majorCode, int minorCode) {
         G.handler.post(() -> {
             loader.setVisibility(View.GONE);
-            if (getActivity() != null ) HelperError.showSnackMessage(getActivity().getString(R.string.server_error), false);
+            if (getContext() != null)
+                HelperError.showSnackMessage(getContext().getString(R.string.server_error), false);
         });
     }
 

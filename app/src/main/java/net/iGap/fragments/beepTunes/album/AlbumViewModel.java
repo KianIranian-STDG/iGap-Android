@@ -12,7 +12,10 @@ import com.downloader.Progress;
 
 import net.iGap.DbManager;
 import net.iGap.api.BeepTunesApi;
+import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.ApiServiceProvider;
+import net.iGap.api.apiService.ResponseCallback;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.fragments.beepTunes.downloadQuality.DownloadQualityFragment;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.interfaces.OnSongDownload;
@@ -27,10 +30,6 @@ import net.iGap.viewmodel.BaseViewModel;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     private static final String TAG = "aabolfazlAlbum";
@@ -49,39 +48,43 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     }
 
     void getAlbumSong(long id) {
-        LoadingProgressMutableLiveData.postValue(true);
-        apiService.getAlbumTrack(id).enqueue(new Callback<AlbumTrack>() {
+        new ApiInitializer<AlbumTrack>().initAPI(apiService.getAlbumTrack(id), this, new ResponseCallback<AlbumTrack>() {
             @Override
-            public void onResponse(Call<AlbumTrack> call, Response<AlbumTrack> response) {
-                LoadingProgressMutableLiveData.postValue(false);
-                if (response.isSuccessful() && response.body() != null) {
-                    trackMutableLiveData.postValue(response.body().getData());
-                }
+            public void onSuccess(AlbumTrack data) {
+                trackMutableLiveData.postValue(data.getData());
             }
 
             @Override
-            public void onFailure(Call<AlbumTrack> call, Throwable t) {
-                LoadingProgressMutableLiveData.postValue(false);
+            public void onError(ErrorModel error) {
+
+            }
+
+            @Override
+            public void setProgressIndicator(boolean visibility) {
+                LoadingProgressMutableLiveData.postValue(visibility);
             }
         });
     }
 
     void getArtistOtherAlbum(long id) {
-        LoadingProgressMutableLiveData.postValue(true);
-        apiService.getArtistAlbums(id).enqueue(new Callback<Albums>() {
+
+        new ApiInitializer<Albums>().initAPI(apiService.getArtistAlbums(id), this, new ResponseCallback<Albums>() {
             @Override
-            public void onResponse(Call<Albums> call, Response<Albums> response) {
-                LoadingProgressMutableLiveData.postValue(false);
-                if (response.isSuccessful()) {
-                    albumMutableLiveData.postValue(response.body());
-                }
+            public void onSuccess(Albums data) {
+                albumMutableLiveData.postValue(data);
             }
 
             @Override
-            public void onFailure(Call<Albums> call, Throwable t) {
-                LoadingProgressMutableLiveData.postValue(false);
+            public void onError(ErrorModel error) {
+
+            }
+
+            @Override
+            public void setProgressIndicator(boolean visibility) {
+                LoadingProgressMutableLiveData.postValue(visibility);
             }
         });
+
     }
 
     void onDownloadClick(Track track, String path, FragmentManager fragmentManager, SharedPreferences sharedPreferences) {

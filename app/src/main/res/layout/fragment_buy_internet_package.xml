@@ -10,12 +10,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:layoutDirection="locale">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -28,7 +25,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/phoneNumberIcon"
-            style="@style/greenIconTextViewStyle"
+            style="@style/primaryIconTextViewStyle"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
             android:layout_margin="@dimen/dp16"
@@ -40,7 +37,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/phoneNumberEditText"
-            style="?hintColorSettingTheme"
+            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp8"
@@ -78,12 +75,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/packageTypeTitle"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp16"
             android:padding="@dimen/dp8"
             android:text="@string/buy_internet_package_type_title"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{viewModel.showDetail}"
             app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
@@ -103,21 +100,23 @@
 
             <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/timeType"
-                style="?textSubColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:button="@drawable/check_box_background"
-                android:text="@string/buy_internet_package_time_type_title" />
+                android:padding="@dimen/dp8"
+                android:text="@string/buy_internet_package_time_type_title"
+                android:textColor="?iGapSubtitleTextColor" />
 
             <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/volumeType"
-                style="?textSubColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:button="@drawable/check_box_background"
-                android:text="@string/buy_internet_package_volume_type_title" />
+                android:padding="@dimen/dp8"
+                android:text="@string/buy_internet_package_volume_type_title"
+                android:textColor="?iGapSubtitleTextColor" />
         </RadioGroup>
 
         <androidx.appcompat.widget.AppCompatSpinner
@@ -165,7 +164,7 @@
             app:layout_constraintTop_toTopOf="@id/packageList" />
 
         <com.google.android.material.button.MaterialButton
-            style="?iGapButton"
+            style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp8"
@@ -194,8 +193,8 @@
             style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
-            android:text="@string/retry_icon"
             android:onClick="@{()->viewModel.onRetryClick()}"
+            android:text="@string/retry_icon"
             android:visibility="@{viewModel.showRetryView}"
             app:layout_constraintBottom_toBottomOf="@id/loadingView"
             app:layout_constraintEnd_toEndOf="@id/loadingView"

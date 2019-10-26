@@ -579,7 +579,7 @@ public class FragmentContactsProfileViewModel extends ViewModel implements OnUse
 
         if (userStatus != null) {
             if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                String status = LastSeenTimeUtil.computeTime(userId, time, false);
+                String status = LastSeenTimeUtil.computeTime(G.context, userId, time, false);
 
                 lastSeen.setValue(status);
             } else {

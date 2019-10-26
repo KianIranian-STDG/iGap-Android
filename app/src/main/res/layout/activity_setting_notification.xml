@@ -88,7 +88,7 @@
                 android:paddingTop="@dimen/dp8"
                 android:visibility="visible">
 
-                <net.iGap.module.HeaderTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
                     android:paddingBottom="@dimen/dp16"
                     android:paddingTop="@dimen/dp12"
                     android:text="@string/st_title_messageNotification"
-                    android:textColor="@color/green"
+                    android:textColor="?colorPrimary"
                     android:textSize="@dimen/dp18"
                     android:textStyle="normal" />
 
@@ -329,7 +329,7 @@
                 android:paddingTop="@dimen/dp8"
                 android:visibility="visible">
 
-                <net.iGap.module.HeaderTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -337,7 +337,7 @@
                     android:paddingBottom="@dimen/dp16"
                     android:paddingTop="@dimen/dp12"
                     android:text="@string/st_title_groupNotification"
-                    android:textColor="@color/green"
+                    android:textColor="?colorPrimary"
                     android:textSize="@dimen/dp18"
                     android:textStyle="normal" />
 
@@ -567,7 +567,7 @@
                 android:paddingTop="@dimen/dp8"
                 android:visibility="visible">
 
-                <net.iGap.module.HeaderTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -575,7 +575,7 @@
                     android:paddingBottom="@dimen/dp16"
                     android:paddingTop="@dimen/dp12"
                     android:text="@string/st_title_in_app_notification"
-                    android:textColor="@color/green"
+                    android:textColor="?colorPrimary"
                     android:textSize="@dimen/dp18"
                     android:textStyle="normal" />
 
@@ -837,7 +837,7 @@
                 android:paddingTop="@dimen/dp8"
                 android:visibility="visible">
 
-                <net.iGap.module.HeaderTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -845,7 +845,7 @@
                     android:paddingBottom="@dimen/dp16"
                     android:paddingTop="@dimen/dp12"
                     android:text="@string/st_title_other"
-                    android:textColor="@color/green"
+                    android:textColor="?colorPrimary"
                     android:textSize="@dimen/dp18"
                     android:textStyle="normal" />
 
@@ -1056,7 +1056,7 @@
                 android:paddingTop="@dimen/dp8"
                 android:visibility="visible">
 
-                <net.iGap.module.HeaderTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:fontFamily="@font/main_font_bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1064,7 +1064,7 @@
                     android:paddingBottom="@dimen/dp16"
                     android:paddingTop="@dimen/dp12"
                     android:text="@string/st_title_reset"
-                    android:textColor="@color/green"
+                    android:textColor="?colorPrimary"
                     android:textSize="@dimen/dp18"
                     android:textStyle="normal" />
 

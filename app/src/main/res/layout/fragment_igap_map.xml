@@ -4,10 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mapContainer_main"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="?backgroundColorSettingTheme"
-    android:clickable="true"
     android:fitsSystemWindows="false"
     android:orientation="vertical"
     tools:ignore="MissingPrefix">
@@ -15,7 +14,6 @@
 
     <RelativeLayout
         android:id="@+id/mapContainer"
-        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -27,15 +25,15 @@
                 android:id="@+id/backgroundToolbarMap"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:background="@color/iGapColorDarker">
+                android:background="@color/iGapColorDarker"
+                android:visibility="gone">
 
                 <androidx.appcompat.widget.Toolbar
 
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp60"
-                    android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
                     android:layoutDirection="ltr"
                     app:contentInsetLeft="0dp"
@@ -124,7 +122,6 @@
 
                         <LinearLayout
                             android:id="@+id/vgMessageGps"
-                            style="?backgroundColorSettingTheme"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
@@ -138,7 +135,7 @@
 
                                 <net.iGap.module.MEditText
                                     android:id="@+id/edtMessageGps"
-                                    style="?hintColorSettingTheme"
+                                    style="@style/iGapEditTextStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="@android:color/transparent"
@@ -147,17 +144,17 @@
                                     android:maxLength="255"
                                     android:maxLines="4"
                                     android:minHeight="@dimen/dp52"
-                                    android:paddingEnd="@dimen/dp10"
-                                    android:paddingLeft="@dimen/dp10"
-                                    android:paddingRight="@dimen/dp10"
                                     android:paddingStart="@dimen/dp12"
+                                    android:paddingLeft="@dimen/dp10"
+                                    android:paddingEnd="@dimen/dp10"
+                                    android:paddingRight="@dimen/dp10"
                                     android:textSize="@dimen/dp15" />
 
                                 <View
-                                    style="?lineColorSettingTheme"
                                     android:layout_width="match_parent"
                                     android:layout_height="1dp"
-                                    android:layout_marginBottom="0dp" />
+                                    android:layout_marginBottom="0dp"
+                                    android:background="?iGapDividerLine" />
                             </LinearLayout>
 
                             <RelativeLayout
@@ -217,15 +214,15 @@
 
                         <TextView
                             android:id="@+id/txtTextTurnOnOffGps"
-                            android:fontFamily="@font/main_font_bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/main_font_bold"
                             android:gravity="center"
                             android:lineSpacingExtra="@dimen/dp4"
-                            android:paddingBottom="@dimen/dp8"
                             android:paddingLeft="@dimen/dp48"
-                            android:paddingRight="@dimen/dp48"
                             android:paddingTop="@dimen/dp20"
+                            android:paddingRight="@dimen/dp48"
+                            android:paddingBottom="@dimen/dp8"
                             android:text="@string/turn_on_gps_explain"
                             android:textColor="@color/white"
                             android:textSize="@dimen/dp18" />
@@ -240,15 +237,15 @@
 
                         <TextView
                             android:id="@+id/txtDescriptionMap"
-                            android:fontFamily="@font/main_font_bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/main_font_bold"
                             android:gravity="center"
                             android:lineSpacingExtra="@dimen/dp4"
-                            android:paddingBottom="@dimen/dp8"
                             android:paddingLeft="@dimen/dp48"
-                            android:paddingRight="@dimen/dp48"
                             android:paddingTop="@dimen/dp20"
+                            android:paddingRight="@dimen/dp48"
+                            android:paddingBottom="@dimen/dp8"
                             android:text="@string/info_map"
                             android:textColor="@color/white"
                             android:textSize="@dimen/dp18" />
@@ -260,9 +257,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="@dimen/dp24"
-                    android:layout_marginLeft="@dimen/dp24"
                     android:layout_marginStart="19dp"
+                    android:layout_marginLeft="@dimen/dp24"
+                    android:layout_marginBottom="@dimen/dp24"
                     android:background="@android:color/white"
                     android:clickable="true"
                     app:backgroundTint="@android:color/white"
@@ -270,9 +267,7 @@
                     app:layout_anchor="@+id/replace"
                     app:layout_anchorGravity="bottom|right|end"
                     app:srcCompat="@drawable/ic_gps_fixed_black_24px"
-                    app:tint="@color/white"
-
-                    />
+                    app:tint="@color/white" />
 
 
                 <net.iGap.libs.floatingAddButton.ArcMenu
@@ -281,16 +276,16 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_gravity="bottom|end"
-                    android:layout_marginBottom="@dimen/dp95"
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="18dp"
+                    android:layout_marginBottom="@dimen/dp95"
                     android:clickable="true"
                     app:layout_anchor="@+id/replace"
                     app:layout_anchorGravity="top|right|end"
+                    app:menu_angle="@integer/ANGLE_NEARBY_ARC_MENU"
+                    app:menu_color="@color/green"
                     app:menu_config="true"
                     app:menu_radius="@dimen/dp60"
-                    app:menu_color="@color/green"
-                    app:menu_angle="@integer/ANGLE_NEARBY_ARC_MENU"
                     app:menu_scr="@drawable/ic_gps_layer">
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton

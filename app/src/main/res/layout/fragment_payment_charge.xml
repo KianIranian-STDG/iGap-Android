@@ -12,12 +12,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:layoutDirection="locale">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/fpc_toolbar"
@@ -30,7 +27,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/phoneNumberIcon"
-            style="@style/greenIconTextViewStyle"
+            style="@style/primaryIconTextViewStyle"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
             android:layout_margin="@dimen/dp16"
@@ -41,7 +38,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/phoneNumberEditText"
-            style="?hintColorSettingTheme"
+            style="@style/iGapEditTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp8"
@@ -85,23 +82,23 @@
             android:button="@drawable/check_box_background"
             android:onCheckedChanged="@{(view,isChecked)->viewModel.checkBoxTarabordChanged(isChecked,phoneNumberEditText.getEditableText().toString())}"
             android:text="@string/trabord"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp16"
-            style="?textTitleColorSettingTheme"
             android:visibility="@{viewModel.showDetail}"
             app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
             app:layout_constraintTop_toBottomOf="@id/phoneNumberExample" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/operatorIcon"
-            style="@style/greenIconTextViewStyle"
+            style="@style/primaryIconTextViewStyle"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
             android:layout_marginTop="@dimen/dp8"
             android:text="@string/md_format_list_bulleted"
             android:textStyle="bold"
             android:visibility="@{viewModel.observeTarabord}"
-            app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
             app:layout_constraintEnd_toEndOf="@id/phoneNumberIcon"
+            app:layout_constraintStart_toStartOf="@id/phoneNumberIcon"
             app:layout_constraintTop_toBottomOf="@id/fpc_checkBox_trabord" />
 
         <androidx.appcompat.widget.AppCompatSpinner
@@ -128,7 +125,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/chargeTypeIcon"
-            style="@style/greenIconTextViewStyle"
+            style="@style/primaryIconTextViewStyle"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
             android:layout_marginTop="@dimen/dp8"
@@ -163,7 +160,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/priceIcon"
-            style="@style/greenIconTextViewStyle"
+            style="@style/primaryIconTextViewStyle"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
             android:layout_marginTop="@dimen/dp8"
@@ -208,7 +205,7 @@
             app:layout_constraintTop_toBottomOf="@id/priceIcon" />
 
         <com.google.android.material.button.MaterialButton
-            style="?iGapButton"
+            style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp8"

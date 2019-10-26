@@ -21,31 +21,31 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginRight="@dimen/dp4"
                 android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp4"
                 android:padding="@dimen/dp4">
 
                 <TextView
-                    style="@style/myIconTextViewStyle"
                     android:id="@+id/smslf_imv_icon_file"
+                    style="@style/myIconTextViewStyle"
                     android:layout_width="@dimen/dp52"
                     android:layout_height="@dimen/dp52"
+                    android:layout_gravity="center"
+                    android:background="@drawable/background_multi_select_light"
                     android:gravity="center"
                     android:text="@string/attach_icon"
-                    android:layout_gravity="center"
-                    android:textColor="@color/shared_media_music_list_icon_color"
-                    android:background="@drawable/background_multi_select_light" />
+                    android:textColor="@color/shared_media_music_list_icon_color" />
 
                 <net.iGap.module.RadiusImageView
                     android:id="@+id/smslf_imv_image_file"
                     android:layout_width="@dimen/dp52"
                     android:layout_height="@dimen/dp52"
-                    android:gravity="center"
-                    android:text="@string/attach_icon"
-                    android:scaleType="centerCrop"
-                    android:visibility="gone"
                     android:layout_gravity="center"
-                    android:background="@drawable/background_multi_select_light" />
+                    android:background="@drawable/background_multi_select_light"
+                    android:gravity="center"
+                    android:scaleType="centerCrop"
+                    android:text="@string/attach_icon"
+                    android:visibility="gone" />
 
                 <include
                     android:id="@+id/progress"
@@ -63,15 +63,15 @@
                 android:orientation="vertical">
 
                 <TextView
-                    style="?textTitleColorSettingTheme"
                     android:id="@+id/smslf_txt_file_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp12"
                     android:ellipsize="middle"
+                    android:gravity="start"
                     android:singleLine="true"
                     android:text="file name"
-                    android:gravity="start"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize" />
 
                 <LinearLayout
@@ -83,20 +83,19 @@
 
 
                     <TextView
-                        style="?textSubColorSettingTheme"
                         android:id="@+id/smslf_txt_file_info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
+                        android:gravity="start"
                         android:maxWidth="@dimen/dp300"
                         android:singleLine="true"
                         android:text="file info"
-                        android:gravity="start"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/smallTextSize" />
 
 
                     <TextView
-                        style="?textSubColorSettingTheme"
                         android:id="@+id/smslf_txt_file_size"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -104,6 +103,7 @@
                         android:gravity="end"
                         android:singleLine="true"
                         android:text="3mb"
+                        android:textColor="?iGapSubtitleTextColor"
                         android:textSize="@dimen/dp14" />
 
 
@@ -112,8 +112,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:visibility="gone"
-                    android:background="@color/gray" />
+                    android:background="@color/gray"
+                    android:visibility="gone" />
 
             </LinearLayout>
 

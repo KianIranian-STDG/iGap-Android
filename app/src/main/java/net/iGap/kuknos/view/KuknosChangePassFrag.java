@@ -23,7 +23,6 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosChangePassVM;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 
 public class KuknosChangePassFrag extends BaseFragment {
 
@@ -72,7 +71,6 @@ public class KuknosChangePassFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosCPToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         onError();

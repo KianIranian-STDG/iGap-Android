@@ -1,5 +1,6 @@
 package net.iGap.module;
 
+import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.google.gson.Gson;
@@ -21,6 +23,7 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.proto.ProtoGlobal;
 
@@ -77,8 +80,8 @@ public class MakeButtons {
         return buttonList;
     }
 
-    public static LinearLayout createLayout() {
-        LinearLayout linearLayout_179 = new LinearLayout(G.context);
+    public static LinearLayout createLayout(Context context) {
+        LinearLayout linearLayout_179 = new LinearLayout(context);
         linearLayout_179.setOrientation(HORIZONTAL);
         LinearLayout.LayoutParams layout_937 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layout_937.topMargin = 4;
@@ -133,7 +136,7 @@ public class MakeButtons {
                 textWeight = 4f;
             }
         }
-        CardView card = new CardView(G.context);
+        CardView card = new CardView(mainLayout.getContext());
 
         // Set the CardView layoutParams
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -158,7 +161,7 @@ public class MakeButtons {
         }*/
 
 
-        LinearLayout linearLayout_529 = new LinearLayout(G.context);
+        LinearLayout linearLayout_529 = new LinearLayout(mainLayout.getContext());
         LinearLayout.LayoutParams layout_941 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp36));
 
         layout_941.gravity = Gravity.CENTER;
@@ -166,7 +169,7 @@ public class MakeButtons {
         linearLayout_529.setLayoutParams(layout_941);
         linearLayout_529.setWeightSum(weightSum);
 
-        AppCompatImageView img1 = new AppCompatImageView(G.context);
+        AppCompatImageView img1 = new AppCompatImageView(mainLayout.getContext());
 
         /*img1.setId(1);
         img1.setTag("abc");*/
@@ -189,7 +192,7 @@ public class MakeButtons {
         }
 
         if (entity.getLable().trim() != null) {
-            TextView btn1 = new AppCompatTextView(G.context);
+            TextView btn1 = new AppCompatTextView(mainLayout.getContext());
 
             // btn1.setId(R.id.btn1);
             btn1.setEllipsize(TextUtils.TruncateAt.END);
@@ -198,13 +201,13 @@ public class MakeButtons {
             btn1.setMaxLines(1);
             btn1.setTypeface(ResourcesCompat.getFont(btn1.getContext() , R.font.main_font));
             if (entity.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
-                btn1.setText(G.context.getString(R.string.cardToCardBtnText));
+                btn1.setText(R.string.cardToCardBtnText);
             } else {
                 btn1.setText(entity.getLable());
             }
             btn1.setTextSize(16);
-            card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
-            btn1.setTextColor(Color.parseColor("#000000"));
+            card.setBackgroundResource(new Theme().getCardToCardButtonBackground(mainLayout.getContext()));
+            btn1.setTextColor(ContextCompat.getColor(btn1.getContext(), R.color.white));
 
             LinearLayout.LayoutParams layout_844 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
 

@@ -67,7 +67,7 @@ public class ProgressWaiting extends AbstractMessage<net.iGap.adapter.items.chat
 
         public ViewHolder(View view) {
             super(view);
-            progressBar = (ProgressBar) ViewMaker.getProgressWaitingItemView();
+            progressBar = (ProgressBar) ViewMaker.getProgressWaitingItemView(view.getContext());
             ((ViewGroup) itemView).addView(progressBar);
         }
     }

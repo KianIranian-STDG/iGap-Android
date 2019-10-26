@@ -7,10 +7,9 @@ import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.G;
 import net.iGap.R;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.api.errorhandler.ResponseCallback;
 import net.iGap.api.repository.CPayRepository;
 import net.iGap.model.cPay.CPayWalletAmountModel;
 import net.iGap.model.cPay.ChargeWalletBodyModel;
@@ -20,7 +19,6 @@ import net.iGap.model.cPay.PlaqueBodyModel;
 public class FragmentCPayChargeViewModel extends BaseCPayViewModel<CPayWalletAmountModel> {
 
     private MutableLiveData<Boolean> editTextVisibilityListener = new MutableLiveData<>();
-    public ObservableField<Boolean> isDark = new ObservableField<>(false);
     public ObservableField<String> userCurrentAmount = new ObservableField<>("-");
     public ObservableInt secondaryLoaderVisiblity = new ObservableInt(View.GONE);
     public ObservableBoolean payButtonEnableState = new ObservableBoolean(true);
@@ -30,12 +28,11 @@ public class FragmentCPayChargeViewModel extends BaseCPayViewModel<CPayWalletAmo
     private String mPlaque;
 
     public FragmentCPayChargeViewModel() {
-        isDark.set(G.isDarkTheme);
     }
 
     public void getRequestAmountFromServer() {
         getLoaderListener().setValue(true);
-        CPayRepository.getInstance().getWalletAmount(new PlaqueBodyModel(mPlaque), this);
+        CPayRepository.getInstance().getWalletAmount(new PlaqueBodyModel(mPlaque), this, this);
     }
 
     @Override
@@ -54,7 +51,7 @@ public class FragmentCPayChargeViewModel extends BaseCPayViewModel<CPayWalletAmo
         secondaryLoaderVisiblity.set(View.VISIBLE);
         payButtonEnableState.set(false);
 
-        CPayRepository.getInstance().getChargeWallet(new ChargeWalletBodyModel(mPlaque, mChargeAmount), new ResponseCallback<ChargeWalletModel>() {
+        CPayRepository.getInstance().getChargeWallet(new ChargeWalletBodyModel(mPlaque, mChargeAmount), this, new ResponseCallback<ChargeWalletModel>() {
             @Override
             public void onSuccess(ChargeWalletModel data) {
                 secondaryLoaderVisiblity.set(View.GONE);

@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp68"
-    android:clickable="true"
-    android:layoutDirection="locale"
     android:orientation="vertical">
 
     <View
         android:id="@+id/cigp_view_topLine"
-        style="?lineColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginStart="@dimen/dp8"
-        android:layout_marginLeft="@dimen/dp8" />
+        android:layout_marginLeft="@dimen/dp8"
+        android:background="?attr/iGapDividerLine" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,13 +58,13 @@
 
                         <net.iGap.module.CustomTextViewMedium
                             android:id="@+id/cigp_txt_contact_name"
-                            style="?textTitleColorSettingTheme"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:gravity="start"
                             android:singleLine="true"
                             android:text="Dominika Faniz"
+                            android:textColor="?iGapTitleTextColor"
                             android:textSize="@dimen/standardTextSize" />
                     </LinearLayout>
 
@@ -77,7 +74,6 @@
 
                 <net.iGap.module.CustomTextViewMedium
                     android:id="@+id/cigp_txt_contact_lastseen"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -85,6 +81,7 @@
                     android:singleLine="true"
                     android:tag="menu"
                     android:text="@string/last_seen_recently"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/smallTextSize" />
             </RelativeLayout>
 
@@ -108,10 +105,10 @@
 
             <TextView
                 android:id="@+id/cigp_txt_nomber_of_shared_media"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp16" />
         </LinearLayout>
 

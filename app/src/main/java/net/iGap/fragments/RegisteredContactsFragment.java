@@ -55,7 +55,7 @@ import net.iGap.interfaces.OnContactsGetList;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnUserContactDelete;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.Contacts;
 import net.iGap.module.EmojiTextViewE;
@@ -77,7 +77,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Case;
 
 import static net.iGap.helper.ContactManager.CONTACT_LIMIT;
@@ -153,7 +152,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         realmRecyclerView = view.findViewById(R.id.recycler_view);
 
         LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
-        Utils.darkModeHandler(toolbarLayout);
 
         if (mHelperToolbar == null)
             if (isContact) {
@@ -715,7 +713,11 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         }
 
         public String getBubbleText(int position) {
-            return usersList.get(position).getDisplay_name().substring(0, 1).toUpperCase();
+            if (usersList.size() > position) {
+                return usersList.get(position).getDisplay_name().substring(0, 1).toUpperCase();
+            } else {
+                return "-";
+            }
         }
 
         @Override
@@ -763,16 +765,8 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     return;
                 }
 
-                if (G.isDarkTheme) {
-                    viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_300));
-                    viewHolder.title.setTextColor(getResources().getColor(R.color.white));
-                } else {
-                    viewHolder.title.setTextColor(getResources().getColor(R.color.black));
-                    viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_4c));
-                }
-
                 viewHolder.title.setText(contact.getDisplay_name());
-                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(contact.getId(), contact.getLast_seen(), false));
+                viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(viewHolder.subtitle.getContext(), contact.getId(), contact.getLast_seen(), false));
 
                 if (selectedList.containsKey(usersList.get(i).getPhone())) {
                     viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
@@ -797,16 +791,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 final RealmContacts contact = viewHolder.realmContacts = usersList.get(i);
                 if (contact == null) {
                     return;
-                }
-
-                if (G.isDarkTheme) {
-                    viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_300));
-                    viewHolder.btnVoiceCall.setTextColor(getResources().getColor(R.color.gray_300));
-                    viewHolder.title.setTextColor(getResources().getColor(R.color.white));
-                } else {
-                    viewHolder.title.setTextColor(getResources().getColor(R.color.black));
-                    viewHolder.subtitle.setTextColor(getResources().getColor(R.color.gray_4c));
-                    viewHolder.btnVoiceCall.setTextColor(getResources().getColor(R.color.gray_4c));
                 }
 
                 viewHolder.title.setText(contact.getDisplay_name());
@@ -1010,7 +994,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 super(itemView);
 
                 txtCounter = itemView.findViewById(R.id.row_contact_counter_txt);
-                Utils.darkModeHandler(txtCounter);
             }
 
             public void setCount(int count) {

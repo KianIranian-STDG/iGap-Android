@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    style="?backgroundColorSettingTheme">
+    android:layout_height="match_parent">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/pullToRefresh"
@@ -26,7 +26,6 @@
 
                 <TextView
                     android:id="@+id/agreement"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/dp8"
@@ -38,19 +37,20 @@
                     android:scrollbarStyle="outsideInset"
                     android:scrollbarThumbVertical="@color/gray_5c"
                     android:scrollbars="vertical"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14" />
 
                 <CheckBox
                     android:id="@+id/fpc_checkBox_trabord"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:button="@drawable/check_box_background"
                     android:layout_marginLeft="@dimen/dp10"
                     android:layout_marginRight="@dimen/dp10"
                     android:layout_marginBottom="@dimen/dp32"
+                    android:button="@drawable/check_box_background"
                     android:text="@string/i_agree_with_the_terms"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14" />
 
             </LinearLayout>
@@ -61,15 +61,15 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/emptyRecycle"
-        style="?textTitleColorSettingTheme"
         android:layout_width="@dimen/dp52"
         android:layout_height="@dimen/dp52"
         android:layout_gravity="center"
         android:gravity="center"
         android:padding="4dp"
         android:text="@string/md_try_agin"
-        android:visibility="gone"
         android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:textColor="?iGapTitleTextColor"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

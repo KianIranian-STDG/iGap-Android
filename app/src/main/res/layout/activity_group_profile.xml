@@ -6,15 +6,13 @@
 
         <import type="android.view.View" />
 
-        <import type="net.iGap.G" />
-
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.FragmentGroupProfileViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -22,7 +20,7 @@
             android:id="@+id/toolbar_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@{G.isDarkTheme ? @drawable/shape_toolbar_background_dark : @drawable/shape_toolbar_background , default=@drawable/shape_toolbar_background}"
+            android:background="?iGapToolbarBackground"
             android:layoutDirection="ltr"
             app:elevation="0dp">
 
@@ -166,16 +164,15 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layoutDirection="locale">
+                android:layout_height="wrap_content">
 
                 <net.iGap.module.EmojiTextViewE
                     android:id="@+id/description"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:padding="8dp"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.haveDescription}"
                     app:emojiSize="@dimen/standardTextSize"
@@ -186,10 +183,10 @@
 
                 <View
                     android:id="@+id/divider"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp8"
+                    android:background="?iGapDividerLine"
                     android:visibility="@{viewModel.haveDescription}"
                     app:layout_constraintEnd_toEndOf="@id/divider1"
                     app:layout_constraintStart_toStartOf="@id/divider1"
@@ -198,12 +195,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/inviteLink"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/dp8"
                     android:paddingBottom="4dp"
                     android:text="@{viewModel.inviteLink}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showLink}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -213,13 +210,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/inviteLinkTitle"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
                     android:paddingLeft="@dimen/dp8"
                     android:paddingRight="@dimen/dp8"
                     android:text="@{viewModel.inviteLinkTitle}"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.showLink}"
                     app:layout_constraintEnd_toEndOf="@+id/inviteLink"
@@ -238,10 +235,10 @@
 
                 <View
                     android:id="@+id/divider0"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp8"
+                    android:background="?iGapDividerLine"
                     android:visibility="@{viewModel.showLink}"
                     app:layout_constraintEnd_toEndOf="@id/divider1"
                     app:layout_constraintStart_toStartOf="@id/divider1"
@@ -250,7 +247,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/notificationTitle"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
@@ -259,6 +255,7 @@
                     android:paddingTop="@dimen/dp8"
                     android:paddingBottom="@dimen/dp8"
                     android:text="@string/mute_notification"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -267,7 +264,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/notificationAndSound"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
@@ -275,6 +271,7 @@
                     android:paddingTop="@dimen/dp8"
                     android:paddingBottom="@dimen/dp8"
                     android:text="@string/notificaion_and_sound"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -292,10 +289,10 @@
 
                 <View
                     android:id="@+id/divider1"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp8"
+                    android:background="?iGapDividerLine"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/notificationAndSound"
@@ -303,13 +300,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/sharedContentTitle"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
                     android:layout_marginBottom="@dimen/dp8"
                     android:paddingTop="@dimen/dp8"
                     android:text="@string/chi_shared_Media"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/largeTextSize"
                     android:visibility="@{viewModel.noMediaSharedVisibility}"
                     app:layout_constraintEnd_toEndOf="@id/notificationTitle"
@@ -318,13 +315,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/photo"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(1)}"
                     android:padding="8dp"
                     android:text="@string/shared_image"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedPhotoVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/photoCount"
@@ -333,12 +330,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/photoCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedPhotoCount)}"
-                    android:textColor="@color/green"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedPhotoVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/photo"
@@ -347,13 +343,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/video"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(2)}"
                     android:padding="8dp"
                     android:text="@string/shared_video"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedVideoVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/photoCount"
@@ -362,12 +358,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/videoCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedVideoCount)}"
-                    android:textColor="@color/green"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedVideoVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/video"
@@ -376,13 +371,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/audioFiles"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(3)}"
                     android:padding="8dp"
                     android:text="@string/shared_audio"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedAudioVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/audioFilesCount"
@@ -391,12 +386,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/audioFilesCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedAudioCount)}"
-                    android:textColor="@color/green"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedAudioVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/audioFiles"
@@ -405,13 +399,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/voiceMessage"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(4)}"
                     android:padding="8dp"
                     android:text="@string/shared_voice"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedVoiceVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/voiceMessageCount"
@@ -420,12 +414,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/voiceMessageCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedVoiceCount)}"
-                    android:textColor="@color/green"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedVoiceVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/voiceMessage"
@@ -434,13 +427,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/gif"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(5)}"
                     android:padding="8dp"
                     android:text="@string/shared_gif"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedGifVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/gifCount"
@@ -449,12 +442,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/gifCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedGifCount)}"
-                    android:textColor="@color/green"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedGifVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/gif"
@@ -463,13 +455,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/files"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(6)}"
                     android:padding="8dp"
                     android:text="@string/shared_files"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedFileVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/filesCount"
@@ -478,12 +470,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/filesCount"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedFileCount)}"
-                    android:textColor="@color/green"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedFileVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/files"
@@ -492,13 +483,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/links"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onClickGroupShearedMedia(7)}"
                     android:padding="8dp"
                     android:text="@string/shared_links"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.sharedLinkVisibility}"
                     app:layout_constraintEnd_toStartOf="@id/linksCount"
@@ -511,7 +502,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@{String.valueOf(viewModel.sharedLinkCount)}"
-                    android:textColor="@color/green"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="@dimen/smallTextSize"
                     android:visibility="@{viewModel.sharedLinkVisibility}"
                     app:layout_constraintBottom_toBottomOf="@id/links"
@@ -520,10 +511,10 @@
 
                 <View
                     android:id="@+id/divider2"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
+                    android:background="?iGapDividerLine"
                     android:visibility="@{viewModel.noMediaSharedVisibility}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -532,7 +523,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/addMember"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
@@ -540,6 +530,7 @@
                     android:onClick="@{()->viewModel.addNewMember()}"
                     android:padding="8dp"
                     android:text="@string/add_new_member"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     android:visibility="@{viewModel.addMemberVisibility}"
                     app:layout_constraintEnd_toEndOf="@id/notificationTitle"
@@ -548,13 +539,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/showMemberList"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onShowMemberClick()}"
                     android:padding="@dimen/dp8"
                     android:text="@string/show_member"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="@id/addMember"
                     app:layout_constraintStart_toStartOf="@id/addMember"
@@ -562,10 +553,10 @@
 
                 <View
                     android:id="@+id/divider3"
-                    style="?lineColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp16"
+                    android:background="?iGapDividerLine"
                     android:visibility="@{viewModel.showLeaveGroup}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -574,7 +565,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/leaveGroup"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"

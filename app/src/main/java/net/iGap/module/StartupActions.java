@@ -72,18 +72,13 @@ import static net.iGap.G.DIR_VIDEOS;
 import static net.iGap.G.IGAP;
 import static net.iGap.G.IMAGE_NEW_CHANEL;
 import static net.iGap.G.IMAGE_NEW_GROUP;
-import static net.iGap.G.appBarColor;
-import static net.iGap.G.attachmentColor;
 import static net.iGap.G.authorHash;
 import static net.iGap.G.context;
 import static net.iGap.G.displayName;
-import static net.iGap.G.headerTextColor;
 import static net.iGap.G.imageFile;
 import static net.iGap.G.imageLoader;
 import static net.iGap.G.isSaveToGallery;
-import static net.iGap.G.notificationColor;
 import static net.iGap.G.selectedLanguage;
-import static net.iGap.G.toggleButtonColor;
 import static net.iGap.G.userTextSize;
 
 /**
@@ -397,8 +392,6 @@ public final class StartupActions {
             editor.apply();
         }
 
-//        G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
-
         boolean isDisableAutoDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_DISABLE_TIME_DARK_THEME, true);
         if (!isDisableAutoDarkTheme) {
             checkTimeForAutoTheme(preferences);
@@ -451,21 +444,9 @@ public final class StartupActions {
             if (currentTime.getTime() > time1.getTime() && currentTime.getTime() < time2.getTime()) {
 
                 //checkes whether the current time is between 14:49:00 and 20:11:13.
-                G.isDarkTheme = true;
-                appBarColor = Theme.default_dark_appBarColor;
-                notificationColor = Theme.default_dark_notificationColor;
-                toggleButtonColor = Theme.default_dark_toggleButtonColor;
-                attachmentColor = Theme.default_dark_attachmentColor;
-                headerTextColor = Theme.default_dark_headerTextColor;
-                G.progressColor = Theme.default_dark_progressColor;
+                G.themeColor = Theme.DARK;
             } else {
-                G.isDarkTheme = false;
-                appBarColor = Theme.default_appBarColor;
-                notificationColor = Theme.default_notificationColor;
-                toggleButtonColor = Theme.default_toggleButtonColor;
-                attachmentColor = Theme.default_attachmentColor;
-                headerTextColor = Theme.default_headerTextColor;
-                G.progressColor = Theme.default_progressColor;
+                G.themeColor = Theme.DARK;
             }
         } catch (ParseException e) {
             e.printStackTrace();

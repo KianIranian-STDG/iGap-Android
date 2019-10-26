@@ -8,28 +8,29 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentIgashtLocationSubDetailBinding;
 
-public class IGashtLocationSubDetailFragment extends Fragment {
+public class IGashtLocationSubDetailFragment extends BaseAPIViewFrag {
 
     private FragmentIgashtLocationSubDetailBinding binding;
-    private IGashtLocationSubDetailViewModel viewModel;
+    private IGashtLocationSubDetailViewModel iGashtLocationSubDetailViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(IGashtLocationSubDetailViewModel.class);
+        iGashtLocationSubDetailViewModel = ViewModelProviders.of(this).get(IGashtLocationSubDetailViewModel.class);
+        viewModel = iGashtLocationSubDetailViewModel;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_location_sub_detail, container, false);
-        binding.setViewModel(viewModel);
+        binding.setViewModel(iGashtLocationSubDetailViewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }

@@ -67,11 +67,9 @@ public class ItemBottomSheetForward extends AbstractItem<ItemBottomSheetForward,
         if (structBottomSheetForward.isChecked()) {
             structBottomSheetForward.setChecked(false);
             viewHolder.checkBoxSelect.setChecked(false);
-            viewHolder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
         } else {
             structBottomSheetForward.setChecked(true);
             viewHolder.checkBoxSelect.setChecked(true);
-            viewHolder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.green));
         }
         FragmentChat.onForwardBottomSheet.path(structBottomSheetForward);
     }

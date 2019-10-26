@@ -6,23 +6,22 @@ import androidx.databinding.ObservableDouble;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import net.iGap.G;
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.api.errorhandler.ResponseCallback;
 import net.iGap.helper.HelperCalander;
 
 import org.jetbrains.annotations.NotNull;
 
-public class PaymentViewModel extends ViewModel {
+public class PaymentViewModel extends BaseAPIViewModel {
 
     private ObservableInt showLoadingView = new ObservableInt(View.VISIBLE);
     private ObservableInt showRetryView = new ObservableInt(View.GONE);
     private ObservableInt showMainView = new ObservableInt(View.INVISIBLE);
     private ObservableInt showPaymentErrorMessage = new ObservableInt(View.GONE);
-    private ObservableInt background = new ObservableInt();
+    /*private ObservableInt background = new ObservableInt();*/
     private ObservableInt paymentStateIcon = new ObservableInt(R.string.icon_card_to_card);
     private ObservableInt paymentStatusTextColor = new ObservableInt(R.color.black);
     private ObservableInt showButtons = new ObservableInt(View.GONE);
@@ -47,7 +46,6 @@ public class PaymentViewModel extends ViewModel {
 
     public PaymentViewModel(String token, String type) {
         repository = PaymentRepository.getInstance();
-        background.set(G.isDarkTheme ? R.drawable.bottom_sheet_background : R.drawable.bottom_sheet_light_background);
         this.token = token;
         paymentType.set(type);
         paymentResult = new PaymentResult();
@@ -74,9 +72,9 @@ public class PaymentViewModel extends ViewModel {
         return showPaymentErrorMessage;
     }
 
-    public ObservableInt getBackground() {
+    /*public ObservableInt getBackground() {
         return background;
-    }
+    }*/
 
     public ObservableInt getPaymentStateIcon() {
         return paymentStateIcon;
@@ -187,7 +185,7 @@ public class PaymentViewModel extends ViewModel {
         showButtons.set(View.INVISIBLE);
         showRetryView.set(View.GONE);
         showLoadingView.set(View.VISIBLE);
-        repository.checkOrder(token, new ResponseCallback<CheckOrderResponse>() {
+        repository.checkOrder(token, this, new ResponseCallback<CheckOrderResponse>() {
             @Override
             public void onSuccess(CheckOrderResponse data) {
                 showLoadingView.set(View.GONE);
@@ -217,7 +215,7 @@ public class PaymentViewModel extends ViewModel {
         showLoadingView.set(View.VISIBLE);
         showButtons.set(View.INVISIBLE);
         showRetryView.set(View.GONE);
-        repository.checkOrderStatus(orderId, new ResponseCallback<CheckOrderStatusResponse>() {
+        repository.checkOrderStatus(orderId, this, new ResponseCallback<CheckOrderStatusResponse>() {
             @Override
             public void onSuccess(CheckOrderStatusResponse data) {
                 showPaymentErrorMessage.set(View.VISIBLE);

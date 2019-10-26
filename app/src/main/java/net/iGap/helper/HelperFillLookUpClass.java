@@ -106,6 +106,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30153, "ProtoUserIVandGetActivities.UserIVandGetActivitiesResponse");
         lookupMap.put(30154, "ProtoUserIVandGetScore.UserIVandGetScoreResponse");
         lookupMap.put(30155, "ProtoUserIVandSetActivity.UserIVandSetActivityResponse");
+        lookupMap.put(30156, "ProtoUserRefreshToken.UserRefreshTokenResponse");
 
         // Chat 2xx , 302xx
         lookupMap.put(30200, "ProtoChatGetRoom.ChatGetRoomResponse");
@@ -275,8 +276,6 @@ public class HelperFillLookUpClass {
         lookupMap.put(60002, "ProtoPushUserInfoExpired.PushUserInfoExpiredResponse");
         lookupMap.put(60003, "ProtoPushRateSignaling.PushRateSignalingResponse");
         lookupMap.put(60004, "ProtoPushWalletPaymentVerified.PushWalletPaymentVerifiedResponse");
-
-
     }
 
     /**

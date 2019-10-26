@@ -6,14 +6,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import net.iGap.G;
 import net.iGap.R;
 
 public class FragmentCallAction extends BottomSheetDialogFragment {
@@ -51,27 +49,12 @@ public class FragmentCallAction extends BottomSheetDialogFragment {
                 startActivity(intent);
             }
         });
-
-        TextView call = rootView.findViewById(R.id.tv_callAction_call);
-        TextView message = rootView.findViewById(R.id.tv_callAction_message);
-
-        if (G.isDarkTheme) {
-            call.setTextColor(getResources().getColor(R.color.white));
-            message.setTextColor(getResources().getColor(R.color.white));
-        } else {
-            call.setTextColor(getResources().getColor(R.color.black));
-            message.setTextColor(getResources().getColor(R.color.black));
-        }
     }
 
 
     @Override
     public int getTheme() {
-        if (G.isDarkTheme) {
-            return R.style.BaseBottomSheetDialog;
-        } else {
-            return R.style.BaseBottomSheetDialogLight;
-        }
+        return R.style.BaseBottomSheetDialog;
     }
 
     public void setPhoneNumber(String phoneNumber) {

@@ -285,6 +285,7 @@
     <string name="just_wait_en">"من فضلك انتظر"</string>
 
     <string name="device_dosenot_camera_en">"لايتوفّر الكاميرا في هذا الجهاز"</string>
+    <string name="device_dosenot_support">"لا يحتوي هذا الجهاز على تطبيق لهذا الإجراء"</string>
 
     <string name="do_you_want_to_turn_on_gps">"نظام تحديد الواقع العالمي (GPS) مغلق، هل تريد تشغليه؟"</string>
 
@@ -2980,7 +2981,10 @@
     <string name="iland">آیلند</string>
     <string name="all_calls">المكالمات</string>
     <string name="open_url">رابط مفتوح</string>
-    <string name="url_copied">تم نسخ الرابط</string>
+    <string name="copied">تم نسخ </string>
+    <string name="charity_confirm">شما مبلغ %s ریال جهت کمک به خیریه %s در نظر گرفته اید.</string>
+    <string name="default_theme_title">السمة الافتراضية</string>
     <string name="message_is_long">Your message is too long  Message will covert to</string>
     <string name="add_new_account">أضف حساب جديد</string>
+    <string name="profile">الشخصي</string>
 </resources>

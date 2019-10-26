@@ -11,7 +11,6 @@
 package net.iGap.module;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.media.MediaRecorder;
 import android.os.Handler;
 import android.util.TypedValue;
@@ -23,6 +22,7 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnVoiceRecord;
 import net.iGap.proto.ProtoGlobal;
@@ -68,9 +68,9 @@ public class VoiceRecord {
         txtMillisecond = layoutMic.findViewById(R.id.txt_time_mili_secend);
         layoutMicLock = layoutMic.findViewById(R.id.lmr_layout_mic);
         txt_slide_to_cancel = layoutMic.findViewById(R.id.txt_slideto_cancel);
-        btnMicLayout = (MaterialDesignTextView) layoutMic.findViewById(R.id.lmr_btn_mic_layout);
-        btnLock = (MaterialDesignTextView) layoutMic.findViewById(R.id.lmr_txt_Lock);
-        AndroidUtils.setBackgroundShapeColor(btnMicLayout, Color.parseColor(G.appBarColor));
+        btnMicLayout = layoutMic.findViewById(R.id.lmr_btn_mic_layout);
+        btnLock = layoutMic.findViewById(R.id.lmr_txt_Lock);
+        AndroidUtils.setBackgroundShapeColor(btnMicLayout, new Theme().getPrimaryColor(context));
         this.layoutAttach = layoutAttach;
         this.layoutMic = layoutMic;
         this.onVoiceRecordListener = listener;
@@ -337,12 +337,6 @@ public class VoiceRecord {
         txt_slide_to_cancel.setPadding(0, 0, 0, 0);
         txt_slide_to_cancel.setText(R.string.slide_to_cancel_en);
         txt_slide_to_cancel.setAlpha(1);
-        if (G.isDarkTheme) {
-            txt_slide_to_cancel.setTextColor(G.context.getResources().getColor(R.color.white));
-        } else {
-            txt_slide_to_cancel.setTextColor(G.context.getResources().getColor(R.color.black));
-        }
-        //txt_slide_to_cancel.setTypeface(Typeface.DEFAULT);
         btnMicLayout.setText(R.string.md_voice_message_microphone_button);
         btnMicLayout.setTextColor(G.context.getResources().getColor(R.color.black_register));
         btnMicLayout.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp26));

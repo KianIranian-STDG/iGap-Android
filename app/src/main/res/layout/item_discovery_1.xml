@@ -6,20 +6,20 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/type1_card0"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/discovery_margin"
-        app:cardPreventCornerOverlap="false"
-        app:cardCornerRadius="@dimen/discovery_radius">
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="?attr/iGapCardViewColor"
+        app:cardCornerRadius="@dimen/discovery_radius"
+        app:cardPreventCornerOverlap="false">
 
         <ImageView
             android:id="@+id/type1_img0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@color/color_default_discovery_cards"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY" />
 
     </androidx.cardview.widget.CardView>
 

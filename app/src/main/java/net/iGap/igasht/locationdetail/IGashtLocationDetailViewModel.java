@@ -59,7 +59,7 @@ public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<RegisterT
 
     public void registerOrder() {
         showLoadingView.set(View.VISIBLE);
-        repository.registeredOrder(this);
+        repository.registeredOrder(this, this);
     }
 
     @Override

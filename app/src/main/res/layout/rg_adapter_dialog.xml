@@ -20,10 +20,10 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/countryName"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp4"
+        android:textColor="?iGapTitleTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/countryCode"
         app:layout_constraintRight_toLeftOf="@id/countyImage"
@@ -31,12 +31,12 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/countryCode"
-        style="?textTitleColorSettingTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp8"
         android:layout_marginLeft="@dimen/dp8"
         android:padding="@dimen/dp4"
+        android:textColor="?iGapTitleTextColor"
         app:layout_constraintBottom_toBottomOf="@id/countryName"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@id/countryName" />

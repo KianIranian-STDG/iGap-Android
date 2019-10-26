@@ -6,7 +6,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.poll.PollAdapter;
 import net.iGap.adapter.items.poll.PollItem;
@@ -19,7 +18,6 @@ public class TypeUnknownViewHolder extends BaseViewHolder {
         super(pollAdapter, itemView);
         txt0 = itemView.findViewById(R.id.unknown_text);
         card0 = itemView.findViewById(R.id.unknown_card);
-        card0.setCardBackgroundColor(G.getThemeBackgroundColor());
     }
 
     @Override

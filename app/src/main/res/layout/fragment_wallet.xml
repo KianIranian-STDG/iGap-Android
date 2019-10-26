@@ -2,8 +2,7 @@
 
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -23,13 +22,10 @@
     </data>
 
     <LinearLayout
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical"
-        tools:ignore="MissingPrefix">
+        android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -38,7 +34,7 @@
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp60"
-                android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+                android:background="?attr/iGapToolbarBackground"
                 android:layoutDirection="ltr"
                 android:padding="0dp"
                 app:contentInsetLeft="0dp"

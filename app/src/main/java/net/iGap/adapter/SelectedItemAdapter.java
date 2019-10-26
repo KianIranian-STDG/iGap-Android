@@ -8,9 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.model.MultiSelectStruct;
 
 import java.util.ArrayList;
@@ -51,10 +49,6 @@ public class SelectedItemAdapter extends RecyclerView.Adapter<SelectedItemAdapte
         public SelectedItemViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTv = itemView.findViewById(R.id.tv_itemMultiSelect);
-            if (G.isDarkTheme) {
-                itemView.setBackgroundResource(R.drawable.round_button_enabled_bg);
-                Utils.darkModeHandler(nameTv);
-            }
         }
 
         void bindData(MultiSelectStruct multiSelect) {

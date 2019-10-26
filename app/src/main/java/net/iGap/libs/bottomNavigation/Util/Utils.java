@@ -1,16 +1,8 @@
 package net.iGap.libs.bottomNavigation.Util;
 
-import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.util.TypedValue;
-import android.view.View;
 import android.widget.TextView;
-
-import androidx.cardview.widget.CardView;
-
-import net.iGap.G;
-import net.iGap.R;
 
 import static net.iGap.G.context;
 
@@ -22,75 +14,6 @@ public class Utils {
 
     public static int pxToDp(int px) {
         return (int) (px / Resources.getSystem().getDisplayMetrics().density);
-    }
-
-    public static void darkModeHandler(View view) {
-        if (G.isDarkTheme) {
-            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.background_setting_dark));
-        } else {
-            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.white));
-        }
-    }
-
-    public static void setBackgroundColor(View view) {
-        if (G.isDarkTheme) {
-            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.white));
-        } else {
-            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.black));
-        }
-    }
-
-    public static void setShapeBackground(View view, int light, int dark) {
-        if (G.isDarkTheme) {
-            view.setBackgroundResource(dark);
-        } else {
-            view.setBackgroundResource(light);
-        }
-    }
-
-    public static void setCardsBackground(CardView cardView, int light, int dark) {
-        if (G.isDarkTheme) {
-            cardView.setCardBackgroundColor(context.getResources().getColor(dark));
-        } else {
-            cardView.setCardBackgroundColor(context.getResources().getColor(light));
-        }
-    }
-
-    public static void setBackgroundColorGray(View view) {
-        if (G.isDarkTheme) {
-            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.gray_300));
-        } else {
-            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.gray_3c));
-        }
-    }
-
-    public static void darkModeHandlerGray(View view) {
-        if (G.isDarkTheme) {
-            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.gray_4c));
-        } else {
-            view.setBackgroundColor(view.getContext().getResources().getColor(R.color.bottomSheetHeaderLine));
-        }
-    }
-
-    public static void darkModeHandlerGray(TextView textView) {
-        textView.setTextColor(Color.parseColor(G.textSubTheme));
-    }
-
-    public static void darkModeHandler(TextView textView) {
-        textView.setTextColor(Color.parseColor(G.textTitleTheme));
-    }
-
-    public static int darkModeHandler(Context context) {
-        if (G.isDarkTheme) {
-            return context.getResources().getColor(R.color.white);
-        } else {
-            return context.getResources().getColor(R.color.black);
-        }
-    }
-
-
-    public static int getScreenHeight() {
-        return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
     public static void setTextSize(TextView textView, int sizeSrc) {

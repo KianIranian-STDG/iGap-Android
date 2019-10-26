@@ -75,11 +75,10 @@ public class FragmentThemColorViewModel extends ViewModel {
     }
 
     public void onClickThemeDeepPurple(View v) {
-        setSetting(Theme.DEEPPURPLE, false);
+
     }
 
     public void onClickThemeIndigo(View v) {
-        setSetting(Theme.INDIGO, false);
     }
 
     public void onClickThemeBlue(View v) {
@@ -87,15 +86,15 @@ public class FragmentThemColorViewModel extends ViewModel {
     }
 
     public void onClickThemeLightBlue(View v) {
-        setSetting(Theme.LIGHT_BLUE, false);
+
     }
 
     public void onClickThemeCyan(View v) {
-        setSetting(Theme.CYAN, false);
+
     }
 
     public void onClickThemeTeal(View v) {
-        setSetting(Theme.TEAL, false);
+
     }
 
     public void onClickThemeGreen(View v) {
@@ -103,15 +102,15 @@ public class FragmentThemColorViewModel extends ViewModel {
     }
 
     public void onClickThemeLightGreen(View v) {
-        setSetting(Theme.LIGHT_GREEN, false);
+
     }
 
     public void onClickThemeLime(View v) {
-        setSetting(Theme.LIME, false);
+
     }
 
     public void onClickThemeYellow(View v) {
-        setSetting(Theme.YELLLOW, false);
+
     }
 
     public void onClickThemeAmber(View v) {
@@ -123,11 +122,10 @@ public class FragmentThemColorViewModel extends ViewModel {
     }
 
     public void onClickThemeDeepOrange(View v) {
-        setSetting(Theme.DEEP_ORANGE, false);
+
     }
 
     public void onClickThemeBrown(View v) {
-        setSetting(Theme.BROWN, false);
 
     }
 
@@ -137,32 +135,27 @@ public class FragmentThemColorViewModel extends ViewModel {
     }
 
     public void onClickThemeBlueGrey(View v) {
-        setSetting(Theme.BLUE_GREY, false);
 
     }
 
     public void onClickThemeBlueGreyComplete(View v) {
-        setSetting(Theme.BLUE_GREY_COMPLETE, false);
 
     }
 
     public void onClickThemeIndigoComplete(View v) {
-        setSetting(Theme.INDIGO_COMPLETE, false);
 
     }
 
     public void onClickThemeBrownComplete(View v) {
-        setSetting(Theme.BROWN_COMPLETE, false);
 
     }
 
     public void onClickThemeTealComplete(View v) {
-        setSetting(Theme.TEAL_COMPLETE, false);
 
     }
 
     public void onClickThemeGreyComplete(View v) {
-        setSetting(Theme.GREY_COMPLETE, false);
+
     }
 
     private void setSetting(int config, boolean isDark) {
@@ -175,12 +168,12 @@ public class FragmentThemColorViewModel extends ViewModel {
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, newTheme.isDark());
         editor.apply();
         if (applyColorsToCustomize) {
-            editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
-            editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
-            editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleButtonColor);
-            editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, G.attachmentColor);
-            editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
-            editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
+//           editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
+//           editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
+//            editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleButtonColor);
+//            editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, G.attachmentColor);
+//            editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
+//            editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
             editor.apply();
         }
         reCreateApp.setValue(true);
@@ -274,9 +267,9 @@ public class FragmentThemColorViewModel extends ViewModel {
 
 
             switch (G.themeColor) {
-                case Theme.CUSTOM:
+                /*case Theme.CUSTOM:
                     fragmentThemColorBinding.iconCustom.setVisibility(View.VISIBLE);
-                    break;
+                    break;*/
                 case Theme.DEFAULT:
 
                     fragmentThemColorBinding.iconDefault.setVisibility(View.VISIBLE);
@@ -293,43 +286,43 @@ public class FragmentThemColorViewModel extends ViewModel {
                 case Theme.PURPLE:
                     fragmentThemColorBinding.iconPurple.setVisibility(View.VISIBLE);
                     break;
-                case Theme.DEEPPURPLE:
+                /*case Theme.DEEPPURPLE:
                     fragmentThemColorBinding.iconDeepPurple.setVisibility(View.VISIBLE);
-                    break;
-                case Theme.INDIGO:
+                    break;*/
+                /*case Theme.INDIGO:
                     fragmentThemColorBinding.iconIndigo.setVisibility(View.VISIBLE);
-                    break;
+                    break;*/
                 case Theme.BLUE:
                     fragmentThemColorBinding.iconBlue.setVisibility(View.VISIBLE);
                     break;
 
-                case Theme.LIGHT_BLUE:
+                /*case Theme.LIGHT_BLUE:
                     fragmentThemColorBinding.iconLightBlue.setVisibility(View.VISIBLE);
-                    break;
+                    break;*/
 
-                case Theme.CYAN:
+                /*case Theme.CYAN:
                     fragmentThemColorBinding.iconCyan.setVisibility(View.VISIBLE);
-                    break;
+                    break;*/
 
-                case Theme.TEAL:
+                /*case Theme.TEAL:
                     fragmentThemColorBinding.iconTeal.setVisibility(View.VISIBLE);
-                    break;
+                    break;*/
 
                 case Theme.GREEN:
                     fragmentThemColorBinding.iconGreen.setVisibility(View.VISIBLE);
                     break;
 
-                case Theme.LIGHT_GREEN:
+                /*case Theme.LIGHT_GREEN:
                     fragmentThemColorBinding.iconLightGreen.setVisibility(View.VISIBLE);
-                    break;
+                    break;*/
 
-                case Theme.LIME:
+                /*case Theme.LIME:
                     fragmentThemColorBinding.iconLime.setVisibility(View.VISIBLE);
-                    break;
+                    break;*/
 
-                case Theme.YELLLOW:
+                /*case Theme.YELLLOW:
                     fragmentThemColorBinding.iconYellow.setVisibility(View.VISIBLE);
-                    break;
+                    break;*/
                 case Theme.AMBER:
                     fragmentThemColorBinding.iconAmber.setVisibility(View.VISIBLE);
                     break;
@@ -338,40 +331,40 @@ public class FragmentThemColorViewModel extends ViewModel {
                     fragmentThemColorBinding.iconOrange.setVisibility(View.VISIBLE);
                     break;
 
-                case Theme.DEEP_ORANGE:
+                /*case Theme.DEEP_ORANGE:
                     fragmentThemColorBinding.iconDeepOrange.setVisibility(View.VISIBLE);
-                    break;
+                    break;*/
 
-                case Theme.BROWN:
+                /*case Theme.BROWN:
                     fragmentThemColorBinding.iconBrown.setVisibility(View.VISIBLE);
 
-                    break;
+                    break;*/
                 case Theme.GREY:
 
                     fragmentThemColorBinding.iconGrey.setVisibility(View.VISIBLE);
                     break;
-                case Theme.BLUE_GREY:
+                /*case Theme.BLUE_GREY:
 
                     fragmentThemColorBinding.iconBlueGrey.setVisibility(View.VISIBLE);
-                    break;
-                case Theme.BLUE_GREY_COMPLETE:
+                    break;*/
+                /*case Theme.BLUE_GREY_COMPLETE:
 
                     fragmentThemColorBinding.iconBlueGreyComplete.setVisibility(View.VISIBLE);
-                    break;
-                case Theme.INDIGO_COMPLETE:
+                    break;*/
+                /*case Theme.INDIGO_COMPLETE:
                     fragmentThemColorBinding.iconIndigoComplete.setVisibility(View.VISIBLE);
-                    break;
+                    break;*/
 
-                case Theme.BROWN_COMPLETE:
+                /*case Theme.BROWN_COMPLETE:
                     fragmentThemColorBinding.iconBrownComplete.setVisibility(View.VISIBLE);
-                    break;
-                case Theme.TEAL_COMPLETE:
+                    break;*/
+                /*case Theme.TEAL_COMPLETE:
                     fragmentThemColorBinding.iconTealComplete.setVisibility(View.VISIBLE);
-                    break;
+                    break;*/
 
-                case Theme.GREY_COMPLETE:
+                /*case Theme.GREY_COMPLETE:
                     fragmentThemColorBinding.iconGreyComplete.setVisibility(View.VISIBLE);
-                    break;
+                    break;*/
             }
 
 

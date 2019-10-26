@@ -18,8 +18,6 @@ import net.iGap.module.structs.DataUsageStruct;
 
 import java.util.ArrayList;
 
-import static net.iGap.libs.bottomNavigation.Util.Utils.darkModeHandlerGray;
-
 public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<DataUsageStruct> dataList;

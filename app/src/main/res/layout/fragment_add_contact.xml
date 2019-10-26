@@ -3,19 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ac_layoutParent"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="?backgroundColorSettingTheme"
-    android:clickable="true"
     android:layoutDirection="ltr"
     android:orientation="vertical"
     tools:ignore="MissingPrefix">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:id="@+id/frg_add_contact_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -25,7 +24,7 @@
 
     <EditText
         android:id="@+id/ac_edt_firstName"
-        style="?hintColorSettingTheme"
+        style="@style/iGapEditTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
@@ -48,7 +47,7 @@
 
     <EditText
         android:id="@+id/ac_edt_lastName"
-        style="?hintColorSettingTheme"
+        style="@style/iGapEditTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
@@ -69,26 +68,26 @@
 
     <EditText
         android:id="@+id/ac_txt_codeCountry"
+        style="@style/iGapEditTextStyle"
         android:layout_width="72dp"
         android:layout_height="wrap_content"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:gravity="center"
         android:inputType="phone"
         android:maxLength="8"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:singleLine="true"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
         android:text="+98"
         android:textSize="@dimen/dp15"
-        style="?hintColorSettingTheme"
         app:layout_constraintBottom_toBottomOf="@+id/ac_edt_phoneNumber"
         app:layout_constraintStart_toStartOf="@id/ac_edt_lastName"
         app:layout_constraintTop_toTopOf="@+id/ac_edt_phoneNumber" />
 
     <com.vicmikhailau.maskededittext.MaskedEditText
         android:id="@+id/ac_edt_phoneNumber"
-        style="?hintColorSettingTheme"
+        style="@style/iGapEditTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

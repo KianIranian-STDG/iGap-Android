@@ -253,6 +253,7 @@
     <string name="just_wait_en">Пожалуйста, подождите.</string>
 
     <string name="device_dosenot_camera_en">Это устройство не имеет камеры.</string>
+    <string name="device_dosenot_support">На этом устройстве нет приложения для этого действия.</string>
 
     <string name="do_you_want_to_turn_on_gps">Ваша система глобального позиционирования (GPS) выключена, вы хотите ее включить?</string>
 
@@ -3579,7 +3580,9 @@
     <string name="popular_channel">Развлекательные каналы</string>
     <string name="edit_contact">Изменить контакт</string>
     <string name="open_url">открытый URL</string>
+    <string name="copied">скопирована</string>
     <string name="url_copied">ссылка скопирована</string>
+    <string name="profile">профиль</string>
 
 
 </resources>

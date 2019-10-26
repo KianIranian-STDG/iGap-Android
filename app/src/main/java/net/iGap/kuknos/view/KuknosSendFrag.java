@@ -30,7 +30,6 @@ import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.viewmodel.KuknosSendVM;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 
 import java.io.IOException;
 
@@ -84,7 +83,6 @@ public class KuknosSendFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosSToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         binding.fragKuknosSWalletAddressET.setImeOptions(EditorInfo.IME_ACTION_NEXT);

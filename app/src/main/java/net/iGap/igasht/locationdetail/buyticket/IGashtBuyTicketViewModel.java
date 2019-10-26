@@ -122,6 +122,6 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
         showLoadingView.set(View.VISIBLE);
         showMainView.set(View.GONE);
         showViewRefresh.set(View.GONE);
-        repository.getServiceList(this);
+        repository.getServiceList(this, this);
     }
 }

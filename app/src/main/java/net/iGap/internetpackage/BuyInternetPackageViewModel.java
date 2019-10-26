@@ -5,11 +5,12 @@ import android.view.View;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
+import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.api.errorhandler.ResponseCallback;
+import net.iGap.igasht.BaseIGashtResponse;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.model.OperatorType;
 
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BuyInternetPackageViewModel extends ViewModel {
+public class BuyInternetPackageViewModel extends BaseAPIViewModel {
 
     private ObservableInt showDetail = new ObservableInt(View.GONE);
     private ObservableInt showFilterType = new ObservableInt(View.GONE);
@@ -161,7 +162,7 @@ public class BuyInternetPackageViewModel extends ViewModel {
         if (selectedPackageType > 0) {
             enabledPaymentButton.set(false);
             showLoadingView.set(View.VISIBLE);
-            repository.purchaseInternetPackage(phoneNumber.substring(1), String.valueOf(selectedPackageType), new ResponseCallback<MciPurchaseResponse>() {
+            repository.purchaseInternetPackage(phoneNumber.substring(1), String.valueOf(selectedPackageType), this, new ResponseCallback<MciPurchaseResponse>() {
                 @Override
                 public void onSuccess(MciPurchaseResponse data) {
                     showLoadingView.set(View.INVISIBLE);
@@ -197,7 +198,7 @@ public class BuyInternetPackageViewModel extends ViewModel {
         showMainView.set(View.GONE);
         showRetryView.set(View.GONE);
         if (daysFilter == null || trafficFilter == null) {
-            repository.getFilterListData(new ResponseCallback<List<MciInternetPackageFilter>>() {
+            repository.getFilterListData(this, new ResponseCallback<List<MciInternetPackageFilter>>() {
                 @Override
                 public void onSuccess(List<MciInternetPackageFilter> data) {
                     getFilterListDuration(data);
@@ -216,10 +217,10 @@ public class BuyInternetPackageViewModel extends ViewModel {
                 }
             });
         } else if (packageList == null) {
-            repository.getInternetPackageList(new ResponseCallback<List<InternetPackage>>() {
+            repository.getInternetPackageList(this, new ResponseCallback<BaseIGashtResponse<InternetPackage>>() {
                 @Override
-                public void onSuccess(List<InternetPackage> data) {
-                    packageList = data;
+                public void onSuccess(BaseIGashtResponse<InternetPackage> data) {
+                    packageList = data.getData();
                     showMainView();
                 }
 
