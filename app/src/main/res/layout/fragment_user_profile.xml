@@ -18,9 +18,7 @@
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:fitsSystemWindows="true"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:background="?attr/rootBackgroundColor"
             app:elevation="0dp">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -28,21 +26,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/toolbar_height"
-                app:contentScrim="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                app:contentScrim="@drawable/shape_profile_toolbar"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                android:elevation="0dp"
+                android:background="@drawable/shape_profile_toolbar"
+                app:scrimAnimationDuration="1">
 
                 <net.iGap.module.RadiusImageView
                     android:id="@+id/fup_bg_avatar"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp200"
-                    android:layout_marginTop="-8dp"
                     android:scaleType="centerCrop"
+                    android:layout_marginTop="-8dp"
                     app:layout_collapseMode="parallax" />
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar_collapsed"
                     android:layout_width="match_parent"
-                    style="?attr/toolbarStyle"
                     android:layout_height="@dimen/toolbar_height"
                     android:layout_gravity="top"
                     android:gravity="center_vertical"
