@@ -187,6 +187,7 @@ public class RegisterRepository {
             public void onError(int majorCode, int minorCode) {
                 //todo: fixed it and handle is Secure
                 /*G.handler.postDelayed(()->new RequestInfoPage().infoPage("TOS"),2000);*/
+                Log.wtf(this.getClass().getName(), "onReceivePageInfoTOS: on Error");
                 callback.onError();
             }
         };
@@ -379,28 +380,26 @@ public class RegisterRepository {
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-                DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransactionAsync(realm1 -> RealmUserInfo.putOrUpdate(realm1, user), () -> {
-                        G.displayName = user.getDisplayName();
-                        G.userId = user.getId();
-                        G.onUserInfoResponse = null;
-                        if (AccountManager.getInstance().isExistThisAccount(user.getId())) {
-                            loginExistUser.setValue(true);
-                        } else {
-                            AccountManager.getInstance().addAccount(new AccountUser(
-                                    user.getId(),
-                                    null,
-                                    user.getDisplayName(),
-                                    String.valueOf(user.getPhone()),
-                                    null,
-                                    user.getInitials(),
-                                    user.getColor(),
-                                    0,
-                                    true));
-                            goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
-                        }
+                if (AccountManager.getInstance().isExistThisAccount(user.getId())) {
+                    loginExistUser.setValue(true);
+                } else {
+                    AccountManager.getInstance().addAccount(new AccountUser(
+                            user.getId(),
+                            null,
+                            user.getDisplayName(),
+                            String.valueOf(user.getPhone()),
+                            0,
+                            true));
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        realm.executeTransactionAsync(realm1 -> RealmUserInfo.putOrUpdate(realm1, user), () -> {
+                            G.displayName = user.getDisplayName();
+                            G.userId = user.getId();
+                            G.onUserInfoResponse = null;
+                        });
                     });
-                });
+                    goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
+
+                }
 
             }
 

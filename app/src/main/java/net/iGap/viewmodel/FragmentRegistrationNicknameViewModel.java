@@ -257,9 +257,6 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
                             null,
                             user.getDisplayName(),
                             String.valueOf(user.getPhone()),
-                            null,
-                            user.getInitials(),
-                            user.getColor(),
                             0,
                             true
                     ));

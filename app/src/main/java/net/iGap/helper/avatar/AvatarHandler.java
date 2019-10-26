@@ -41,6 +41,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import io.realm.Realm;
 
@@ -64,7 +65,7 @@ public class AvatarHandler {
         }
     }
 
-    private static HashSet<AvatarHandler> allAvatarHandler = new HashSet<>();
+    private static CopyOnWriteArraySet<AvatarHandler> allAvatarHandler = new CopyOnWriteArraySet<>();
 
     private ConcurrentHashMap<ImageView, ImageHashValue> imageViewHashValue;
     private ConcurrentHashMap<Long, HashSet<ImageView>> avatarHashImages;

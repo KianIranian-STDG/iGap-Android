@@ -361,7 +361,9 @@ public class WebSocketClient {
     }
 
     public static void disconnectSocket() {
-        webSocketClient.disconnect(/*"change account"*/);
+        if (webSocketClient != null) {
+            webSocketClient.disconnect(/*"change account"*/);
+        }
         changeAccountTime = true;
     }
 

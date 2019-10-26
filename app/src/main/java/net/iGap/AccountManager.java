@@ -2,6 +2,7 @@ package net.iGap;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Base64;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -11,21 +12,23 @@ import net.iGap.model.AccountUser;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class AccountManager {
 
+    public final static String defaultDBName = "iGapLocalDatabaseEncrypted.realm";
     private static AccountManager ourInstance = null;
 
     private SharedPreferences sharedPreferences;
+    private String dbEncryptionKey;
 
     //first item is fake user for handel add new user
     private List<AccountUser> userAccountList;
     private List<String> DbNameList = Arrays.asList("iGapLocalDatabaseEncrypted3.realm", "iGapLocalDatabaseEncrypted2.realm", defaultDBName);
-    private AccountUser currentUser;
-    public static final String defaultDBName = "iGapLocalDatabaseEncrypted.realm";
+    private int currentUser;
 
     public static AccountManager getInstance() {
         if (ourInstance != null) {
@@ -43,17 +46,26 @@ public class AccountManager {
 
     private AccountManager(@NotNull Context context) {
         sharedPreferences = context.getSharedPreferences("iGapUserAccount", Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        userAccountList = gson.fromJson(sharedPreferences.getString("userList", ""), new TypeToken<List<AccountUser>>() {
-        }.getType());
+        getUserAccountListFromSharedPreferences();
         if (userAccountList == null) {
             userAccountList = new ArrayList<>();
             AccountUser accountUser = new AccountUser(false, "test");
             accountUser.setDbName(getDbName());
             userAccountList.add(accountUser);
-            currentUser = accountUser;
-        } else {
-            currentUser = gson.fromJson(sharedPreferences.getString("currentUser", ""), AccountUser.class);
+            currentUser = 0;
+        }
+        getCurrentUserFromSharedPreferences();
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
+        dbEncryptionKey = sharedPreferences.getString("myByteArray", null);
+        if (dbEncryptionKey == null) {
+            byte[] key = new byte[64];
+            new SecureRandom().nextBytes(key);
+            String saveThis = Base64.encodeToString(key, Base64.DEFAULT);
+            sharedPreferences.edit().putString("myByteArray", saveThis).apply();
+            dbEncryptionKey = saveThis;
+        }
+        for (int i = 0; i < userAccountList.size(); i++) {
+            userAccountList.get(i).setRealmConfiguration(dbEncryptionKey);
         }
     }
 
@@ -62,30 +74,49 @@ public class AccountManager {
     }
 
     public AccountUser getCurrentUser() {
-        return currentUser;
+        return userAccountList.get(currentUser);
     }
 
-    private void setCurrentUser(AccountUser currentUser) {
-        sharedPreferences.edit().putString("currentUser", new Gson().toJson(currentUser, AccountUser.class)).apply();
-        this.currentUser = currentUser;
+    private void setCurrentUserInSharedPreferences() {
+        sharedPreferences.edit().putInt("currentUser", this.currentUser).apply();
     }
 
-    private void setUserList() {
+    private void getCurrentUserFromSharedPreferences() {
+        this.currentUser = sharedPreferences.getInt("currentUser", 0);
+    }
+
+    private void getUserAccountListFromSharedPreferences() {
+        userAccountList = new Gson().fromJson(sharedPreferences.getString("userList", ""), new TypeToken<List<AccountUser>>() {
+        }.getType());
+    }
+
+    private void setUserAccountListInSharedPreferences() {
         sharedPreferences.edit().putString("userList", new Gson().toJson(userAccountList, new TypeToken<List<AccountUser>>() {
         }.getType())).apply();
     }
 
+    public void setCurrentUser() {
+        getCurrentUserFromSharedPreferences();
+    }
+
     public void addAccount(AccountUser accountUser) {
+        Log.wtf(this.getClass().getName(), "addAccount");
         if (accountUser.getDbName() == null) {
             accountUser.setDbName(getDbName());
+            accountUser.setRealmConfiguration(userAccountList.get(0).getRealmConfiguration());
+            Log.wtf(this.getClass().getName(), "get config: " + (accountUser.getRealmConfiguration() != null));
         }
         userAccountList.add(userAccountList.size(), accountUser);
         userAccountList.get(0).setDbName(getDbName());
-        setUserList();
-        setCurrentUser(accountUser);
+        userAccountList.get(0).setRealmConfiguration(dbEncryptionKey);
+        Log.wtf(this.getClass().getName(), "get config: " + (userAccountList.get(0).getRealmConfiguration() != null));
+        setUserAccountListInSharedPreferences();
+        this.currentUser = userAccountList.size() - 1;
+        setCurrentUserInSharedPreferences();
         for (int i = 0; i < userAccountList.size(); i++) {
             Log.wtf(this.getClass().getName(), "account: " + userAccountList.get(i).toString());
         }
+        Log.wtf(this.getClass().getName(), "current user: " + currentUser);
     }
 
     public boolean isExistThisAccount(long userId) {
@@ -93,16 +124,16 @@ public class AccountManager {
     }
 
     public void changeCurrentUserForAddAccount() {
-        currentUser = userAccountList.get(0);
+        currentUser = 0;
     }
 
     public void changeCurrentUserAccount(long userId) {
         int t = userAccountList.indexOf(new AccountUser(userId));
         if (t != -1) {
-            currentUser = userAccountList.get(t);
-            setCurrentUser(currentUser);
+            currentUser = t;
+            setCurrentUserInSharedPreferences();
         } else {
-            Log.wtf(this.getClass().getName(), "not exist this user");
+            throw new IllegalArgumentException("not exist this user");
         }
     }
 
@@ -111,10 +142,10 @@ public class AccountManager {
         if (accountUser.isAssigned()) {
             if (userAccountList.contains(accountUser)) {
                 userAccountList.remove(accountUser);
-                currentUser = userAccountList.get(userAccountList.size() - 1);
-                setUserList();
-                setCurrentUser(currentUser);
-                return currentUser.isAssigned();
+                currentUser = userAccountList.size() - 1;
+                setCurrentUserInSharedPreferences();
+                setUserAccountListInSharedPreferences();
+                return userAccountList.get(currentUser).isAssigned();
             } else {
                 return false;
             }

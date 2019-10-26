@@ -10,6 +10,8 @@ package net.iGap.viewmodel;
  */
 
 import android.net.Uri;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import androidx.core.text.HtmlCompat;
@@ -176,41 +178,52 @@ public class FragmentRegisterViewModel extends ViewModel {
     }
 
     private void getTermsAndConditionData() {
-        repository.getTermsOfServiceBody(new RegisterRepository.RepositoryCallback<String>() {
-            @Override
-            public void onSuccess(String data) {
-                if (data != null) {
-                    agreementDescription = HtmlCompat.fromHtml(data, HtmlCompat.FROM_HTML_MODE_LEGACY).toString();
-                }
-                repository.getInfoLocation(new RegisterRepository.RepositoryCallback<LocationModel>() {
-                    @Override
-                    public void onSuccess(LocationModel data) {
-                        repository.inRegisterMode(hideDialogQRCode, goToTwoStepVerificationPage);
-                        isShowLoading.set(View.INVISIBLE);
-                        viewVisibility.set(View.VISIBLE);
-                        callbackEdtCodeNumber.set("+" + data.getCountryCode());
-                        callbackBtnChoseCountry.set(data.getCountryName());
-                        if (data.getPhoneMask() != null && !data.getPhoneMask().equals("")) {
-                            edtPhoneNumberMask.set(data.getPhoneMask().replace("X", "#").replace(" ", "-"));
-                        } else {
-                            edtPhoneNumberMask.set("##################");
+        if (G.socketConnection) {
+            repository.getTermsOfServiceBody(new RegisterRepository.RepositoryCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    if (data != null) {
+                        agreementDescription = HtmlCompat.fromHtml(data, HtmlCompat.FROM_HTML_MODE_LEGACY).toString();
+                    }
+                    repository.getInfoLocation(new RegisterRepository.RepositoryCallback<LocationModel>() {
+                        @Override
+                        public void onSuccess(LocationModel data) {
+                            repository.inRegisterMode(hideDialogQRCode, goToTwoStepVerificationPage);
+                            isShowLoading.set(View.INVISIBLE);
+                            viewVisibility.set(View.VISIBLE);
+                            callbackEdtCodeNumber.set("+" + data.getCountryCode());
+                            callbackBtnChoseCountry.set(data.getCountryName());
+                            if (data.getPhoneMask() != null && !data.getPhoneMask().equals("")) {
+                                edtPhoneNumberMask.set(data.getPhoneMask().replace("X", "#").replace(" ", "-"));
+                            } else {
+                                edtPhoneNumberMask.set("##################");
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onError() {
-                        isShowLoading.set(View.INVISIBLE);
-                        showRetryView.set(View.VISIBLE);
-                    }
-                });
-            }
+                        @Override
+                        public void onError() {
+                            isShowLoading.set(View.INVISIBLE);
+                            showRetryView.set(View.VISIBLE);
+                        }
+                    });
+                }
 
-            @Override
-            public void onError() {
-                isShowLoading.set(View.INVISIBLE);
-                showRetryView.set(View.VISIBLE);
-            }
-        });
+                @Override
+                public void onError() {
+                    Log.wtf(this.getClass().getName(), "onError");
+                    isShowLoading.set(View.INVISIBLE);
+                    showRetryView.set(View.VISIBLE);
+                }
+            });
+        } else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log.wtf(this.getClass().getName(), "not connected");
+                    getTermsAndConditionData();
+                }
+            }, 500);
+        }
     }
 
     public void confirmPhoneNumber() {

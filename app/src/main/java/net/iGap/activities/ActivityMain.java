@@ -51,7 +51,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -178,7 +177,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static boolean waitingForConfiguration = false;
     private SharedPreferences sharedPreferences;
     private TextView iconLock;
-    private boolean isNeedToRegister = false;
     private int retryConnectToWallet = 0;
     public static String userPhoneNumber;
     private MyPhonStateService myPhonStateService;
@@ -393,11 +391,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setContentView(R.layout.activity_main);
 
         detectDeviceType();
-
-        Log.wtf(this.getClass().getName(), "userList Size: " + AccountManager.getInstance().getUserAccountList().size());
-        for (int i = 0; i < AccountManager.getInstance().getUserAccountList().size(); i++) {
-            Log.wtf(this.getClass().getName(), "user: " + AccountManager.getInstance().getUserAccountList().get(i).toString());
-        }
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         G.logoutAccount.observe(this, haveOtherAccount -> {
@@ -422,7 +415,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
         if (G.ISRealmOK) {
-            DbManager.getInstance().doRealmTask(realm -> {
+            /*DbManager.getInstance().doRealmTask(realm -> {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (realmUserInfo != null) {
                     String token = realmUserInfo.getPushNotificationToken();
@@ -440,10 +433,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             });
 
             if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
-                isNeedToRegister = true;
                 Intent intent = new Intent(this, ActivityRegistration.class);
                 startActivity(intent);
                 finish();
+                Log.wtf(this.getClass().getName(), "user registered before");
                 return;
             } else if (userInfo.getUserInfo() == null || userInfo.getUserInfo().getDisplayName() == null || userInfo.getUserInfo().getDisplayName().isEmpty()) {
                 Intent intent = new Intent(this, ActivityRegistration.class);
@@ -451,8 +444,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
+                Log.wtf(this.getClass().getName(), "getDisplayName is empty");
                 return;
-            }
+            }*/
 
             finishActivity = new FinishActivity() {
                 @Override
@@ -519,10 +513,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-            if (checkValidationForRealm(userInfo)) {
-                userPhoneNumber = userInfo.getUserInfo().getPhoneNumber();
-            }
-
             boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
             if (deleteFolderBackground) {
                 deleteContentFolderChatBackground();
@@ -540,7 +530,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 };
 
                 designLayout(chatLayoutMode.none);
-                new HelperFragment(getSupportFragmentManager(), new TabletEmptyChatFragment()).load(true);
                 setDialogFragmentSize();
 
                 G.iTowPanModDesinLayout = new ITowPanModDesinLayout() {
@@ -691,10 +680,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
         Log.wtf(this.getClass().getName(), "onCreate");
-    }
-
-    private boolean checkValidationForRealm(RealmUserInfo realmUserInfo) {
-        return realmUserInfo != null && realmUserInfo.isManaged() && realmUserInfo.isValid() && realmUserInfo.isLoaded();
     }
 
     /**
@@ -950,6 +935,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 // onPostResume.
                 retryProviderInstall = true;
                 break;
+            case 2424:
+                /*signOutWallet();
+                AccountManager.getInstance().setCurrentUser();
+                RaadApp.onCreate(this);
+                RequestClientGetRoomList.pendingRequest.remove(0);
+                FragmentMain.mOffset = 0;
+                DbManager.getInstance().changeRealmConfiguration();
+                WebSocketClient.connectNewAccount();
+                if (resultCode == RESULT_OK){
+
+                }else{
+                    WebSocketClient.disconnectSocket();
+                    DbManager.getInstance().closeUiRealm();
+                }
+*/
         }
     }
 
@@ -1183,6 +1183,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     //******************************************************************************************************************************
 
     private void initTabStrip(Intent intent) {
+        Log.wtf(this.getClass().getName(), "initTabStrip");
         BottomNavigationFragment bottomNavigationFragment = new BottomNavigationFragment();
 
         if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
@@ -1190,6 +1191,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         new HelperFragment(getSupportFragmentManager(), bottomNavigationFragment).load();
+        if (G.twoPaneMode) {
+            Log.wtf(this.getClass().getName(), "initTabStrip: twoPaneMode");
+            new HelperFragment(getSupportFragmentManager(), new TabletEmptyChatFragment()).load();
+        }
     }
 
 
@@ -1477,9 +1482,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Log.wtf(this.getClass().getName(), "onPause");
         super.onPause();
         if (G.ISRealmOK) {
-            if (isNeedToRegister) {
-                return;
-            }
             DbManager.getInstance().doRealmTask(realm -> {
                 AppUtils.updateBadgeOnly(realm, -1);
             });
@@ -1956,6 +1958,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public void updateUiForChangeAccount() {
         DbManager.getInstance().changeRealmConfiguration();
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if (G.twoPaneMode) {
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
         initTabStrip(getIntent());
         WebSocketClient.connectNewAccount();
     }

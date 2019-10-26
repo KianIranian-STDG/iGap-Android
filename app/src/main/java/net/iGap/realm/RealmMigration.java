@@ -651,12 +651,8 @@ public class RealmMigration implements io.realm.RealmMigration {
                             null,
                             userInfo.getString("displayName"),
                             userInfo.getString("phoneNumber"),
-                            userImageAvatarPath,
-                            userInfo.getString("initials"),
-                            userInfo.getString("color"),
                             0,
-                            true)
-                    );
+                            true));
                 }
             }
         }

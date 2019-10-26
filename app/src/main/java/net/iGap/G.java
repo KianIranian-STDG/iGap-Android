@@ -496,6 +496,14 @@ public class G extends ApplicationContext {
         Log.wtf(this.getClass().getName(), "onCreate");
         super.onCreate();
         //init account manager for handle multi account
+
+        try {
+            Realm.init(this);
+        } catch (Exception e) {
+            G.ISRealmOK = false;
+        } catch (Error e) {
+            G.ISRealmOK = false;
+        }
         AccountManager.initial(this);
 
         LooperThreadHelper.getInstance();

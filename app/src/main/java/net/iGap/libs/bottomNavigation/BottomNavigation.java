@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -139,7 +140,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
         super.onAttachedToWindow();
         avatarHandler = new AvatarHandler();
         avatarHandler.registerChangeFromOtherAvatarHandler();
-        avatarHandler.getAvatar(new ParamWithAvatarType(avatarImageView, G.userId).avatarType(AvatarHandler.AvatarType.USER).showMain());
+        avatarHandler.getAvatar(new ParamWithAvatarType(avatarImageView, AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

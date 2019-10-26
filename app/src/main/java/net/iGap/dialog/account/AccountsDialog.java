@@ -56,8 +56,8 @@ public class AccountsDialog extends BottomSheetDialogFragment {
                     RaadApp.onCreate(getContext());
                     pendingRequest.remove(0);
                     FragmentMain.mOffset = 0;
-                    ((ActivityMain) getActivity()).updateUiForChangeAccount();
                     dismiss();
+                    ((ActivityMain) getActivity()).updateUiForChangeAccount();
                 }
             } else {
                 if (getActivity() != null) {
@@ -68,10 +68,12 @@ public class AccountsDialog extends BottomSheetDialogFragment {
                     signOutWallet();
                     AccountManager.getInstance().changeCurrentUserForAddAccount();
                     DbManager.getInstance().changeRealmConfiguration();
-                    startActivity(new Intent(getActivity(), ActivityRegistration.class));
-                    getActivity().finish();
                     RaadApp.onCreate(getContext());
                     WebSocketClient.connectNewAccount();
+                    Intent intent = new Intent(getActivity(), ActivityRegistration.class);
+                    intent.putExtra("add account", true);
+                    getActivity().startActivity(intent);
+                    getActivity().finish();
                 }
             }
         }));

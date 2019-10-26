@@ -106,8 +106,8 @@ public final class StartupActions {
         new Thread(CallObserver::new).start();
         new Thread(HelperUploadFile::new).start();
 
-        if (realmConfiguration()) {
-            /*DbManager.getInstance().doRealmTask(realm -> {
+        if (G.ISRealmOK/*realmConfiguration()*/) {
+            DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(@NotNull Realm realm) {
@@ -139,10 +139,9 @@ public final class StartupActions {
                         }
                     }
                 });
-            });*/
-
-            /*new Thread(() -> checkDataUsage()).start();
-            new Thread(() -> mainUserInfo()).start();*/
+            });
+            new Thread(() -> checkDataUsage()).start();
+            new Thread(() -> mainUserInfo()).start();
             new Thread(this::connectToServer).start();
             Log.wtf(this.getClass().getName(), "StartupActions");
         }

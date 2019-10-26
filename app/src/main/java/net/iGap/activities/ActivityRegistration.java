@@ -14,17 +14,26 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import net.iGap.AccountManager;
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.WebSocketClient;
 import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.fragments.FragmentActivation;
 import net.iGap.fragments.FragmentIntroduce;
+import net.iGap.fragments.FragmentMain;
+import net.iGap.fragments.FragmentRegister;
 import net.iGap.fragments.FragmentRegistrationNickname;
 import net.iGap.fragments.WelcomeFragment;
 import net.iGap.helper.PermissionHelper;
+import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.viewmodel.RegistrationViewModel;
 
+import org.paygear.RaadApp;
+
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static org.paygear.utils.Utils.signOutWallet;
 
 public class ActivityRegistration extends ActivityEnhanced {
 
@@ -44,10 +53,12 @@ public class ActivityRegistration extends ActivityEnhanced {
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                 boolean showPro = false;
+                boolean isAddAccount = false;
                 if (getIntent() != null && getIntent().getExtras() != null) {
                     showPro = getIntent().getExtras().getBoolean(showProfile);
+                    isAddAccount = getIntent().getBooleanExtra("add account", false);
                 }
-                return (T) new RegistrationViewModel(showPro);
+                return (T) new RegistrationViewModel(showPro, isAddAccount);
             }
         }).get(RegistrationViewModel.class);
 
@@ -93,11 +104,11 @@ public class ActivityRegistration extends ActivityEnhanced {
             }
         });
 
-        viewModel.getGoToIntroduction().observe(this, isGo ->
-                loadFragment(new FragmentIntroduce(), true)
-        );
+        viewModel.getGoToIntroduction().observe(this, isGo -> loadFragment(new FragmentIntroduce(), true));
 
         viewModel.getGoToNicknamePage().observe(this, isGo -> loadFragment(new FragmentRegistrationNickname(), true));
+
+        viewModel.getGoToRegisterPage().observe(this, isGo -> loadFragment(new FragmentRegister(), true));
 
         viewModel.getLoadFromBackStack().observe(this, isLoad -> {
             if (isLoad != null && isLoad) {
@@ -136,8 +147,23 @@ public class ActivityRegistration extends ActivityEnhanced {
                 Log.wtf(this.getClass().getName(), "onBackPressed");
                 super.onBackPressed();
             } else {
-                Log.wtf(this.getClass().getName(), "finish");
-                finish();
+                if (getIntent().getBooleanExtra("add account", false)) {
+                    WebSocketClient.disconnectSocket();
+                    DbManager.getInstance().closeUiRealm();
+                    signOutWallet();
+                    AccountManager.getInstance().setCurrentUser();
+                    RaadApp.onCreate(this);
+                    RequestClientGetRoomList.pendingRequest.remove(0);
+                    FragmentMain.mOffset = 0;
+                    DbManager.getInstance().changeRealmConfiguration();
+                    WebSocketClient.connectNewAccount();
+                    Log.wtf(this.getClass().getName(), "current user: " + AccountManager.getInstance().getCurrentUser());
+                    finish();
+                    startActivity(new Intent(this, ActivityMain.class));
+                } else {
+                    Log.wtf(this.getClass().getName(), "finish");
+                    finish();
+                }
             }
         }
     }

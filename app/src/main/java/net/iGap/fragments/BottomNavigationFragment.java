@@ -216,21 +216,6 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         bottomNavigation.setCurrentItem(4);
     }
 
-    public void setChatPage(FragmentChat fragmentChat) {
-        if (bottomNavigation.getSelectedItemPosition() != 2) {
-            bottomNavigation.setCurrentItem(2);
-        }
-        Fragment page = getChildFragmentManager().findFragmentById(R.id.viewpager);
-        // based on the current position you can then cast the page to the correct
-        // class and call the method:
-        if (page instanceof TabletMainFragment) {
-            Log.wtf(this.getClass().getName(), "if");
-            ((TabletMainFragment) page).loadChatFragment(fragmentChat);
-        } else {
-            Log.wtf(this.getClass().getName(), "else");
-        }
-    }
-
 
     public boolean isFirstTabItem() {
         if (bottomNavigation.getSelectedItemPosition() == 2) {
