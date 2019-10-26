@@ -8,8 +8,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="4dp"
-        style="?textSubColorSettingTheme"
         android:gravity="center"
+        android:textColor="?iGapSubtitleTextColor"
         android:visibility="invisible" />
 
     <androidx.appcompat.widget.AppCompatImageView

@@ -43,19 +43,6 @@
         <attr name="menu_config" format="boolean" />
     </declare-styleable>
 
-
-    <declare-styleable name="SelectableRoundedImageView">
-        <attr name="sriv_left_top_corner_radius" format="dimension" />
-        <attr name="sriv_right_top_corner_radius" format="dimension" />
-        <attr name="sriv_left_bottom_corner_radius" format="dimension" />
-        <attr name="sriv_right_bottom_corner_radius" format="dimension" />
-        <attr name="sriv_border_width" format="dimension" />
-        <attr name="sriv_border_color" format="color" />
-        <attr name="sriv_oval" format="boolean" />
-        <attr name="android:scaleType" />
-    </declare-styleable>
-
-
     <!--ripple library-->
     <declare-styleable name="RippleView">
         <attr name="rv_alpha" format="integer" />
@@ -75,63 +62,52 @@
 
     </declare-styleable>
 
-    <!--NavigationTabStrip library-->
-    <declare-styleable name="NavigationTabStrip">
-        <attr name="nts_color" format="color" />
-        <attr name="nts_size" format="dimension" />
-        <attr name="nts_weight" format="dimension" />
-        <attr name="nts_factor" format="float" />
-        <attr name="nts_titles" format="reference" />
-        <attr name="nts_type" format="enum">
-            <enum name="line" value="0" />
-            <enum name="point" value="1" />
-        </attr>
-        <attr name="nts_gravity" format="enum">
-            <enum name="bottom" value="0" />
-            <enum name="top" value="1" />
-        </attr>
-        <attr name="nts_typeface" format="string" />
-        <attr name="nts_corners_radius" format="dimension" />
-        <attr name="nts_animation_duration" format="integer" />
-        <attr name="nts_inactive_color" format="color" />
-        <attr name="nts_active_color" format="color" />
-    </declare-styleable>
-
+    <!--=======================custom theme=====================-->
+    <attr name="colorPrimaryLight" format="reference|color" />
+    <attr name="colorAccentDark" format="reference|color" />
+    <!--general color-->
+    <attr name="rootBackgroundColor" format="reference|color" />
+    <attr name="iGapTitleTextColor" format="reference|color" />
+    <attr name="iGapSubtitleTextColor" format="reference|color" />
+    <attr name="iGapPrimaryTextColor" format="reference|color" />
+    <attr name="iGapDividerLine" format="reference|color" />
+    <attr name="iGapHintTextColor" format="reference|color" />
+    <attr name="iGapButtonColor" format="reference|color" />
+    <attr name="iGapButtonTextColor" format="reference|color" />
+    <attr name="iGapPrimaryIconTextColor" format="reference|color" />
+    <attr name="iGapLogoutButtonColor" format="reference|color" />
+    <attr name="iGapCardViewColor" format="reference|color" />
+    <attr name="iGapEditTxtColor" format="reference|color" />
+    <!--chat item color-->
+    <attr name="iGapReceivedMessageTextColor" format="reference|color" />
+    <attr name="iGapReceivedOtherTextColor" format="reference|color" />
+    <attr name="iGapReceivedReplayColor" format="reference|color" />
+    <attr name="iGapSendMessageTextColor" format="reference|color" />
+    <attr name="iGapSendMessageOtherTextColor" format="reference|color" />
+    <attr name="iGapSendMessageBubbleColor" format="reference|color" />
+    <attr name="iGapSendReplayColor" format="reference|color" />
+    <attr name="iGapLinkColor" format="reference|color" />
+    <attr name="iGapDefaultChatBackground" format="reference|color" />
+    <!--bottom navigation item icon color-->
+    <attr name="iGapBottomNavigationIconStart" format="reference|color" />
+    <attr name="iGapBottomNavigationIconEnd" format="reference|color" />
+    <!--for support theme under android version 21-->
+    <attr name="iGapToolbarBackground" format="reference" />
+    <attr name="iGapToolbarBackgroundSharp" format="reference" />
+    <attr name="iGapAvatarBackground" format="reference" />
+    <attr name="iGapReceivedReplayBackground" format="reference" />
+    <attr name="iGapSendReplayBackground" format="reference" />
+    <attr name="iGapButtonSelector" format="reference" />
+    <attr name="iGapBottomSheetBackground" format="reference" />
+    <attr name="iGapCardToCardBackground" format="reference" />
+    <attr name="iGapCardToCardButtonBackground" format="reference" />
+    <attr name="iGapCardToCardIconBackground" format="reference" />
+    <attr name="iGapBottomSheetHeaderLine" format="reference" />
+    <attr name="iGapScrollerHandler" format="reference" />
+    <attr name="iGapChatSendMessageBackground" format="reference" />
+    <attr name="iGapCheckButton" format="reference" />
 
     <!--=======================custom theme=====================-->
-
-    <attr name="pageBackgroundTheme" format="reference" />
-    <attr name="textColorTheme" format="reference" />
-    <attr name="iGapButtonStroke" format="reference" />
-    <attr name="iGapButton" format="reference" />
-    <attr name="iGapButtonGray" format="reference" />
-    <attr name="greenTextIconColor" format="reference" />
-    <attr name="iGapKuknosLogout" format="reference" />
-
-    <!--Menu-->
-    <attr name="textColorMenuTheme" format="reference" />
-    <attr name="textColorBottomSheet" format="reference" />
-    <attr name="iconColorMenuTheme" format="reference" />
-    <attr name="backgroundColorMenuTheme" format="reference" />
-
-    <!--setting-->
-
-    <attr name="backgroundColorSettingTheme" format="reference" />
-    <attr name="backgroundColorSettingTheme_2" format="reference" />
-    <attr name="textTitleColorSettingTheme" format="reference" />
-    <attr name="text2TitleColorSettingTheme" format="reference" />
-    <attr name="textSubColorSettingTheme" format="reference" />
-    <attr name="lineColorSettingTheme" format="reference" />
-    <attr name="hintColorSettingTheme" format="reference" />
-    <attr name="textBackgroundColor" format="reference" />
-    <attr name="textBackgroundColor_2" format="reference" />
-    <attr name="textSecurityColor" format="reference" />
-    <attr name="textColorCall" format="reference" />
-    <attr name="backgroundColorCall" format="reference" />
-    <attr name="emojiChat" format="reference" />
-    <attr name="backgroundSubChatTheme" format="reference" />
-    <attr name="fabButtoniGap" format="reference" />
-    <attr name="backgroundPassCode" format="reference" />
 
 
     <!--bottom navigation-->
@@ -177,15 +153,15 @@
     </declare-styleable>
 
     <declare-styleable name="AudioWave">
-        <attr format="color" name="waveColor" />
-        <attr format="dimension" name="chunkWidth" />
-        <attr format="dimension" name="chunkHeight" />
-        <attr format="dimension" name="minChunkHeight" />
-        <attr format="dimension" name="chunkRadius" />
-        <attr format="dimension" name="chunkSpacing" />
-        <attr format="float" name="progress" />
-        <attr format="boolean" name="animateExpansion" />
-        <attr format="boolean" name="touchable" />
+        <attr name="waveColor" format="color" />
+        <attr name="chunkWidth" format="dimension" />
+        <attr name="chunkHeight" format="dimension" />
+        <attr name="minChunkHeight" format="dimension" />
+        <attr name="chunkRadius" format="dimension" />
+        <attr name="chunkSpacing" format="dimension" />
+        <attr name="progress" format="float" />
+        <attr name="animateExpansion" format="boolean" />
+        <attr name="touchable" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="BannerSlider">
@@ -217,4 +193,10 @@
         <attr name="color_unchecked_stroke" format="color" />
         <attr name="small_tick" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="RadiusImageView">
+        <attr name="riv_radius" format="dimension"/>
+        <attr name="riv_radius_right_side" format="boolean"/>
+    </declare-styleable>
+
 </resources>

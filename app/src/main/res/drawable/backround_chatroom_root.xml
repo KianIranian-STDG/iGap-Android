@@ -4,9 +4,9 @@
     <corners
         android:topLeftRadius="@dimen/dp8"
         android:topRightRadius="@dimen/dp8" />
-    <solid android:color="@color/chat_bottom_bg" />
+    <solid android:color="?attr/iGapDividerLine" />
 
     <stroke
-        android:color="@color/gray_9d"
-        android:width="0.1dp" />
+        android:width="0.1dp"
+        android:color="@color/gray_6c" />
 </shape>

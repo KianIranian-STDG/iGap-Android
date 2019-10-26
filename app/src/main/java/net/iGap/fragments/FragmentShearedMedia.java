@@ -38,6 +38,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -51,6 +52,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperCalander;
@@ -558,13 +560,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
         textView.setSingleLine(true);
 
-        if (G.isDarkTheme) {
-            textView.setBackground(getContext().getResources().getDrawable(R.drawable.round_button_enabled_bg));
-            textView.setTextColor(getContext().getResources().getColor(R.color.gray_4c));
-        } else {
-            textView.setBackground(getContext().getResources().getDrawable(R.drawable.round_button_disabled_bg));
-            textView.setTextColor(getContext().getResources().getColor(R.color.white));
-        }
+        textView.setBackgroundResource(new Theme().getButtonSelectorBackground(textView.getContext()));
+        textView.setTextColor(ContextCompat.getColorStateList(textView.getContext(), R.color.button_text_color_selector));
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         if (pos == 0 || pos == mSharedTypesList.size() + 1) {
@@ -590,25 +587,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     }
 
     private void checkSharedButtonsBackgrounds() {
-
         for (int i = 0; i < mSharedTypeButtonsList.size(); i++) {
-            if (G.isDarkTheme) {
-                if (mCurrentSharedMediaType == mSharedTypeButtonsList.get(i).getId()) {
-                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.round_button_enabled_bg));
-                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.white));
-                } else {
-                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.round_button_disabled_bg));
-                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.gray_4c));
-                }
-            } else {
-                if (mCurrentSharedMediaType != mSharedTypeButtonsList.get(i).getId()) {
-                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.round_button_disabled_bg));
-                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.gray_4c));
-                } else {
-                    mSharedTypeButtonsList.get(i).getButton().setBackground(getContext().getResources().getDrawable(R.drawable.round_button_selected_bg));
-                    mSharedTypeButtonsList.get(i).getButton().setTextColor(getContext().getResources().getColor(R.color.white));
-                }
-            }
+            mSharedTypeButtonsList.get(i).getButton().setSelected(mCurrentSharedMediaType == mSharedTypeButtonsList.get(i).getId());
         }
     }
 

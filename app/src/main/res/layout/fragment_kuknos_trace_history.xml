@@ -10,9 +10,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/kuknos_tradeHistory_header"
@@ -21,93 +21,89 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="@dimen/dp10"
             android:background="@drawable/kuknos_list_header_style"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/kuknos_tradeHistory_recycler"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.9">
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:minHeight="38dp"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="2"
+                android:gravity="center"
+                android:minHeight="38dp"
                 android:text="@string/kuknos_trade_sell"
+                android:textColor="@color/buttonTextColor"
                 android:textSize="@dimen/dp14"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_gravity="center_vertical"
-                android:textColor="@color/buttonTextColor" />
+                android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:minHeight="38dp"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="2"
+                android:gravity="center"
+                android:minHeight="38dp"
                 android:text="@string/kuknos_trade_recieve"
+                android:textColor="@color/buttonTextColor"
                 android:textSize="@dimen/dp14"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_gravity="center_vertical"
-                android:textColor="@color/buttonTextColor" />
+                android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:minHeight="38dp"
-                android:layout_weight="2"
-                android:text="@string/kuknos_trade_amount"
-                android:textSize="@dimen/dp14"
-                android:textStyle="bold"
-                android:gravity="center"
                 android:layout_gravity="center_vertical"
-                android:textColor="@color/buttonTextColor" />
+                android:layout_weight="2"
+                android:gravity="center"
+                android:minHeight="38dp"
+                android:text="@string/kuknos_trade_amount"
+                android:textColor="@color/buttonTextColor"
+                android:textSize="@dimen/dp14"
+                android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="?textTitleColorSettingTheme"
                 android:id="@+id/kuknos_tradeHistory_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:minHeight="38dp"
-                android:layout_weight="3"
-                android:text="@string/kuknos_trade_date"
-                android:textSize="@dimen/dp14"
-                android:textStyle="bold"
-                android:gravity="center"
                 android:layout_gravity="center_vertical"
-                android:textColor="@color/buttonTextColor" />
+                android:layout_weight="3"
+                android:gravity="center"
+                android:minHeight="38dp"
+                android:text="@string/kuknos_trade_date"
+                android:textColor="@color/buttonTextColor"
+                android:textSize="@dimen/dp14"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
         <TextView
-            style="?textTitleColorSettingTheme"
             android:id="@+id/kuknos_tradeHistory_NOitem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/dp36"
-            android:gravity="center"
-            android:text="@string/kuknos_trade_noItem"
-            android:textStyle="bold"
-            android:textSize="@dimen/dp16"
-            android:singleLine="true"
             android:layout_margin="@dimen/dp4"
+            android:gravity="center"
+            android:minHeight="@dimen/dp36"
+            android:singleLine="true"
+            android:text="@string/kuknos_trade_noItem"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/dp16"
+            android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/kuknos_tradeHistory_header"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_tradeHistory_header" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/kuknos_tradeHistory_recycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scrollbars="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/kuknos_tradeHistory_NOitem"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_tradeHistory_NOitem" />
 
         <ProgressBar
             android:id="@+id/kuknos_tradeHistory_ProgressV"
@@ -115,12 +111,12 @@
             android:layout_height="0dp"
             android:elevation="2dp"
             android:visibility="visible"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.08"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHeight_percent="0.08" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

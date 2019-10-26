@@ -116,22 +116,6 @@ public class FragmentPassCode extends BaseFragment {
         fragmentPassCodeBinding.patternLockView.setTactileFeedbackEnabled(true);                            // Enables vibration feedback when the pattern is drawn
         fragmentPassCodeBinding.patternLockView.setInputEnabled(true);                                     // Disables any input from the pattern lock view completely
 
-        fragmentPassCodeBinding.patternLockView.setDotCount(4);
-        fragmentPassCodeBinding.patternLockView.setDotNormalSize((int) ResourceUtils.getDimensionInPx(G.fragmentActivity, R.dimen.dp22));
-        fragmentPassCodeBinding.patternLockView.setDotSelectedSize((int) ResourceUtils.getDimensionInPx(G.fragmentActivity, R.dimen.dp32));
-        fragmentPassCodeBinding.patternLockView.setPathWidth((int) ResourceUtils.getDimensionInPx(G.fragmentActivity, R.dimen.pattern_lock_path_width));
-        fragmentPassCodeBinding.patternLockView.setAspectRatioEnabled(true);
-        fragmentPassCodeBinding.patternLockView.setAspectRatio(PatternLockView.AspectRatio.ASPECT_RATIO_HEIGHT_BIAS);
-        if (G.isDarkTheme) {
-            fragmentPassCodeBinding.patternLockView.setNormalStateColor(ResourceUtils.getColor(G.fragmentActivity, R.color.white));
-        } else {
-            fragmentPassCodeBinding.patternLockView.setNormalStateColor(Color.parseColor(G.appBarColor));
-        }
-        fragmentPassCodeBinding.patternLockView.setCorrectStateColor(ResourceUtils.getColor(G.fragmentActivity, R.color.green));
-        fragmentPassCodeBinding.patternLockView.setWrongStateColor(ResourceUtils.getColor(G.fragmentActivity, R.color.red));
-        fragmentPassCodeBinding.patternLockView.setDotAnimationDuration(150);
-        fragmentPassCodeBinding.patternLockView.setPathEndAnimationDuration(100);
-
     }
 
     private void initDataBinding() {

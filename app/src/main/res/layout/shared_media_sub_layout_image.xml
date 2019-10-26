@@ -37,8 +37,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp8"
             android:padding="2dp"
-            android:text="@string/md_camera_alt"
-            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:text="@string/camera2_icon"
+            style="@style/myIconTextViewStyle"
             android:textColor="@android:color/white"
             android:textSize="@dimen/dp10" />
 

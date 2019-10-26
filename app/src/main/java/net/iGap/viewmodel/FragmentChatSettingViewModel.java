@@ -1,6 +1,7 @@
 package net.iGap.viewmodel;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
@@ -10,11 +11,16 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.helper.HelperCalander;
+import net.iGap.model.ThemeModel;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StartupActions;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 
 public class FragmentChatSettingViewModel extends ViewModel {
@@ -37,8 +43,15 @@ public class FragmentChatSettingViewModel extends ViewModel {
     private ObservableInt dateType = new ObservableInt(R.string.miladi);
     private ObservableInt textSize = new ObservableInt(14 - MIN_TEXT_SIZE);
     private ObservableInt textSizeMax = new ObservableInt(MAX_TEXT_SIZE - MIN_TEXT_SIZE);
-    private MutableLiveData<Boolean> goToChatBackgroundPage = new MutableLiveData<>();
+    private SingleLiveEvent<Boolean> goToChatBackgroundPage = new SingleLiveEvent<>();
     private MutableLiveData<Boolean> goToDateFragment = new MutableLiveData<>();
+    private MutableLiveData<Integer> selectedThemePosition = new MutableLiveData<>();
+    private MutableLiveData<List<ThemeModel>> themeList = new SingleLiveEvent<>();
+    private MutableLiveData<Integer> updateTextSizeSampleView = new MutableLiveData<>();
+    private SingleLiveEvent<Boolean> updateNewTheme = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
+    private MutableLiveData<String> setChatBackground = new MutableLiveData<>();
+    private MutableLiveData<Integer> setChatBackgroundDefault = new MutableLiveData<>();
 
     private SharedPreferences sharedPreferences;
 
@@ -60,6 +73,9 @@ public class FragmentChatSettingViewModel extends ViewModel {
         textSize.set(sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14) - MIN_TEXT_SIZE);
         setTextSizeValue(sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14));
         dateIsChange();
+
+        themeList.setValue(new Theme().getThemeList());
+        selectedThemePosition.setValue(themeList.getValue().indexOf(new ThemeModel(sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT), 0)));
     }
 
     public ObservableBoolean getIsTime() {
@@ -122,12 +138,40 @@ public class FragmentChatSettingViewModel extends ViewModel {
         return textSize;
     }
 
-    public MutableLiveData<Boolean> getGoToChatBackgroundPage() {
+    public SingleLiveEvent<Boolean> getGoToChatBackgroundPage() {
         return goToChatBackgroundPage;
     }
 
     public MutableLiveData<Boolean> getGoToDateFragment() {
         return goToDateFragment;
+    }
+
+    public MutableLiveData<Integer> getSelectedThemePosition() {
+        return selectedThemePosition;
+    }
+
+    public MutableLiveData<List<ThemeModel>> getThemeList() {
+        return themeList;
+    }
+
+    public MutableLiveData<Integer> getUpdateTextSizeSampleView() {
+        return updateTextSizeSampleView;
+    }
+
+    public MutableLiveData<String> getSetChatBackground() {
+        return setChatBackground;
+    }
+
+    public MutableLiveData<Integer> getSetChatBackgroundDefault() {
+        return setChatBackgroundDefault;
+    }
+
+    public SingleLiveEvent<Boolean> getUpdateNewTheme() {
+        return updateNewTheme;
+    }
+
+    public SingleLiveEvent<Boolean> getUpdateTwoPaneView() {
+        return updateTwoPaneView;
     }
 
     public void onDateClick() {
@@ -199,8 +243,8 @@ public class FragmentChatSettingViewModel extends ViewModel {
         G.showVoteChannelLayout = isShowVote.get();
     }
 
-    public void onProgressChangedTextSize(int progress,boolean fromUser){
-        if (fromUser){
+    public void onProgressChangedTextSize(int progress, boolean fromUser) {
+        if (fromUser) {
             sharedPreferences.edit().putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, progress + MIN_TEXT_SIZE).apply();
             StartupActions.textSizeDetection(progress + MIN_TEXT_SIZE);
             setTextSizeValue((progress + MIN_TEXT_SIZE));
@@ -222,12 +266,39 @@ public class FragmentChatSettingViewModel extends ViewModel {
         dateType.set(dateTypeResId);
     }
 
-    private void setTextSizeValue(int size){
+    public void getChatBackground() {
+        String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
+        Log.wtf(this.getClass().getName(), "value of background: " + backGroundPath);
+        if (backGroundPath.length() > 0) {
+            setChatBackground.setValue(backGroundPath);
+        } else {
+            setChatBackgroundDefault.setValue(R.drawable.chat_default_background_pattern);
+        }
+    }
+
+    public void setTheme(int oldTheme, int newTheme) {
+        if (themeList.getValue() != null) {
+            sharedPreferences.edit()
+                    .putInt(SHP_SETTING.KEY_OLD_THEME_COLOR, themeList.getValue().get(oldTheme).getThemeId())
+                    .putInt(SHP_SETTING.KEY_THEME_COLOR, themeList.getValue().get(newTheme).getThemeId())
+                    .putBoolean(SHP_SETTING.KEY_THEME_DARK, themeList.getValue().get(newTheme).getThemeId() == Theme.DARK)
+                    .apply();
+            G.themeColor = themeList.getValue().get(newTheme).getThemeId();
+            updateNewTheme.setValue(true);
+            if (G.twoPaneMode) {
+                updateTwoPaneView.setValue(true);
+            }
+            selectedThemePosition.setValue(newTheme);
+        }
+    }
+
+    private void setTextSizeValue(int size) {
         String tmp = String.valueOf(size);
         if (HelperCalander.isPersianUnicode) {
             textSizeValue.set(HelperCalander.convertToUnicodeFarsiNumber(tmp));
         } else {
             textSizeValue.set(tmp);
         }
+        updateTextSizeSampleView.setValue(size);
     }
 }

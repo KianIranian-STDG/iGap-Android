@@ -10,9 +10,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/toolbar"
@@ -110,11 +110,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/rankTitle"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
                     android:text="@string/rank"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintLeft_toLeftOf="@id/rankView"
                     app:layout_constraintRight_toRightOf="@id/rankView"
@@ -122,12 +122,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/scoreTitle"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp16"
-                    android:textSize="@dimen/standardTextSize"
                     android:text="@string/score"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
                     app:layout_constraintLeft_toLeftOf="@id/scoreView"
                     app:layout_constraintRight_toRightOf="@id/scoreView"
                     app:layout_constraintTop_toBottomOf="@id/scoreView" />
@@ -137,19 +137,19 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_margin="@dimen/dp10"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/scanBarcodeButton"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/scoreTitle"
-                    app:layout_constraintBottom_toTopOf="@id/scanBarcodeButton" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scoreTitle" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/scanBarcodeButton"
-                    style="?iGapButton"
+                    style="@style/iGapButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp10"
                     android:onClick="@{()->viewModel.onScanBarcodeButtonClick()}"
                     android:text="@string/scan_barcode"
-                    android:layout_marginBottom="@dimen/dp10"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"

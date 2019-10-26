@@ -10,12 +10,9 @@
     </data>
 
     <LinearLayout
-        style="?backgroundColorSettingTheme"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:layoutDirection="locale"
         android:orientation="vertical">
 
         <LinearLayout
@@ -46,11 +43,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/lastTermTitle"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/last_term"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/dp16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -58,12 +55,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/lastTermMessage"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp6"
                     android:gravity="center"
                     android:text="@{viewModel.response.lastTerm.message}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:visibility="@{viewModel.showLastTermMessage}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -80,7 +77,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/billIdTitle"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp8"
@@ -88,6 +84,7 @@
                     android:layout_marginTop="@dimen/dp8"
                     android:gravity="start"
                     android:text="@string/billing_id"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:visibility="@{viewModel.lastTermHaveAmount}"
                     app:layout_constraintStart_toStartOf="parent"
@@ -95,13 +92,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/billId"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp8"
                     android:layout_marginEnd="@dimen/dp8"
                     android:gravity="start"
                     android:text="@{String.valueOf(viewModel.response.lastTerm.billId)}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:visibility="@{viewModel.lastTermHaveAmount}"
                     app:layout_constraintBottom_toBottomOf="@id/billIdTitle"
@@ -111,12 +108,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/lastTermPayIdTitle"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
                     android:gravity="start"
                     android:text="@string/payment_code"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:visibility="@{viewModel.lastTermHaveAmount}"
                     app:layout_constraintStart_toStartOf="@id/billIdTitle"
@@ -124,11 +121,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/lastTermPayId"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="@{String.valueOf(viewModel.response.lastTerm.payId)}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:visibility="@{viewModel.lastTermHaveAmount}"
                     app:layout_constraintBottom_toBottomOf="@id/lastTermPayIdTitle"
@@ -138,12 +135,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/lastTermAmountTitle"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
                     android:gravity="start"
                     android:text="@string/amount"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:visibility="@{viewModel.lastTermHaveAmount}"
                     app:layout_constraintStart_toStartOf="@id/billIdTitle"
@@ -151,11 +148,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/lastTermAmount"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="@{viewModel.getCommaSeparatedPrice(viewModel.response.lastTerm.amount)}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:visibility="@{viewModel.lastTermHaveAmount}"
                     app:layout_constraintBottom_toBottomOf="@id/lastTermAmountTitle"
@@ -165,7 +162,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/payLastTermButton"
-                    style="?iGapButton"
+                    style="@style/iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp20"
@@ -188,12 +185,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/midTermTitle"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp20"
                     android:gravity="center"
                     android:text="@string/mid_term"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:visibility="@{viewModel.midTermHaveAmount}"
                     app:layout_constraintEnd_toEndOf="@id/lastTermTitle"
@@ -202,12 +199,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/midTermMessage"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp6"
                     android:gravity="center"
                     android:text="@{viewModel.response.midTerm.message}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:visibility="@{viewModel.showMidTermMessage}"
                     app:layout_constraintEnd_toEndOf="@id/midTermTitle"
@@ -216,7 +213,6 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/midTermBillIdTitle"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp8"
@@ -224,6 +220,7 @@
                     android:layout_marginTop="@dimen/dp8"
                     android:gravity="start"
                     android:text="@string/billing_id"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:visibility="@{viewModel.midTermHaveAmount}"
                     app:layout_constraintStart_toStartOf="parent"
@@ -231,13 +228,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/midTermBillId"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp8"
                     android:layout_marginEnd="@dimen/dp8"
                     android:gravity="start"
                     android:text="@{String.valueOf(viewModel.response.midTerm.billId)}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:visibility="@{viewModel.midTermHaveAmount}"
                     app:layout_constraintBottom_toBottomOf="@id/midTermBillIdTitle"
@@ -247,11 +244,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/midTermPayIdTitle"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
                     android:text="@string/payment_code"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:visibility="@{viewModel.midTermHaveAmount}"
                     app:layout_constraintStart_toStartOf="@id/midTermBillIdTitle"
@@ -259,11 +256,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/midTermPayId"
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="@{String.valueOf(viewModel.response.midTerm.payId)}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:visibility="@{viewModel.midTermHaveAmount}"
                     app:layout_constraintBottom_toBottomOf="@id/midTermPayIdTitle"
@@ -273,23 +270,23 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/midTermAmountTitle"
-                    style="?textSubColorSettingTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp8"
                     android:gravity="start"
                     android:text="@string/amount"
+                    android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:visibility="@{viewModel.midTermHaveAmount}"
                     app:layout_constraintStart_toStartOf="@id/midTermBillIdTitle"
                     app:layout_constraintTop_toBottomOf="@id/midTermPayId" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="?textTitleColorSettingTheme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="@{viewModel.getCommaSeparatedPrice(viewModel.response.midTerm.amount)}"
+                    android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
                     android:visibility="@{viewModel.midTermHaveAmount}"
                     app:layout_constraintBottom_toBottomOf="@id/midTermAmountTitle"
@@ -299,7 +296,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/midTermPayButton"
-                    style="?iGapButton"
+                    style="@style/iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp20"

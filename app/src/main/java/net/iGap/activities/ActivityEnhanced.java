@@ -16,10 +16,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
+import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
@@ -118,7 +119,11 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
             /*Log.wtf("ActivityEnhanced","status bar start");*/
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                StatusBarUtil.setColor(this, Color.parseColor(G.appBarColor), 50);
+                TypedValue tV = new TypedValue();
+                TypedArray aa = obtainStyledAttributes(tV.data, new int[]{R.attr.colorPrimaryDark});
+                int clr = aa.getColor(0, 0);
+                aa.recycle();
+                StatusBarUtil.setColor(this, clr, 50);
             }
             /*Log.wtf("ActivityEnhanced","status bar start");*/
 
@@ -138,100 +143,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
     }
 
     private void setThemeSetting() {
-        switch (G.themeColor) {
-            case Theme.CUSTOM:
-                this.setTheme(R.style.Material_lightCustom);
-                break;
-            case Theme.DEFAULT:
-                this.setTheme(R.style.Material_lightCustom);
-                break;
-            case Theme.DARK:
-                this.setTheme(R.style.Material_blackCustom);
-                break;
-            case Theme.RED:
-                this.setTheme(R.style.Material_red);
-                break;
-            case Theme.PINK:
-                this.setTheme(R.style.Material_pink);
-                break;
-            case Theme.PURPLE:
-                this.setTheme(R.style.Material_purple);
-                break;
-            case Theme.DEEPPURPLE:
-                this.setTheme(R.style.Material_deepPurple);
-                break;
-            case Theme.INDIGO:
-                this.setTheme(R.style.Material_indigo);
-                break;
-            case Theme.BLUE:
-                this.setTheme(R.style.Material_blue);
-                break;
-
-            case Theme.LIGHT_BLUE:
-                this.setTheme(R.style.Material_lightBlue);
-                break;
-
-            case Theme.CYAN:
-                this.setTheme(R.style.Material_cyan);
-                break;
-
-            case Theme.TEAL:
-                this.setTheme(R.style.Material_teal);
-                break;
-
-            case Theme.GREEN:
-                this.setTheme(R.style.Material_green);
-                break;
-
-            case Theme.LIGHT_GREEN:
-                this.setTheme(R.style.Material_lightGreen);
-                break;
-
-            case Theme.LIME:
-                this.setTheme(R.style.Material_lime);
-                break;
-
-            case Theme.YELLLOW:
-                this.setTheme(R.style.Material_yellow);
-                break;
-            case Theme.AMBER:
-                this.setTheme(R.style.Material_amber);
-                break;
-
-            case Theme.ORANGE:
-                this.setTheme(R.style.Material_orange);
-                break;
-
-            case Theme.DEEP_ORANGE:
-                this.setTheme(R.style.Material_deepOrange);
-                break;
-            case Theme.BROWN:
-                this.setTheme(R.style.Material_brown);
-                break;
-            case Theme.GREY:
-                this.setTheme(R.style.Material_grey);
-                break;
-            case Theme.BLUE_GREY:
-                this.setTheme(R.style.Material_blueGrey);
-                break;
-            case Theme.BLUE_GREY_COMPLETE:
-                this.setTheme(R.style.Material_blueGreyComplete);
-                break;
-            case Theme.INDIGO_COMPLETE:
-                this.setTheme(R.style.Material_indigoComplete);
-                break;
-            case Theme.BROWN_COMPLETE:
-                this.setTheme(R.style.Material_BrownComplete);
-                break;
-            case Theme.TEAL_COMPLETE:
-                this.setTheme(R.style.Material_TealComplete);
-                break;
-            case Theme.GREY_COMPLETE:
-                this.setTheme(R.style.Material_GreyComplete);
-                break;
-
-        }
-
+        this.setTheme(new Theme().getTheme(this));
     }
 
     @Override
@@ -371,7 +283,6 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
         new HelperFragment(getSupportFragmentManager()).removeAll(false);
 
-        Theme.setThemeColor();
         this.recreate();
 
     }

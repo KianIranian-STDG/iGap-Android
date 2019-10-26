@@ -25,18 +25,20 @@ import net.iGap.interfaces.ToolbarListener;
 public class IGashtHistoryPlaceListFragment extends IGashtBaseView {
 
     private FragmentIgashtHistoryPlaceBinding binding;
+    private IGashtHistoryPlaceViewModel iGashtHistoryPlaceViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(IGashtHistoryPlaceViewModel.class);
+        iGashtHistoryPlaceViewModel = ViewModelProviders.of(this).get(IGashtHistoryPlaceViewModel.class);
+        viewModel = iGashtHistoryPlaceViewModel;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_igasht_history_place, container, false);
-        binding.setViewModel((IGashtHistoryPlaceViewModel) viewModel);
+        binding.setViewModel(iGashtHistoryPlaceViewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         return binding.getRoot();
     }
@@ -59,25 +61,25 @@ public class IGashtHistoryPlaceListFragment extends IGashtBaseView {
                     }
                 }).getView());
 
-        binding.favoriteList.setAdapter(new PlaceHistoryAdapter(position -> ((IGashtHistoryPlaceViewModel) viewModel).onClickHistoryItem(position)));
+        binding.favoriteList.setAdapter(new PlaceHistoryAdapter(position -> iGashtHistoryPlaceViewModel.onClickHistoryItem(position)));
         binding.favoriteList.addItemDecoration(new DividerItemDecoration(binding.favoriteList.getContext(), DividerItemDecoration.VERTICAL));
         binding.favoriteList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (recyclerView.getLayoutManager() != null) {
-                    ((IGashtHistoryPlaceViewModel) viewModel).loadMoreItems(recyclerView.getLayoutManager().getItemCount(), ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition());
+                    iGashtHistoryPlaceViewModel.loadMoreItems(recyclerView.getLayoutManager().getItemCount(), ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition());
                 }
             }
         });
 
-        ((IGashtHistoryPlaceViewModel) viewModel).getHistoryList().observe(getViewLifecycleOwner(), data -> {
+        iGashtHistoryPlaceViewModel.getHistoryList().observe(getViewLifecycleOwner(), data -> {
             if (data != null && binding.favoriteList.getAdapter() instanceof PlaceHistoryAdapter) {
                 ((PlaceHistoryAdapter) binding.favoriteList.getAdapter()).setItems(data);
             }
         });
 
-        ((IGashtHistoryPlaceViewModel) viewModel).getGoToTicketDetail().observe(getViewLifecycleOwner(), voucherNumber -> {
+        iGashtHistoryPlaceViewModel.getGoToTicketDetail().observe(getViewLifecycleOwner(), voucherNumber -> {
             if (getActivity() != null && voucherNumber != null) {
                 Fragment fragment = new FragmentIgashtBarcodeScan();
                 Bundle bundle = new Bundle();

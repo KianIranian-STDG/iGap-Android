@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:id="@+id/rootView"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/rootView"
-    android:background="@color/white"
-    style="?backgroundColorSettingTheme"
-    android:clickable="true"
-    tools:context="org.paygear.fragment.OrderInfoFragment">
+    android:orientation="vertical">
 
 
     <LinearLayout
         android:id="@+id/toolbarLayout"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height" />
+        android:layout_height="@dimen/toolbar_height"
+        android:orientation="horizontal" />
 
     <LinearLayout
-        android:layout_below="@+id/toolbarLayout"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="?backgroundColorSettingTheme">
+        android:layout_below="@+id/toolbarLayout"
+        android:orientation="vertical">
 
         <!--<include layout="@layout/fragment_payment_history_list_item" />-->
         <org.paygear.widget.OrderView
@@ -39,16 +34,16 @@
 
 
         <com.google.android.material.button.MaterialButton
-            style="?iGapButton"
             android:id="@+id/show_receipt_button"
+            style="@style/iGapButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
-            android:textStyle="bold"
+            android:text="@string/show_receipt"
             android:textSize="14sp"
-            android:text="@string/show_receipt" />
+            android:textStyle="bold" />
 
 
     </LinearLayout>
@@ -57,7 +52,7 @@
         android:id="@+id/progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:layout_below="@+id/app_bar" />
+        android:layout_below="@+id/app_bar"
+        android:background="@android:color/white" />
 
 </RelativeLayout>

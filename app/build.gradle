@@ -30,8 +30,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 137
-        versionName "2.0.5"
+        versionCode 141
+        versionName "2.0.6.beta3"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
@@ -161,7 +161,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'org.webrtc:google-webrtc:1.0.23995'
+    implementation 'org.webrtc:google-webrtc:1.0.28513'
     implementation('com.afollestad.material-dialogs:core:0.9.6.0') {
         transitive = true
     }
@@ -229,14 +229,14 @@ dependencies {
     }
     implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
     implementation 'com.github.KianIranian-STDG:MessageProgress:1.0.1'
-    releaseImplementation 'com.github.KianIranian-STDG:Proto:protoMain13'
-    release_IranImplementation 'com.github.KianIranian-STDG:Proto:protoMain13'
-    release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protoMain13'
-    release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain13'
-    release_CharImplementation 'com.github.KianIranian-STDG:Proto:protoMain13'
-    release_GooglePlayImplementation 'com.github.KianIranian-STDG:Proto:protoMain13'
-    release_BazaarImplementation 'com.github.KianIranian-STDG:Proto:protoMain13'
-    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta13'
+    releaseImplementation 'com.github.KianIranian-STDG:Proto:protoMain14'
+    release_IranImplementation 'com.github.KianIranian-STDG:Proto:protoMain14'
+    release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protoMain14'
+    release_WebImplementation 'com.github.KianIranian-STDG:Proto:protoMain14'
+    release_CharImplementation 'com.github.KianIranian-STDG:Proto:protoMain14'
+    release_GooglePlayImplementation 'com.github.KianIranian-STDG:Proto:protoMain14'
+    release_BazaarImplementation 'com.github.KianIranian-STDG:Proto:protoMain14'
+    debugImplementation 'com.github.KianIranian-STDG:Proto:protoBeta14'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1' // don't upgrade this lib to version 4
@@ -268,6 +268,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.github.stellar:java-stellar-sdk:0.9.0'
+//  this lib is used for MPL
+    implementation 'com.android.volley:volley:1.1.1'
 }
 
 configurations.all {

@@ -35,6 +35,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperError;
@@ -241,7 +242,7 @@ public final class AppUtils {
     public static String conversionMessageType(ProtoGlobal.RoomMessageType type, @Nullable TextView textView, int colorId) {
         String result = returnConversionMessageType(type);
         if (textView != null && !result.isEmpty()) {
-            textView.setTextColor(ContextCompat.getColor(context, colorId));
+            textView.setTextColor(ContextCompat.getColor(textView.getContext(), colorId));
             textView.setText(result);
         }
         return result;
@@ -308,7 +309,6 @@ public final class AppUtils {
      * @param iconTextView TextView message status
      */
     public static void rightMessageStatus(FontIconTextView iconTextView, ProtoGlobal.RoomMessageStatus status, boolean isSenderMe) {
-        boolean isDarkTheme = G.isDarkTheme;
 
         if (iconTextView == null) {
             return;
@@ -322,26 +322,23 @@ public final class AppUtils {
         switch (status) {
             case DELIVERED:
                 iconTextView.setText(R.string.delivery_icon);
-                iconTextView.setTextColor(context.getResources()
-                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
+                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case FAILED:
                 iconTextView.setText(R.string.error_icon);
-                iconTextView.setTextColor(context.getResources().getColor(R.color.red));
+                iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), R.color.red));
                 break;
             case SEEN:
                 iconTextView.setText(R.string.delivery_icon);
-                iconTextView.setTextColor(context.getResources().getColor(R.color.read_status));
+                iconTextView.setTextColor(new Theme().getAccentColor(iconTextView.getContext()));
                 break;
             case SENDING:
                 iconTextView.setText(R.string.history_icon);
-                iconTextView.setTextColor(context.getResources()
-                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
+                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case SENT:
                 iconTextView.setText(R.string.check_icon);
-                iconTextView.setTextColor(context.getResources()
-                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
+                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             default:
                 iconTextView.setVisibility(View.GONE);
@@ -354,9 +351,7 @@ public final class AppUtils {
      *
      * @param iconTextView TextView message status
      */
-    public static void rightMessageStatus(FontIconTextView iconTextView, ProtoGlobal.RoomMessageStatus status
-            , ProtoGlobal.RoomMessageType messageType, boolean isSenderMe) {
-        boolean isDarkTheme = G.isDarkTheme;
+    public static void rightMessageStatus(TextView iconTextView, ProtoGlobal.RoomMessageStatus status, ProtoGlobal.RoomMessageType messageType, boolean isSenderMe) {
         if (iconTextView == null) {
             return;
         }
@@ -370,27 +365,24 @@ public final class AppUtils {
         switch (status) {
             case DELIVERED:
                 iconTextView.setText(R.string.delivery_icon);
-                iconTextView.setTextColor(context.getResources()
-                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
+                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case FAILED:
                 iconTextView.setText(R.string.error_icon);
-                iconTextView.setTextColor(context.getResources().getColor(R.color.red));
+                iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), R.color.red));
                 break;
             case LISTENED:
             case SEEN:
                 iconTextView.setText(R.string.delivery_icon);
-                iconTextView.setTextColor(context.getResources().getColor(R.color.read_status));
+                iconTextView.setTextColor(new Theme().getAccentColor(iconTextView.getContext()));
                 break;
             case SENDING:
                 iconTextView.setText(R.string.history_icon);
-                iconTextView.setTextColor(context.getResources()
-                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
+                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case SENT:
                 iconTextView.setText(R.string.check_icon);
-                iconTextView.setTextColor(context.getResources()
-                        .getColor(isDarkTheme ? R.color.unread_status_dark : R.color.unread_status));
+                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             default:
                 iconTextView.setVisibility(View.GONE);
@@ -460,7 +452,7 @@ public final class AppUtils {
                     messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, G.fragmentActivity.getString(R.string.location_message));
                     break;
                 case LOG:
-                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, HelperLogMessage.deserializeLog(message.getLogs(), false).toString());
+                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, HelperLogMessage.deserializeLog(G.fragmentActivity,message.getLogs(), false).toString());
                     break;
                 case VIDEO_TEXT:
                 case VIDEO:
@@ -633,7 +625,7 @@ public final class AppUtils {
 
         try {
 
-            progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(G.progressColor), PorterDuff.Mode.SRC_IN);
+            progressBar.getIndeterminateDrawable().setColorFilter(new Theme().getAccentColor(progressBar.getContext()), PorterDuff.Mode.SRC_IN);
 
             //  getResources().getColor(R.color.toolbar_background)
 
@@ -646,9 +638,9 @@ public final class AppUtils {
 
         try {
 
-            progressBar.setColor(Color.parseColor(G.progressColor));
+            progressBar.setColor(new Theme().getAccentColor(progressBar.getContext()));
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 

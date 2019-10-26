@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="?backgroundColorSettingTheme"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true">
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -31,19 +30,18 @@
                         android:layout_width="@dimen/dp260"
                         android:layout_height="@dimen/dp260"
                         android:layout_gravity="top|center"
-                        android:scaleType="fitCenter"
                         android:layout_marginLeft="@dimen/dp20"
                         android:layout_marginTop="@dimen/dp20"
                         android:layout_marginRight="@dimen/dp20"
                         android:layout_marginBottom="@dimen/dp12"
                         android:adjustViewBounds="true"
                         android:paddingTop="@dimen/dp20"
+                        android:scaleType="fitCenter"
                         android:visibility="gone"
                         app:srcCompat="@drawable/find1" />
 
                     <TextView
                         android:id="@+id/sfl_txt_empty_list_comment"
-                        style="?textTitleColorSettingTheme"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -51,6 +49,7 @@
                         android:paddingLeft="@dimen/dp20"
                         android:paddingRight="@dimen/dp20"
                         android:text="@string/empty_message"
+                        android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp13"
                         android:visibility="gone" />
 
@@ -83,18 +82,18 @@
 
 
     <LinearLayout
-        android:layout_below="@id/sfl_layout_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:layout_below="@id/sfl_layout_toolbar"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/sfl_ll_toolbar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@drawable/shape_toolbar_background"
+            android:background="?attr/iGapToolbarBackground"
             android:orientation="horizontal"
             android:paddingStart="@dimen/dp8"
             android:paddingLeft="@dimen/dp8"
@@ -155,8 +154,8 @@
         android:id="@+id/sfl_layout_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:minHeight="@dimen/toolbar_height" />
+        android:minHeight="@dimen/toolbar_height"
+        android:orientation="vertical" />
 
 </RelativeLayout>
 

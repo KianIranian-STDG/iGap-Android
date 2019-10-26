@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.databinding.PaymentDialogBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
@@ -247,15 +248,15 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                                                     intent.putExtra("Mobile", "0" + G.userId);
                                                     intent.putExtra("IsP2P", true);
                                                     intent.putExtra("Payment", payment);
-                                                    intent.putExtra("PrimaryColor", G.appBarColor);
-                                                    intent.putExtra("DarkPrimaryColor", G.appBarColor);
-                                                    intent.putExtra("AccentColor", G.appBarColor);
-                                                    intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-                                                    intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                                                    intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-                                                    intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
-                                                    intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-                                                    intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                                                    intent.putExtra("PrimaryColor", new Theme().getPrimaryColor(getContext()));
+                                                    intent.putExtra("DarkPrimaryColor", new Theme().getPrimaryColor(getContext()));
+                                                    intent.putExtra("AccentColor", new Theme().getPrimaryColor(getContext()));
+                                                    intent.putExtra(WalletActivity.PROGRESSBAR, new Theme().getAccentColor(getContext()));
+                                                    intent.putExtra(WalletActivity.LINE_BORDER, new Theme().getDividerColor(getContext()));
+                                                    intent.putExtra(WalletActivity.BACKGROUND, new Theme().getRootColor(getContext()));
+                                                    intent.putExtra(WalletActivity.BACKGROUND_2, new Theme().getRootColor(getContext()));
+                                                    intent.putExtra(WalletActivity.TEXT_TITLE, new Theme().getTitleTextColor(getContext()));
+                                                    intent.putExtra(WalletActivity.TEXT_SUB_TITLE, new Theme().getSubTitleColor(getContext()));
                                                     startActivityForResult(intent, 66);
                                                     G.currentActivity.onBackPressed();
                                                 }
@@ -360,7 +361,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                             sendPost(response.body().callbackUrl, paymentAuth.token);
                             G.cardamount -= response.body().amount;
                         }
-                    }, G.appBarColor);
+                    },"");
                     dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
                   /*  if (G.refreshWalletBalance != null) {
                         G.refreshWalletBalance.setRefreshBalance();
@@ -433,14 +434,14 @@ public class PaymentFragment extends BaseFragment implements EventListener {
     }
 
     public void setNewPassword() {
-        final LinearLayout layoutNickname = new LinearLayout(G.fragmentActivity);
+        final LinearLayout layoutNickname = new LinearLayout(getContext());
         layoutNickname.setOrientation(LinearLayout.VERTICAL);
 
-        final View viewNewPassword = new View(G.fragmentActivity);
+        final View viewNewPassword = new View(getContext());
         viewNewPassword.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
-        TextInputLayout inputNewPassWord = new TextInputLayout(G.fragmentActivity, null, R.attr.hintColorSettingTheme);
+        TextInputLayout inputNewPassWord = new TextInputLayout(getContext(), null, R.attr.iGapHintTextColor);
         final AppCompatEditText newPassWord = new AppCompatEditText(G.fragmentActivity);
         newPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password));
         newPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
@@ -450,12 +451,9 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         newPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
         newPassWord.setPadding(0, 8, 0, 8);
         newPassWord.setMaxLines(1);
+        newPassWord.setTextColor(new Theme().getTitleTextColor(getContext()));
         inputNewPassWord.addView(newPassWord);
         inputNewPassWord.addView(viewNewPassword, viewParams);
-
-        if (G.isDarkTheme) {
-            newPassWord.setTextColor(G.context.getResources().getColor(R.color.white));
-        }
 
         final View viewConfirmPassWord = new View(G.fragmentActivity);
         viewConfirmPassWord.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
@@ -463,7 +461,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             newPassWord.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
         }
 
-        TextInputLayout inputConfirmPassWord = new TextInputLayout(G.fragmentActivity, null, R.attr.hintColorSettingTheme);
+        TextInputLayout inputConfirmPassWord = new TextInputLayout(G.fragmentActivity, null, R.attr.iGapHintTextColor);
         final AppCompatEditText confirmPassWord = new AppCompatEditText(G.fragmentActivity);
         confirmPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_re_enter_your_password));
         confirmPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
@@ -473,11 +471,9 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         confirmPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
         confirmPassWord.setPadding(0, 8, 0, 8);
         confirmPassWord.setMaxLines(1);
+        confirmPassWord.setTextColor(new Theme().getTitleTextColor(getContext()));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             confirmPassWord.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
-        }
-        if (G.isDarkTheme) {
-            confirmPassWord.setTextColor(G.context.getResources().getColor(R.color.white));
         }
         inputConfirmPassWord.addView(confirmPassWord);
         inputConfirmPassWord.addView(viewConfirmPassWord, viewParams);
@@ -495,7 +491,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                         .title(G.fragmentActivity.getResources().getString(R.string.please_set_password))
                         .inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD)
                         .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).customView(layoutNickname, true)
-                        .widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                        .widgetColor(new Theme().getPrimaryColor(getContext())).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
 
@@ -503,7 +499,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewNewPassword.setBackgroundColor(Color.parseColor(G.appBarColor));
+                    viewNewPassword.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
                 } else {
                     viewNewPassword.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
@@ -514,7 +510,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewConfirmPassWord.setBackgroundColor(Color.parseColor(G.appBarColor));
+                    viewConfirmPassWord.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
                 } else {
                     viewConfirmPassWord.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
@@ -587,15 +583,15 @@ public class PaymentFragment extends BaseFragment implements EventListener {
      */
 
     public void setConfirmPassword(final PaymentAuth paymentAuth) {
-        final LinearLayout layoutNickname = new LinearLayout(G.fragmentActivity);
+        final LinearLayout layoutNickname = new LinearLayout(getContext());
         layoutNickname.setOrientation(LinearLayout.VERTICAL);
 
-        final View viewFirstName = new View(G.fragmentActivity);
+        final View viewFirstName = new View(getContext());
         viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
-        TextInputLayout inputNewPassWord = new TextInputLayout(G.fragmentActivity, null, R.attr.hintColorSettingTheme);
-        final AppCompatEditText newPassWord = new AppCompatEditText(G.fragmentActivity);
+        TextInputLayout inputNewPassWord = new TextInputLayout(getContext(), null, R.attr.iGapHintTextColor);
+        final AppCompatEditText newPassWord = new AppCompatEditText(getContext());
         newPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password));
         newPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         newPassWord.setTypeface(ResourcesCompat.getFont(newPassWord.getContext() , R.font.main_font));
@@ -604,12 +600,10 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         newPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
         newPassWord.setPadding(0, 8, 0, 8);
         newPassWord.setMaxLines(1);
-        if (G.isDarkTheme) {
-            newPassWord.setTextColor(G.context.getResources().getColor(R.color.white));
-        }
+        newPassWord.setTextColor(new Theme().getTitleTextColor(getContext()));
         inputNewPassWord.addView(newPassWord);
         inputNewPassWord.addView(viewFirstName, viewParams);
-        final View viewLastName = new View(G.fragmentActivity);
+        final View viewLastName = new View(getContext());
         viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             newPassWord.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
@@ -623,11 +617,11 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         layoutNickname.addView(inputNewPassWord, layoutParams);
 
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity)
-                        .title(G.fragmentActivity.getResources().getString(R.string.your_password))
+                new MaterialDialog.Builder(getContext())
+                        .title(R.string.your_password)
                         .inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD)
-                        .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).customView(layoutNickname, true)
-                        .widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                        .positiveText(R.string.B_ok).customView(layoutNickname, true)
+                        .widgetColor(new Theme().getPrimaryColor(getContext())).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
 
@@ -635,7 +629,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewFirstName.setBackgroundColor(Color.parseColor(G.appBarColor));
+                    viewFirstName.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
                 } else {
                     viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }

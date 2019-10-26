@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootFragmentLanguage"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="?backgroundColorSettingTheme"
-    android:clickable="true"
-    android:orientation="vertical"
-    tools:context="net.iGap.fragments.FragmentLanguage"
-    tools:ignore="MissingPrefix"
-
-    >
+    android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -84,9 +78,9 @@
                     <net.iGap.module.MaterialDesignTextView
                         android:layout_width="@dimen/dp52"
                         android:layout_height="match_parent"
+                        android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_alignParentTop="true"
                         android:gravity="center"
                         android:text="@string/md_check_symbol"
                         android:textAppearance="@style/TextIconAppearance_toolbar"
@@ -112,11 +106,11 @@
 
             <EditText
                 android:id="@+id/edtReport"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:hint="@string/desc"
-                style="?hintColorSettingTheme"
                 android:minHeight="@dimen/dp44" />
 
             <View

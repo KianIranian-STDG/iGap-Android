@@ -51,8 +51,8 @@ public class FragmentMediaPlayerViewModel {
     public ObservableInt imgRepeadOneVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt imgMusicPicture = new ObservableInt(View.VISIBLE);
     public ObservableInt imgMusIciconDefault = new ObservableInt(View.VISIBLE);
-    public ObservableInt btnShuffelMusicColor = new ObservableInt(G.context.getResources().getColor(R.color.black));
-    public ObservableInt btnReplayMusicColor = new ObservableInt(G.context.getResources().getColor(R.color.black));
+    public ObservableInt btnShuffelMusicColor = new ObservableInt(R.attr.iGapTitleTextColor);
+    public ObservableInt btnReplayMusicColor = new ObservableInt(R.attr.iGapTitleTextColor);
     public ObservableInt seekBar1 = new ObservableInt();
     public ObservableBoolean txtMusicInfoSingleLine = new ObservableBoolean(true);
     private RippleVisualizerView rippleVisualizerView;
@@ -268,19 +268,11 @@ public class FragmentMediaPlayerViewModel {
             imgRepeadOneVisibility.set(View.GONE);
         } else if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.repeatAll.toString())) {
             callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.retry_icon));
-            if (G.isDarkTheme) {
-                btnReplayMusicColor.set(Color.WHITE);
-            } else {
-                btnReplayMusicColor.set(Color.BLACK);
-            }
+            btnReplayMusicColor.set(R.attr.iGapTitleTextColor);
             imgRepeadOneVisibility.set(View.GONE);
         } else if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.oneRpeat.toString())) {
             callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.retry_icon));
-            if (G.isDarkTheme) {
-                btnReplayMusicColor.set(Color.WHITE);
-            } else {
-                btnReplayMusicColor.set(Color.BLACK);
-            }
+            btnReplayMusicColor.set(R.attr.iGapTitleTextColor);
             imgRepeadOneVisibility.set(View.VISIBLE);
         }
     }
@@ -288,11 +280,7 @@ public class FragmentMediaPlayerViewModel {
     private void setShuffleButton() {
 
         if (MusicPlayer.isShuffelOn) {
-            if (G.isDarkTheme) {
-                btnShuffelMusicColor.set(Color.WHITE);
-            } else {
-                btnShuffelMusicColor.set(Color.BLACK);
-            }
+            btnShuffelMusicColor.set(R.attr.iGapTitleTextColor);
         } else {
             btnShuffelMusicColor.set(Color.GRAY);
         }

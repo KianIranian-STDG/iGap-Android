@@ -34,6 +34,8 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestGeoGetComment;
 import net.iGap.request.RequestGeoGetNearbyDistance;
 
+import org.jetbrains.annotations.NotNull;
+
 import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
@@ -337,9 +339,10 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             super(data, autoUpdate);
         }
 
+        @NotNull
         @Override
         public MapUserAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MapUserAdapter.ViewHolder(inflater.inflate(R.layout.map_user_item, parent, false));
+            return new MapUserAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.map_user_item, parent, false));
         }
 
         @Override
@@ -417,16 +420,6 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
                 comment = itemView.findViewById(R.id.txt_user_comment_map);
                 arrow = (MaterialDesignTextView) itemView.findViewById(R.id.txt_arrow_list_map);
                 distance = (CustomTextViewMedium) itemView.findViewById(R.id.txt_user_distance_map);
-
-                setupTheme();
-            }
-
-            private void setupTheme() {
-
-                Utils.darkModeHandler(username);
-                Utils.darkModeHandler(arrow);
-                Utils.darkModeHandlerGray(distance);
-                Utils.darkModeHandlerGray(comment);
             }
         }
     }

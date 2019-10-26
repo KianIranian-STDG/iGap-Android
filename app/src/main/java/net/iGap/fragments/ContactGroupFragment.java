@@ -91,6 +91,13 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // to disable swipe in channel creation mode
+        if (typeCreate != null) {
+            if (typeCreate.equals("CHANNEL"))
+                getSwipeBackLayout().setEnableGesture(false);
+        }
+
+
         selectedContacts.clear();
         G.onContactsGetList = this;
 
@@ -119,11 +126,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
          * library does not support change text color or background color at run time until 1.0.8
          */
         ViewGroup layoutChips = view.findViewById(R.id.fcg_layout_search);
-        if (G.isDarkTheme) {
-            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout_dark, null));
-        } else {
-            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout, null));
-        }
+        layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout, null));
 
         if (typeCreate.equals("CHANNEL")) {
             mHelperToolbar.setDefaultTitle(G.context.getResources().getString(R.string.new_channel));
@@ -343,7 +346,16 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     @Override
     public void onLeftIconClickListener(View view) {
         G.fragmentActivity.onBackPressed();
+    }
 
+    @Override
+    public boolean onBackPressed() {
+        if (typeCreate.equals("CHANNEL")) {
+            ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+            return true;
+        }
+        else
+            return false;
     }
 
     @Override

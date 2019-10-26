@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Editable;
@@ -42,6 +41,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentWalletAgrement;
@@ -54,8 +54,6 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.realm.RealmUserInfo;
 
-import org.paygear.WalletActivity;
-
 import io.realm.Realm;
 
 import static androidx.constraintlayout.widget.ConstraintSet.BOTTOM;
@@ -65,7 +63,6 @@ import static androidx.constraintlayout.widget.ConstraintSet.PARENT_ID;
 import static androidx.constraintlayout.widget.ConstraintSet.START;
 import static androidx.constraintlayout.widget.ConstraintSet.TOP;
 import static androidx.constraintlayout.widget.ConstraintSet.WRAP_CONTENT;
-import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 
@@ -1000,14 +997,13 @@ public class HelperToolbar {
         }
 
         //main fragment onResume not called cause of usage algorithm , we get min activity and update button
-        if (mFragmentActivity instanceof ActivityMain){
+        if (mFragmentActivity instanceof ActivityMain) {
             ((ActivityMain) mFragmentActivity).updatePassCodeState();
         }
 
     }
 
     private void onScannerClickListener() {
-
         String phoneNumber = "0";
 
         try {
@@ -1032,22 +1028,7 @@ public class HelperToolbar {
         if (!G.isWalletRegister) {
             new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
         } else {
-            Intent intent = new Intent(mContext, WalletActivity.class);
-            intent.putExtra("Language", "fa");
-            intent.putExtra("Mobile", "0" + phoneNumber);
-            intent.putExtra("PrimaryColor", G.appBarColor);
-            intent.putExtra("DarkPrimaryColor", G.appBarColor);
-            intent.putExtra("AccentColor", G.appBarColor);
-            intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
-            intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-            intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-            intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-            intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-            intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
-            intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-            intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
-            intent.putExtra("isScan", true);
-            G.fragmentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
+            new HelperWallet().goToWallet(mContext, "0" + phoneNumber,true);
         }
     }
 
@@ -1180,7 +1161,7 @@ public class HelperToolbar {
             tfFontIcon = ResourcesCompat.getFont(mContext, R.font.font_icon);
 
         if (tfMain == null)
-            tfMain = ResourcesCompat.getFont(mContext , R.font.main_font);
+            tfMain = ResourcesCompat.getFont(mContext, R.font.main_font);
 
 
     }
@@ -1300,15 +1281,9 @@ public class HelperToolbar {
                 mainConstraint.setId(R.id.view_toolbar_main_constraint);
 
                 if (isRoundBackground) {
-                    if (isDark)
-                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_dark);
-                    else
-                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background);
+                    mainConstraint.setBackgroundResource(new Theme().getToolbarDrawable(mContext));
                 } else {
-                    if (isDark)
-                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_rect_dark);
-                    else
-                        mainConstraint.setBackgroundResource(R.drawable.shape_toolbar_background_rect);
+                    mainConstraint.setBackgroundResource(new Theme().getToolbarDrawableSharpe(mContext));
                 }
                 setRoot.constrainHeight(mainConstraint.getId(), i_Dp(R.dimen.toolbar_height));
                 setRoot.constrainWidth(mainConstraint.getId(), MATCH_CONSTRAINT);
@@ -1475,7 +1450,7 @@ public class HelperToolbar {
                     tvSearch.setGravity(Gravity.CENTER);
                     tvSearch.setVisibility(VISIBLE);
                     tvSearch.setTypeface(tfMain);
-                    tvSearch.setTextColor(Utils.darkModeHandler(getContext()));
+                    tvSearch.setTextColor(new Theme().getTitleTextColor(tvSearch.getContext()));
                     Utils.setTextSize(tvSearch, R.dimen.smallTextSize);
                     setLayoutParams(tvSearch, i_Dp(R.dimen.dp20), 0, 0, i_Dp(R.dimen.dp20), 0, 0);
                     searchLayout.addView(tvSearch);
@@ -1738,12 +1713,6 @@ public class HelperToolbar {
                     fabChat = new FloatingActionButton(getContext());
                     fabChat.setId(R.id.chi_fab_setPic);
 
-                    if (G.isDarkTheme) {
-                        fabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.navigation_dark_mode_bg)));
-                    } else {
-                        fabChat.setBackgroundTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.green)));
-                    }
-
                     fabChat.setImageResource(R.drawable.ic_chat_message);
                     fabChat.setSize(FloatingActionButton.SIZE_MINI);
                     addView(fabChat);
@@ -1795,10 +1764,6 @@ public class HelperToolbar {
                     tvProfileTell.setGravity(Gravity.LEFT);
                     tvProfileTell.setSingleLine();
                     Utils.setTextSize(tvProfileTell, R.dimen.smallTextSize);
-                    if (G.isDarkTheme)
-                        tvProfileTell.setTextColor(getContext().getResources().getColor(R.color.gray_300));
-                    else
-                        tvProfileTell.setTextColor(getContext().getResources().getColor(R.color.gray_4c));
 
                     addView(tvProfileTell);
 
@@ -1815,10 +1780,6 @@ public class HelperToolbar {
                     tvProfileStatus.setGravity(Gravity.LEFT);
                     tvProfileStatus.setSingleLine();
                     Utils.setTextSize(tvProfileStatus, R.dimen.smallTextSize);
-                    if (G.isDarkTheme)
-                        tvProfileStatus.setTextColor(getContext().getResources().getColor(R.color.gray_300));
-                    else
-                        tvProfileStatus.setTextColor(getContext().getResources().getColor(R.color.gray_4c));
 
                     addView(tvProfileStatus);
 
@@ -1890,7 +1851,7 @@ public class HelperToolbar {
                 setRoot.applyTo(this);
                 set.applyTo(mainConstraint);
 
-            } else {
+            }/* else {
 
                 ConstraintSet set = new ConstraintSet();
 
@@ -2020,7 +1981,7 @@ public class HelperToolbar {
                 set.connect(tViewSplitter3.getId(), TOP, tIconAdd.getId(), BOTTOM, i_Dp(R.dimen.dp6));
 
                 set.applyTo(this);
-            }
+            }*/
         }
 
         private void setIconViewSize(View v, ConstraintSet set) {
@@ -2089,7 +2050,7 @@ public class HelperToolbar {
 
         private void setupDefaults() {
 
-            isDark = G.isDarkTheme;
+            isDark = G.themeColor == Theme.DARK;
 
             VALUE_1DP = i_Dp(R.dimen.dp1);
             VALUE_4DP = i_Dp(R.dimen.dp4);

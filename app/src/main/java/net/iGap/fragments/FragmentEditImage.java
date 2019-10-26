@@ -92,6 +92,7 @@ public class FragmentEditImage extends BaseFragment {
     public static HashMap<String, StructBottomSheet> textImageList = new HashMap<>();
     public static ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<StructBottomSheet>();
     private OnImageEdited onProfileImageEdited;
+    private boolean isOpenForShareImages = false ;
 
     public void setOnProfileImageEdited(OnImageEdited onProfileImageEdited) {
         this.onProfileImageEdited = onProfileImageEdited;
@@ -196,7 +197,7 @@ public class FragmentEditImage extends BaseFragment {
                 if (getActivity() != null) {
                     new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
                 }
-                if (G.openBottomSheetItem != null && isChatPage)
+                if (G.openBottomSheetItem != null && isChatPage && !isOpenForShareImages)
                     G.openBottomSheetItem.openBottomSheet(false);
             }
         });
@@ -271,7 +272,7 @@ public class FragmentEditImage extends BaseFragment {
             @Override
             public void onClick(View v) {
                 AndroidUtils.closeKeyboard(v);
-                if (getActivity() != null) {
+                if (getActivity() != null && itemGalleryList.size() > 0) {
                     if (!isNicknamePage) {
                         new HelperFragment(getActivity().getSupportFragmentManager(), FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path)).setReplace(false).load();
                     } else {
@@ -425,6 +426,10 @@ public class FragmentEditImage extends BaseFragment {
         });
     }
 
+    public void setIsOpenForShareImages(boolean isShare){
+        this.isOpenForShareImages = isShare;
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -453,25 +458,11 @@ public class FragmentEditImage extends BaseFragment {
     }
 
     private void setUpEmojiPopup(View view) {
-        switch (G.themeColor) {
-            case Theme.BLUE_GREY_COMPLETE:
-            case Theme.INDIGO_COMPLETE:
-            case Theme.BROWN_COMPLETE:
-            case Theme.GREY_COMPLETE:
-            case Theme.TEAL_COMPLETE:
-            case Theme.DARK:
-
-                setEmojiColor(view, G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);
-                break;
-            default:
-                setEmojiColor(view, Color.parseColor("#eceff1"), "#61000000", "#61000000");
-
-
-        }
+        setEmojiColor(view,new Theme().getRootColor(getContext()), new Theme().getTitleTextColor(getContext()),new Theme().getTitleTextColor(getContext()));
 
     }
 
-    private void setEmojiColor(View view, int BackgroundColor, String iconColor, String dividerColor) {
+    private void setEmojiColor(View view, int BackgroundColor, int iconColor, int dividerColor) {
 
         emojiPopup = EmojiPopup.Builder.fromRootView(view.findViewById(R.id.ac_ll_parent))
                 .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
@@ -504,8 +495,8 @@ public class FragmentEditImage extends BaseFragment {
                     }
                 })
                 .setBackgroundColor(BackgroundColor)
-                .setIconColor(Color.parseColor(iconColor))
-                .setDividerColor(Color.parseColor(dividerColor))
+                .setIconColor(iconColor)
+                .setDividerColor(dividerColor)
                 .build(edtChat);
 
     }
@@ -534,7 +525,7 @@ public class FragmentEditImage extends BaseFragment {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK && getActivity() != null) {
                     AndroidUtils.closeKeyboard(v);
                     new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
-                    if (G.openBottomSheetItem != null && isChatPage)
+                    if (G.openBottomSheetItem != null && isChatPage && !isOpenForShareImages)
                         G.openBottomSheetItem.openBottomSheet(false);
                     return true;
                 }

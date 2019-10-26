@@ -80,7 +80,6 @@ public class KuknosLoginFrag extends BaseFragment {
                 .setLogoShown(true);
 
         LinearLayout toolbarLayout = binding.fragKuknosIdToolbar;
-        Utils.darkModeHandler(toolbarLayout);
         toolbarLayout.addView(mHelperToolbar.getView());
 
         if (kuknosLoginVM.loginStatus()) {

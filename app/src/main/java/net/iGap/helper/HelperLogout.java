@@ -130,12 +130,10 @@ public final class HelperLogout {
 
 
     private void resetStaticField() {
-        Theme.setThemeColor();
         G.userLogin = false;
         G.isTimeWhole = false;
         G.isFirstPassCode = false;
         G.isPassCode = false;
-        G.isDarkTheme = false;
         G.isSaveToGallery = false;
         G.showSenderNameInGroup = false;
     }

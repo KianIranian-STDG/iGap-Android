@@ -13,7 +13,6 @@ import android.content.SharedPreferences;
 import android.view.View;
 
 import androidx.databinding.ObservableInt;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
@@ -25,6 +24,8 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
 
 import java.util.Locale;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentLanguageViewModel extends ViewModel {
 
@@ -112,6 +113,7 @@ public class FragmentLanguageViewModel extends ViewModel {
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }
+            updateLocalDateTime();
         } else {
             goBack.setValue(true);
         }
@@ -133,6 +135,7 @@ public class FragmentLanguageViewModel extends ViewModel {
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }
+            updateLocalDateTime();
         }
         goBack.setValue(true);
     }
@@ -151,6 +154,7 @@ public class FragmentLanguageViewModel extends ViewModel {
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }
+            updateLocalDateTime();
         } else {
             goBack.setValue(true);
         }
@@ -170,6 +174,7 @@ public class FragmentLanguageViewModel extends ViewModel {
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }
+            updateLocalDateTime();
         } else {
             goBack.setValue(true);
         }
@@ -189,6 +194,7 @@ public class FragmentLanguageViewModel extends ViewModel {
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }
+            updateLocalDateTime();
         } else {
             goBack.setValue(true);
         }
@@ -212,8 +218,28 @@ public class FragmentLanguageViewModel extends ViewModel {
             if (MusicPlayer.updateName != null) {
                 MusicPlayer.updateName.rename();
             }
+            updateLocalDateTime();
         }
         goBack.setValue(true);
+    }
+
+    private void updateLocalDateTime(){
+
+        switch (G.selectedLanguage){
+            case "fa":
+            case "ur"://kurdi
+                sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, 1).apply();//shamsi
+                break;
+            case "ar":
+                sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, 2).apply();//hijri
+                break;
+            default:
+                sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, 0).apply();//miladi
+        }
+
+        if (G.onDateChanged != null) {
+            G.onDateChanged.onChange();
+        }
     }
 
 }

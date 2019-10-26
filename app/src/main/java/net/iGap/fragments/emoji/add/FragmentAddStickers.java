@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -246,81 +245,76 @@ public class FragmentAddStickers extends BaseFragment {
                 //GradientDrawable backgroundGradient = (GradientDrawable) txtRemove.getBackground();
                 //backgroundGradient.setColor(Color.parseColor(G.appBarColor));
 
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentDetailStickers.newInstance(mData.get(getAdapterPosition()).getStickers())).setReplace(false).load();
-                        }
+                itemView.setOnClickListener(v -> {
+                    if (getActivity() != null) {
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentDetailStickers.newInstance(mData.get(getAdapterPosition()).getStickers())).setReplace(false).load();
                     }
                 });
+
                 if (progressBar.getVisibility() == View.GONE)
-                    txtRemove.setOnClickListener(new View.OnClickListener() {
+
+                    txtRemove.setOnClickListener(v -> {
+
+                        int pos = getAdapterPosition();
+
+                        if (getActivity() == null) return;
+                        new MaterialDialog.Builder(getActivity())
+                                .title(getResources().getString(R.string.add_sticker))
+                                .content(getResources().getString(R.string.add_sticker_text))
+                                .positiveText(getString(R.string.yes))
+                                .negativeText(getString(R.string.no))
+                                .onPositive((dialog, which) -> addStickerByApi(pos)).show();
+                    });
+
+            }
+
+            private void addStickerByApi(int pos){
+
+                if (mData.size() > pos) {
+
+                    progressBar.setVisibility(View.VISIBLE);
+                    StructGroupSticker item = mData.get(pos);
+                    String groupId = mData.get(pos).getId();
+                    mAPIService.addSticker(groupId).enqueue(new Callback<StructStickerResult>() {
                         @Override
-                        public void onClick(View v) {
-
-
-                            new MaterialDialog.Builder(getActivity())
-                                    .title(getResources().getString(R.string.add_sticker))
-                                    .content(getResources().getString(R.string.add_sticker_text))
-                                    .positiveText(getString(R.string.yes))
-                                    .negativeText(getString(R.string.no))
-                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
+                            if (response.body() != null && response.body().isSuccess()) {
+                                DbManager.getInstance().doRealmTask(realm -> {
+                                    realm.executeTransactionAsync(new Realm.Transaction() {
                                         @Override
-                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                            try {
-                                                progressBar.setVisibility(View.VISIBLE);
-                                                StructGroupSticker item = mData.get(getAdapterPosition());
-                                                String groupId = mData.get(getAdapterPosition()).getId();
-                                                mAPIService.addSticker(groupId).enqueue(new Callback<StructStickerResult>() {
-                                                    @Override
-                                                    public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
-                                                        if (response.body() != null && response.body().isSuccess()) {
-                                                            DbManager.getInstance().doRealmTask(realm -> {
-                                                                realm.executeTransactionAsync(new Realm.Transaction() {
-                                                                    @Override
-                                                                    public void execute(Realm realm) {
-                                                                        RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
-                                                                        if (realmStickers == null) {
-                                                                            RealmStickers.put(realm, item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), true);
-                                                                        } else {
-                                                                            RealmStickers.updateFavorite(realm, item.getId(), true);
-                                                                        }
-                                                                    }
-                                                                }, () -> {
-                                                                    if (getAdapterPosition() == -1 || getActivity() == null || getActivity().isFinishing() || !isAdded()) {
-                                                                        return;
-                                                                    }
-                                                                    progressBar.setVisibility(View.GONE);
-                                                                    mData.get(getAdapterPosition()).setIsFavorite(true);
-                                                                    if (FragmentChat.onUpdateSticker != null) {
-                                                                        FragmentChat.onUpdateSticker.update();
-                                                                    }
-                                                                    notifyDataSetChanged();
-                                                                });
-                                                            });
-                                                        } else {
-                                                            progressBar.setVisibility(View.GONE);
-                                                        }
-
-                                                    }
-
-                                                    @Override
-                                                    public void onFailure(Call<StructStickerResult> call, Throwable t) {
-                                                        progressBar.setVisibility(View.GONE);
-
-                                                    }
-                                                });
-                                            } catch (ArrayIndexOutOfBoundsException e) {
-                                                e.printStackTrace();
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
+                                        public void execute(Realm realm) {
+                                            RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId, realm);
+                                            if (realmStickers == null) {
+                                                RealmStickers.put(realm, item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), true);
+                                            } else {
+                                                RealmStickers.updateFavorite(realm, item.getId(), true);
                                             }
                                         }
-                                    }).show();
+                                    }, () -> {
+                                        if (getAdapterPosition() == -1 || getActivity() == null || getActivity().isFinishing() || !isAdded()) {
+                                            return;
+                                        }
+                                        progressBar.setVisibility(View.GONE);
+                                        mData.get(pos).setIsFavorite(true);
+                                        if (FragmentChat.onUpdateSticker != null) {
+                                            FragmentChat.onUpdateSticker.update();
+                                        }
+                                        notifyDataSetChanged();
+                                    });
+                                });
+                            } else {
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<StructStickerResult> call, Throwable t) {
+                            progressBar.setVisibility(View.GONE);
+
                         }
                     });
+
+                }
             }
         }
     }

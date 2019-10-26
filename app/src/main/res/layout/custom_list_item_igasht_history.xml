@@ -22,9 +22,9 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/itemDate"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toTopOf="@id/itemDetail"
         app:layout_constraintEnd_toStartOf="@id/barCode"
@@ -33,9 +33,9 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/itemDetail"
-        style="?textTitleColorSettingTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/largeTextSize"
         app:layout_constraintEnd_toEndOf="@id/itemDate"
         app:layout_constraintStart_toStartOf="@id/itemDate"

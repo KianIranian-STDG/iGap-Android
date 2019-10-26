@@ -54,12 +54,14 @@ import com.google.zxing.integration.android.IntentResult;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.WebSocketClient;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.dialog.SubmitScoreDialog;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentChat;
@@ -353,6 +355,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         new HelperGetDataFromOtherApp(this, intent);
+        //check has shared data if true setup main fragment (room list) ui
+        Fragment fragmentBottomNav = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragmentBottomNav instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragmentBottomNav).checkHasSharedData(true);//set true just for checking state
+        }
 
         if (intent.getAction() != null && intent.getAction().equals("net.iGap.activities.OPEN_ACCOUNT")) {
             new HelperFragment(getSupportFragmentManager(), new FragmentSetting()).load();
@@ -657,11 +664,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             boolean isDefaultBg = sharedPreferences.getBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
             if (isDefaultBg) {
-                if (G.isDarkTheme) {
-                    sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
-                } else {
-                    getWallpaperAsDefault();
-                }
+                sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
             }
 
         } else {
@@ -757,7 +760,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         };
     }
 
-    private void getWallpaperAsDefault() {
+    /*private void getWallpaperAsDefault() {
         try {
             RealmWallpaper realmWallpaper = DbManager.getInstance().doRealmTask(realm -> {
                 return realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
@@ -800,9 +803,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             e3.printStackTrace();
         }
 
-    }
+    }*/
 
-    private void setDefaultBackground(String bigImagePath) {
+    /*private void setDefaultBackground(String bigImagePath) {
         String finalPath = "";
         try {
             finalPath = HelperSaveFile.saveInPrivateDirectory(this, bigImagePath);
@@ -813,9 +816,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, finalPath);
         editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
         editor.apply();
-    }
+    }*/
 
-    private void getImageListFromServer() {
+    /*private void getImageListFromServer() {
         Log.e("wallpaper", "request in main ");
         G.onGetWallpaper = new OnGetWallpaper() {
             @Override
@@ -832,7 +835,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         };
 
         new RequestInfoWallpaper().infoWallpaper(ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND);
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1093,11 +1096,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void checkGoogleUpdate() {
-        if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
-            Log.wtf(this.getClass().getName(), "installIfNeeded");
-            ProviderInstaller.installIfNeededAsync(this, this);
-            Log.wtf(this.getClass().getName(), "installIfNeeded");
-        }
+        Log.wtf(this.getClass().getName(), "installIfNeeded");
+        ProviderInstaller.installIfNeededAsync(this, this);
+        Log.wtf(this.getClass().getName(), "installIfNeeded");
     }
 
     //*******************************************************************************************************************************************
@@ -1367,10 +1368,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
                     }
                 }
-            } else {
+            }
+            else {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                     if (!(getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment)) {
-                        super.onBackPressed();
+                        List fragmentList = getSupportFragmentManager().getFragments();
+                        boolean handled = false;
+                        try {
+                            // because some of our fragments are NOT extended from BaseFragment
+                            handled = ((BaseFragment) fragmentList.get(fragmentList.size() - 1)).onBackPressed();
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (!handled) {
+                            super.onBackPressed();
+                        }
                     }
                 } else {
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
@@ -1383,7 +1396,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 }
             }
-        } else {
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -1940,6 +1954,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).setForwardMessage(enable);
+        }
+    }
+
+    public void checkHasSharedData(boolean enable) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragment).checkHasSharedData(enable);
         }
     }
 

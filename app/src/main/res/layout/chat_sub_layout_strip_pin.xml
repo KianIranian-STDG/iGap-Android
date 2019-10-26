@@ -19,7 +19,6 @@
             android:padding="@dimen/dp4">
 
             <TextView
-                style="?textTitleColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
@@ -29,11 +28,11 @@
 
             <TextView
                 android:id="@+id/pl_txt_pined_Message"
-                style="?textTitleColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text=""
+                android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/smallTextSize" />
 
         </LinearLayout>

@@ -82,13 +82,6 @@ public class PopularMoreChannelAdapter extends RecyclerView.Adapter<PopularMoreC
                 if (callBack != null)
                     callBack.onChannelClick(channel);
             });
-
-            CardView root = itemView.findViewById(R.id.card_item_pop_grid);
-            Utils.setCardsBackground(root, R.color.white, R.color.gray_6c);
-            LinearLayout linearLayout = itemView.findViewById(R.id.ll_item_pop_card_info);
-            if (G.isDarkTheme) {
-                linearLayout.setBackgroundResource(R.drawable.shape_favorite_channel_dark_item_them);
-            }
         }
 
     }

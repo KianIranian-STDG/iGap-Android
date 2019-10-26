@@ -164,4 +164,8 @@ public class BaseFragment extends SwipeBackFragment {
             //nothing
         }
     }
+
+    public boolean onBackPressed() {
+        return false;
+    }
 }

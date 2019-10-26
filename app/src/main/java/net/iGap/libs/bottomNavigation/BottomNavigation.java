@@ -62,13 +62,8 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
     private void parseAttr(AttributeSet attributeSet) {
         if (attributeSet != null) {
             TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.BottomNavigation);
-
             try {
-                if (G.isDarkTheme) {
-                    backgroundColor = getContext().getResources().getColor(R.color.navigation_dark_mode_bg);
-                } else {
-                    backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color, getResources().getColor(R.color.background_color));
-                }
+                backgroundColor = typedArray.getColor(R.styleable.BottomNavigation_background_color, getResources().getColor(R.color.background_color));
                 cornerRadius = typedArray.getInt(R.styleable.BottomNavigation_corner_radius, 0);
             } finally {
                 typedArray.recycle();
@@ -95,7 +90,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
                     avatarImageView = (CircleImageView) getChildAt(4);
                     avatarImageView.setOnLongClickListener(this);
                     avatarImageView.setOnClickListener(this);
-                    avatarImageView.setBorderColor(Color.parseColor(G.isDarkTheme ? "#868686" : "#FF696969"));
+                    //avatarImageView.setBorderColor(Color.parseColor(G.isDarkTheme ? "#868686" : "#FF696969"));
                 }
             }
         } catch (Exception e) {
@@ -208,11 +203,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
     private void onSelectedItemChanged() {
         try {
             for (int i = 0; i < tabItems.size(); i++) {
-                if (tabItems.get(i).getPosition() == selectedItemPosition) {
-                    tabItems.get(i).setSelectedItem(true);
-                } else {
-                    tabItems.get(i).setSelectedItem(false);
-                }
+                tabItems.get(i).setSelectedItem(tabItems.get(i).getPosition() == selectedItemPosition);
             }
         } catch (Exception e) {
             Log.e(getClass().getName(), "onSelectedItemChanged: ", e);
@@ -224,6 +215,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
     }
 
     public void setDefaultItem(int defaultItem) {
+        Log.wtf(this.getClass().getName(), "default tab: " + defaultItem);
         this.defaultItem = defaultItem;
         this.selectedItemPosition = defaultItem;
     }

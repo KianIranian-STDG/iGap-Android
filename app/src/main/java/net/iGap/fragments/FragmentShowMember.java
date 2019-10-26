@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -63,7 +64,9 @@ import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
+import net.iGap.realm.RealmMemberFields;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -85,8 +88,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmQuery;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
@@ -95,6 +100,7 @@ import static net.iGap.G.inflater;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class FragmentShowMember extends BaseFragment implements ToolbarListener, OnGroupKickMember {
+
 
     public enum ShowMemberMode {
         NONE,
@@ -117,6 +123,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
     private long mRoomID = 0;
     private RecyclerView mRecyclerView;
     //private MemberAdapterA mAdapter;
+    private RealmResults<RealmMember> realmMemberMe;
     private MemberAdapter mAdapter;
     private String mMainRole = "";
     private ProgressBar progressBar;
@@ -656,6 +663,20 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             //    mAdapter.add(new MemberItem(realmRoom.getType(), mMainRole, userID).setInfo(member).withIdentifier(member.getPeerId()));
             //}
         }
+
+        realmMemberMe = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmMember.filterMember(realm , mRoomID , G.userId);
+        });
+
+        realmMemberMe.addChangeListener((realmMembers1, changeSet) -> {
+            try {
+                mMainRole = realmMembers1.get(0).getRole();
+                mAdapter.setMainRole(mMainRole);
+            }catch (NullPointerException ex){
+                ex.printStackTrace();
+            }
+        });
+
     }
 
     /**
@@ -761,10 +782,10 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             this.userId = userId;
         }
 
+        @NotNull
         @Override
         public MemberAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = inflater.inflate(R.layout.contact_item_group_profile, viewGroup, false);
-            return new ViewHolder(v);
+            return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.contact_item_group_profile, viewGroup, false));
         }
 
         @Override
@@ -899,14 +920,13 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
             holder.title.setText(mContact.displayName);
 
-            checkTheme(holder);
             setRoleStarColor(holder.roleStar, mContact);
 
             avatarHandler.getAvatar(new ParamWithAvatarType(holder.image, mContact.peerId).avatarType(AvatarHandler.AvatarType.USER));
 
             if (mContact.status != null) {
                 if (mContact.status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                    holder.subtitle.setText(LastSeenTimeUtil.computeTime(mContact.peerId, mContact.lastSeen, false));
+                    holder.subtitle.setText(LastSeenTimeUtil.computeTime(holder.subtitle.getContext() ,mContact.peerId, mContact.lastSeen, false));
                 } else {
                     holder.subtitle.setText(mContact.status);
                 }
@@ -945,13 +965,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             }
         }
 
-        private void checkTheme(ViewHolder holder) {
-
-            Utils.darkModeHandler(holder.btnMenu);
-            Utils.darkModeHandler(holder.title);
-            Utils.darkModeHandlerGray(holder.subtitle);
-            Utils.darkModeHandlerGray(holder.topLine);
-
+        public void setMainRole(String role){
+            if (role != null) this.mainRole = role;
+            notifyDataSetChanged();
         }
 
         private void showPopup(ViewHolder holder, final StructContactInfo mContact) {
@@ -1035,4 +1051,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         }
     }
 
+    @Override
+    public void onDestroy() {
+        if (realmMemberMe != null) realmMemberMe.removeAllChangeListeners();
+        super.onDestroy();
+    }
 }

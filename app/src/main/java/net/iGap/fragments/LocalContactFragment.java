@@ -321,7 +321,14 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
                         }
                     }
                     if (!helpIndex) {
-                        slc.add(contacts.get(i));
+                        if (isSearch){
+                            slc.add(contacts.get(i));
+                        }else{
+                            if (!phoneContactsList.contains(contacts.get(i))){
+                                slc.add(contacts.get(i));
+                            }
+                        }
+
                     }
                 }
                 return slc;
