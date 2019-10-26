@@ -12,8 +12,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/rootBackgroundColor"
-        android:fitsSystemWindows="true">
+        android:background="?attr/rootBackgroundColor">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
@@ -29,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/toolbar_height"
-                app:contentScrim="?attr/colorPrimaryDark"
+                app:contentScrim="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <net.iGap.module.RadiusImageView
@@ -43,6 +42,7 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar_collapsed"
                     android:layout_width="match_parent"
+                    style="?attr/toolbarStyle"
                     android:layout_height="@dimen/toolbar_height"
                     android:layout_gravity="top"
                     android:gravity="center_vertical"
