@@ -67,8 +67,22 @@ public class DbManager {
     }
 
     public void doRealmTask(RealmTask realmTask, long userId) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            throw new IllegalStateException("You must call this function in non ui thread.");
+        }
+
         try (Realm realm = Realm.getInstance(AccountManager.getInstance().getUser(userId).getRealmConfiguration())) {
             realmTask.doTask(realm);
+        }
+    }
+
+    public <T> T doRealmTask(RealmTaskWithReturn<T> realmTask, long userId) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            throw new IllegalStateException("You must call this function in non ui thread.");
+        }
+
+        try (Realm realm = Realm.getInstance(AccountManager.getInstance().getUser(userId).getRealmConfiguration())) {
+            return realmTask.doTask(realm);
         }
     }
 
