@@ -44,17 +44,15 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
     private FragmentElecBillPayBinding binding;
     private ElectricityBillPayVM elecBillVM;
     private Bill bill;
-    private boolean editMode = false;
+    private boolean editMode;
     private static final String TAG = "ElectricityBillPayFrag";
 
     public static ElectricityBillPayFrag newInstance(String billID, String billPayID, String billPrice, boolean editMode) {
-        ElectricityBillPayFrag Frag = new ElectricityBillPayFrag(new Bill(billID, billPayID, billPrice, null), editMode);
-        return Frag;
+        return new ElectricityBillPayFrag(new Bill(billID, billPayID, billPrice, null), editMode);
     }
 
     public static ElectricityBillPayFrag newInstance(String billID, boolean editMode) {
-        ElectricityBillPayFrag Frag = new ElectricityBillPayFrag(new Bill(billID, null, null, null), editMode);
-        return Frag;
+        return new ElectricityBillPayFrag(new Bill(billID, null, null, null), editMode);
     }
 
     private ElectricityBillPayFrag(Bill bill, boolean editMode) {
@@ -110,8 +108,37 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
         toolbarLayout.addView(mHelperToolbar.getView());
 
         elecBillVM.getBillImage().observe(getViewLifecycleOwner(), data -> downloadFile());
+        elecBillVM.getErrorM().observe(getViewLifecycleOwner(), errorModel -> {
+            switch (errorModel.getMessage()) {
+                case "001":
+                    showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_billMissing), getResources().getString(R.string.ok));
+                    break;
+                case "002":
+                    showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_bellowMin), getResources().getString(R.string.ok));
+                    break;
+                case "003":
+                    showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_MPLError), getResources().getString(R.string.ok));
+                    break;
+                case "004":
+                    showDialog(getResources().getString(R.string.elecBill_success_title), getResources().getString(R.string.elecBill_success_pay), getResources().getString(R.string.ok));
+                    break;
+                default:
+                    Snackbar.make(binding.Container, errorModel.getMessage(), Snackbar.LENGTH_LONG)
+                            .setAction(R.string.ok, v -> {
+                            }).show();
+                    break;
+            }
+        });
         if (editMode)
             binding.addToList.setText(getResources().getString(R.string.elecBill_edit_Btn));
+    }
+
+    private void showDialog(String title, String message, String btnRes) {
+        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
+        defaultRoundDialog.setTitle(title);
+        defaultRoundDialog.setMessage(message);
+        defaultRoundDialog.setPositiveButton(btnRes, (dialog, id) -> dialog.dismiss());
+        defaultRoundDialog.show();
     }
 
     public void onBranchInfoBtnClick() {

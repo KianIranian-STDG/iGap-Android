@@ -40,9 +40,8 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
     private ObservableField<Integer> progressVisibility;
 
     private MutableLiveData<Boolean> goBack;
-    private MutableLiveData<BillMessage> message;
+    private MutableLiveData<ErrorModel> errorM;
 
-    private ElectricityBillRealmRepo repo = new ElectricityBillRealmRepo();
     private BillRegister info;
     private boolean editMode = false;
 
@@ -52,6 +51,7 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
         billIDError = new ObservableField<>();
         billIDErrorEnable = new ObservableField<>(false);
 
+        ElectricityBillRealmRepo repo = new ElectricityBillRealmRepo();
         billPhone = new ObservableField<>(repo.getUserNum());
         billPhoneError = new ObservableField<>();
         billPhoneErrorEnable = new ObservableField<>(false);
@@ -70,7 +70,7 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
 
         progressVisibility = new ObservableField<>(View.GONE);
         goBack = new MutableLiveData<>(false);
-        message = new MutableLiveData<>();
+        errorM = new MutableLiveData<>();
 
         info = new BillRegister();
         info.setEmailEnable(false);
@@ -97,33 +97,39 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
     }
 
     private void sendAndSaveData() {
+        progressVisibility.set(View.VISIBLE);
         new ElectricityBillAPIRepository().addBill(info, this, new ResponseCallback<ElectricityResponseModel<String>>() {
             @Override
             public void onSuccess(ElectricityResponseModel<String> data) {
                 if (data.getStatus() == 200)
-                    message.setValue(new BillMessage(false, "موفقیت", data.getMessage(), 0));
+                    errorM.setValue(new ErrorModel("200", data.getMessage()));
                 goBack.setValue(true);
+                progressVisibility.set(View.GONE);
             }
 
             @Override
             public void onError(ErrorModel error) {
-
+                progressVisibility.set(View.GONE);
+                errorM.setValue(error);
             }
         });
     }
 
     private void editAndSaveData() {
+        progressVisibility.set(View.VISIBLE);
         new ElectricityBillAPIRepository().editBill(info, this, new ResponseCallback<ElectricityResponseModel<String>>() {
             @Override
             public void onSuccess(ElectricityResponseModel<String> data) {
                 if (data.getStatus() == 200)
-                    message.setValue(new BillMessage(false, "موفقیت", data.getMessage(), 0));
+                    errorM.setValue(new ErrorModel("200", data.getMessage()));
                 goBack.setValue(true);
+                progressVisibility.set(View.GONE);
             }
 
             @Override
             public void onError(ErrorModel error) {
-
+                progressVisibility.set(View.GONE);
+                errorM.setValue(error);
             }
         });
     }
@@ -317,19 +323,19 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
         this.goBack = goBack;
     }
 
-    public MutableLiveData<BillMessage> getMessage() {
-        return message;
-    }
-
-    public void setMessage(MutableLiveData<BillMessage> message) {
-        this.message = message;
-    }
-
     public boolean isEditMode() {
         return editMode;
     }
 
     public void setEditMode(boolean editMode) {
         this.editMode = editMode;
+    }
+
+    public MutableLiveData<ErrorModel> getErrorM() {
+        return errorM;
+    }
+
+    public void setErrorM(MutableLiveData<ErrorModel> errorM) {
+        this.errorM = errorM;
     }
 }

@@ -6,6 +6,7 @@ import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
@@ -24,22 +25,31 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
 
     private MutableLiveData<Map<BillData.BillDataModel, BranchDebit>> mMapData;
     private MutableLiveData<Boolean> goBack;
+    private MutableLiveData<ErrorModel> errorM;
+
     private ObservableField<Integer> progressVisibility;
+    private ObservableField<Integer> errorVisibility;
     private int nationalID = -1;
 
     public ElectricityBillListVM() {
 
         mMapData = new MutableLiveData<>(new HashMap<>());
         progressVisibility = new ObservableField<>(View.GONE);
+        errorVisibility = new ObservableField<>(View.GONE);
         goBack = new MutableLiveData<>(false);
+        errorM = new MutableLiveData<>();
 
     }
 
     public void getBranchData() {
+        progressVisibility.set(View.VISIBLE);
         new ElectricityBillAPIRepository().getBillList(this, new ResponseCallback<ElectricityResponseModel<BillData>>() {
             @Override
             public void onSuccess(ElectricityResponseModel<BillData> data) {
                 if (data.getStatus() == 200) {
+                    if (data.getData().getBillData().size() == 0) {
+                        errorVisibility.set(View.VISIBLE);
+                    }
                     nationalID = data.getData().getNID();
                     Map<BillData.BillDataModel, BranchDebit> tmp = new HashMap<>();
                     for (BillData.BillDataModel dataModel:data.getData().getBillData()) {
@@ -48,16 +58,19 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
                     }
                     mMapData.setValue(tmp);
                 }
+                progressVisibility.set(View.GONE);
             }
 
             @Override
             public void onError(ErrorModel error) {
-
+                progressVisibility.set(View.GONE);
+                errorM.setValue(error);
+                errorVisibility.set(View.VISIBLE);
             }
         });
     }
 
-    public void getDebitData(BillData.BillDataModel bill) {
+    private void getDebitData(BillData.BillDataModel bill) {
         new ElectricityBillAPIRepository().getBranchDebit(bill.getBillID(), this,
                 new ResponseCallback<ElectricityResponseModel<BranchDebit>>() {
                     @Override
@@ -72,27 +85,29 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
 
                     @Override
                     public void onError(ErrorModel error) {
-
+                        Map<BillData.BillDataModel, BranchDebit> tmp = mMapData.getValue();
+                        BranchDebit debitTmp = tmp.get(bill);
+                        debitTmp.setLoading(false);
+                        tmp.put(bill, debitTmp);
+                        mMapData.setValue(tmp);
                     }
                 });
     }
 
     public void payBill (int position){
         BranchDebit tmp = mMapData.getValue().get(new ArrayList<>(mMapData.getValue().keySet()).get(position));
-        if (Long.parseLong(tmp.getTotalBillDebt()) < 1000) {
+        if (Long.parseLong(tmp.getTotalBillDebt()) < 10000) {
             return;
         }
 
-//        progressVisibilityPay.set(View.VISIBLE);
-//        payBtnEnable.set(false);
+        progressVisibility.set(View.VISIBLE);
 
         G.onMplResult = error -> {
-//            progressVisibilityPay.set(View.GONE);
+            progressVisibility.set(View.GONE);
             if (error) {
-//                progressVisibilityPay.set(View.GONE);
-//                payBtnEnable.set(true);
+                errorM.setValue(new ErrorModel("", "001"));
             } else {
-                // error
+                errorM.setValue(new ErrorModel("", "002"));
             }
         };
 
@@ -102,6 +117,7 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
     }
 
     public void deleteItem(int position) {
+        progressVisibility.set(View.VISIBLE);
         BillData.BillDataModel dataModel = new ArrayList<>(mMapData.getValue().keySet()).get(position);
         BillRegister info = new BillRegister();
         info.setNID("" + nationalID);
@@ -115,16 +131,19 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
                     tmp.remove(dataModel);
                     mMapData.setValue(tmp);
                 }
+                progressVisibility.set(View.GONE);
             }
 
             @Override
             public void onError(ErrorModel error) {
-
+                errorM.setValue(error);
+                progressVisibility.set(View.GONE);
             }
         });
     }
 
     public void deleteAccount() {
+        progressVisibility.set(View.VISIBLE);
         new ElectricityBillAPIRepository().deleteAccount(String.valueOf(nationalID), this, new ResponseCallback<ElectricityResponseModel<String>>() {
             @Override
             public void onSuccess(ElectricityResponseModel<String> data) {
@@ -132,11 +151,13 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
                     mMapData.setValue(null);
                     goBack.setValue(true);
                 }
+                progressVisibility.set(View.GONE);
             }
 
             @Override
             public void onError(ErrorModel error) {
-
+                errorM.setValue(error);
+                progressVisibility.set(View.GONE);
             }
         });
     }
@@ -172,4 +193,21 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
     public void setGoBack(MutableLiveData<Boolean> goBack) {
         this.goBack = goBack;
     }
+
+    public MutableLiveData<ErrorModel> getErrorM() {
+        return errorM;
+    }
+
+    public void setErrorM(MutableLiveData<ErrorModel> errorM) {
+        this.errorM = errorM;
+    }
+
+    public ObservableField<Integer> getErrorVisibility() {
+        return errorVisibility;
+    }
+
+    public void setErrorVisibility(ObservableField<Integer> errorVisibility) {
+        this.errorVisibility = errorVisibility;
+    }
+
 }

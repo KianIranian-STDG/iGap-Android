@@ -16,9 +16,9 @@ import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
+import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.databinding.FragmentElecBillAddBinding;
 import net.iGap.dialog.DefaultRoundDialog;
-import net.iGap.electricity_bill.repository.model.BillMessage;
 import net.iGap.electricity_bill.viewmodel.ElectricityBillAddVM;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -32,21 +32,18 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
     private static final String TAG = "ElectricityBillAddFrag";
 
     public static ElectricityBillAddFrag newInstance() {
-        ElectricityBillAddFrag Frag = new ElectricityBillAddFrag();
-        return Frag;
+        return new ElectricityBillAddFrag();
     }
 
     public static ElectricityBillAddFrag newInstance(String billID, boolean editMode) {
-        ElectricityBillAddFrag Frag = new ElectricityBillAddFrag(billID, editMode);
-        return Frag;
+        return new ElectricityBillAddFrag(billID, editMode);
     }
 
     public static ElectricityBillAddFrag newInstance(String billID, String billTitle, String nationalID, boolean editMode) {
-        ElectricityBillAddFrag Frag = new ElectricityBillAddFrag(billID, billTitle, nationalID, editMode);
-        return Frag;
+        return new ElectricityBillAddFrag(billID, billTitle, nationalID, editMode);
     }
 
-    public ElectricityBillAddFrag(String billID, boolean editMode) {
+    private ElectricityBillAddFrag(String billID, boolean editMode) {
         this.billID = billID;
         this.editMode = editMode;
     }
@@ -54,7 +51,7 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
     public ElectricityBillAddFrag() {
     }
 
-    public ElectricityBillAddFrag(String billID, String billTitle, String nationalID, boolean editMode) {
+    private ElectricityBillAddFrag(String billID, String billTitle, String nationalID, boolean editMode) {
         this.billID = billID;
         this.billTitle = billTitle;
         this.nationalID = nationalID;
@@ -105,19 +102,16 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
         LinearLayout toolbarLayout = binding.Toolbar;
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        elecBillVM.getMessage().observe(getViewLifecycleOwner(), new Observer<BillMessage>() {
-            @Override
-            public void onChanged(BillMessage billMessage) {
-                showDialog(billMessage.getTitle(), billMessage.getMessage(), R.string.ok);
-            }
+        elecBillVM.getErrorM().observe(getViewLifecycleOwner(), errorModel -> {
+            if (errorModel.getName().equals("200"))
+                showDialog(getResources().getString(R.string.elecBill_success_title), errorModel.getMessage());
+            else
+                showDialog(getResources().getString(R.string.elecBill_error_title), errorModel.getMessage());
         });
 
-        elecBillVM.getGoBack().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean)
-                    popBackStackFragment();
-            }
+        elecBillVM.getGoBack().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean)
+                popBackStackFragment();
         });
         cancelErrorWhileTyping();
 
@@ -208,11 +202,11 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
         });
     }
 
-    private void showDialog(String title, String message, int btnRes) {
+    private void showDialog(String title, String message) {
         DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
         defaultRoundDialog.setTitle(title);
         defaultRoundDialog.setMessage(message);
-        defaultRoundDialog.setPositiveButton(getResources().getString(btnRes), (dialog, id) -> dialog.dismiss());
+        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.ok), (dialog, id) -> dialog.dismiss());
         defaultRoundDialog.show();
     }
 

@@ -2318,4 +2318,17 @@ Want to get it?</string>
     <string name="elecBill_search_billCompany">Electricity Provider Company</string>
     <string name="elecBill_search_billSearch">Find my Bill</string>
     <string name="elecBill_search_billSpinner">choose</string>
+    <string name="elecBill_error_billMissing">Not enough data to pay the bill.</string>
+    <string name="elecBill_error_bellowMin">Can\'t pay bills under 10,000 Rial.</string>
+    <string name="elecBill_error_MPLError">Can\'t connect to payment service.</string>
+    <string name="elecBill_error_title">Error</string>
+    <string name="elecBill_error_listView">There is no data to show. Please try again later.</string>
+    <string name="elecBill_error_company">You must choose a service provider.</string>
+    <string name="elecBill_error_billSerial">Bill serial can NOT be empty.</string>
+    <string name="elecBill_error_billSerialLength">Bill serial must be at least 7 character.</string>
+    <string name="elecBill_error_openCompanySpinner">Open</string>
+    <string name="elecBill_error_zeroResultSearch">result: No bills found.</string>
+    <string name="elecBill_error_zeroResultBill">No bills is registered under your name.</string>
+    <string name="elecBill_success_title">Success</string>
+    <string name="elecBill_success_pay">Payment is successful.</string>
 </resources>

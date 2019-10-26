@@ -37,7 +37,8 @@ public class ElectricityBillSearchCompanySpinnerAdapter extends BaseAdapter {
 
         if (position == 0)
             companyName.setText(context.getResources().getString(R.string.elecBill_search_billSpinner));
-        companyName.setText(companies.get(position).getTitle());
+        else
+            companyName.setText(companies.get(position-1).getTitle());
 
         return layout;
     }

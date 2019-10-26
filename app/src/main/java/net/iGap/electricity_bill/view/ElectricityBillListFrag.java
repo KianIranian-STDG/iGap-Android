@@ -13,11 +13,13 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBillListBinding;
+import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.electricity_bill.repository.model.BillData;
 import net.iGap.electricity_bill.repository.model.BranchDebit;
@@ -41,8 +43,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
     private static final String TAG = "ElectricityBillListFrag";
 
     public static ElectricityBillListFrag newInstance() {
-        ElectricityBillListFrag kuknosLoginFrag = new ElectricityBillListFrag();
-        return kuknosLoginFrag;
+        return new ElectricityBillListFrag();
     }
 
     @Override
@@ -85,21 +86,17 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                         List<String> items = new ArrayList<>();
                         items.add(getString(R.string.elecBill_cell_deleteAccount));
                         new TopSheetDialog(getContext()).setListData(items, -1, position -> {
-                            switch (position) {
-                                case 0:
-                                    final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                                            .title(R.string.elecBill_deleteAccount_title)
-                                            .content(R.string.elecBill_deleteAccount_desc)
-                                            .positiveText(R.string.elecBill_deleteAccount_pos)
-                                            .negativeText(R.string.elecBill_deleteAccount_neg)
-                                            .positiveColor(getContext().getResources().getColor(R.color.red))
-                                            .widgetColor(new Theme().getAccentColor(getContext()))
-                                            .onPositive((dialog1, which) -> {
-                                                elecBillVM.deleteItem(position);
-                                            })
-                                            .build();
-                                    dialog.show();
-                                    break;
+                            if (position == 0) {
+                                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                                        .title(R.string.elecBill_deleteAccount_title)
+                                        .content(R.string.elecBill_deleteAccount_desc)
+                                        .positiveText(R.string.elecBill_deleteAccount_pos)
+                                        .negativeText(R.string.elecBill_deleteAccount_neg)
+                                        .positiveColor(getContext().getResources().getColor(R.color.red))
+                                        .widgetColor(new Theme().getAccentColor(getContext()))
+                                        .onPositive((dialog1, which) -> elecBillVM.deleteItem(position))
+                                        .build();
+                                dialog.show();
                             }
                         }).show();
                     }
@@ -121,7 +118,33 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                 popBackStackFragment();
             }
         });
+
+        elecBillVM.getErrorM().observe(getViewLifecycleOwner(), errorModel -> {
+            switch (errorModel.getMessage()) {
+                case "001":
+                    showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_MPLError), getResources().getString(R.string.ok));
+                    break;
+                case "002":
+                    showDialog(getResources().getString(R.string.elecBill_success_title), getResources().getString(R.string.elecBill_success_pay), getResources().getString(R.string.ok));
+                    break;
+                default:
+                    Snackbar.make(binding.Container, errorModel.getMessage(), Snackbar.LENGTH_LONG)
+                            .setAction(R.string.ok, v -> {
+                            }).show();
+                    break;
+            }
+        });
     }
+
+
+    private void showDialog(String title, String message, String btnRes) {
+        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
+        defaultRoundDialog.setTitle(title);
+        defaultRoundDialog.setMessage(message);
+        defaultRoundDialog.setPositiveButton(btnRes, (dialog, id) -> dialog.dismiss());
+        defaultRoundDialog.show();
+    }
+
 
     private void initRecycler(Map<BillData.BillDataModel, BranchDebit> bills) {
         adapter = new ElectricityBillListAdapter(getContext(), bills, (position, btnAction) -> {
@@ -170,10 +193,8 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
     }
 
     private void onBtnClickManger(btnActions actions) {
-        switch (actions) {
-            case ADD_NEW_BILL:
-                new HelperFragment(getFragmentManager(), ElectricityBillAddFrag.newInstance()).setReplace(false).load();
-                break;
+        if (actions == btnActions.ADD_NEW_BILL) {
+            new HelperFragment(getFragmentManager(), ElectricityBillAddFrag.newInstance()).setReplace(false).load();
         }
     }
 

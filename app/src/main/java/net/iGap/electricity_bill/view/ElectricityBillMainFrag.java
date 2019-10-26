@@ -38,8 +38,7 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag {
     private static final String TAG = "ElectricityBillMainFrag";
 
     public static ElectricityBillMainFrag newInstance() {
-        ElectricityBillMainFrag kuknosLoginFrag = new ElectricityBillMainFrag();
-        return kuknosLoginFrag;
+        return new ElectricityBillMainFrag();
     }
 
     @Override

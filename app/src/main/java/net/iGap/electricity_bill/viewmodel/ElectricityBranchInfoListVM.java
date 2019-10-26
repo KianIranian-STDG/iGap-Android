@@ -16,12 +16,14 @@ public class ElectricityBranchInfoListVM extends BaseAPIViewModel {
 
     private MutableLiveData<ElectricityResponseModel<BranchData>> mData;
     private ObservableField<Integer> progressVisibility;
+    private ObservableField<Integer> errorVisibility;
     private String billID = null;
 
     public ElectricityBranchInfoListVM() {
 
         mData = new MutableLiveData<>();
         progressVisibility = new ObservableField<>(View.GONE);
+        errorVisibility = new ObservableField<>(View.GONE);
 
     }
 
@@ -37,7 +39,8 @@ public class ElectricityBranchInfoListVM extends BaseAPIViewModel {
 
             @Override
             public void onError(ErrorModel error) {
-
+                progressVisibility.set(View.GONE);
+                errorVisibility.set(View.VISIBLE);
             }
         });
     }
@@ -64,5 +67,13 @@ public class ElectricityBranchInfoListVM extends BaseAPIViewModel {
 
     public void setBillID(String billID) {
         this.billID = billID;
+    }
+
+    public ObservableField<Integer> getErrorVisibility() {
+        return errorVisibility;
+    }
+
+    public void setErrorVisibility(ObservableField<Integer> errorVisibility) {
+        this.errorVisibility = errorVisibility;
     }
 }

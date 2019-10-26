@@ -14,6 +14,7 @@ import net.iGap.electricity_bill.repository.api.ElectricityBillAPIRepository;
 import net.iGap.electricity_bill.repository.model.BranchDebit;
 import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
 import net.iGap.electricity_bill.repository.model.LastBillData;
+import net.iGap.helper.HelperNumerical;
 import net.iGap.request.RequestMplGetBillToken;
 
 public class ElectricityBillPayVM extends BaseAPIViewModel {
@@ -28,6 +29,7 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
     private ObservableBoolean payBtnEnable;
 
     private MutableLiveData<LastBillData> billImage;
+    private MutableLiveData<ErrorModel> errorM;
 
     public ElectricityBillPayVM() {
 
@@ -36,6 +38,7 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
         billPrice = new ObservableField<>();
         billTime = new ObservableField<>();
         billImage = new MutableLiveData<>();
+        errorM = new MutableLiveData<>();
 
         progressVisibilityData = new ObservableField<>(View.VISIBLE);
         progressVisibilityPay = new ObservableField<>(View.GONE);
@@ -45,6 +48,7 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
     }
 
     public void getData() {
+        progressVisibilityData.set(View.VISIBLE);
         new ElectricityBillAPIRepository().getBranchDebit(billID.get(), this,
                 new ResponseCallback<ElectricityResponseModel<BranchDebit>>() {
             @Override
@@ -52,20 +56,28 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
                 progressVisibilityData.set(View.GONE);
                 if (data.getStatus() == 200) {
                     billPayID.set(data.getData().getPaymentID());
-                    billPrice.set(data.getData().getTotalBillDebt());
+                    billPrice.set(new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(data.getData().getTotalBillDebt())) + " ریال");
                     billTime.set(data.getData().getPaymentDeadLineDate());
                 }
             }
 
             @Override
             public void onError(ErrorModel error) {
-
+                errorM.setValue(error);
+                progressVisibilityData.set(View.GONE);
             }
         });
     }
 
     public void payBill (){
-        if (Long.parseLong(billPrice.get()) < 1000) {
+
+        if (billPayID.get() == null || billPayID.get().equals("") || billPayID.get().equals("null")) {
+            errorM.setValue(new ErrorModel("" , "001"));
+            return;
+        }
+
+        if (Long.parseLong(billPrice.get().replace(",","").replace(" ریال", "")) < 10000) {
+            errorM.setValue(new ErrorModel("" , "002"));
             return;
         }
 
@@ -74,16 +86,21 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
 
         G.onMplResult = error -> {
             progressVisibilityPay.set(View.GONE);
+            payBtnEnable.set(true);
             if (error) {
-                progressVisibilityPay.set(View.GONE);
-                payBtnEnable.set(true);
+                errorM.setValue(new ErrorModel("", "003"));
             } else {
-                // error
+                errorM.setValue(new ErrorModel("", "004"));
             }
         };
 
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
-        requestMplGetBillToken.mplGetBillToken(Long.parseLong(billID.get()), Long.parseLong(billPrice.get().replace("0","")) + Long.parseLong(billPayID.get()));
+        if (billPayID.get().startsWith(billPrice.get().replace("0", "").replace(",","").replace(" ریال", ""))) {
+            requestMplGetBillToken.mplGetBillToken(Long.parseLong(billID.get()), Long.parseLong(billPayID.get()));
+        }
+        else {
+            requestMplGetBillToken.mplGetBillToken(Long.parseLong(billID.get()), Long.parseLong(billPrice.get().replace("0", "").replace(",","").replace(" ریال", "") + billPayID.get()));
+        }
     }
 
     public void showBillImage() {
@@ -93,11 +110,13 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
             public void onSuccess(ElectricityResponseModel<LastBillData> data) {
                 if (data.getStatus() == 200)
                     billImage.setValue(data.getData());
+                progressVisibilityDownload.set(View.GONE);
             }
 
             @Override
             public void onError(ErrorModel error) {
-
+                progressVisibilityDownload.set(View.GONE);
+                errorM.setValue(error);
             }
         });
     }
@@ -172,5 +191,13 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
 
     public void setProgressVisibilityDownload(ObservableField<Integer> progressVisibilityDownload) {
         this.progressVisibilityDownload = progressVisibilityDownload;
+    }
+
+    public MutableLiveData<ErrorModel> getErrorM() {
+        return errorM;
+    }
+
+    public void setErrorM(MutableLiveData<ErrorModel> errorM) {
+        this.errorM = errorM;
     }
 }

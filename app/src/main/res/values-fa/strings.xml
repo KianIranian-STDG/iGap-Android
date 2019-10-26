@@ -2297,4 +2297,17 @@
     <string name="elecBill_search_billCompany">شرکت ارائه دهنده سرویس برق</string>
     <string name="elecBill_search_billSearch">جستجو</string>
     <string name="elecBill_search_billSpinner">انتخاب کنید</string>
+    <string name="elecBill_error_billMissing">اطلاعات لازم جهت پرداخت قبض موجود نیست.</string>
+    <string name="elecBill_error_bellowMin">امکان پرداخت قبض های زیر 10000 ریال وجود ندارد.</string>
+    <string name="elecBill_error_MPLError">سرویس پرداخت متصل نمی باشد.</string>
+    <string name="elecBill_error_title">خطا</string>
+    <string name="elecBill_error_listView">موردی برای نمایش موجود نیست. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
+    <string name="elecBill_error_company">شما باید شرکت توزیع کننده برق خود را انتخاب کنید.</string>
+    <string name="elecBill_error_billSerial">شماره کنتور نمیتواند خالی باشد.</string>
+    <string name="elecBill_error_billSerialLength">شماره کنتور باید حداقل 7 کاراکتر باشد.</string>
+    <string name="elecBill_error_openCompanySpinner">باز کردن</string>
+    <string name="elecBill_error_zeroResultSearch">نتایج: قبضی یافت نشد.</string>
+    <string name="elecBill_error_zeroResultBill">هیچ قبضی به نام شما در سیستم موجود نیست.</string>
+    <string name="elecBill_success_title">موفقیت</string>
+    <string name="elecBill_success_pay">پرداخت با موفقیت انجام شد.</string>
 </resources>

@@ -71,6 +71,24 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/errorView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:justificationMode="inter_word"
+                    android:text="@string/elecBill_error_zeroResultBill"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:gravity="center"
+                    android:ellipsize="end"
+                    android:visibility="@{viewmodel.errorVisibility}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/billRecycler"/>
+
                 <ProgressBar
                     android:id="@+id/ProgressV"
                     android:layout_width="0dp"

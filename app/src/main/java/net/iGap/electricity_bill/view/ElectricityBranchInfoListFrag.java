@@ -30,11 +30,10 @@ public class ElectricityBranchInfoListFrag extends BaseAPIViewFrag {
     private static final String TAG = "ElectricityBranchInfoLi";
 
     public static ElectricityBranchInfoListFrag newInstance(String billID) {
-        ElectricityBranchInfoListFrag kuknosLoginFrag = new ElectricityBranchInfoListFrag(billID);
-        return kuknosLoginFrag;
+        return new ElectricityBranchInfoListFrag(billID);
     }
 
-    public ElectricityBranchInfoListFrag(String billID) {
+    private ElectricityBranchInfoListFrag(String billID) {
         this.billID = billID;
     }
 

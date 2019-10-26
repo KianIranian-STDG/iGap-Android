@@ -65,12 +65,15 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:gravity="start|center_vertical"
-                        android:inputType="text"
+                        android:inputType="numberDecimal"
                         android:minHeight="48dp"
                         android:text="@={viewmodel.billSerial}"
                         android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp18"
-                        android:imeOptions="actionNext"/>
+                        android:digits="0123456789"
+                        android:imeOptions="actionDone"
+                        android:lines="1"
+                        android:maxLines="1"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -78,13 +81,13 @@
                     android:id="@+id/billCompanyTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp16"
                     android:layout_marginStart="@dimen/dp16"
                     android:layout_marginEnd="@dimen/dp16"
                     android:justificationMode="inter_word"
                     android:text="@string/elecBill_search_billCompany"
                     android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/dp18"
+                    android:textSize="@dimen/dp16"
                     android:gravity="center_vertical|start"
                     android:ellipsize="end"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -130,6 +133,25 @@
                     app:layout_constraintTop_toBottomOf="@+id/addNewBill"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/errorView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:justificationMode="inter_word"
+                    android:text="@string/elecBill_error_zeroResultSearch"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:gravity="center"
+                    android:ellipsize="end"
+                    android:visibility="@{viewmodel.errorVisibility}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/billRecycler"/>
 
                 <ProgressBar
                     android:id="@+id/ProgressV"
