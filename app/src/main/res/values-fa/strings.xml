@@ -2283,4 +2283,18 @@
     <string name="elecBill_deleteAccount_desc">آیا از حذف حساب کاربری خود اطمینان دارید؟</string>
     <string name="elecBill_deleteAccount_pos">حذف حساب</string>
     <string name="elecBill_deleteAccount_neg">لغو حذف حساب من</string>
+    <string name="elecBill_image_Directory">آیگپ - قبض برق</string>
+    <string name="elecBill_image_success">دانلود فایل کامل شد.</string>
+    <string name="elecBill_image_fail">بارگزاری با خطا مواجه شد.</string>
+    <string name="elecBill_image_open">باز کردن فایل</string>
+    <string name="elecBill_image_close">رد کردن</string>
+    <string name="elecBill_edit_saveBtn">ذخیره تغییرات</string>
+    <string name="elecBill_edit_Btn">ویرایش قبض</string>
+    <string name="elecBill_searchCell_billID">شناسه قبض</string>
+    <string name="elecBill_searchCell_CustomerName">نام مشتری</string>
+    <string name="elecBill_searchCell_CustomerAddress">آدرس مشتری</string>
+    <string name="elecBill_search_billSerial">شماره کنتور</string>
+    <string name="elecBill_search_billCompany">شرکت ارائه دهنده سرویس برق</string>
+    <string name="elecBill_search_billSearch">جستجو</string>
+    <string name="elecBill_search_billSpinner">انتخاب کنید</string>
 </resources>

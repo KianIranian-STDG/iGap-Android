@@ -128,6 +128,7 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag {
                 new HelperFragment(getFragmentManager(), ElectricityBillListFrag.newInstance()).setReplace(false).load();
                 break;
             case SEARCH_BILL:
+                new HelperFragment(getFragmentManager(), ElectricityBillSearchListFrag.newInstance()).setReplace(false).load();
                 break;
             case BRANCH_INFO:
                 break;

@@ -2,8 +2,6 @@ package net.iGap.electricity_bill.repository.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 public class ElectricityResponseError {
 
     @SerializedName("name")

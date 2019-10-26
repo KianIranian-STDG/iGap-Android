@@ -1,9 +1,7 @@
 package net.iGap.electricity_bill.repository.api;
 
 import net.iGap.api.ElecBillApi;
-import net.iGap.api.NewsApi;
 import net.iGap.api.apiService.ApiInitializer;
-import net.iGap.api.apiService.ApiResponse;
 import net.iGap.api.apiService.ApiServiceProvider;
 import net.iGap.api.apiService.HandShakeCallback;
 import net.iGap.api.apiService.ResponseCallback;
@@ -17,12 +15,6 @@ import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
 import net.iGap.electricity_bill.repository.model.LastBillData;
 import net.iGap.electricity_bill.repository.model.PaidBill;
 import net.iGap.electricity_bill.repository.model.SaleBill;
-import net.iGap.news.repository.model.NewsGroup;
-import net.iGap.news.repository.model.NewsList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ElectricityBillAPIRepository {
 

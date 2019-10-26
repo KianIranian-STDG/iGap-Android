@@ -2304,7 +2304,6 @@ Want to get it?</string>
     <string name="elecBill_deleteAccount_desc">Are you sure to delete your account?</string>
     <string name="elecBill_deleteAccount_pos">Delete</string>
     <string name="elecBill_deleteAccount_neg">No, don\'t delete.</string>
-
     <string name="elecBill_image_Directory">IGap - Electricity Bill</string>
     <string name="elecBill_image_success">Download is complete.</string>
     <string name="elecBill_image_fail">Download has failed.</string>
@@ -2312,4 +2311,11 @@ Want to get it?</string>
     <string name="elecBill_image_close">Dismiss</string>
     <string name="elecBill_edit_saveBtn">Save Changes</string>
     <string name="elecBill_edit_Btn">Edit Bill</string>
+    <string name="elecBill_searchCell_billID">Bill ID</string>
+    <string name="elecBill_searchCell_CustomerName">Customer Name</string>
+    <string name="elecBill_searchCell_CustomerAddress">Customer Address</string>
+    <string name="elecBill_search_billSerial">Customer Address</string>
+    <string name="elecBill_search_billCompany">Electricity Provider Company</string>
+    <string name="elecBill_search_billSearch">Find my Bill</string>
+    <string name="elecBill_search_billSpinner">choose</string>
 </resources>
