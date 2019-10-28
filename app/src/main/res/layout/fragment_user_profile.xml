@@ -174,7 +174,12 @@
                 app:layout_constraintTop_toBottomOf="@id/fup_user_tel" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="@{viewModel.showLoading}" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>
