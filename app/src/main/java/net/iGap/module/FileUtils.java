@@ -651,7 +651,7 @@ public class FileUtils {
     }
 
     public void clearImageFile() {
-        clearFile(new File(G.DIR_IMAGE_USER));
+        clearFile(new File(G.DIR_IMAGES));
     }
 
     public void clearVideoFile() {

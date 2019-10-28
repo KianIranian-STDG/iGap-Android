@@ -658,8 +658,8 @@ public class FragmentEditImage extends BaseFragment {
         Uri uri = Uri.parse(newPath);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
             UCrop.Options options = new UCrop.Options();
-            options.setStatusBarColor(ContextCompat.getColor(G.context, R.color.black));
-            options.setToolbarColor(ContextCompat.getColor(G.context, R.color.black));
+            options.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.black));
+            options.setToolbarColor(ContextCompat.getColor(getContext(), R.color.black));
             options.setCompressionQuality(80);
             options.setFreeStyleCropEnabled(true);
 
