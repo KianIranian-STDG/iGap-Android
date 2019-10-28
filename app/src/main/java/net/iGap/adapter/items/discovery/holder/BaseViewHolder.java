@@ -172,7 +172,9 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case PHONE_BILL_MENU:/** tested **/
-//                new HelperFragment(activity.getSupportFragmentManager(), new FragmentPaymentInquiryTelephone()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), new FragmentPaymentInquiryTelephone()).setReplace(false).load();
+                break;
+            case ELECTRIC_BILL_MENU:
                 new HelperFragment(activity.getSupportFragmentManager(), new ElectricityBillMainFrag()).setReplace(false).load();
                 break;
             case MOBILE_BILL_MENU:/** tested **/
