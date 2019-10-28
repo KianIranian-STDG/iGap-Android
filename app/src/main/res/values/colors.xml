@@ -296,6 +296,8 @@
     <color name="brownDividerLine">#bcaaa4</color>
     <color name="tealDividerLine">#80cbc4</color>
     <color name="grayDividerLine">#e0e0e0</color>
+    <color name="news_red">#B60000</color>
+    <color name="news_gray">#D9616161</color>
     <color name="chat_bottom_bg">#EEEEEE</color>
     <color name="amber">#f6d365</color>
     <color name="blue">#207dff</color>

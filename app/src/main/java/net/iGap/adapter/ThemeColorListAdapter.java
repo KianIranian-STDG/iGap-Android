@@ -57,7 +57,11 @@ public class ThemeColorListAdapter extends RecyclerView.Adapter<ThemeColorListAd
 
         setChatReceivedChatBubble(holder.themeColor, new Theme().getColor(items.get(position).getThemeId()));
         holder.themeName.setText(items.get(position).getThemeNameRes());
-        holder.itemView.setOnClickListener(v -> callback.onItemClicked(selectedThemePosition, holder.getAdapterPosition()));
+        holder.itemView.setOnClickListener(v -> {
+            if (selectedThemePosition != holder.getAdapterPosition()) {
+                callback.onItemClicked(selectedThemePosition, holder.getAdapterPosition());
+            }
+        });
     }
 
     @Override
