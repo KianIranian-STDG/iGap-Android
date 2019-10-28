@@ -58,7 +58,13 @@ public class NewsDetailVM extends BaseAPIViewModel {
     }
 
     public void getDataFromServer(String newsID) {
-        this.newsID = Integer.parseInt(newsID);
+        try {
+            this.newsID = Integer.parseInt(newsID);
+        }
+        catch (Exception e) {
+            error.setValue(new NewsError(true, "", "API Input is NOT valid.", 0));
+            return;
+        }
         repo.getNewsDetail(this.newsID, this, new ResponseCallback<NewsDetail>() {
             @Override
             public void onSuccess(NewsDetail newsDetail) {

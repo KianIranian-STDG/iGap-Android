@@ -208,7 +208,7 @@ public class Theme {
     }
 
     public int getForwardFromTextColor(Context context) {
-        return getColorFromAttr(context, R.attr.colorAccentDark);
+        return getColorFromAttr(context, R.attr.colorAccent);
     }
 
     public int getTitleTextColor(Context context) {

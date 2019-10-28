@@ -18,8 +18,7 @@ public class IgapRetrofitInterceptor implements Interceptor {
                 .method(original.method(), original.body())
                 .build();
 
-        Response response = chain.proceed(request);
-        return response;
+        return chain.proceed(request);
 /*
         Log.d("amini", "intercept: " + response.code() + " " + response.isSuccessful() + " " + response.message());
         if (response.isSuccessful())

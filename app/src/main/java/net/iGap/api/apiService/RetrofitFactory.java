@@ -44,7 +44,8 @@ public class RetrofitFactory {
         ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                 .tlsVersions(TlsVersion.TLS_1_2)
                 .build();
-        httpClient = builder.connectionSpecs(Collections.singletonList(spec)).build();
+        // TODO: 10/22/2019 Must be added for release
+        httpClient = builder/*.connectionSpecs(Collections.singletonList(spec))*/.build();
 //        httpClient = enableTls12OnPreLollipop(builder).build();
     }
 
@@ -117,6 +118,14 @@ public class RetrofitFactory {
     public Retrofit getNewsRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.NEWS_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build();
+    }
+
+    public Retrofit getElecBillRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.ELECTRICITY_BILL_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build();

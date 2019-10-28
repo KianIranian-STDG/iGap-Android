@@ -100,6 +100,10 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void removeLoading() {
+        // TODO: 10/28/2019 line 104 & 105 must be removed
+        if (mData.getNews().size() == 0)
+            return;
+
         isLoaderVisible = false;
         int position = mData.getNews().size() - 1;
         NewsList.News item = mData.getNews().get(position);
