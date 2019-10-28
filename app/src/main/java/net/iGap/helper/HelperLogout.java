@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
+import net.iGap.Theme;
 import net.iGap.WebSocketClient;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.interfaces.OnUserSessionLogout;
