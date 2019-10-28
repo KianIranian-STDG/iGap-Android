@@ -9,6 +9,9 @@ public class Bill {
     private String dueTime;
     private boolean loading;
 
+    public Bill() {
+    }
+
     public Bill(String ID, String payID, String price, String dueTime) {
         this.ID = ID;
         this.payID = payID;
@@ -16,8 +19,7 @@ public class Bill {
         this.dueTime = dueTime;
     }
 
-    public Bill(String title, String ID, String payID, String price, String dueTime, boolean loading) {
-        this.title = title;
+    public Bill(String ID, String payID, String price, String dueTime, boolean loading) {
         this.ID = ID;
         this.payID = payID;
         this.price = price;

@@ -26,6 +26,7 @@ import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.electricity_bill.repository.model.Bill;
 import net.iGap.electricity_bill.repository.model.LastBillData;
 import net.iGap.electricity_bill.viewmodel.ElectricityBillPayVM;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperToolbar;
@@ -64,14 +65,6 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         elecBillVM = ViewModelProviders.of(this).get(ElectricityBillPayVM.class);
-        elecBillVM.getBillID().set(bill.getID());
-        if (bill.getPayID() != null)
-            elecBillVM.getBillPayID().set(bill.getPayID());
-        if (bill.getPrice() != null) {
-            elecBillVM.getBillPrice().set(bill.getPrice());
-            elecBillVM.getProgressVisibilityData().set(View.GONE);
-        }
-        elecBillVM.getData();
     }
 
     @Nullable
@@ -131,6 +124,34 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
         });
         if (editMode)
             binding.addToList.setText(getResources().getString(R.string.elecBill_edit_Btn));
+
+        getIntent();
+        elecBillVM.getData();
+    }
+
+    private void getIntent() {
+        if (HelperCalander.isPersianUnicode) {
+            elecBillVM.getBillID().set(HelperCalander.convertToUnicodeFarsiNumber(bill.getID()));
+        }
+        else
+            elecBillVM.getBillID().set(bill.getID());
+        if (bill.getPayID() != null) {
+            if (HelperCalander.isPersianUnicode) {
+                elecBillVM.getBillPayID().set(HelperCalander.convertToUnicodeFarsiNumber(bill.getPayID()));
+            }
+            else
+                elecBillVM.getBillPayID().set(bill.getPayID());
+        }
+        if (bill.getPrice() != null) {
+            if (HelperCalander.isPersianUnicode) {
+                elecBillVM.getBillPrice().set(HelperCalander.convertToUnicodeFarsiNumber(bill.getPrice()));
+            }
+            else
+                elecBillVM.getBillPrice().set(bill.getPrice());
+            elecBillVM.getProgressVisibilityData().set(View.GONE);
+        }
+
+        elecBillVM.setDebit(new Bill(bill.getID(), bill.getPayID(), bill.getPrice(), "-"));
     }
 
     private void showDialog(String title, String message, String btnRes) {
@@ -152,10 +173,10 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
     private void onBtnClickManger(btnActions actions) {
         switch (actions) {
             case BRANCH_INFO:
-                new HelperFragment(getFragmentManager(), ElectricityBranchInfoListFrag.newInstance(elecBillVM.getBillID().get())).setReplace(false).load();
+                new HelperFragment(getFragmentManager(), ElectricityBranchInfoListFrag.newInstance(bill.getID())).setReplace(false).load();
                 break;
             case ADD_LIST:
-                new HelperFragment(getFragmentManager(), ElectricityBillAddFrag.newInstance(elecBillVM.getBillID().get(), editMode)).setReplace(false).load();
+                new HelperFragment(getFragmentManager(), ElectricityBillAddFrag.newInstance(bill.getID(), editMode)).setReplace(false).load();
                 break;
         }
     }

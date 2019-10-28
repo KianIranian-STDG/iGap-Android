@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.electricity_bill.repository.model.BillData;
 import net.iGap.electricity_bill.repository.model.BranchDebit;
+import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperNumerical;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +27,6 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
 
     private Map<BillData.BillDataModel, BranchDebit> mdata;
     private List<BillData.BillDataModel> bill;
-    private List<BranchDebit> debits;
     private Context context;
     private OnItemClickListener clickListener;
 
@@ -33,7 +34,6 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
         this.mdata = new HashMap<>();
         this.mdata.putAll(data);
         this.bill = new ArrayList<>(mdata.keySet());
-        this.debits = new ArrayList<>(mdata.values());
         this.context = context;
         this.clickListener = clickListener;
     }
@@ -87,10 +87,14 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                 progressT.setVisibility(View.GONE);
 
                 title.setText(bill.get(position).getBillTitle());
-                billID.setText(bill.get(position).getBillID());
+                if (HelperCalander.isPersianUnicode) {
+                    billID.setText(HelperCalander.convertToUnicodeFarsiNumber(bill.get(position).getBillID()));
+                }
+                else
+                    billID.setText(bill.get(position).getBillID());
 
                 billPayID.setText(mdata.get(bill.get(position)).getPaymentID());
-                billPrice.setText(mdata.get(bill.get(position)).getTotalBillDebt());
+                billPrice.setText(new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(mdata.get(bill.get(position)).getTotalBillDebt())) + " ریال");
                 billTime.setText(mdata.get(bill.get(position)).getPaymentDeadLineDate());
             }
 

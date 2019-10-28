@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.electricity_bill.repository.model.BranchData;
+import net.iGap.helper.HelperCalander;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,8 +63,13 @@ public class ElectricityBillSearchListAdapter extends RecyclerView.Adapter<Elect
 
         void initView(int position) {
 
-            billID.setText(mData.get(position).getBillID());
-            customerName.setText(mData.get(position).getCustomerName() + " " + mData.get(position).getCustomerFamily());
+            if (HelperCalander.isPersianUnicode) {
+                billID.setText(HelperCalander.convertToUnicodeFarsiNumber(mData.get(position).getBillID()));
+            }
+            else
+                billID.setText(mData.get(position).getBillID());
+            customerName.setText((mData.get(position).getCustomerName()==null? "":mData.get(position).getCustomerName())
+                    + " " + (mData.get(position).getCustomerFamily()==null? "" : mData.get(position).getCustomerFamily()));
             customerAddress.setText(mData.get(position).getServiceAddress());
             container.setOnClickListener(v -> clickListener.onClick(position));
 

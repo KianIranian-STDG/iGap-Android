@@ -75,7 +75,7 @@ public class ElectricityBillSearchListVM extends BaseAPIViewModel {
             return false;
         }
 
-        if (companyPosition == -1 || companyPosition == 0) {
+        if (companyPosition == -1) {
             errorM.setValue(new ErrorModel("error", "001"));
             return false;
         }
@@ -83,10 +83,13 @@ public class ElectricityBillSearchListVM extends BaseAPIViewModel {
     }
 
     public void getBranchData() {
-        if (!checkData())
-            return;
-
         progressVisibility.set(View.VISIBLE);
+
+        if (!checkData()) {
+            progressVisibility.set(View.GONE);
+            return;
+        }
+
         new ElectricityBillAPIRepository().searchBills(billSerial.get(), String.valueOf(mCompanyData.getValue().getCompaniesList().get(companyPosition).getCode()), this, new ResponseCallback<ElectricityResponseList<BranchData>>() {
             @Override
             public void onSuccess(ElectricityResponseList<BranchData> data) {

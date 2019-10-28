@@ -1,6 +1,14 @@
 package net.iGap.electricity_bill.repository.model;
 
+import android.text.format.DateUtils;
+
 import com.google.gson.annotations.SerializedName;
+
+import net.iGap.helper.HelperCalander;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class LastBillData {
 
@@ -32,7 +40,18 @@ public class LastBillData {
     }
 
     public String getPaymentDeadLine() {
-        return paymentDeadLine;
+        if (paymentDeadLine == null || paymentDeadLine.isEmpty())
+            return "";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
+        try {
+            Date mDate = sdf.parse(paymentDeadLine.replace("T", " ").replace("Z"," "));
+            long timeInMilliseconds = mDate.getTime();
+            return HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     public void setPaymentDeadLine(String paymentDeadLine) {

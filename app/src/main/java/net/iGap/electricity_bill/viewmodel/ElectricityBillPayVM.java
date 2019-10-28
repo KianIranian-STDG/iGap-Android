@@ -11,6 +11,7 @@ import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.electricity_bill.repository.api.ElectricityBillAPIRepository;
+import net.iGap.electricity_bill.repository.model.Bill;
 import net.iGap.electricity_bill.repository.model.BranchDebit;
 import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
 import net.iGap.electricity_bill.repository.model.LastBillData;
@@ -29,16 +30,18 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
     private ObservableBoolean payBtnEnable;
 
     private MutableLiveData<LastBillData> billImage;
+    private Bill debit;
     private MutableLiveData<ErrorModel> errorM;
 
     public ElectricityBillPayVM() {
 
-        billID = new ObservableField<>();
-        billPayID = new ObservableField<>();
-        billPrice = new ObservableField<>();
-        billTime = new ObservableField<>();
+        billID = new ObservableField<>("-");
+        billPayID = new ObservableField<>("-");
+        billPrice = new ObservableField<>("-");
+        billTime = new ObservableField<>("-");
         billImage = new MutableLiveData<>();
         errorM = new MutableLiveData<>();
+        debit = new Bill();
 
         progressVisibilityData = new ObservableField<>(View.VISIBLE);
         progressVisibilityPay = new ObservableField<>(View.GONE);
@@ -49,12 +52,13 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
 
     public void getData() {
         progressVisibilityData.set(View.VISIBLE);
-        new ElectricityBillAPIRepository().getBranchDebit(billID.get(), this,
+        new ElectricityBillAPIRepository().getBranchDebit(debit.getID(), this,
                 new ResponseCallback<ElectricityResponseModel<BranchDebit>>() {
             @Override
             public void onSuccess(ElectricityResponseModel<BranchDebit> data) {
                 progressVisibilityData.set(View.GONE);
                 if (data.getStatus() == 200) {
+                    debit = new Bill(debit.getID(), data.getData().getPaymentID(), data.getData().getTotalBillDebt(), data.getData().getPaymentDeadLineDate());
                     billPayID.set(data.getData().getPaymentID());
                     billPrice.set(new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(data.getData().getTotalBillDebt())) + " ریال");
                     billTime.set(data.getData().getPaymentDeadLineDate());
@@ -71,12 +75,13 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
 
     public void payBill (){
 
-        if (billPayID.get() == null || billPayID.get().equals("") || billPayID.get().equals("null")) {
+        if (debit.getPayID() == null || debit.getPayID().equals("") || debit.getPayID().equals("null")) {
             errorM.setValue(new ErrorModel("" , "001"));
+            getData();
             return;
         }
 
-        if (Long.parseLong(billPrice.get().replace(",","").replace(" ریال", "")) < 10000) {
+        if (Long.parseLong(debit.getPrice().replace(",","").replace(" ریال", "")) < 10000) {
             errorM.setValue(new ErrorModel("" , "002"));
             return;
         }
@@ -89,23 +94,21 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
             payBtnEnable.set(true);
             if (error) {
                 errorM.setValue(new ErrorModel("", "003"));
-            } else {
-                errorM.setValue(new ErrorModel("", "004"));
             }
         };
 
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
-        if (billPayID.get().startsWith(billPrice.get().replace("0", "").replace(",","").replace(" ریال", ""))) {
-            requestMplGetBillToken.mplGetBillToken(Long.parseLong(billID.get()), Long.parseLong(billPayID.get()));
+        if (debit.getPayID().startsWith(debit.getPrice().replace("0", "").replace(",","").replace(" ریال", ""))) {
+            requestMplGetBillToken.mplGetBillToken(Long.parseLong(debit.getID()), Long.parseLong(debit.getPayID()));
         }
         else {
-            requestMplGetBillToken.mplGetBillToken(Long.parseLong(billID.get()), Long.parseLong(billPrice.get().replace("0", "").replace(",","").replace(" ریال", "") + billPayID.get()));
+            requestMplGetBillToken.mplGetBillToken(Long.parseLong(debit.getID()), Long.parseLong(debit.getPrice().replace("0", "").replace(",","").replace(" ریال", "") + debit.getPayID()));
         }
     }
 
     public void showBillImage() {
         progressVisibilityDownload.set(View.VISIBLE);
-        new ElectricityBillAPIRepository().getLastBill(billID.get(), this, new ResponseCallback<ElectricityResponseModel<LastBillData>>() {
+        new ElectricityBillAPIRepository().getLastBill(debit.getID(), this, new ResponseCallback<ElectricityResponseModel<LastBillData>>() {
             @Override
             public void onSuccess(ElectricityResponseModel<LastBillData> data) {
                 if (data.getStatus() == 200)
@@ -199,5 +202,13 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
 
     public void setErrorM(MutableLiveData<ErrorModel> errorM) {
         this.errorM = errorM;
+    }
+
+    public Bill getDebit() {
+        return debit;
+    }
+
+    public void setDebit(Bill debit) {
+        this.debit = debit;
     }
 }

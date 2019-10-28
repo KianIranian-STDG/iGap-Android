@@ -124,6 +124,21 @@
                     app:layout_constraintTop_toBottomOf="@+id/billCompanySpinner"
                     app:layout_constraintWidth_percent="0.7"/>
 
+                <ProgressBar
+                    android:id="@+id/ProgressV"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:elevation="2dp"
+                    android:visibility="@{viewmodel.progressVisibility}"
+                    android:translationZ="@dimen/dp1"
+                    app:layout_constraintBottom_toBottomOf="@+id/addNewBill"
+                    app:layout_constraintEnd_toEndOf="@+id/addNewBill"
+                    app:layout_constraintStart_toStartOf="@+id/addNewBill"
+                    app:layout_constraintTop_toTopOf="@+id/addNewBill"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintWidth_percent="0.1"
+                    app:layout_constraintHorizontal_bias="0.05" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/billRecycler"
                     android:layout_width="match_parent"
@@ -152,20 +167,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/billRecycler"/>
-
-                <ProgressBar
-                    android:id="@+id/ProgressV"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:elevation="2dp"
-                    android:visibility="@{viewmodel.progressVisibility}"
-                    app:layout_constraintBottom_toBottomOf="@+id/addNewBill"
-                    app:layout_constraintEnd_toEndOf="@+id/addNewBill"
-                    app:layout_constraintStart_toStartOf="@+id/addNewBill"
-                    app:layout_constraintTop_toTopOf="@+id/addNewBill"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintWidth_percent="0.1"
-                    app:layout_constraintHorizontal_bias="0.05" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

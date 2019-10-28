@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.electricity_bill.repository.model.BranchData;
 import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
+import net.iGap.helper.HelperCalander;
 
 public class ElectricityBranchInfoListAdapter extends RecyclerView.Adapter<ElectricityBranchInfoListAdapter.ViewHolder> {
 
@@ -59,7 +60,11 @@ public class ElectricityBranchInfoListAdapter extends RecyclerView.Adapter<Elect
                     break;
                 case 1:
                     title.setText("شناسه قبض");
-                    desc.setText(mdata.getData().getBillID());
+                    if (HelperCalander.isPersianUnicode) {
+                        desc.setText(HelperCalander.convertToUnicodeFarsiNumber(mdata.getData().getBillID()));
+                    }
+                    else
+                        desc.setText(mdata.getData().getBillID());
                     break;
                 case 2:
                     title.setText("شناسه پرداخت");
@@ -67,7 +72,7 @@ public class ElectricityBranchInfoListAdapter extends RecyclerView.Adapter<Elect
                     break;
                 case 3:
                     title.setText("کد شرکت توزیع");
-                    desc.setText(String.valueOf(mdata.getData().getCompanyCode()));
+                    desc.setText(mdata.getData().getCompanyCode());
                     break;
                 case 4:
                     title.setText("شرکت توزیع");
@@ -172,11 +177,11 @@ public class ElectricityBranchInfoListAdapter extends RecyclerView.Adapter<Elect
                     break;
                 case 18:
                     title.setText("تاریخ انقضا پروانه");
-                    desc.setText(String.valueOf(mdata.getData().getLicenseExpireDate()));
+                    desc.setText(mdata.getData().getLicenseExpireDate());
                     break;
                 case 19:
                     title.setText("قدرت قراردادی");
-                    desc.setText(String.valueOf(mdata.getData().getContractDemand()));
+                    desc.setText(mdata.getData().getContractDemand());
                     break;
             }
         }

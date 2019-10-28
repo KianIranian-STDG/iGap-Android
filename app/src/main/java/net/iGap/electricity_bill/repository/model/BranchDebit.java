@@ -1,6 +1,14 @@
 package net.iGap.electricity_bill.repository.model;
 
+import android.text.format.DateUtils;
+
 import com.google.gson.annotations.SerializedName;
+
+import net.iGap.helper.HelperCalander;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class BranchDebit {
 
@@ -50,6 +58,9 @@ public class BranchDebit {
     }
 
     public String getPaymentID() {
+        if (HelperCalander.isPersianUnicode) {
+            return HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(paymentID));
+        }
         return paymentID;
     }
 
@@ -58,6 +69,9 @@ public class BranchDebit {
     }
 
     public String getTotalBillDebt() {
+        if (HelperCalander.isPersianUnicode) {
+            return HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(totalBillDebt));
+        }
         return totalBillDebt;
     }
 
@@ -74,7 +88,21 @@ public class BranchDebit {
     }
 
     public String getPaymentDeadLineDate() {
-        return paymentDeadLineDate;
+        if (paymentDeadLineDate == null || paymentDeadLineDate.isEmpty())
+            return "";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
+        try {
+            Date mDate = sdf.parse(paymentDeadLineDate.replace("T", " ").replace("Z"," "));
+            long timeInMilliseconds = mDate.getTime();
+            if (HelperCalander.isPersianUnicode) {
+                return HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS)));
+            }
+            return HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     public void setPaymentDeadLineDate(String paymentDeadLineDate) {

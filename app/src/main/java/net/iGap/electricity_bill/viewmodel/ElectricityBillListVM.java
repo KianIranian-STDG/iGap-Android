@@ -6,7 +6,6 @@ import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
-import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
@@ -50,7 +49,7 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
                     if (data.getData().getBillData().size() == 0) {
                         errorVisibility.set(View.VISIBLE);
                     }
-                    nationalID = data.getData().getNID();
+                    nationalID = Integer.valueOf(data.getData().getNID());
                     Map<BillData.BillDataModel, BranchDebit> tmp = new HashMap<>();
                     for (BillData.BillDataModel dataModel:data.getData().getBillData()) {
                         tmp.put(dataModel, new BranchDebit());
@@ -95,8 +94,15 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
     }
 
     public void payBill (int position){
+
         BranchDebit tmp = mMapData.getValue().get(new ArrayList<>(mMapData.getValue().keySet()).get(position));
-        if (Long.parseLong(tmp.getTotalBillDebt()) < 10000) {
+        if (tmp == null || tmp.getPaymentID() == null || tmp.getPaymentID().equals("") || tmp.getPaymentID().equals("null")) {
+            errorM.setValue(new ErrorModel("" , "003"));
+            return;
+        }
+
+        if (Long.parseLong(tmp.getTotalBillDebt().replace(",","").replace(" ریال", "")) < 10000) {
+            errorM.setValue(new ErrorModel("" , "004"));
             return;
         }
 
@@ -106,8 +112,6 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
             progressVisibility.set(View.GONE);
             if (error) {
                 errorM.setValue(new ErrorModel("", "001"));
-            } else {
-                errorM.setValue(new ErrorModel("", "002"));
             }
         };
 

@@ -2293,7 +2293,7 @@
     <string name="elecBill_searchCell_billID">شناسه قبض</string>
     <string name="elecBill_searchCell_CustomerName">نام مشتری</string>
     <string name="elecBill_searchCell_CustomerAddress">آدرس مشتری</string>
-    <string name="elecBill_search_billSerial">شماره کنتور</string>
+    <string name="elecBill_search_billSerial">شماره بدنه کنتور</string>
     <string name="elecBill_search_billCompany">شرکت ارائه دهنده سرویس برق</string>
     <string name="elecBill_search_billSearch">جستجو</string>
     <string name="elecBill_search_billSpinner">انتخاب کنید</string>

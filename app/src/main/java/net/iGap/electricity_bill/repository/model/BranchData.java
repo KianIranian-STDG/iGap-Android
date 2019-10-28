@@ -1,6 +1,14 @@
 package net.iGap.electricity_bill.repository.model;
 
+import android.text.format.DateUtils;
+
 import com.google.gson.annotations.SerializedName;
+
+import net.iGap.helper.HelperCalander;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class BranchData {
 
@@ -82,6 +90,9 @@ public class BranchData {
     }
 
     public String getPaymentID() {
+        if (HelperCalander.isPersianUnicode) {
+            return HelperCalander.convertToUnicodeFarsiNumber(paymentID);
+        }
         return paymentID;
     }
 
@@ -106,7 +117,21 @@ public class BranchData {
     }
 
     public String getPaymentDeadLineDate() {
-        return paymentDeadLineDate;
+        if (paymentDeadLineDate == null || paymentDeadLineDate.isEmpty())
+            return "";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
+        try {
+            Date mDate = sdf.parse(paymentDeadLineDate.replace("T", " ").replace("Z"," "));
+            long timeInMilliseconds = mDate.getTime();
+            if (HelperCalander.isPersianUnicode) {
+                return HelperCalander.convertToUnicodeFarsiNumber(HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS));
+            }
+            return HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     public void setPaymentDeadLineDate(String paymentDeadLineDate) {
@@ -114,7 +139,21 @@ public class BranchData {
     }
 
     public String getLastReadDate() {
-        return lastReadDate;
+        if (lastReadDate == null || lastReadDate.isEmpty())
+            return "";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
+        try {
+            Date mDate = sdf.parse(lastReadDate.replace("T", " ").replace("Z"," "));
+            long timeInMilliseconds = mDate.getTime();
+            if (HelperCalander.isPersianUnicode) {
+                return HelperCalander.convertToUnicodeFarsiNumber(HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS));
+            }
+            return HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     public void setLastReadDate(String lastReadDate) {
@@ -169,8 +208,11 @@ public class BranchData {
         this.companyName = companyName;
     }
 
-    public int getCompanyCode() {
-        return companyCode;
+    public String getCompanyCode() {
+        if (HelperCalander.isPersianUnicode) {
+            return HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(companyCode));
+        }
+        return String.valueOf(companyCode);
     }
 
     public void setCompanyCode(int companyCode) {
@@ -201,8 +243,11 @@ public class BranchData {
         this.amper = amper;
     }
 
-    public int getContractDemand() {
-        return contractDemand;
+    public String getContractDemand() {
+        if (HelperCalander.isPersianUnicode) {
+            return HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(contractDemand));
+        }
+        return String.valueOf(contractDemand);
     }
 
     public void setContractDemand(int contractDemand) {
@@ -266,6 +311,9 @@ public class BranchData {
     }
 
     public String getServiceAddress() {
+        if (HelperCalander.isPersianUnicode) {
+            return HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(serviceAddress));
+        }
         return serviceAddress;
     }
 
@@ -282,6 +330,9 @@ public class BranchData {
     }
 
     public String getSerialNumber() {
+        if (HelperCalander.isPersianUnicode) {
+            return HelperCalander.convertToUnicodeFarsiNumber(serialNumber);
+        }
         return serialNumber;
     }
 
@@ -289,8 +340,11 @@ public class BranchData {
         this.serialNumber = serialNumber;
     }
 
-    public int getLicenseExpireDate() {
-        return licenseExpireDate;
+    public String  getLicenseExpireDate() {
+        if (HelperCalander.isPersianUnicode) {
+            return HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(licenseExpireDate));
+        }
+        return String.valueOf(licenseExpireDate);
     }
 
     public void setLicenseExpireDate(int licenseExpireDate) {
@@ -330,6 +384,9 @@ public class BranchData {
     }
 
     public String getServicePostCode() {
+        if (HelperCalander.isPersianUnicode) {
+            return HelperCalander.convertToUnicodeFarsiNumber(servicePostCode);
+        }
         return servicePostCode;
     }
 

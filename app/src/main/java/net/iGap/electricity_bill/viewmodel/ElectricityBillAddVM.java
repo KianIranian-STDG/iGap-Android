@@ -11,7 +11,6 @@ import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.electricity_bill.repository.api.ElectricityBillAPIRepository;
 import net.iGap.electricity_bill.repository.api.ElectricityBillRealmRepo;
-import net.iGap.electricity_bill.repository.model.BillMessage;
 import net.iGap.electricity_bill.repository.model.BillRegister;
 import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
 

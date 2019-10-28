@@ -2,6 +2,8 @@ package net.iGap.electricity_bill.repository.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import net.iGap.helper.HelperCalander;
+
 import java.util.List;
 
 public class BillData {
@@ -135,8 +137,11 @@ public class BillData {
         this.email = email;
     }
 
-    public int getNID() {
-        return NID;
+    public String getNID() {
+        if (HelperCalander.isPersianUnicode) {
+            return HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(NID));
+        }
+        return String.valueOf(NID);
     }
 
     public void setNID(int NID) {

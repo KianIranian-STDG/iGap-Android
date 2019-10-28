@@ -127,6 +127,12 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                 case "002":
                     showDialog(getResources().getString(R.string.elecBill_success_title), getResources().getString(R.string.elecBill_success_pay), getResources().getString(R.string.ok));
                     break;
+                case "003":
+                    showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_billMissing), getResources().getString(R.string.ok));
+                    break;
+                case "004":
+                    showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_bellowMin), getResources().getString(R.string.ok));
+                    break;
                 default:
                     Snackbar.make(binding.Container, errorModel.getMessage(), Snackbar.LENGTH_LONG)
                             .setAction(R.string.ok, v -> {
