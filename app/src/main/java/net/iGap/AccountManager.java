@@ -3,7 +3,6 @@ package net.iGap;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -104,23 +103,16 @@ public class AccountManager {
     }
 
     public void addAccount(AccountUser accountUser) {
-        Log.wtf(this.getClass().getName(), "addAccount");
         if (accountUser.getDbName() == null) {
             accountUser.setDbName(getDbName());
             accountUser.setRealmConfiguration(userAccountList.get(0).getRealmConfiguration());
-            Log.wtf(this.getClass().getName(), "get config: " + (accountUser.getRealmConfiguration() != null));
         }
         userAccountList.add(userAccountList.size(), accountUser);
         userAccountList.get(0).setDbName(getDbName());
         userAccountList.get(0).setRealmConfiguration(dbEncryptionKey);
-        Log.wtf(this.getClass().getName(), "get config: " + (userAccountList.get(0).getRealmConfiguration() != null));
         setUserAccountListInSharedPreferences();
         this.currentUser = userAccountList.size() - 1;
         setCurrentUserInSharedPreferences();
-        for (int i = 0; i < userAccountList.size(); i++) {
-            Log.wtf(this.getClass().getName(), "account: " + userAccountList.get(i).toString());
-        }
-        Log.wtf(this.getClass().getName(), "current user: " + currentUser);
     }
 
     public boolean isExistThisAccount(long userId) {

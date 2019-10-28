@@ -41,9 +41,7 @@ public class DbManager {
 
     public void changeRealmConfiguration() {
         this.uiRealm = null;
-        Log.wtf(this.getClass().getName(), "current user: " + AccountManager.getInstance().getCurrentUser().getName());
         this.uiRealm = Realm.getInstance(AccountManager.getInstance().getCurrentUser().getRealmConfiguration());
-        Log.wtf(this.getClass().getName(), "changeRealmConfiguration: " + this.uiRealm.getConfiguration().getRealmFileName());
     }
 
     public <T> T doRealmTask(RealmTaskWithReturn<T> realmTask) {

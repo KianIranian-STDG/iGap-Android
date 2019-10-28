@@ -52,6 +52,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line_dark</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_dark</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_dark</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_dark</item>
     </style>
 
     <style name="BaseTheme.baseLightTheme">
@@ -109,6 +110,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_light</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_dark</item>
     </style>
 
     <style name="BaseTheme.baseRedTheme">
@@ -164,6 +166,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_red</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_red</item>
     </style>
 
     <style name="BaseTheme.basePinkTheme">
@@ -218,6 +221,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_pink</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_pink</item>
     </style>
 
     <style name="BaseTheme.basePurpleTheme">
@@ -275,6 +279,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_purple</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_purple</item>
     </style>
 
     <style name="BaseTheme.baseBlueTheme">
@@ -329,6 +334,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_blue</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_blue</item>
     </style>
 
     <style name="BaseTheme.baseGreenTheme">
@@ -384,6 +390,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_green</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_green</item>
     </style>
 
     <style name="BaseTheme.baseAmberTheme">
@@ -439,6 +446,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_yellow</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_amber</item>
     </style>
 
     <style name="BaseTheme.baseOrangeTheme">
@@ -498,6 +506,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_orange</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_orange</item>
     </style>
 
     <style name="BaseTheme.baseDarkGrayTheme">
@@ -555,6 +564,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_dark_gray</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_gray</item>
     </style>
 
     <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">

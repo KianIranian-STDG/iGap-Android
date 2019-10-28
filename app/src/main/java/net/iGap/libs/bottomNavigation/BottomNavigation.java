@@ -93,9 +93,8 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
                     avatarImageView = (CircleImageView) ((FrameLayout) getChildAt(4)).getChildAt(0);
                     textView = (TextView) ((FrameLayout) getChildAt(4)).getChildAt(1);
                     textView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
-                    avatarImageView.setOnLongClickListener(this);
-                    avatarImageView.setOnClickListener(this);
-                    avatarImageView.setBorderColor(new Theme().getPrimaryColor(getContext()));
+                    getChildAt(4).setOnLongClickListener(this);
+                    getChildAt(4).setOnClickListener(this);
                 }
             }
         } catch (Exception e) {
@@ -210,7 +209,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
             for (int i = 0; i < tabItems.size(); i++) {
                 tabItems.get(i).setSelectedItem(tabItems.get(i).getPosition() == selectedItemPosition);
             }
-            textView.setSelected(selectedItemPosition == 4);
+            getChildAt(4).setSelected(selectedItemPosition == 4);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -247,6 +246,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
 
     @Override
     public void onClick(View v) {
+        v.setSelected(!v.isSelected());
         selectedTabItem(4);
     }
 

@@ -12,7 +12,6 @@ package net.iGap.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import net.iGap.AccountManager;
 import net.iGap.DbManager;
@@ -68,8 +67,6 @@ public final class HelperLogout {
     }
 
     private boolean logoutUser(AccountUser accountUser) {
-        Log.wtf(this.getClass().getName(), "logoutUser");
-        Log.wtf(this.getClass().getName(), "user: "+accountUser.getName());
         if (accountUser.isAssigned()) {
             logout();
             boolean tmp = AccountManager.getInstance().removeUser(accountUser);
@@ -77,7 +74,6 @@ public final class HelperLogout {
                 clearPreferences();
                 resetStaticField();
             }
-            Log.wtf(this.getClass().getName(), "tmp: " + tmp);
             return tmp;
         } else {
             return false;
@@ -89,11 +85,9 @@ public final class HelperLogout {
     }
 
     public void logoutUserWithRequest(LogOutUserCallBack logOutUserCallBack) {
-        Log.wtf(this.getClass().getName(), "logoutUserWithRequest");
         new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
             @Override
             public void onUserSessionLogout() {
-                Log.wtf(this.getClass().getName(), "onUserSessionLogout");
                 G.userLogin = false;
                 WebSocketClient.disconnectSocket();
                 logOutUserCallBack.onLogOut(logoutUser(AccountManager.getInstance().getCurrentUser()));
@@ -102,13 +96,11 @@ public final class HelperLogout {
 
             @Override
             public void onError() {
-                Log.wtf(this.getClass().getName(), "onError");
                 logOutUserCallBack.onError();
             }
 
             @Override
             public void onTimeOut() {
-                Log.wtf(this.getClass().getName(), "onTimeOut");
                 logOutUserCallBack.onError();
             }
         });

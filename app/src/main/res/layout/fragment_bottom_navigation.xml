@@ -29,10 +29,11 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
-            app:item_text="@string/contacts"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_contacts_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_contacts_off_darkmode"
+            app:item_text="@string/contacts"
             app:selected_icon="@drawable/ic_bottomnavigation_contact_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_contact_off" />
 
@@ -41,10 +42,11 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
-            app:item_text="@string/all_calls"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_call_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_call_off_darkmode"
+            app:item_text="@string/all_calls"
             app:selected_icon="@drawable/ic_bottomnavigation_call_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_call_off" />
 
@@ -53,10 +55,11 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
-            app:item_text="@string/chat"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_chat_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_chat_off_darkmode"
+            app:item_text="@string/chat"
             app:selected_icon="@drawable/ic_bottomnavigation_chat_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_chat_off" />
 
@@ -65,38 +68,40 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
-            app:item_text="@string/iland"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_discovery_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_discovery_off_darkmode"
+            app:item_text="@string/iland"
             app:selected_icon="@drawable/ic_bottomnavigation_discovery_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_discovery_off" />
 
         <FrameLayout
+            android:id="@+id/profileTabItem"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:orientation="vertical">
 
             <net.iGap.module.CircleImageView
                 android:id="@+id/ti_main_setting"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:padding="4dp"
-                android:layout_marginTop="6dp"
-                app:civ_border_width="1dp"
                 android:layout_gravity="center_horizontal"
-                app:civ_border_padding="2dp" />
+                android:layout_marginTop="6dp"
+                android:background="?attr/iGapProfileStroke"
+                android:padding="4dp" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:textSize="9dp"
-                android:gravity="center"
-                android:layout_gravity="bottom"
-                android:textColor="@color/bottom_navigation_text_color"
-                android:layout_marginBottom="4dp"
                 android:layout_height="wrap_content"
-                android:text="@string/profile" />
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="4dp"
+                android:gravity="center"
+                android:text="@string/profile"
+                android:textColor="@color/bottom_navigation_text_color"
+                android:textSize="9dp" />
         </FrameLayout>
 
     </net.iGap.libs.bottomNavigation.BottomNavigation>
