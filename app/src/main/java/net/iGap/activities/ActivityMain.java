@@ -162,6 +162,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static final int requestCodeQrCode = 200;
     public static final int kuknosRequestCodeQrCode = 202;
     public static final int requestCodeBarcode = 201;
+    public static final int electricityBillRequestCodeQrCode = 203;
     public static final int WALLET_REQUEST_CODE = 1024;
     private static final int ERROR_DIALOG_REQUEST_CODE = 1;
 

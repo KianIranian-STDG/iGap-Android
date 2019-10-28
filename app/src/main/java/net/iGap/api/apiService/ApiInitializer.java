@@ -64,6 +64,7 @@ public class ApiInitializer<T> {
                     handShakeCallback.onHandShake();
                     return;
                 }
+                retrofitCallback.onError(new ErrorModel("Error", "Server is NOT responding."));
                 retrofitCallback.onError("Server is NOT responding.");
             }
         });
@@ -116,6 +117,7 @@ public class ApiInitializer<T> {
                     retrofitCallback.onHandShake();
                     return;
                 }
+                retrofitCallback.onError(new ErrorModel("Error", "Server is NOT responding."));
                 retrofitCallback.onError("Server is NOT responding.");
             }
         });

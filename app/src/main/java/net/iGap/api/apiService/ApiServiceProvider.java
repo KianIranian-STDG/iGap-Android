@@ -1,6 +1,7 @@
 package net.iGap.api.apiService;
 
 import net.iGap.api.BeepTunesApi;
+import net.iGap.api.ElecBillApi;
 import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.KuknosApi;
 import net.iGap.api.KuknosHorizenApi;
@@ -13,6 +14,7 @@ public class ApiServiceProvider {
     private static FavoriteChannelApi channelApi;
     private static KuknosApi kuknosApi;
     private static NewsApi newsApi;
+    private static ElecBillApi elecApi;
     private static KuknosHorizenApi kuknosHorizenApi;
 
     public static BeepTunesApi getBeepTunesClient() {
@@ -41,6 +43,13 @@ public class ApiServiceProvider {
             newsApi = factory.getNewsRetrofit().create(NewsApi.class);
         }
         return newsApi;
+    }
+
+    public static ElecBillApi getElecBillClient() {
+        if (elecApi == null) {
+            elecApi = factory.getElecBillRetrofit().create(ElecBillApi.class);
+        }
+        return elecApi;
     }
 
     //todo clean this comment
