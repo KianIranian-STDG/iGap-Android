@@ -175,7 +175,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 //                new HelperFragment(activity.getSupportFragmentManager(), new FragmentPaymentInquiryTelephone()).setReplace(false).load();
                 NewsMainFrag frag2 = new NewsMainFrag();
                 if (!discoveryField.value.equals(""))
-                    frag2.setSpecificNewsID(discoveryField.value);
+                    frag2.setSpecificGroupID(discoveryField.value);
                 new HelperFragment(activity.getSupportFragmentManager(), frag2).setReplace(false).load();
                 break;
             case NEWS:
