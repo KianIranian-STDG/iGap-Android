@@ -16,9 +16,11 @@
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/iconDialogTitle"
             style="@style/myIconTextViewStyle"
+            android:fontFamily="@font/font_icon_old"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/md_muted"
+            android:padding="@dimen/dp8"
             android:textSize="@dimen/dp26" />
 
         <TextView
@@ -68,7 +70,7 @@
             android:paddingRight="@dimen/dp20"
             android:paddingBottom="@dimen/dp8"
             android:text="@string/B_cancel"
-            android:textColor="@color/green"
+            android:textColor="?attr/colorAccent"
             android:textSize="@dimen/dp14" />
 
         <TextView
@@ -82,7 +84,7 @@
             android:paddingRight="@dimen/dp20"
             android:paddingBottom="@dimen/dp8"
             android:text="@string/B_ok"
-            android:textColor="@color/green"
+            android:textColor="?attr/colorAccent"
             android:textSize="@dimen/dp14" />
 
 

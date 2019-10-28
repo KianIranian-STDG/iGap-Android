@@ -3,6 +3,7 @@ package net.iGap.fragments;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +50,7 @@ public class FragmentSetting extends BaseFragment {
 
     private FragmentSettingBinding binding;
     private FragmentSettingViewModel viewModel;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -206,6 +208,7 @@ public class FragmentSetting extends BaseFragment {
     }
 
     private void showDialogLogout() {
+
         if (getActivity() != null) {
             MaterialDialog inDialog = new MaterialDialog.Builder(getActivity()).customView(R.layout.dialog_content_custom, true).build();
             View v = inDialog.getCustomView();
@@ -227,6 +230,7 @@ public class FragmentSetting extends BaseFragment {
             txtOk.setOnClickListener(v1 -> {
                 inDialog.dismiss();
                 viewModel.logout();
+
             });
 
             txtCancel.setOnClickListener(v12 -> inDialog.dismiss());

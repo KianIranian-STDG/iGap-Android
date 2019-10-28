@@ -38,7 +38,7 @@ public class ApiServiceProvider {
 
     public static NewsApi getNewsClient() {
         if (newsApi == null) {
-            newsApi = factory.getKuknosRetrofit().create(NewsApi.class);
+            newsApi = factory.getNewsRetrofit().create(NewsApi.class);
         }
         return newsApi;
     }

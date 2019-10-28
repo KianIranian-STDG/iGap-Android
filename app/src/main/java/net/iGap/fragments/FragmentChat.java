@@ -6342,7 +6342,7 @@ public class FragmentChat extends BaseFragment
                                 break;
                             case image:
                                 //maybe share data was more than one ... add to list then after for open edit image
-                                FragmentEditImage.insertItemList(sharedData.address, false);
+                                FragmentEditImage.insertItemList(sharedData.address , sharedData.message , false);
                                 isOpenEditImageFragment = true;
                                 //sendMessage(AttachFile.request_code_TAKE_PICTURE, sharedData.address);
                                 break;
@@ -6352,7 +6352,7 @@ public class FragmentChat extends BaseFragment
                     }
 
                     if (isOpenEditImageFragment && getActivity() != null) {
-                        isOpenEditImageFragment = false;
+
                         FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, FragmentEditImage.itemGalleryList.size() - 1);
                         fragmentEditImage.setIsOpenForShareImages(true);
                         new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
