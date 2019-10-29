@@ -16,6 +16,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
     </style>
 
     <style name="iGapLightTheme" parent="BaseTheme.baseLightTheme">
