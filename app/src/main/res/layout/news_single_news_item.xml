@@ -57,6 +57,7 @@
                     android:background="@color/black"
                     android:layout_marginTop="@dimen/dp8"
                     android:layout_marginBottom="@dimen/dp4"
+                    android:visibility="gone"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="@+id/category"
                     app:layout_constraintRight_toLeftOf="@+id/category"
@@ -73,6 +74,7 @@
                     android:gravity="center|right"
                     android:layout_marginTop="@dimen/dp4"
                     android:layout_marginRight="@dimen/dp8"
+                    android:visibility="gone"
                     android:textColor="?attr/iGapTitleTextColor"
                     app:layout_constraintRight_toLeftOf="@+id/category"
                     app:layout_constraintTop_toTopOf="parent"/>
