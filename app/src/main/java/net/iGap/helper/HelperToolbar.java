@@ -53,6 +53,8 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.realm.RealmUserInfo;
 
+import org.paygear.WalletActivity;
+
 import io.realm.Realm;
 
 import static androidx.constraintlayout.widget.ConstraintSet.BOTTOM;
@@ -62,6 +64,7 @@ import static androidx.constraintlayout.widget.ConstraintSet.PARENT_ID;
 import static androidx.constraintlayout.widget.ConstraintSet.START;
 import static androidx.constraintlayout.widget.ConstraintSet.TOP;
 import static androidx.constraintlayout.widget.ConstraintSet.WRAP_CONTENT;
+import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 
@@ -1024,7 +1027,7 @@ public class HelperToolbar {
         if (!G.isWalletRegister) {
             new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
         } else {
-            new HelperWallet().goToWallet(mContext, "0" + phoneNumber,true);
+            mFragmentActivity.startActivityForResult(new HelperWallet().goToWallet(mContext,new Intent(mFragmentActivity, WalletActivity.class),"0" + phoneNumber,true),WALLET_REQUEST_CODE);
         }
     }
 

@@ -21,14 +21,12 @@ import com.bumptech.glide.request.target.Target;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
@@ -67,7 +65,6 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
 import net.iGap.request.RequestGeoGetConfiguration;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.paygear.WalletActivity;
@@ -75,12 +72,7 @@ import org.paygear.WalletActivity;
 import java.io.IOException;
 
 import io.realm.Realm;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-import static net.iGap.G.context;
-import static net.iGap.G.needGetSignalingConfiguration;
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
@@ -198,8 +190,8 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                     if (!G.isWalletRegister) {
                         new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), discoveryField.value.equals("QR_USER_WALLET"))).load();
                     } else {
-                        boolean goToScanner = true ;/*discoveryField.value.equals("QR_USER_WALLET")*/
-                        new HelperWallet().goToWallet(G.currentActivity, "0" + phoneNumber.substring(2) ,goToScanner);
+                        boolean goToScanner = discoveryField.value.equals("QR_USER_WALLET");
+                        activity.startActivityForResult(new HelperWallet().goToWallet(activity, new Intent(activity, WalletActivity.class), "0" + phoneNumber.substring(2), goToScanner), WALLET_REQUEST_CODE);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -64,11 +64,13 @@ import net.iGap.module.StatusBarUtil;
 import net.iGap.viewmodel.UserProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
+import org.paygear.WalletActivity;
 
 import java.io.File;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
+import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 public class FragmentUserProfile extends BaseMainFragments implements FragmentEditImage.OnImageEdited {
@@ -132,8 +134,8 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         });
 
         viewModel.goToWalletPage.observe(getViewLifecycleOwner(), phoneNumber -> {
-            if (getContext() != null && phoneNumber != null) {
-                new HelperWallet().goToWallet(getContext(), phoneNumber, false);
+            if (getActivity() != null && phoneNumber != null) {
+                getActivity().startActivityForResult(new HelperWallet().goToWallet(getActivity(), new Intent(getActivity(), WalletActivity.class), phoneNumber, false), WALLET_REQUEST_CODE);
             }
         });
 
