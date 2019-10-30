@@ -16,6 +16,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
     </style>
 
     <style name="iGapLightTheme" parent="BaseTheme.baseLightTheme">
@@ -33,6 +34,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
     </style>
 
     <style name="iGapRedTheme" parent="BaseTheme.baseRedTheme">
@@ -50,6 +52,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
     </style>
 
     <style name="iGapPinkTheme" parent="BaseTheme.basePinkTheme">
@@ -67,6 +70,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
     </style>
 
     <style name="iGapPurpleTheme" parent="BaseTheme.basePurpleTheme">
@@ -84,6 +88,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
     </style>
 
     <style name="iGapBlueTheme" parent="BaseTheme.baseBlueTheme">
@@ -101,6 +106,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
     </style>
 
     <style name="iGapGreenTheme" parent="BaseTheme.baseGreenTheme">
@@ -118,6 +124,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
     </style>
 
     <style name="iGapAmberTheme" parent="BaseTheme.baseAmberTheme">
@@ -135,6 +142,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
     </style>
 
     <style name="iGapOrangeTheme" parent="BaseTheme.baseOrangeTheme">
@@ -152,6 +160,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
     </style>
 
     <style name="iGapGrayTheme" parent="BaseTheme.baseDarkGrayTheme">
@@ -169,6 +178,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root</item>
         <item name="iGapCheckButton">@drawable/check_box_background_on</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar</item>
     </style>
 
     <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">
