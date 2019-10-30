@@ -7,12 +7,12 @@ import net.iGap.G;
 import net.iGap.Theme;
 
 import org.paygear.WalletActivity;
+import org.paygear.model.Payment;
 
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 
 public class HelperWallet {
-    public void goToWallet(Context context, String phoneNumber,boolean goToScanner) {
-        Intent intent = new Intent(context, WalletActivity.class);
+    public Intent goToWallet(Context context, Intent intent, String phoneNumber, boolean goToScanner) {
         intent.putExtra("Language", "fa");
         intent.putExtra("Mobile", phoneNumber);
         intent.putExtra("PrimaryColor", String.format("#%06X", 0xFFFFFF & new Theme().getPrimaryColor(context)));
@@ -27,6 +27,13 @@ public class HelperWallet {
         intent.putExtra(WalletActivity.TEXT_TITLE, String.format("#%06X", 0xFFFFFF & new Theme().getTitleTextColor(context)));
         intent.putExtra(WalletActivity.TEXT_SUB_TITLE, String.format("#%06X", 0xFFFFFF & new Theme().getSubTitleColor(context)));
         intent.putExtra("isScan", goToScanner);
-        G.currentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
+        return intent;
+    }
+
+    public Intent goToWallet(Payment payment, Context context, Intent intent, String phoneNumber, boolean goToScanner) {
+        Intent intent1 = goToWallet(context,intent,phoneNumber,goToScanner);
+        intent1.putExtra("Payment", payment);
+        intent1.putExtra("IsP2P", true);
+        return intent1;
     }
 }
