@@ -25,19 +25,19 @@
                 android:id="@+id/collapsingToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/toolbar_height"
-                app:contentScrim="@drawable/shape_profile_toolbar"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                android:background="?attr/iGapProfileToolbar"
                 android:elevation="0dp"
-                android:background="@drawable/shape_profile_toolbar"
+                android:minHeight="@dimen/toolbar_height"
+                app:contentScrim="?attr/iGapProfileToolbar"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:scrimAnimationDuration="1">
 
                 <net.iGap.module.RadiusImageView
                     android:id="@+id/fup_bg_avatar"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp200"
-                    android:scaleType="centerCrop"
                     android:layout_marginTop="-8dp"
+                    android:scaleType="centerCrop"
                     app:layout_collapseMode="parallax" />
 
                 <androidx.appcompat.widget.Toolbar
@@ -68,6 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fillViewport="true"
+            android:paddingTop="54dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <FrameLayout
@@ -81,7 +82,7 @@
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
             app:layout_anchor="@id/appBar"
-            app:layout_anchorGravity="bottom|start">
+            app:layout_anchorGravity="bottom">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/fup_user_image"
@@ -174,6 +175,7 @@
                 app:layout_constraintTop_toBottomOf="@id/fup_user_tel" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <ProgressBar
             android:id="@+id/loading"
             android:layout_width="wrap_content"
