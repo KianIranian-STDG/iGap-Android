@@ -60,14 +60,14 @@ public class FileDownloadResponse extends MessageHandler {
         }
 
         if (identityFileDownload.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
-            HelperDataUsage.progressDownload(connectivityType, builder.getBytes().size(), identityFileDownload.type);
+            HelperDataUsage.progressDownload(builder.getBytes().size(), identityFileDownload.type);
         }
         long progress = (nextOffset * 100) / fileSize;
 
         RequestFileDownload.downloadPending.remove(cacheId + "" + identityFileDownload.offset);
 
         if (progress == 100 && (identityFileDownload.selector == ProtoFileDownload.FileDownload.Selector.FILE)) {
-            HelperDataUsage.insertDataUsage(HelperDataUsage.convetredDownloadType, connectivityType, true);
+            HelperDataUsage.increaseDownloadFiles(identityFileDownload.type);
         }
 
         AndroidUtils.writeBytesToFile(filePath, builder.getBytes().toByteArray());

@@ -27,9 +27,10 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTimeOut;
-import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.upload.UploadManager;
 import net.iGap.interfaces.OnActivityChatStart;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
@@ -58,7 +59,6 @@ import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 import io.realm.net_iGap_realm_RealmRoomMessageRealmProxy;
 
-import static net.iGap.fragments.FragmentChat.compressingFiles;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -265,10 +265,7 @@ public class RealmRoomMessage extends RealmObject {
                                         if ((System.currentTimeMillis() - roomMessage.getCreateTime()) > Config.TIME_OUT_MS) {
                                             if (roomMessage.getAttachment() != null) {
                                                 if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
-                                                    if (compressingFiles != null && compressingFiles.containsKey(roomMessage.messageId)) {
-                                                        return;
-                                                    }
-                                                    if (!HelperUploadFile.isUploading(roomMessage.getMessageId() + "")) {
+                                                    if (!UploadManager.getInstance().isCompressingOrUploading(roomMessage.getMessageId() + "")) {
                                                         callback.resendMessageNeedsUpload(roomMessage, roomMessage.getMessageId());
                                                     }
                                                 }
@@ -1072,27 +1069,46 @@ public class RealmRoomMessage extends RealmObject {
         return roomMessage;
     }
 
-    public static RealmRoomMessage makeVoiceMessage(Realm realm, final long roomId, final long messageId, final long duration, final long updateTime, final String filepath, final String message) {
-        RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, messageId);
+    public static RealmRoomMessage makeVoiceMessage(final long roomId, final ProtoGlobal.Room.Type roomType, final String filepath, final String message) {
+        final long messageId = AppUtils.makeRandomId();
+        final long updateTime = TimeUtils.currentLocalTime();
+        final long duration = AndroidUtils.getAudioDuration(G.fragmentActivity, filepath) / 1000;
+        RealmRoomMessage roomMessage = new RealmRoomMessage();
+        roomMessage.setMessageId(messageId);
         roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE);
         roomMessage.setMessage(message);
         roomMessage.setRoomId(roomId);
         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-        roomMessage.setAttachment(messageId, filepath, 0, 0, 0, null, duration, LocalFileType.FILE);
+        RealmAttachment realmAttachment = new RealmAttachment();
+        realmAttachment.setId(messageId);
+        realmAttachment.setLocalFilePath(filepath);
+        realmAttachment.setWidth(0);
+        realmAttachment.setSize(0);
+        realmAttachment.setHeight(0);
+        realmAttachment.setName(null);
+        realmAttachment.setDuration(duration);
+
+
+        roomMessage.setAttachment(realmAttachment);
         roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
         roomMessage.setCreateTime(updateTime);
-        return roomMessage;
-    }
+        if (roomType.equals(CHANNEL)) {
+            RealmChannelExtra channelExtra = new RealmChannelExtra();
+            channelExtra.setMessageId(messageId);
+            channelExtra.setThumbsUp("0");
+            channelExtra.setThumbsDown("0");
+            channelExtra.setViewsLabel("1");
 
-    public static void makeVoiceMessage(final long roomId, final long messageId, final long duration, final long updateTime, final String filepath, final String message) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    makeVoiceMessage(realm, roomId, messageId, duration, updateTime, filepath, message);
-                }
-            });
-        });
+            if (RealmRoom.showSignature(roomId)) {
+                channelExtra.setSignature(G.displayName);
+            } else {
+                channelExtra.setSignature("");
+            }
+
+            roomMessage.setChannelExtra(channelExtra);
+        }
+
+        return roomMessage;
     }
 
     public static void makeForwardMessage(Realm realm, long roomId, long messageId, long forwardedMessageId) {

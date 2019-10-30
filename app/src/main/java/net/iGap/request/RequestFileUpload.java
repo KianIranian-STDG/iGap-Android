@@ -19,7 +19,12 @@ import net.iGap.proto.ProtoRequest;
 
 public class RequestFileUpload {
 
-    public void fileUpload(String token, long offset, byte[] bytes, IdentityFileUpload identity) {
+    public interface OnFileUpload {
+        void onFileUpload(double progress, long nextOffset, int nextLimit);
+        void onFileUploadError(int major, int minor);
+    }
+
+    public String fileUpload(String token, long offset, byte[] bytes, OnFileUpload onFileUpload) {
 
         ProtoFileUpload.FileUpload.Builder fileUploadInit = ProtoFileUpload.FileUpload.newBuilder();
         fileUploadInit.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
@@ -27,21 +32,13 @@ public class RequestFileUpload {
         fileUploadInit.setOffset(offset);
         fileUploadInit.setBytes(ByteString.copyFrom(bytes));
 
-        RequestWrapper requestWrapper = new RequestWrapper(702, fileUploadInit, identity);
+        RequestWrapper requestWrapper = new RequestWrapper(702, fileUploadInit, onFileUpload);
         try {
-            RequestQueue.sendRequest(requestWrapper);
+            return RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        return "";
     }
 
-    public static class IdentityFileUpload {
-        public String identify;
-        public ProtoGlobal.RoomMessageType type;
-
-        public IdentityFileUpload(ProtoGlobal.RoomMessageType type, String identify) {
-            this.identify = identify;
-            this.type = type;
-        }
-    }
 }

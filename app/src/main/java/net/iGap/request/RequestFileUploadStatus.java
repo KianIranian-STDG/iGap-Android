@@ -16,17 +16,23 @@ import net.iGap.proto.ProtoRequest;
 
 public class RequestFileUploadStatus {
 
-    public void fileUploadStatus(String token, String fileHashAsIdentity) {
+    public interface OnFileUploadStatus {
+        void onFileUploadStatus(ProtoFileUploadStatus.FileUploadStatusResponse.Status status, double progress, int recheckDelayMS);
+        void onFileUploadStatusError(int major, int minor);
+    }
+
+    public String fileUploadStatus(String token, OnFileUploadStatus onFileUploadStatus) {
 
         ProtoFileUploadStatus.FileUploadStatus.Builder builder = ProtoFileUploadStatus.FileUploadStatus.newBuilder();
         builder.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
         builder.setToken(token);
 
-        RequestWrapper requestWrapper = new RequestWrapper(703, builder, fileHashAsIdentity);
+        RequestWrapper requestWrapper = new RequestWrapper(703, builder, onFileUploadStatus);
         try {
-            RequestQueue.sendRequest(requestWrapper);
+            return RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        return "";
     }
 }

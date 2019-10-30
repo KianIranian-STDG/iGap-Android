@@ -23,8 +23,10 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.BindingAdapter;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.upload.OnUploadListener;
+import net.iGap.helper.upload.UploadManager;
+import net.iGap.helper.upload.UploadTask;
 import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnUserAvatarResponse;
 import net.iGap.interfaces.OnUserInfoResponse;
@@ -33,7 +35,6 @@ import net.iGap.interfaces.OnUserProfileSetRepresentative;
 import net.iGap.model.AccountUser;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
-import net.iGap.module.FileUploadStructure;
 import net.iGap.module.structs.StructCountry;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
@@ -44,10 +45,11 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserProfileSetNickname;
 import net.iGap.request.RequestUserProfileSetRepresentative;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import io.realm.Realm;
+
 
 public class FragmentRegistrationNicknameViewModel extends ViewModel implements OnUserAvatarResponse {
 
@@ -305,20 +307,21 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
         pathImageUser = path;
         int lastUploadedAvatarId = idAvatar + 1;
         prgVisibility.set(View.VISIBLE);
-        HelperUploadFile.startUploadTaskAvatar(pathImageUser, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+        UploadManager.getInstance().upload(new UploadTask(lastUploadedAvatarId + "", new File(pathImageUser), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
             @Override
-            public void OnProgress(int progress, FileUploadStructure struct) {
-                if (progress < 100) {
-                    G.handler.post(() -> progressValue.setValue(progress));
-                } else {
-                    new RequestUserAvatarAdd().userAddAvatar(struct.token);
-                }
+            public void onProgress(String id, int progress) {
+                G.handler.post(() -> progressValue.setValue(progress));
             }
 
             @Override
-            public void OnError() {
+            public void onFinish(String id, String token) {
+                new RequestUserAvatarAdd().userAddAvatar(token);
+            }
+
+            @Override
+            public void onError(String id) {
                 prgVisibility.set(View.GONE);
             }
-        });
+        }));
     }
 }

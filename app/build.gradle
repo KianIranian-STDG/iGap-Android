@@ -221,14 +221,14 @@ dependencies {
     implementation 'com.mindorks.android:prdownloader:0.6.0'
     implementation 'com.google.firebase:firebase-core:17.2.1'
     implementation 'com.google.firebase:firebase-messaging:20.0.0'
-    implementation('com.github.KianIranian-STDG:Compress:1.3.1') {
+    implementation('com.github.KianIranian-STDG:Compress:2.1.1') {
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
     }
     implementation('com.github.KianIranian-STDG:VideoTrimmer:1.1.1') {
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
     }
     implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
-    implementation 'com.github.KianIranian-STDG:MessageProgress:1.0.1'
+    implementation 'com.github.KianIranian-STDG:MessageProgress:1.1.2'
     releaseImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
     release_IranImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'
     release_MyketImplementation 'com.github.KianIranian-STDG:Proto:protoMain16'

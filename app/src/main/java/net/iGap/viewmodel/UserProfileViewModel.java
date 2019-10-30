@@ -39,8 +39,10 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
-import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.upload.OnUploadListener;
+import net.iGap.helper.upload.UploadManager;
+import net.iGap.helper.upload.UploadTask;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnUserAvatarResponse;
@@ -55,7 +57,6 @@ import net.iGap.interfaces.OnUserProfileUpdateUsername;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
-import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
 import net.iGap.module.SingleLiveEvent;
@@ -1115,19 +1116,21 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         pathSaveImage = path;
         long lastUploadedAvatarId = idAvatar + 1L;
         showLoading.set(View.VISIBLE);
-        HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+        UploadManager.getInstance().upload(new UploadTask(lastUploadedAvatarId + "", new File(pathSaveImage), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
             @Override
-            public void OnProgress(int progress, FileUploadStructure struct) {
-                if (progress >= 100) {
-                    new RequestUserAvatarAdd().userAddAvatar(struct.token);
-                }
+            public void onProgress(String id, int progress) {
             }
 
             @Override
-            public void OnError() {
+            public void onFinish(String id, String token) {
+                new RequestUserAvatarAdd().userAddAvatar(token);
+            }
+
+            @Override
+            public void onError(String id) {
                 G.handler.post(() -> showLoading.set(View.GONE));
             }
-        });
+        }));
     }
 
     public void onCountryCodeClick() {

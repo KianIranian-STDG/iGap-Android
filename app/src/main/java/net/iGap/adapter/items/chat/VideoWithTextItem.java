@@ -70,7 +70,6 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
 
                 if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
                     holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.Uploading)));
-                    AbstractMessage.processVideo(holder.duration, holder.itemView, structMessage);
                 } else {
                     holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + ""));
                 }
@@ -113,7 +112,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         protected FontIconTextView more;
         protected MessageProgress progress;
         protected ReserveSpaceRoundedImageView image;
-        protected TextView duration;
+        public TextView duration;
 
         public ViewHolder(View view) {
             super(view);

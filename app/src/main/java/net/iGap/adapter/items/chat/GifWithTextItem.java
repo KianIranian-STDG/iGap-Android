@@ -104,46 +104,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
 
         setTextIfNeeded(holder.messageView);
 
-
         holder.progress.setOnLongClickListener(getLongClickPerform(holder));
-
-        holder.progress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!FragmentChat.isInSelectionMode) {
-                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                        if (!hasFileSize(mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getAttachment().getLocalFilePath() :
-                                structMessage.getAttachment().getLocalFilePath())) {
-                            messageClickListener.onUploadOrCompressCancel(holder.progress, structMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
-                        }
-                        return;
-                    }
-                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
-                    } else {
-                        if (mMessage.getForwardMessage() != null && mMessage.getForwardMessage().getAttachment().isFileExistsOnLocal()) {
-                            try {
-                                onPlayPauseGIF(holder, mMessage.getForwardMessage().getAttachment().getLocalFilePath());
-                            } catch (ClassCastException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            if (structMessage.getAttachment().isFileExistsOnLocal()) {
-                                try {
-                                    onPlayPauseGIF(holder, structMessage.getAttachment().getLocalFilePath());
-                                } catch (ClassCastException e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                downLoadFile(holder, 0);
-                            }
-                        }
-                    }
-                } else {
-                    holder.itemView.performLongClick();
-                }
-            }
-        });
 
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override

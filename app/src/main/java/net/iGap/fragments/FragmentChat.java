@@ -173,13 +173,13 @@ import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
-import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
+import net.iGap.helper.upload.UploadManager;
 import net.iGap.interfaces.IDispatchTochEvent;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.IOnBackPressed;
@@ -396,7 +396,6 @@ public class FragmentChat extends BaseFragment
     public static OnComplete onComplete;
     public static OnUpdateUserOrRoomInfo onUpdateUserOrRoomInfo;
     public static ArrayList<Long> resentedMessageId = new ArrayList<>();
-    public static ArrayMap<Long, HelperUploadFile.StructUpload> compressingFiles = new ArrayMap<>();
     public static int forwardMessageCount = 0;
     public static ArrayList<Parcelable> mForwardMessages;
     public static boolean canClearForwardList = true;
@@ -410,7 +409,6 @@ public class FragmentChat extends BaseFragment
     public static OnUpdateSticker onUpdateSticker;
     private static List<StructBottomSheet> contacts;
     private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>(); // keep compressedPath and also keep video path that never be won't compressed
-    private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
     private EmojiPopup emojiPopup;
     private boolean isPaused;
 
@@ -503,7 +501,6 @@ public class FragmentChat extends BaseFragment
     private FastItemAdapter fastItemAdapterForward;
     private BottomSheetDialog bottomSheetDialogForward;
     private View viewBottomSheetForward;
-    private RealmRoomMessage voiceLastMessage = null;
     private boolean showVoteChannel = true;
     private RealmResults<RealmRoom> results = null;
     private RealmResults<RealmContacts> resultsContact = null;
@@ -852,19 +849,7 @@ public class FragmentChat extends BaseFragment
                             if (!allowResendMessage(message.getMessageId())) {
                                 return;
                             }
-                            HelperUploadFile.startUploadTaskChat(mRoomId, chatType, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getMessage(), RealmRoomMessage.getReplyMessageId(message), new HelperUploadFile.UpdateListener() {
-                                @Override
-                                public void OnProgress(int progress, FileUploadStructure struct) {
-                                    if (canUpdateAfterDownload) {
-                                        insertItemAndUpdateAfterStartUpload(progress, struct);
-                                    }
-                                }
-
-                                @Override
-                                public void OnError() {
-
-                                }
-                            });
+                            UploadManager.getInstance().uploadMessageAndSend(chatType, message);
                             G.handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1282,20 +1267,10 @@ public class FragmentChat extends BaseFragment
                         return;
                     } else if (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1) {
 
-                        File mediaStorageDir = new File(G.DIR_VIDEOS);
-                        File mediaFile = new File(mediaStorageDir.getPath() + File.separator + "video_" + HelperString.getRandomFileName(3) + ".mp4");
                         listPathString = new ArrayList<>();
+                        mainVideoPath = new File(AttachFile.videoPath).getPath();
+                        listPathString.add(mainVideoPath);
 
-                        Uri uri = Uri.fromFile(new File(AttachFile.videoPath));
-                        File tempFile = com.lalongooo.videocompressor.file.FileUtils.saveTempFile(G.DIR_TEMP, HelperString.getRandomFileName(5) + ".mp4", G.fragmentActivity, uri);
-                        mainVideoPath = tempFile.getPath();
-                        //                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                        //                        String savePathVideoCompress = getCacheDir() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                        String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-
-                        listPathString.add(savePathVideoCompress);
-
-                        new VideoCompressor().execute(tempFile.getPath(), savePathVideoCompress);
                         showDraftLayout();
                         setDraftMessage(requestCode);
                         latestRequestCode = requestCode;
@@ -1313,13 +1288,8 @@ public class FragmentChat extends BaseFragment
                         File mediaStorageDir = new File(G.DIR_VIDEOS);
                         listPathString = new ArrayList<>();
 
-                        //                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                        //                        String savePathVideoCompress = getCacheDir() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                        String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-
-                        listPathString.add(savePathVideoCompress);
                         mainVideoPath = data.getData().getPath();
-                        new VideoCompressor().execute(data.getData().getPath(), savePathVideoCompress);
+                        listPathString.add(mainVideoPath);
                     } else {
                         compressedPath.put(data.getData().getPath(), true);
                     }
@@ -1347,8 +1317,6 @@ public class FragmentChat extends BaseFragment
                             String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
 
                             listPathString.set(0, savePathVideoCompress);
-
-                            new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
 
                             showDraftLayout();
                             setDraftMessage(requestCode);
@@ -3684,19 +3652,12 @@ public class FragmentChat extends BaseFragment
         if (sendingStep == SendingStep.UPLOADING) {
             HelperSetAction.sendCancel(message.realmRoomMessage.getMessageId());
 
-            if (HelperUploadFile.cancelUploading(message.realmRoomMessage.getMessageId() + "")) {
+            if (UploadManager.getInstance().cancelUploading(message.realmRoomMessage.getMessageId() + "")) {
                 deleteItem(message.realmRoomMessage.getMessageId(), pos);
             }
         } else if (sendingStep == SendingStep.COMPRESSING) {
 
-            /**
-             * clear path for avoid from continue uploading after compressed file
-             */
-            for (StructUploadVideo structUploadVideo : structUploadVideos) {
-                if (structUploadVideo.filePath.equals(message.getAttachment().getLocalFilePath())) {
-                    structUploadVideo.filePath = "";
-                }
-            }
+            //Todo: bagi cancel uploading
             deleteItem(message.realmRoomMessage.getMessageId(), pos);
         } else if (sendingStep == SendingStep.CORRUPTED_FILE) {
             deleteItem(message.realmRoomMessage.getMessageId(), pos);
@@ -4068,61 +4029,12 @@ public class FragmentChat extends BaseFragment
         }
         sendCancelAction();
 
-        final long messageId = AppUtils.makeRandomId();
-        final long updateTime = TimeUtils.currentLocalTime();
-        final long duration = AndroidUtils.getAudioDuration(G.fragmentActivity, savedPath) / 1000;
+        RealmRoomMessage roomMessage = RealmRoomMessage.makeVoiceMessage(mRoomId, chatType, savedPath, getWrittenMessage());
 
-        RealmRoomMessage roomMessage = new RealmRoomMessage();
-        roomMessage.setMessageId(messageId);
-        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE);
-        roomMessage.setMessage(getWrittenMessage());
-        roomMessage.setRoomId(mRoomId);
-        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
-        RealmAttachment realmAttachment = new RealmAttachment();
-        realmAttachment.setId(messageId);
-        realmAttachment.setLocalFilePath(savedPath);
-        realmAttachment.setWidth(0);
-        realmAttachment.setSize(0);
-        realmAttachment.setHeight(0);
-        realmAttachment.setName(null);
-        realmAttachment.setDuration(duration);
-
-        roomMessage.setAttachment(realmAttachment);
-        roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
-        roomMessage.setCreateTime(updateTime);
-
-        HelperUploadFile.startUploadTaskChat(mRoomId, chatType, savedPath, messageId, ProtoGlobal.RoomMessageType.VOICE, getWrittenMessage(), 0, new HelperUploadFile.UpdateListener() {
-            @Override
-            public void OnProgress(int progress, FileUploadStructure struct) {
-                if (canUpdateAfterDownload) {
-                    insertItemAndUpdateAfterStartUpload(progress, struct);
-                }
-            }
-
-            @Override
-            public void OnError() {
-
-            }
-        });
-
-        RealmChannelExtra channelExtra = new RealmChannelExtra();
-        channelExtra.setMessageId(messageId);
-        channelExtra.setThumbsUp("0");
-        channelExtra.setThumbsDown("0");
-        channelExtra.setViewsLabel("1");
-
-        if (RealmRoom.showSignature(mRoomId)) {
-            channelExtra.setSignature(G.displayName);
-        } else {
-            channelExtra.setSignature("");
-        }
-
-        roomMessage.setChannelExtra(channelExtra);
         new Thread(() -> {
             DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(realm1 -> {
-                    realm1.copyToRealmOrUpdate(roomMessage);
-                    RealmRoom.setLastMessageWithRoomMessage(realm1, mRoomId, voiceLastMessage);
+                    RealmRoom.setLastMessageWithRoomMessage(realm1, mRoomId, realm1.copyToRealmOrUpdate(roomMessage));
                 });
             });
         }).start();
@@ -4861,8 +4773,8 @@ public class FragmentChat extends BaseFragment
                 for (int i = 0; i < failedMessages.size(); i++) {
                     if (failedMessages.get(i).realmRoomMessage.getMessageId() == message.realmRoomMessage.getMessageId()) {
                         if (failedMessages.get(i).getAttachment() != null) {
-                            if (HelperUploadFile.isUploading(message.realmRoomMessage.getMessageId() + "")) {
-                                HelperUploadFile.reUpload(message.realmRoomMessage.getMessageId() + "");
+                            if (!UploadManager.getInstance().isCompressingOrUploading(message.realmRoomMessage.getMessageId() + "")) {
+                                UploadManager.getInstance().uploadMessageAndSend(chatType,message.realmRoomMessage);
                             }
                         }
                         break;
@@ -5428,40 +5340,6 @@ public class FragmentChat extends BaseFragment
             }
         };
         countWaitTimer.start();
-    }
-
-    /**
-     * update item progress
-     */
-    private void insertItemAndUpdateAfterStartUpload(int progress, final FileUploadStructure struct) {
-        if (progress == 0) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    addItemAfterStartUpload(struct);
-                }
-            });
-        }
-    }
-
-    /**
-     * add new item to view after start upload
-     */
-    private void addItemAfterStartUpload(final FileUploadStructure struct) {
-        try {
-            if (mAdapter != null) {
-                if (!G.userLogin) {
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            makeFailed(struct.messageId);
-                        }
-                    }, 200);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -6325,7 +6203,7 @@ public class FragmentChat extends BaseFragment
                                         startActivityForResult(intent, AttachFile.request_code_trim_video);
                                         isAllowToClearChatEditText = false;
                                     } else {
-                                        G.handler.postDelayed(() -> new VideoCompressor().execute(mainVideoPath, savePathVideoCompress), 200);
+                                        //G.handler.postDelayed(() -> new VideoCompressor().execute(mainVideoPath, savePathVideoCompress), 200);
                                         sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
                                     }
 
@@ -7582,39 +7460,6 @@ public class FragmentChat extends BaseFragment
                 roomMessage.getAttachment().setHeight(bitmap.getHeight());
                 roomMessage.getAttachment().setLocalFilePath(finalFilePath);
             }
-
-            //if (compressedPath.get(finalFilePath)) {//(sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 0) ||
-            boolean compress = false;
-            if (compressedPath.get(finalFilePath) != null) {
-                compress = compressedPath.get(finalFilePath);
-            }
-            if (compress) {
-
-                HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, messageId, finalMessageType, getWrittenMessage(), replyMessageId, new HelperUploadFile.UpdateListener() {
-                    @Override
-                    public void OnProgress(int progress, FileUploadStructure struct) {
-                        {
-                            insertItemAndUpdateAfterStartUpload(progress, struct);
-                        }
-                    }
-
-                    @Override
-                    public void OnError() {
-
-                    }
-                });
-            } else {
-                compressingFiles.put(messageId, null);
-                StructUploadVideo uploadVideo = new StructUploadVideo();
-                uploadVideo.filePath = finalFilePath;
-                uploadVideo.roomId = mRoomId;
-                uploadVideo.messageId = messageId;
-                uploadVideo.messageType = finalMessageType;
-                uploadVideo.message = getWrittenMessage();
-                uploadVideo.replyMessageId = replyMessageId;
-
-                structUploadVideos.add(uploadVideo);
-            }
         }
 
         new Thread(() -> {
@@ -7632,20 +7477,6 @@ public class FragmentChat extends BaseFragment
 
         if (finalMessageType != VIDEO && finalMessageType != VIDEO_TEXT) {
             if (finalMessageType != CONTACT) {
-
-                HelperUploadFile.startUploadTaskChat(mRoomId, chatType, finalFilePath, messageId, finalMessageType, getWrittenMessage(), replyMessageId, new HelperUploadFile.UpdateListener() {
-                    @Override
-                    public void OnProgress(int progress, FileUploadStructure struct) {
-                        if (canUpdateAfterDownload) {
-                            insertItemAndUpdateAfterStartUpload(progress, struct);
-                        }
-                    }
-
-                    @Override
-                    public void OnError() {
-
-                    }
-                });
             } else {
                 ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
                 messageUtil.contact(structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getFirstName(),
@@ -9321,82 +9152,6 @@ public class FragmentChat extends BaseFragment
             lastMessageId = messageid;
 
             mAdapter.toggleSelection(lastMessageId, true, recyclerView);
-        }
-    }
-
-    /**
-     * *** VideoCompressor ***
-     */
-
-    class VideoCompressor extends AsyncTask<String, Void, StructCompress> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected StructCompress doInBackground(String... params) {
-            if (params[0] == null) { // if data is null
-                StructCompress structCompress = new StructCompress();
-                structCompress.compress = false;
-                return structCompress;
-            }
-            File file = new File(params[0]);
-            long originalSize = file.length();
-
-            StructCompress structCompress = new StructCompress();
-            structCompress.path = params[1];
-            structCompress.originalPath = params[0];
-            long endTime = AndroidUtils.getAudioDuration(G.fragmentActivity, params[0]);
-            try {
-                structCompress.compress = MediaController.getInstance().convertVideo(params[0], params[1], endTime);
-
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
-            structCompress.originalSize = originalSize;
-            return structCompress;
-        }
-
-        @Override
-        protected void onPostExecute(StructCompress structCompress) {
-            super.onPostExecute(structCompress);
-            if (structCompress.compress) {
-                compressedPath.put(structCompress.path, true);
-                for (StructUploadVideo structUploadVideo : structUploadVideos) {
-                    if (structUploadVideo != null && structUploadVideo.filePath.equals(structCompress.path)) {
-                        /**
-                         * update new info after compress file with notify item
-                         */
-
-                        long fileSize = new File(structUploadVideo.filePath).length();
-                        long duration = AndroidUtils.getAudioDuration(G.fragmentActivity, structUploadVideo.filePath) / 1000;
-
-                        if (fileSize >= structCompress.originalSize) {
-                            structUploadVideo.filePath = structCompress.originalPath;
-                            mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, structCompress.originalSize);
-                        } else {
-                            RealmAttachment.updateFileSize(structUploadVideo.messageId, fileSize);
-                            mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, fileSize);
-                        }
-
-                        HelperUploadFile.startUploadTaskChat(structUploadVideo.roomId, chatType, structUploadVideo.filePath, structUploadVideo.messageId, structUploadVideo.messageType, structUploadVideo.message, structUploadVideo.replyMessageId, new HelperUploadFile.UpdateListener() {
-                            @Override
-                            public void OnProgress(int progress, FileUploadStructure struct) {
-                                if (canUpdateAfterDownload) {
-                                    insertItemAndUpdateAfterStartUpload(progress, struct);
-                                }
-                            }
-
-                            @Override
-                            public void OnError() {
-
-                            }
-                        });
-                    }
-                }
-            }
         }
     }
 }

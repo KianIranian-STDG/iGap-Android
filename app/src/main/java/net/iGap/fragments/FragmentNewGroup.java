@@ -55,10 +55,12 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.helper.upload.OnUploadListener;
+import net.iGap.helper.upload.UploadManager;
+import net.iGap.helper.upload.UploadTask;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnChannelAvatarAdd;
 import net.iGap.interfaces.OnGetPermission;
@@ -71,8 +73,6 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
-import net.iGap.module.FileUploadStructure;
-import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
@@ -87,7 +87,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import static net.iGap.G.context;
@@ -144,36 +143,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             isGroup = true;
             initGroupMembersRecycler();
         }
-
-        FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
-            @Override
-            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
-
-                pathSaveImage = path;
-                avatarId = System.nanoTime();
-
-                fragmentNewGroupViewModel.showProgressBar();
-                //showProgressBar();
-                HelperUploadFile.startUploadTaskAvatar(pathSaveImage, avatarId, new HelperUploadFile.UpdateListener() {
-                    @Override
-                    public void OnProgress(int progress, FileUploadStructure struct) {
-                        if (progress < 100) {
-                            fragmentNewGroupBinding.ngPrgWaiting.setProgress(progress);
-                        } else {
-                            fragmentNewGroupViewModel.hideProgressBar();
-                            fragmentNewGroupViewModel.existAvatar = true;
-                            fragmentNewGroupViewModel.token = struct.token;
-                            setImage(pathSaveImage);
-                        }
-                    }
-
-                    @Override
-                    public void OnError() {
-                        fragmentNewGroupViewModel.hideProgressBar();
-                    }
-                });
-            }
-        };
 
         onRemoveFragmentNewGroup = new OnRemoveFragmentNewGroup() {
             @Override
@@ -602,24 +571,28 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         avatarId = System.nanoTime();
 
         fragmentNewGroupViewModel.showProgressBar();
-        HelperUploadFile.startUploadTaskAvatar(pathSaveImage, avatarId, new HelperUploadFile.UpdateListener() {
+        //showProgressBar();
+
+        UploadManager.getInstance().upload(new UploadTask(avatarId + "", new File(pathSaveImage), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
             @Override
-            public void OnProgress(int progress, FileUploadStructure struct) {
-                if (progress < 100) {
-                    fragmentNewGroupBinding.ngPrgWaiting.setProgress(progress);
-                } else {
-                    fragmentNewGroupViewModel.hideProgressBar();
-                    fragmentNewGroupViewModel.existAvatar = true;
-                    fragmentNewGroupViewModel.token = struct.token;
-                    setImage(pathSaveImage);
-                }
+            public void onProgress(String id, int progress) {
+                fragmentNewGroupBinding.ngPrgWaiting.setProgress(progress);
             }
 
             @Override
-            public void OnError() {
+            public void onFinish(String id, String token) {
                 fragmentNewGroupViewModel.hideProgressBar();
+                fragmentNewGroupViewModel.existAvatar = true;
+                fragmentNewGroupViewModel.token = token;
+                setImage(pathSaveImage);
             }
-        });
+
+            @Override
+            public void onError(String id) {
+                fragmentNewGroupViewModel.hideProgressBar();
+
+            }
+        }));
     }
 
     public interface OnRemoveFragmentNewGroup {
