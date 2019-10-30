@@ -36,6 +36,13 @@
                 android:layout_marginBottom="@dimen/dp20"
                 android:paddingBottom="@dimen/dp20">
 
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/pageGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{viewmodel.pageVisibility}"
+                    app:constraint_referenced_ids="title_back,banner_slider,image,rootTitle,title,dateTXT,view_icon,detail_TV,share_newsBTN,share_news,comment_back,comments_title,write_comment,news_back,date,view,tags" />
+
                 <View
                     android:id="@+id/title_back"
                     android:layout_width="match_parent"
@@ -259,7 +266,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/dp24"
-                    android:text="Body"
+                    android:text="بدنه خبر"
                     android:textSize="@dimen/dp18"
                     android:justificationMode="inter_word"
                     android:gravity="center|right"
@@ -490,7 +497,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:elevation="2dp"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:layout_constraintTop_toTopOf="@+id/news_back"
                     app:layout_constraintStart_toStartOf="@+id/news_back"
                     app:layout_constraintEnd_toEndOf="@+id/news_back"
