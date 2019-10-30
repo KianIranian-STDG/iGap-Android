@@ -36,15 +36,15 @@ import net.iGap.interfaces.OnContactsGetList;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnPhoneContact;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
 import net.iGap.module.EmojiTextViewE;
-import net.iGap.module.FastScroller;
+import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.LoginActions;
 import net.iGap.module.ScrollingLinearLayoutManager;
+import net.iGap.module.scrollbar.FastScrollerBarBaseAdapter;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmContacts;
@@ -406,7 +406,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
     }
 
 
-    public class ContactListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public class ContactListAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FastScrollerBarBaseAdapter {
 
         private List<RealmContacts> usersList;
         private int count;
@@ -417,6 +417,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
             usersList = contacts;
         }
 
+        @Override
         public String getBubbleText(int position) {
             if (usersList.size() == 0 || position > (usersList.size() - 1) || position == -1)
                 return "-";
