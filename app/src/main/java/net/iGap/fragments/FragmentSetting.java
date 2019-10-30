@@ -108,7 +108,7 @@ public class FragmentSetting extends BaseFragment {
 
         viewModel.goToLanguagePage.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentLanguage()).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentLanguage()).setReplace(true).load();
             }
         });
 

@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.yariksoffice.lingver.Lingver;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityEnhanced;
@@ -83,7 +85,8 @@ public class FragmentLanguage extends BaseFragment {
 
         viewModel.getRefreshActivityForChangeLanguage().observe(getViewLifecycleOwner(), language -> {
             if (getActivity() instanceof ActivityEnhanced && language != null) {
-                G.updateResources(getActivity().getBaseContext());
+//                G.updateResources(getActivity().getBaseContext());
+                Lingver.getInstance().setLocale(getContext(), G.selectedLanguage);
                 ((ActivityEnhanced) getActivity()).onRefreshActivity(false, language);
                 if (getActivity() instanceof ActivityRegistration) {
                     getActivity().onBackPressed();
