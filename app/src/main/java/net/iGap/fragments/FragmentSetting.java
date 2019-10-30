@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
@@ -192,6 +193,7 @@ public class FragmentSetting extends BaseFragment {
 
             TextView iconTitle = v.findViewById(R.id.iconDialogTitle);
             iconTitle.setText(R.string.md_exit_app);
+            iconTitle.setTypeface(ResourcesCompat.getFont(iconTitle.getContext() , R.font.font_icon_old));
 
             TextView txtContent = v.findViewById(R.id.txtDialogContent);
             txtContent.setText(R.string.content_log_out);
