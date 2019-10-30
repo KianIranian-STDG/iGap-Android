@@ -2231,7 +2231,7 @@
     <string name="accept_the_terms">اقبل الشروط</string>
     <string name="wallet_agrement">اتفاقية المحفظة</string>
     <string name="SendMoney">إرسال الأموال</string>
-    <string name="transfer_amount_hint">أدخل مبلغ الإيداع:</string>
+    <string name="transfer_amount_hint">أدخل مبلغ الإيداع</string>
     <string name="amount_in_rial">المبلغ بالريال:</string>
     <string name="pay">دفع</string>
     <string name="transfer_to_dialog">الانتقال إلى:</string>
@@ -2899,8 +2899,8 @@
     <string name="payment_order_id_title">شماره سفارش : %s</string>
     <string name="payment_rrn_title">شماره تراکنش: %.0f</string>
     <string name="mci_topup_payment_title">شارژ همراه اول</string>
-    <string name="insert_amount_in_rial">مبلغ را به ریال وارد کنید.</string>
-    <string name="enter_16_digit_card_number">شماره کارت ۱۶ رقمی را وارد کنید.</string>
+    <string name="insert_amount_in_rial">مبلغ را به ریال وارد کنید</string>
+    <string name="enter_16_digit_card_number">شماره کارت ۱۶ رقمی را وارد کنید</string>
     <string name="buy_internet_package_type_title">نوع الحزمة</string>
     <string name="buy_internet_package_time_type_title">زمن</string>
     <string name="buy_internet_package_volume_type_title">الصوت</string>

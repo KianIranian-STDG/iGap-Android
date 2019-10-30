@@ -45,7 +45,7 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
         });
         // if more than 60 entries are displayed in the chart, no values will be
         // drawn
-        chart.setMaxVisibleValueCount(60);
+        chart.setMaxVisibleValueCount(100);
         chart.setPinchZoom(true);
         chart.setHighlightPerTapEnabled(false);
 
@@ -54,6 +54,7 @@ public class TypeChartViewHolder extends RecyclerView.ViewHolder {
         chart.setDrawGridBackground(false);
         chart.getDescription().setEnabled(false);
         chart.setDrawGridBackground(false);
+        chart.setTouchEnabled(false);
         chart.setDoubleTapToZoomEnabled(false);
 
         XAxis xAxis = chart.getXAxis();

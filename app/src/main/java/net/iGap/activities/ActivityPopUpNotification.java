@@ -196,11 +196,12 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         txtName.setText(mList.get(position).name);
 
 
-        try (Realm realm = Realm.getDefaultInstance()) {
+        try {
+            Realm realm = Realm.getDefaultInstance();
             RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, mList.get(position).senderId);
             if (realmRegisteredInfo != null) {
                 if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
+                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext() ,realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
                 } else {
                     txtLastSeen.setText(realmRegisteredInfo.getStatus());
                 }
@@ -209,6 +210,9 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             }
 
             setAvatar(realmRegisteredInfo, realm);
+            realm.close();
+        }catch (Exception e){
+            //nothing
         }
     }
 

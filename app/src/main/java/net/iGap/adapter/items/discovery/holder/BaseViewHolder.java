@@ -55,11 +55,13 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.HelperWallet;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.internetpackage.BuyInternetPackageFragment;
 import net.iGap.model.MciPurchaseResponse;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.news.view.NewsMainFrag;
 import net.iGap.payment.PaymentCallBack;
 import net.iGap.payment.PaymentResult;
 import net.iGap.realm.RealmUserInfo;
@@ -177,6 +179,12 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case ELECTRIC_BILL_MENU:
                 new HelperFragment(activity.getSupportFragmentManager(), new ElectricityBillMainFrag()).setReplace(false).load();
                 break;
+            case NEWS:
+                NewsMainFrag frag = new NewsMainFrag();
+                if (!discoveryField.value.equals(""))
+                    frag.setSpecificNewsID(discoveryField.value);
+                new HelperFragment(activity.getSupportFragmentManager(), frag).setReplace(false).load();
+                break;
             case MOBILE_BILL_MENU:/** tested **/
                 new HelperFragment(activity.getSupportFragmentManager(), new FragmentPaymentInquiryMobile()).setReplace(false).load();
                 break;
@@ -188,33 +196,10 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                     RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                     String phoneNumber = userInfo.getUserInfo().getPhoneNumber();
                     if (!G.isWalletRegister) {
-                        if (discoveryField.value.equals("QR_USER_WALLET")) {
-                            new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), true)).load();
-                        } else {
-                            new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), false)).load();
-                        }
+                        new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), discoveryField.value.equals("QR_USER_WALLET"))).load();
                     } else {
-
-                        Intent intent = new Intent(activity, WalletActivity.class);
-                        intent.putExtra("Language", "fa");
-                        intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
-                        intent.putExtra("PrimaryColor", new Theme().getPrimaryColor(activity));
-                        intent.putExtra("DarkPrimaryColor",new Theme().getPrimaryColor(activity));
-                        intent.putExtra("AccentColor",new Theme().getPrimaryColor(activity));
-                        intent.putExtra("IS_DARK_THEME", G.themeColor == Theme.DARK);
-                        intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-                        intent.putExtra(WalletActivity.PROGRESSBAR,new Theme().getAccentColor(activity));
-                        intent.putExtra(WalletActivity.LINE_BORDER, new Theme().getDividerColor(activity));
-                        intent.putExtra(WalletActivity.BACKGROUND,new Theme().getRootColor(activity));
-                        intent.putExtra(WalletActivity.BACKGROUND_2, new Theme().getRootColor(activity));
-                        intent.putExtra(WalletActivity.TEXT_TITLE, new Theme().getTitleTextColor(activity));
-                        intent.putExtra(WalletActivity.TEXT_SUB_TITLE, new Theme().getSubTitleColor(activity));
-                        if (discoveryField.value.equals("QR_USER_WALLET")) {
-                            intent.putExtra("isScan", true);
-                        } else {
-                            intent.putExtra("isScan", true);
-                        }
-                        G.currentActivity.startActivityForResult(intent, WALLET_REQUEST_CODE);
+                        boolean goToScanner = true ;/*discoveryField.value.equals("QR_USER_WALLET")*/
+                        new HelperWallet().goToWallet(G.currentActivity, "0" + phoneNumber.substring(2) ,goToScanner);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

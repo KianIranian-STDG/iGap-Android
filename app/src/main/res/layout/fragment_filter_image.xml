@@ -97,10 +97,11 @@
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?attr/rootBackgroundColor"
                 app:tabGravity="fill"
-                app:tabTextColor="@color/green"
-                app:tabSelectedTextColor="@color/white"
-                app:tabMode="fixed" />
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="?attr/colorPrimary"
+                app:tabTextColor="?attr/iGapTitleTextColor" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

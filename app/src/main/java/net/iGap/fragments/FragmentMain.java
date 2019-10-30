@@ -36,6 +36,7 @@ import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetAction;
+import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
@@ -257,8 +258,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
         initRecycleView();
 
-        //check is available forward message
+        //check is available forward,shared message
         setForwardMessage(true);
+        checkHasSharedData();
 
         //just check at first time page loaded
         notifyChatRoomsList();
@@ -447,7 +449,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             @Override
             public boolean onLongClick(RoomListCell roomListCell, RealmRoom realmRoom, int position) {
 
-                if (!isChatMultiSelectEnable && FragmentChat.mForwardMessages == null) {
+                if (!isChatMultiSelectEnable && FragmentChat.mForwardMessages == null && !HelperGetDataFromOtherApp.hasSharedData) {
                     enableMultiSelect();
                     selectedItemCountTv.setVisibility(View.VISIBLE);
                     multiSelectRv.setVisibility(View.VISIBLE);
@@ -861,8 +863,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     @Override
     public void onLeftIconClickListener(View view) {
-        if (!(G.isLandscape && G.twoPaneMode) && FragmentChat.mForwardMessages != null) {
-            revertToolbarFromForwardMode();
+        if (!(G.isLandscape && G.twoPaneMode)) {
+            if (FragmentChat.mForwardMessages != null || HelperGetDataFromOtherApp.hasSharedData)
+                revertToolbarFromForwardMode();
         }
 
         if (isChatMultiSelectEnable) {
@@ -967,6 +970,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     public void revertToolbarFromForwardMode() {
         FragmentChat.mForwardMessages = null;
+        HelperGetDataFromOtherApp.hasSharedData = false ;
+        HelperGetDataFromOtherApp.sharedList.clear();
         mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
         mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
         mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
@@ -1105,7 +1110,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         if (isChatMultiSelectEnable) {
             onLeftIconClickListener(null);
             return false;
-        } else if (FragmentChat.mForwardMessages != null) {
+        } else if (FragmentChat.mForwardMessages != null || HelperGetDataFromOtherApp.hasSharedData) {
             revertToolbarFromForwardMode();
             return false;
         } else {
@@ -1164,5 +1169,21 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             }
         }
 
+    }
+
+    public void checkHasSharedData(){
+
+        if (!(G.isLandscape && G.twoPaneMode)) {
+            if (HelperGetDataFromOtherApp.hasSharedData) {
+                mHelperToolbar.setDefaultTitle(getString(R.string.send_message_to) + "...");
+                mHelperToolbar.getRightButton().setVisibility(View.GONE);
+                mHelperToolbar.getScannerButton().setVisibility(View.GONE);
+                if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+                mHelperToolbar.getLeftButton().setVisibility(View.VISIBLE);
+                mHelperToolbar.setLeftIcon(R.string.back_icon);
+            } else {
+                revertToolbarFromForwardMode();
+            }
+        }
     }
 }

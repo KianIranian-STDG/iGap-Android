@@ -50,7 +50,6 @@
         android:text="user name"
         android:textColor="?attr/iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
-        android:textStyle="bold"
         app:emojiSize="@dimen/standardTextSize"
         app:layout_constraintBottom_toTopOf="@+id/tv_itemContactChat_userPhoneNumber"
         app:layout_constraintEnd_toEndOf="parent"

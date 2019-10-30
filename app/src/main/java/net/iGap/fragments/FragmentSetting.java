@@ -1,6 +1,7 @@
 package net.iGap.fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
@@ -45,6 +47,7 @@ public class FragmentSetting extends BaseFragment {
 
     private FragmentSettingBinding binding;
     private FragmentSettingViewModel viewModel;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -178,6 +181,7 @@ public class FragmentSetting extends BaseFragment {
     }
 
     private void showDialogLogout() {
+
         if (getActivity() != null) {
             MaterialDialog inDialog = new MaterialDialog.Builder(getActivity()).customView(R.layout.dialog_content_custom, true).build();
             View v = inDialog.getCustomView();
@@ -189,6 +193,7 @@ public class FragmentSetting extends BaseFragment {
 
             TextView iconTitle = v.findViewById(R.id.iconDialogTitle);
             iconTitle.setText(R.string.md_exit_app);
+            iconTitle.setTypeface(ResourcesCompat.getFont(iconTitle.getContext() , R.font.font_icon_old));
 
             TextView txtContent = v.findViewById(R.id.txtDialogContent);
             txtContent.setText(R.string.content_log_out);
@@ -199,6 +204,7 @@ public class FragmentSetting extends BaseFragment {
             txtOk.setOnClickListener(v1 -> {
                 inDialog.dismiss();
                 viewModel.logout();
+
             });
 
             txtCancel.setOnClickListener(v12 -> inDialog.dismiss());

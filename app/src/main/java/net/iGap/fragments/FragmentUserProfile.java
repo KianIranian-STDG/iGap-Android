@@ -26,18 +26,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.transition.TransitionManager;
 
-import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -50,8 +47,6 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermission;
-import net.iGap.helper.HelperUrl;
-import net.iGap.helper.HelperWallet;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
@@ -69,6 +64,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
+
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 public class FragmentUserProfile extends BaseMainFragments implements FragmentEditImage.OnImageEdited {
@@ -100,12 +96,31 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.wtf(this.getClass().getName(), "onViewCreated");
 
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
         }
-
+        viewModel.setCurrentFragment.observe(getViewLifecycleOwner(),isEdit->{
+            if (isEdit) {
+                FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+                Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentEditProfile.class.getName());
+                if (fragment == null){
+                    fragment = FragmentEditProfile.newInstance();
+                    fragmentTransaction.addToBackStack(FragmentEditProfile.class.getName());
+                }
+                fragmentTransaction.replace(R.id.frame_edit, fragment, FragmentEditProfile.class.getName()).commit();
+                binding.addAvatar.setVisibility(View.VISIBLE);
+            } else {
+                FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+                Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentProfile.class.getName());
+                if (fragment == null){
+                    fragment = FragmentProfile.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                }
+                fragmentTransaction.replace(R.id.frame_edit, fragment, fragment.getClass().getName()).commit();
+                binding.addAvatar.setVisibility(View.GONE);
+            }
+        });
         viewModel.changeUserProfileWallpaper.observe(getViewLifecycleOwner(), drawable -> {
             if (drawable != null) {
                 binding.fupBgAvatar.setImageDrawable(drawable);
@@ -114,111 +129,10 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        viewModel.goToAddMemberPage.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (getActivity() != null && aBoolean != null && aBoolean) {
-                try {
-                    Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-            }
-        });
-
-        viewModel.goToWalletAgreementPage.observe(getViewLifecycleOwner(), phoneNumber -> {
-            if (getActivity() != null && phoneNumber != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
-            }
-        });
-
-        viewModel.goToWalletPage.observe(getViewLifecycleOwner(), phoneNumber -> {
-            if (getContext() != null && phoneNumber != null) {
-                new HelperWallet().goToWallet(getContext(), phoneNumber, false);
-            }
-        });
-
-        viewModel.shareInviteLink.observe(getViewLifecycleOwner(), link -> {
-            if (link != null) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, link);
-                sendIntent.setType("text/plain");
-                Intent openInChooser = Intent.createChooser(sendIntent, "Open in...");
-                startActivity(openInChooser);
-            }
-        });
-
-        viewModel.goToScannerPage.observe(getViewLifecycleOwner(), go -> {
-            if (go != null && go) {
-                try {
-                    HelperPermission.getCameraPermission(getActivity(), new OnGetPermission() {
-                        @Override
-                        public void Allow() throws IllegalStateException {
-                            IntentIntegrator integrator = new IntentIntegrator(getActivity());
-                            integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-                            integrator.setRequestCode(ActivityMain.requestCodeQrCode);
-                            integrator.setBeepEnabled(false);
-                            integrator.setPrompt("");
-                            integrator.initiateScan();
-                        }
-
-                        @Override
-                        public void deny() {
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        viewModel.checkLocationPermission.observe(getViewLifecycleOwner(), isCheck -> {
-            if (isCheck != null && isCheck) {
-                try {
-                    HelperPermission.getLocationPermission(getActivity(), new OnGetPermission() {
-                        @Override
-                        public void Allow() {
-                            viewModel.haveLocationPermission();
-                        }
-
-                        @Override
-                        public void deny() {
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        viewModel.goToIGapMapPage.observe(getViewLifecycleOwner(), isGo -> {
-            if (getActivity() != null && isGo != null && isGo) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentiGapMap.getInstance()).setReplace(false).load();
-            }
-        });
-
-        viewModel.goToFAQPage.observe(getViewLifecycleOwner(), link -> {
-            if (link != null) {
-                HelperUrl.openBrowser(link);
-            }
-        });
-
-        viewModel.goToSettingPage.observe(getViewLifecycleOwner(), go -> {
-            if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetting()).setReplace(false).load();
-            }
-        });
-
         viewModel.goToShowAvatarPage.observe(getViewLifecycleOwner(), userId -> {
             if (getActivity() != null && userId != null) {
                 FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-            }
-        });
-
-        viewModel.goToUserScorePage.observe(getViewLifecycleOwner(), go -> {
-            if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentUserScore()).setReplace(false).load();
             }
         });
 
@@ -251,38 +165,15 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        viewModel.isEditProfile.observe(getViewLifecycleOwner(), isEditProfile -> {
-            if (isEditProfile != null) {
-                if (!isEditProfile) {
-                    hideKeyboard();
-                }
-                ConstraintSet set = new ConstraintSet();
-                set.clone(binding.root);
-                set.setVisibility(binding.editProfileView.getId(), isEditProfile ? View.VISIBLE : View.GONE);
-                set.setVisibility(binding.profileViewGroup.getId(), isEditProfile ? View.GONE : View.VISIBLE);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    TransitionManager.beginDelayedTransition(binding.root);
-                    set.applyTo(binding.root);
-                } else {
-                    set.applyTo(binding.root);
-                }
-            }
-        });
-
         viewModel.showDialogChooseImage.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 startDialog();
             }
         });
 
-        viewModel.getUpdateNewTheme().observe(getViewLifecycleOwner(), isUpdate -> {
-            if (getActivity() != null && isUpdate != null && isUpdate) {
-                Fragment frg;
-                frg = getActivity().getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.detach(frg);
-                ft.attach(frg);
-                ft.commit();
+        viewModel.showError.observe(getViewLifecycleOwner(), message -> {
+            if (message != null) {
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -297,48 +188,25 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        viewModel.showError.observe(getViewLifecycleOwner(), message -> {
-            if (message != null) {
-                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        viewModel.showDialogBeLastVersion.observe(getViewLifecycleOwner(), isShow -> {
-            if (getActivity() != null && isShow != null && isShow) {
-                new MaterialDialog.Builder(getActivity())
-                        .cancelable(false)
-                        .title(R.string.app_version_change_log).titleGravity(GravityEnum.CENTER)
-                        .titleColor(new Theme().getPrimaryColor(getActivity()))
-                        .content(R.string.updated_version_title)
-                        .contentGravity(GravityEnum.CENTER)
-                        .positiveText(R.string.ok).itemsGravity(GravityEnum.START).show();
-            }
-        });
-
-        viewModel.showDialogUpdate.observe(getViewLifecycleOwner(), body -> {
-            if (getActivity() != null && body != null) {
-                new MaterialDialog.Builder(getActivity())
-                        .cancelable(false)
-                        .title(R.string.app_version_change_log).titleGravity(GravityEnum.CENTER)
-                        .titleColor(new Theme().getPrimaryColor(getActivity()))
-                        .content(body)
-                        .contentGravity(GravityEnum.CENTER)
-                        .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive((dialog, which) -> {
-                    String url = "http://d.igap.net/update";
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
-                }).negativeText(R.string.cancel).show();
-            }
-        });
-
         viewModel.getShowDialogSelectCountry().observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null && isShow) {
                 showCountryDialog();
             }
         });
 
-        Log.wtf(this.getClass().getName(), "onViewCreated");
+
+
+        getChildFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                Log.wtf(this.getClass().getName(), "-------------------------------------------");
+                for (int i = 0; i < getChildFragmentManager().getBackStackEntryCount(); i++) {
+                    Log.wtf(this.getClass().getName(), "fragment: " + getChildFragmentManager().getBackStackEntryAt(i).getName());
+                }
+                Log.wtf(this.getClass().getName(), "-------------------------------------------");
+            }
+        });
+
     }
 
     @Override

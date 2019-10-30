@@ -92,6 +92,7 @@ public class FragmentEditImage extends BaseFragment {
     public static HashMap<String, StructBottomSheet> textImageList = new HashMap<>();
     public static ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<StructBottomSheet>();
     private OnImageEdited onProfileImageEdited;
+    private boolean isOpenForShareImages = false ;
 
     public void setOnProfileImageEdited(OnImageEdited onProfileImageEdited) {
         this.onProfileImageEdited = onProfileImageEdited;
@@ -196,7 +197,7 @@ public class FragmentEditImage extends BaseFragment {
                 if (getActivity() != null) {
                     new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
                 }
-                if (G.openBottomSheetItem != null && isChatPage)
+                if (G.openBottomSheetItem != null && isChatPage && !isOpenForShareImages)
                     G.openBottomSheetItem.openBottomSheet(false);
             }
         });
@@ -425,6 +426,10 @@ public class FragmentEditImage extends BaseFragment {
         });
     }
 
+    public void setIsOpenForShareImages(boolean isShare){
+        this.isOpenForShareImages = isShare;
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -520,7 +525,7 @@ public class FragmentEditImage extends BaseFragment {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK && getActivity() != null) {
                     AndroidUtils.closeKeyboard(v);
                     new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
-                    if (G.openBottomSheetItem != null && isChatPage)
+                    if (G.openBottomSheetItem != null && isChatPage && !isOpenForShareImages)
                         G.openBottomSheetItem.openBottomSheet(false);
                     return true;
                 }
@@ -653,8 +658,8 @@ public class FragmentEditImage extends BaseFragment {
         Uri uri = Uri.parse(newPath);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
             UCrop.Options options = new UCrop.Options();
-            options.setStatusBarColor(ContextCompat.getColor(G.context, R.color.black));
-            options.setToolbarColor(ContextCompat.getColor(G.context, R.color.black));
+            options.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.black));
+            options.setToolbarColor(ContextCompat.getColor(getContext(), R.color.black));
             options.setCompressionQuality(80);
             options.setFreeStyleCropEnabled(true);
 
@@ -695,6 +700,26 @@ public class FragmentEditImage extends BaseFragment {
         item.setId(itemGalleryList.size());
         item.setPath(path);
         item.setText("");
+        item.isSelected = isSelected;
+        itemGalleryList.add(0, item);
+        textImageList.put(path, item);
+
+        return itemGalleryList;
+    }
+
+    public static ArrayList<StructBottomSheet> insertItemList(String path, String message,  boolean isSelected) {
+
+        if (itemGalleryList == null) {
+            itemGalleryList = new ArrayList<>();
+        }
+
+        if (!HelperPermission.grantedUseStorage()) {
+            return itemGalleryList;
+        }
+        StructBottomSheet item = new StructBottomSheet();
+        item.setId(itemGalleryList.size());
+        item.setPath(path);
+        item.setText(message);
         item.isSelected = isSelected;
         itemGalleryList.add(0, item);
         textImageList.put(path, item);

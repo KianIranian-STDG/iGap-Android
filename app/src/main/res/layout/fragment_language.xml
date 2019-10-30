@@ -180,7 +180,7 @@
             android:layout_marginTop="@dimen/dp16"
             android:background="?attr/selectableItemBackground"
             android:onClick="@{()->viewModel.onClickRussian()}"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@id/txtLanguageRu"
             app:layout_constraintEnd_toEndOf="@id/persianLanguage"
             app:layout_constraintStart_toStartOf="@id/persianLanguage"
@@ -195,7 +195,7 @@
             android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintStart_toStartOf="@id/russianLanguage"
             app:layout_constraintTop_toTopOf="@id/russianLanguage" />
 
@@ -207,7 +207,7 @@
             android:text="@string/check_icon"
             android:textColor="@color/green"
             android:textSize="@dimen/largeTextSize"
-            android:visibility="gone"
+            android:visibility="@{viewModel.isRussian}"
             app:layout_constraintBottom_toBottomOf="@id/russianLanguage"
             app:layout_constraintEnd_toEndOf="@id/russianLanguage"
             app:layout_constraintTop_toTopOf="@id/russianLanguage" />

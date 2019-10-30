@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Check connect to internet Page introduce app -->
     <string name="text_i_introduce_page1">i</string>
     <string name="text_line_1_introduce_page1">Gap</string>
@@ -1320,8 +1320,8 @@ Want to get it?</string>
     <string name="accept_the_terms">Accept the terms</string>
     <string name="wallet_agrement">Wallet agreement</string>
     <string name="SendMoney">Send Money</string>
-    <string name="transfer_amount_hint">Enter the transfer amount below :</string>
-    <string name="amount_in_rial">Amount in Rial :</string>
+    <string name="transfer_amount_hint">Enter the transfer amount below</string>
+    <string name="amount_in_rial">Amount in Rial</string>
     <string name="pay">Pay</string>
     <string name="transfer_to_dialog">Transfer to :</string>
     <string name="am_money">money</string>
@@ -1372,7 +1372,7 @@ Want to get it?</string>
     <string name="wallet_data">Pay Time</string>
     <string name="wallet_desc">---Description---</string>
     <string name="wallet_toman">Toman</string>
-    <string name="wallet_Your_credit">Your credit: </string>
+    <string name="wallet_Your_credit">Your credit : </string>
     <string name="wallet_Reial">%d Rial </string>
     <string name="payment_rial">%s ریال </string>
     <string name="wallet_error_server">Error communicating with server</string>
@@ -1952,8 +1952,8 @@ Want to get it?</string>
     <string name="payment_order_id_title">Order ID : %s</string>
     <string name="payment_rrn_title">Transaction ID: %.0f</string>
     <string name="mci_topup_payment_title">MCI TopUp</string>
-    <string name="insert_amount_in_rial">insert amount in rial.</string>
-    <string name="enter_16_digit_card_number">Enter the 16-digit card number.</string>
+    <string name="insert_amount_in_rial">insert amount in rial</string>
+    <string name="enter_16_digit_card_number">Enter the 16-digit card number</string>
     <string name="buy_internet_package_type_title">Package Type</string>
     <string name="buy_internet_package_time_type_title">Time</string>
     <string name="buy_internet_package_volume_type_title">Volume</string>
@@ -2331,4 +2331,42 @@ Want to get it?</string>
     <string name="elecBill_error_zeroResultBill">No bills is registered under your name.</string>
     <string name="elecBill_success_title">Success</string>
     <string name="elecBill_success_pay">Payment is successful.</string>
+    <!--<string name="news_latest">Latest</string>
+       <string name="news_MHits">Most-Watched</string>
+       <string name="news_ergent">Most_Read</string>
+       <string name="news_emptyList">There is no item to show. \n Pull down to refresh.</string>
+       <string name="news_mainTitle">IGap News</string>
+       <string name="news_serverError">Something went wrong. Please try again.</string>
+       <string name="news_groupTitle">News Group</string>
+       <string name="news_share">Share this news with your friends.</string>
+       <string name="news_comment">Comments</string>
+       <string name="news_write_comment">Write comment</string>
+       <string name="news_related_news">Related News</string>-->
+
+    <string name="news_MHits" tools:ignore="ExtraTranslation">پربازدیدترین</string>
+    <string name="news_comment" tools:ignore="ExtraTranslation">نظرات</string>
+    <string name="news_emptyList" tools:ignore="ExtraTranslation">هیچ موردی برای نمایش موجود نیست. \n برای بارگزاری مجدد صفحه را به سمت پایین بکشید.</string>
+    <string name="news_ergent" tools:ignore="ExtraTranslation">پربحث ترین</string>
+    <string name="news_groupTitle" tools:ignore="ExtraTranslation">گروه های خبری</string>
+    <string name="news_latest" tools:ignore="ExtraTranslation">آخرین خبرها</string>
+    <string name="news_mainTitle" tools:ignore="ExtraTranslation">اخبار آیگپ</string>
+    <string name="news_related_news" tools:ignore="ExtraTranslation">اخبار مرتبط</string>
+    <string name="news_share" tools:ignore="ExtraTranslation">اشتراک گذاری خبر</string>
+    <string name="news_write_comment" tools:ignore="ExtraTranslation">نظر شما چیست؟</string>
+    <string name="news_no_comment" tools:ignore="ExtraTranslation">هیچ نظری ثبت نشده است.</string>
+    <string name="news_serverError" tools:ignore="ExtraTranslation">Something went wrong. Please try again.</string>
+    <string name="news_add_comment_title" tools:ignore="ExtraTranslation">ثبت نظر</string>
+    <string name="news_add_comment_author" tools:ignore="ExtraTranslation">نام</string>
+    <string name="news_add_comment_email" tools:ignore="ExtraTranslation">ایمیل</string>
+    <string name="news_add_comment_comment" tools:ignore="ExtraTranslation">دیدگاه شما</string>
+    <string name="news_add_comment_submit" tools:ignore="ExtraTranslation">ثبت</string>
+    <string name="news_add_comment_load" tools:ignore="ExtraTranslation">در حال ارسال</string>
+    <string name="news_add_comment_success" tools:ignore="ExtraTranslation">ثبت شد.</string>
+    <string name="news_add_comment_fail" tools:ignore="ExtraTranslation">خطا!</string>
+    <string name="news_add_comment_successToast" tools:ignore="ExtraTranslation">نظر شما با موفقیت ثبت شد.</string>
+    <string name="news_add_comment_errorAuthor" tools:ignore="ExtraTranslation">لطفا نام خود را وارد کنید.</string>
+    <string name="news_add_comment_errorEmail" tools:ignore="ExtraTranslation">لطفا ایمیل خود را وارد کنید.</string>
+    <string name="news_add_comment_errorEmail2" tools:ignore="ExtraTranslation">فرمت ایمیل وارد شده صحیح نیست.</string>
+    <string name="news_add_comment_errorComment" tools:ignore="ExtraTranslation">لطفا نظر خود را وارد کنید.</string>
+
 </resources>

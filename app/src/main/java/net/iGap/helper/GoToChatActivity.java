@@ -106,6 +106,10 @@ public class GoToChatActivity {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     HelperGetDataFromOtherApp.hasSharedData = false;
+                    //revert main rooms list from share mode
+                    if (activity instanceof ActivityMain){
+                        ((ActivityMain) activity).checkHasSharedData(false);
+                    }
                 }
             }).neutralText(R.string.another_room).onNeutral(new MaterialDialog.SingleButtonCallback() {
                 @Override

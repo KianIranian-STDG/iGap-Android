@@ -87,5 +87,10 @@ public final class HelperLogout {
         G.isPassCode = false;
         G.isSaveToGallery = false;
         G.showSenderNameInGroup = false;
+        G.themeColor = Theme.DEFAULT;
+        G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE).edit()
+                .putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT)
+                .putBoolean(SHP_SETTING.KEY_THEME_DARK, false)
+                .apply();
     }
 }

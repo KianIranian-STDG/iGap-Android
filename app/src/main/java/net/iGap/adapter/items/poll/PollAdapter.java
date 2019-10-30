@@ -46,10 +46,10 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.barEntries = null;
     }
 
-    public void addChatToEnd(String[] labels, ArrayList<BarEntry> barEntries , long sum) {
+    public void addChatToEnd(String[] labels, ArrayList<BarEntry> barEntries, long sum) {
 
         //convert to percent
-        for (int i = 0 ; i<barEntries.size() ; i++){
+        for (int i = 0; i < barEntries.size(); i++) {
             barEntries.get(i).setY((barEntries.get(i).getY() * 100) / sum);
         }
 
@@ -66,7 +66,7 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ArrayList<String> labels = new ArrayList<>();
         ArrayList<BarEntry> barValue = new ArrayList<>();
         boolean userPolledBefore = false;
-        long sumOfPoll = 0 ;
+        long sumOfPoll = 0;
         int i = 0;
         for (PollItem pollItem : getData()) {
             for (PollItemField pollItemField : pollItem.pollItemFields) {
@@ -125,12 +125,10 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         if (pollList.size() == i) {
-            //float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * 2 / 3;
-            //viewHolder.itemView.getLayoutParams().height = Math.round(height);
             ((TypeChartViewHolder) viewHolder).bindView(labels, barEntries);
         } else {
             String[] scales = pollList.get(i).scale.split(":");
-            float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+            float height = Resources.getSystem().getDisplayMetrics().widthPixels *1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
             viewHolder.itemView.getLayoutParams().height = Math.round(height);
             ((BaseViewHolder) viewHolder).bindView(pollList.get(i));
         }

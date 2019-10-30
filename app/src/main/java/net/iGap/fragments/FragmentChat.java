@@ -142,7 +142,6 @@ import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.databinding.PaymentDialogBinding;
-import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.ChatAttachmentPopup;
 import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
@@ -1784,7 +1783,7 @@ public class FragmentChat extends BaseFragment
                 } else {
                     if (userStatus != null) {
                         if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true, false));
+                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext() ,chatPeerId, userTime, true, false));
                         } else {
                             txtLastSeen.setText(userStatus);
                         }
@@ -2346,8 +2345,8 @@ public class FragmentChat extends BaseFragment
                 }
             }
         } else {
-            Picasso.get().load(R.drawable.chat_default_background_pattern).fit().centerCrop().into(imgBackGround);
-            /*imgBackGround.setImageResource(R.drawable.chat_default_background_pattern);*/
+            /*Picasso.get().load(R.drawable.chat_default_background_pattern).fit().centerCrop().into(imgBackGround);*/
+            imgBackGround.setImageResource(R.drawable.chat_default_background_pattern);
         }
 
     }
@@ -3062,6 +3061,33 @@ public class FragmentChat extends BaseFragment
 
         };
 
+        FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
+            @Override
+            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
+                listPathString = null;
+                listPathString = new ArrayList<>();
+
+                if (textImageList.size() == 0) {
+                    return;
+                }
+
+                ArrayList<StructBottomSheet> itemList = new ArrayList<StructBottomSheet>();
+                for (Map.Entry<String, StructBottomSheet> items : textImageList.entrySet()) {
+                    itemList.add(items.getValue());
+                }
+
+                Collections.sort(itemList);
+
+                for (StructBottomSheet item : itemList) {
+                    edtChat.setText(item.getText());
+                    listPathString.add(item.getPath());
+                    latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
+                    ll_attach_text.setVisibility(View.VISIBLE);
+                    imvSendButton.performClick();
+                }
+            }
+        };
+
         imvAttachFileButton.setOnClickListener(view -> {
             if (mAttachmentPopup == null) initPopupAttachment();
             mAttachmentPopup.setMessagesLayoutHeight(recyclerView.getMeasuredHeight());
@@ -3194,6 +3220,10 @@ public class FragmentChat extends BaseFragment
 
         if (getActivity() == null) return;
 
+        //clear at first time to load image gallery
+        FragmentEditImage.itemGalleryList.clear();
+        FragmentEditImage.textImageList.clear();
+
         mAttachmentPopup = ChatAttachmentPopup.create()
                 .setContext(getActivity())
                 .setRootView(rootView)
@@ -3205,32 +3235,6 @@ public class FragmentChat extends BaseFragment
                 .setListener(FragmentChat.this)
                 .build();
 
-        FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
-            @Override
-            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
-                listPathString = null;
-                listPathString = new ArrayList<>();
-
-                if (textImageList.size() == 0) {
-                    return;
-                }
-
-                ArrayList<StructBottomSheet> itemList = new ArrayList<StructBottomSheet>();
-                for (Map.Entry<String, StructBottomSheet> items : textImageList.entrySet()) {
-                    itemList.add(items.getValue());
-                }
-
-                Collections.sort(itemList);
-
-                for (StructBottomSheet item : itemList) {
-                    edtChat.setText(item.getText());
-                    listPathString.add(item.getPath());
-                    latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
-                    ll_attach_text.setVisibility(View.VISIBLE);
-                    imvSendButton.performClick();
-                }
-            }
-        };
     }
 
     private void removeEditedMessage() {
@@ -4336,6 +4340,25 @@ public class FragmentChat extends BaseFragment
         items.add(getString(R.string.forward_item_dialog));
         items.add(getString(R.string.delete_item_dialog));
 
+        //check and remove share base on type and download state
+        if (roomMessageType.toString().equals("LOCATION") || roomMessageType.toString().equals("VOICE")){
+
+            items.remove(getString(R.string.share_item_dialog));
+
+        }else if (!roomMessageType.toString().equals("TEXT") && !roomMessageType.toString().equals("CONTACT")) {
+
+            String filepath_;
+            if (message.forwardedFrom != null) {
+                filepath_ = message.forwardedFrom.getAttachment().getLocalFilePath() != null ? message.forwardedFrom.getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(message.forwardedFrom.getAttachment().getCacheId(), message.forwardedFrom.getAttachment().getName(), roomMessageType);
+            } else {
+                filepath_ = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
+            }
+
+            if (!new File(filepath_).exists()) {
+                items.remove(getString(R.string.share_item_dialog));
+            }
+        }
+
 
         if (roomMessageType.toString().contains("IMAGE") || roomMessageType.toString().contains("VIDEO") || roomMessageType.toString().contains("GIF")) {
             items.add(getString(R.string.save_to_gallery));
@@ -4901,7 +4924,7 @@ public class FragmentChat extends BaseFragment
                         } else {
                             if (userStatus != null) {
                                 if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true, false));
+                                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext() ,chatPeerId, userTime, true, false));
                                 } else {
                                     txtLastSeen.setText(userStatus);
                                 }
@@ -5212,7 +5235,7 @@ public class FragmentChat extends BaseFragment
                     } else {
                         if (status != null && txtLastSeen != null) {
                             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                                txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, time, true, false));
+                                txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext() ,chatPeerId, time, true, false));
                             } else {
                                 txtLastSeen.setText(status);
                             }
@@ -5265,7 +5288,7 @@ public class FragmentChat extends BaseFragment
                 } else {
                     if (userStatus != null) {
                         if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true, false));
+                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext() ,chatPeerId, userTime, true, false));
                         } else {
                             txtLastSeen.setText(userStatus);
                         }
@@ -6195,6 +6218,8 @@ public class FragmentChat extends BaseFragment
                 if (HelperGetDataFromOtherApp.hasSharedData) {
                     HelperGetDataFromOtherApp.hasSharedData = false;
 
+                    boolean isOpenEditImageFragment = false ;
+                    boolean isAllowToClearChatEditText = true ;
                     for (HelperGetDataFromOtherApp.SharedData sharedData : HelperGetDataFromOtherApp.sharedList) {
 
                         edtChat.setText(sharedData.message);
@@ -6207,16 +6232,18 @@ public class FragmentChat extends BaseFragment
                                 if (HelperGetDataFromOtherApp.sharedList.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
                                     final String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
                                     mainVideoPath = sharedData.address;
-                                    if (mainVideoPath == null) {
-                                        return;
+                                    if (mainVideoPath == null) return;
+
+                                    if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
+                                        Intent intent = new Intent(G.fragmentActivity, ActivityTrimVideo.class);
+                                        intent.putExtra("PATH", mainVideoPath);
+                                        startActivityForResult(intent, AttachFile.request_code_trim_video);
+                                        isAllowToClearChatEditText = false;
+                                    }else {
+                                        G.handler.postDelayed(() -> new VideoCompressor().execute(mainVideoPath, savePathVideoCompress), 200);
+                                        sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
                                     }
-                                    G.handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
-                                        }
-                                    }, 200);
-                                    sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
+
                                 } else {
                                     compressedPath.put(sharedData.address, true);
                                     sendMessage(request_code_VIDEO_CAPTURED, sharedData.address);
@@ -6229,14 +6256,27 @@ public class FragmentChat extends BaseFragment
                                 sendMessage(AttachFile.request_code_pic_audi, sharedData.address);
                                 break;
                             case image:
-                                sendMessage(AttachFile.request_code_TAKE_PICTURE, sharedData.address);
+                                //maybe share data was more than one ... add to list then after for open edit image
+                                FragmentEditImage.insertItemList(sharedData.address , sharedData.message , false);
+                                isOpenEditImageFragment = true ;
+                                //sendMessage(AttachFile.request_code_TAKE_PICTURE, sharedData.address);
                                 break;
                         }
 
-                        edtChat.setText("");
+                        if (isAllowToClearChatEditText) edtChat.setText("");
+                    }
+
+                    if (isOpenEditImageFragment && getActivity() != null) {
+                        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, FragmentEditImage.itemGalleryList.size()-1);
+                        fragmentEditImage.setIsOpenForShareImages(true);
+                        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                     }
 
                     HelperGetDataFromOtherApp.sharedList.clear();
+                    //update main room list ui after share done
+                    if (getActivity() instanceof ActivityMain){
+                        ((ActivityMain) getActivity()).checkHasSharedData(false);
+                    }
 
                 }
             }
@@ -6283,10 +6323,10 @@ public class FragmentChat extends BaseFragment
                     intent.putExtra(Intent.EXTRA_TEXT, messageContact);
                     break;
                 case "LOCATION":
+                    intent.setType("image/*");
                     String imagePathPosition = messageInfo.forwardedFrom != null ?
                             AppUtils.getLocationPath(messageInfo.forwardedFrom.getLocation().getLocationLat(), messageInfo.forwardedFrom.getLocation().getLocationLong()) :
                             AppUtils.getLocationPath(messageInfo.location.getLocationLat(), messageInfo.location.getLocationLong());
-                    intent.setType("image/*");
                     if (imagePathPosition != null) {
                         intent.putExtra(Intent.EXTRA_STREAM, AppUtils.createtUri(new File(imagePathPosition)));
                     }
@@ -6294,20 +6334,20 @@ public class FragmentChat extends BaseFragment
                 case "VOICE":
                 case "AUDIO":
                 case "AUDIO_TEXT":
-                    intent.setType("audio/*");
                     AppUtils.shareItem(intent, messageInfo);
+                    intent.setType("audio/*");
                     chooserDialogText = G.fragmentActivity.getResources().getString(R.string.share_audio_file);
                     break;
                 case "IMAGE":
                 case "IMAGE_TEXT":
-                    intent.setType("image/*");
                     AppUtils.shareItem(intent, messageInfo);
+                    intent.setType("image/*");
                     chooserDialogText = G.fragmentActivity.getResources().getString(R.string.share_image);
                     break;
                 case "VIDEO":
                 case "VIDEO_TEXT":
-                    intent.setType("video/*");
                     AppUtils.shareItem(intent, messageInfo);
+                    intent.setType("video/*");
                     chooserDialogText = G.fragmentActivity.getResources().getString(R.string.share_video_file);
                     break;
                 case "FILE":
@@ -6325,23 +6365,20 @@ public class FragmentChat extends BaseFragment
                         } else {
                             mimeType = "application/*" + mimeType;
                         }
-                        intent.setType(mimeType);
                         intent.putExtra(Intent.EXTRA_STREAM, uri);
+                        intent.setType(mimeType);
                         chooserDialogText = G.fragmentActivity.getResources().getString(R.string.share_file);
                     } else {
 
                         isShareOk = false;
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(context, R.string.file_not_download_yet, Toast.LENGTH_SHORT).show();
-                            }
-                        });
                     }
                     break;
             }
 
-            if (!isShareOk) return;
+            if (!isShareOk){
+                G.handler.post(() -> Toast.makeText(context, R.string.file_not_download_yet, Toast.LENGTH_SHORT).show());
+                return;
+            }
 
             startActivity(Intent.createChooser(intent, chooserDialogText));
         } catch (Exception e) {

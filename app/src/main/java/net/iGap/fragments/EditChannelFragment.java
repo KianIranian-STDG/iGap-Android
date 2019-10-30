@@ -92,6 +92,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isNeedResume = true ;
         viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
@@ -157,6 +158,11 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
             }
         });
 
+        viewModel.closePageImediatly.observe(getViewLifecycleOwner() , isClose -> {
+            if (isClose == null || !isClose) return;
+                popBackStackFragment();
+        });
+
         viewModel.initEmoji.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null) {
                 emojiPopup.toggle();
@@ -213,6 +219,12 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
 
         setEmojiColor();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.updateGroupRole();
     }
 
     @Override

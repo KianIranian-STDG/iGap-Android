@@ -124,7 +124,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
         binding.toolbarMore.setOnClickListener(v -> showPopUp());
         binding.toolbarEdit.setOnClickListener(v -> {
-            if (getActivity() != null) {
+            if (getActivity() != null && viewModel.checkIsEditableAndReturnState()) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), EditChannelFragment.newInstance(viewModel.roomId)).setReplace(false).load();
             }
         });
@@ -354,6 +354,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
     public void onResume() {
         super.onResume();
         setAvatar();
+        viewModel.checkChannelIsEditable();
         viewModel.onResume();
     }
 

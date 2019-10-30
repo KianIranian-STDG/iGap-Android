@@ -51,6 +51,8 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line_dark</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_dark</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_dark</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_dark</item>
+
     </style>
 
     <style name="BaseTheme.baseLightTheme">
@@ -65,11 +67,11 @@
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
-        <item name="iGapPrimaryTextColor">@color/gray_4c</item>
+        <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">@color/hint_edit_text</item>
         <item name="iGapButtonColor">@color/buttonColor</item>
-        <item name="iGapButtonTextColor">@color/buttonColor</item>
+        <item name="iGapButtonTextColor">@color/white</item>
         <item name="iGapPrimaryIconTextColor">@color/green</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
@@ -104,6 +106,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_light</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_default</item>
     </style>
 
     <style name="BaseTheme.baseRedTheme">
@@ -122,7 +125,7 @@
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
         <item name="iGapButtonColor">#c82121</item>
-        <item name="iGapButtonTextColor">#c82121</item>
+        <item name="iGapButtonTextColor">@color/white</item>
         <item name="iGapPrimaryIconTextColor">#c82121</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
@@ -158,6 +161,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_red</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_red</item>
     </style>
 
     <style name="BaseTheme.basePinkTheme">
@@ -176,7 +180,7 @@
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
         <item name="iGapButtonColor">#ffb5b5</item>
-        <item name="iGapButtonTextColor">#ffb5b5</item>
+        <item name="iGapButtonTextColor">@color/white</item>
         <item name="iGapPrimaryIconTextColor">#ffb5b5</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
@@ -211,6 +215,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_pink</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_pink</item>
     </style>
 
     <style name="BaseTheme.basePurpleTheme">
@@ -229,7 +234,7 @@
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
         <item name="iGapButtonColor">#aa5c9f</item>
-        <item name="iGapButtonTextColor">#aa5c9f</item>
+        <item name="iGapButtonTextColor">@color/white</item>
         <item name="iGapPrimaryIconTextColor">#aa5c9f</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
@@ -264,6 +269,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_purple</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_purple</item>
     </style>
 
     <style name="BaseTheme.baseBlueTheme">
@@ -282,7 +288,7 @@
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
         <item name="iGapButtonColor">#207dff</item>
-        <item name="iGapButtonTextColor">#207dff</item>
+        <item name="iGapButtonTextColor">@color/white</item>
         <item name="iGapPrimaryIconTextColor">#207dff</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
@@ -317,6 +323,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_blue</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_blue</item>
     </style>
 
     <style name="BaseTheme.baseGreenTheme">
@@ -335,7 +342,7 @@
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
         <item name="iGapButtonColor">#b5e663</item>
-        <item name="iGapButtonTextColor">#b5e663</item>
+        <item name="iGapButtonTextColor">@color/white</item>
         <item name="iGapPrimaryIconTextColor">#b5e663</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
@@ -370,6 +377,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_green</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_green</item>
     </style>
 
     <style name="BaseTheme.baseAmberTheme">
@@ -388,7 +396,7 @@
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
         <item name="iGapButtonColor">#FFC107</item>
-        <item name="iGapButtonTextColor">#FFC107</item>
+        <item name="iGapButtonTextColor">@color/white</item>
         <item name="iGapPrimaryIconTextColor">#FFC107</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
@@ -423,6 +431,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_yellow</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_amber</item>
     </style>
 
     <style name="BaseTheme.baseOrangeTheme">
@@ -441,7 +450,7 @@
         <item name="iGapDividerLine">@color/background_editText</item>
         <item name="iGapHintTextColor">#757575</item>
         <item name="iGapButtonColor">#ff9d00</item>
-        <item name="iGapButtonTextColor">#ff9d00</item>
+        <item name="iGapButtonTextColor">@color/white</item>
         <item name="iGapPrimaryIconTextColor">#ff9d00</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
@@ -478,6 +487,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_orange</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_orange</item>
     </style>
 
     <style name="BaseTheme.baseDarkGrayTheme">
@@ -497,7 +507,7 @@
         <item name="iGapDividerLine">@color/grayDividerLine</item>
         <item name="iGapHintTextColor">#757575</item>
         <item name="iGapButtonColor">#4e698a</item>
-        <item name="iGapButtonTextColor">#4e698a</item>
+        <item name="iGapButtonTextColor">@color/white</item>
         <item name="iGapPrimaryIconTextColor">#4e698a</item>
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
@@ -530,6 +540,7 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_dark_gray</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_dark_gray</item>
     </style>
 
     <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">

@@ -1150,7 +1150,7 @@
     <string name = "accept_the_terms">قبووڵکردنی مەرجەکان</string>
     <string name = "wallet_agrement">ڕێکەوتنی جزدان</string>
     <string name = "SendMoney">ناردنی پارە</string>
-    <string name = "transfer_amount_hint">بڕە پارەیەک دەبێ بیدەیت داخڵ بکە:</string>
+    <string name = "transfer_amount_hint">بڕە پارەیەک دەبێ بیدەیت داخڵ بکە</string>
     <string name = "amount_in_rial">بڕەپارەکە بە ریال:</string>
     <string name = "pay">پارەدان</string>
     <string name = "transfer_to_dialog">گواستنەوە بۆ:</string>
@@ -1756,7 +1756,7 @@
     <string name = "payment_order_id_title">ژمارە داواکاری: %s</string>
     <string name = "payment_rrn_title">ژمارە گواستنەوە: %.0f</string>
     <string name = "mci_topup_payment_title">شەحنی mci</string>
-    <string name = "insert_amount_in_rial">بڕی پارە بە ریال داخڵ بکە.</string>
+    <string name = "insert_amount_in_rial">بڕی پارە بە ریال داخڵ بکە</string>
     <string name = "enter_16_digit_card_number">ژمارە کارتی 16 ڕەقەمی داخڵ بکە.</string>
     <string name = "buy_internet_package_type_title">جۆری پاکێج</string>
     <string name = "buy_internet_package_time_type_title">کات</string>

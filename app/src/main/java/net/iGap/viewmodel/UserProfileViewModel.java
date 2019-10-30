@@ -121,7 +121,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private ObservableLong currentCredit = new ObservableLong(0);
     private ObservableField<String> currentScore = new ObservableField<>("0");
     private ObservableBoolean isDarkMode = new ObservableBoolean(false);
-    private ObservableInt editProfileIcon = new ObservableInt(R.string.edit_icon);
+    public ObservableInt editProfileIcon = new ObservableInt(R.string.edit_icon);
     private ObservableField<String> name = new ObservableField<>("");
     private ObservableField<String> userName = new ObservableField<>("");
     private ObservableField<String> bio = new ObservableField<>("");
@@ -168,6 +168,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
     public SingleLiveEvent<Integer> showError = new SingleLiveEvent<>();
     public MutableLiveData<Drawable> changeUserProfileWallpaper = new MutableLiveData<>();
+    public MutableLiveData<Boolean> setCurrentFragment = new MutableLiveData<>();
 
     private Realm mRealm;
     private RealmUserInfo userInfo;
@@ -199,8 +200,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         updateUserInfoUI();
         if (checkValidationForRealm(userInfo)) {
             userInfo.addChangeListener(realmModel -> {
-                Log.wtf("view Model", "call updateUserInfoUI from =realmUserInfo change listener");
-                Log.wtf("view Model", "1");
                 userInfo = (RealmUserInfo) realmModel;
                 updateUserInfoUI();
             });
@@ -226,6 +225,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void init() {
+        setCurrentFragment.setValue(isEditMode());
         isDarkMode.set(G.themeColor == Theme.DARK);
         //set credit amount
         if (G.selectedCard != null) {
@@ -254,7 +254,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     }
 
-    private void updateUserInfoUI() {
+    public void updateUserInfoUI() {
         if (checkValidationForRealm(userInfo)) {
             userId = userInfo.getUserId();
             phoneNumber = userInfo.getUserInfo().getPhoneNumber();
@@ -271,8 +271,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 } else if (userGender == ProtoGlobal.Gender.FEMALE) {
                     currentGender = R.id.female;
                 }
-            } else {
-                currentGender = -1;
             }
             gender.set(currentGender);
             name.set(currentName);
@@ -376,6 +374,23 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public void onEditProfileClick() {
         if (isEditProfile.getValue() != null && isEditProfile.getValue()) {
+            editProfileIcon.set(R.string.edit_icon);
+            isEditProfile.setValue(false);
+            submitData();
+        } else {
+            editProfileIcon.set(R.string.close_icon);
+            isEditProfile.setValue(true);
+            if (editProfileIcon.get() == R.string.close_icon) {
+                isEditProfile.setValue(true);
+            } else {
+                isEditProfile.setValue(false);
+                getReferral();
+            }
+        }
+        setCurrentFragment.setValue(isEditProfile.getValue());
+    }
+  /*  public void onEditProfileClick() {
+        if (isEditProfile.getValue() != null && isEditProfile.getValue()) {
             if (editProfileIcon.get() == R.string.check_icon) {
                 submitData();
             } else {
@@ -387,7 +402,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             isEditProfile.setValue(true);
             getReferral();
         }
-    }
+        setCurrentFragment.setValue(isEditProfile.getValue());
+    }*/
 
     public void onCloudMessageClick() {
         showLoading.set(View.VISIBLE);
@@ -614,13 +630,15 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public void onCheckedListener(int checkedId) {
         if (isEditMode()) {
             if (checkedId != currentGender) {
+                gender.set(checkedId);
                 editProfileIcon.set(R.string.check_icon);
             } else {
                 if (currentName.equals(name.get())) {
                     if (currentUserName.equals(userName.get())) {
                         if (currentUserEmail.equals(email.get())) {
                             if (currentBio.equals(bio.get())) {
-                                editProfileIcon.set(R.string.close_icon);
+                                if (currentBio.equals(gender.get())){
+                                    editProfileIcon.set(R.string.close_icon);}
                             }
                         }
                     }
