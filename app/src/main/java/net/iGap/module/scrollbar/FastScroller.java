@@ -1,21 +1,21 @@
-package net.iGap.module;
+package net.iGap.module.scrollbar;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,17 +27,15 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.adapter.items.ContactItemGroup;
-import net.iGap.fragments.FragmentBlockedUser;
-import net.iGap.fragments.FragmentSyncRegisteredContacts;
-import net.iGap.fragments.RegisteredContactsFragment;
 
 import org.jetbrains.annotations.NotNull;
 
 public class FastScroller extends LinearLayout {
 
-    private AppCompatImageView bubble;
-    private AppCompatTextView handle;
+    private View handle;
     private RecyclerView recyclerView;
+    private PopupWindow bubble;
+    private TextView textView;
 
     private static final int HANDLE_ANIMATION_DURATION = 100;
     private static final int HANDLE_HIDE_DELAY = 500;
@@ -52,7 +50,6 @@ public class FastScroller extends LinearLayout {
     private AnimatorSet currentAnimator = null;
 
     private int height;
-    /*private int totalItemCount;*/
 
     private final ScrollListener scrollListener = new ScrollListener();
 
@@ -97,12 +94,12 @@ public class FastScroller extends LinearLayout {
                 currentAnimator.cancel();
             }
             getHandler().removeCallbacks(handleHider);
-            if (handle.getVisibility() == INVISIBLE) {
+            if (!bubble.isShowing()/*kb24.getVisibility() == INVISIBLE*/) {
                 showHandle();
             }
             recyclerView.setOnScrollListener(null);
             setRecyclerViewPosition(event.getY());
-            bubble.setSelected(true);
+            handle.setSelected(true);
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             recyclerView.setOnScrollListener(scrollListener);
@@ -115,35 +112,32 @@ public class FastScroller extends LinearLayout {
     private class HandleHider implements Runnable {
         @Override
         public void run() {
-            bubble.setSelected(false);
+            handle.setSelected(false);
             hideHandle();
         }
     }
 
     private void setRecyclerViewPosition(float y) {
-        if (recyclerView != null) {
+        if (recyclerView != null && recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
             float proportion;
-            if (bubble.getY() == 0) {
+            if (handle.getY() == 0) {
                 proportion = 0f;
-            } else if (bubble.getY() + bubble.getHeight() >= height - TRACK_SNAP_RANGE) {
+            } else if (handle.getY() + handle.getHeight() >= height - TRACK_SNAP_RANGE) {
                 proportion = 1f;
             } else {
                 proportion = y / (float) height;
             }
             int targetPos = getValueInRange(0, recyclerView.getAdapter().getItemCount() - 1, (int) (proportion * (float) recyclerView.getAdapter().getItemCount()));
-            if (recyclerView.getAdapter() instanceof RegisteredContactsFragment.ContactListAdapter) {
-                handle.setText(((RegisteredContactsFragment.ContactListAdapter) recyclerView.getAdapter()).getBubbleText(((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()));
-            } else if (recyclerView.getAdapter() instanceof FastAdapter) {
+            if (recyclerView.getAdapter() instanceof FastAdapter) {
                 IItem iItem = ((FastAdapter) recyclerView.getAdapter()).getItem(((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition());
-                if (iItem instanceof ContactItemGroup) {
-                    handle.setText(((ContactItemGroup) iItem).getBubbleText());
+                if (iItem instanceof FastScrollerBarBaseAdapter) {
+                    textView.setText(((ContactItemGroup) iItem).getBubbleText(0));
                 }
-            } else if (recyclerView.getAdapter() instanceof FragmentBlockedUser.BlockListAdapter) {
-                handle.setText(((FragmentBlockedUser.BlockListAdapter) recyclerView.getAdapter()).getBubbleText(((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()));
-            } else if (recyclerView.getAdapter() instanceof FragmentSyncRegisteredContacts.ContactListAdapter2) {
-                handle.setText(((FragmentSyncRegisteredContacts.ContactListAdapter2) recyclerView.getAdapter()).getBubbleText(((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()));
+            } else if (recyclerView.getAdapter() instanceof FastScrollerBarBaseAdapter) {
+                textView.setText(((FastScrollerBarBaseAdapter) recyclerView.getAdapter()).getBubbleText(((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()));
+            } else {
+                textView.setText("-");
             }
-
             recyclerView.scrollToPosition(targetPos);
         }
     }
@@ -153,8 +147,15 @@ public class FastScroller extends LinearLayout {
         setClipChildren(false);
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.fastscroller, this);
-        bubble = findViewById(R.id.fastscroller_bubble);
-        handle = findViewById(R.id.fastscroller_handle);
+        handle = findViewById(R.id.fastscroller_bubble);
+        bubble = new PopupWindow(getContext());
+        bubble.setWidth(LayoutParams.WRAP_CONTENT);
+        bubble.setHeight(LayoutParams.WRAP_CONTENT);
+        bubble.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        textView = new TextView(getContext());
+        textView.setGravity(Gravity.CENTER);
+        textView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        bubble.setContentView(textView);
 
         int handleResId;
         if (G.isAppRtl) {
@@ -162,15 +163,13 @@ public class FastScroller extends LinearLayout {
         } else {
             handleResId = R.drawable.fastscroll_bubble_light_right;
         }
-        handle.setTextColor(new Theme().getPrimaryTextColor(context));
-        bubble.setImageResource(new Theme().getFastScrollerBackground(context));
-        handle.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(context, handleResId), context, R.attr.iGapButtonColor));
+        textView.setTextColor(new Theme().getPrimaryTextColor(context));
+        handle.setBackgroundResource(new Theme().getFastScrollerBackground(context));
+        textView.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(context, handleResId), context, R.attr.iGapButtonColor));
     }
 
     private void setPosition(float y) {
         float position = y / height;
-        int bubbleHeight = bubble.getHeight();
-        bubble.setY(getValueInRange(0, height - bubbleHeight, (int) ((height - bubbleHeight) * position)));
         int handleHeight = handle.getHeight();
         handle.setY(getValueInRange(0, height - handleHeight, (int) ((height - handleHeight) * position)));
     }
@@ -181,45 +180,52 @@ public class FastScroller extends LinearLayout {
     }
 
     private void showHandle() {
-        AnimatorSet animatorSet = new AnimatorSet();
-        handle.setPivotX(handle.getWidth());
-        handle.setPivotY(handle.getHeight());
-        handle.setVisibility(VISIBLE);
-        Animator growerX = ObjectAnimator.ofFloat(handle, SCALE_X, 0f, 1f).setDuration(HANDLE_ANIMATION_DURATION);
-        Animator growerY = ObjectAnimator.ofFloat(handle, SCALE_Y, 0f, 1f).setDuration(HANDLE_ANIMATION_DURATION);
-        Animator alpha = ObjectAnimator.ofFloat(handle, ALPHA, 0f, 1f).setDuration(HANDLE_ANIMATION_DURATION);
+        if (G.isAppRtl) {
+            bubble.showAsDropDown(handle, (int) getResources().getDimension(R.dimen.dp8), (int) -getResources().getDimension(R.dimen.dp52));
+        } else {
+            bubble.showAsDropDown(handle, (int) -(getResources().getDimension(R.dimen.dp52) + getResources().getDimension(R.dimen.dp8)), (int) -getResources().getDimension(R.dimen.dp52));
+        }
+        bubble.update();
+        /*AnimatorSet animatorSet = new AnimatorSet();
+        bubble.setPivotX(kb24.getWidth());
+        bubble.setPivotY(kb24.getHeight());
+        bubble.setVisibility(VISIBLE);
+        Animator growerX = ObjectAnimator.ofFloat(kb24, SCALE_X, 0f, 1f).setDuration(HANDLE_ANIMATION_DURATION);
+        Animator growerY = ObjectAnimator.ofFloat(kb24, SCALE_Y, 0f, 1f).setDuration(HANDLE_ANIMATION_DURATION);
+        Animator alpha = ObjectAnimator.ofFloat(kb24, ALPHA, 0f, 1f).setDuration(HANDLE_ANIMATION_DURATION);
         animatorSet.playTogether(growerX, growerY, alpha);
-        animatorSet.start();
+        animatorSet.start();*/
     }
 
     private void hideHandle() {
-        currentAnimator = new AnimatorSet();
+        bubble.dismiss();
+        /*currentAnimator = new AnimatorSet();
         if (G.isAppRtl) {
-            handle.setPivotX(0);
+            kb24.setPivotX(0);
         } else {
-            handle.setPivotX(handle.getWidth());
+            kb24.setPivotX(kb24.getWidth());
         }
-        handle.setPivotY(handle.getHeight());
-        Animator shrinkerX = ObjectAnimator.ofFloat(handle, SCALE_X, 1f, 0f).setDuration(HANDLE_ANIMATION_DURATION);
-        Animator shrinkerY = ObjectAnimator.ofFloat(handle, SCALE_Y, 1f, 0f).setDuration(HANDLE_ANIMATION_DURATION);
-        Animator alpha = ObjectAnimator.ofFloat(handle, ALPHA, 1f, 0f).setDuration(HANDLE_ANIMATION_DURATION);
+        kb24.setPivotY(kb24.getHeight());
+        Animator shrinkerX = ObjectAnimator.ofFloat(kb24, SCALE_X, 1f, 0f).setDuration(HANDLE_ANIMATION_DURATION);
+        Animator shrinkerY = ObjectAnimator.ofFloat(kb24, SCALE_Y, 1f, 0f).setDuration(HANDLE_ANIMATION_DURATION);
+        Animator alpha = ObjectAnimator.ofFloat(kb24, ALPHA, 1f, 0f).setDuration(HANDLE_ANIMATION_DURATION);
         currentAnimator.playTogether(shrinkerX, shrinkerY, alpha);
         currentAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                handle.setVisibility(INVISIBLE);
+                kb24.setVisibility(INVISIBLE);
                 currentAnimator = null;
             }
 
             @Override
             public void onAnimationCancel(Animator animation) {
                 super.onAnimationCancel(animation);
-                handle.setVisibility(INVISIBLE);
+                kb24.setVisibility(INVISIBLE);
                 currentAnimator = null;
             }
         });
-        currentAnimator.start();
+        currentAnimator.start();*/
     }
 
     private class ScrollListener extends RecyclerView.OnScrollListener {

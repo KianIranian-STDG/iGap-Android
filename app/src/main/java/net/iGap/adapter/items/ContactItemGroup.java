@@ -27,6 +27,7 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
+import net.iGap.module.scrollbar.FastScrollerBarBaseAdapter;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
 
@@ -35,7 +36,7 @@ import java.util.List;
 /**
  * Contact item used with FastAdapter for Navigation drawer contacts fragment.
  */
-public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItemGroup.ViewHolder> {
+public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItemGroup.ViewHolder> implements FastScrollerBarBaseAdapter {
     public static OnClickAdapter OnClickAdapter;
     public StructContactInfo mContact;
     private AvatarHandler avatarHandler;
@@ -103,7 +104,8 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         return new ViewHolder(v);
     }
 
-    public String getBubbleText() {
+    @Override
+    public String getBubbleText(int position) {
         if (mContact == null)
             return "-";
         else {

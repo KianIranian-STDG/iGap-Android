@@ -24,7 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fbu_layout_toolbar" />
 
-    <net.iGap.module.FastScroller
+    <net.iGap.module.scrollbar.FastScroller
         android:id="@+id/fast_scroller"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
