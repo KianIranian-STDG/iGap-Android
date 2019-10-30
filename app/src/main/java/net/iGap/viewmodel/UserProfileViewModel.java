@@ -168,7 +168,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
     public SingleLiveEvent<Integer> showError = new SingleLiveEvent<>();
     public MutableLiveData<Drawable> changeUserProfileWallpaper = new MutableLiveData<>();
-    public SingleLiveEvent<Boolean> setCurrentFragment = new SingleLiveEvent<>();
+    public MutableLiveData<Boolean> setCurrentFragment = new SingleLiveEvent<>();
 
     private Realm mRealm;
     private RealmUserInfo userInfo;
@@ -205,7 +205,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             });
         }
 
-
+        setCurrentFragment.setValue(isEditMode());
         appVersion.set(BuildConfig.VERSION_NAME);
 
         //set user info text gravity
@@ -225,7 +225,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void init() {
-        setCurrentFragment.setValue(isEditMode());
+        /*setCurrentFragment.setValue(isEditMode());*/
         isDarkMode.set(G.themeColor == Theme.DARK);
         //set credit amount
         if (G.selectedCard != null) {

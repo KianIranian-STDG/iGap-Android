@@ -100,27 +100,31 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
         }
+
         viewModel.setCurrentFragment.observe(getViewLifecycleOwner(),isEdit->{
-            if (isEdit) {
-                FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-                Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentEditProfile.class.getName());
-                if (fragment == null){
-                    fragment = FragmentEditProfile.newInstance();
-                    fragmentTransaction.addToBackStack(FragmentEditProfile.class.getName());
+            if (isEdit != null) {
+                if (isEdit) {
+                    FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+                    Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentEditProfile.class.getName());
+                    if (fragment == null) {
+                        fragment = FragmentEditProfile.newInstance();
+                        fragmentTransaction.addToBackStack(FragmentEditProfile.class.getName());
+                    }
+                    fragmentTransaction.replace(R.id.frame_edit, fragment, FragmentEditProfile.class.getName()).commit();
+                    binding.addAvatar.setVisibility(View.VISIBLE);
+                } else {
+                    FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+                    Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentProfile.class.getName());
+                    if (fragment == null) {
+                        fragment = FragmentProfile.newInstance();
+                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                    }
+                    fragmentTransaction.replace(R.id.frame_edit, fragment, fragment.getClass().getName()).commit();
+                    binding.addAvatar.setVisibility(View.GONE);
                 }
-                fragmentTransaction.replace(R.id.frame_edit, fragment, FragmentEditProfile.class.getName()).commit();
-                binding.addAvatar.setVisibility(View.VISIBLE);
-            } else {
-                FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-                Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentProfile.class.getName());
-                if (fragment == null){
-                    fragment = FragmentProfile.newInstance();
-                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                }
-                fragmentTransaction.replace(R.id.frame_edit, fragment, fragment.getClass().getName()).commit();
-                binding.addAvatar.setVisibility(View.GONE);
             }
         });
+
         viewModel.changeUserProfileWallpaper.observe(getViewLifecycleOwner(), drawable -> {
             if (drawable != null) {
                 binding.fupBgAvatar.setImageDrawable(drawable);
@@ -159,12 +163,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        viewModel.goToChatPage.observe(getViewLifecycleOwner(), data -> {
-            if (getActivity() != null && data != null) {
-                new GoToChatActivity(data.getRoomId()).setPeerID(data.getPeerId()).startActivity(getActivity());
-            }
-        });
-
         viewModel.showDialogChooseImage.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
                 startDialog();
@@ -188,14 +186,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        viewModel.getShowDialogSelectCountry().observe(getViewLifecycleOwner(), isShow -> {
-            if (isShow != null && isShow) {
-                showCountryDialog();
-            }
-        });
-
-
-
         getChildFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
@@ -206,6 +196,8 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 Log.wtf(this.getClass().getName(), "-------------------------------------------");
             }
         });
+
+        Log.wtf(this.getClass().getName(),"onViewCreated");
 
     }
 
@@ -341,105 +333,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             } else {
                 Toast.makeText(G.fragmentActivity, G.fragmentActivity.getResources().getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    private void showCountryDialog() {
-        if (getActivity() != null) {
-            Dialog dialogChooseCountry = new Dialog(getActivity());
-            dialogChooseCountry.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialogChooseCountry.setContentView(R.layout.rg_dialog);
-
-            dialogChooseCountry.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-            int setWidth = (int) (getResources().getDisplayMetrics().widthPixels * 0.9);
-            int setHeight = (int) (getResources().getDisplayMetrics().heightPixels * 0.9);
-            dialogChooseCountry.getWindow().setLayout(setWidth, setHeight);
-            //
-            final TextView txtTitle = dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
-            SearchView edtSearchView = dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
-            LinearLayout rootView = dialogChooseCountry.findViewById(R.id.country_root);
-            rootView.setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.dialog_background), getContext(), R.attr.rootBackgroundColor));
-
-            txtTitle.setOnClickListener(view -> {
-                edtSearchView.setIconified(false);
-                edtSearchView.setIconifiedByDefault(true);
-                txtTitle.setVisibility(View.GONE);
-            });
-
-            // close SearchView and show title again
-            edtSearchView.setOnCloseListener(() -> {
-                txtTitle.setVisibility(View.VISIBLE);
-                return false;
-            });
-
-            ListView listView = dialogChooseCountry.findViewById(R.id.lstContent);
-            AdapterDialog adapterDialog = new AdapterDialog(getContext(), viewModel.getStructCountryArrayList());
-            listView.setAdapter(adapterDialog);
-            listView.setOnItemClickListener((parent, view, position, id) -> {
-                viewModel.setCountry(adapterDialog.getItem(position));
-                dialogChooseCountry.dismiss();
-            });
-
-            ViewGroup root = dialogChooseCountry.findViewById(android.R.id.content);
-            InputMethodManager im = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-            SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
-            softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
-                @Override
-                public void onSoftKeyboardHide() {
-                    G.handler.post(() -> {
-                        if (edtSearchView.getQuery().toString().length() > 0) {
-                            edtSearchView.setIconified(false);
-                            edtSearchView.clearFocus();
-                            txtTitle.setVisibility(View.GONE);
-                        } else {
-                            edtSearchView.setIconified(true);
-                            txtTitle.setVisibility(View.VISIBLE);
-                        }
-                        adapterDialog.notifyDataSetChanged();
-                    });
-                }
-
-                @Override
-                public void onSoftKeyboardShow() {
-                    G.handler.post(() -> txtTitle.setVisibility(View.GONE));
-                }
-            });
-
-            View border = dialogChooseCountry.findViewById(R.id.rg_borderButton);
-            listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(AbsListView absListView, int i) {
-
-                }
-
-                @Override
-                public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                    if (i > 0) {
-                        border.setVisibility(View.VISIBLE);
-                    } else {
-                        border.setVisibility(View.GONE);
-                    }
-                }
-            });
-
-            adapterDialog.notifyDataSetChanged();
-
-            edtSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String s) {
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String s) {
-                    adapterDialog.getFilter().filter(s);
-                    return false;
-                }
-            });
-
-            dialogChooseCountry.findViewById(R.id.rg_txt_okDialog).setOnClickListener(v -> dialogChooseCountry.dismiss());
-            dialogChooseCountry.show();
         }
     }
 
