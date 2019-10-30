@@ -168,7 +168,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
     public SingleLiveEvent<Integer> showError = new SingleLiveEvent<>();
     public MutableLiveData<Drawable> changeUserProfileWallpaper = new MutableLiveData<>();
-    public MutableLiveData<Boolean> setCurrentFragment = new MutableLiveData<>();
+    public SingleLiveEvent<Boolean> setCurrentFragment = new SingleLiveEvent<>();
 
     private Realm mRealm;
     private RealmUserInfo userInfo;
