@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -85,8 +87,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_user_profile, container, false);
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.frame_edit, FragmentProfile.newInstance(), null).commit();
         viewModel.init();
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
@@ -100,21 +100,27 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
         }
-        binding.editProfile.setOnClickListener(view1 -> {
-            viewModel.onEditProfileClick();
-            if (viewModel.setCurrentFragment.getValue()) {
+        viewModel.setCurrentFragment.observe(getViewLifecycleOwner(),isEdit->{
+            if (isEdit) {
                 FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frame_edit, FragmentEditProfile.newInstance(), null).setCustomAnimations(R.anim.fade_in,R.anim.fade_out).commit();
-                fragmentTransaction.addToBackStack(null);
+                Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentEditProfile.class.getName());
+                if (fragment == null){
+                    fragment = FragmentEditProfile.newInstance();
+                    fragmentTransaction.addToBackStack(FragmentEditProfile.class.getName());
+                }
+                fragmentTransaction.replace(R.id.frame_edit, fragment, FragmentEditProfile.class.getName()).commit();
                 binding.addAvatar.setVisibility(View.VISIBLE);
             } else {
                 FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frame_edit, FragmentProfile.newInstance(), null).setCustomAnimations(R.anim.fade_in,R.anim.fade_out).commit();
-                fragmentTransaction.addToBackStack(null);
+                Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentProfile.class.getName());
+                if (fragment == null){
+                    fragment = FragmentProfile.newInstance();
+                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
+                }
+                fragmentTransaction.replace(R.id.frame_edit, fragment, fragment.getClass().getName()).commit();
                 binding.addAvatar.setVisibility(View.GONE);
             }
         });
-
         viewModel.changeUserProfileWallpaper.observe(getViewLifecycleOwner(), drawable -> {
             if (drawable != null) {
                 binding.fupBgAvatar.setImageDrawable(drawable);
@@ -185,6 +191,19 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         viewModel.getShowDialogSelectCountry().observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null && isShow) {
                 showCountryDialog();
+            }
+        });
+
+
+
+        getChildFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                Log.wtf(this.getClass().getName(), "-------------------------------------------");
+                for (int i = 0; i < getChildFragmentManager().getBackStackEntryCount(); i++) {
+                    Log.wtf(this.getClass().getName(), "fragment: " + getChildFragmentManager().getBackStackEntryAt(i).getName());
+                }
+                Log.wtf(this.getClass().getName(), "-------------------------------------------");
             }
         });
 

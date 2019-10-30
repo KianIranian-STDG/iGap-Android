@@ -57,6 +57,7 @@
                     android:layout_height="@dimen/toolbar_icon_size"
                     android:layout_gravity="end"
                     android:layout_margin="8dp"
+                    android:onClick="@{()->viewModel.onEditProfileClick()}"
                     android:text="@{viewModel.editProfileIcon}"
                     app:layout_anchor="@id/toolbar_layout_collapse"
                     app:layout_collapseMode="pin" />

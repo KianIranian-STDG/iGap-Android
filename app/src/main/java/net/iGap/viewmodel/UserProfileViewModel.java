@@ -386,25 +386,24 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 isEditProfile.setValue(false);
                 getReferral();
             }
-
         }
         setCurrentFragment.setValue(isEditProfile.getValue());
     }
-//    public void onEditProfileClick() {
-//        if (isEditProfile.getValue() != null && isEditProfile.getValue()) {
-//            if (editProfileIcon.get() == R.string.check_icon) {
-//                submitData();
-//            } else {
-//                editProfileIcon.set(R.string.edit_icon);
-//                isEditProfile.setValue(false);
-//            }
-//        } else {
-//            editProfileIcon.set(R.string.close_icon);
-//            isEditProfile.setValue(true);
-//            getReferral();
-//        }
-//        setCurrentFragment.setValue(isEditProfile.getValue());
-//    }
+  /*  public void onEditProfileClick() {
+        if (isEditProfile.getValue() != null && isEditProfile.getValue()) {
+            if (editProfileIcon.get() == R.string.check_icon) {
+                submitData();
+            } else {
+                editProfileIcon.set(R.string.edit_icon);
+                isEditProfile.setValue(false);
+            }
+        } else {
+            editProfileIcon.set(R.string.close_icon);
+            isEditProfile.setValue(true);
+            getReferral();
+        }
+        setCurrentFragment.setValue(isEditProfile.getValue());
+    }*/
 
     public void onCloudMessageClick() {
         showLoading.set(View.VISIBLE);
