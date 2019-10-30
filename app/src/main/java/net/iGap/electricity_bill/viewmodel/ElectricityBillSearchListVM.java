@@ -89,7 +89,7 @@ public class ElectricityBillSearchListVM extends BaseAPIViewModel {
             progressVisibility.set(View.GONE);
             return;
         }
-
+        errorVisibility.set(View.GONE);
         new ElectricityBillAPIRepository().searchBills(billSerial.get(), String.valueOf(mCompanyData.getValue().getCompaniesList().get(companyPosition).getCode()), this, new ResponseCallback<ElectricityResponseList<BranchData>>() {
             @Override
             public void onSuccess(ElectricityResponseList<BranchData> data) {
