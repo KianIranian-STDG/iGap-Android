@@ -988,7 +988,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 } else {
                     replayView.setBackgroundResource(new Theme().getReceivedReplay(replayView.getContext()));
                 }
-                replyFrom.setTextColor(new Theme().getPrimaryTextColor(replyFrom.getContext()));
+                replyFrom.setTextColor(new Theme().getAccentColor(replyFrom.getContext()));
                 replayMessage.setTextColor(new Theme().getPrimaryTextColor(replayMessage.getContext()));
 
                 replyFrom.measure(0, 0);       //must call measure!

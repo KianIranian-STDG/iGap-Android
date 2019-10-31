@@ -1,12 +1,8 @@
 package net.iGap.fragments;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,17 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -40,9 +29,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
-import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.FragmentUserProfileBinding;
-import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
@@ -54,7 +41,6 @@ import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.SoftKeyboard;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.viewmodel.UserProfileViewModel;
 
@@ -64,7 +50,6 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
-
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 public class FragmentUserProfile extends BaseMainFragments implements FragmentEditImage.OnImageEdited {
@@ -186,6 +171,12 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
+        viewModel.getPopBackStack().observe(getViewLifecycleOwner(),isPopBackStack->{
+            if (isPopBackStack!= null&& isPopBackStack){
+                getChildFragmentManager().popBackStack();
+            }
+        });
+
         getChildFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
@@ -246,39 +237,12 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     }
 
     private void startDialog() {
-        /*List<String> items = new ArrayList<>();
-        items.add(getString(R.string.gallery));
-        items.add(getString(R.string.remove));
-        new SelectImageBottomSheetDialog().setData(items, 0, position -> {
-            if (position == 0) {
-                try {
-                    HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
-                        @Override
-                        public void Allow() {
-                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            intent.setType("image/*");
-                            startActivityForResult(Intent.createChooser(intent, getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
-                        }
-
-                        @Override
-                        public void deny() {
-
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-
-            }
-        }).show(getFragmentManager(), "test");*/
-
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+        new MaterialDialog.Builder(getActivity()).title(R.string.choose_picture).negativeText(R.string.B_cancel).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
-                if (text.toString().equals(G.fragmentActivity.getResources().getString(R.string.array_From_Camera))) { // camera
+                if (text.toString().equals(getString(R.string.array_From_Camera))) { // camera
                     try {
-                        HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
+                        HelperPermission.getCameraPermission(getActivity(), new OnGetPermission() {
                             @Override
                             public void Allow() {
                                 dialog.dismiss();
@@ -295,7 +259,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                     }
                 } else {
                     try {
-                        HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                        HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
                             @Override
                             public void Allow() {
                                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -331,7 +295,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
 
             } else {
-                Toast.makeText(G.fragmentActivity, G.fragmentActivity.getResources().getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
             }
         }
     }

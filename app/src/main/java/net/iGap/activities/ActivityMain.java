@@ -52,7 +52,6 @@ import com.google.zxing.integration.android.IntentResult;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.dialog.SubmitScoreDialog;
 import net.iGap.eventbus.EventListener;
@@ -70,10 +69,8 @@ import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
-import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCalculateKeepMedia;
-import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
@@ -82,7 +79,6 @@ import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperPublicMethod;
-import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
 import net.iGap.interfaces.FinishActivity;
@@ -90,7 +86,6 @@ import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnGetWallpaper;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.interfaces.OnMapRegisterStateMain;
@@ -113,19 +108,13 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.payment.Payment;
 import net.iGap.payment.PaymentFragment;
-import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.proto.ProtoInfoWallpaper;
 import net.iGap.proto.ProtoSignalingOffer;
-import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.realm.RealmWallpaper;
-import net.iGap.realm.RealmWallpaperFields;
-import net.iGap.request.RequestInfoWallpaper;
 import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletGetAccessToken;
@@ -182,6 +171,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private boolean isNeedToRegister = false;
     private int retryConnectToWallet = 0;
     public static String userPhoneNumber;
+    private BroadcastReceiver audioManagerReciver;
+    private MyPhonStateService myPhonStateService;
 
     public static void setMediaLayout() {
         try {
@@ -277,7 +268,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         super.onDestroy();
         if (G.ISRealmOK) {
             mRealm.close();
+            if (myPhonStateService != null) {
+                unregisterReceiver(myPhonStateService);
+            }
 
+            if (audioManagerReciver != null) {
+                unregisterReceiver(audioManagerReciver);
+            }
             if (G.imageLoader != null) {
                 G.imageLoader.clearMemoryCache();
             }
@@ -448,7 +445,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             initTabStrip(getIntent());
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PHONE_STATE");
-            MyPhonStateService myPhonStateService = new MyPhonStateService();
+            myPhonStateService = new MyPhonStateService();
 
             //add it for handle ssl handshake error
             checkGoogleUpdate();
@@ -466,7 +463,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     AudioManager.RINGER_MODE_CHANGED_ACTION);
 
 
-            BroadcastReceiver audioManagerReciver = new BroadcastReceiver() {
+            audioManagerReciver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     //code...
