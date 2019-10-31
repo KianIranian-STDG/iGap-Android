@@ -94,7 +94,6 @@ import com.google.gson.JsonSyntaxException;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-import com.squareup.picasso.Picasso;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
@@ -147,7 +146,6 @@ import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
-import net.iGap.eventbus.PaymentFragment;
 import net.iGap.fragments.chatMoneyTransfer.ChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.OnUpdateSticker;
@@ -440,7 +438,6 @@ public class FragmentChat extends BaseFragment
     public boolean rcTouchListener;
     BotInit botInit;
     PaymentDialogBinding paymentDialogBinding;
-    PaymentFragment paymentDialog;
     boolean isAnimateStart = false;
     boolean isScrollEnd = false;
     private boolean isShareOk = true;
@@ -609,7 +606,7 @@ public class FragmentChat extends BaseFragment
     private int receiveMessageSound;
     private String TAG = "messageSound";
     private ChatAttachmentPopup mAttachmentPopup;
-    private int messageLentghCounter ;
+    private int messageLentghCounter;
     private int oldMessageLentghCounter;
 
     public static Realm getRealmChat() {
@@ -1783,7 +1780,7 @@ public class FragmentChat extends BaseFragment
                 } else {
                     if (userStatus != null) {
                         if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext() ,chatPeerId, userTime, true, false));
+                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext(), chatPeerId, userTime, true, false));
                         } else {
                             txtLastSeen.setText(userStatus);
                         }
@@ -2765,7 +2762,7 @@ public class FragmentChat extends BaseFragment
         //added run time -> counter of un read messages
         llScrollNavigate = rootView.findViewById(R.id.ac_ll_scrool_navigate);
         txtNewUnreadMessage = new BadgeView(getContext());
-        txtNewUnreadMessage.getTextView().setTypeface(ResourcesCompat.getFont(txtNewUnreadMessage.getContext() , R.font.main_font));
+        txtNewUnreadMessage.getTextView().setTypeface(ResourcesCompat.getFont(txtNewUnreadMessage.getContext(), R.font.main_font));
         txtNewUnreadMessage.getTextView().setSingleLine();
         txtNewUnreadMessage.getTextView().setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});//set max length
         txtNewUnreadMessage.setBadgeColor(new Theme().getPrimaryDarkColor(txtNewUnreadMessage.getContext()));
@@ -3046,7 +3043,7 @@ public class FragmentChat extends BaseFragment
                 }
 
                 oldMessageLentghCounter = 0;
-                messageLentghCounter = 0 ;
+                messageLentghCounter = 0;
 
             }
         });
@@ -3131,7 +3128,6 @@ public class FragmentChat extends BaseFragment
         });
 
 
-
         // to toggle between keyboard and emoji popup
         imvSmileButton.setOnClickListener(new View.OnClickListener() {
 
@@ -3186,11 +3182,11 @@ public class FragmentChat extends BaseFragment
                     imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
                 }*/
 
-               messageLentghCounter = ((int) Math.ceil((float) text.length() / (float) Config.MAX_TEXT_LENGTH) );
-               if ( messageLentghCounter > 1 && messageLentghCounter != oldMessageLentghCounter && getContext() != null){
-                   oldMessageLentghCounter = messageLentghCounter ;
-                   Toast.makeText(getContext(), getString(R.string.message_is_long) + " " + messageLentghCounter + " " + getString(R.string.message) , Toast.LENGTH_SHORT).show();
-               }
+                messageLentghCounter = ((int) Math.ceil((float) text.length() / (float) Config.MAX_TEXT_LENGTH));
+                if (messageLentghCounter > 1 && messageLentghCounter != oldMessageLentghCounter && getContext() != null) {
+                    oldMessageLentghCounter = messageLentghCounter;
+                    Toast.makeText(getContext(), getString(R.string.message_is_long) + " " + messageLentghCounter + " " + getString(R.string.message), Toast.LENGTH_SHORT).show();
+                }
 
             }
 
@@ -3788,10 +3784,10 @@ public class FragmentChat extends BaseFragment
                                 isAllSenderId = false;
                                 //}
                             } else if (channelRole == ChannelChatRole.ADMIN) {
-                               // if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
+                                // if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
                                 mBtnDeleteSelected.setVisibility(View.GONE);
                                 isAllSenderId = false;
-                               // }
+                                // }
                             }
                         } else {
                             mBtnDeleteSelected.setVisibility(View.VISIBLE);
@@ -4283,7 +4279,7 @@ public class FragmentChat extends BaseFragment
         mAdapter.deselect();
 
         if (getActivity() == null) return;
-        HelperUrl.openLinkDialog(getActivity() , url);
+        HelperUrl.openLinkDialog(getActivity(), url);
     }
 
     @Override
@@ -4341,11 +4337,11 @@ public class FragmentChat extends BaseFragment
         items.add(getString(R.string.delete_item_dialog));
 
         //check and remove share base on type and download state
-        if (roomMessageType.toString().equals("LOCATION") || roomMessageType.toString().equals("VOICE")){
+        if (roomMessageType.toString().equals("LOCATION") || roomMessageType.toString().equals("VOICE")) {
 
             items.remove(getString(R.string.share_item_dialog));
 
-        }else if (!roomMessageType.toString().equals("TEXT") && !roomMessageType.toString().equals("CONTACT")) {
+        } else if (!roomMessageType.toString().equals("TEXT") && !roomMessageType.toString().equals("CONTACT")) {
 
             String filepath_;
             if (message.forwardedFrom != null) {
@@ -4758,7 +4754,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void editTextRequestFocus(EditText editText) {
-        if(getContext() != null){
+        if (getContext() != null) {
             editText.requestFocus();
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
@@ -4924,7 +4920,7 @@ public class FragmentChat extends BaseFragment
                         } else {
                             if (userStatus != null) {
                                 if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext() ,chatPeerId, userTime, true, false));
+                                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext(), chatPeerId, userTime, true, false));
                                 } else {
                                     txtLastSeen.setText(userStatus);
                                 }
@@ -5235,7 +5231,7 @@ public class FragmentChat extends BaseFragment
                     } else {
                         if (status != null && txtLastSeen != null) {
                             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                                txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext() ,chatPeerId, time, true, false));
+                                txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext(), chatPeerId, time, true, false));
                             } else {
                                 txtLastSeen.setText(status);
                             }
@@ -5288,7 +5284,7 @@ public class FragmentChat extends BaseFragment
                 } else {
                     if (userStatus != null) {
                         if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext() ,chatPeerId, userTime, true, false));
+                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext(), chatPeerId, userTime, true, false));
                         } else {
                             txtLastSeen.setText(userStatus);
                         }
@@ -5693,7 +5689,7 @@ public class FragmentChat extends BaseFragment
      * emoji initialization
      */
     private void setUpEmojiPopup() {
-        setEmojiColor(new Theme().getRootColor(getContext()), new Theme().getTitleTextColor(getContext()),new Theme().getTitleTextColor(getContext()));
+        setEmojiColor(new Theme().getRootColor(getContext()), new Theme().getTitleTextColor(getContext()), new Theme().getTitleTextColor(getContext()));
 
     }
 
@@ -6218,8 +6214,8 @@ public class FragmentChat extends BaseFragment
                 if (HelperGetDataFromOtherApp.hasSharedData) {
                     HelperGetDataFromOtherApp.hasSharedData = false;
 
-                    boolean isOpenEditImageFragment = false ;
-                    boolean isAllowToClearChatEditText = true ;
+                    boolean isOpenEditImageFragment = false;
+                    boolean isAllowToClearChatEditText = true;
                     for (HelperGetDataFromOtherApp.SharedData sharedData : HelperGetDataFromOtherApp.sharedList) {
 
                         edtChat.setText(sharedData.message);
@@ -6239,7 +6235,7 @@ public class FragmentChat extends BaseFragment
                                         intent.putExtra("PATH", mainVideoPath);
                                         startActivityForResult(intent, AttachFile.request_code_trim_video);
                                         isAllowToClearChatEditText = false;
-                                    }else {
+                                    } else {
                                         G.handler.postDelayed(() -> new VideoCompressor().execute(mainVideoPath, savePathVideoCompress), 200);
                                         sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
                                     }
@@ -6257,8 +6253,8 @@ public class FragmentChat extends BaseFragment
                                 break;
                             case image:
                                 //maybe share data was more than one ... add to list then after for open edit image
-                                FragmentEditImage.insertItemList(sharedData.address , sharedData.message , false);
-                                isOpenEditImageFragment = true ;
+                                FragmentEditImage.insertItemList(sharedData.address, sharedData.message, false);
+                                isOpenEditImageFragment = true;
                                 //sendMessage(AttachFile.request_code_TAKE_PICTURE, sharedData.address);
                                 break;
                         }
@@ -6267,14 +6263,14 @@ public class FragmentChat extends BaseFragment
                     }
 
                     if (isOpenEditImageFragment && getActivity() != null) {
-                        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, FragmentEditImage.itemGalleryList.size()-1);
+                        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, FragmentEditImage.itemGalleryList.size() - 1);
                         fragmentEditImage.setIsOpenForShareImages(true);
                         new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                     }
 
                     HelperGetDataFromOtherApp.sharedList.clear();
                     //update main room list ui after share done
-                    if (getActivity() instanceof ActivityMain){
+                    if (getActivity() instanceof ActivityMain) {
                         ((ActivityMain) getActivity()).checkHasSharedData(false);
                     }
 
@@ -6375,7 +6371,7 @@ public class FragmentChat extends BaseFragment
                     break;
             }
 
-            if (!isShareOk){
+            if (!isShareOk) {
                 G.handler.post(() -> Toast.makeText(context, R.string.file_not_download_yet, Toast.LENGTH_SHORT).show());
                 return;
             }
@@ -6723,9 +6719,9 @@ public class FragmentChat extends BaseFragment
             mReplayLayout = rootView.findViewById(R.id.replayLayoutAboveEditText);
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = mReplayLayout.findViewById(R.id.replayTo);
-            replayTo.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext() , R.font.main_font));
+            replayTo.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext(), R.font.main_font));
             TextView replayFrom = mReplayLayout.findViewById(R.id.replyFrom);
-            replayFrom.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext() , R.font.main_font));
+            replayFrom.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext(), R.font.main_font));
 
             FontIconTextView replayIcon = rootView.findViewById(R.id.lcr_imv_replay);
             if (isEdit)

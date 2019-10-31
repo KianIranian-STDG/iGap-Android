@@ -21,6 +21,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentProfileBinding;
+import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
@@ -29,9 +30,13 @@ import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.UserProfileViewModel;
 
+import org.paygear.WalletActivity;
+
 import java.io.IOException;
 
-public class FragmentProfile extends BaseFragment{
+import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
+
+public class FragmentProfile extends BaseFragment {
     private FragmentProfileBinding binding;
     private UserProfileViewModel viewModel;
 
@@ -53,13 +58,14 @@ public class FragmentProfile extends BaseFragment{
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                 return (T) new UserProfileViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), avatarHandler);
             }
-        }).get(UserProfileViewModel.class); }
+        }).get(UserProfileViewModel.class);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false);
-        viewModel.init();
+        /*viewModel.init();*/
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
@@ -69,8 +75,8 @@ public class FragmentProfile extends BaseFragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel.goToWalletPage.observe(getViewLifecycleOwner(), phoneNumber -> {
-            if (getContext() != null && phoneNumber != null) {
-                new HelperWallet().goToWallet(getContext(), phoneNumber, false);
+            if (getActivity() != null && phoneNumber != null) {
+                getActivity().startActivityForResult(new HelperWallet().goToWallet(getActivity(), new Intent(getActivity(), WalletActivity.class), phoneNumber, false), WALLET_REQUEST_CODE);
             }
         });
 
@@ -82,6 +88,12 @@ public class FragmentProfile extends BaseFragment{
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
+            }
+        });
+
+        viewModel.goToChatPage.observe(getViewLifecycleOwner(), data -> {
+            if (getActivity() != null && data != null) {
+                new GoToChatActivity(data.getRoomId()).setPeerID(data.getPeerId()).startActivity(getActivity());
             }
         });
 
