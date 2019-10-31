@@ -3,6 +3,7 @@ package net.iGap.electricity_bill.view;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -208,4 +210,12 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
         new MaterialDialog.Builder(getContext()).title(title).positiveText(getResources().getString(R.string.ok)).content(message).show();
     }
 
+    @Override
+    public boolean onBackPressed() {
+        Fragment fragment = getFragmentManager().findFragmentByTag(ElectricityBillListFrag.class.getName());
+        if (fragment != null){
+            ((ElectricityBillListFrag)fragment).refreshData();
+        }
+        return false;
+    }
 }

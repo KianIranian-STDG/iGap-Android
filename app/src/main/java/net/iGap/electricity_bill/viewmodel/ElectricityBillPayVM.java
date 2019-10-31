@@ -60,7 +60,7 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
                 if (data.getStatus() == 200) {
                     debit = new Bill(debit.getID(), data.getData().getPaymentIDConverted(), data.getData().getTotalBillDebtConverted(), data.getData().getPaymentDeadLineDate());
                     billPayID.set(data.getData().getPaymentIDConverted());
-                    billPrice.set(new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(data.getData().getTotalBillDebtConverted())) + " ریال");
+                    billPrice.set(data.getData().getTotalBillDebtConverted() + " ریال");
                     billTime.set(data.getData().getPaymentDeadLineDate());
                 }
             }

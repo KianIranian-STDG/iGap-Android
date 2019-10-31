@@ -169,6 +169,7 @@
                     android:minHeight="48dp"
                     android:hint="@string/elecBill_add_UserNID"
                     android:textColorHint="?iGapHintTextColor"
+                    android:visibility="gone"
                     app:errorText="@{viewmodel.billUserIDError}"
                     app:errorEnabled="@{viewmodel.billUserIDErrorEnable}"
                     app:layout_constraintEnd_toEndOf="parent"

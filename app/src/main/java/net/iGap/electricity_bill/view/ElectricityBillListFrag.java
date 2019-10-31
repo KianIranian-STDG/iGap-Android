@@ -94,7 +94,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                                         .negativeText(R.string.elecBill_deleteAccount_neg)
                                         .positiveColor(getContext().getResources().getColor(R.color.red))
                                         .widgetColor(new Theme().getAccentColor(getContext()))
-                                        .onPositive((dialog1, which) -> elecBillVM.deleteItem(position))
+                                        .onPositive((dialog1, which) -> elecBillVM.deleteAccount())
                                         .build();
                                 dialog.show();
                             }
@@ -144,11 +144,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
 
 
     private void showDialog(String title, String message, String btnRes) {
-        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-        defaultRoundDialog.setTitle(title);
-        defaultRoundDialog.setMessage(message);
-        defaultRoundDialog.setPositiveButton(btnRes, (dialog, id) -> dialog.dismiss());
-        defaultRoundDialog.show();
+        new MaterialDialog.Builder(getContext()).title(title).positiveText(btnRes).content(message).show();
     }
 
 
@@ -173,8 +169,8 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                             .positiveColor(getContext().getResources().getColor(R.color.red))
                             .widgetColor(new Theme().getAccentColor(getContext()))
                             .onPositive((dialog1, which) -> {
+                                elecBillVM.deleteItem(item);
                                 Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
-                                elecBillVM.deleteAccount();
                             })
                             .build();
                     dialog.show();
@@ -203,4 +199,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
         }
     }
 
+    public void refreshData() {
+        elecBillVM.getBranchData();
+    }
 }
