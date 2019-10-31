@@ -17,7 +17,7 @@
         <item name="iGapDividerLine">@color/gray_4c</item>
         <item name="iGapHintTextColor">@color/hint_edit_text</item>
         <item name="iGapButtonColor">@color/players_dark_background</item>
-        <item name="iGapButtonTextColor">@color/players_dark_background</item>
+        <item name="iGapButtonTextColor">@color/white</item>
         <item name="iGapPrimaryIconTextColor">@color/white</item>
         <item name="iGapLogoutButtonColor">@color/players_dark_background</item>
         <item name="iGapCardViewColor">@color/gray_6c</item>

@@ -153,16 +153,15 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
 
 
     private void initRecycler(Map<BillData.BillDataModel, BranchDebit> bills) {
-        adapter = new ElectricityBillListAdapter(getContext(), bills, (position, btnAction) -> {
-            BranchDebit temp = elecBillVM.getmMapData().getValue().get(new ArrayList<>(elecBillVM.getmMapData().getValue().keySet()).get(position));
-            BillData.BillDataModel dataModel = new ArrayList<>(elecBillVM.getmMapData().getValue().keySet()).get(position);
+        adapter = new ElectricityBillListAdapter(getContext(), bills, (item, btnAction) -> {
+            BranchDebit temp = elecBillVM.getmMapData().getValue().get(item);
             switch (btnAction) {
                 case PAY:
-                    elecBillVM.payBill(position);
+                    elecBillVM.payBill(item);
                     break;
                 case EDIT:
                     new HelperFragment(getFragmentManager(),
-                            ElectricityBillAddFrag.newInstance(temp.getBillID(), dataModel.getBillTitle(),
+                            ElectricityBillAddFrag.newInstance(temp.getBillID(), item.getBillTitle(),
                                     String.valueOf(elecBillVM.getNationalID()), true)).setReplace(false).load();
                     break;
                 case DELETE:
@@ -182,7 +181,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                     break;
                 case SHOW_DETAIL:
                     new HelperFragment(getFragmentManager(),
-                            ElectricityBillPayFrag.newInstance(temp.getBillID(), temp.getPaymentID(), temp.getTotalBillDebt(), true))
+                            ElectricityBillPayFrag.newInstance(temp.getBillID(), temp.getPaymentIDConverted(), temp.getTotalBillDebtConverted(), true))
                             .setReplace(false).load();
                     break;
             }

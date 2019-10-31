@@ -14,6 +14,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.api.errorhandler.ErrorModel;
@@ -203,11 +205,7 @@ public class ElectricityBillAddFrag extends BaseAPIViewFrag {
     }
 
     private void showDialog(String title, String message) {
-        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-        defaultRoundDialog.setTitle(title);
-        defaultRoundDialog.setMessage(message);
-        defaultRoundDialog.setPositiveButton(getResources().getString(R.string.ok), (dialog, id) -> dialog.dismiss());
-        defaultRoundDialog.show();
+        new MaterialDialog.Builder(getContext()).title(title).positiveText(getResources().getString(R.string.ok)).content(message).show();
     }
 
 }

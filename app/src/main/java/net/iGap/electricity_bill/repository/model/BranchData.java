@@ -45,7 +45,7 @@ public class BranchData {
     @SerializedName("amper")
     private String amper;
     @SerializedName("contract_demand")
-    private int contractDemand;
+    private double contractDemand;
     @SerializedName("tariff_type")
     private String tariffType;
     @SerializedName("customer_type")

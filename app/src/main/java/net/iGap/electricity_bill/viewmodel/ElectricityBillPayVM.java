@@ -58,9 +58,9 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
             public void onSuccess(ElectricityResponseModel<BranchDebit> data) {
                 progressVisibilityData.set(View.GONE);
                 if (data.getStatus() == 200) {
-                    debit = new Bill(debit.getID(), data.getData().getPaymentID(), data.getData().getTotalBillDebt(), data.getData().getPaymentDeadLineDate());
-                    billPayID.set(data.getData().getPaymentID());
-                    billPrice.set(new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(data.getData().getTotalBillDebt())) + " ریال");
+                    debit = new Bill(debit.getID(), data.getData().getPaymentIDConverted(), data.getData().getTotalBillDebtConverted(), data.getData().getPaymentDeadLineDate());
+                    billPayID.set(data.getData().getPaymentIDConverted());
+                    billPrice.set(new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(data.getData().getTotalBillDebtConverted())) + " ریال");
                     billTime.set(data.getData().getPaymentDeadLineDate());
                 }
             }
@@ -98,11 +98,11 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
         };
 
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
-        if (debit.getPayID().startsWith(debit.getPrice().replace("0", "").replace(",","").replace(" ریال", ""))) {
+        if (debit.getPayID().startsWith(debit.getPrice().replace("000", "").replace(",","").replace(" ریال", ""))) {
             requestMplGetBillToken.mplGetBillToken(Long.parseLong(debit.getID()), Long.parseLong(debit.getPayID()));
         }
         else {
-            requestMplGetBillToken.mplGetBillToken(Long.parseLong(debit.getID()), Long.parseLong(debit.getPrice().replace("0", "").replace(",","").replace(" ریال", "") + debit.getPayID()));
+            requestMplGetBillToken.mplGetBillToken(Long.parseLong(debit.getID()), Long.parseLong(debit.getPrice().replace("000", "").replace(",","").replace(" ریال", "") + debit.getPayID()));
         }
     }
 

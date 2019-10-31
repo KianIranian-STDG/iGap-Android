@@ -1,5 +1,6 @@
 package net.iGap.electricity_bill.viewmodel;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
@@ -93,9 +94,9 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
                 });
     }
 
-    public void payBill (int position){
+    public void payBill (BillData.BillDataModel item){
 
-        BranchDebit tmp = mMapData.getValue().get(new ArrayList<>(mMapData.getValue().keySet()).get(position));
+        BranchDebit tmp = mMapData.getValue().get(item);
         if (tmp == null || tmp.getPaymentID() == null || tmp.getPaymentID().equals("") || tmp.getPaymentID().equals("null")) {
             errorM.setValue(new ErrorModel("" , "003"));
             return;
@@ -114,10 +115,14 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
                 errorM.setValue(new ErrorModel("", "001"));
             }
         };
-
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
-        requestMplGetBillToken.mplGetBillToken(Long.parseLong(tmp.getBillID()),
-                Long.parseLong(tmp.getTotalBillDebt().replace("0","")) + Long.parseLong(tmp.getPaymentID()));
+        if (tmp.getPaymentID().startsWith(tmp.getTotalBillDebt().replace("000", "").replace(",","").replace(" ریال", ""))) {
+            requestMplGetBillToken.mplGetBillToken(Long.parseLong(tmp.getBillID()), Long.parseLong(tmp.getPaymentID()));
+        }
+        else {
+            requestMplGetBillToken.mplGetBillToken(Long.parseLong(tmp.getBillID()),
+                    Long.parseLong(tmp.getTotalBillDebt().replace("000","").replace(",","").replace(" ریال", "") + tmp.getPaymentID()));
+        }
     }
 
     public void deleteItem(int position) {

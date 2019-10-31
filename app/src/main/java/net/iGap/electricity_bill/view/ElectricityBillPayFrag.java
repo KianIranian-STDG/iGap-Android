@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,8 +18,10 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBillPayBinding;
@@ -29,7 +32,9 @@ import net.iGap.electricity_bill.viewmodel.ElectricityBillPayVM;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperMimeType;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.ToolbarListener;
 
 import java.io.File;
@@ -37,6 +42,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import static net.iGap.G.context;
+import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 public class ElectricityBillPayFrag extends BaseAPIViewFrag {
 
@@ -155,11 +161,9 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
     }
 
     private void showDialog(String title, String message, String btnRes) {
-        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-        defaultRoundDialog.setTitle(title);
-        defaultRoundDialog.setMessage(message);
-        defaultRoundDialog.setPositiveButton(btnRes, (dialog, id) -> dialog.dismiss());
-        defaultRoundDialog.show();
+
+        new MaterialDialog.Builder(getContext()).title(title).positiveText(btnRes).content(message).show();
+
     }
 
     public void onBranchInfoBtnClick() {
@@ -209,7 +213,18 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
     }
 
     private void showSuccessMessage(String path) {
-        Snackbar.make(binding.Container, R.string.elecBill_image_success, Snackbar.LENGTH_LONG)
+        Intent intent = HelperMimeType.appropriateProgram(path);
+        if (intent != null) {
+            try {
+                startActivity(intent);
+            } catch (Exception e) {
+                // to prevent from 'No Activity found to handle Intent'
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(context, R.string.can_not_open_file, Toast.LENGTH_SHORT).show();
+        }
+        /*Snackbar.make(binding.Container, R.string.elecBill_image_success, Snackbar.LENGTH_LONG)
                 .setAction(R.string.elecBill_image_open, v -> {
                     Intent intent = HelperMimeType.appropriateProgram(path);
                     if (intent != null) {
@@ -222,7 +237,7 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
                     } else {
                         Toast.makeText(context, R.string.can_not_open_file, Toast.LENGTH_SHORT).show();
                     }
-                }).show();
+                }).show();*/
     }
 
     /* Checks if external storage is available for read and write */
