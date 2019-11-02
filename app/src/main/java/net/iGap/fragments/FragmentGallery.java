@@ -88,10 +88,11 @@ public class FragmentGallery extends BaseFragment {
                 MediaStore.Images.Media._ID,
                 MediaStore.Images.Media.BUCKET_ID,
                 MediaStore.MediaColumns.DATA,
-                MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME ,
+                MediaStore.Images.ImageColumns.DATE_TAKEN
         };
 
-        Cursor cursor = getContext().getContentResolver().query(uri, projection, null, null, null);
+        Cursor cursor = getContext().getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_TAKEN);
 
         ArrayList<String> ids = new ArrayList<>();
         if (cursor != null) {
@@ -103,6 +104,10 @@ public class FragmentGallery extends BaseFragment {
                         album.setCaption(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)));
                         album.setCover(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA)));
                         if (!album.getCover().contains(".gif")) {
+                            //check and add ALL for first item
+                            if (albums.size() == 0){
+                                albums.add(new GalleryAlbumModel("-1" , getString(R.string.all) , album.getCover()));
+                            }
                             albums.add(album);
                             ids.add(album.getId());
                         }

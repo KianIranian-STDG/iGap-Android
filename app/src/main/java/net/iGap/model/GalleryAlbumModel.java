@@ -7,6 +7,15 @@ public class GalleryAlbumModel {
     private String caption = "";
     private String cover ;
 
+    public GalleryAlbumModel() {
+    }
+
+    public GalleryAlbumModel(String id, String caption, String cover) {
+        this.id = id;
+        this.caption = caption;
+        this.cover = cover;
+    }
+
     public String getId() {
         return id;
     }
