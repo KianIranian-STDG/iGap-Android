@@ -3850,14 +3850,14 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onMessageUpdate(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, final ProtoGlobal.RoomMessage roomMessage) {
         // I'm in the room
-        if (roomId == mRoomId && mAdapter != null) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (roomId == mRoomId && mAdapter != null) {
                     mAdapter.updateMessageIdAndStatus(messageId, identity, status, roomMessage);
                 }
-            });
-        }
+            }
+        });
 
         if (soundPool != null && sendMessageSound != 0)
             playSendSound(roomId, roomMessage, chatType);

@@ -1747,7 +1747,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      *
      * @param holder VH
      */
-    private void prepareProgress(final VH holder) {
+    public void prepareProgress(final VH holder) {
         if (structMessage.getSendType() == MyType.SendType.send) {
 
             final MessageProgress progressBar = ((IProgress) holder).getProgress();

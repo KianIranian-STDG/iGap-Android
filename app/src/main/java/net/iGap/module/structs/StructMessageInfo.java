@@ -189,6 +189,12 @@ public class StructMessageInfo implements Parcelable {
                     //mAdapter.notifyItemChanged(mAdapter.getPosition(identifier));
                 }
 
+                for (String change: changeSet.getChangedFields()) {
+                    if (change.equals(RealmAttachmentFields.LOCAL_FILE_PATH)) {
+                        abstractMessage.prepareProgress(holder);
+                    }
+                }
+
             };
             liverRealmAttachment.addChangeListener(realmAttachmentRealmChangeListener);
         });
