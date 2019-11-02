@@ -78,13 +78,14 @@ public class FragmentProfile extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel.goToWalletPage.observe(getViewLifecycleOwner(), phoneNumber -> {
+
+        viewModel.getGoToWalletPage().observe(getViewLifecycleOwner(), phoneNumber -> {
             if (getActivity() != null && phoneNumber != null) {
                 getActivity().startActivityForResult(new HelperWallet().goToWallet(getActivity(), new Intent(getActivity(), WalletActivity.class), phoneNumber, false), WALLET_REQUEST_CODE);
             }
         });
 
-        viewModel.goToAddMemberPage.observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.getGoToAddMemberPage().observe(getViewLifecycleOwner(), aBoolean -> {
             if (getActivity() != null && aBoolean != null && aBoolean) {
                 try {
                     Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
@@ -98,6 +99,12 @@ public class FragmentProfile extends BaseFragment {
         viewModel.goToChatPage.observe(getViewLifecycleOwner(), data -> {
             if (getActivity() != null && data != null) {
                 new GoToChatActivity(data.getRoomId()).setPeerID(data.getPeerId()).startActivity(getActivity());
+            }
+        });
+
+        viewModel.getGoToWalletAgreementPage().observe(getViewLifecycleOwner(), phoneNumber -> {
+            if (getActivity() != null && phoneNumber != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
             }
         });
 
