@@ -22,7 +22,7 @@ import java.util.List;
 public class AdapterGalleryAlbums extends RecyclerView.Adapter<AdapterGalleryAlbums.ViewHolderGallery> {
 
     private List<GalleryAlbumModel> items = new ArrayList<>();
-    private SingleLiveEvent<Integer> listener = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> listener = new SingleLiveEvent<>();
 
     public AdapterGalleryAlbums() {
 
@@ -33,7 +33,7 @@ public class AdapterGalleryAlbums extends RecyclerView.Adapter<AdapterGalleryAlb
         notifyDataSetChanged();
     }
 
-    public SingleLiveEvent<Integer> getClickListener() {
+    public SingleLiveEvent<String> getClickListener() {
         return listener;
     }
 
@@ -69,7 +69,7 @@ public class AdapterGalleryAlbums extends RecyclerView.Adapter<AdapterGalleryAlb
 
             caption.setText(item.getCaption());
             caption.setVisibility(View.VISIBLE);
-            image.setOnClickListener(v -> listener.setValue(pos));
+            image.setOnClickListener(v -> listener.setValue("/" + item.getCaption()));
 
             //rotate and load image
             ImageHelper.correctRotateImage(item.getCover(), true, new OnRotateImage() {

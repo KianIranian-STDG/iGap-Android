@@ -11,11 +11,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.adapter.AdapterGalleryAlbums;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.model.GalleryAlbumModel;
@@ -26,12 +28,20 @@ import java.util.List;
 public class FragmentGallery extends BaseFragment {
 
     private int SPAN_GRID_FOLDER = 2;
-    private int SPAN_GRID_IMAGE = 3;
+    private int SPAN_GRID_SUB_FOLDER = 3;
     private AdapterGalleryAlbums mGalleryAdapter;
+    public String folderName ;
+    public boolean isSubFolder = false ;
 
     public FragmentGallery() {
     }
 
+    public static FragmentGallery newInstance(String folder){
+        FragmentGallery fragment = new FragmentGallery();
+        fragment.folderName = folder ;
+        fragment.isSubFolder = true ;
+        return fragment ;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,7 +62,7 @@ public class FragmentGallery extends BaseFragment {
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
-                .setDefaultTitle(getString(R.string.gallery))
+                .setDefaultTitle(isSubFolder ? folderName : getString(R.string.gallery))
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -66,16 +76,29 @@ public class FragmentGallery extends BaseFragment {
     private void initRecyclerView(View view) {
 
         RecyclerView rvGallery = view.findViewById(R.id.rv_gallery);
-        rvGallery.setLayoutManager(new GridLayoutManager(rvGallery.getContext(), SPAN_GRID_FOLDER));
+        rvGallery.setLayoutManager(new GridLayoutManager(rvGallery.getContext(), isSubFolder ? SPAN_GRID_SUB_FOLDER : SPAN_GRID_FOLDER));
         mGalleryAdapter = new AdapterGalleryAlbums();
         rvGallery.setAdapter(mGalleryAdapter);
 
-        mGalleryAdapter.getClickListener().observe(getViewLifecycleOwner(), position -> {
-            if (position == null) return;
-            //do stuff
+        mGalleryAdapter.getClickListener().observe(getViewLifecycleOwner(), folderName -> {
+            if (folderName == null || getActivity() == null) return;
+
+            if (isSubFolder){
+                //open Image
+            }else {
+                //open sub directory
+                Fragment fragment = FragmentGallery.newInstance(folderName);
+                new HelperFragment(getActivity().getSupportFragmentManager() , fragment).setReplace(false).load(false);
+
+            }
         });
 
-        mGalleryAdapter.setItems(getGalleryAlbums());
+        if (isSubFolder) {
+            //load folder images
+
+        }else {
+            mGalleryAdapter.setItems(getGalleryAlbums());
+        }
     }
 
     private List<GalleryAlbumModel> getGalleryAlbums() {
