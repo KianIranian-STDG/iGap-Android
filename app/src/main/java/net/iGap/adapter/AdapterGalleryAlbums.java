@@ -7,47 +7,46 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnRotateImage;
-import net.iGap.model.GalleryItemModel;
+import net.iGap.model.GalleryAlbumModel;
 import net.iGap.module.SingleLiveEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHolderGallery> {
+public class AdapterGalleryAlbums extends RecyclerView.Adapter<AdapterGalleryAlbums.ViewHolderGallery> {
 
-    private List<GalleryItemModel> items = new ArrayList<>();
+    private List<GalleryAlbumModel> items = new ArrayList<>();
     private SingleLiveEvent<Integer> listener = new SingleLiveEvent<>();
 
-    public AdapterGallery() {
+    public AdapterGalleryAlbums() {
 
     }
 
-    public void setItems(List<GalleryItemModel> items) {
+    public void setItems(List<GalleryAlbumModel> items) {
         this.items = items;
+        notifyDataSetChanged();
     }
 
     public SingleLiveEvent<Integer> getClickListener() {
-       return listener ;
+        return listener;
     }
 
     @NonNull
     @Override
     public ViewHolderGallery onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_gallery_image , parent , false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_gallery_image, parent, false);
         return new ViewHolderGallery(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderGallery holder, int position) {
-        holder.bind(items.get(holder.getAdapterPosition()) , holder.getAdapterPosition());
+        holder.bind(items.get(holder.getAdapterPosition()), holder.getAdapterPosition());
     }
 
     @Override
@@ -55,29 +54,25 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
         return items.size();
     }
 
-    class ViewHolderGallery extends RecyclerView.ViewHolder{
+    class ViewHolderGallery extends RecyclerView.ViewHolder {
 
-        private TextView caption ;
-        private ImageView image ;
-        private AppCompatCheckBox check ;
+        private TextView caption;
+        private ImageView image;
 
         public ViewHolderGallery(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
             caption = itemView.findViewById(R.id.caption);
-            check = itemView.findViewById(R.id.check);
         }
 
-        public void bind(GalleryItemModel item , int pos){
+        public void bind(GalleryAlbumModel item, int pos) {
 
-            caption.setVisibility(item.isFolder() ? View.VISIBLE : View.GONE);
             caption.setText(item.getCaption());
-            check.setVisibility(item.isSelect() ? View.VISIBLE : View.GONE);
-            check.setChecked(item.isSelect());
+            caption.setVisibility(View.VISIBLE);
             image.setOnClickListener(v -> listener.setValue(pos));
 
             //rotate and load image
-            ImageHelper.correctRotateImage(item.getAddress(), true, new OnRotateImage() {
+            ImageHelper.correctRotateImage(item.getCover(), true, new OnRotateImage() {
                 @Override
                 public void startProcess() {
                     //nothing
@@ -85,7 +80,7 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
 
                 @Override
                 public void success(String newPath) {
-                    G.handler.post(() -> G.imageLoader.displayImage("file://" + item.getAddress() , image));
+                    G.handler.post(() -> G.imageLoader.displayImage("file://" + item.getCover(), image));
                 }
             });
         }
