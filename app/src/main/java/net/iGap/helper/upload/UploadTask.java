@@ -67,6 +67,13 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
         fileHash = AndroidUtils.getFileHashFromPath(file.getAbsolutePath());
 
         lastRequestId = new RequestFileUploadOption().fileUploadOption(file.length(), this);
+        synchronized (this) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void openFile(String filePath) throws FileNotFoundException {
@@ -157,6 +164,10 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            synchronized (this) {
+                notify();
+            }
         } else if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSING || (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.UPLOADING) && progress == 100D) {
             handler.postDelayed(new Runnable() {
                 @Override
@@ -173,30 +184,46 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
     public void onFileUploadOptionError(int major, int minor) {
         Log.d("bagi", "onFileUploadOptionError major:" + major + "minor:" + minor);
         onUploadListener.onError(identity);
+        synchronized (this) {
+            notify();
+        }
     }
 
     @Override
     public void onFileUploadInitError(int major, int minor) {
         Log.d("bagi", "onFileUploadInitError major:" + major + "minor:" + minor);
         onUploadListener.onError(identity);
+        synchronized (this) {
+            notify();
+        }
     }
 
     @Override
     public void onFileUploadError(int major, int minor) {
         Log.d("bagi", "onFileUploadError major:" + major + "minor:" + minor);
         onUploadListener.onError(identity);
+        synchronized (this) {
+            notify();
+        }
     }
 
     @Override
     public void onFileUploadStatusError(int major, int minor) {
         Log.d("bagi", "onFileUploadStatusError major:" + major + "minor:" + minor);
         onUploadListener.onError(identity);
+        synchronized (this) {
+            notify();
+        }
 
     }
 
     public void cancel() {
         if (lastRequestId != null) {
             G.requestQueueMap.remove(lastRequestId);
+        }
+
+        synchronized (this) {
+            notify();
         }
     }
 }

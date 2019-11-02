@@ -21,6 +21,9 @@ import net.iGap.realm.RealmRoomMessageFields;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 
@@ -31,23 +34,30 @@ public class UploadManager {
         return ourInstance;
     }
 
+    private ThreadPoolExecutor mThreadPoolExecutor;
 
     private ArrayMap<String, UploadTask> pendingUploadTasks;
     private ArrayMap<String, CompressTask> pendingCompressTasks;
-//    private int pendingUploadingMaxsize = 1;
-//    private Queue<UploadTask> uploadTaskQueue;
 
     private UploadManager() {
+        int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
+
+        mThreadPoolExecutor = new ThreadPoolExecutor(
+                NUMBER_OF_CORES,   // Initial pool size
+                NUMBER_OF_CORES + 3,   // Max pool size
+                3,       // Time idle thread waits before terminating
+                TimeUnit.SECONDS,  // Sets the Time Unit for KEEP_ALIVE_TIME
+                new LinkedBlockingDeque<>());  // Work Queue
+
         pendingUploadTasks = new ArrayMap<>();
         pendingCompressTasks = new ArrayMap<>();
-//        uploadTaskQueue = new LinkedList<>();
     }
 
     public void upload(UploadTask uploadTask) {
         if (uploadTask == null)
             return;
         pendingUploadTasks.put(uploadTask.identity, uploadTask);
-        uploadTask.start();
+        mThreadPoolExecutor.execute(uploadTask);
     }
 
     public void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message) {
@@ -91,10 +101,15 @@ public class UploadManager {
                 }
             });
             pendingCompressTasks.put(message.getMessageId() + "", compressTask);
-            compressTask.start();
+            mThreadPoolExecutor.execute(compressTask);
             return;
         }
-        pendingCompressTasks.remove(message.getMessageId() + "");
+        CompressTask compressTask = pendingCompressTasks.remove(message.getMessageId() + "");
+        if (message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO ||
+                message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT &&
+                        compressTask == null)
+            return;
+
         Log.d("bagi", "after Compress");
         UploadTask uploadTask = new UploadTask(message, new OnUploadListener() {
             @Override
@@ -151,7 +166,7 @@ public class UploadManager {
         });
         if (!pendingUploadTasks.containsKey(uploadTask.identity)) {
             pendingUploadTasks.put(uploadTask.identity, uploadTask);
-            uploadTask.start();
+            mThreadPoolExecutor.execute(uploadTask);
             HelperSetAction.setActionFiles(message.getRoomId(), message.getMessageId(), HelperSetAction.getAction(message.getMessageType()), roomType);
             EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, message.getMessageId() + "", 1);
         }
@@ -209,6 +224,7 @@ public class UploadManager {
         if (uploadTask == null) {
             return false;
         } else {
+            mThreadPoolExecutor.remove(uploadTask);
             uploadTask.cancel();
             return true;
         }
