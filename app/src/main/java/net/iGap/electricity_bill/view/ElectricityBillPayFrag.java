@@ -59,6 +59,10 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
         return new ElectricityBillPayFrag(new Bill(billID, billPayID, billPrice, null), editMode);
     }
 
+    public static ElectricityBillPayFrag newInstance(String billName, String billID, String billPayID, String billPrice, boolean editMode) {
+        return new ElectricityBillPayFrag(new Bill(billName, billID, billPayID, billPrice, null), editMode);
+    }
+
     public static ElectricityBillPayFrag newInstance(String billID, boolean editMode) {
         return new ElectricityBillPayFrag(new Bill(billID, null, null, null), editMode);
     }
@@ -181,7 +185,7 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
                 new HelperFragment(getFragmentManager(), ElectricityBranchInfoListFrag.newInstance(bill.getID())).setReplace(false).load();
                 break;
             case ADD_LIST:
-                new HelperFragment(getFragmentManager(), ElectricityBillAddFrag.newInstance(bill.getID(), editMode)).setReplace(false).load();
+                new HelperFragment(getFragmentManager(), ElectricityBillAddFrag.newInstance(bill.getID(), bill.getTitle(), "", editMode)).setReplace(false).load();
                 break;
         }
     }

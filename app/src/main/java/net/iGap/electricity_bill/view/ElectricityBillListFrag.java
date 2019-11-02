@@ -177,7 +177,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                     break;
                 case SHOW_DETAIL:
                     new HelperFragment(getFragmentManager(),
-                            ElectricityBillPayFrag.newInstance(temp.getBillID(), temp.getPaymentIDConverted(), temp.getTotalBillDebtConverted(), true))
+                            ElectricityBillPayFrag.newInstance(item.getBillTitle(), temp.getBillID(), temp.getPaymentIDConverted(), temp.getTotalBillDebtConverted(), true))
                             .setReplace(false).load();
                     break;
             }
