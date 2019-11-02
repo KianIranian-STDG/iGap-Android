@@ -2264,7 +2264,7 @@ Want to get it?</string>
     <string name="elecBill_Entry_lengthError">Bill ID must be 13 character.</string>
     <string name="elecBill_Entry_barcodeError">Barcode scan failed. Please try again.</string>
     <string name="elecBill_Entry_companyError">We only support Electricity Bill.</string>
-    <string name="elecBill_main_billTitle">Inquiry Electricity Bill and quick pay</string>
+    <string name="elecBill_main_billTitle">Electricity Bill Inquiry and quick payment</string>
     <string name="elecBill_main_billIDHint">Electricity Bill Number</string>
     <string name="elecBill_main_billPay">Inquiry My Bill</string>
     <string name="elecBill_main_billMyList">My Electricity Bills</string>
@@ -2314,7 +2314,7 @@ Want to get it?</string>
     <string name="elecBill_searchCell_billID">Bill ID</string>
     <string name="elecBill_searchCell_CustomerName">Customer Name</string>
     <string name="elecBill_searchCell_CustomerAddress">Customer Address</string>
-    <string name="elecBill_search_billSerial">Customer Address</string>
+    <string name="elecBill_search_billSerial">Power meter\'s body number</string>
     <string name="elecBill_search_billCompany">Electricity Provider Company</string>
     <string name="elecBill_search_billSearch">Find my Bill</string>
     <string name="elecBill_search_billSpinner">choose</string>
