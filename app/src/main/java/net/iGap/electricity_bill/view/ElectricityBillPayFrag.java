@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -266,17 +267,16 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
     }
 
     private void showDialog(int mode, int titleRes, int messageRes, int btnRes) {
-        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-        defaultRoundDialog.setTitle(getResources().getString(titleRes));
-        defaultRoundDialog.setMessage(getResources().getString(messageRes));
-        defaultRoundDialog.setPositiveButton(getResources().getString(btnRes), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                if (mode == 1) {
-                    downloadFile();
-                }
-            }
-        });
-        defaultRoundDialog.show();
+        new MaterialDialog.Builder(getContext())
+                .title(getResources().getString(titleRes))
+                .positiveText(getResources().getString(btnRes))
+                .onPositive((dialog, which) -> {
+                    if (mode == 1) {
+                        downloadFile();
+                    }
+                })
+                .content(getResources().getString(messageRes))
+                .show();
     }
 
 }
