@@ -13,7 +13,7 @@
         <LinearLayout
             android:id="@+id/lmr_layout_bottom"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
+            android:layout_height="55dp"
             android:layout_gravity="bottom"
             android:background="?attr/rootBackgroundColor"
             android:orientation="vertical" />
@@ -27,7 +27,7 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp48"
+                android:layout_height="55dp"
                 android:gravity="center"
                 android:paddingLeft="@dimen/dp6">
 
@@ -66,11 +66,11 @@
                 <TextView
                     android:id="@+id/txt_slideto_cancel"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/dp48"
+                    android:layout_height="55dp"
                     android:layout_gravity="bottom"
                     android:layout_marginRight="@dimen/dp8"
                     android:layout_weight="1"
-                    android:gravity="right|center"
+                    android:gravity="right|center_vertical"
                     android:text="@string/slide_to_cancel_en"
                     android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp14" />
