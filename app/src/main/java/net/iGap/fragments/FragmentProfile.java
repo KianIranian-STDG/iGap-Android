@@ -2,6 +2,7 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +17,12 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentProfileBinding;
 import net.iGap.helper.GoToChatActivity;
@@ -181,6 +185,35 @@ public class FragmentProfile extends BaseFragment {
                 ft.detach(frg);
                 ft.attach(frg);
                 ft.commit();
+            }
+        });
+
+        viewModel.showDialogBeLastVersion.observe(getViewLifecycleOwner(), isShow -> {
+            if (getActivity() != null && isShow != null && isShow) {
+                new MaterialDialog.Builder(getActivity())
+                        .cancelable(false)
+                        .title(R.string.app_version_change_log).titleGravity(GravityEnum.CENTER)
+                        .titleColor(new Theme().getPrimaryColor(getActivity()))
+                        .content(R.string.updated_version_title)
+                        .contentGravity(GravityEnum.CENTER)
+                        .positiveText(R.string.ok).itemsGravity(GravityEnum.START).show();
+            }
+        });
+
+        viewModel.showDialogUpdate.observe(getViewLifecycleOwner(), body -> {
+            if (getActivity() != null && body != null) {
+                new MaterialDialog.Builder(getActivity())
+                        .cancelable(false)
+                        .title(R.string.app_version_change_log).titleGravity(GravityEnum.CENTER)
+                        .titleColor(new Theme().getPrimaryColor(getActivity()))
+                        .content(body)
+                        .contentGravity(GravityEnum.CENTER)
+                        .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive((dialog, which) -> {
+                    String url = "http://d.igap.net/update";
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }).negativeText(R.string.cancel).show();
             }
         });
     }

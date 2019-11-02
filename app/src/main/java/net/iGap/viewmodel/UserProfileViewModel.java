@@ -136,6 +136,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private ObservableInt textsGravity = new ObservableInt(Gravity.LEFT);
     private ObservableBoolean showReferralErrorLiveData = new ObservableBoolean(false);
     private ObservableInt referralError = new ObservableInt(R.string.already_registered);
+    private ObservableInt showAddAvatarButton = new ObservableInt(View.GONE);
 
     private MutableLiveData<Boolean> showDialogSelectCountry = new MutableLiveData<>();
     private MutableLiveData<Boolean> referralEnableLiveData = new MutableLiveData<>();
@@ -333,6 +334,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         return referralNumberObservableField;
     }
 
+    public ObservableInt getShowAddAvatarButton() {
+        return showAddAvatarButton;
+    }
+
     public ArrayList<StructCountry> getStructCountryArrayList() {
         return structCountryArrayList;
     }
@@ -406,6 +411,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             }
         }
         setCurrentFragment.setValue(isEditProfile.getValue());
+        showAddAvatarButton.set(isEditMode() ? View.VISIBLE : View.GONE);
     }
 
     public void onCloudMessageClick() {
