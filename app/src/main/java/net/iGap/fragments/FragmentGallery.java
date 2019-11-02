@@ -85,14 +85,12 @@ public class FragmentGallery extends BaseFragment {
 
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         String[] projection = {
-                MediaStore.Images.Media._ID,
                 MediaStore.Images.Media.BUCKET_ID,
                 MediaStore.MediaColumns.DATA,
-                MediaStore.Images.Media.BUCKET_DISPLAY_NAME ,
-                MediaStore.Images.ImageColumns.DATE_TAKEN
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME
         };
 
-        Cursor cursor = getContext().getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_TAKEN);
+        Cursor cursor = getContext().getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_TAKEN  + " DESC");
 
         ArrayList<String> ids = new ArrayList<>();
         if (cursor != null) {
@@ -111,7 +109,7 @@ public class FragmentGallery extends BaseFragment {
                             albums.add(album);
                             ids.add(album.getId());
                         }
-                    }//else could be counter\
+                    }//else could be counter
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
