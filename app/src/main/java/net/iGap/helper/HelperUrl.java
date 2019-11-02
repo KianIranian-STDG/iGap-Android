@@ -313,10 +313,15 @@ public class HelperUrl {
         //todo: fixed it and do not user G.currentActivity
         final CustomTabsHelperFragment mCustomTabsHelperFragment = CustomTabsHelperFragment.attachTo(G.currentActivity);
 
-        int mColorPrimary = new Theme().getAccentColor(G.currentActivity);
+        int mColorPrimary = new Theme().getPrimaryColor(G.currentActivity);
         final Uri PROJECT_URI = Uri.parse(url);
 
-        CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(mColorPrimary).setShowTitle(true).build();
+        CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder()
+                .enableUrlBarHiding()
+                .setToolbarColor(mColorPrimary)
+                .setSecondaryToolbarColor(Color.WHITE)
+                .setShowTitle(true)
+                .build();
 
         mCustomTabsHelperFragment.setConnectionCallback(new CustomTabsActivityHelper.ConnectionCallback() {
             @Override
