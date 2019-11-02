@@ -8,13 +8,20 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.adapter.AdapterGallery;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 
 public class FragmentGallery extends BaseFragment {
 
+    private int SPAN_GRID_FOLDER = 2 ;
+    private int SPAN_GRID_IMAGE = 3 ;
+    private AdapterGallery mGalleryAdapter;
 
     public FragmentGallery() {
     }
@@ -51,6 +58,16 @@ public class FragmentGallery extends BaseFragment {
     }
 
     private void initRecyclerView(View view) {
+
+        RecyclerView rvGallery = view.findViewById(R.id.rv_gallery);
+        rvGallery.setLayoutManager(new GridLayoutManager(rvGallery.getContext() , SPAN_GRID_FOLDER));
+        mGalleryAdapter = new AdapterGallery();
+        rvGallery.setAdapter(mGalleryAdapter);
+
+        mGalleryAdapter.getClickListener().observe(getViewLifecycleOwner() , position -> {
+            if (position == null) return;
+            //do stuff
+        });
 
     }
 }
