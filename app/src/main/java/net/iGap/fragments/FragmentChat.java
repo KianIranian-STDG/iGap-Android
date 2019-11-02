@@ -3647,19 +3647,10 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onUploadOrCompressCancel(View view, final StructMessageInfo message, int pos, SendingStep sendingStep) {
+    public void onUploadOrCompressCancel(View view, final StructMessageInfo message, int pos) {
+        HelperSetAction.sendCancel(message.realmRoomMessage.getMessageId());
 
-        if (sendingStep == SendingStep.UPLOADING) {
-            HelperSetAction.sendCancel(message.realmRoomMessage.getMessageId());
-
-            if (UploadManager.getInstance().cancelUploading(message.realmRoomMessage.getMessageId() + "")) {
-                deleteItem(message.realmRoomMessage.getMessageId(), pos);
-            }
-        } else if (sendingStep == SendingStep.COMPRESSING) {
-
-            //Todo: bagi cancel uploading
-            deleteItem(message.realmRoomMessage.getMessageId(), pos);
-        } else if (sendingStep == SendingStep.CORRUPTED_FILE) {
+        if (UploadManager.getInstance().cancelCompressingAndUploading(message.realmRoomMessage.getMessageId() + "")) {
             deleteItem(message.realmRoomMessage.getMessageId(), pos);
         }
     }

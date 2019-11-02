@@ -1559,7 +1559,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                 }
             } else {
-                messageClickListener.onUploadOrCompressCancel(progress, structMessage, holder.getAdapterPosition(), SendingStep.UPLOADING);
+                messageClickListener.onUploadOrCompressCancel(progress, structMessage, holder.getAdapterPosition());
             }
         } else if (HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
             HelperDownloadFile.getInstance().stopDownLoad(structMessage.getAttachment().getCacheId());
