@@ -2329,6 +2329,7 @@ Want to get it?</string>
     <string name="elecBill_error_openCompanySpinner">Open</string>
     <string name="elecBill_error_zeroResultSearch">result: No bills found.</string>
     <string name="elecBill_error_zeroResultBill">No bills is registered under your name.</string>
+    <string name="elecBill_error_notPossible">This action is Not available at the moment.</string>
     <string name="elecBill_success_title">Success</string>
     <string name="elecBill_success_pay">Payment is successful.</string>
     <!--<string name="news_latest">Latest</string>

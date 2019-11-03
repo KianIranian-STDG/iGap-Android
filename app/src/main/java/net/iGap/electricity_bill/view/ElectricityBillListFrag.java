@@ -156,6 +156,10 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                     elecBillVM.payBill(item);
                     break;
                 case EDIT:
+                    if (temp.getBillID() == null) {
+                        showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_notPossible),getResources().getString(R.string.ok));
+                        return;
+                    }
                     new HelperFragment(getFragmentManager(),
                             ElectricityBillAddFrag.newInstance(temp.getBillID(), item.getBillTitle(),
                                     String.valueOf(elecBillVM.getNationalID()), true)).setReplace(false).load();
@@ -176,6 +180,10 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                     dialog.show();
                     break;
                 case SHOW_DETAIL:
+                    if (temp.getBillID() == null) {
+                        showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_notPossible),getResources().getString(R.string.ok));
+                        return;
+                    }
                     new HelperFragment(getFragmentManager(),
                             ElectricityBillPayFrag.newInstance(item.getBillTitle(), temp.getBillID(), temp.getPaymentIDConverted(), temp.getTotalBillDebtConverted(), true))
                             .setReplace(false).load();
