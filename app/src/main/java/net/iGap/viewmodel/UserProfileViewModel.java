@@ -209,12 +209,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
         appVersion.set(BuildConfig.VERSION_NAME);
 
-        //set user info text gravity
-        if (!G.isAppRtl) {
-            textsGravity.set(Gravity.LEFT);
-        } else {
-            textsGravity.set(Gravity.RIGHT);
-        }
     }
 
     public SingleLiveEvent<Boolean> getUpdateNewTheme() {
@@ -232,6 +226,13 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             currentCredit.set(G.cardamount);
         } else {
             getUserCredit();
+        }
+
+        //set user info text gravity
+        if (!G.isAppRtl) {
+            textsGravity.set(Gravity.LEFT);
+        } else {
+            textsGravity.set(Gravity.RIGHT);
         }
 
         FragmentShowAvatars.onComplete = (result, messageOne, MessageTow) -> {
