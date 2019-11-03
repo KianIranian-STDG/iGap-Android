@@ -117,17 +117,12 @@ public class ClientGetRoomResponse extends MessageHandler {
                                             }, new OnSuccess() {
                                                 @Override
                                                 public void onSuccess() {
-                                                    G.handler.post(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            if (G.onClientGetRoomResponse != null) {
-                                                                G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identityClientGetRoom);
-                                                            }
-                                                            if (G.onClientGetRoomResponseRoomList != null) {
-                                                                G.onClientGetRoomResponseRoomList.onClientGetRoomResponse(clientGetRoom.getRoom().getId());
-                                                            }
-                                                        }
-                                                    });
+                                                    if (G.onClientGetRoomResponse != null) {
+                                                        G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identityClientGetRoom);
+                                                    }
+                                                    if (G.onClientGetRoomResponseRoomList != null) {
+                                                        G.onClientGetRoomResponseRoomList.onClientGetRoomResponse(clientGetRoom.getRoom().getId());
+                                                    }
                                                 }
                                             });
                                         });
