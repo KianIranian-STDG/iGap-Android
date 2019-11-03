@@ -91,6 +91,7 @@ public final class HelperLogout {
             public void onUserSessionLogout() {
                 G.userLogin = false;
                 WebSocketClient.disconnectSocket();
+                G.handler.removeCallbacksAndMessages(null);
                 logOutUserCallBack.onLogOut(logoutUser(AccountManager.getInstance().getCurrentUser()));
                 /*new LoginActions();*/
             }

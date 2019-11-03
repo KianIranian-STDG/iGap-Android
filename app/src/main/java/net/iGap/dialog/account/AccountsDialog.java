@@ -16,6 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import net.iGap.AccountManager;
 import net.iGap.DbManager;
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.activities.ActivityMain;
@@ -49,6 +50,7 @@ public class AccountsDialog extends BottomSheetDialogFragment {
             if (isAssigned) {
                 if (getActivity() instanceof ActivityMain && AccountManager.getInstance().getCurrentUser().getId() != id) {
                     WebSocketClient.disconnectSocket();
+                    G.handler.removeCallbacksAndMessages(null);
                     DbManager.getInstance().closeUiRealm();
                     signOutWallet();
                     AccountManager.getInstance().changeCurrentUserAccount(id);
@@ -61,6 +63,7 @@ public class AccountsDialog extends BottomSheetDialogFragment {
             } else {
                 if (getActivity() != null) {
                     WebSocketClient.disconnectSocket();
+                    G.handler.removeCallbacksAndMessages(null);
                     DbManager.getInstance().closeUiRealm();
                     pendingRequest.remove(0);
                     FragmentMain.mOffset = 0;
