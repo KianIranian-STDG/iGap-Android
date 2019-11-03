@@ -170,7 +170,7 @@ public class FragmentGallery extends BaseFragment {
                 uri,
                 projection,
                 isAllPhoto ? null : MediaStore.Images.Media.DATA + " like ? ",
-                isAllPhoto ? null : new String[] {folderName},
+                isAllPhoto ? null : new String[] {"%" + folderName + "%"},
                 MediaStore.Images.ImageColumns.DATE_TAKEN  + " DESC"
         );
 
