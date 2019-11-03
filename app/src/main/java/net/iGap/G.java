@@ -460,8 +460,8 @@ public class G extends ApplicationContext {
         super.onCreate();
         RaadApp.onCreate(getApplicationContext());
         LooperThreadHelper.getInstance();
-        Lingver.init(this, G.selectedLanguage == null ? Locale.getDefault() : new Locale(G.selectedLanguage));
         Metrix.initialize(this, "jpbnabzrmeqvxme");
+        Lingver.init(this, G.selectedLanguage == null ? Locale.getDefault() : new Locale(G.selectedLanguage));
 
         // dont remove below line please
         if (!BuildConfig.DEBUG && BuildConfig.Store.length() > 1) {
@@ -497,7 +497,6 @@ public class G extends ApplicationContext {
             e.printStackTrace();
         }
         new StartupActions();
-
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
      /*   try {
             WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
