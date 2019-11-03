@@ -3,6 +3,7 @@ package net.iGap.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,27 +15,33 @@ import net.iGap.R;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnRotateImage;
 import net.iGap.model.GalleryAlbumModel;
-import net.iGap.module.SingleLiveEvent;
+import net.iGap.model.GalleryPhotoModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterGalleryAlbums extends RecyclerView.Adapter<AdapterGalleryAlbums.ViewHolderGallery> {
 
-    private List<GalleryAlbumModel> items = new ArrayList<>();
-    private SingleLiveEvent<String> listener = new SingleLiveEvent<>();
+    private List<GalleryAlbumModel> albumsItem = new ArrayList<>();
+    private List<GalleryPhotoModel> photosItem = new ArrayList<>();
+    private GalleryItemListener listener ;
 
     public AdapterGalleryAlbums() {
 
     }
 
-    public void setItems(List<GalleryAlbumModel> items) {
-        this.items = items;
+    public void setAlbumsItem(List<GalleryAlbumModel> albumsItem) {
+        this.albumsItem = albumsItem;
         notifyDataSetChanged();
     }
 
-    public SingleLiveEvent<String> getClickListener() {
-        return listener;
+    public void setPhotosItem(List<GalleryPhotoModel> photosItem) {
+        this.photosItem = photosItem;
+        notifyDataSetChanged();
+    }
+
+    public void setListener(GalleryItemListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -46,30 +53,37 @@ public class AdapterGalleryAlbums extends RecyclerView.Adapter<AdapterGalleryAlb
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderGallery holder, int position) {
-        holder.bind(items.get(holder.getAdapterPosition()), holder.getAdapterPosition());
+
+        if (albumsItem.size() > 0){
+            holder.bindAlbums(albumsItem.get(holder.getAdapterPosition()));
+        }else if (photosItem.size() > 0){
+            holder.bindPhotos(photosItem.get(holder.getAdapterPosition()));
+        }
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return albumsItem.size();
     }
 
     class ViewHolderGallery extends RecyclerView.ViewHolder {
 
         private TextView caption;
         private ImageView image;
+        private CheckBox check;
 
         public ViewHolderGallery(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
             caption = itemView.findViewById(R.id.caption);
+            check = itemView.findViewById(R.id.check);
         }
 
-        public void bind(GalleryAlbumModel item, int pos) {
+        void bindAlbums(GalleryAlbumModel item) {
 
             caption.setText(item.getCaption());
             caption.setVisibility(View.VISIBLE);
-            image.setOnClickListener(v -> listener.setValue("/" + item.getCaption()));
+            image.setOnClickListener(v -> listener.onItemClicked(item.getCaption()));
 
             //rotate and load image
             ImageHelper.correctRotateImage(item.getCover(), true, new OnRotateImage() {
@@ -84,5 +98,33 @@ public class AdapterGalleryAlbums extends RecyclerView.Adapter<AdapterGalleryAlb
                 }
             });
         }
+
+        void bindPhotos(GalleryPhotoModel item) {
+
+            check.setVisibility(View.VISIBLE);
+            check.setChecked(item.isSelect());
+            image.setOnClickListener(v -> listener.onItemClicked(item.getAddress()));
+            check.setOnCheckedChangeListener((buttonView, isChecked) -> listener.onItemSelected(item , isChecked));
+
+            //rotate and load image
+            ImageHelper.correctRotateImage(item.getAddress(), true, new OnRotateImage() {
+                @Override
+                public void startProcess() {
+                    //nothing
+                }
+
+                @Override
+                public void success(String newPath) {
+                    G.handler.post(() -> G.imageLoader.displayImage("file://" + item.getAddress(), image));
+                }
+            });
+        }
+    }
+
+    public interface GalleryItemListener{
+
+        void onItemClicked(String name);
+        void onItemSelected(GalleryPhotoModel item ,boolean isCheck);
+
     }
 }

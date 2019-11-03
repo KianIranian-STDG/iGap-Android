@@ -21,6 +21,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.model.GalleryAlbumModel;
+import net.iGap.model.GalleryPhotoModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,7 @@ public class FragmentGallery extends BaseFragment {
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
+                .setIGapLogoCheck(false)
                 .setDefaultTitle(isSubFolder ? folderName : getString(R.string.gallery))
                 .setListener(new ToolbarListener() {
                     @Override
@@ -80,29 +82,34 @@ public class FragmentGallery extends BaseFragment {
         mGalleryAdapter = new AdapterGalleryAlbums();
         rvGallery.setAdapter(mGalleryAdapter);
 
-        mGalleryAdapter.getClickListener().observe(getViewLifecycleOwner(), folderName -> {
-            if (folderName == null || getActivity() == null) return;
+        mGalleryAdapter.setListener(new AdapterGalleryAlbums.GalleryItemListener() {
+            @Override
+            public void onItemClicked(String name) {
+                if (name == null || getActivity() == null) return;
+                if (isSubFolder){
+                    //open Image
 
-            if (isSubFolder){
-                //open Image
-            }else {
-                //open sub directory
-                Fragment fragment = FragmentGallery.newInstance(folderName);
-                new HelperFragment(getActivity().getSupportFragmentManager() , fragment).setReplace(false).load(false);
+                }else {
+                    //open sub directory
+                    Fragment fragment = FragmentGallery.newInstance(name);
+                    new HelperFragment(getActivity().getSupportFragmentManager() , fragment).setReplace(false).load(false);
+                }
+            }
 
+            @Override
+            public void onItemSelected(GalleryPhotoModel item, boolean isCheck) {
+                //do multi select
             }
         });
 
         if (isSubFolder) {
-            //load folder images
-
+            mGalleryAdapter.setPhotosItem(getAlbumPhotos(folderName));
         }else {
-            mGalleryAdapter.setItems(getGalleryAlbums());
+            mGalleryAdapter.setAlbumsItem(getGalleryAlbums());
         }
     }
 
     private List<GalleryAlbumModel> getGalleryAlbums() {
-
         List<GalleryAlbumModel> albums = new ArrayList<>();
         if (getContext() == null) return albums;
 
@@ -113,7 +120,12 @@ public class FragmentGallery extends BaseFragment {
                 MediaStore.Images.Media.BUCKET_DISPLAY_NAME
         };
 
-        Cursor cursor = getContext().getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_TAKEN  + " DESC");
+        Cursor cursor = getContext().getContentResolver().query(
+                uri,
+                projection,
+                null,
+                null,
+                MediaStore.Images.ImageColumns.DATE_TAKEN  + " DESC");
 
         ArrayList<String> ids = new ArrayList<>();
         if (cursor != null) {
@@ -140,6 +152,44 @@ public class FragmentGallery extends BaseFragment {
             cursor.close();
         }
         return albums;
+    }
+
+    private List<GalleryPhotoModel> getAlbumPhotos(String folderName){
+        List<GalleryPhotoModel> photos = new ArrayList<>();
+        if (getContext() == null) return photos ;
+
+        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        String[] projection = {
+                MediaStore.MediaColumns.DATA ,
+                MediaStore.Images.Media.DATE_TAKEN
+        };
+
+        boolean isAllPhoto = folderName.equals(getString(R.string.all));
+
+        Cursor cursor = getContext().getContentResolver().query(
+                uri,
+                projection,
+                isAllPhoto ? null : MediaStore.Images.Media.DATA + " like ? ",
+                isAllPhoto ? null : new String[] {folderName},
+                MediaStore.Images.ImageColumns.DATE_TAKEN  + " DESC"
+        );
+
+        if (cursor != null){
+            while (cursor.moveToNext()){
+                try{
+                    GalleryPhotoModel photo = new GalleryPhotoModel();
+                    photo.setId(photos.size());
+                    photo.setAddress(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA)));
+                    if (photo.getAddress() != null && !photo.getAddress().contains(".gif")) {
+                        photos.add(photo);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            cursor.close();
+        }
+        return photos;
     }
 
 }
