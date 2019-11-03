@@ -111,6 +111,9 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
             if (isMultiSelect) {
                 check.setVisibility(View.VISIBLE);
                 check.setChecked(item.isSelect());
+            }else {
+                check.setChecked(false);
+                check.setVisibility(View.GONE);
             }
             image.setOnClickListener(v -> listener.onItemClicked(item.getAddress()));
             check.setOnCheckedChangeListener((buttonView, isChecked) -> listener.onItemSelected(item , isChecked));
