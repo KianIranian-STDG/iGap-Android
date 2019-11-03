@@ -395,7 +395,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
         this.holder = holder;
 
-        if (mMessage.getForwardMessage() == null && mMessage.isSenderMe() &&
+        if (mMessage.getForwardMessage() == null && mMessage.isSenderMe() && mMessage.getAttachment() != null &&
                 mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())
         ) {
             EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
