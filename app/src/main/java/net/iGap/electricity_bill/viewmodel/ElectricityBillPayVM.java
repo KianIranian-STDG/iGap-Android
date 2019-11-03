@@ -58,7 +58,7 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
             public void onSuccess(ElectricityResponseModel<BranchDebit> data) {
                 progressVisibilityData.set(View.GONE);
                 if (data.getStatus() == 200) {
-                    debit = new Bill(debit.getID(), data.getData().getPaymentIDConverted(), data.getData().getTotalBillDebtConverted(), data.getData().getPaymentDeadLineDate());
+                    debit = new Bill(debit.getID(), data.getData().getPaymentID(), data.getData().getTotalBillDebt(), data.getData().getPaymentDeadLineDate());
                     billPayID.set(data.getData().getPaymentIDConverted());
                     billPrice.set(data.getData().getTotalBillDebtConverted() + " ریال");
                     billTime.set(data.getData().getPaymentDeadLineDate());
