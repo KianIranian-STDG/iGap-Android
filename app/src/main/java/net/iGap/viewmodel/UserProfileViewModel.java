@@ -166,7 +166,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
     public SingleLiveEvent<Integer> showError = new SingleLiveEvent<>();
     public MutableLiveData<Drawable> changeUserProfileWallpaper = new MutableLiveData<>();
-    public MutableLiveData<Boolean> setCurrentFragment = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> setCurrentFragment = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> popBackStack = new SingleLiveEvent<>();
 
     private int phoneMax = 10;
@@ -403,22 +403,17 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onEditProfileClick() {
-        Log.wtf(this.getClass().getName(), "onEditProfileClick");
         if (isEditProfile) {
-            Log.wtf(this.getClass().getName(), "isEditProfile true");
             editProfileIcon.set(R.string.edit_icon);
             isEditProfile = false;
             submitData();
         } else {
-            Log.wtf(this.getClass().getName(), "isEditProfile false");
             editProfileIcon.set(R.string.close_icon);
             isEditProfile = true;
             if (editProfileIcon.get() == R.string.close_icon) {
-                Log.wtf(this.getClass().getName(), "getReferral");
                 isEditProfile = true;
                 getReferral();
             } else {
-                Log.wtf(this.getClass().getName(), "isEditProfile false");
                 isEditProfile = false;
             }
         }
@@ -650,7 +645,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public void onCheckedListener(int checkedId) {
         if (isEditProfile) {
-            if (checkedId != currentGender) {
+            if (currentGender != checkedId) {
                 gender.set(checkedId);
                 editProfileIcon.set(R.string.check_icon);
             } else {
@@ -658,9 +653,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                     if (currentUserName.equals(userName.get())) {
                         if (currentUserEmail.equals(email.get())) {
                             if (currentBio.equals(bio.get())) {
-                                if (currentBio.equals(gender.get())) {
-                                    editProfileIcon.set(R.string.close_icon);
-                                }
+                                editProfileIcon.set(R.string.close_icon);
+                            gender.set(currentGender);
                             }
                         }
                     }
