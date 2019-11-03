@@ -460,7 +460,7 @@ public class G extends ApplicationContext {
         super.onCreate();
         RaadApp.onCreate(getApplicationContext());
         LooperThreadHelper.getInstance();
-        Lingver.init(this, Locale.getDefault());
+        Lingver.init(this, G.selectedLanguage == null ? Locale.getDefault() : new Locale(G.selectedLanguage));
         Metrix.initialize(this, "jpbnabzrmeqvxme");
 
         // dont remove below line please
