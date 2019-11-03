@@ -521,8 +521,8 @@
     <string name="delete_account_text4">Другое</string>
     <string name="capture_image">Получение фотографии</string>
     <string name="capture_video">Получить видео</string>
-    <string name="set_gender">Настройка и редактирование пола</string>
-    <string name="set_email">Настройка и редактирование электронной почты</string>
+    <string name="set_gender">секс</string>
+    <string name="set_email">е-мейл</string>
     <string name="delete_contact">Удалить контакт</string>
     <string name="error_email">Неверный адрес электронной почты</string>
     <string name="do_you_want_delete_this">Вы уверены, что хотите удалить выбранный элемент?</string>
@@ -1752,6 +1752,7 @@
     <string name="edit_contact">Изменить контакт</string>
     <string name="open_url">открытый URL</string>
     <string name="copied">скопирована</string>
+    <string name="all_calls">звонки</string>
 
 
 </resources>
