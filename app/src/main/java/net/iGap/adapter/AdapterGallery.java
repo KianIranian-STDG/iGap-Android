@@ -23,6 +23,7 @@ import java.util.List;
 public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHolderGallery> {
 
     private boolean isPhotoMode;
+    private boolean isMultiSelect ;
     private List<GalleryAlbumModel> albumsItem = new ArrayList<>();
     private List<GalleryPhotoModel> photosItem = new ArrayList<>();
     private GalleryItemListener listener ;
@@ -43,6 +44,11 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
 
     public void setListener(GalleryItemListener listener) {
         this.listener = listener;
+    }
+
+    public void setMultiSelectState(boolean enable){
+        this.isMultiSelect = enable;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -102,8 +108,10 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
 
         void bindPhotos(GalleryPhotoModel item) {
 
-            check.setVisibility(View.VISIBLE);
-            check.setChecked(item.isSelect());
+            if (isMultiSelect) {
+                check.setVisibility(View.VISIBLE);
+                check.setChecked(item.isSelect());
+            }
             image.setOnClickListener(v -> listener.onItemClicked(item.getAddress()));
             check.setOnCheckedChangeListener((buttonView, isChecked) -> listener.onItemSelected(item , isChecked));
 

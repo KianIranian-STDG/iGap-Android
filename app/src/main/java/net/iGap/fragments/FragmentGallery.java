@@ -31,8 +31,9 @@ public class FragmentGallery extends BaseFragment {
     private int SPAN_GRID_FOLDER = 2;
     private int SPAN_GRID_SUB_FOLDER = 3;
     private AdapterGallery mGalleryAdapter;
-    public String folderName ;
-    public boolean isSubFolder = false ;
+    private String folderName ;
+    private boolean isSubFolder = false ;
+    private boolean isMultiSelect ;
 
     public FragmentGallery() {
     }
@@ -64,13 +65,28 @@ public class FragmentGallery extends BaseFragment {
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setIGapLogoCheck(false)
-                .setDefaultTitle(isSubFolder ? folderName : getString(R.string.gallery))
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-                    }
-                });
+                .setDefaultTitle(isSubFolder ? folderName : getString(R.string.gallery));
+
+        if (isSubFolder) toolbar.setRightIcons(R.string.edit_icon);
+
+        toolbar.setListener(new ToolbarListener() {
+            @Override
+            public void onLeftIconClickListener(View view) {
+                popBackStackFragment();
+            }
+
+            @Override
+            public void onRightIconClickListener(View view) {
+                if (isMultiSelect){
+                    toolbar.getRightButton().setText(R.string.edit_icon);
+                    isMultiSelect = false ;
+                }else {
+                    toolbar.getRightButton().setText(R.string.md_send_button);
+                    isMultiSelect = true;
+                }
+                mGalleryAdapter.setMultiSelectState(isMultiSelect);
+            }
+        });
 
         lytToolbar.addView(toolbar.getView());
     }
