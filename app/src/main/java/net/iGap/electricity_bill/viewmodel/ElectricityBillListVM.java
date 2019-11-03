@@ -90,6 +90,8 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
                         Map<BillData.BillDataModel, BranchDebit> tmp = mMapData.getValue();
                         BranchDebit debitTmp = tmp.get(bill);
                         debitTmp.setLoading(false);
+                        debitTmp.setTotalBillDebt("0");
+                        debitTmp.setPaymentID("0");
                         tmp.put(bill, debitTmp);
                         mMapData.setValue(tmp);
                     }
