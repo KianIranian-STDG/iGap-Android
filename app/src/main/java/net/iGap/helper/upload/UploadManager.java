@@ -105,8 +105,8 @@ public class UploadManager {
             return;
         }
         CompressTask compressTask = pendingCompressTasks.remove(message.getMessageId() + "");
-        if (message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO ||
-                message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT &&
+        if ((message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO ||
+                message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT )&&
                         compressTask == null)
             return;
 
