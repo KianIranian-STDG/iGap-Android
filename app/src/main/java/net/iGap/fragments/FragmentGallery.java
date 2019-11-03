@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.adapter.AdapterGalleryAlbums;
+import net.iGap.adapter.AdapterGallery;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
@@ -30,7 +30,7 @@ public class FragmentGallery extends BaseFragment {
 
     private int SPAN_GRID_FOLDER = 2;
     private int SPAN_GRID_SUB_FOLDER = 3;
-    private AdapterGalleryAlbums mGalleryAdapter;
+    private AdapterGallery mGalleryAdapter;
     public String folderName ;
     public boolean isSubFolder = false ;
 
@@ -79,10 +79,10 @@ public class FragmentGallery extends BaseFragment {
 
         RecyclerView rvGallery = view.findViewById(R.id.rv_gallery);
         rvGallery.setLayoutManager(new GridLayoutManager(rvGallery.getContext(), isSubFolder ? SPAN_GRID_SUB_FOLDER : SPAN_GRID_FOLDER));
-        mGalleryAdapter = new AdapterGalleryAlbums();
+        mGalleryAdapter = new AdapterGallery(isSubFolder);
         rvGallery.setAdapter(mGalleryAdapter);
 
-        mGalleryAdapter.setListener(new AdapterGalleryAlbums.GalleryItemListener() {
+        mGalleryAdapter.setListener(new AdapterGallery.GalleryItemListener() {
             @Override
             public void onItemClicked(String name) {
                 if (name == null || getActivity() == null) return;

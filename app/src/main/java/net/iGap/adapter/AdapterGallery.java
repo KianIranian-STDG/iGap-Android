@@ -20,14 +20,15 @@ import net.iGap.model.GalleryPhotoModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterGalleryAlbums extends RecyclerView.Adapter<AdapterGalleryAlbums.ViewHolderGallery> {
+public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHolderGallery> {
 
+    private boolean isPhotoMode;
     private List<GalleryAlbumModel> albumsItem = new ArrayList<>();
     private List<GalleryPhotoModel> photosItem = new ArrayList<>();
     private GalleryItemListener listener ;
 
-    public AdapterGalleryAlbums() {
-
+    public AdapterGallery(boolean isPhotoMode) {
+        this.isPhotoMode = isPhotoMode;
     }
 
     public void setAlbumsItem(List<GalleryAlbumModel> albumsItem) {
@@ -54,16 +55,16 @@ public class AdapterGalleryAlbums extends RecyclerView.Adapter<AdapterGalleryAlb
     @Override
     public void onBindViewHolder(@NonNull ViewHolderGallery holder, int position) {
 
-        if (albumsItem.size() > 0){
-            holder.bindAlbums(albumsItem.get(holder.getAdapterPosition()));
-        }else if (photosItem.size() > 0){
+        if (isPhotoMode){
             holder.bindPhotos(photosItem.get(holder.getAdapterPosition()));
+        }else {
+            holder.bindAlbums(albumsItem.get(holder.getAdapterPosition()));
         }
     }
 
     @Override
     public int getItemCount() {
-        return albumsItem.size();
+        return isPhotoMode ? photosItem.size() : albumsItem.size();
     }
 
     class ViewHolderGallery extends RecyclerView.ViewHolder {
