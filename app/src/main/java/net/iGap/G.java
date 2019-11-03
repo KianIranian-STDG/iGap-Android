@@ -36,6 +36,7 @@ import com.caspian.otpsdk.context.ApplicationContext;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yariksoffice.lingver.Lingver;
 
 import net.iGap.activities.ActivityCustomError;
 import net.iGap.activities.ActivityEnhanced;
@@ -459,7 +460,7 @@ public class G extends ApplicationContext {
         super.onCreate();
         RaadApp.onCreate(getApplicationContext());
         LooperThreadHelper.getInstance();
-
+        Lingver.init(this, Locale.getDefault());
         Metrix.initialize(this, "jpbnabzrmeqvxme");
 
         // dont remove below line please
@@ -517,7 +518,7 @@ public class G extends ApplicationContext {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        updateResources(getBaseContext());
+        updateResources(this);
     }
 
     public static void showToast(String message) {
