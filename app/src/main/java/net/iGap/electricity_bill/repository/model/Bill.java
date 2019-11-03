@@ -19,6 +19,14 @@ public class Bill {
         this.dueTime = dueTime;
     }
 
+    public Bill(String name, String ID, String payID, String price, String dueTime) {
+        this.ID = ID;
+        this.payID = payID;
+        this.price = price;
+        this.dueTime = dueTime;
+        this.title = name;
+    }
+
     public Bill(String ID, String payID, String price, String dueTime, boolean loading) {
         this.ID = ID;
         this.payID = payID;

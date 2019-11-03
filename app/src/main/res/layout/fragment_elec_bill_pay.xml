@@ -357,6 +357,8 @@
                     android:layout_marginEnd="@dimen/dp32"
                     android:layout_marginRight="@dimen/dp32"
                     android:layout_marginLeft="@dimen/dp32"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/Pay"/>
