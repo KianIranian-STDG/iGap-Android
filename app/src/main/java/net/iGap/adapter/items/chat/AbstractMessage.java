@@ -451,9 +451,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         })
                         .setOnLinkLongClickListener((tv, url) -> {
 
-                            if (!FragmentChat.isInSelectionMode){
-                                if (HelperUrl.isTextLink(url)){
-                                    G.isLinkClicked = true ;
+                            if (!FragmentChat.isInSelectionMode) {
+                                if (HelperUrl.isTextLink(url)) {
+                                    G.isLinkClicked = true;
                                     messageClickListener.onOpenLinkDialog(url);
                                 }
 
@@ -704,7 +704,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), Long.parseLong(mMessage.senderID));
             if (realmRegisteredInfo != null) {
-                final EmojiTextViewE _tv = (EmojiTextViewE) ViewMaker.makeHeaderTextView(holder.getContext(),realmRegisteredInfo.getDisplayName());
+                final EmojiTextViewE _tv = (EmojiTextViewE) ViewMaker.makeHeaderTextView(holder.getContext(), realmRegisteredInfo.getDisplayName());
 
                 _tv.measure(0, 0);       //must call measure!
                 int maxWith = 0;
@@ -988,8 +988,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 } else {
                     replayView.setBackgroundResource(new Theme().getReceivedReplay(replayView.getContext()));
                 }
-                replyFrom.setTextColor(new Theme().getAccentColor(replyFrom.getContext()));
-                replayMessage.setTextColor(new Theme().getPrimaryTextColor(replayMessage.getContext()));
+                replyFrom.setTextColor(new Theme().getSendReplayUserColor(replyFrom.getContext()));
+                replayMessage.setTextColor(new Theme().getSendMessageTextColor(replayMessage.getContext()));
 
                 replyFrom.measure(0, 0);       //must call measure!
                 replayMessage.measure(0, 0);
@@ -1049,9 +1049,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             });
 
             TextView txtPrefixForwardFrom = forwardView.findViewById(R.id.cslr_txt_prefix_forward);
-            txtPrefixForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext() , R.font.main_font));
+            txtPrefixForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext(), R.font.main_font));
             TextView txtForwardFrom = forwardView.findViewById(R.id.cslr_txt_forward_from);
-            txtForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext() , R.font.main_font));
+            txtForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext(), R.font.main_font));
 
             /**
              * if forward message from chat or group , sender is user

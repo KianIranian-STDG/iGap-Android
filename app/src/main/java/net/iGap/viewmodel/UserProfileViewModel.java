@@ -136,18 +136,17 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private ObservableInt textsGravity = new ObservableInt(Gravity.LEFT);
     private ObservableBoolean showReferralErrorLiveData = new ObservableBoolean(false);
     private ObservableInt referralError = new ObservableInt(R.string.already_registered);
+    private ObservableInt showAddAvatarButton = new ObservableInt(View.GONE);
 
     private MutableLiveData<Boolean> showDialogSelectCountry = new MutableLiveData<>();
     private MutableLiveData<Boolean> referralEnableLiveData = new MutableLiveData<>();
     private ObservableField<String> referralNumberObservableField = new ObservableField<>("");
     public ObservableField<String> referralCountryCodeObservableField = new ObservableField<>("+98");
-    private int phoneMax = 10;
-    private boolean sendReferral = false;
 
     //ui
-    public SingleLiveEvent<Boolean> goToAddMemberPage = new SingleLiveEvent<>();
-    public SingleLiveEvent<String> goToWalletAgreementPage = new SingleLiveEvent<>();
-    public SingleLiveEvent<String> goToWalletPage = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> goToAddMemberPage = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> goToWalletAgreementPage = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> goToWalletPage = new SingleLiveEvent<>();
     public SingleLiveEvent<String> shareInviteLink = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goToScannerPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> checkLocationPermission = new SingleLiveEvent<>();
@@ -162,7 +161,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public SingleLiveEvent<DeleteAvatarModel> deleteAvatar = new SingleLiveEvent<>();
     public SingleLiveEvent<ChangeImageModel> setUserAvatarPath = new SingleLiveEvent<>();
     public SingleLiveEvent<GoToChatModel> goToChatPage = new SingleLiveEvent<>();
-    public MutableLiveData<Boolean> isEditProfile = new MutableLiveData<>();
     public SingleLiveEvent<Boolean> showDialogChooseImage = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> updateNewTheme = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
@@ -171,6 +169,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public MutableLiveData<Boolean> setCurrentFragment = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> popBackStack = new SingleLiveEvent<>();
 
+    private int phoneMax = 10;
+    private boolean sendReferral = false;
     private Realm mRealm;
     private RealmUserInfo userInfo;
     private String phoneNumber;
@@ -186,6 +186,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public String pathSaveImage;
     private long idAvatar;
     private AvatarHandler avatarHandler;
+    private boolean isEditProfile;
 
     private int retryRequestTime = -1;
 
@@ -206,7 +207,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             });
         }
 
-        setCurrentFragment.setValue(isEditMode());
+        setCurrentFragment.setValue(isEditProfile);
         appVersion.set(BuildConfig.VERSION_NAME);
 
         //set user info text gravity
@@ -255,7 +256,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     }
 
-    public void updateUserInfoUI() {
+    private void updateUserInfoUI() {
         if (checkValidationForRealm(userInfo)) {
             userId = userInfo.getUserId();
             phoneNumber = userInfo.getUserInfo().getPhoneNumber();
@@ -333,6 +334,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         return referralNumberObservableField;
     }
 
+    public ObservableInt getShowAddAvatarButton() {
+        return showAddAvatarButton;
+    }
+
     public ArrayList<StructCountry> getStructCountryArrayList() {
         return structCountryArrayList;
     }
@@ -385,27 +390,40 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         return referralError;
     }
 
+    public SingleLiveEvent<Boolean> getGoToAddMemberPage() {
+        return goToAddMemberPage;
+    }
+
+    public SingleLiveEvent<String> getGoToWalletAgreementPage() {
+        return goToWalletAgreementPage;
+    }
+
+    public SingleLiveEvent<String> getGoToWalletPage() {
+        return goToWalletPage;
+    }
+
     public void onEditProfileClick() {
         Log.wtf(this.getClass().getName(), "onEditProfileClick");
-        if (isEditProfile.getValue() != null && isEditProfile.getValue()) {
+        if (isEditProfile) {
             Log.wtf(this.getClass().getName(), "isEditProfile true");
             editProfileIcon.set(R.string.edit_icon);
-            isEditProfile.setValue(false);
+            isEditProfile = false;
             submitData();
         } else {
             Log.wtf(this.getClass().getName(), "isEditProfile false");
             editProfileIcon.set(R.string.close_icon);
-            isEditProfile.setValue(true);
+            isEditProfile = true;
             if (editProfileIcon.get() == R.string.close_icon) {
                 Log.wtf(this.getClass().getName(), "getReferral");
-                isEditProfile.setValue(true);
+                isEditProfile = true;
                 getReferral();
             } else {
                 Log.wtf(this.getClass().getName(), "isEditProfile false");
-                isEditProfile.setValue(false);
+                isEditProfile = false;
             }
         }
-        setCurrentFragment.setValue(isEditProfile.getValue());
+        setCurrentFragment.setValue(isEditProfile);
+        showAddAvatarButton.set(isEditProfile ? View.VISIBLE : View.GONE);
     }
 
     public void onCloudMessageClick() {
@@ -543,7 +561,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void nameTextChangeListener(String newName) {
-        if (isEditMode()) {
+        if (isEditProfile) {
             if (!newName.equals(currentName)) {
                 editProfileIcon.set(R.string.check_icon);
             } else {
@@ -555,7 +573,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void usernameTextChangeListener(String newUsername) {
-        if (isEditMode()) {
+        if (isEditProfile) {
             if (HelperString.regexCheckUsername(newUsername)) {
                 new RequestUserProfileCheckUsername().userProfileCheckUsername(newUsername, new OnUserProfileCheckUsername() {
                     @Override
@@ -591,7 +609,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void emailTextChangeListener(String newEmail) {
-        if (isEditMode()) {
+        if (isEditProfile) {
             if (!newEmail.equals(currentUserEmail)) {
                 editProfileIcon.set(R.string.check_icon);
                 emailErrorMessage.set(R.string.empty_error_message);
@@ -605,7 +623,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void referralTextChangeListener(String phoneNumber) {
-        if (isEditMode()) {
+        if (isEditProfile) {
             if (phoneNumber.startsWith("0")) {
                 phoneNumber = "";
             }
@@ -619,7 +637,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void bioTextChangeListener(String newBio) {
-        if (isEditMode()) {
+        if (isEditProfile) {
             if (!currentBio.equals(newBio)) {
                 editProfileIcon.set(R.string.check_icon);
             } else {
@@ -631,7 +649,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onCheckedListener(int checkedId) {
-        if (isEditMode()) {
+        if (isEditProfile) {
             if (checkedId != currentGender) {
                 gender.set(checkedId);
                 editProfileIcon.set(R.string.check_icon);
@@ -727,10 +745,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         super.onCleared();
     }
 
-    private boolean isEditMode() {
-        return isEditProfile.getValue() != null && isEditProfile.getValue();
-    }
-
     private void submitData() {
         showLoading.set(View.VISIBLE);
         if (!currentName.equals(name.get())) {
@@ -748,7 +762,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             setReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replace(" ", ""));
         } else {
             showLoading.set(View.GONE);
-            isEditProfile.setValue(false);
+            isEditProfile = false;
             editProfileIcon.set(R.string.edit_icon);
         }
     }
@@ -929,15 +943,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public boolean checkEditModeForOnBackPressed() {
-        if (isEditProfile.getValue() != null) {
-            if (isEditProfile.getValue()) {
-                isEditProfile.setValue(false);
-                getEditProfileIcon().set(R.string.edit_icon);
-                popBackStack.setValue(true);
-                return false;
-            } else {
-                return true;
-            }
+        if (isEditProfile) {
+            isEditProfile = false;
+            getEditProfileIcon().set(R.string.edit_icon);
+            popBackStack.setValue(true);
+            return false;
         } else {
             return true;
         }
@@ -1238,7 +1248,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                         referralEnableLiveData.postValue(false);
                         sendReferral = false;
                     }
-                }, 500);
+                }, 0);
             }
 
             @Override

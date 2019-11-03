@@ -36,6 +36,7 @@ import net.iGap.Theme;
 import net.iGap.adapter.BottomSheetItem;
 import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.fragments.FragmentEditImage;
+import net.iGap.fragments.FragmentGallery;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnClickCamera;

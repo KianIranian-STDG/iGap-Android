@@ -86,8 +86,9 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
         }
 
-        viewModel.setCurrentFragment.observe(getViewLifecycleOwner(),isEdit->{
+        viewModel.setCurrentFragment.observe(getViewLifecycleOwner(), isEdit -> {
             if (isEdit != null) {
+                Log.wtf(this.getClass().getName(), "setCurrentFragment, isEditMode: " + isEdit);
                 if (isEdit) {
                     FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
                     Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentEditProfile.class.getName());
@@ -171,8 +172,8 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        viewModel.getPopBackStack().observe(getViewLifecycleOwner(),isPopBackStack->{
-            if (isPopBackStack!= null&& isPopBackStack){
+        viewModel.getPopBackStack().observe(getViewLifecycleOwner(), isPopBackStack -> {
+            if (isPopBackStack != null && isPopBackStack) {
                 getChildFragmentManager().popBackStack();
             }
         });
@@ -188,7 +189,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        Log.wtf(this.getClass().getName(),"onViewCreated");
+        Log.wtf(this.getClass().getName(), "onViewCreated");
 
     }
 

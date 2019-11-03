@@ -33,6 +33,7 @@
         <item name="iGapSendMessageBubbleColor">#3d3d3d</item>
         <item name="iGapSendMessageOtherTextColor">#cccccc</item>
         <item name="iGapSendMessageTextColor">#AAAAAA</item>
+        <item name="iGapSendReplayColor">@color/green</item>
 
         <item name="iGapLinkColor">#00BCD4</item>
         <item name="iGapDefaultChatBackground">@color/background_setting_dark</item>
@@ -81,12 +82,13 @@
         <item name="iGapBottomNavigationIconEnd">#FF50B452</item>
 
         <item name="iGapReceivedMessageTextColor">#5F5F5F</item>
-        <item name="iGapReceivedOtherTextColor">#cccccc</item>
+        <item name="iGapReceivedOtherTextColor">#7a7a7a</item>
         <item name="iGapReceivedReplayColor">#e2e8de</item>
 
         <item name="iGapSendMessageBubbleColor">#f5ffec</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">@color/green</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#f4f0e8</item>
@@ -142,6 +144,7 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#720505</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#ffcdd2</item>
@@ -196,6 +199,7 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">#5F5F5F</item>
+        <item name="iGapSendReplayColor">#da6463</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#F8BBD0</item>
@@ -250,6 +254,7 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#68265b</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#E1BEE7</item>
@@ -304,6 +309,7 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#07439b</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#BBDEFB</item>
@@ -358,6 +364,7 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#8cb238</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#DCEDC8</item>
@@ -412,6 +419,7 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#dd9f07</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#FFF9C4</item>
@@ -466,6 +474,7 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">#5f5f5f</item>
+        <item name="iGapSendReplayColor">#ff6700</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#FFE0B2</item>
@@ -521,6 +530,7 @@
         <item name="iGapReceivedReplayColor">#99B3C4</item>
         <item name="iGapSendMessageOtherTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#182d44</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#CFD8DC</item>
