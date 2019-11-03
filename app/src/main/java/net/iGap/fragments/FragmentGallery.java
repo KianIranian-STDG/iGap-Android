@@ -100,14 +100,14 @@ public class FragmentGallery extends BaseFragment {
 
         mGalleryAdapter.setListener(new AdapterGallery.GalleryItemListener() {
             @Override
-            public void onItemClicked(String name) {
-                if (name == null || getActivity() == null) return;
+            public void onItemClicked(String path) {
+                if (path == null || getActivity() == null) return;
                 if (isSubFolder){
                     //open Image
-
+                    openImageForEdit(path);
                 }else {
                     //open sub directory
-                    Fragment fragment = FragmentGallery.newInstance(name);
+                    Fragment fragment = FragmentGallery.newInstance(path);
                     new HelperFragment(getActivity().getSupportFragmentManager() , fragment).setReplace(false).load(false);
                 }
             }
@@ -123,6 +123,20 @@ public class FragmentGallery extends BaseFragment {
         }else {
             mGalleryAdapter.setAlbumsItem(getGalleryAlbums());
         }
+    }
+
+    private void openImageForEdit(String path) {
+        if (getActivity() == null) return;
+        FragmentEditImage.itemGalleryList.clear();
+        FragmentEditImage.textImageList.clear();
+        FragmentEditImage.insertItemList(path, "", false);
+        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, 0);
+        fragmentEditImage.setIsReOpenChatAttachment(false);
+        fragmentEditImage.setGalleryListener(() -> {
+            popBackStackFragment();
+            popBackStackFragment();
+        });
+        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
     }
 
     private List<GalleryAlbumModel> getGalleryAlbums() {
