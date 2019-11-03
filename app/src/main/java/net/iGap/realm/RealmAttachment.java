@@ -173,25 +173,25 @@ public class RealmAttachment extends RealmObject {
             String _Dir = "";
 
             if (_filePath != null && _filePath.length() > 0) {
-                if (_filePath.contains(G.DIR_APP)) {
-                    String _defaultFilePAth = "";
-                    switch (attachmentFor) {
-                        case MESSAGE_ATTACHMENT:
-                            _defaultFilePAth = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), messageType);
-                            _Dir = AndroidUtils.suitableAppFilePath(messageType);
-                            break;
-                        case AVATAR:
-                            _defaultFilePAth = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, false);
+                String _defaultFilePAth = "";
+                switch (attachmentFor) {
+                    case MESSAGE_ATTACHMENT:
+                        _defaultFilePAth = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), messageType);
+                        _Dir = AndroidUtils.suitableAppFilePath(messageType);
+                        break;
+                    case AVATAR:
+                        _defaultFilePAth = AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, false);
 
-                            if (realmAttachment.getLocalThumbnailPath() == null) {
-                                realmAttachment.setLocalThumbnailPath(AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, true));
-                            }
-                            _Dir = G.DIR_IMAGE_USER;
+                        if (realmAttachment.getLocalThumbnailPath() == null) {
+                            realmAttachment.setLocalThumbnailPath(AndroidUtils.getFilePathWithCashId(file.getCacheId(), file.getName(), G.DIR_IMAGE_USER, true));
+                        }
+                        _Dir = G.DIR_IMAGE_USER;
 
-                            break;
-                    }
+                        break;
+                }
 
-                    if (!_filePath.equals(_defaultFilePAth)) {
+                if (!_filePath.equals(_defaultFilePAth)) {
+                    try {
                         File _File1 = new File(_filePath);
                         if (_File1.exists()) {
 
@@ -199,14 +199,13 @@ public class RealmAttachment extends RealmObject {
                                 _File1.renameTo(new File(_defaultFilePAth));
                                 realmAttachment.setLocalFilePath(_defaultFilePAth);
                             } else {
-                                try {
                                     AndroidUtils.copyFile(_File1, new File(_defaultFilePAth));
                                     realmAttachment.setLocalFilePath(_defaultFilePAth);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+
                             }
                         }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }
