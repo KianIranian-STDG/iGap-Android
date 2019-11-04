@@ -23,10 +23,11 @@ import java.util.List;
 public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHolderGallery> {
 
     private boolean isPhotoMode;
-    private boolean isMultiSelect ;
+    private boolean isMultiSelect;
     private List<GalleryAlbumModel> albumsItem = new ArrayList<>();
     private List<GalleryPhotoModel> photosItem = new ArrayList<>();
-    private GalleryItemListener listener ;
+    private List<GalleryPhotoModel> mSelectedPhotos = new ArrayList<>();
+    private GalleryItemListener listener;
 
     public AdapterGallery(boolean isPhotoMode) {
         this.isPhotoMode = isPhotoMode;
@@ -46,9 +47,18 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
         this.listener = listener;
     }
 
-    public void setMultiSelectState(boolean enable){
+    public void setMultiSelectState(boolean enable) {
         this.isMultiSelect = enable;
+        if (!enable) mSelectedPhotos.clear();
         notifyDataSetChanged();
+    }
+
+    public boolean getMultiSelectState() {
+        return isMultiSelect;
+    }
+
+    public List<GalleryPhotoModel> getSelectedPhotos() {
+        return mSelectedPhotos;
     }
 
     @NonNull
@@ -61,11 +71,58 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolderGallery holder, int position) {
 
-        if (isPhotoMode){
-            holder.bindPhotos(photosItem.get(holder.getAdapterPosition()));
-        }else {
-            holder.bindAlbums(albumsItem.get(holder.getAdapterPosition()));
+        //use 2 state for gallery to decrease codes => ALBUM and PHOTO
+        if (!isPhotoMode) {
+
+            holder.caption.setText(albumsItem.get(position).getCaption());
+            holder.caption.setVisibility(View.VISIBLE);
+
+        } else {
+
+            if (isMultiSelect) {
+                holder.check.setVisibility(View.VISIBLE);
+                holder.check.setChecked(mSelectedPhotos.contains(photosItem.get(position)));
+            } else {
+                holder.check.setChecked(false);
+                holder.check.setVisibility(View.GONE);
+            }
+
+            holder.check.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    if (!mSelectedPhotos.contains(photosItem.get(holder.getAdapterPosition())))
+                        mSelectedPhotos.add(photosItem.get(holder.getAdapterPosition()));
+                } else {
+                    mSelectedPhotos.remove(photosItem.get(holder.getAdapterPosition()));
+                }
+            });
+
         }
+
+        //handle item click
+        holder.image.setOnClickListener(v -> {
+
+            if (!isMultiSelect){
+                listener.onItemClicked(
+                        isPhotoMode ? photosItem.get(holder.getAdapterPosition()).getAddress() : albumsItem.get(holder.getAdapterPosition()).getCaption()
+                );
+            }else{
+                holder.check.setChecked(!holder.check.isChecked());
+            }
+
+        });
+
+        //rotate and load image
+        ImageHelper.correctRotateImage(isPhotoMode ? photosItem.get(position).getAddress() : albumsItem.get(position).getCover(), true, new OnRotateImage() {
+            @Override
+            public void startProcess() {
+                //nothing
+            }
+
+            @Override
+            public void success(String newPath) {
+                G.handler.post(() -> G.imageLoader.displayImage("file://" + newPath, holder.image));
+            }
+        });
     }
 
     @Override
@@ -75,68 +132,22 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
 
     class ViewHolderGallery extends RecyclerView.ViewHolder {
 
-        private TextView caption;
-        private ImageView image;
-        private CheckBox check;
+        TextView caption;
+        ImageView image;
+        CheckBox check;
 
-        public ViewHolderGallery(@NonNull View itemView) {
+        ViewHolderGallery(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
             caption = itemView.findViewById(R.id.caption);
             check = itemView.findViewById(R.id.check);
         }
 
-        void bindAlbums(GalleryAlbumModel item) {
-
-            caption.setText(item.getCaption());
-            caption.setVisibility(View.VISIBLE);
-            image.setOnClickListener(v -> listener.onItemClicked(item.getCaption()));
-
-            //rotate and load image
-            ImageHelper.correctRotateImage(item.getCover(), true, new OnRotateImage() {
-                @Override
-                public void startProcess() {
-                    //nothing
-                }
-
-                @Override
-                public void success(String newPath) {
-                    G.handler.post(() -> G.imageLoader.displayImage("file://" + item.getCover(), image));
-                }
-            });
-        }
-
-        void bindPhotos(GalleryPhotoModel item) {
-
-            if (isMultiSelect) {
-                check.setVisibility(View.VISIBLE);
-                check.setChecked(item.isSelect());
-            }else {
-                check.setChecked(false);
-                check.setVisibility(View.GONE);
-            }
-            image.setOnClickListener(v -> listener.onItemClicked(item.getAddress()));
-            check.setOnCheckedChangeListener((buttonView, isChecked) -> listener.onItemSelected(item , isChecked));
-
-            //rotate and load image
-            ImageHelper.correctRotateImage(item.getAddress(), true, new OnRotateImage() {
-                @Override
-                public void startProcess() {
-                    //nothing
-                }
-
-                @Override
-                public void success(String newPath) {
-                    G.handler.post(() -> G.imageLoader.displayImage("file://" + item.getAddress(), image));
-                }
-            });
-        }
     }
 
-    public interface GalleryItemListener{
+    public interface GalleryItemListener {
 
         void onItemClicked(String name);
-        void onItemSelected(GalleryPhotoModel item ,boolean isCheck);
 
     }
 }
