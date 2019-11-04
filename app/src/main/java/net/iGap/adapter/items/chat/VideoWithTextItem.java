@@ -57,8 +57,6 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.image.setTag(getCacheId(structMessage));
-
         super.bindView(holder, payloads);
 
         if (mMessage.getForwardMessage() != null) {
@@ -70,7 +68,6 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
 
                 if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
                     holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.Uploading)));
-                    AbstractMessage.processVideo(holder.duration, holder.itemView, structMessage);
                 } else {
                     holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + ""));
                 }
@@ -84,23 +81,20 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
     @Override
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
-
-        if (holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
-            if (fileType == LocalFileType.THUMBNAIL) {
+        if (fileType == LocalFileType.THUMBNAIL) {
 //                BitmapFactory.Options options = new BitmapFactory.Options();
 //                options.inPreferredConfig = Bitmap.Config.RGB_565;
 //                DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
 //                G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
 //                        new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
-                G.imageLoader.displayImage(suitablePath(localPath), holder.image);
+            G.imageLoader.displayImage(suitablePath(localPath), holder.image);
 
-            } else {
+        } else {
 
-                AppUtils.setProgresColor(holder.progress.progressBar);
+            AppUtils.setProgresColor(holder.progress.progressBar);
 
-                holder.progress.setVisibility(View.VISIBLE);
-                holder.progress.withDrawable(R.drawable.ic_play, true);
-            }
+            holder.progress.setVisibility(View.VISIBLE);
+            holder.progress.withDrawable(R.drawable.ic_play, true);
         }
     }
 
@@ -113,7 +107,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         protected FontIconTextView more;
         protected MessageProgress progress;
         protected ReserveSpaceRoundedImageView image;
-        protected TextView duration;
+        public TextView duration;
 
         public ViewHolder(View view) {
             super(view);

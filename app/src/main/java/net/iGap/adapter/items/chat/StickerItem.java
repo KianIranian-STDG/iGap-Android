@@ -49,7 +49,6 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.image.setTag(getCacheId(structMessage));
         super.bindView(holder, payloads);
 
         holder.getChatBloke().setBackgroundResource(0);
@@ -82,10 +81,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
     public void onLoadThumbnailFromLocal(ViewHolder holder, String tag, String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
-        if (holder.image != null && holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
-            G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-        }
-
+        G.imageLoader.displayImage(suitablePath(localPath), holder.image);
     }
 
     @Override

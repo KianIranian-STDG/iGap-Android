@@ -195,16 +195,6 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
                 G.isAppInFg = false;
             }
             G.isScrInFg = false;
-            try {
-
-                HelperDataUsage.insertDataUsage(null, true, true);
-                HelperDataUsage.insertDataUsage(null, true, false);
-
-                HelperDataUsage.insertDataUsage(null, false, true);
-                HelperDataUsage.insertDataUsage(null, false, false);
-
-            } catch (Exception e) {
-            }
 
             if (!AttachFile.isInAttach && canSetUserStatus) {
                 UserStatusController.getInstance().setOffline();

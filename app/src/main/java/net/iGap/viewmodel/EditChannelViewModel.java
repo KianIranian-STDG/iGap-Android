@@ -13,14 +13,15 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentShowAvatars;
-import net.iGap.helper.HelperUploadFile;
+import net.iGap.helper.upload.OnUploadListener;
+import net.iGap.helper.upload.UploadManager;
+import net.iGap.helper.upload.UploadTask;
 import net.iGap.interfaces.OnChannelAvatarAdd;
 import net.iGap.interfaces.OnChannelAvatarDelete;
 import net.iGap.interfaces.OnChannelDelete;
 import net.iGap.interfaces.OnChannelEdit;
 import net.iGap.interfaces.OnChannelUpdateReactionStatus;
 import net.iGap.interfaces.OnChannelUpdateSignature;
-import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.proto.ProtoGlobal;
@@ -34,6 +35,7 @@ import net.iGap.request.RequestChannelEdit;
 import net.iGap.request.RequestChannelUpdateReactionStatus;
 import net.iGap.request.RequestChannelUpdateSignature;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class EditChannelViewModel extends BaseViewModel implements OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelUpdateReactionStatus, OnChannelDelete {
@@ -382,22 +384,22 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     public void uploadAvatar(String path) {
         long avatarId = SUID.id().get();
         long lastUploadedAvatarId = avatarId + 1L;
-
-        HelperUploadFile.startUploadTaskAvatar(path, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+        UploadManager.getInstance().upload(new UploadTask(lastUploadedAvatarId + "", new File(path), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
             @Override
-            public void OnProgress(int progress, FileUploadStructure struct) {
-                if (progress < 100) {
-                    showUploadProgressLiveData.postValue(View.VISIBLE);
-                } else {
-                    new RequestChannelAvatarAdd().channelAvatarAdd(roomId, struct.token);
-                }
+            public void onProgress(String id, int progress) {
+                showUploadProgressLiveData.postValue(View.VISIBLE);
             }
 
             @Override
-            public void OnError() {
+            public void onFinish(String id, String token) {
+                new RequestChannelAvatarAdd().channelAvatarAdd(roomId, token);
+            }
+
+            @Override
+            public void onError(String id) {
                 showUploadProgressLiveData.postValue(View.GONE);
             }
-        });
+        }));
     }
 
     public MutableLiveData<Long> getChannelAvatarUpdatedLiveData() {

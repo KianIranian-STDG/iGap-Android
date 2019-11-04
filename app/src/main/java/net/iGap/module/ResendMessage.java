@@ -16,7 +16,7 @@ import android.content.Context;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.helper.HelperUploadFile;
+import net.iGap.helper.upload.UploadManager;
 import net.iGap.interfaces.IResendMessage;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
@@ -109,8 +109,8 @@ public class ResendMessage implements IResendMessage {
                                                     if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
                                                         new ChatSendMessageUtil().build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage).sendMessage(roomMessage.getMessageId() + "");
                                                     } else {
-                                                        HelperUploadFile.startUploadTaskChat(roomMessage.getRoomId(), realmRoom.getType(), roomMessage.getAttachment().getLocalFilePath(), roomMessage.getMessageId(), roomMessage.getMessageType(), roomMessage.getMessage(), RealmRoomMessage.getReplyMessageId(roomMessage), null);
-                                                    }
+                                                        UploadManager.getInstance().uploadMessageAndSend(realmRoom.getType(), roomMessage);
+                                                   }
                                                 }
                                             }
                                         }
@@ -132,7 +132,7 @@ public class ResendMessage implements IResendMessage {
                                             if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
                                                 new ChatSendMessageUtil().build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage).sendMessage(roomMessage.getMessageId() + "");
                                             } else {
-                                                HelperUploadFile.startUploadTaskChat(roomMessage.getRoomId(), roomType, roomMessage.getAttachment().getLocalFilePath(), roomMessage.getMessageId(), roomMessage.getMessageType(), roomMessage.getMessage(), RealmRoomMessage.getReplyMessageId(roomMessage), null);
+                                                UploadManager.getInstance().uploadMessageAndSend(realmRoom.getType(), roomMessage);
                                             }
                                         }
                                     }

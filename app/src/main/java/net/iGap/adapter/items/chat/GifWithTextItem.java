@@ -77,21 +77,18 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
     @Override
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
+        holder.image.setImageURI(Uri.fromFile(new File(localPath)));
 
-        if (holder.image.getTag() != null && holder.image.getTag().equals(tag)) {
-            holder.image.setImageURI(Uri.fromFile(new File(localPath)));
-
-            if (fileType == LocalFileType.FILE) {
-                SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 1) {
-                    holder.progress.setVisibility(View.GONE);
-                } else {
-                    if (holder.image.getDrawable() instanceof GifDrawable) {
-                        GifDrawable gifDrawable = (GifDrawable) holder.image.getDrawable();
-                        // to get first frame
-                        gifDrawable.stop();
-                        holder.progress.setVisibility(View.VISIBLE);
-                    }
+        if (fileType == LocalFileType.FILE) {
+            SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+            if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 1) {
+                holder.progress.setVisibility(View.GONE);
+            } else {
+                if (holder.image.getDrawable() instanceof GifDrawable) {
+                    GifDrawable gifDrawable = (GifDrawable) holder.image.getDrawable();
+                    // to get first frame
+                    gifDrawable.stop();
+                    holder.progress.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -99,51 +96,11 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.image.setTag(getCacheId(structMessage));
         super.bindView(holder, payloads);
 
         setTextIfNeeded(holder.messageView);
 
-
         holder.progress.setOnLongClickListener(getLongClickPerform(holder));
-
-        holder.progress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!FragmentChat.isInSelectionMode) {
-                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                        if (!hasFileSize(mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getAttachment().getLocalFilePath() :
-                                structMessage.getAttachment().getLocalFilePath())) {
-                            messageClickListener.onUploadOrCompressCancel(holder.progress, structMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
-                        }
-                        return;
-                    }
-                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
-                    } else {
-                        if (mMessage.getForwardMessage() != null && mMessage.getForwardMessage().getAttachment().isFileExistsOnLocal()) {
-                            try {
-                                onPlayPauseGIF(holder, mMessage.getForwardMessage().getAttachment().getLocalFilePath());
-                            } catch (ClassCastException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            if (structMessage.getAttachment().isFileExistsOnLocal()) {
-                                try {
-                                    onPlayPauseGIF(holder, structMessage.getAttachment().getLocalFilePath());
-                                } catch (ClassCastException e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                downLoadFile(holder, 0);
-                            }
-                        }
-                    }
-                } else {
-                    holder.itemView.performLongClick();
-                }
-            }
-        });
 
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
