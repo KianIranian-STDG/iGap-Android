@@ -35,6 +35,7 @@ public class FragmentGallery extends BaseFragment {
     private String mFolderName, mFolderId;
     private boolean isSubFolder = false;
     private HelperToolbar mHelperToolbar;
+    private GalleryFragmentListener mGalleryListener ;
 
     public FragmentGallery() {
     }
@@ -44,6 +45,12 @@ public class FragmentGallery extends BaseFragment {
         fragment.mFolderName = folder;
         fragment.mFolderId = id;
         fragment.isSubFolder = true;
+        return fragment;
+    }
+
+    public static FragmentGallery newInstance(GalleryFragmentListener listener) {
+        FragmentGallery fragment = new FragmentGallery();
+        fragment.mGalleryListener = listener ;
         return fragment;
     }
 
@@ -65,6 +72,7 @@ public class FragmentGallery extends BaseFragment {
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
+                .setRightIcons(isSubFolder ? R.string.edit_icon : R.string.more_icon)
                 .setLogoShown(true)
                 .setIGapLogoCheck(false)
                 .setDefaultTitle(isSubFolder ? mFolderName : getString(R.string.gallery))
@@ -76,18 +84,24 @@ public class FragmentGallery extends BaseFragment {
 
                     @Override
                     public void onRightIconClickListener(View view) {
-                        if (mGalleryAdapter == null) return;
-                        if (mGalleryAdapter.getMultiSelectState()) {
-                            mHelperToolbar.getRightButton().setText(R.string.edit_icon);
-                            sendSelectedPhotos(mGalleryAdapter.getSelectedPhotos());
-                        } else {
-                            mHelperToolbar.getRightButton().setText(R.string.md_send_button);
+                        if (isSubFolder){
+                            if (mGalleryAdapter == null) return;
+                            if (mGalleryAdapter.getMultiSelectState()) {
+                                mHelperToolbar.getRightButton().setText(R.string.edit_icon);
+                                sendSelectedPhotos(mGalleryAdapter.getSelectedPhotos());
+                            } else {
+                                mHelperToolbar.getRightButton().setText(R.string.md_send_button);
+                            }
+                            mGalleryAdapter.setMultiSelectState(!mGalleryAdapter.getMultiSelectState());
+                        }else{
+                            if (mGalleryListener != null) {
+                                popBackStackFragment();
+                                mGalleryListener.openOsGallery();
+                            }
                         }
-                        mGalleryAdapter.setMultiSelectState(!mGalleryAdapter.getMultiSelectState());
                     }
                 });
 
-        if (isSubFolder) mHelperToolbar.setRightIcons(R.string.edit_icon);
         lytToolbar.addView(mHelperToolbar.getView());
     }
 
@@ -255,6 +269,10 @@ public class FragmentGallery extends BaseFragment {
             cursor.close();
         }
         return photos;
+    }
+
+    public interface GalleryFragmentListener{
+        void openOsGallery();
     }
 
 }

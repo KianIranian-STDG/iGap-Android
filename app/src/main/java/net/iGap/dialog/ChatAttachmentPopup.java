@@ -336,12 +336,14 @@ public class ChatAttachmentPopup {
             FragmentEditImage.itemGalleryList.clear();
             FragmentEditImage.textImageList.clear();
 
-            new HelperFragment(mFrgActivity.getSupportFragmentManager() , new FragmentGallery()).setReplace(false).load();
-            /*try {
-                attachFile.requestOpenGalleryForImageMultipleSelect(mFragment);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
+            Fragment fragment = FragmentGallery.newInstance(()->{
+                try {
+                    attachFile.requestOpenGalleryForImageMultipleSelect(mFragment);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            new HelperFragment(mFrgActivity.getSupportFragmentManager() , fragment).setReplace(false).load();
         });
 
         video.setOnClickListener(v -> {
