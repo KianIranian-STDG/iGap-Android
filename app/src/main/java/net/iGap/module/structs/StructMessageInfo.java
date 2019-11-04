@@ -12,6 +12,7 @@ package net.iGap.module.structs;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -157,6 +158,16 @@ public class StructMessageInfo implements Parcelable {
         return 0;
     }
 
+    private boolean isEqualTwoString(String a, String b) {
+        if (a == null) {
+            if (b == null)
+                return true;
+            return false;
+        } else {
+            return a.equals(b);
+        }
+    }
+
     public <VH extends RecyclerView.ViewHolder> void addAttachmentChangeListener(AbstractMessage abstractMessage, long identifier, IChatItemAttachment<VH> itemVHAbstractMessage, VH holder, ProtoGlobal.RoomMessageType messageType) {
         removeAttachmentChangeListener();
 
@@ -168,13 +179,15 @@ public class StructMessageInfo implements Parcelable {
             liverRealmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, getAttachment().getId()).findFirstAsync();
 
             realmAttachmentRealmChangeListener = (realmAttachment, changeSet) -> {
-                if (changeSet == null) {
-                    //init query
-                    return;
-                }
                 if (realmAttachment.isValid() && realmAttachment.isManaged()) {
                     setAttachment(realm.copyFromRealm(realmAttachment));
+                    if (isEqualTwoString(getAttachment().getLocalFilePath(), realmAttachment.getLocalFilePath()) &&
+                            isEqualTwoString(getAttachment().getLocalThumbnailPath(), realmAttachment.getLocalThumbnailPath())
+                    ) {
+                        return;
+                    }
                     abstractMessage.onProgressFinish(holder, messageType);
+                    Log.d("bagi" ,"onProgressFinish: " + realmAttachment.getLocalFilePath());
 
                     if (realmAttachment.isFileExistsOnLocalAndIsThumbnail()) {
                         itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
@@ -187,12 +200,6 @@ public class StructMessageInfo implements Parcelable {
                     }
 
                     //mAdapter.notifyItemChanged(mAdapter.getPosition(identifier));
-                }
-
-                for (String change: changeSet.getChangedFields()) {
-                    if (change.equals(RealmAttachmentFields.LOCAL_FILE_PATH)) {
-                        abstractMessage.prepareProgress(holder);
-                    }
                 }
 
             };
