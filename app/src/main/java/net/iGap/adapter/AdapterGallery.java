@@ -1,5 +1,6 @@
 package net.iGap.adapter;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -120,7 +123,7 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
 
             @Override
             public void success(String newPath) {
-                G.handler.post(() -> G.imageLoader.displayImage("file://" + newPath, holder.image));
+                G.handler.post(() -> Glide.with(holder.image.getContext()).load(Uri.parse("file://" + newPath)).into(holder.image));
             }
         });
     }
