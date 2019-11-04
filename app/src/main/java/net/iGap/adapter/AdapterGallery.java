@@ -114,18 +114,10 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
 
         });
 
-        //rotate and load image
-        ImageHelper.correctRotateImage(isPhotoMode ? photosItem.get(position).getAddress() : albumsItem.get(position).getCover(), true, new OnRotateImage() {
-            @Override
-            public void startProcess() {
-                //nothing
-            }
-
-            @Override
-            public void success(String newPath) {
-                G.handler.post(() -> Glide.with(holder.image.getContext()).load(Uri.parse("file://" + newPath)).into(holder.image));
-            }
-        });
+        //load image
+        Glide.with(holder.image.getContext())
+                .load(Uri.parse("file://" + (isPhotoMode ? photosItem.get(position).getAddress() : albumsItem.get(position).getCover())))
+                .into(holder.image);
     }
 
     @Override

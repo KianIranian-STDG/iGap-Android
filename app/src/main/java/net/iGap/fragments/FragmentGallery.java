@@ -15,10 +15,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterGallery;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.ImageHelper;
+import net.iGap.interfaces.OnRotateImage;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.model.GalleryAlbumModel;
 import net.iGap.model.GalleryPhotoModel;
@@ -115,17 +118,33 @@ public class FragmentGallery extends BaseFragment {
     }
 
     private void openImageForEdit(String path) {
-        if (getActivity() == null) return;
         FragmentEditImage.itemGalleryList.clear();
         FragmentEditImage.textImageList.clear();
-        FragmentEditImage.insertItemList(path, "", false);
+
         FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, 0);
         fragmentEditImage.setIsReOpenChatAttachment(false);
+
+        //rotate and send image for edit
+        ImageHelper.correctRotateImage(path, true, new OnRotateImage() {
+            @Override
+            public void startProcess() {
+                //nothing
+            }
+
+            @Override
+            public void success(String newPath) {
+                FragmentEditImage.insertItemList(newPath, "", false);
+                G.handler.post(() -> {
+                    if (getActivity() == null) return;
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+                });
+            }
+        });
+
         fragmentEditImage.setGalleryListener(() -> {
             popBackStackFragment();
             popBackStackFragment();
         });
-        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
     }
 
     private void sendSelectedPhotos(List<GalleryPhotoModel> selectedPhotos) {
