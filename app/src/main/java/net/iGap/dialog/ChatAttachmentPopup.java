@@ -331,11 +331,19 @@ public class ChatAttachmentPopup {
 
         photo.setOnClickListener(v -> {
             dismiss();
-            try {
-                attachFile.requestOpenGalleryForImageMultipleSelect(mFragment);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+            //clear at first time to load image gallery
+            FragmentEditImage.itemGalleryList.clear();
+            FragmentEditImage.textImageList.clear();
+
+            Fragment fragment = FragmentGallery.newInstance(()->{
+                try {
+                    attachFile.requestOpenGalleryForImageMultipleSelect(mFragment);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            new HelperFragment(mFrgActivity.getSupportFragmentManager() , fragment).setReplace(false).load();
         });
 
         video.setOnClickListener(v -> {

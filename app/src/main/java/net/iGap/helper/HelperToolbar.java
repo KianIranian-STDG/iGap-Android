@@ -132,6 +132,7 @@ public class HelperToolbar {
     private int mScannerIcon;
     private int mAnimationOldPositionItem = 0;
     private boolean isRoundBackground = true;
+    private boolean isCheckIGapLogo = true;
     private TextView mTxtCallTimer;
     private BroadcastReceiver callTimerReceiver;
 
@@ -200,6 +201,11 @@ public class HelperToolbar {
 
     public HelperToolbar setLogoShown(boolean logoShown) {
         this.isLogoShown = logoShown;
+        return this;
+    }
+
+    public HelperToolbar setIGapLogoCheck(boolean isCheck) {
+        this.isCheckIGapLogo = isCheck;
         return this;
     }
 
@@ -827,20 +833,21 @@ public class HelperToolbar {
             mTxtLogo.setText(defaultTitleText);
         }
 
-        if (mTxtLogo.getText().toString().toLowerCase().equals("igap")) {
+        if (isCheckIGapLogo) {
 
-            Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
+            if (mTxtLogo.getText().toString().toLowerCase().equals("igap")) {
+                Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
+                mTxtLogo.setTypeface(tfFontIcon);
+                mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
+            } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ") || mTxtLogo.getText().toString().equals("آیکب")) {
+                Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
+                mTxtLogo.setTypeface(tfFontIcon);
+                mTxtLogo.setText(mContext.getString(R.string.igap_fa_icon));
+            } else {
+                mTxtLogo.setTypeface(tfMain);
+            }
 
-            mTxtLogo.setTypeface(tfFontIcon);
-            mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
-        } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ") || mTxtLogo.getText().toString().equals("آیکب")) {
-
-            Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
-
-            mTxtLogo.setTypeface(tfFontIcon);
-            mTxtLogo.setText(mContext.getString(R.string.igap_fa_icon));
-
-        } else {
+        }else{
             mTxtLogo.setTypeface(tfMain);
         }
 

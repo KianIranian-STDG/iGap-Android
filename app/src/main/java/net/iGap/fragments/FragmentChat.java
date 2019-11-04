@@ -6264,7 +6264,7 @@ public class FragmentChat extends BaseFragment
 
                     if (isOpenEditImageFragment && getActivity() != null) {
                         FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, FragmentEditImage.itemGalleryList.size() - 1);
-                        fragmentEditImage.setIsOpenForShareImages(true);
+                        fragmentEditImage.setIsReOpenChatAttachment(false);
                         new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                     }
 
