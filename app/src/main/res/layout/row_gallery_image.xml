@@ -43,6 +43,7 @@
         android:layout_height="wrap_content"
         android:button="@drawable/check_box_background"
         android:layout_margin="@dimen/dp8"
+        android:clickable="false"
         android:visibility="gone"
         app:layout_constraintRight_toRightOf="@id/image"
         app:layout_constraintTop_toTopOf="@id/image" />

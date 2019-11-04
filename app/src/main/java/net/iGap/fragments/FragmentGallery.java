@@ -79,6 +79,11 @@ public class FragmentGallery extends BaseFragment {
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
+                        if (mGalleryAdapter != null && mGalleryAdapter.getMultiSelectState()){
+                            mHelperToolbar.getRightButton().setText(R.string.edit_icon);
+                            mGalleryAdapter.setMultiSelectState(!mGalleryAdapter.getMultiSelectState());
+                            return;
+                        }
                         popBackStackFragment();
                     }
 
@@ -88,9 +93,9 @@ public class FragmentGallery extends BaseFragment {
                             if (mGalleryAdapter == null) return;
                             if (mGalleryAdapter.getMultiSelectState()) {
                                 mHelperToolbar.getRightButton().setText(R.string.edit_icon);
-                                sendSelectedPhotos(mGalleryAdapter.getSelectedPhotos());
+                                if ( mGalleryAdapter.getSelectedPhotos().size() > 0) sendSelectedPhotos(mGalleryAdapter.getSelectedPhotos());
                             } else {
-                                mHelperToolbar.getRightButton().setText(R.string.md_send_button);
+                                mHelperToolbar.getRightButton().setText(R.string.close_icon);
                             }
                             mGalleryAdapter.setMultiSelectState(!mGalleryAdapter.getMultiSelectState());
                         }else{
@@ -112,16 +117,28 @@ public class FragmentGallery extends BaseFragment {
         mGalleryAdapter = new AdapterGallery(isSubFolder);
         rvGallery.setAdapter(mGalleryAdapter);
 
-        mGalleryAdapter.setListener((path, id) -> {
-            if (path == null || getActivity() == null) return;
-            if (isSubFolder) {
-                //open Image
-                openImageForEdit(path);
-            } else {
-                //open sub directory
-                if (id == null) return;
-                Fragment fragment = FragmentGallery.newInstance(path, id);
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load(false);
+        mGalleryAdapter.setListener(new AdapterGallery.GalleryItemListener() {
+            @Override
+            public void onItemClicked(String path, String id) {
+                if (path == null || getActivity() == null) return;
+                if (isSubFolder) {
+                    //open Image
+                    openImageForEdit(path);
+                } else {
+                    //open sub directory
+                    if (id == null) return;
+                    Fragment fragment = FragmentGallery.newInstance(path, id);
+                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load(false);
+                }
+            }
+
+            @Override
+            public void onMultiSelect(int size) {
+                if (size > 0){
+                    mHelperToolbar.getRightButton().setText(R.string.md_send_button);
+                }else {
+                    mHelperToolbar.getRightButton().setText(R.string.close_icon);
+                }
             }
         });
 

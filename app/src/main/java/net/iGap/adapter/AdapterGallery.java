@@ -119,6 +119,7 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
                 );
             }else{
                 holder.check.setChecked(!holder.check.isChecked());
+                listener.onMultiSelect(mSelectedPhotos.size());
             }
 
         });
@@ -152,6 +153,7 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
     public interface GalleryItemListener {
 
         void onItemClicked(String name , String id);
+        void onMultiSelect(int size);
 
     }
 }
