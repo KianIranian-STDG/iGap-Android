@@ -180,12 +180,13 @@ public class StructMessageInfo implements Parcelable {
 
             realmAttachmentRealmChangeListener = (realmAttachment, changeSet) -> {
                 if (realmAttachment.isValid() && realmAttachment.isManaged()) {
-                    setAttachment(realm.copyFromRealm(realmAttachment));
                     if (isEqualTwoString(getAttachment().getLocalFilePath(), realmAttachment.getLocalFilePath()) &&
                             isEqualTwoString(getAttachment().getLocalThumbnailPath(), realmAttachment.getLocalThumbnailPath())
                     ) {
+                        setAttachment(realm.copyFromRealm(realmAttachment));
                         return;
                     }
+                    setAttachment(realm.copyFromRealm(realmAttachment));
                     abstractMessage.onProgressFinish(holder, messageType);
                     Log.d("bagi" ,"onProgressFinish: " + realmAttachment.getLocalFilePath());
 
