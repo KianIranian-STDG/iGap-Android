@@ -26,6 +26,7 @@ import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperWallet;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoWalletPaymentInit;
 import net.iGap.request.RequestWalletPaymentInit;
@@ -256,21 +257,7 @@ public class WalletTransferFragment extends BaseFragment implements EventListene
         payment.isCredit = false;
         payment.orderId = null;
         payment.price = Long.parseLong(mPrice[0]);
-        Intent intent = new Intent(context, WalletActivity.class);
-        intent.putExtra("Language", "fa");
-        intent.putExtra("Mobile", "0" + AccountManager.getInstance().getCurrentUser().getId());
-        intent.putExtra("IsP2P", true);
-        intent.putExtra("Payment", payment);
-        intent.putExtra("PrimaryColor", new Theme().getPrimaryColor(getContext()));
-        intent.putExtra("DarkPrimaryColor", new Theme().getPrimaryColor(getContext()));
-        intent.putExtra("AccentColor", new Theme().getPrimaryColor(getContext()));
-        intent.putExtra(WalletActivity.PROGRESSBAR, new Theme().getAccentColor(getContext()));
-        intent.putExtra(WalletActivity.LINE_BORDER, new Theme().getDividerColor(getContext()));
-        intent.putExtra(WalletActivity.BACKGROUND, new Theme().getRootColor(getContext()));
-        intent.putExtra(WalletActivity.BACKGROUND_2, new Theme().getRootColor(getContext()));
-        intent.putExtra(WalletActivity.TEXT_TITLE, new Theme().getTitleTextColor(getContext()));
-        intent.putExtra(WalletActivity.TEXT_SUB_TITLE, new Theme().getSubTitleColor(getContext()));
-        startActivityForResult(intent, 66);
+        startActivityForResult(new HelperWallet().goToWallet(payment, getContext(), new Intent(context, WalletActivity.class), "0" + AccountManager.getInstance().getCurrentUser().getId(), false), 66);
         cancelBtn.performClick();
     }
 

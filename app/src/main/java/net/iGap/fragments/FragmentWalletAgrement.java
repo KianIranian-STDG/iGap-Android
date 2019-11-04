@@ -17,17 +17,18 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.databinding.FragmentWalletAgrementBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperWallet;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentWalletAgreementViewModel;
 
 import org.jetbrains.annotations.NotNull;
 import org.paygear.WalletActivity;
+
+import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -113,21 +114,7 @@ public class FragmentWalletAgrement extends BaseFragment {
 
         viewModel.getGoToWalletPage().observe(getViewLifecycleOwner(), data -> {
             if (getActivity() != null && data != null) {
-                Intent intent = new Intent(getActivity(), WalletActivity.class);
-                intent.putExtra("Language", "fa");
-                intent.putExtra("Mobile", "0" + data.getPhone());
-                intent.putExtra("PrimaryColor", new Theme().getPrimaryColor(getContext()));
-                intent.putExtra("DarkPrimaryColor", new Theme().getPrimaryColor(getContext()));
-                intent.putExtra("AccentColor", new Theme().getPrimaryColor(getContext()));
-                intent.putExtra("IS_DARK_THEME", G.themeColor == Theme.DARK);
-                intent.putExtra(WalletActivity.PROGRESSBAR, new Theme().getAccentColor(getContext()));
-                intent.putExtra(WalletActivity.LINE_BORDER, new Theme().getDividerColor(getContext()));
-                intent.putExtra(WalletActivity.BACKGROUND, new Theme().getRootColor(getContext()));
-                intent.putExtra(WalletActivity.BACKGROUND_2, new Theme().getRootColor(getContext()));
-                intent.putExtra(WalletActivity.TEXT_TITLE, new Theme().getTitleTextColor(getContext()));
-                intent.putExtra(WalletActivity.TEXT_SUB_TITLE, new Theme().getSubTitleColor(getContext()));
-                intent.putExtra("isScan", data.isScan());
-                getActivity().startActivity(intent);
+                getActivity().startActivityForResult(new HelperWallet().goToWallet(getActivity(), new Intent(getActivity(), WalletActivity.class), "0" + data.getPhone(), data.isScan()), WALLET_REQUEST_CODE);
                 getActivity().onBackPressed();
             }
         });

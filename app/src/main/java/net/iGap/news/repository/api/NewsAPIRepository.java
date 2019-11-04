@@ -37,7 +37,7 @@ public class NewsAPIRepository {
                 getLatestNews(arg.getStart(), arg.getDisplay(), handShakeCallback, apiResponse);
                 break;
             case MOST_HITS:
-                getHitNews(arg.getStart(), arg.getDisplay(), handShakeCallback, apiResponse);
+                getHitNews(arg.getGroupID(), arg.getStart(), arg.getDisplay(), handShakeCallback, apiResponse);
                 break;
             case FEATURED_NEWS:
                 getFeaturedNews(arg.getStart(), arg.getDisplay(), handShakeCallback, apiResponse);
@@ -55,7 +55,7 @@ public class NewsAPIRepository {
                 getErgentNews(arg.getStart(), arg.getDisplay(), handShakeCallback, apiResponse);
                 break;
             case CONTROVERSIAL_NEWS:
-                getMControversialNews(arg.getStart(), arg.getDisplay(), handShakeCallback, apiResponse);
+                getMControversialNews(arg.getGroupID(), arg.getStart(), arg.getDisplay(), handShakeCallback, apiResponse);
                 break;
             case RELATED_NEWS:
                 getRelatedNews(arg.getGroupID(), arg.getStart(), arg.getDisplay(), handShakeCallback, apiResponse);
@@ -67,12 +67,12 @@ public class NewsAPIRepository {
         new ApiInitializer<NewsList>().initAPI(apiService.getLatestNews(start, display), handShakeCallback, apiResponse);
     }
 
-    private void getHitNews(int start, int display, HandShakeCallback handShakeCallback, ResponseCallback<NewsList> apiResponse) {
-        new ApiInitializer<NewsList>().initAPI(apiService.getMHitsNews(start, display), handShakeCallback, apiResponse);
+    private void getHitNews(int groupID, int start, int display, HandShakeCallback handShakeCallback, ResponseCallback<NewsList> apiResponse) {
+        new ApiInitializer<NewsList>().initAPI(apiService.getMHitsNews(groupID, start, display), handShakeCallback, apiResponse);
     }
 
-    private void getMControversialNews(int start, int display, HandShakeCallback handShakeCallback, ResponseCallback<NewsList> apiResponse) {
-        new ApiInitializer<NewsList>().initAPI(apiService.getMControversialNews(start, display), handShakeCallback, apiResponse);
+    private void getMControversialNews(int groupID, int start, int display, HandShakeCallback handShakeCallback, ResponseCallback<NewsList> apiResponse) {
+        new ApiInitializer<NewsList>().initAPI(apiService.getMControversialNews(groupID, start, display), handShakeCallback, apiResponse);
     }
 
     private void getFeaturedNews(int start, int display, HandShakeCallback handShakeCallback, ResponseCallback<NewsList> apiResponse) {

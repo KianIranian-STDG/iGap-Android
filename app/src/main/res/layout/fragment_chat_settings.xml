@@ -135,7 +135,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/dp4"
                         android:text="ehsan kb"
-                        android:textColor="?iGapPrimaryTextColor"
+                        android:textColor="?attr/iGapSendReplayColor"
                         app:layout_constraintLeft_toRightOf="@id/divider0"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -147,7 +147,7 @@
                         android:padding="@dimen/dp4"
                         android:singleLine="true"
                         android:text="i use iGap and it is so good"
-                        android:textColor="?attr/iGapPrimaryTextColor"
+                        android:textColor="?attr/iGapSubtitleTextColor"
                         app:layout_constraintLeft_toLeftOf="@id/replayUserName"
                         app:layout_constraintRight_toRightOf="@id/replayUserName"
                         app:layout_constraintTop_toBottomOf="@id/replayUserName" />

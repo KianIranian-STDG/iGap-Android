@@ -107,6 +107,7 @@
     <attr name="iGapChatSendMessageBackground" format="reference" />
     <attr name="iGapCheckButton" format="reference" />
     <attr name="iGapProfileStroke" format="reference" />
+    <attr name="iGapProfileToolbar" format="reference" />
 
     <!--=======================custom theme=====================-->
 

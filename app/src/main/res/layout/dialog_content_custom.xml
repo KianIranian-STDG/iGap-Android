@@ -20,16 +20,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/md_muted"
-            android:padding="@dimen/dp8"
-            android:textSize="@dimen/dp26" />
+            android:paddingTop="@dimen/dp8"
+            android:paddingRight="@dimen/dp4"
+            android:paddingLeft="@dimen/dp4"
+            android:textSize="@dimen/dp20" />
 
         <TextView
             android:id="@+id/txtDialogTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dp24"
+            android:paddingLeft="@dimen/dp16"
             android:paddingTop="@dimen/dp8"
-            android:paddingRight="@dimen/dp24"
+            android:paddingRight="@dimen/dp16"
             android:text="@string/mute_notification"
             android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp20" />

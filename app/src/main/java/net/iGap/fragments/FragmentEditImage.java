@@ -91,7 +91,8 @@ public class FragmentEditImage extends BaseFragment {
     public static HashMap<String, StructBottomSheet> textImageList = new HashMap<>();
     public static ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<StructBottomSheet>();
     private OnImageEdited onProfileImageEdited;
-    private boolean isOpenForShareImages = false;
+    private boolean isReOpenChatAttachment = true ;
+    private GalleryListener galleryListener;
 
     public void setOnProfileImageEdited(OnImageEdited onProfileImageEdited) {
         this.onProfileImageEdited = onProfileImageEdited;
@@ -196,7 +197,7 @@ public class FragmentEditImage extends BaseFragment {
                 if (getActivity() != null) {
                     new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
                 }
-                if (G.openBottomSheetItem != null && isChatPage && !isOpenForShareImages)
+                if (G.openBottomSheetItem != null && isChatPage && isReOpenChatAttachment)
                     G.openBottomSheetItem.openBottomSheet(false);
             }
         });
@@ -227,9 +228,11 @@ public class FragmentEditImage extends BaseFragment {
         imvSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (getActivity() != null) {
                     new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
                 }
+                if (galleryListener != null) galleryListener.onImageSent();
 
                 if (textImageList.size() == 0) {
                     setValueCheckBox(viewPager.getCurrentItem());
@@ -237,6 +240,7 @@ public class FragmentEditImage extends BaseFragment {
 
                 completeEditImage.result("", edtChat.getText().toString(), textImageList);
                 AndroidUtils.closeKeyboard(v);
+
             }
         });
 
@@ -425,8 +429,12 @@ public class FragmentEditImage extends BaseFragment {
         });
     }
 
-    public void setIsOpenForShareImages(boolean isShare) {
-        this.isOpenForShareImages = isShare;
+    public void setIsReOpenChatAttachment(boolean enable) {
+        this.isReOpenChatAttachment = enable;
+    }
+
+    public void setGalleryListener(GalleryListener listener){
+        this.galleryListener = listener ;
     }
 
     @Override
@@ -524,7 +532,7 @@ public class FragmentEditImage extends BaseFragment {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK && getActivity() != null) {
                     AndroidUtils.closeKeyboard(v);
                     new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
-                    if (G.openBottomSheetItem != null && isChatPage && !isOpenForShareImages)
+                    if (G.openBottomSheetItem != null && isChatPage && isReOpenChatAttachment)
                         G.openBottomSheetItem.openBottomSheet(false);
                     return true;
                 }
@@ -770,6 +778,10 @@ public class FragmentEditImage extends BaseFragment {
         mAdapter.notifyDataSetChanged();
 
 
+    }
+
+    public interface GalleryListener{
+        void onImageSent();
     }
 
     @FunctionalInterface

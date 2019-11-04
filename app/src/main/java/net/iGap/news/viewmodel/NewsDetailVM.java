@@ -33,6 +33,7 @@ public class NewsDetailVM extends BaseAPIViewModel {
     private ObservableField<String> tag;
     private ObservableField<String> date;
     private ObservableField<Integer> viewVisibility;
+    private ObservableField<Integer> pageVisibility;
 
     private int newsID = -1;
     private DetailRepo repo;
@@ -49,12 +50,13 @@ public class NewsDetailVM extends BaseAPIViewModel {
 
         title = new ObservableField<>("عنوان خبر های ایران");
         rootTitle = new ObservableField<>("زیر عنوان خبرهای ایران");
-        viewNum = new ObservableField<>("128");
-        commentNum = new ObservableField<>("132");
+        viewNum = new ObservableField<>("0");
+        commentNum = new ObservableField<>("0");
         source = new ObservableField<>("منبع خبری");
         tag = new ObservableField<>("ورزشی، اجتماعی و...");
         date = new ObservableField<>("دو ساعت پیش");
         viewVisibility = new ObservableField<>(View.VISIBLE);
+        pageVisibility = new ObservableField<>(View.INVISIBLE);
     }
 
     public void getDataFromServer(String newsID) {
@@ -82,7 +84,7 @@ public class NewsDetailVM extends BaseAPIViewModel {
                 else
                     tag.set("برچسب ها: " + newsDetail.getTags());
                 date.set(newsDetail.getDate());
-
+                pageVisibility.set(View.VISIBLE);
                 getNewsComment();
                 getRelatedNewsS();
             }
@@ -263,5 +265,13 @@ public class NewsDetailVM extends BaseAPIViewModel {
 
     public void setViewVisibility(ObservableField<Integer> viewVisibility) {
         this.viewVisibility = viewVisibility;
+    }
+
+    public ObservableField<Integer> getPageVisibility() {
+        return pageVisibility;
+    }
+
+    public void setPageVisibility(ObservableField<Integer> pageVisibility) {
+        this.pageVisibility = pageVisibility;
     }
 }

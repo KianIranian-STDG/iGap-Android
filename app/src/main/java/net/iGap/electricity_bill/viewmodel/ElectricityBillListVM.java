@@ -1,5 +1,6 @@
 package net.iGap.electricity_bill.viewmodel;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
@@ -14,6 +15,7 @@ import net.iGap.electricity_bill.repository.model.BillData;
 import net.iGap.electricity_bill.repository.model.BillRegister;
 import net.iGap.electricity_bill.repository.model.BranchDebit;
 import net.iGap.electricity_bill.repository.model.ElectricityResponseModel;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.request.RequestMplGetBillToken;
 
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ import java.util.Map;
 public class ElectricityBillListVM extends BaseAPIViewModel {
 
     private MutableLiveData<Map<BillData.BillDataModel, BranchDebit>> mMapData;
-    private MutableLiveData<Boolean> goBack;
+    private SingleLiveEvent<Boolean> goBack;
     private MutableLiveData<ErrorModel> errorM;
 
     private ObservableField<Integer> progressVisibility;
@@ -35,13 +37,14 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
         mMapData = new MutableLiveData<>(new HashMap<>());
         progressVisibility = new ObservableField<>(View.GONE);
         errorVisibility = new ObservableField<>(View.GONE);
-        goBack = new MutableLiveData<>(false);
+        goBack = new SingleLiveEvent<>();
         errorM = new MutableLiveData<>();
 
     }
 
     public void getBranchData() {
         progressVisibility.set(View.VISIBLE);
+        errorVisibility.set(View.GONE);
         new ElectricityBillAPIRepository().getBillList(this, new ResponseCallback<ElectricityResponseModel<BillData>>() {
             @Override
             public void onSuccess(ElectricityResponseModel<BillData> data) {
@@ -87,15 +90,17 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
                         Map<BillData.BillDataModel, BranchDebit> tmp = mMapData.getValue();
                         BranchDebit debitTmp = tmp.get(bill);
                         debitTmp.setLoading(false);
+                        debitTmp.setTotalBillDebt("0");
+                        debitTmp.setPaymentID("0");
                         tmp.put(bill, debitTmp);
                         mMapData.setValue(tmp);
                     }
                 });
     }
 
-    public void payBill (int position){
+    public void payBill (BillData.BillDataModel item){
 
-        BranchDebit tmp = mMapData.getValue().get(new ArrayList<>(mMapData.getValue().keySet()).get(position));
+        BranchDebit tmp = mMapData.getValue().get(item);
         if (tmp == null || tmp.getPaymentID() == null || tmp.getPaymentID().equals("") || tmp.getPaymentID().equals("null")) {
             errorM.setValue(new ErrorModel("" , "003"));
             return;
@@ -114,15 +119,19 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
                 errorM.setValue(new ErrorModel("", "001"));
             }
         };
-
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
-        requestMplGetBillToken.mplGetBillToken(Long.parseLong(tmp.getBillID()),
-                Long.parseLong(tmp.getTotalBillDebt().replace("0","")) + Long.parseLong(tmp.getPaymentID()));
+        if (tmp.getPaymentID().startsWith(tmp.getTotalBillDebt().replace("000", "").replace(",","").replace(" ریال", ""))) {
+            requestMplGetBillToken.mplGetBillToken(Long.parseLong(tmp.getBillID()), Long.parseLong(tmp.getPaymentID()));
+        }
+        else {
+            requestMplGetBillToken.mplGetBillToken(Long.parseLong(tmp.getBillID()),
+                    Long.parseLong(tmp.getTotalBillDebt().replace("000","").replace(",","").replace(" ریال", "") + tmp.getPaymentID()));
+        }
     }
 
-    public void deleteItem(int position) {
+    public void deleteItem(BillData.BillDataModel item) {
         progressVisibility.set(View.VISIBLE);
-        BillData.BillDataModel dataModel = new ArrayList<>(mMapData.getValue().keySet()).get(position);
+        BillData.BillDataModel dataModel = item;
         BillRegister info = new BillRegister();
         info.setNID("" + nationalID);
         info.setID(dataModel.getBillID());
@@ -190,11 +199,11 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
         this.nationalID = nationalID;
     }
 
-    public MutableLiveData<Boolean> getGoBack() {
+    public SingleLiveEvent<Boolean> getGoBack() {
         return goBack;
     }
 
-    public void setGoBack(MutableLiveData<Boolean> goBack) {
+    public void setGoBack(SingleLiveEvent<Boolean> goBack) {
         this.goBack = goBack;
     }
 

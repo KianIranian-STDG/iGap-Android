@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,8 +18,11 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentElecBillPayBinding;
@@ -29,7 +33,9 @@ import net.iGap.electricity_bill.viewmodel.ElectricityBillPayVM;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperMimeType;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.ToolbarListener;
 
 import java.io.File;
@@ -37,6 +43,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import static net.iGap.G.context;
+import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 public class ElectricityBillPayFrag extends BaseAPIViewFrag {
 
@@ -50,6 +57,10 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
 
     public static ElectricityBillPayFrag newInstance(String billID, String billPayID, String billPrice, boolean editMode) {
         return new ElectricityBillPayFrag(new Bill(billID, billPayID, billPrice, null), editMode);
+    }
+
+    public static ElectricityBillPayFrag newInstance(String billName, String billID, String billPayID, String billPrice, boolean editMode) {
+        return new ElectricityBillPayFrag(new Bill(billName, billID, billPayID, billPrice, null), editMode);
     }
 
     public static ElectricityBillPayFrag newInstance(String billID, boolean editMode) {
@@ -155,11 +166,9 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
     }
 
     private void showDialog(String title, String message, String btnRes) {
-        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-        defaultRoundDialog.setTitle(title);
-        defaultRoundDialog.setMessage(message);
-        defaultRoundDialog.setPositiveButton(btnRes, (dialog, id) -> dialog.dismiss());
-        defaultRoundDialog.show();
+
+        new MaterialDialog.Builder(getContext()).title(title).positiveText(btnRes).content(message).show();
+
     }
 
     public void onBranchInfoBtnClick() {
@@ -176,7 +185,7 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
                 new HelperFragment(getFragmentManager(), ElectricityBranchInfoListFrag.newInstance(bill.getID())).setReplace(false).load();
                 break;
             case ADD_LIST:
-                new HelperFragment(getFragmentManager(), ElectricityBillAddFrag.newInstance(bill.getID(), editMode)).setReplace(false).load();
+                new HelperFragment(getFragmentManager(), ElectricityBillAddFrag.newInstance(bill.getID(), bill.getTitle(), "", editMode)).setReplace(false).load();
                 break;
         }
     }
@@ -209,7 +218,18 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
     }
 
     private void showSuccessMessage(String path) {
-        Snackbar.make(binding.Container, R.string.elecBill_image_success, Snackbar.LENGTH_LONG)
+        Intent intent = HelperMimeType.appropriateProgram(path);
+        if (intent != null) {
+            try {
+                startActivity(intent);
+            } catch (Exception e) {
+                // to prevent from 'No Activity found to handle Intent'
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(context, R.string.can_not_open_file, Toast.LENGTH_SHORT).show();
+        }
+        /*Snackbar.make(binding.Container, R.string.elecBill_image_success, Snackbar.LENGTH_LONG)
                 .setAction(R.string.elecBill_image_open, v -> {
                     Intent intent = HelperMimeType.appropriateProgram(path);
                     if (intent != null) {
@@ -222,7 +242,7 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
                     } else {
                         Toast.makeText(context, R.string.can_not_open_file, Toast.LENGTH_SHORT).show();
                     }
-                }).show();
+                }).show();*/
     }
 
     /* Checks if external storage is available for read and write */
@@ -251,17 +271,16 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag {
     }
 
     private void showDialog(int mode, int titleRes, int messageRes, int btnRes) {
-        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-        defaultRoundDialog.setTitle(getResources().getString(titleRes));
-        defaultRoundDialog.setMessage(getResources().getString(messageRes));
-        defaultRoundDialog.setPositiveButton(getResources().getString(btnRes), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                if (mode == 1) {
-                    downloadFile();
-                }
-            }
-        });
-        defaultRoundDialog.show();
+        new MaterialDialog.Builder(getContext())
+                .title(getResources().getString(titleRes))
+                .positiveText(getResources().getString(btnRes))
+                .onPositive((dialog, which) -> {
+                    if (mode == 1) {
+                        downloadFile();
+                    }
+                })
+                .content(getResources().getString(messageRes))
+                .show();
     }
 
 }

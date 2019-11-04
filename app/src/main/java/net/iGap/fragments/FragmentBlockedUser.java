@@ -35,8 +35,9 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnBlockStateChanged;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.FastScroller;
+import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.LastSeenTimeUtil;
+import net.iGap.module.scrollbar.FastScrollerBarBaseAdapter;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestUserContactsUnblock;
@@ -110,7 +111,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
     public void onBlockStateChanged(final boolean blocked, final long userId) {
     }
 
-    public class BlockListAdapter extends RealmRecyclerViewAdapter<RealmRegisteredInfo, BlockListAdapter.ViewHolder> {
+    public class BlockListAdapter extends RealmRecyclerViewAdapter<RealmRegisteredInfo, BlockListAdapter.ViewHolder> implements FastScrollerBarBaseAdapter {
 
         BlockListAdapter(RealmResults<RealmRegisteredInfo> realmResults) {
             super(realmResults, true);
@@ -143,7 +144,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
 
         }
 
-
+        @Override
         public String getBubbleText(int position) {
             if (getItem(position) == null)
                 return "-";

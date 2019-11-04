@@ -117,6 +117,7 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletGetAccessToken;
@@ -171,6 +172,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private int retryConnectToWallet = 0;
     public static String userPhoneNumber;
     private MyPhonStateService myPhonStateService;
+    private BroadcastReceiver audioManagerReciver;
     private BroadcastReceiver audioManagerReciver;
 
     public static void setMediaLayout() {

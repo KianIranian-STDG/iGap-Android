@@ -94,7 +94,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                                         .negativeText(R.string.elecBill_deleteAccount_neg)
                                         .positiveColor(getContext().getResources().getColor(R.color.red))
                                         .widgetColor(new Theme().getAccentColor(getContext()))
-                                        .onPositive((dialog1, which) -> elecBillVM.deleteItem(position))
+                                        .onPositive((dialog1, which) -> elecBillVM.deleteAccount())
                                         .build();
                                 dialog.show();
                             }
@@ -144,25 +144,24 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
 
 
     private void showDialog(String title, String message, String btnRes) {
-        DefaultRoundDialog defaultRoundDialog = new DefaultRoundDialog(getContext());
-        defaultRoundDialog.setTitle(title);
-        defaultRoundDialog.setMessage(message);
-        defaultRoundDialog.setPositiveButton(btnRes, (dialog, id) -> dialog.dismiss());
-        defaultRoundDialog.show();
+        new MaterialDialog.Builder(getContext()).title(title).positiveText(btnRes).content(message).show();
     }
 
 
     private void initRecycler(Map<BillData.BillDataModel, BranchDebit> bills) {
-        adapter = new ElectricityBillListAdapter(getContext(), bills, (position, btnAction) -> {
-            BranchDebit temp = elecBillVM.getmMapData().getValue().get(new ArrayList<>(elecBillVM.getmMapData().getValue().keySet()).get(position));
-            BillData.BillDataModel dataModel = new ArrayList<>(elecBillVM.getmMapData().getValue().keySet()).get(position);
+        adapter = new ElectricityBillListAdapter(getContext(), bills, (item, btnAction) -> {
+            BranchDebit temp = elecBillVM.getmMapData().getValue().get(item);
             switch (btnAction) {
                 case PAY:
-                    elecBillVM.payBill(position);
+                    elecBillVM.payBill(item);
                     break;
                 case EDIT:
+                    if (temp.getBillID() == null) {
+                        showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_notPossible),getResources().getString(R.string.ok));
+                        return;
+                    }
                     new HelperFragment(getFragmentManager(),
-                            ElectricityBillAddFrag.newInstance(temp.getBillID(), dataModel.getBillTitle(),
+                            ElectricityBillAddFrag.newInstance(temp.getBillID(), item.getBillTitle(),
                                     String.valueOf(elecBillVM.getNationalID()), true)).setReplace(false).load();
                     break;
                 case DELETE:
@@ -174,15 +173,19 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
                             .positiveColor(getContext().getResources().getColor(R.color.red))
                             .widgetColor(new Theme().getAccentColor(getContext()))
                             .onPositive((dialog1, which) -> {
+                                elecBillVM.deleteItem(item);
                                 Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
-                                elecBillVM.deleteAccount();
                             })
                             .build();
                     dialog.show();
                     break;
                 case SHOW_DETAIL:
+                    if (temp.getBillID() == null) {
+                        showDialog(getResources().getString(R.string.elecBill_error_title), getResources().getString(R.string.elecBill_error_notPossible),getResources().getString(R.string.ok));
+                        return;
+                    }
                     new HelperFragment(getFragmentManager(),
-                            ElectricityBillPayFrag.newInstance(temp.getBillID(), temp.getPaymentID(), temp.getTotalBillDebt(), true))
+                            ElectricityBillPayFrag.newInstance(item.getBillTitle(), temp.getBillID(), temp.getPaymentIDConverted(), temp.getTotalBillDebtConverted(), true))
                             .setReplace(false).load();
                     break;
             }
@@ -204,4 +207,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag {
         }
     }
 
+    public void refreshData() {
+        elecBillVM.getBranchData();
+    }
 }

@@ -1320,8 +1320,8 @@ Want to get it?</string>
     <string name="accept_the_terms">Accept the terms</string>
     <string name="wallet_agrement">Wallet agreement</string>
     <string name="SendMoney">Send Money</string>
-    <string name="transfer_amount_hint">Enter the transfer amount below :</string>
-    <string name="amount_in_rial">Amount in Rial :</string>
+    <string name="transfer_amount_hint">Enter the transfer amount below</string>
+    <string name="amount_in_rial">Amount in Rial</string>
     <string name="pay">Pay</string>
     <string name="transfer_to_dialog">Transfer to :</string>
     <string name="am_money">money</string>
@@ -1372,7 +1372,7 @@ Want to get it?</string>
     <string name="wallet_data">Pay Time</string>
     <string name="wallet_desc">---Description---</string>
     <string name="wallet_toman">Toman</string>
-    <string name="wallet_Your_credit">Your credit: </string>
+    <string name="wallet_Your_credit">Your credit : </string>
     <string name="wallet_Reial">%d Rial </string>
     <string name="payment_rial">%s ریال </string>
     <string name="wallet_error_server">Error communicating with server</string>
@@ -1950,8 +1950,8 @@ Want to get it?</string>
     <string name="payment_order_id_title">Order ID : %s</string>
     <string name="payment_rrn_title">Transaction ID: %.0f</string>
     <string name="mci_topup_payment_title">MCI TopUp</string>
-    <string name="insert_amount_in_rial">insert amount in rial.</string>
-    <string name="enter_16_digit_card_number">Enter the 16-digit card number.</string>
+    <string name="insert_amount_in_rial">insert amount in rial</string>
+    <string name="enter_16_digit_card_number">Enter the 16-digit card number</string>
     <string name="buy_internet_package_type_title">Package Type</string>
     <string name="buy_internet_package_time_type_title">Time</string>
     <string name="buy_internet_package_volume_type_title">Volume</string>
@@ -2264,7 +2264,7 @@ Want to get it?</string>
     <string name="elecBill_Entry_lengthError">Bill ID must be 13 character.</string>
     <string name="elecBill_Entry_barcodeError">Barcode scan failed. Please try again.</string>
     <string name="elecBill_Entry_companyError">We only support Electricity Bill.</string>
-    <string name="elecBill_main_billTitle">Inquiry Electricity Bill and quick pay</string>
+    <string name="elecBill_main_billTitle">Electricity Bill Inquiry and quick payment</string>
     <string name="elecBill_main_billIDHint">Electricity Bill Number</string>
     <string name="elecBill_main_billPay">Inquiry My Bill</string>
     <string name="elecBill_main_billMyList">My Electricity Bills</string>
@@ -2314,7 +2314,7 @@ Want to get it?</string>
     <string name="elecBill_searchCell_billID">Bill ID</string>
     <string name="elecBill_searchCell_CustomerName">Customer Name</string>
     <string name="elecBill_searchCell_CustomerAddress">Customer Address</string>
-    <string name="elecBill_search_billSerial">Customer Address</string>
+    <string name="elecBill_search_billSerial">Power meter\'s body number</string>
     <string name="elecBill_search_billCompany">Electricity Provider Company</string>
     <string name="elecBill_search_billSearch">Find my Bill</string>
     <string name="elecBill_search_billSpinner">choose</string>
@@ -2329,6 +2329,7 @@ Want to get it?</string>
     <string name="elecBill_error_openCompanySpinner">Open</string>
     <string name="elecBill_error_zeroResultSearch">result: No bills found.</string>
     <string name="elecBill_error_zeroResultBill">No bills is registered under your name.</string>
+    <string name="elecBill_error_notPossible">This action is Not available at the moment.</string>
     <string name="elecBill_success_title">Success</string>
     <string name="elecBill_success_pay">Payment is successful.</string>
     <!--<string name="news_latest">Latest</string>

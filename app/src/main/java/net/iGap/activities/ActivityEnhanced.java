@@ -258,7 +258,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        updateResources(getBaseContext());
+        updateResources(this);
     }
 
     public void onRefreshActivity(boolean changeColor, String language) {

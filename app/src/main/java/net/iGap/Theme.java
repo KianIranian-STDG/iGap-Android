@@ -223,6 +223,10 @@ public class Theme {
         return getColorFromAttr(context, R.attr.iGapLinkColor);
     }
 
+    public int getSendReplayUserColor(Context context){
+        return getColorFromAttr(context,R.attr.iGapSendReplayColor);
+    }
+
     private int getColorFromAttr(@NotNull Context context, int attrResId) {
         TypedValue typedValue = new TypedValue();
         TypedArray a = context.obtainStyledAttributes(typedValue.data, new int[]{attrResId});

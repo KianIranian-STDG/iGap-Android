@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.ios.IosEmojiProvider;
+import com.yariksoffice.lingver.Lingver;
 
 import net.iGap.Config;
 import net.iGap.DbManager;
@@ -513,7 +514,7 @@ public final class StartupActions {
                 Raad.isFA = true;
                 break;
         }
-
+        Lingver.getInstance().setLocale(context, selectedLanguage);
     }
 
     private void initializeGlobalVariables() {

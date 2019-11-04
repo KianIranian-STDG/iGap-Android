@@ -265,7 +265,7 @@
         <item name="android:textSize">@dimen/dp16</item>
         <item name="strokeWidth">2dp</item>
         <item name="android:textColor">?iGapButtonTextColor</item>
-        <item name="strokeColor">?iGapButtonColor</item>
+        <item name="strokeColor">?iGapButtonTextColor</item>
         <item name="rippleColor">?iGapButtonColor</item>
     </style>
 

@@ -59,7 +59,7 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
         billNameError = new ObservableField<>();
         billNameErrorEnable = new ObservableField<>(false);
 
-        billUserID = new ObservableField<>();
+        billUserID = new ObservableField<>("0");
         billUserIDError = new ObservableField<>();
         billUserIDErrorEnable = new ObservableField<>(false);
 
@@ -164,7 +164,7 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
             billPhoneErrorEnable.set(true);
             return false;
         }
-        if (billUserID.get() == null || billUserID.get().isEmpty()) {
+        /*if (billUserID.get() == null || billUserID.get().isEmpty()) {
             billUserIDError.set(R.string.elecBill_Entry_userIDError);
             billUserIDErrorEnable.set(true);
             return false;
@@ -173,7 +173,7 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
             billUserIDError.set(R.string.elecBill_Entry_userIDLengthError);
             billUserIDErrorEnable.set(true);
             return false;
-        }
+        }*/
         if (billEmail.get() != null && !billEmail.get().isEmpty()) {
             if (!android.util.Patterns.EMAIL_ADDRESS.matcher(billEmail.get()).matches()) {
                 billEmailError.set(R.string.elecBill_Entry_emailFormatError);

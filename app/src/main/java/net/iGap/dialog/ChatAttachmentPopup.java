@@ -36,6 +36,7 @@ import net.iGap.Theme;
 import net.iGap.adapter.BottomSheetItem;
 import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.fragments.FragmentEditImage;
+import net.iGap.fragments.FragmentGallery;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnClickCamera;
@@ -330,11 +331,19 @@ public class ChatAttachmentPopup {
 
         photo.setOnClickListener(v -> {
             dismiss();
-            try {
-                attachFile.requestOpenGalleryForImageMultipleSelect(mFragment);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+            //clear at first time to load image gallery
+            FragmentEditImage.itemGalleryList.clear();
+            FragmentEditImage.textImageList.clear();
+
+            Fragment fragment = FragmentGallery.newInstance(()->{
+                try {
+                    attachFile.requestOpenGalleryForImageMultipleSelect(mFragment);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            new HelperFragment(mFrgActivity.getSupportFragmentManager() , fragment).setReplace(false).load();
         });
 
         video.setOnClickListener(v -> {

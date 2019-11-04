@@ -484,9 +484,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         })
                         .setOnLinkLongClickListener((tv, url) -> {
 
-                            if (!FragmentChat.isInSelectionMode){
-                                if (HelperUrl.isTextLink(url)){
-                                    G.isLinkClicked = true ;
+                            if (!FragmentChat.isInSelectionMode) {
+                                if (HelperUrl.isTextLink(url)) {
+                                    G.isLinkClicked = true;
                                     messageClickListener.onOpenLinkDialog(url);
                                 }
 
@@ -636,7 +636,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (type == ProtoGlobal.Room.Type.CHANNEL) {
             mHolder.getForwardContainer().setVisibility(View.VISIBLE);
-            mHolder.getChannelForwardIv().setOnClickListener(v -> messageClickListener.onForwardClick(structMessage));
+            mHolder.getChannelForwardIv().setOnClickListener(v -> {
+                if (!FragmentChat.isInSelectionMode) messageClickListener.onForwardClick(structMessage);
+            });
         }
 
         /**
@@ -1022,8 +1024,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 } else {
                     replayView.setBackgroundResource(new Theme().getReceivedReplay(replayView.getContext()));
                 }
-                replyFrom.setTextColor(new Theme().getPrimaryTextColor(replyFrom.getContext()));
-                replayMessage.setTextColor(new Theme().getPrimaryTextColor(replayMessage.getContext()));
+                replyFrom.setTextColor(new Theme().getSendReplayUserColor(replyFrom.getContext()));
+                replayMessage.setTextColor(new Theme().getSendMessageTextColor(replayMessage.getContext()));
 
                 replyFrom.measure(0, 0);       //must call measure!
                 replayMessage.measure(0, 0);
@@ -1083,9 +1085,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             });
 
             TextView txtPrefixForwardFrom = forwardView.findViewById(R.id.cslr_txt_prefix_forward);
-            txtPrefixForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext() , R.font.main_font));
+            txtPrefixForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext(), R.font.main_font));
             TextView txtForwardFrom = forwardView.findViewById(R.id.cslr_txt_forward_from);
-            txtForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext() , R.font.main_font));
+            txtForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext(), R.font.main_font));
 
             /**
              * if forward message from chat or group , sender is user

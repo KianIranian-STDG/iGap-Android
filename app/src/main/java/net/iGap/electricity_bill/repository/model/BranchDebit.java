@@ -5,6 +5,7 @@ import android.text.format.DateUtils;
 import com.google.gson.annotations.SerializedName;
 
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperNumerical;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,10 +58,14 @@ public class BranchDebit {
         this.totalRegisterDebt = totalRegisterDebt;
     }
 
-    public String getPaymentID() {
+    public String getPaymentIDConverted() {
         if (HelperCalander.isPersianUnicode) {
             return HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(paymentID));
         }
+        return paymentID;
+    }
+
+    public String getPaymentID() {
         return paymentID;
     }
 
@@ -68,10 +73,14 @@ public class BranchDebit {
         this.paymentID = paymentID;
     }
 
-    public String getTotalBillDebt() {
+    public String getTotalBillDebtConverted() {
         if (HelperCalander.isPersianUnicode) {
-            return HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(totalBillDebt));
+            return HelperCalander.convertToUnicodeFarsiNumber(new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(totalBillDebt)));
         }
+        return new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(totalBillDebt));
+    }
+
+    public String getTotalBillDebt() {
         return totalBillDebt;
     }
 

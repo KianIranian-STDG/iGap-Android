@@ -33,6 +33,7 @@
         <item name="iGapSendMessageBubbleColor">#3d3d3d</item>
         <item name="iGapSendMessageOtherTextColor">#cccccc</item>
         <item name="iGapSendMessageTextColor">#AAAAAA</item>
+        <item name="iGapSendReplayColor">@color/green</item>
 
         <item name="iGapLinkColor">#00BCD4</item>
         <item name="iGapDefaultChatBackground">@color/background_setting_dark</item>
@@ -52,6 +53,8 @@
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line_dark</item>
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_dark</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_dark</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_dark</item>
+
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_dark</item>
     </style>
 
@@ -81,12 +84,13 @@
         <item name="iGapBottomNavigationIconEnd">#FF50B452</item>
 
         <item name="iGapReceivedMessageTextColor">#5F5F5F</item>
-        <item name="iGapReceivedOtherTextColor">#cccccc</item>
+        <item name="iGapReceivedOtherTextColor">#7a7a7a</item>
         <item name="iGapReceivedReplayColor">#e2e8de</item>
 
         <item name="iGapSendMessageBubbleColor">#f5ffec</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">@color/green</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#f4f0e8</item>
@@ -111,6 +115,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_light</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_dark</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_default</item>
     </style>
 
     <style name="BaseTheme.baseRedTheme">
@@ -146,6 +151,7 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#720505</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#ffcdd2</item>
@@ -167,6 +173,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_red</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_red</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_red</item>
     </style>
 
     <style name="BaseTheme.basePinkTheme">
@@ -201,6 +208,7 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">#5F5F5F</item>
+        <item name="iGapSendReplayColor">#da6463</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#F8BBD0</item>
@@ -222,6 +230,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_pink</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_pink</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_pink</item>
     </style>
 
     <style name="BaseTheme.basePurpleTheme">
@@ -256,6 +265,7 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#68265b</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#E1BEE7</item>
@@ -280,6 +290,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_purple</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_purple</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_purple</item>
     </style>
 
     <style name="BaseTheme.baseBlueTheme">
@@ -314,6 +325,7 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#07439b</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#BBDEFB</item>
@@ -335,6 +347,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_blue</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_blue</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_blue</item>
     </style>
 
     <style name="BaseTheme.baseGreenTheme">
@@ -369,6 +382,7 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#8cb238</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#DCEDC8</item>
@@ -391,6 +405,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_green</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_green</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_green</item>
     </style>
 
     <style name="BaseTheme.baseAmberTheme">
@@ -425,6 +440,7 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#dd9f07</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#FFF9C4</item>
@@ -447,6 +463,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_yellow</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_amber</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_amber</item>
     </style>
 
     <style name="BaseTheme.baseOrangeTheme">
@@ -481,6 +498,7 @@
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
         <item name="iGapSendMessageTextColor">#5f5f5f</item>
+        <item name="iGapSendReplayColor">#ff6700</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#FFE0B2</item>
@@ -507,6 +525,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_orange</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_orange</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_orange</item>
     </style>
 
     <style name="BaseTheme.baseDarkGrayTheme">
@@ -540,6 +559,7 @@
         <item name="iGapReceivedReplayColor">#99B3C4</item>
         <item name="iGapSendMessageOtherTextColor">@color/receive_message_text_light</item>
         <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#182d44</item>
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#CFD8DC</item>
@@ -565,6 +585,7 @@
         <item name="iGapScrollerHandler">@drawable/fastscroll_handle_dark_gray</item>
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_gray</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_dark_gray</item>
     </style>
 
     <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">

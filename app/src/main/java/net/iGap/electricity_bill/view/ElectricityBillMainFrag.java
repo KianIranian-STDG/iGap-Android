@@ -124,7 +124,7 @@ public class ElectricityBillMainFrag extends BaseAPIViewFrag {
     private void onBtnClickManger(btnActions actions) {
         switch (actions) {
             case MY_ELEC_BILLS:
-                new HelperFragment(getFragmentManager(), ElectricityBillListFrag.newInstance()).setReplace(false).load();
+                new HelperFragment(getFragmentManager(), ElectricityBillListFrag.newInstance()).setTag(ElectricityBillListFrag.class.getName()).setReplace(false).load();
                 break;
             case SEARCH_BILL:
                 new HelperFragment(getFragmentManager(), ElectricityBillSearchListFrag.newInstance()).setReplace(false).load();

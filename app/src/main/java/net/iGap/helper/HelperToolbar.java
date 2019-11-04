@@ -54,6 +54,10 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.realm.RealmUserInfo;
 
+import org.paygear.WalletActivity;
+
+import io.realm.Realm;
+
 import static androidx.constraintlayout.widget.ConstraintSet.BOTTOM;
 import static androidx.constraintlayout.widget.ConstraintSet.END;
 import static androidx.constraintlayout.widget.ConstraintSet.MATCH_CONSTRAINT;
@@ -61,6 +65,7 @@ import static androidx.constraintlayout.widget.ConstraintSet.PARENT_ID;
 import static androidx.constraintlayout.widget.ConstraintSet.START;
 import static androidx.constraintlayout.widget.ConstraintSet.TOP;
 import static androidx.constraintlayout.widget.ConstraintSet.WRAP_CONTENT;
+import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 
@@ -128,6 +133,7 @@ public class HelperToolbar {
     private int mScannerIcon;
     private int mAnimationOldPositionItem = 0;
     private boolean isRoundBackground = true;
+    private boolean isCheckIGapLogo = true;
     private TextView mTxtCallTimer;
     private BroadcastReceiver callTimerReceiver;
 
@@ -196,6 +202,11 @@ public class HelperToolbar {
 
     public HelperToolbar setLogoShown(boolean logoShown) {
         this.isLogoShown = logoShown;
+        return this;
+    }
+
+    public HelperToolbar setIGapLogoCheck(boolean isCheck) {
+        this.isCheckIGapLogo = isCheck;
         return this;
     }
 
@@ -823,20 +834,21 @@ public class HelperToolbar {
             mTxtLogo.setText(defaultTitleText);
         }
 
-        if (mTxtLogo.getText().toString().toLowerCase().equals("igap")) {
+        if (isCheckIGapLogo) {
 
-            Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
+            if (mTxtLogo.getText().toString().toLowerCase().equals("igap")) {
+                Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
+                mTxtLogo.setTypeface(tfFontIcon);
+                mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
+            } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ") || mTxtLogo.getText().toString().equals("آیکب")) {
+                Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
+                mTxtLogo.setTypeface(tfFontIcon);
+                mTxtLogo.setText(mContext.getString(R.string.igap_fa_icon));
+            } else {
+                mTxtLogo.setTypeface(tfMain);
+            }
 
-            mTxtLogo.setTypeface(tfFontIcon);
-            mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
-        } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ") || mTxtLogo.getText().toString().equals("آیکب")) {
-
-            Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
-
-            mTxtLogo.setTypeface(tfFontIcon);
-            mTxtLogo.setText(mContext.getString(R.string.igap_fa_icon));
-
-        } else {
+        }else{
             mTxtLogo.setTypeface(tfMain);
         }
 
@@ -1026,7 +1038,7 @@ public class HelperToolbar {
         if (!G.isWalletRegister) {
             new HelperFragment(mFragmentActivity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
         } else {
-            new HelperWallet().goToWallet(mContext, "0" + phoneNumber, true);
+            mFragmentActivity.startActivityForResult(new HelperWallet().goToWallet(mContext,new Intent(mFragmentActivity, WalletActivity.class),"0" + phoneNumber, true),WALLET_REQUEST_CODE);
         }
     }
 

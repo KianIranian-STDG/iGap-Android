@@ -72,6 +72,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import io.realm.Realm;
+
+import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 import static net.iGap.viewmodel.FragmentIVandProfileViewModel.scanBarCode;
@@ -188,9 +191,8 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
                             new HelperFragment(activity.getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber.substring(2), discoveryField.value.equals("QR_USER_WALLET"))).load();
                         } else {
-                            boolean goToScanner = true;/*discoveryField.value.equals("QR_USER_WALLET")*/
-                            new HelperWallet().goToWallet(
-                                    G.currentActivity, "0" + phoneNumber.substring(2), goToScanner);
+                            boolean goToScanner = discoveryField.value.equals("QR_USER_WALLET");
+                            activity.startActivityForResult(new HelperWallet().goToWallet(activity, new Intent(activity, WalletActivity.class), "0" + phoneNumber.substring(2), goToScanner), WALLET_REQUEST_CODE);
                         }
                     });
                 break;

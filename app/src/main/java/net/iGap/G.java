@@ -34,6 +34,7 @@ import com.caspian.otpsdk.context.ApplicationContext;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yariksoffice.lingver.Lingver;
 
 import net.iGap.activities.ActivityCustomError;
 import net.iGap.activities.ActivityEnhanced;
@@ -467,8 +468,8 @@ public class G extends ApplicationContext {
         AccountManager.initial(this);
 
         LooperThreadHelper.getInstance();
-
         Metrix.initialize(this, "jpbnabzrmeqvxme");
+        Lingver.init(this, G.selectedLanguage == null ? Locale.getDefault() : new Locale(G.selectedLanguage));
 
         // dont remove below line please
         if (!BuildConfig.DEBUG && BuildConfig.Store.length() > 1) {
@@ -504,7 +505,6 @@ public class G extends ApplicationContext {
             e.printStackTrace();
         }
         new StartupActions();
-
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
      /*   try {
             WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
@@ -525,7 +525,7 @@ public class G extends ApplicationContext {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        updateResources(getBaseContext());
+        updateResources(this);
     }
 
     public static void showToast(String message) {

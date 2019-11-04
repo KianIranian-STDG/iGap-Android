@@ -148,7 +148,6 @@ import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
-import net.iGap.eventbus.PaymentFragment;
 import net.iGap.fragments.chatMoneyTransfer.ChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.OnUpdateSticker;
@@ -437,7 +436,6 @@ public class FragmentChat extends BaseFragment
     public boolean rcTouchListener;
     BotInit botInit;
     PaymentDialogBinding paymentDialogBinding;
-    PaymentFragment paymentDialog;
     boolean isAnimateStart = false;
     boolean isScrollEnd = false;
     private boolean isShareOk = true;
@@ -605,7 +603,7 @@ public class FragmentChat extends BaseFragment
     private int receiveMessageSound;
     private String TAG = "messageSound";
     private ChatAttachmentPopup mAttachmentPopup;
-    private int messageLentghCounter ;
+    private int messageLentghCounter;
     private int oldMessageLentghCounter;
 
     public static boolean allowResendMessage(long messageId) {
@@ -2775,7 +2773,7 @@ public class FragmentChat extends BaseFragment
         //added run time -> counter of un read messages
         llScrollNavigate = rootView.findViewById(R.id.ac_ll_scrool_navigate);
         txtNewUnreadMessage = new BadgeView(getContext());
-        txtNewUnreadMessage.getTextView().setTypeface(ResourcesCompat.getFont(txtNewUnreadMessage.getContext() , R.font.main_font));
+        txtNewUnreadMessage.getTextView().setTypeface(ResourcesCompat.getFont(txtNewUnreadMessage.getContext(), R.font.main_font));
         txtNewUnreadMessage.getTextView().setSingleLine();
         txtNewUnreadMessage.getTextView().setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});//set max length
         txtNewUnreadMessage.setBadgeColor(new Theme().getPrimaryDarkColor(txtNewUnreadMessage.getContext()));
@@ -3054,7 +3052,7 @@ public class FragmentChat extends BaseFragment
                 }
 
                 oldMessageLentghCounter = 0;
-                messageLentghCounter = 0 ;
+                messageLentghCounter = 0;
 
             }
         });
@@ -3139,7 +3137,6 @@ public class FragmentChat extends BaseFragment
         });
 
 
-
         // to toggle between keyboard and emoji popup
         imvSmileButton.setOnClickListener(new View.OnClickListener() {
 
@@ -3194,11 +3191,11 @@ public class FragmentChat extends BaseFragment
                     imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
                 }*/
 
-               messageLentghCounter = ((int) Math.ceil((float) text.length() / (float) Config.MAX_TEXT_LENGTH) );
-               if ( messageLentghCounter > 1 && messageLentghCounter != oldMessageLentghCounter && getContext() != null){
-                   oldMessageLentghCounter = messageLentghCounter ;
-                   Toast.makeText(getContext(), getString(R.string.message_is_long) + " " + messageLentghCounter + " " + getString(R.string.message) , Toast.LENGTH_SHORT).show();
-               }
+                messageLentghCounter = ((int) Math.ceil((float) text.length() / (float) Config.MAX_TEXT_LENGTH));
+                if (messageLentghCounter > 1 && messageLentghCounter != oldMessageLentghCounter && getContext() != null) {
+                    oldMessageLentghCounter = messageLentghCounter;
+                    Toast.makeText(getContext(), getString(R.string.message_is_long) + " " + messageLentghCounter + " " + getString(R.string.message), Toast.LENGTH_SHORT).show();
+                }
 
             }
 
@@ -3778,10 +3775,10 @@ public class FragmentChat extends BaseFragment
                                 isAllSenderId = false;
                                 //}
                             } else if (channelRole == ChannelChatRole.ADMIN) {
-                               // if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
+                                // if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
                                 mBtnDeleteSelected.setVisibility(View.GONE);
                                 isAllSenderId = false;
-                               // }
+                                // }
                             }
                         } else {
                             mBtnDeleteSelected.setVisibility(View.VISIBLE);
@@ -4242,7 +4239,7 @@ public class FragmentChat extends BaseFragment
         mAdapter.deselect();
 
         if (getActivity() == null) return;
-        HelperUrl.openLinkDialog(getActivity() , url);
+        HelperUrl.openLinkDialog(getActivity(), url);
     }
 
     @Override
@@ -6211,7 +6208,7 @@ public class FragmentChat extends BaseFragment
                                 break;
                             case image:
                                 //maybe share data was more than one ... add to list then after for open edit image
-                                FragmentEditImage.insertItemList(sharedData.address , sharedData.message , false);
+                                FragmentEditImage.insertItemList(sharedData.address, sharedData.message, false);
                                 isOpenEditImageFragment = true;
                                 //sendMessage(AttachFile.request_code_TAKE_PICTURE, sharedData.address);
                                 break;
@@ -6223,7 +6220,7 @@ public class FragmentChat extends BaseFragment
                     if (isOpenEditImageFragment && getActivity() != null) {
 
                         FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, FragmentEditImage.itemGalleryList.size() - 1);
-                        fragmentEditImage.setIsOpenForShareImages(true);
+                        fragmentEditImage.setIsReOpenChatAttachment(false);
                         new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                     }
 
@@ -6687,9 +6684,9 @@ public class FragmentChat extends BaseFragment
             mReplayLayout = rootView.findViewById(R.id.replayLayoutAboveEditText);
             mReplayLayout.setVisibility(View.VISIBLE);
             TextView replayTo = mReplayLayout.findViewById(R.id.replayTo);
-            replayTo.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext() , R.font.main_font));
+            replayTo.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext(), R.font.main_font));
             TextView replayFrom = mReplayLayout.findViewById(R.id.replyFrom);
-            replayFrom.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext() , R.font.main_font));
+            replayFrom.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext(), R.font.main_font));
 
             FontIconTextView replayIcon = rootView.findViewById(R.id.lcr_imv_replay);
             if (isEdit)

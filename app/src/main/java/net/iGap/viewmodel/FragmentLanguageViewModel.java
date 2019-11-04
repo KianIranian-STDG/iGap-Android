@@ -206,7 +206,6 @@ public class FragmentLanguageViewModel extends ViewModel {
             editor.putString(SHP_SETTING.KEY_LANGUAGE, "کوردی");
             editor.apply();
             G.selectedLanguage = "ur";
-            G.updateResources(G.currentActivity.getBaseContext());
             HelperCalander.isPersianUnicode = true;
             HelperCalander.isLanguagePersian = true;
             HelperCalander.isLanguageArabic = false;

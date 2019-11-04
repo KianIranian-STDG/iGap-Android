@@ -47,7 +47,7 @@ import net.iGap.interfaces.OnGroupAddMember;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.ContactChip;
 import net.iGap.module.Contacts;
-import net.iGap.module.FastScroller;
+import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.LoginActions;
 import net.iGap.module.ScrollingLinearLayoutManager;
 import net.iGap.module.structs.StructContactInfo;

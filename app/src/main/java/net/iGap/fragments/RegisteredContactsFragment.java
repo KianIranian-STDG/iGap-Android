@@ -59,11 +59,12 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.Contacts;
 import net.iGap.module.EmojiTextViewE;
-import net.iGap.module.FastScroller;
+import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.ScrollingLinearLayoutManager;
+import net.iGap.module.scrollbar.FastScrollerBarBaseAdapter;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmContacts;
@@ -695,7 +696,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
      * **********************************************************************************
      */
 
-    public class ContactListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public class ContactListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FastScrollerBarBaseAdapter {
 
         private List<RealmContacts> usersList = new ArrayList<>();
 
@@ -712,6 +713,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
             notifyDataSetChanged();
         }
 
+        @Override
         public String getBubbleText(int position) {
             if (usersList.size() > position) {
                 return usersList.get(position).getDisplay_name().substring(0, 1).toUpperCase();

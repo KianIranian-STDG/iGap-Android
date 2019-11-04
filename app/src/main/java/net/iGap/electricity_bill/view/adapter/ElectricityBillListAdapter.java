@@ -93,30 +93,30 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                 else
                     billID.setText(bill.get(position).getBillID());
 
-                billPayID.setText(mdata.get(bill.get(position)).getPaymentID());
-                billPrice.setText(new HelperNumerical().getCommaSeparatedPrice(Long.parseLong(mdata.get(bill.get(position)).getTotalBillDebt())) + " ریال");
+                billPayID.setText(mdata.get(bill.get(position)).getPaymentIDConverted());
+                billPrice.setText(mdata.get(bill.get(position)).getTotalBillDebtConverted() + " ریال");
                 billTime.setText(mdata.get(bill.get(position)).getPaymentDeadLineDate());
             }
 
             pay.setOnClickListener(v -> {
                 if (!mdata.get(bill.get(position)).isLoading()) {
-                    clickListener.onClick(position, OnItemClickListener.Actoin.PAY);
+                    clickListener.onClick(bill.get(position), OnItemClickListener.Actoin.PAY);
                 }
                 else
                     Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
             });
 
-            showDetail.setOnClickListener(v -> clickListener.onClick(position, OnItemClickListener.Actoin.SHOW_DETAIL));
+            showDetail.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Actoin.SHOW_DETAIL));
 
-            delete.setOnClickListener(v -> clickListener.onClick(position, OnItemClickListener.Actoin.DELETE));
+            delete.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Actoin.DELETE));
 
-            edit.setOnClickListener(v -> clickListener.onClick(position, OnItemClickListener.Actoin.EDIT));
+            edit.setOnClickListener(v -> clickListener.onClick(bill.get(position), OnItemClickListener.Actoin.EDIT));
         }
     }
 
     public interface OnItemClickListener {
         enum Actoin {DELETE, EDIT, SHOW_DETAIL, PAY}
-        void onClick(int position, Actoin btnAction);
+        void onClick(BillData.BillDataModel item, Actoin btnAction);
     }
 
 }
