@@ -77,21 +77,18 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
     @Override
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
+        holder.image.setImageURI(Uri.fromFile(new File(localPath)));
 
-        if (holder.image.getTag() != null && holder.image.getTag().equals(tag)) {
-            holder.image.setImageURI(Uri.fromFile(new File(localPath)));
-
-            if (fileType == LocalFileType.FILE) {
-                SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 1) {
-                    holder.progress.setVisibility(View.GONE);
-                } else {
-                    if (holder.image.getDrawable() instanceof GifDrawable) {
-                        GifDrawable gifDrawable = (GifDrawable) holder.image.getDrawable();
-                        // to get first frame
-                        gifDrawable.stop();
-                        holder.progress.setVisibility(View.VISIBLE);
-                    }
+        if (fileType == LocalFileType.FILE) {
+            SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+            if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 1) {
+                holder.progress.setVisibility(View.GONE);
+            } else {
+                if (holder.image.getDrawable() instanceof GifDrawable) {
+                    GifDrawable gifDrawable = (GifDrawable) holder.image.getDrawable();
+                    // to get first frame
+                    gifDrawable.stop();
+                    holder.progress.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -99,7 +96,6 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.image.setTag(getCacheId(structMessage));
         super.bindView(holder, payloads);
 
         setTextIfNeeded(holder.messageView);
