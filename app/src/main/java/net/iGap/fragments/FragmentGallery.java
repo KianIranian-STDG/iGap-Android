@@ -32,15 +32,16 @@ import java.util.List;
 public class FragmentGallery extends BaseFragment {
 
     private AdapterGallery mGalleryAdapter;
-    private String mFolderName ;
+    private String mFolderName , mFolderId ;
     private boolean isSubFolder = false ;
 
     public FragmentGallery() {
     }
 
-    public static FragmentGallery newInstance(String folder){
+    public static FragmentGallery newInstance(String folder , String id){
         FragmentGallery fragment = new FragmentGallery();
         fragment.mFolderName = folder ;
+        fragment.mFolderId = id ;
         fragment.isSubFolder = true ;
         return fragment ;
     }
@@ -98,20 +99,21 @@ public class FragmentGallery extends BaseFragment {
         mGalleryAdapter = new AdapterGallery(isSubFolder);
         rvGallery.setAdapter(mGalleryAdapter);
 
-        mGalleryAdapter.setListener(path -> {
+        mGalleryAdapter.setListener((path ,id) -> {
             if (path == null || getActivity() == null) return;
             if (isSubFolder){
                 //open Image
                 openImageForEdit(path);
             }else {
                 //open sub directory
-                Fragment fragment = FragmentGallery.newInstance(path);
+                if (id == null) return;
+                Fragment fragment = FragmentGallery.newInstance(path , id);
                 new HelperFragment(getActivity().getSupportFragmentManager() , fragment).setReplace(false).load(false);
             }
         });
 
         if (isSubFolder) {
-            mGalleryAdapter.setPhotosItem(getAlbumPhotos(mFolderName));
+            mGalleryAdapter.setPhotosItem(getAlbumPhotos(mFolderId));
         }else {
             mGalleryAdapter.setAlbumsItem(getGalleryAlbums());
         }
@@ -209,7 +211,7 @@ public class FragmentGallery extends BaseFragment {
         return albums;
     }
 
-    private List<GalleryPhotoModel> getAlbumPhotos(String folderName){
+    private List<GalleryPhotoModel> getAlbumPhotos(String folderId){
         List<GalleryPhotoModel> photos = new ArrayList<>();
         if (getContext() == null) return photos ;
 
@@ -219,13 +221,13 @@ public class FragmentGallery extends BaseFragment {
                 MediaStore.Images.Media.DATE_TAKEN
         };
 
-        boolean isAllPhoto = folderName.equals(getString(R.string.all));
+        boolean isAllPhoto = folderId.equals("-1");
 
         Cursor cursor = getContext().getContentResolver().query(
                 uri,
                 projection,
-                isAllPhoto ? null : MediaStore.Images.Media.DATA + " like ? ",
-                isAllPhoto ? null : new String[] {"%" + folderName + "%"},
+                isAllPhoto ? null : MediaStore.Images.Media.BUCKET_ID + " = ?",
+                isAllPhoto ? null : new String[] {folderId},
                 MediaStore.Images.ImageColumns.DATE_TAKEN  + " DESC"
         );
 

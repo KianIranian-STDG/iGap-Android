@@ -106,7 +106,8 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
 
             if (!isMultiSelect){
                 listener.onItemClicked(
-                        isPhotoMode ? photosItem.get(holder.getAdapterPosition()).getAddress() : albumsItem.get(holder.getAdapterPosition()).getCaption()
+                        isPhotoMode ? photosItem.get(holder.getAdapterPosition()).getAddress() : albumsItem.get(holder.getAdapterPosition()).getCaption() ,
+                        isPhotoMode ? null : albumsItem.get(holder.getAdapterPosition()).getId()
                 );
             }else{
                 holder.check.setChecked(!holder.check.isChecked());
@@ -142,7 +143,7 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
 
     public interface GalleryItemListener {
 
-        void onItemClicked(String name);
+        void onItemClicked(String name , String id);
 
     }
 }
