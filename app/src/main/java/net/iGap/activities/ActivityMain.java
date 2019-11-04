@@ -173,7 +173,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static String userPhoneNumber;
     private MyPhonStateService myPhonStateService;
     private BroadcastReceiver audioManagerReciver;
-    private BroadcastReceiver audioManagerReciver;
 
     public static void setMediaLayout() {
         try {

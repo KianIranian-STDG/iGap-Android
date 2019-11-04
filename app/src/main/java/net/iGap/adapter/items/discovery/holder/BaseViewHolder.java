@@ -69,6 +69,7 @@ import net.iGap.request.RequestGeoGetConfiguration;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.paygear.WalletActivity;
 
 import java.io.IOException;
 
