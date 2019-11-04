@@ -56,6 +56,14 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
         notifyDataSetChanged();
     }
 
+    public List<GalleryPhotoModel> getPhotosItem() {
+        return photosItem;
+    }
+
+    public List<GalleryAlbumModel> getAlbumsItem() {
+        return albumsItem;
+    }
+
     public boolean getMultiSelectState() {
         return isMultiSelect;
     }

@@ -32,18 +32,19 @@ import java.util.List;
 public class FragmentGallery extends BaseFragment {
 
     private AdapterGallery mGalleryAdapter;
-    private String mFolderName , mFolderId ;
-    private boolean isSubFolder = false ;
+    private String mFolderName, mFolderId;
+    private boolean isSubFolder = false;
+    private HelperToolbar mHelperToolbar;
 
     public FragmentGallery() {
     }
 
-    public static FragmentGallery newInstance(String folder , String id){
+    public static FragmentGallery newInstance(String folder, String id) {
         FragmentGallery fragment = new FragmentGallery();
-        fragment.mFolderName = folder ;
-        fragment.mFolderId = id ;
-        fragment.isSubFolder = true ;
-        return fragment ;
+        fragment.mFolderName = folder;
+        fragment.mFolderId = id;
+        fragment.isSubFolder = true;
+        return fragment;
     }
 
     @Override
@@ -61,35 +62,33 @@ public class FragmentGallery extends BaseFragment {
     private void initToolbar(View view) {
         ViewGroup lytToolbar = view.findViewById(R.id.toolbar);
 
-        HelperToolbar toolbar = HelperToolbar.create()
+        mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setIGapLogoCheck(false)
-                .setDefaultTitle(isSubFolder ? mFolderName : getString(R.string.gallery));
+                .setDefaultTitle(isSubFolder ? mFolderName : getString(R.string.gallery))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
 
-        if (isSubFolder) toolbar.setRightIcons(R.string.edit_icon);
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        if (mGalleryAdapter == null) return;
+                        if (mGalleryAdapter.getMultiSelectState()) {
+                            mHelperToolbar.getRightButton().setText(R.string.edit_icon);
+                            sendSelectedPhotos(mGalleryAdapter.getSelectedPhotos());
+                        } else {
+                            mHelperToolbar.getRightButton().setText(R.string.md_send_button);
+                        }
+                        mGalleryAdapter.setMultiSelectState(!mGalleryAdapter.getMultiSelectState());
+                    }
+                });
 
-        toolbar.setListener(new ToolbarListener() {
-            @Override
-            public void onLeftIconClickListener(View view) {
-                popBackStackFragment();
-            }
-
-            @Override
-            public void onRightIconClickListener(View view) {
-                if (mGalleryAdapter == null) return;
-                if (mGalleryAdapter.getMultiSelectState()){
-                    toolbar.getRightButton().setText(R.string.edit_icon);
-                    sendSelectedPhotos(mGalleryAdapter.getSelectedPhotos());
-                }else {
-                    toolbar.getRightButton().setText(R.string.md_send_button);
-                }
-                mGalleryAdapter.setMultiSelectState(!mGalleryAdapter.getMultiSelectState());
-            }
-        });
-
-        lytToolbar.addView(toolbar.getView());
+        if (isSubFolder) mHelperToolbar.setRightIcons(R.string.edit_icon);
+        lytToolbar.addView(mHelperToolbar.getView());
     }
 
     private void initRecyclerView(View view) {
@@ -99,23 +98,32 @@ public class FragmentGallery extends BaseFragment {
         mGalleryAdapter = new AdapterGallery(isSubFolder);
         rvGallery.setAdapter(mGalleryAdapter);
 
-        mGalleryAdapter.setListener((path ,id) -> {
+        mGalleryAdapter.setListener((path, id) -> {
             if (path == null || getActivity() == null) return;
-            if (isSubFolder){
+            if (isSubFolder) {
                 //open Image
                 openImageForEdit(path);
-            }else {
+            } else {
                 //open sub directory
                 if (id == null) return;
-                Fragment fragment = FragmentGallery.newInstance(path , id);
-                new HelperFragment(getActivity().getSupportFragmentManager() , fragment).setReplace(false).load(false);
+                Fragment fragment = FragmentGallery.newInstance(path, id);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load(false);
             }
         });
 
         if (isSubFolder) {
             mGalleryAdapter.setPhotosItem(getAlbumPhotos(mFolderId));
-        }else {
+        } else {
             mGalleryAdapter.setAlbumsItem(getGalleryAlbums());
+        }
+
+        if (isSubFolder && mGalleryAdapter.getPhotosItem().size() < 2 ){//disable multi select when photo count was 1 or 0
+            mHelperToolbar.getRightButton().setVisibility(View.GONE);
+        }
+
+        if (!isSubFolder && (mGalleryAdapter.getAlbumsItem().size() == 1 || mGalleryAdapter.getAlbumsItem().size() == 0)){//check 1 because we add all statically
+            rvGallery.setVisibility(View.GONE);
+            view.findViewById(R.id.tv_no_item).setVisibility(View.VISIBLE);
         }
     }
 
@@ -154,10 +162,10 @@ public class FragmentGallery extends BaseFragment {
 
         FragmentEditImage.itemGalleryList.clear();
         FragmentEditImage.textImageList.clear();
-        for (GalleryPhotoModel photo : selectedPhotos){
+        for (GalleryPhotoModel photo : selectedPhotos) {
             FragmentEditImage.insertItemList(photo.getAddress(), "", false);
         }
-        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, selectedPhotos.size()-1);
+        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, selectedPhotos.size() - 1);
         fragmentEditImage.setIsReOpenChatAttachment(false);
         fragmentEditImage.setGalleryListener(() -> {
             popBackStackFragment();
@@ -182,7 +190,7 @@ public class FragmentGallery extends BaseFragment {
                 projection,
                 null,
                 null,
-                MediaStore.Images.ImageColumns.DATE_TAKEN  + " DESC");
+                MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
 
         ArrayList<String> ids = new ArrayList<>();
         if (cursor != null) {
@@ -195,8 +203,8 @@ public class FragmentGallery extends BaseFragment {
                         album.setCover(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA)));
                         if (!album.getCover().contains(".gif")) {
                             //check and add ALL for first item
-                            if (albums.size() == 0){
-                                albums.add(new GalleryAlbumModel("-1" , getString(R.string.all) , album.getCover()));
+                            if (albums.size() == 0) {
+                                albums.add(new GalleryAlbumModel("-1", getString(R.string.all), album.getCover()));
                             }
                             albums.add(album);
                             ids.add(album.getId());
@@ -211,13 +219,13 @@ public class FragmentGallery extends BaseFragment {
         return albums;
     }
 
-    private List<GalleryPhotoModel> getAlbumPhotos(String folderId){
+    private List<GalleryPhotoModel> getAlbumPhotos(String folderId) {
         List<GalleryPhotoModel> photos = new ArrayList<>();
-        if (getContext() == null) return photos ;
+        if (getContext() == null) return photos;
 
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         String[] projection = {
-                MediaStore.MediaColumns.DATA ,
+                MediaStore.MediaColumns.DATA,
                 MediaStore.Images.Media.DATE_TAKEN
         };
 
@@ -227,20 +235,20 @@ public class FragmentGallery extends BaseFragment {
                 uri,
                 projection,
                 isAllPhoto ? null : MediaStore.Images.Media.BUCKET_ID + " = ?",
-                isAllPhoto ? null : new String[] {folderId},
-                MediaStore.Images.ImageColumns.DATE_TAKEN  + " DESC"
+                isAllPhoto ? null : new String[]{folderId},
+                MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC"
         );
 
-        if (cursor != null){
-            while (cursor.moveToNext()){
-                try{
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                try {
                     GalleryPhotoModel photo = new GalleryPhotoModel();
                     photo.setId(photos.size());
                     photo.setAddress(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA)));
                     if (photo.getAddress() != null && !photo.getAddress().contains(".gif")) {
                         photos.add(photo);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
