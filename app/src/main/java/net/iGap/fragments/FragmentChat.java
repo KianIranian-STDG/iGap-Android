@@ -7658,8 +7658,10 @@ public class FragmentChat extends BaseFragment
             public void run() {
 
                 final long messageId = AppUtils.makeRandomId();
+                RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                });
 
-                RealmRoom realmRoom = getRoom();
                 if (realmRoom == null || realmRoom.getReadOnly()) {
                     return;
                 }
