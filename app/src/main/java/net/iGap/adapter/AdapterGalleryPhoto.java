@@ -13,17 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.ImageHelper;
-import net.iGap.interfaces.OnRotateImage;
 import net.iGap.model.GalleryAlbumModel;
 import net.iGap.model.GalleryPhotoModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHolderGallery> {
+public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhoto.ViewHolderGallery> {
 
     private boolean isPhotoMode;
     private boolean isMultiSelect;
@@ -32,7 +29,7 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
     private List<GalleryPhotoModel> mSelectedPhotos = new ArrayList<>();
     private GalleryItemListener listener;
 
-    public AdapterGallery(boolean isPhotoMode) {
+    public AdapterGalleryPhoto(boolean isPhotoMode) {
         this.isPhotoMode = isPhotoMode;
     }
 
@@ -112,12 +109,12 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
         //handle item click
         holder.image.setOnClickListener(v -> {
 
-            if (!isMultiSelect){
+            if (!isMultiSelect) {
                 listener.onItemClicked(
-                        isPhotoMode ? photosItem.get(holder.getAdapterPosition()).getAddress() : albumsItem.get(holder.getAdapterPosition()).getCaption() ,
+                        isPhotoMode ? photosItem.get(holder.getAdapterPosition()).getAddress() : albumsItem.get(holder.getAdapterPosition()).getCaption(),
                         isPhotoMode ? null : albumsItem.get(holder.getAdapterPosition()).getId()
                 );
-            }else{
+            } else {
                 holder.check.setChecked(!holder.check.isChecked());
                 listener.onMultiSelect(mSelectedPhotos.size());
             }
@@ -152,7 +149,8 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
 
     public interface GalleryItemListener {
 
-        void onItemClicked(String name , String id);
+        void onItemClicked(String name, String id);
+
         void onMultiSelect(int size);
 
     }

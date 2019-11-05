@@ -340,7 +340,7 @@ public class ChatAttachmentPopup {
                         FragmentEditImage.itemGalleryList.clear();
                         FragmentEditImage.textImageList.clear();
 
-                        Fragment fragment = FragmentGallery.newInstance(()->{
+                        Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO , ()->{
                             try {
                                 attachFile.requestOpenGalleryForImageMultipleSelect(mFragment);
                             } catch (IOException e) {

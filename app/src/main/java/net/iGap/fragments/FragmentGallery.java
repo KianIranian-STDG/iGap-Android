@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.AdapterGallery;
+import net.iGap.adapter.AdapterGalleryPhoto;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
@@ -31,26 +31,29 @@ import java.util.List;
 
 public class FragmentGallery extends BaseFragment {
 
-    private AdapterGallery mGalleryAdapter;
+    private AdapterGalleryPhoto mGalleryPhotoAdapter;
     private String mFolderName, mFolderId;
     private boolean isSubFolder = false;
     private HelperToolbar mHelperToolbar;
-    private GalleryFragmentListener mGalleryListener ;
+    private GalleryFragmentListener mGalleryListener;
+    private GalleryMode mGalleryMode;
 
     public FragmentGallery() {
     }
 
-    public static FragmentGallery newInstance(String folder, String id) {
+    public static FragmentGallery newInstance(GalleryMode mode, String folder, String id) {
         FragmentGallery fragment = new FragmentGallery();
         fragment.mFolderName = folder;
         fragment.mFolderId = id;
+        fragment.mGalleryMode = mode;
         fragment.isSubFolder = true;
         return fragment;
     }
 
-    public static FragmentGallery newInstance(GalleryFragmentListener listener) {
+    public static FragmentGallery newInstance(GalleryMode mode, GalleryFragmentListener listener) {
         FragmentGallery fragment = new FragmentGallery();
-        fragment.mGalleryListener = listener ;
+        fragment.mGalleryListener = listener;
+        fragment.mGalleryMode = mode;
         return fragment;
     }
 
@@ -79,30 +82,15 @@ public class FragmentGallery extends BaseFragment {
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
-                        if (mGalleryAdapter != null && mGalleryAdapter.getMultiSelectState()){
-                            mHelperToolbar.getRightButton().setText(R.string.edit_icon);
-                            mGalleryAdapter.setMultiSelectState(!mGalleryAdapter.getMultiSelectState());
-                            return;
-                        }
-                        popBackStackFragment();
+                        galleryOnBackPressed();
                     }
 
                     @Override
                     public void onRightIconClickListener(View view) {
-                        if (isSubFolder){
-                            if (mGalleryAdapter == null) return;
-                            if (mGalleryAdapter.getMultiSelectState()) {
-                                mHelperToolbar.getRightButton().setText(R.string.edit_icon);
-                                if ( mGalleryAdapter.getSelectedPhotos().size() > 0) sendSelectedPhotos(mGalleryAdapter.getSelectedPhotos());
-                            } else {
-                                mHelperToolbar.getRightButton().setText(R.string.close_icon);
-                            }
-                            mGalleryAdapter.setMultiSelectState(!mGalleryAdapter.getMultiSelectState());
-                        }else{
-                            if (mGalleryListener != null) {
-                                popBackStackFragment();
-                                mGalleryListener.openOsGallery();
-                            }
+                        if (isSubFolder && mGalleryMode == GalleryMode.PHOTO) {
+                            checkPhotoMultiSelectAndSendToEdit();
+                        } else {
+                            openAndroidOsGallery();
                         }
                     }
                 });
@@ -110,14 +98,50 @@ public class FragmentGallery extends BaseFragment {
         lytToolbar.addView(mHelperToolbar.getView());
     }
 
+    private void galleryOnBackPressed() {
+        if (mGalleryMode == GalleryMode.PHOTO && mGalleryPhotoAdapter != null && mGalleryPhotoAdapter.getMultiSelectState()) {
+            mHelperToolbar.getRightButton().setText(R.string.edit_icon);
+            mGalleryPhotoAdapter.setMultiSelectState(!mGalleryPhotoAdapter.getMultiSelectState());
+            return;
+        }
+        popBackStackFragment();
+    }
+
+    private void openAndroidOsGallery() {
+        if (mGalleryListener != null) {
+            popBackStackFragment();
+            mGalleryListener.openOsGallery();
+        }
+    }
+
+    private void checkPhotoMultiSelectAndSendToEdit() {
+        if (mGalleryPhotoAdapter == null) return;
+        if (mGalleryPhotoAdapter.getMultiSelectState()) {
+            mHelperToolbar.getRightButton().setText(R.string.edit_icon);
+            if (mGalleryPhotoAdapter.getSelectedPhotos().size() > 0)
+                sendSelectedPhotos(mGalleryPhotoAdapter.getSelectedPhotos());
+        } else {
+            mHelperToolbar.getRightButton().setText(R.string.close_icon);
+        }
+        mGalleryPhotoAdapter.setMultiSelectState(!mGalleryPhotoAdapter.getMultiSelectState());
+    }
+
     private void initRecyclerView(View view) {
 
         RecyclerView rvGallery = view.findViewById(R.id.rv_gallery);
         rvGallery.setLayoutManager(new GridLayoutManager(rvGallery.getContext(), isSubFolder ? 3 : 2));
-        mGalleryAdapter = new AdapterGallery(isSubFolder);
-        rvGallery.setAdapter(mGalleryAdapter);
+        if (mGalleryMode == GalleryMode.PHOTO) {
+            setupGalleryWithPhotoAdapter(view, rvGallery);
+        } else if (mGalleryMode == GalleryMode.VIDEO) {
 
-        mGalleryAdapter.setListener(new AdapterGallery.GalleryItemListener() {
+        }
+    }
+
+    private void setupGalleryWithPhotoAdapter(View view, RecyclerView rvGallery) {
+
+        mGalleryPhotoAdapter = new AdapterGalleryPhoto(isSubFolder);
+        rvGallery.setAdapter(mGalleryPhotoAdapter);
+        mGalleryPhotoAdapter.setListener(new AdapterGalleryPhoto.GalleryItemListener() {
             @Override
             public void onItemClicked(String path, String id) {
                 if (path == null || getActivity() == null) return;
@@ -127,32 +151,32 @@ public class FragmentGallery extends BaseFragment {
                 } else {
                     //open sub directory
                     if (id == null) return;
-                    Fragment fragment = FragmentGallery.newInstance(path, id);
+                    Fragment fragment = FragmentGallery.newInstance(GalleryMode.PHOTO, path, id);
                     new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load(false);
                 }
             }
 
             @Override
             public void onMultiSelect(int size) {
-                if (size > 0){
+                if (size > 0) {
                     mHelperToolbar.getRightButton().setText(R.string.md_send_button);
-                }else {
+                } else {
                     mHelperToolbar.getRightButton().setText(R.string.close_icon);
                 }
             }
         });
 
         if (isSubFolder) {
-            mGalleryAdapter.setPhotosItem(getAlbumPhotos(mFolderId));
+            mGalleryPhotoAdapter.setPhotosItem(getAlbumPhotos(mFolderId));
         } else {
-            mGalleryAdapter.setAlbumsItem(getGalleryAlbums());
+            mGalleryPhotoAdapter.setAlbumsItem(getGalleryAlbums());
         }
 
-        if (isSubFolder && mGalleryAdapter.getPhotosItem().size() < 2 ){//disable multi select when photo count was 1 or 0
+        if (isSubFolder && mGalleryPhotoAdapter.getPhotosItem().size() < 2) {//disable multi select when photo count was 1 or 0
             mHelperToolbar.getRightButton().setVisibility(View.GONE);
         }
 
-        if (!isSubFolder && (mGalleryAdapter.getAlbumsItem().size() == 1 || mGalleryAdapter.getAlbumsItem().size() == 0)){//check 1 because we add all statically
+        if (!isSubFolder && (mGalleryPhotoAdapter.getAlbumsItem().size() == 1 || mGalleryPhotoAdapter.getAlbumsItem().size() == 0)) {//check 1 because we add all statically
             rvGallery.setVisibility(View.GONE);
             view.findViewById(R.id.tv_no_item).setVisibility(View.VISIBLE);
         }
@@ -288,8 +312,12 @@ public class FragmentGallery extends BaseFragment {
         return photos;
     }
 
-    public interface GalleryFragmentListener{
+    public interface GalleryFragmentListener {
         void openOsGallery();
+    }
+
+    public enum GalleryMode {
+        PHOTO, VIDEO
     }
 
 }
