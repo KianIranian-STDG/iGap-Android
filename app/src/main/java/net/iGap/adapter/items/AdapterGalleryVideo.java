@@ -1,4 +1,4 @@
-package net.iGap.adapter;
+package net.iGap.adapter.items;
 
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -21,17 +21,17 @@ import net.iGap.model.GalleryPhotoModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhoto.ViewHolderGallery> {
+public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVideo.ViewHolderGallery> {
 
-    private boolean isPhotoMode;
+    private boolean isVideoMode;
     private boolean isMultiSelect;
     private List<GalleryAlbumModel> albumsItem = new ArrayList<>();
-    private List<GalleryPhotoModel> photosItem = new ArrayList<>();
-    private List<GalleryPhotoModel> mSelectedPhotos = new ArrayList<>();
+    private List<GalleryPhotoModel> videosItem = new ArrayList<>();
+    private List<GalleryPhotoModel> mSelectedVideos = new ArrayList<>();
     private GalleryItemListener listener;
 
-    public AdapterGalleryPhoto(boolean isPhotoMode) {
-        this.isPhotoMode = isPhotoMode;
+    public AdapterGalleryVideo(boolean isVideoMode) {
+        this.isVideoMode = isVideoMode;
     }
 
     public void setAlbumsItem(List<GalleryAlbumModel> albumsItem) {
@@ -39,8 +39,8 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
         notifyDataSetChanged();
     }
 
-    public void setPhotosItem(List<GalleryPhotoModel> photosItem) {
-        this.photosItem = photosItem;
+    public void setVideosItem(List<GalleryPhotoModel> videosItem) {
+        this.videosItem = videosItem;
         notifyDataSetChanged();
     }
 
@@ -50,12 +50,12 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
 
     public void setMultiSelectState(boolean enable) {
         this.isMultiSelect = enable;
-        if (!enable) mSelectedPhotos.clear();
+        if (!enable) mSelectedVideos.clear();
         notifyDataSetChanged();
     }
 
-    public List<GalleryPhotoModel> getPhotosItem() {
-        return photosItem;
+    public List<GalleryPhotoModel> getVideosItem() {
+        return videosItem;
     }
 
     public List<GalleryAlbumModel> getAlbumsItem() {
@@ -66,23 +66,23 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
         return isMultiSelect;
     }
 
-    public List<GalleryPhotoModel> getSelectedPhotos() {
-        return mSelectedPhotos;
+    public List<GalleryPhotoModel> getmSelectedVideos() {
+        return mSelectedVideos;
     }
 
     @NonNull
     @Override
     public ViewHolderGallery onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_gallery_image, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_gallery_video, parent, false);
         return new ViewHolderGallery(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderGallery holder, int position) {
 
-        //use 2 state for gallery to decrease codes => ALBUM and PHOTO
-        if (!isPhotoMode) {
+        if (!isVideoMode) {
 
+            holder.play.setVisibility(View.GONE);
             holder.caption.setText(albumsItem.get(position).getCaption());
             holder.caption.setVisibility(View.VISIBLE);
 
@@ -90,7 +90,7 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
 
             if (isMultiSelect) {
                 holder.check.setVisibility(View.VISIBLE);
-                holder.check.setChecked(mSelectedPhotos.contains(photosItem.get(position)));
+                holder.check.setChecked(mSelectedVideos.contains(videosItem.get(position)));
             } else {
                 holder.check.setChecked(false);
                 holder.check.setVisibility(View.GONE);
@@ -98,10 +98,10 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
 
             holder.check.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
-                    if (!mSelectedPhotos.contains(photosItem.get(holder.getAdapterPosition())))
-                        mSelectedPhotos.add(photosItem.get(holder.getAdapterPosition()));
+                    if (!mSelectedVideos.contains(videosItem.get(holder.getAdapterPosition())))
+                        mSelectedVideos.add(videosItem.get(holder.getAdapterPosition()));
                 } else {
-                    mSelectedPhotos.remove(photosItem.get(holder.getAdapterPosition()));
+                    mSelectedVideos.remove(videosItem.get(holder.getAdapterPosition()));
                 }
             });
 
@@ -112,31 +112,32 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
 
             if (!isMultiSelect) {
                 listener.onItemClicked(
-                        isPhotoMode ? photosItem.get(holder.getAdapterPosition()).getAddress() : albumsItem.get(holder.getAdapterPosition()).getCaption(),
-                        isPhotoMode ? null : albumsItem.get(holder.getAdapterPosition()).getId()
+                        isVideoMode ? videosItem.get(holder.getAdapterPosition()).getAddress() : albumsItem.get(holder.getAdapterPosition()).getCaption(),
+                        isVideoMode ? null : albumsItem.get(holder.getAdapterPosition()).getId()
                 );
             } else {
                 holder.check.setChecked(!holder.check.isChecked());
-                listener.onMultiSelect(mSelectedPhotos.size());
+                listener.onMultiSelect(mSelectedVideos.size());
             }
 
         });
 
         //load image
         Glide.with(holder.image.getContext())
-                .load(Uri.parse("file://" + (isPhotoMode ? photosItem.get(position).getAddress() : albumsItem.get(position).getCover())))
+                .load(Uri.parse("file://" + (isVideoMode ? videosItem.get(position).getAddress() : albumsItem.get(position).getCover())))
                 .into(holder.image);
     }
 
     @Override
     public int getItemCount() {
-        return isPhotoMode ? photosItem.size() : albumsItem.size();
+        return isVideoMode ? videosItem.size() : albumsItem.size();
     }
 
     class ViewHolderGallery extends RecyclerView.ViewHolder {
 
         TextView caption;
         ImageView image;
+        ImageView play ;
         CheckBox check;
 
         ViewHolderGallery(@NonNull View itemView) {
@@ -144,7 +145,9 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
             image = itemView.findViewById(R.id.image);
             caption = itemView.findViewById(R.id.caption);
             check = itemView.findViewById(R.id.check);
+            play = itemView.findViewById(R.id.play);
         }
 
     }
+
 }

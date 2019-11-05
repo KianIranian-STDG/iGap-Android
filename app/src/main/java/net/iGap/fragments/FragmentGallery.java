@@ -21,6 +21,7 @@ import net.iGap.adapter.AdapterGalleryPhoto;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
+import net.iGap.interfaces.GalleryItemListener;
 import net.iGap.interfaces.OnRotateImage;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.model.GalleryAlbumModel;
@@ -141,7 +142,7 @@ public class FragmentGallery extends BaseFragment {
 
         mGalleryPhotoAdapter = new AdapterGalleryPhoto(isSubFolder);
         rvGallery.setAdapter(mGalleryPhotoAdapter);
-        mGalleryPhotoAdapter.setListener(new AdapterGalleryPhoto.GalleryItemListener() {
+        mGalleryPhotoAdapter.setListener(new GalleryItemListener() {
             @Override
             public void onItemClicked(String path, String id) {
                 if (path == null || getActivity() == null) return;
