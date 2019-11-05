@@ -1,6 +1,9 @@
 package net.iGap.adapter.items;
 
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,7 @@ import net.iGap.R;
 import net.iGap.interfaces.GalleryItemListener;
 import net.iGap.model.GalleryAlbumModel;
 import net.iGap.model.GalleryItemModel;
+import net.iGap.model.GalleryVideoModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,21 +29,15 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
 
     private boolean isVideoMode;
     private boolean isMultiSelect;
-    private List<GalleryAlbumModel> albumsItem = new ArrayList<>();
-    private List<GalleryItemModel> videosItem = new ArrayList<>();
-    private List<GalleryItemModel> mSelectedVideos = new ArrayList<>();
+    private List<GalleryVideoModel> videosItem = new ArrayList<>();
+    private List<GalleryVideoModel> mSelectedVideos = new ArrayList<>();
     private GalleryItemListener listener;
 
     public AdapterGalleryVideo(boolean isVideoMode) {
         this.isVideoMode = isVideoMode;
     }
 
-    public void setAlbumsItem(List<GalleryAlbumModel> albumsItem) {
-        this.albumsItem = albumsItem;
-        notifyDataSetChanged();
-    }
-
-    public void setVideosItem(List<GalleryItemModel> videosItem) {
+    public void setVideosItem(List<GalleryVideoModel> videosItem) {
         this.videosItem = videosItem;
         notifyDataSetChanged();
     }
@@ -54,19 +52,15 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
         notifyDataSetChanged();
     }
 
-    public List<GalleryItemModel> getVideosItem() {
+    public List<GalleryVideoModel> getVideosItem() {
         return videosItem;
-    }
-
-    public List<GalleryAlbumModel> getAlbumsItem() {
-        return albumsItem;
     }
 
     public boolean getMultiSelectState() {
         return isMultiSelect;
     }
 
-    public List<GalleryItemModel> getmSelectedVideos() {
+    public List<GalleryVideoModel> getSelectedVideos() {
         return mSelectedVideos;
     }
 
@@ -83,7 +77,7 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
         if (!isVideoMode) {
 
             holder.play.setVisibility(View.GONE);
-            holder.caption.setText(albumsItem.get(position).getCaption());
+            holder.caption.setText(videosItem.get(position).getCaption());
             holder.caption.setVisibility(View.VISIBLE);
 
         } else {
@@ -112,8 +106,8 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
 
             if (!isMultiSelect) {
                 listener.onItemClicked(
-                        isVideoMode ? videosItem.get(holder.getAdapterPosition()).getAddress() : albumsItem.get(holder.getAdapterPosition()).getCaption(),
-                        isVideoMode ? null : albumsItem.get(holder.getAdapterPosition()).getId()
+                        isVideoMode ? videosItem.get(holder.getAdapterPosition()).getPath() : videosItem.get(holder.getAdapterPosition()).getCaption(),
+                        isVideoMode ? null : videosItem.get(holder.getAdapterPosition()).getId()
                 );
             } else {
                 holder.check.setChecked(!holder.check.isChecked());
@@ -124,13 +118,13 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
 
         //load image
         Glide.with(holder.image.getContext())
-                .load(Uri.parse("file://" + (isVideoMode ? videosItem.get(position).getAddress() : albumsItem.get(position).getCover())))
+                .load(videosItem.get(position).getCover())
                 .into(holder.image);
     }
 
     @Override
     public int getItemCount() {
-        return isVideoMode ? videosItem.size() : albumsItem.size();
+        return videosItem.size();
     }
 
     class ViewHolderGallery extends RecyclerView.ViewHolder {
