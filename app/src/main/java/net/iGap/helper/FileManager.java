@@ -7,14 +7,14 @@ import android.provider.MediaStore;
 
 import net.iGap.R;
 import net.iGap.model.GalleryAlbumModel;
-import net.iGap.model.GalleryPhotoModel;
+import net.iGap.model.GalleryItemModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileManager {
 
-    public static List<GalleryAlbumModel> getGalleryAlbums(Context context) {
+    public static List<GalleryAlbumModel> getDevicePhotoFolders(Context context) {
         List<GalleryAlbumModel> albums = new ArrayList<>();
         if (context == null) return albums;
 
@@ -59,8 +59,8 @@ public class FileManager {
         return albums;
     }
 
-    public static List<GalleryPhotoModel> getAlbumPhotos(Context context ,String folderId) {
-        List<GalleryPhotoModel> photos = new ArrayList<>();
+    public static List<GalleryItemModel> getFolderPhotosById(Context context , String folderId) {
+        List<GalleryItemModel> photos = new ArrayList<>();
         if (context == null) return photos;
 
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -82,7 +82,7 @@ public class FileManager {
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 try {
-                    GalleryPhotoModel photo = new GalleryPhotoModel();
+                    GalleryItemModel photo = new GalleryItemModel();
                     photo.setId(photos.size());
                     photo.setAddress(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA)));
                     if (photo.getAddress() != null && !photo.getAddress().contains(".gif")) {

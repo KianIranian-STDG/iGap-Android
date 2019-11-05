@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import net.iGap.R;
 import net.iGap.interfaces.GalleryItemListener;
 import net.iGap.model.GalleryAlbumModel;
-import net.iGap.model.GalleryPhotoModel;
+import net.iGap.model.GalleryItemModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +26,8 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
     private boolean isVideoMode;
     private boolean isMultiSelect;
     private List<GalleryAlbumModel> albumsItem = new ArrayList<>();
-    private List<GalleryPhotoModel> videosItem = new ArrayList<>();
-    private List<GalleryPhotoModel> mSelectedVideos = new ArrayList<>();
+    private List<GalleryItemModel> videosItem = new ArrayList<>();
+    private List<GalleryItemModel> mSelectedVideos = new ArrayList<>();
     private GalleryItemListener listener;
 
     public AdapterGalleryVideo(boolean isVideoMode) {
@@ -39,7 +39,7 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
         notifyDataSetChanged();
     }
 
-    public void setVideosItem(List<GalleryPhotoModel> videosItem) {
+    public void setVideosItem(List<GalleryItemModel> videosItem) {
         this.videosItem = videosItem;
         notifyDataSetChanged();
     }
@@ -54,7 +54,7 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
         notifyDataSetChanged();
     }
 
-    public List<GalleryPhotoModel> getVideosItem() {
+    public List<GalleryItemModel> getVideosItem() {
         return videosItem;
     }
 
@@ -66,7 +66,7 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
         return isMultiSelect;
     }
 
-    public List<GalleryPhotoModel> getmSelectedVideos() {
+    public List<GalleryItemModel> getmSelectedVideos() {
         return mSelectedVideos;
     }
 

@@ -1,10 +1,7 @@
 package net.iGap.fragments;
 
 
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +22,8 @@ import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.GalleryItemListener;
 import net.iGap.interfaces.OnRotateImage;
 import net.iGap.interfaces.ToolbarListener;
-import net.iGap.model.GalleryAlbumModel;
-import net.iGap.model.GalleryPhotoModel;
+import net.iGap.model.GalleryItemModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentGallery extends BaseFragment {
@@ -169,9 +164,9 @@ public class FragmentGallery extends BaseFragment {
         });
 
         if (isSubFolder) {
-            mGalleryPhotoAdapter.setPhotosItem(FileManager.getAlbumPhotos(getContext() ,mFolderId));
+            mGalleryPhotoAdapter.setPhotosItem(FileManager.getFolderPhotosById(getContext() ,mFolderId));
         } else {
-            mGalleryPhotoAdapter.setAlbumsItem(FileManager.getGalleryAlbums(getContext()));
+            mGalleryPhotoAdapter.setAlbumsItem(FileManager.getDevicePhotoFolders(getContext()));
         }
 
         if (isSubFolder && mGalleryPhotoAdapter.getPhotosItem().size() < 2) {//disable multi select when photo count was 1 or 0
@@ -214,12 +209,12 @@ public class FragmentGallery extends BaseFragment {
         });
     }
 
-    private void sendSelectedPhotos(List<GalleryPhotoModel> selectedPhotos) {
+    private void sendSelectedPhotos(List<GalleryItemModel> selectedPhotos) {
         if (getActivity() == null || selectedPhotos.size() == 0) return;
 
         FragmentEditImage.itemGalleryList.clear();
         FragmentEditImage.textImageList.clear();
-        for (GalleryPhotoModel photo : selectedPhotos) {
+        for (GalleryItemModel photo : selectedPhotos) {
             FragmentEditImage.insertItemList(photo.getAddress(), "", false);
         }
         FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, selectedPhotos.size() - 1);

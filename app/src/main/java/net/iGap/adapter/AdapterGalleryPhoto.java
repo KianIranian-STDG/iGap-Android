@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import net.iGap.R;
 import net.iGap.interfaces.GalleryItemListener;
 import net.iGap.model.GalleryAlbumModel;
-import net.iGap.model.GalleryPhotoModel;
+import net.iGap.model.GalleryItemModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +26,8 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
     private boolean isPhotoMode;
     private boolean isMultiSelect;
     private List<GalleryAlbumModel> albumsItem = new ArrayList<>();
-    private List<GalleryPhotoModel> photosItem = new ArrayList<>();
-    private List<GalleryPhotoModel> mSelectedPhotos = new ArrayList<>();
+    private List<GalleryItemModel> photosItem = new ArrayList<>();
+    private List<GalleryItemModel> mSelectedPhotos = new ArrayList<>();
     private GalleryItemListener listener;
 
     public AdapterGalleryPhoto(boolean isPhotoMode) {
@@ -39,7 +39,7 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
         notifyDataSetChanged();
     }
 
-    public void setPhotosItem(List<GalleryPhotoModel> photosItem) {
+    public void setPhotosItem(List<GalleryItemModel> photosItem) {
         this.photosItem = photosItem;
         notifyDataSetChanged();
     }
@@ -54,7 +54,7 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
         notifyDataSetChanged();
     }
 
-    public List<GalleryPhotoModel> getPhotosItem() {
+    public List<GalleryItemModel> getPhotosItem() {
         return photosItem;
     }
 
@@ -66,7 +66,7 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
         return isMultiSelect;
     }
 
-    public List<GalleryPhotoModel> getSelectedPhotos() {
+    public List<GalleryItemModel> getSelectedPhotos() {
         return mSelectedPhotos;
     }
 
