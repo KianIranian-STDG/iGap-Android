@@ -3,11 +3,17 @@ package net.iGap;
 import android.os.Looper;
 import android.util.Log;
 
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import io.realm.Realm;
 
 public class DbManager {
 
     private Realm uiRealm;
+
+    private ThreadPoolExecutor realmLowPriorityPoolExecutor;
 
     private static final DbManager ourInstance = new DbManager();
 
@@ -16,7 +22,12 @@ public class DbManager {
     }
 
     private DbManager() {
-
+        realmLowPriorityPoolExecutor = new ThreadPoolExecutor(
+                1,
+                1,
+                3,
+                TimeUnit.SECONDS,
+                new LinkedBlockingDeque<>());
     }
 
     private Realm getUiRealm() {
@@ -64,6 +75,23 @@ public class DbManager {
         }
     }
 
+    /***
+     Very important Not:
+     All transaction using this method have low priority and may not execute in order of transaction but order of all low transaction is guaranteed.
+     so all transaction that use this function will be called in order of calling.
+     **/
+    public void doRealmTransactionLowPriorityAsync(RealmTransaction realmTransaction) {
+        realmLowPriorityPoolExecutor.execute(new Thread(() -> DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransaction(realmTransaction::doTransaction);
+        })));
+    }
+
+    public void doRealmTransaction(RealmTransaction realmTransaction) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransaction(realmTransaction::doTransaction);
+        });
+    }
+
     public void doRealmTask(RealmTask realmTask, long userId) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             throw new IllegalStateException("You must call this function in non ui thread.");
@@ -84,6 +112,23 @@ public class DbManager {
         }
     }
 
+    /***
+     Very important Not:
+     All transaction using this method have low priority and may not execute in order of transaction but order of all low transaction is guaranteed.
+     so all transaction that use this function will be called in order of calling.
+     **/
+    public void doRealmTransactionLowPriorityAsync(RealmTransaction realmTransaction, long userId) {
+        realmLowPriorityPoolExecutor.execute(new Thread(() -> DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransaction(realmTransaction::doTransaction);
+        }, userId)));
+    }
+
+    public void doRealmTransaction(RealmTransaction realmTransaction, long userId) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.executeTransaction(realmTransaction::doTransaction);
+        }, userId);
+    }
+
     @FunctionalInterface
     public interface RealmTaskWithReturn<T> {
         T doTask(Realm realm);
@@ -92,6 +137,11 @@ public class DbManager {
     @FunctionalInterface
     public interface RealmTask {
         void doTask(Realm realm);
+    }
+
+    @FunctionalInterface
+    public interface RealmTransaction {
+        void doTransaction(Realm realm);
     }
 
 }
