@@ -24,7 +24,7 @@ public class HelperDataUsage {
                     }
                 });
             });
-        }).run();
+        }).start();
 
     }
 
@@ -42,7 +42,7 @@ public class HelperDataUsage {
                     }
                 });
             });
-        }).run();
+        }).start();
 
     }
 
@@ -60,7 +60,7 @@ public class HelperDataUsage {
                     }
                 });
             });
-        }).run();
+        }).start();
 
     }
 
@@ -79,7 +79,7 @@ public class HelperDataUsage {
                     }
                 });
             });
-        }).run();
+        }).start();
 
     }
 
@@ -110,7 +110,7 @@ public class HelperDataUsage {
                     }
                 });
             });
-        }).run();
+        }).start();
     }
 
     public static void clearUsageRealm(boolean connectivityType) {
