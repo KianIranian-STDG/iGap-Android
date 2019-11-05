@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterGalleryPhoto;
+import net.iGap.helper.FileManager;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
@@ -168,9 +169,9 @@ public class FragmentGallery extends BaseFragment {
         });
 
         if (isSubFolder) {
-            mGalleryPhotoAdapter.setPhotosItem(getAlbumPhotos(mFolderId));
+            mGalleryPhotoAdapter.setPhotosItem(FileManager.getAlbumPhotos(getContext() ,mFolderId));
         } else {
-            mGalleryPhotoAdapter.setAlbumsItem(getGalleryAlbums());
+            mGalleryPhotoAdapter.setAlbumsItem(FileManager.getGalleryAlbums(getContext()));
         }
 
         if (isSubFolder && mGalleryPhotoAdapter.getPhotosItem().size() < 2) {//disable multi select when photo count was 1 or 0
@@ -228,89 +229,6 @@ public class FragmentGallery extends BaseFragment {
             popBackStackFragment();
         });
         new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
-    }
-
-    private List<GalleryAlbumModel> getGalleryAlbums() {
-        List<GalleryAlbumModel> albums = new ArrayList<>();
-        if (getContext() == null) return albums;
-
-        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = {
-                MediaStore.Images.Media.BUCKET_ID,
-                MediaStore.MediaColumns.DATA,
-                MediaStore.Images.Media.BUCKET_DISPLAY_NAME
-        };
-
-        Cursor cursor = getContext().getContentResolver().query(
-                uri,
-                projection,
-                null,
-                null,
-                MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
-
-        ArrayList<String> ids = new ArrayList<>();
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                try {
-                    GalleryAlbumModel album = new GalleryAlbumModel();
-                    album.setId(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID)));
-                    if (!ids.contains(album.getId())) {
-                        album.setCaption(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)));
-                        album.setCover(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA)));
-                        if (!album.getCover().contains(".gif")) {
-                            //check and add ALL for first item
-                            if (albums.size() == 0) {
-                                albums.add(new GalleryAlbumModel("-1", getString(R.string.all), album.getCover()));
-                            }
-                            albums.add(album);
-                            ids.add(album.getId());
-                        }
-                    }//else could be counter
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            cursor.close();
-        }
-        return albums;
-    }
-
-    private List<GalleryPhotoModel> getAlbumPhotos(String folderId) {
-        List<GalleryPhotoModel> photos = new ArrayList<>();
-        if (getContext() == null) return photos;
-
-        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = {
-                MediaStore.MediaColumns.DATA,
-                MediaStore.Images.Media.DATE_TAKEN
-        };
-
-        boolean isAllPhoto = folderId.equals("-1");
-
-        Cursor cursor = getContext().getContentResolver().query(
-                uri,
-                projection,
-                isAllPhoto ? null : MediaStore.Images.Media.BUCKET_ID + " = ?",
-                isAllPhoto ? null : new String[]{folderId},
-                MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC"
-        );
-
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                try {
-                    GalleryPhotoModel photo = new GalleryPhotoModel();
-                    photo.setId(photos.size());
-                    photo.setAddress(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA)));
-                    if (photo.getAddress() != null && !photo.getAddress().contains(".gif")) {
-                        photos.add(photo);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            cursor.close();
-        }
-        return photos;
     }
 
     public interface GalleryFragmentListener {
