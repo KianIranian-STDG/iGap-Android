@@ -332,7 +332,30 @@ public class ChatAttachmentPopup {
         photo.setOnClickListener(v -> {
             dismiss();
             try {
-                attachFile.requestOpenGalleryForImageMultipleSelect(mFragment);
+
+                HelperPermission.getStoragePermision(mContext, new OnGetPermission() {
+                    @Override
+                    public void Allow() {
+                        //clear at first time to load image gallery
+                        FragmentEditImage.itemGalleryList.clear();
+                        FragmentEditImage.textImageList.clear();
+
+                        Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO , ()->{
+                            try {
+                                attachFile.requestOpenGalleryForImageMultipleSelect(mFragment);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                        new HelperFragment(mFrgActivity.getSupportFragmentManager() , fragment).setReplace(false).load();
+                    }
+
+                    @Override
+                    public void deny() {
+
+                    }
+                });
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
