@@ -57,7 +57,7 @@ public class NewsDetailVM extends BaseAPIViewModel {
         source = new ObservableField<>("منبع خبری");
         tag = new ObservableField<>("ورزشی، اجتماعی و...");
         date = new ObservableField<>("دو ساعت پیش");
-        viewVisibility = new ObservableField<>(View.VISIBLE);
+        viewVisibility = new ObservableField<>(View.INVISIBLE);
         pageVisibility = new ObservableField<>(View.INVISIBLE);
     }
 
