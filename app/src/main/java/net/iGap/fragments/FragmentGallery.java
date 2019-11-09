@@ -211,19 +211,23 @@ public class FragmentGallery extends BaseFragment {
             }
         });
 
-        mGalleryVideoAdapter.setVideosItem(
-                isSubFolder ? FileManager.getFolderVideosById(getContext(), mFolderId) : FileManager.getDeviceVideoFolders(getContext())
-        );
+        if (isSubFolder){
 
-        if (isSubFolder && mGalleryVideoAdapter.getVideosItem().size() < 2) {//disable multi select when photo count was 1 or 0
-            mHelperToolbar.getRightButton().setVisibility(View.GONE);
+            FileManager.getFolderVideosById(getContext() , mFolderId, result -> {
+                if (getActivity() != null){
+                    getActivity().runOnUiThread(() -> setVideoGalleryAdapter(result , view , rvGallery ));
+                }
+            });
+
+        }else {
+
+            FileManager.getDeviceVideoFolders(getContext(), result -> {
+                if (getActivity() != null){
+                    getActivity().runOnUiThread(() -> setVideoGalleryAdapter(result , view , rvGallery ));
+                }
+            });
+
         }
-
-        if (!isSubFolder && (mGalleryVideoAdapter.getVideosItem().size() == 1 || mGalleryVideoAdapter.getVideosItem().size() == 0)) {//check 1 because we add all statically
-            showNoItemInGallery(rvGallery, view);
-        }
-
-        view.findViewById(R.id.loading).setVisibility(View.GONE);
     }
 
     private void setupGalleryWithPhotoAdapter(View view, RecyclerView rvGallery) {
@@ -250,11 +254,40 @@ public class FragmentGallery extends BaseFragment {
         });
 
         if (isSubFolder) {
-            mGalleryPhotoAdapter.setPhotosItem(FileManager.getFolderPhotosById(getContext(), mFolderId));
+            FileManager.getFolderPhotosById(getContext(), mFolderId , result -> {
+                if (getActivity() == null) return;
+                getActivity().runOnUiThread(() -> {
+                    mGalleryPhotoAdapter.setPhotosItem(result);
+                    setPhotoGalleryUI(view ,rvGallery);
+                });
+            });
         } else {
-            mGalleryPhotoAdapter.setAlbumsItem(FileManager.getDevicePhotoFolders(getContext()));
+            FileManager.getDevicePhotoFolders(getContext() , result -> {
+                if (getActivity() == null) return;
+                getActivity().runOnUiThread(() -> {
+                    mGalleryPhotoAdapter.setAlbumsItem(result);
+                    setPhotoGalleryUI(view, rvGallery);
+                });
+            });
         }
 
+    }
+
+    private void setVideoGalleryAdapter(List<GalleryVideoModel> result , View view, RecyclerView rvGallery) {
+        mGalleryVideoAdapter.setVideosItem(result);
+
+        if (isSubFolder && mGalleryVideoAdapter.getVideosItem().size() < 2) {//disable multi select when photo count was 1 or 0
+            mHelperToolbar.getRightButton().setVisibility(View.GONE);
+        }
+
+        if (!isSubFolder && (mGalleryVideoAdapter.getVideosItem().size() == 1 || mGalleryVideoAdapter.getVideosItem().size() == 0)) {//check 1 because we add all statically
+            showNoItemInGallery(rvGallery, view);
+        }
+
+        view.findViewById(R.id.loading).setVisibility(View.GONE);
+    }
+
+    private void setPhotoGalleryUI(View view, RecyclerView rvGallery){
         if (isSubFolder && mGalleryPhotoAdapter.getPhotosItem().size() < 2) {//disable multi select when photo count was 1 or 0
             mHelperToolbar.getRightButton().setVisibility(View.GONE);
         }
