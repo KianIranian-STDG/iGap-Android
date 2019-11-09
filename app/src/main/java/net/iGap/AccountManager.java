@@ -3,6 +3,7 @@ package net.iGap;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -76,7 +77,7 @@ public class AccountManager {
         return userAccountList.get(currentUser);
     }
 
-    public AccountUser getUser(long userId){
+    public AccountUser getUser(long userId) {
         return userAccountList.get(userAccountList.indexOf(new AccountUser(userId)));
     }
 
@@ -139,6 +140,10 @@ public class AccountManager {
             if (userAccountList.contains(accountUser)) {
                 userAccountList.remove(accountUser);
                 currentUser = userAccountList.size() - 1;
+                userAccountList.get(0).setDbName(getDbName());
+                for (int i = 0; i < userAccountList.size(); i++) {
+                    Log.wtf(this.getClass().getName(), "user\n: " + userAccountList.get(i).toString());
+                }
                 setCurrentUserInSharedPreferences();
                 setUserAccountListInSharedPreferences();
                 return userAccountList.get(currentUser).isAssigned();

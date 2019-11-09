@@ -117,7 +117,6 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletGetAccessToken;
@@ -391,7 +390,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         G.logoutAccount.observe(this, haveOtherAccount -> {
+            Log.wtf(this.getClass().getName(), "current user: " + AccountManager.getInstance().getCurrentUser().getDbName() + " : " + AccountManager.getInstance().getCurrentUser().getName());
             if (haveOtherAccount != null) {
+                DbManager.getInstance().closeUiRealm();
                 if (haveOtherAccount) {
                     //toDo: handel notification for logout user
                     updateUiForChangeAccount();
@@ -412,39 +413,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
         if (G.ISRealmOK) {
-            /*DbManager.getInstance().doRealmTask(realm -> {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    String token = realmUserInfo.getPushNotificationToken();
-                    if (token == null || token.length() < 2) {
-                        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this, instanceIdResult -> {
-                            String mToken = instanceIdResult.getToken();
-                            RealmUserInfo.setPushNotification(mToken);
-                        });
-                    }
-                }
-            });
-
-            RealmUserInfo userInfo = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmUserInfo.class).findFirst();
-            });
-
-            if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
-                Intent intent = new Intent(this, ActivityRegistration.class);
-                startActivity(intent);
-                finish();
-                Log.wtf(this.getClass().getName(), "user registered before");
-                return;
-            } else if (userInfo.getUserInfo() == null || userInfo.getUserInfo().getDisplayName() == null || userInfo.getUserInfo().getDisplayName().isEmpty()) {
-                Intent intent = new Intent(this, ActivityRegistration.class);
-                intent.putExtra(ActivityRegistration.showProfile, true);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-                Log.wtf(this.getClass().getName(), "getDisplayName is empty");
-                return;
-            }*/
-
             finishActivity = new FinishActivity() {
                 @Override
                 public void finishActivity() {
@@ -1964,12 +1932,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void updateUiForChangeAccount() {
-        Log.wtf(this.getClass().getName(),"updateUiForChangeAccount");
+        Log.wtf(this.getClass().getName(), "updateUiForChangeAccount");
+        Log.wtf(this.getClass().getName(), "back stack count: " + getSupportFragmentManager().getBackStackEntryCount());
         DbManager.getInstance().changeRealmConfiguration();
-        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        int t = getSupportFragmentManager().getBackStackEntryCount();
+        for (int i = 0; i < t; i++) {
+            getSupportFragmentManager().popBackStackImmediate();
+        }
+        /*getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         if (G.twoPaneMode) {
             getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        }
+        }*/
         WebSocketClient.connectNewAccount();
         initTabStrip(getIntent());
     }

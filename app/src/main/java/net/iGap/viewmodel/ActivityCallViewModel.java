@@ -87,6 +87,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
     public MutableLiveData<Boolean> setAudioManagerWithBluetooth = new MutableLiveData<>();
     private MutableLiveData<Long> quickDeclineMessageLiveData = new MutableLiveData<>();
     public MutableLiveData<String> callTimerListener = new MutableLiveData<>();
+    public SingleLiveEvent<Boolean> finishActivity = new SingleLiveEvent<>();
 
 
     private boolean isIncomingCall;
@@ -525,10 +526,8 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         Log.wtf(this.getClass().getName(), "endVoiceAndFinish");
         G.isInCall = false;
         EventManager.getInstance().postEvent(ActivityCall.CALL_EVENT, false);
-        playRingTone.setValue(false);
-        if (ActivityCall.onFinishActivity != null) {
-            ActivityCall.onFinishActivity.finishActivity();
-        }
+        playRingTone.postValue(false);
+        finishActivity.postValue(true);
         if (G.iCallFinishChat != null) {
             G.iCallFinishChat.onFinish();
         }
@@ -679,15 +678,8 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
             playRingTone.setValue(false);
             txtAviVisibility.set(View.GONE);
             callBackTxtStatus.set(R.string.empty_error_message);
-            G.handler.postDelayed(this::endVoiceAndFinish, 2000);
-        } else {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    endVoiceAndFinish();
-                }
-            }, 1000);
         }
+        endVoiceAndFinish();
     }
 
     @Override

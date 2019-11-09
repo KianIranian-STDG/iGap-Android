@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,7 +30,6 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentUserProfileBinding;
 import net.iGap.dialog.account.AccountDialogListener;
 import net.iGap.dialog.account.AccountsDialog;
-import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
@@ -98,7 +95,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
 
         viewModel.setCurrentFragment.observe(getViewLifecycleOwner(), isEdit -> {
             if (isEdit != null) {
-                Log.wtf(this.getClass().getName(), "setCurrentFragment, isEditMode: " + isEdit);
                 if (isEdit) {
                     FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
                     Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentEditProfile.class.getName());
@@ -107,7 +103,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                         fragmentTransaction.addToBackStack(FragmentEditProfile.class.getName());
                     }
                     fragmentTransaction.replace(R.id.frame_edit, fragment, FragmentEditProfile.class.getName()).commit();
-                    binding.addAvatar.setVisibility(View.VISIBLE);
                 } else {
                     FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
                     Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentProfile.class.getName());
@@ -116,7 +111,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
                     fragmentTransaction.replace(R.id.frame_edit, fragment, fragment.getClass().getName()).commit();
-                    binding.addAvatar.setVisibility(View.GONE);
                 }
             }
         });
@@ -187,20 +181,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 getChildFragmentManager().popBackStack();
             }
         });
-
-        getChildFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                Log.wtf(this.getClass().getName(), "-------------------------------------------");
-                for (int i = 0; i < getChildFragmentManager().getBackStackEntryCount(); i++) {
-                    Log.wtf(this.getClass().getName(), "fragment: " + getChildFragmentManager().getBackStackEntryAt(i).getName());
-                }
-                Log.wtf(this.getClass().getName(), "-------------------------------------------");
-            }
-        });
-
-        Log.wtf(this.getClass().getName(), "onViewCreated");
-
     }
 
     private void openAccountsDialog() {

@@ -93,7 +93,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     public static View stripLayoutChat;
     public static View stripLayoutMain;
     public static boolean isNearDistance = false;
-    public static OnFinishActivity onFinishActivity;
 
     private MediaPlayer player;
     private MediaPlayer ringtonePlayer;
@@ -264,7 +263,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
         registerSensor();
 
-        onFinishActivity = () -> {
+        viewModel.finishActivity.observe(this, isFinished -> {
             try {
                 if (viewModel.isVideoCall()) {
                     binding.fcrSurfacePeer.release();
@@ -273,8 +272,9 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
+            G.onCallLeaveView = null;
             finish();
-        };
+        });
 
         viewModel.getQuickDeclineMessageLiveData().observe(this, userId -> {
             if (userId != null) {

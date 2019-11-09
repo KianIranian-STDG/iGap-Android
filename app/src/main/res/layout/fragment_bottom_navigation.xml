@@ -29,7 +29,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_contacts_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_contacts_off_darkmode"
@@ -42,7 +41,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_call_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_call_off_darkmode"
@@ -55,7 +53,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_chat_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_chat_off_darkmode"
@@ -68,7 +65,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="center"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_discovery_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_discovery_off_darkmode"
@@ -81,7 +77,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:orientation="vertical">
 
             <net.iGap.module.CircleImageView
