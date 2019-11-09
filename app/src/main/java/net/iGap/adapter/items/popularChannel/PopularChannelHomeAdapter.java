@@ -11,6 +11,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -82,10 +84,14 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
                 case TYPE_POPULAR_CHANNEL_SLIDE:
                     sliderViewHolder = (SliderViewHolder) viewHolder;
                     bannerScale = data.get(i).getInfo().getScale();
-                    String[] scales = bannerScale.split(":");
-                    float height = viewHolder.itemView.getMeasuredWidth()/*Resources.getSystem().getDisplayMetrics().widthPixels*/ * 0.9f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
-                    sliderViewHolder.itemView.getLayoutParams().height = Math.round(height);
+                    ConstraintSet set = new ConstraintSet();
+                    set.clone((ConstraintLayout) viewHolder.itemView);
+                    set.setDimensionRatio(R.id.fc_sliderCv, bannerScale);
+                    set.applyTo((ConstraintLayout) viewHolder.itemView);
                     sliderViewHolder.bindSlid(data.get(i).getSlides(), data.get(i).getInfo().getPlaybackTime());
+                 /* String[] scales = bannerScale.split(":");
+                    float height = viewHolder.itemView.getMeasuredWidth()*Resources.getSystem().getDisplayMetrics().widthPixels * 0.9f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+                    sliderViewHolder.itemView.getLayoutParams().height = Math.round(height);*/
                     break;
                 case TYPE_POPULAR_CHANNEL_FEATURED_CATEGORY:
                     FeaturedViewHolder channelViewHolder = (FeaturedViewHolder) viewHolder;
