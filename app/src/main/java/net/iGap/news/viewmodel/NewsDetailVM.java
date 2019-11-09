@@ -9,6 +9,7 @@ import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
+import net.iGap.helper.HelperCalander;
 import net.iGap.news.repository.DetailRepo;
 import net.iGap.news.repository.model.NewsComment;
 import net.iGap.news.repository.model.NewsDetail;
@@ -76,14 +77,14 @@ public class NewsDetailVM extends BaseAPIViewModel {
                 if (newsDetail.getView().equals("0"))
                     viewVisibility.set(View.GONE);
                 else
-                    viewNum.set(newsDetail.getView());
+                    viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(newsDetail.getView()) : newsDetail.getView());
                 commentNum.set(newsDetail.getView());
                 source.set(newsDetail.getSource());
                 if (newsDetail.getTags() == null || newsDetail.getTags().equals("null"))
                     tag.set("");
                 else
                     tag.set("برچسب ها: " + newsDetail.getTags());
-                date.set(newsDetail.getDate());
+                date.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(newsDetail.getDate()) : newsDetail.getDate());
                 pageVisibility.set(View.VISIBLE);
                 getNewsComment();
                 getRelatedNewsS();

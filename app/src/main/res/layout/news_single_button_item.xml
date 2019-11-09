@@ -16,12 +16,12 @@
         android:layout_marginLeft="@dimen/dp12"
         android:layout_marginEnd="@dimen/dp12"
         android:layout_marginRight="@dimen/dp12"
-        android:layout_marginTop="@dimen/dp2"
-        android:layout_marginBottom="@dimen/dp2"
+        android:layout_marginTop="@dimen/dp1"
+        android:layout_marginBottom="@dimen/dp1"
         android:textSize="@dimen/dp16"
         android:text="..."
         app:backgroundTint="@color/news_red"
-        app:cornerRadius="6dp"
+        app:cornerRadius="3dp"
         app:cardUseCompatPadding="true"/>
 
 </LinearLayout>
