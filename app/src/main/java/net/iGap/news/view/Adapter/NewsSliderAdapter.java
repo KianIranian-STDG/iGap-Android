@@ -1,6 +1,7 @@
 package net.iGap.news.view.Adapter;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.squareup.picasso.Picasso;
@@ -43,12 +46,14 @@ public class NewsSliderAdapter extends SliderViewAdapter {
         ImageView imageViewBackground;
         TextView textViewTitle;
         TextView textViewDescription;
+        ConstraintLayout container;
 
         SliderVH(View itemView) {
             super(itemView);
             imageViewBackground = itemView.findViewById(R.id.sliderImage);
             textViewTitle = itemView.findViewById(R.id.sliderTitle);
             textViewDescription = itemView.findViewById(R.id.sliderDesc);
+            container = itemView.findViewById(R.id.container);
         }
 
         @SuppressLint("ClickableViewAccessibility")
@@ -59,6 +64,7 @@ public class NewsSliderAdapter extends SliderViewAdapter {
             imageViewBackground.setOnClickListener(v -> callBack.onSliderClick(temp));
             imageViewBackground.setOnLongClickListener(null);
             imageViewBackground.setOnTouchListener((v, event) -> {
+                Log.d("amini", "initView: " + event.getAction());
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         callBack.onSliderTouch(true);
@@ -77,6 +83,12 @@ public class NewsSliderAdapter extends SliderViewAdapter {
                     .load(temp.getImage().get(0).getOriginal())
                     .placeholder(R.mipmap.news_temp_banner)
                     .into(imageViewBackground);
+
+            if (!data.get(0).getNews().get(position).getColor().equals("#000000")) {
+                textViewTitle.setTextColor(Color.parseColor(data.get(0).getNews().get(position).getColorTitle()));
+                textViewDescription.setTextColor(Color.parseColor(data.get(0).getNews().get(position).getColorRootTitile()));
+                container.setBackgroundColor(Color.parseColor(data.get(0).getNews().get(position).getColor()));
+            }
         }
     }
 
