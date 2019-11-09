@@ -61,17 +61,15 @@ public class NewsSliderAdapter extends SliderViewAdapter {
             NewsFPList.NewsContent temp = data.get(0).getNews().get(position).getContents();
             textViewTitle.setText(temp.getTitle());
             textViewDescription.setText(temp.getLead());
-            imageViewBackground.setOnClickListener(v -> callBack.onSliderClick(temp));
-            imageViewBackground.setOnLongClickListener(null);
-            imageViewBackground.setOnTouchListener((v, event) -> {
-                Log.d("amini", "initView: " + event.getAction());
+            container.setOnClickListener(v -> callBack.onSliderClick(temp));
+            container.setOnLongClickListener(null);
+            container.setOnTouchListener((v, event) -> {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                    case MotionEvent.ACTION_MOVE:
                         callBack.onSliderTouch(true);
                         break;
                     case MotionEvent.ACTION_UP:
-                        callBack.onSliderTouch(false);
-                        break;
                     case MotionEvent.ACTION_CANCEL:
                         callBack.onSliderTouch(false);
                         break;
