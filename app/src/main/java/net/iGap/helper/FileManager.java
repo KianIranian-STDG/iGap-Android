@@ -16,7 +16,7 @@ import java.util.List;
 
 public class FileManager {
 
-    public static void getDevicePhotoFolders(Context context , FetchListener<List<GalleryAlbumModel>> callback) {
+    public static void getDevicePhotoFolders(Context context, FetchListener<List<GalleryAlbumModel>> callback) {
 
         new Thread(() -> {
 
@@ -75,7 +75,7 @@ public class FileManager {
 
     }
 
-    public static void getFolderPhotosById(Context context, String folderId , FetchListener<List<GalleryItemModel>> callback) {
+    public static void getFolderPhotosById(Context context, String folderId, FetchListener<List<GalleryItemModel>> callback) {
 
         new Thread(() -> {
 
@@ -124,7 +124,7 @@ public class FileManager {
         }).start();
     }
 
-    public static void getFolderVideosById(Context context, String folderId ,FetchListener<List<GalleryVideoModel>> callback) {
+    public static void getFolderVideosById(Context context, String folderId, FetchListener<List<GalleryVideoModel>> callback) {
 
         new Thread(() -> {
 
@@ -136,7 +136,6 @@ public class FileManager {
 
             Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
             String[] projection = {
-                    MediaStore.Video.Media.BUCKET_ID,
                     MediaStore.Video.Media.DATA
             };
 
@@ -159,7 +158,6 @@ public class FileManager {
                         GalleryVideoModel video = new GalleryVideoModel();
                         video.setId(photos.size() + "");
                         video.setPath(cursor.getString(COLUMN_DATA));
-                        video.setCover(ThumbnailUtils.createVideoThumbnail(video.getPath(), MediaStore.Video.Thumbnails.MINI_KIND));
                         photos.add(video);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -173,14 +171,14 @@ public class FileManager {
 
     }
 
-    public static void getDeviceVideoFolders(Context context , FetchListener<List<GalleryVideoModel>> callback) {
+    public static void getDeviceVideoFolders(Context context, FetchListener<List<GalleryVideoModel>> callback) {
 
         new Thread(() -> {
 
             List<GalleryVideoModel> albums = new ArrayList<>();
             if (context == null) {
                 callback.onFetch(albums);
-                return ;
+                return;
             }
 
             Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
@@ -211,11 +209,10 @@ public class FileManager {
                         if (!ids.contains(album.getId())) {
                             album.setCaption(cursor.getString(COLUMN_BUCKET_NAME));
                             album.setPath(cursor.getString(COLUMN_DATA));
-                            album.setCover(ThumbnailUtils.createVideoThumbnail(album.getPath(), MediaStore.Video.Thumbnails.MINI_KIND));
 
                             //check and add ALL for first item
                             if (albums.size() == 0) {
-                                albums.add(new GalleryVideoModel("-1", context.getString(R.string.all), album.getPath() , album.getCover()));
+                                albums.add(new GalleryVideoModel("-1", context.getString(R.string.all), album.getPath()));
                             }
                             albums.add(album);
                             ids.add(album.getId());
@@ -232,7 +229,7 @@ public class FileManager {
         }).start();
     }
 
-    public interface FetchListener<T>{
+    public interface FetchListener<T> {
         void onFetch(T result);
     }
 }

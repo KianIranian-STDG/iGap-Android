@@ -211,19 +211,19 @@ public class FragmentGallery extends BaseFragment {
             }
         });
 
-        if (isSubFolder){
+        if (isSubFolder) {
 
-            FileManager.getFolderVideosById(getContext() , mFolderId, result -> {
-                if (getActivity() != null){
-                    getActivity().runOnUiThread(() -> setVideoGalleryAdapter(result , view , rvGallery ));
+            FileManager.getFolderVideosById(getContext(), mFolderId, result -> {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> setVideoGalleryAdapter(result, view, rvGallery));
                 }
             });
 
-        }else {
+        } else {
 
             FileManager.getDeviceVideoFolders(getContext(), result -> {
-                if (getActivity() != null){
-                    getActivity().runOnUiThread(() -> setVideoGalleryAdapter(result , view , rvGallery ));
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> setVideoGalleryAdapter(result, view, rvGallery));
                 }
             });
 
@@ -254,15 +254,15 @@ public class FragmentGallery extends BaseFragment {
         });
 
         if (isSubFolder) {
-            FileManager.getFolderPhotosById(getContext(), mFolderId , result -> {
+            FileManager.getFolderPhotosById(getContext(), mFolderId, result -> {
                 if (getActivity() == null) return;
                 getActivity().runOnUiThread(() -> {
                     mGalleryPhotoAdapter.setPhotosItem(result);
-                    setPhotoGalleryUI(view ,rvGallery);
+                    setPhotoGalleryUI(view, rvGallery);
                 });
             });
         } else {
-            FileManager.getDevicePhotoFolders(getContext() , result -> {
+            FileManager.getDevicePhotoFolders(getContext(), result -> {
                 if (getActivity() == null) return;
                 getActivity().runOnUiThread(() -> {
                     mGalleryPhotoAdapter.setAlbumsItem(result);
@@ -273,7 +273,7 @@ public class FragmentGallery extends BaseFragment {
 
     }
 
-    private void setVideoGalleryAdapter(List<GalleryVideoModel> result , View view, RecyclerView rvGallery) {
+    private void setVideoGalleryAdapter(List<GalleryVideoModel> result, View view, RecyclerView rvGallery) {
         mGalleryVideoAdapter.setVideosItem(result);
 
         if (isSubFolder && mGalleryVideoAdapter.getVideosItem().size() < 2) {//disable multi select when photo count was 1 or 0
@@ -287,7 +287,7 @@ public class FragmentGallery extends BaseFragment {
         view.findViewById(R.id.loading).setVisibility(View.GONE);
     }
 
-    private void setPhotoGalleryUI(View view, RecyclerView rvGallery){
+    private void setPhotoGalleryUI(View view, RecyclerView rvGallery) {
         if (isSubFolder && mGalleryPhotoAdapter.getPhotosItem().size() < 2) {//disable multi select when photo count was 1 or 0
             mHelperToolbar.getRightButton().setVisibility(View.GONE);
         }
@@ -391,6 +391,14 @@ public class FragmentGallery extends BaseFragment {
         } else {
             mHelperToolbar.getRightButton().setText(R.string.close_icon);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (mGalleryVideoAdapter != null) {
+            mGalleryVideoAdapter.clearThumbnailCache();
+        }
+        super.onDestroyView();
     }
 
     public interface GalleryFragmentListener {

@@ -1,8 +1,5 @@
 package net.iGap.adapter.items;
 
-import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
-import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
 import net.iGap.R;
+import net.iGap.helper.HelperVideo;
 import net.iGap.interfaces.GalleryItemListener;
-import net.iGap.model.GalleryAlbumModel;
-import net.iGap.model.GalleryItemModel;
 import net.iGap.model.GalleryVideoModel;
 
 import java.util.ArrayList;
@@ -32,9 +26,11 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
     private List<GalleryVideoModel> videosItem = new ArrayList<>();
     private List<GalleryVideoModel> mSelectedVideos = new ArrayList<>();
     private GalleryItemListener listener;
+    private HelperVideo mHelperVideo;
 
     public AdapterGalleryVideo(boolean isVideoMode) {
         this.isVideoMode = isVideoMode;
+        this.mHelperVideo = new HelperVideo(isVideoMode ? MediaStore.Video.Thumbnails.MICRO_KIND : MediaStore.Video.Thumbnails.MINI_KIND);
     }
 
     public void setVideosItem(List<GalleryVideoModel> videosItem) {
@@ -117,9 +113,11 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
         });
 
         //load image
-        Glide.with(holder.image.getContext())
-                .load(videosItem.get(position).getCover())
-                .into(holder.image);
+        String path = videosItem.get(position).getPath();
+        holder.image.setImageBitmap(null);
+        holder.image.setTag(path);
+        mHelperVideo.loadVideoThumbnail(path, holder.image);
+
     }
 
     @Override
@@ -127,11 +125,15 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
         return videosItem.size();
     }
 
+    public void clearThumbnailCache() {
+        if (mHelperVideo != null) mHelperVideo.clearCache();
+    }
+
     class ViewHolderGallery extends RecyclerView.ViewHolder {
 
         TextView caption;
         ImageView image;
-        ImageView play ;
+        ImageView play;
         CheckBox check;
 
         ViewHolderGallery(@NonNull View itemView) {
