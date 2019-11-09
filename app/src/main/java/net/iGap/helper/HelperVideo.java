@@ -8,11 +8,16 @@ import android.os.AsyncTask;
 import android.util.LruCache;
 import android.widget.ImageView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class HelperVideo {
 
     private LruCache<String, Drawable> mThumbnailCacher;
     private int mThumbnailMode;
+    private Map<String, AsyncTask> mTasks = new HashMap<>();
+    private boolean isAbleToRemoveTask = true;
 
     public HelperVideo(int thumbMode) {
         mThumbnailMode = thumbMode;
@@ -22,6 +27,12 @@ public class HelperVideo {
     }
 
     public void clearCache() {
+        //clear all ongoing tasks
+        isAbleToRemoveTask = false;
+        for (HashMap.Entry<String, AsyncTask> entry : mTasks.entrySet()) {
+            entry.getValue().cancel(true);
+        }
+        mTasks.clear();
         mThumbnailCacher = null;
     }
 
@@ -29,7 +40,11 @@ public class HelperVideo {
         if (mThumbnailCacher != null && mThumbnailCacher.get(path) != null) {
             iv.setImageDrawable(mThumbnailCacher.get(path));
         } else {
-            new VideoThumbLoader(iv, path).execute();
+            if (!mTasks.containsKey(path)) {
+                VideoThumbLoader videoThumbLoader = new VideoThumbLoader(iv, path);
+                mTasks.put(path, videoThumbLoader);
+                videoThumbLoader.execute();
+            }
         }
     }
 
@@ -60,6 +75,8 @@ public class HelperVideo {
             if (image != null && imgView != null && imgView.getTag().equals(path)) {
                 imgView.setImageDrawable(image);
             }
+            //remove task from list when ended
+            if (isAbleToRemoveTask) mTasks.remove(path);
         }
     }
 }

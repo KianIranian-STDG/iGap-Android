@@ -394,11 +394,11 @@ public class FragmentGallery extends BaseFragment {
     }
 
     @Override
-    public void onDestroyView() {
+    public void onDestroy() {
         if (mGalleryVideoAdapter != null) {
             mGalleryVideoAdapter.clearThumbnailCache();
         }
-        super.onDestroyView();
+        super.onDestroy();
     }
 
     public interface GalleryFragmentListener {
