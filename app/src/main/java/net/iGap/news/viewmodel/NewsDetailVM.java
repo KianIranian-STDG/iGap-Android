@@ -1,5 +1,6 @@
 package net.iGap.news.viewmodel;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableField;

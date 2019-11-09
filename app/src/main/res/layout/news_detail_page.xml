@@ -220,7 +220,6 @@
                     android:gravity="center|left"
                     android:layout_marginRight="@dimen/dp8"
                     android:textColor="?attr/iGapTitleTextColor"
-                    android:visibility="@{viewmodel.viewVisibility}"
                     app:layout_constraintTop_toTopOf="@+id/date"
                     app:layout_constraintRight_toLeftOf="@+id/date"
                     app:layout_constraintLeft_toRightOf="@+id/view_icon" />
@@ -236,11 +235,17 @@
                     android:gravity="center"
                     android:layout_marginLeft="@dimen/dp16"
                     android:layout_marginRight="@dimen/dp4"
-                    android:visibility="@{viewmodel.viewVisibility}"
                     app:layout_constraintTop_toTopOf="@+id/view"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/view" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/viewGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{viewmodel.viewVisibility}"
+                    app:constraint_referenced_ids="view_icon,view"/>
 
                 <WebView
                     android:id="@+id/detail_WV"
