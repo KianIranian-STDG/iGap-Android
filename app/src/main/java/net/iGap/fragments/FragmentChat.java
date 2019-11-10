@@ -401,7 +401,6 @@ public class FragmentChat extends BaseFragment
     public static ArrayList<String> listPathString;
     public static OnUpdateSticker onUpdateSticker;
     private static List<StructBottomSheet> contacts;
-    private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>(); // keep compressedPath and also keep video path that never be won't compressed
     private EmojiPopup emojiPopup;
     private boolean isPaused;
 
@@ -1247,75 +1246,43 @@ public class FragmentChat extends BaseFragment
             }
             latestRequestCode = requestCode;
 
-            /**
-             * compress video if BuildVersion is bigger that 18
-             */
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                if (requestCode == request_code_VIDEO_CAPTURED) {
-                    if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
+            if (requestCode == request_code_VIDEO_CAPTURED) {
+                if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
+                    Intent intent = new Intent(G.fragmentActivity, ActivityTrimVideo.class);
+                    intent.putExtra("PATH", listPathString.get(0));
+                    startActivityForResult(intent, AttachFile.request_code_trim_video);
+                    return;
+                } else {
+
+                    listPathString = new ArrayList<>();
+                    mainVideoPath = new File(AttachFile.videoPath).getPath();
+                    listPathString.add(mainVideoPath);
+
+                    showDraftLayout();
+                    setDraftMessage(requestCode);
+                    latestRequestCode = requestCode;
+                    return;
+                }
+            }
+
+            if (requestCode == AttachFile.request_code_trim_video) {
+                manageTrimVideoResult(data);
+                return;
+            }
+
+            if (listPathString.size() == 1) {
+                if (requestCode == AttachFile.requestOpenGalleryForVideoMultipleSelect) {
+                    boolean isGif = listPathString.get(0).toLowerCase().endsWith(".gif");
+                    if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1 && !isGif) {
                         Intent intent = new Intent(G.fragmentActivity, ActivityTrimVideo.class);
                         intent.putExtra("PATH", listPathString.get(0));
                         startActivityForResult(intent, AttachFile.request_code_trim_video);
                         return;
-                    } else if (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1) {
-
-                        listPathString = new ArrayList<>();
-                        mainVideoPath = new File(AttachFile.videoPath).getPath();
-                        listPathString.add(mainVideoPath);
-
+                    } else {
+                        mainVideoPath = listPathString.get(0);
                         showDraftLayout();
                         setDraftMessage(requestCode);
-                        latestRequestCode = requestCode;
-                        return;
-                    } else {
-                        compressedPath.put(listPathString.get(0), true);
                     }
-                }
-
-                if (requestCode == AttachFile.request_code_trim_video) {
-                    manageTrimVideoResult(data);
-                return;
-                }
-            }
-
-            if (listPathString.size() == 1) {
-                /**
-                 * compress video if BuildVersion is bigger that 18
-                 */
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    if (requestCode == AttachFile.requestOpenGalleryForVideoMultipleSelect) {
-                        boolean isGif = listPathString.get(0).toLowerCase().endsWith(".gif");
-                        if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1 && !isGif) {
-                            Intent intent = new Intent(G.fragmentActivity, ActivityTrimVideo.class);
-                            intent.putExtra("PATH", listPathString.get(0));
-                            startActivityForResult(intent, AttachFile.request_code_trim_video);
-                            return;
-                        } else if ((sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1 && !isGif)) {
-
-                            mainVideoPath = listPathString.get(0);
-
-                            //                            String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                            String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-
-                            listPathString.set(0, savePathVideoCompress);
-
-                            showDraftLayout();
-                            setDraftMessage(requestCode);
-                        } else {
-                            compressedPath.put(listPathString.get(0), true);
-                            showDraftLayout();
-                            setDraftMessage(requestCode);
-                        }
-                    }
-
-                } else {
-                    /**
-                     * set compressed true for use this path
-                     */
-                    compressedPath.put(listPathString.get(0), true);
-
-                    showDraftLayout();
-                    setDraftMessage(requestCode);
                 }
             } else if (listPathString.size() > 1) {
 
@@ -1324,11 +1291,6 @@ public class FragmentChat extends BaseFragment
                     public void run() {
 
                         for (final String path : listPathString) {
-                            /**
-                             * set compressed true for use this path
-                             */
-                            compressedPath.put(path, true);
-
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1441,17 +1403,11 @@ public class FragmentChat extends BaseFragment
 
     public void manageTrimVideoResult(Intent data) {
         latestRequestCode = request_code_VIDEO_CAPTURED;
+        listPathString = new ArrayList<>();
+        mainVideoPath = data.getData().getPath();
+        listPathString.add(mainVideoPath);
         showDraftLayout();
         setDraftMessage(request_code_VIDEO_CAPTURED);
-        if ((sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1)) {
-            File mediaStorageDir = new File(G.DIR_VIDEOS);
-            listPathString = new ArrayList<>();
-
-            mainVideoPath = data.getData().getPath();
-            listPathString.add(mainVideoPath);
-        } else {
-            compressedPath.put(data.getData().getPath(), true);
-        }
     }
 
     private RealmRoom getRoom() {
@@ -6178,9 +6134,8 @@ public class FragmentChat extends BaseFragment
                                 imvSendButton.performClick();
                                 break;
                             case video:
-                                if (HelperGetDataFromOtherApp.sharedList.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
-                                    final String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                                    mainVideoPath = sharedData.address;
+                                if (HelperGetDataFromOtherApp.sharedList.size() == 1) {
+                                   mainVideoPath = sharedData.address;
                                     if (mainVideoPath == null) return;
 
                                     if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
@@ -6189,12 +6144,10 @@ public class FragmentChat extends BaseFragment
                                         startActivityForResult(intent, AttachFile.request_code_trim_video);
                                         isAllowToClearChatEditText = false;
                                     } else {
-                                        //G.handler.postDelayed(() -> new VideoCompressor().execute(mainVideoPath, savePathVideoCompress), 200);
-                                        sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
+                                        sendMessage(request_code_VIDEO_CAPTURED, mainVideoPath);
                                     }
 
                                 } else {
-                                    compressedPath.put(sharedData.address, true);
                                     sendMessage(request_code_VIDEO_CAPTURED, sharedData.address);
                                 }
                                 break;
@@ -7143,9 +7096,9 @@ public class FragmentChat extends BaseFragment
         long messageId = AppUtils.makeRandomId();
         final long updateTime = TimeUtils.currentLocalTime();
         ProtoGlobal.RoomMessageType messageType = null;
-        String fileName = null;
+        String fileName;
         long duration = 0;
-        long fileSize = 0;
+        long fileSize;
         int[] imageDimens = {0, 0};
         final long senderID = AccountManager.getInstance().getCurrentUser().getId();
 
@@ -7161,8 +7114,15 @@ public class FragmentChat extends BaseFragment
             requestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
         }
 
+        fileName = new File(filePath).getName();
+        fileSize = new File(filePath).length();
+
+        RealmRoomMessage roomMessage = new RealmRoomMessage();
+        StructMessageInfo structMessageInfoNew = new StructMessageInfo(roomMessage);
+
         switch (requestCode) {
             case IntentRequests.REQ_CROP:
+            case AttachFile.requestOpenGalleryForImageMultipleSelect:
 
                 if (!filePath.toLowerCase().endsWith(".gif")) {
                     if (isMessageWrote()) {
@@ -7178,14 +7138,9 @@ public class FragmentChat extends BaseFragment
                     }
                 }
 
-                fileName = new File(filePath).getName();
-                fileSize = new File(filePath).length();
                 imageDimens = AndroidUtils.getImageDimens(filePath);
                 break;
             case AttachFile.request_code_TAKE_PICTURE:
-
-                fileName = new File(filePath).getName();
-                fileSize = new File(filePath).length();
                 if (AndroidUtils.getImageDimens(filePath)[0] == 0 && AndroidUtils.getImageDimens(filePath)[1] == 0) {
                     G.handler.post(new Runnable() {
                         @Override
@@ -7204,44 +7159,9 @@ public class FragmentChat extends BaseFragment
 
                 break;
 
-            case AttachFile.requestOpenGalleryForImageMultipleSelect:
-                if (!filePath.toLowerCase().endsWith(".gif")) {
-                    if (isMessageWrote()) {
-                        messageType = IMAGE_TEXT;
-                    } else {
-                        messageType = ProtoGlobal.RoomMessageType.IMAGE;
-                    }
-                } else {
-                    if (isMessageWrote()) {
-                        messageType = GIF_TEXT;
-                    } else {
-                        messageType = ProtoGlobal.RoomMessageType.GIF;
-                    }
-                }
-
-                fileName = new File(filePath).getName();
-                fileSize = new File(filePath).length();
-                imageDimens = AndroidUtils.getImageDimens(filePath);
-
-                break;
-
             case AttachFile.requestOpenGalleryForVideoMultipleSelect:
             case request_code_VIDEO_CAPTURED:
-                fileName = new File(filePath).getName();
-                /**
-                 * if video not compressed use from mainPath
-                 */
-                boolean compress = false;
-                if (compressedPath.get(filePath) != null) {
-                    compress = compressedPath.get(filePath);
-                }
-                if (compress) {
-                    fileSize = new File(filePath).length();
-                    duration = AndroidUtils.getAudioDuration(G.fragmentActivity, filePath) / 1000;
-                } else {
-                    fileSize = new File(mainVideoPath).length();
-                    duration = AndroidUtils.getAudioDuration(G.fragmentActivity, mainVideoPath) / 1000;
-                }
+                duration = AndroidUtils.getAudioDuration(G.fragmentActivity, filePath) / 1000; //mainVideoPath
 
                 if (isMessageWrote()) {
                     messageType = VIDEO_TEXT;
@@ -7251,8 +7171,6 @@ public class FragmentChat extends BaseFragment
 
                 break;
             case AttachFile.request_code_pic_audi:
-                fileName = new File(filePath).getName();
-                fileSize = new File(filePath).length();
                 duration = AndroidUtils.getAudioDuration(G.fragmentActivity, filePath) / 1000;
                 if (isMessageWrote()) {
                     messageType = ProtoGlobal.RoomMessageType.AUDIO_TEXT;
@@ -7260,12 +7178,14 @@ public class FragmentChat extends BaseFragment
                     messageType = ProtoGlobal.RoomMessageType.AUDIO;
                 }
 
+                String songArtist = AndroidUtils.getAudioArtistName(filePath);
+                long songDuration = AndroidUtils.getAudioDuration(G.fragmentActivity, filePath);
+                structMessageInfoNew.setSongArtist(songArtist);
+                structMessageInfoNew.setSongLength(songDuration);
                 break;
             case AttachFile.request_code_pic_file:
             case AttachFile.request_code_open_document:
 
-                fileName = new File(filePath).getName();
-                fileSize = new File(filePath).length();
                 if (isMessageWrote()) {
                     messageType = ProtoGlobal.RoomMessageType.FILE_TEXT;
                 } else {
@@ -7278,9 +7198,12 @@ public class FragmentChat extends BaseFragment
                     break;
                 }
                 messageType = CONTACT;
+                ContactUtils contactUtils = new ContactUtils(G.fragmentActivity, latestUri);
+                String name = contactUtils.retrieveName();
+                String number = contactUtils.retrieveNumber();
+                structMessageInfoNew.setContactValues(name, "", number);
                 break;
             case AttachFile.request_code_paint:
-                fileName = new File(filePath).getName();
 
                 imageDimens = AndroidUtils.getImageDimens(filePath);
                 if (isMessageWrote()) {
@@ -7297,56 +7220,6 @@ public class FragmentChat extends BaseFragment
         final long finalDuration = duration;
         final long finalFileSize = fileSize;
         final int[] finalImageDimens = imageDimens;
-
-
-        RealmRoomMessage roomMessage = new RealmRoomMessage();
-        StructMessageInfo structMessageInfoNew = new StructMessageInfo(roomMessage);
-        switch (requestCode) {
-            case IntentRequests.REQ_CROP:
-                break;
-            case AttachFile.request_code_TAKE_PICTURE:
-
-                if (AndroidUtils.getImageDimens(filePath)[0] == 0 && AndroidUtils.getImageDimens(filePath)[1] == 0) {
-                    return;
-                }
-
-                break;
-
-            case AttachFile.requestOpenGalleryForImageMultipleSelect:
-                break;
-
-            case AttachFile.requestOpenGalleryForVideoMultipleSelect:
-            case request_code_VIDEO_CAPTURED:
-                /**
-                 * if video not compressed use from mainPath
-                 */
-
-                File videoFile = new File(filePath);
-                String videoFileMime = FileUtils.getMimeType(videoFile);
-                break;
-            case AttachFile.request_code_pic_audi:
-                String songArtist = AndroidUtils.getAudioArtistName(filePath);
-                long songDuration = AndroidUtils.getAudioDuration(G.fragmentActivity, filePath);
-                structMessageInfoNew.setSongArtist(songArtist);
-                structMessageInfoNew.setSongLength(songDuration);
-                break;
-            case AttachFile.request_code_pic_file:
-            case AttachFile.request_code_open_document:
-                File fileFile = new File(filePath);
-                String fileFileMime = FileUtils.getMimeType(fileFile);
-                break;
-            case AttachFile.request_code_contact_phone:
-                if (latestUri == null) {
-                    break;
-                }
-                ContactUtils contactUtils = new ContactUtils(G.fragmentActivity, latestUri);
-                String name = contactUtils.retrieveName();
-                String number = contactUtils.retrieveNumber();
-                structMessageInfoNew.setContactValues(name, "", number);
-                break;
-            case AttachFile.request_code_paint:
-                break;
-        }
 
         roomMessage.setMessageId(messageId);
         roomMessage.setMessageType(finalMessageType);
@@ -7426,16 +7299,7 @@ public class FragmentChat extends BaseFragment
 
         String makeThumbnailFilePath = "";
         if (finalMessageType == VIDEO || finalMessageType == VIDEO_TEXT) {
-            //if (compressedPath.get(finalFilePath)) {//(sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 0) ||
-            boolean compress = false;
-            if (compressedPath.get(finalFilePath) != null) {
-                compress = compressedPath.get(finalFilePath);
-            }
-            if (compress) {
-                makeThumbnailFilePath = finalFilePath;
-            } else {
-                makeThumbnailFilePath = mainVideoPath;
-            }
+            makeThumbnailFilePath = finalFilePath; // mainVideoPath
         }
 
         if (finalMessageType == VIDEO || finalMessageType == VIDEO_TEXT) {
