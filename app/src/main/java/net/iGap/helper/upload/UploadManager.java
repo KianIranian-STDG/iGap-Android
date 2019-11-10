@@ -80,13 +80,14 @@ public class UploadManager {
             return;
         }
         Log.d("bagi", "uploadMessageAndSend222");
+        String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + message.getMessageId() + ".mp4";
+        File compressFile = new File(savePathVideoCompress);
 
-        if (!message.getAttachment().isLocalFileCompressedExist() && !ignoreCompress && message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+        if (!compressFile.exists() && !ignoreCompress && message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
             if (pendingCompressTasks.containsKey(message.getMessageId() + ""))
                 return;
 
             Log.d("bagi", "uploadMessageAndSend33");
-            String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + message.getAttachment().getName() + "_" + new SimpleDateFormat("HHmmss", Locale.US).format(new Date()) + ".mp4";
             CompressTask compressTask = new CompressTask(message.getMessageId() + "", message.getAttachment().getLocalFilePath(), savePathVideoCompress, new OnCompress() {
                 @Override
                 public void onCompressProgress(String id, int percent) {
@@ -101,17 +102,6 @@ public class UploadManager {
 
                     EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
 
-                    if (compress) {
-                        message.getAttachment().setLocalFilePathCompressed(savePathVideoCompress);
-                    }
-
-                    DbManager.getInstance().doRealmTransaction(realm -> {
-                        RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, message.getAttachment().getId()).findFirst();
-                        if (attachment != null) {
-                            attachment.setLocalFilePathCompressed(savePathVideoCompress);
-                        }
-                    });
-
                     uploadMessageAndSend(roomType, message, true);
                 }
             });
@@ -122,13 +112,14 @@ public class UploadManager {
         CompressTask compressTask = pendingCompressTasks.remove(message.getMessageId() + "");
         if ((message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO ||
                 message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT ) &&
-                !message.getAttachment().isLocalFileCompressedExist() &&
+                !compressFile.exists() &&
                 G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1 &&
                         compressTask == null)
             return;
 
         Log.d("bagi", "after Compress");
-        UploadTask uploadTask = new UploadTask(message, new OnUploadListener() {
+
+        OnUploadListener onUploadListener = new OnUploadListener() {
             @Override
             public void onProgress(String id, int progress) {
                 Log.d("bagi", progress + "uploadMessageAndSend2");
@@ -138,9 +129,8 @@ public class UploadManager {
             @Override
             public void onFinish(String id, String token) {
                 Log.d("bagi", "uploadMessageAndSendonFinish");
-                if (message.getAttachment().isLocalFileCompressedExist()) {
-                    File fileCompressed = new File(message.getAttachment().getLocalFilePathCompressed());
-                    fileCompressed.delete();
+                if (compressFile.exists()) {
+                    compressFile.delete();
                 }
 
                 HelperSetAction.sendCancel(message.getMessageId());
@@ -183,7 +173,14 @@ public class UploadManager {
                 makeFailed(id);
 
             }
-        });
+        };
+        UploadTask uploadTask;
+        if (compressFile.exists()) {
+            uploadTask = new UploadTask(message, compressFile.getAbsolutePath(), onUploadListener);
+        } else {
+            uploadTask = new UploadTask(message, onUploadListener);
+        }
+
         if (!pendingUploadTasks.containsKey(uploadTask.identity)) {
             pendingUploadTasks.put(uploadTask.identity, uploadTask);
             mThreadPoolExecutor.execute(uploadTask);

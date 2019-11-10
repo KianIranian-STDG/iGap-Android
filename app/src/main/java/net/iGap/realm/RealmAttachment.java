@@ -58,8 +58,6 @@ public class RealmAttachment extends RealmObject {
     private String localThumbnailPath;
     @Nullable
     private String localFilePath;
-    @Nullable
-    private String localFilePathCompressed;
 
     public static void updateToken(long fakeId, String token) {
         DbManager.getInstance().doRealmTask(realm -> {
@@ -409,17 +407,5 @@ public class RealmAttachment extends RealmObject {
      */
     public boolean isThumbnailExistsOnLocal() {
         return localThumbnailPath != null && new File(localThumbnailPath).exists() && new File(localThumbnailPath).canRead();
-    }
-
-    public String getLocalFilePathCompressed() {
-        return localFilePathCompressed;
-    }
-
-    public boolean isLocalFileCompressedExist() {
-        return localFilePathCompressed != null && new File(localFilePathCompressed).exists();
-    }
-
-    public void setLocalFilePathCompressed(String localFilePathCompressed) {
-        this.localFilePathCompressed = localFilePathCompressed;
     }
 }
