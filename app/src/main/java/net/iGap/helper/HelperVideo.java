@@ -1,8 +1,10 @@
 package net.iGap.helper;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.util.LruCache;
@@ -36,39 +38,50 @@ public class HelperVideo {
         mThumbnailCacher = null;
     }
 
-    public void loadVideoThumbnail(String key ,String path, ImageView iv) {
+    public void loadThumbnail(boolean isVideo, String key, String path, ImageView iv) {
         if (mThumbnailCacher != null && mThumbnailCacher.get(key) != null) {
             iv.setImageDrawable(mThumbnailCacher.get(key));
         } else {
             if (!mTasks.containsKey(key)) {
-                VideoThumbLoader videoThumbLoader = new VideoThumbLoader(iv, path , key);
-                mTasks.put(key, videoThumbLoader);
-                videoThumbLoader.execute();
+                ThumbLoader thumbLoader = new ThumbLoader(iv, path, key, isVideo);
+                mTasks.put(key, thumbLoader);
+                thumbLoader.execute();
             }
         }
     }
 
-    private class VideoThumbLoader extends AsyncTask<String, Void, Drawable> {
+    private class ThumbLoader extends AsyncTask<String, Void, Drawable> {
         private ImageView imgView;
         private String path;
-        private String key ;
+        private String key;
+        boolean isVideo;
 
-        public VideoThumbLoader(ImageView imageView, String path , String key) {
+        public ThumbLoader(ImageView imageView, String path, String key, boolean isVideo) {
             this.imgView = imageView;
             this.path = path;
-            this.key = key ;
+            this.key = key;
+            this.isVideo = isVideo;
         }
 
         @Override
         protected Drawable doInBackground(String... params) {
 
-            Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(path, mThumbnailMode);
-            Drawable drawable = new BitmapDrawable(imgView.getResources(), bitmap);
+            Drawable drawable = null;
+            Bitmap bitmap = null;
+
+            if (isVideo) {
+                bitmap = ThumbnailUtils.createVideoThumbnail(path, mThumbnailMode);
+                drawable = new BitmapDrawable(imgView.getResources(), bitmap);
+            } else {
+                bitmap = getMusicCover(path);
+                drawable = new BitmapDrawable(imgView.getResources(), bitmap);
+            }
 
             // save cache
             if (mThumbnailCacher != null && mThumbnailCacher.get(key) == null) {
                 mThumbnailCacher.put(key, drawable);
             }
+
             return drawable;
         }
 
@@ -79,6 +92,17 @@ public class HelperVideo {
             }
             //remove task from list when ended
             if (isAbleToRemoveTask) mTasks.remove(key);
+        }
+
+        private Bitmap getMusicCover(String path) {
+            if (path == null) return null;
+            MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+            mmr.setDataSource(path);
+            byte[] data = mmr.getEmbeddedPicture();
+            if (data != null) {
+                return BitmapFactory.decodeByteArray(data, 0, data.length);
+            }
+            return null;
         }
     }
 }

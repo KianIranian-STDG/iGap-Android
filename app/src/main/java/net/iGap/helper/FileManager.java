@@ -243,7 +243,6 @@ public class FileManager {
             Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
             String[] projection = {
                     MediaStore.Audio.Media.DATA ,
-                    MediaStore.Audio.Media._ID ,
                     MediaStore.Audio.Media.ARTIST ,
                     MediaStore.Audio.Media.TITLE
             };
@@ -258,7 +257,6 @@ public class FileManager {
 
             if (cursor != null) {
 
-                final int COLUMN_ID = cursor.getColumnIndex(MediaStore.Audio.Media._ID);
                 final int COLUMN_DATA = cursor.getColumnIndex(MediaStore.Audio.Media.DATA);
                 final int COLUMN_ARTIST = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
                 final int COLUMN_TITLE = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
@@ -266,7 +264,7 @@ public class FileManager {
                 while (cursor.moveToNext()) {
                     try {
                         GalleryMusicModel music = new GalleryMusicModel();
-                        music.setId(cursor.getLong(COLUMN_ID));
+                        music.setId(musics.size());
                         music.setPath(cursor.getString(COLUMN_DATA));
                         music.setTitle(cursor.getString(COLUMN_TITLE));
                         String artist = cursor.getString(COLUMN_ARTIST) ;
@@ -284,6 +282,29 @@ public class FileManager {
         }).start();
 
     }
+
+/*
+    private static String getMusicCover(Context context ,long id) {
+        if (context == null) return null;
+        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                new String[] {MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
+                MediaStore.Audio.Albums._ID+ "=?",
+                new String[] {String.valueOf(id)},
+                null);
+
+        try {
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    return cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                }
+                cursor.close();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+*/
 
     public interface FetchListener<T> {
         void onFetch(T result);

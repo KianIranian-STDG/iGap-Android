@@ -9,8 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.helper.HelperVideo;
 import net.iGap.interfaces.GalleryItemListener;
 import net.iGap.model.GalleryMusicModel;
+import net.iGap.module.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,11 @@ public class AdapterGalleryMusic extends RecyclerView.Adapter<AdapterGalleryMusi
     private List<GalleryMusicModel> musicsItem = new ArrayList<>();
     private List<GalleryMusicModel> mSelectedMusics = new ArrayList<>();
     private GalleryItemListener listener;
+    private HelperVideo mHelperVideo;
 
+    public AdapterGalleryMusic() {
+        mHelperVideo = new HelperVideo(0);
+    }
 
     @NonNull
     @Override
@@ -60,6 +66,9 @@ public class AdapterGalleryMusic extends RecyclerView.Adapter<AdapterGalleryMusi
 
         holder.subtitle.setText(musicsItem.get(position).getArtist());
         holder.title.setText(musicsItem.get(position).getTitle());
+        String key = musicsItem.get(position).getArtist() + musicsItem.get(position).getId();
+        holder.cover.setTag(key);
+        mHelperVideo.loadThumbnail(false, key, musicsItem.get(position).getPath(), holder.cover);
         holder.itemView.setOnClickListener(v ->
                 listener.onItemClicked(musicsItem.get(holder.getAdapterPosition()).getPath(), musicsItem.get(holder.getAdapterPosition()).getId() + "")
         );
@@ -70,14 +79,20 @@ public class AdapterGalleryMusic extends RecyclerView.Adapter<AdapterGalleryMusi
         return musicsItem.size();
     }
 
+    public void clearThumbnailCache() {
+        if (mHelperVideo != null) mHelperVideo.clearCache();
+    }
+
     class MusicGalleryViewHolder extends RecyclerView.ViewHolder {
 
         TextView title, subtitle;
+        CircleImageView cover;
 
         public MusicGalleryViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.title);
             subtitle = itemView.findViewById(R.id.subtitle);
+            cover = itemView.findViewById(R.id.play_bg);
         }
     }
 }

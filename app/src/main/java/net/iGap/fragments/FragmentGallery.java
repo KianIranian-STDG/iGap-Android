@@ -341,7 +341,7 @@ public class FragmentGallery extends BaseFragment {
     }
 
     private void setMusicGalleryUI(View view, RecyclerView rvGallery) {
-        if ( mGalleryMusicAdapter.getMusicsItem().size() < 1) {
+        if (mGalleryMusicAdapter.getMusicsItem().size() < 1) {
             mHelperToolbar.getRightButton().setVisibility(View.GONE);
             showNoItemInGallery(rvGallery, view);
         }
@@ -446,9 +446,9 @@ public class FragmentGallery extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        if (mGalleryVideoAdapter != null) {
-            mGalleryVideoAdapter.clearThumbnailCache();
-        }
+        if (mGalleryVideoAdapter != null) mGalleryVideoAdapter.clearThumbnailCache();
+        if (mGalleryMusicAdapter != null) mGalleryMusicAdapter.clearThumbnailCache();
+
         super.onDestroy();
     }
 
@@ -458,7 +458,8 @@ public class FragmentGallery extends BaseFragment {
         default void onVideoPickerResult(List<String> videos) {
         }
 
-        default void onMusicPickerResult(String music){}
+        default void onMusicPickerResult(String music) {
+        }
     }
 
     public enum GalleryMode {
