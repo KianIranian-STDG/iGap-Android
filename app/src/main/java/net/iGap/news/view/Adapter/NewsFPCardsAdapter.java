@@ -2,6 +2,7 @@ package net.iGap.news.view.Adapter;
 
 import android.graphics.Color;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -135,21 +136,28 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(temp));
 
-            if (temp.getNews().get(0).getColor().equals("#000")) {
+            setColor(temp);
+        }
+
+        private void setColor(NewsFPList data) {
+            if (data.getNews().get(0).getColor().equals("#000000")) {
                 // Normal
                 changeToNormal();
             }
             else {
-                // Red
-                changeToRed(temp.getNews().get(0).getColor());
+                // color
+                changeToServerColor(data.getNews().get(0).getColor(), data.getNews().get(0).getColorRootTitile(), data.getNews().get(0).getColorTitle());
             }
         }
 
-        private void changeToRed(String color) {
-            category.setTextColor(Color.WHITE);
-            source.setTextColor(Color.WHITE);
-            title.setTextColor(Color.WHITE);
-            container.setCardBackgroundColor(Color.parseColor(color));
+        private void changeToServerColor(String backColor, String rootTitleColor, String titleColor) {
+            category.setTextColor(Color.parseColor(titleColor));
+            source.setTextColor(Color.parseColor(titleColor));
+            title.setTextColor(Color.parseColor(titleColor));
+
+            rootTitle.setTextColor(Color.parseColor(rootTitleColor));
+
+            container.setCardBackgroundColor(Color.parseColor(backColor));
         }
 
         private void changeToNormal() {
@@ -211,15 +219,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*2)));
-
-            if (mData.getmNews().get(position*2).getNews().get(0).getColor().equals("#000")) {
-                // Normal
-                changeToNormal();
-            }
-            else {
-                // Red
-                changeToRed(0, mData.getmNews().get(position*2).getNews().get(0).getColor());
-            }
+            setColor(0, mData.getmNews().get(position*2));
 
             if ((position*2+1) >= mData.getmNews().size())
                 return;
@@ -233,58 +233,73 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image1);
             container1.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*2+1)));
+            setColor(1, mData.getmNews().get(position*2+1));
+        }
 
-            if (mData.getmNews().get(position*2+1).getNews().get(0).getColor().equals("#000")) {
+        private void setColor(int cell, NewsFPList data) {
+            if (data.getNews().get(0).getColor().equals("#000000")) {
                 // Normal
-                changeToNormal();
+                changeToNormal(cell);
             }
             else {
-                // Red
-                changeToRed(1, mData.getmNews().get(position*2+1).getNews().get(0).getColor());
+                // color
+                changeToServerColor(cell, data.getNews().get(0).getColor(), data.getNews().get(0).getColorRootTitile(), data.getNews().get(0).getColorTitle());
             }
         }
 
-        private void changeToRed(int cell, String color) {
+        private void changeToServerColor(int cell, String backColor, String rootTitleColor, String titleColor) {
+            if (cell == 0) {
+                category.setTextColor(Color.parseColor(titleColor));
+                source.setTextColor(Color.parseColor(titleColor));
+                title.setTextColor(Color.parseColor(titleColor));
+
+                rootTitle.setTextColor(Color.parseColor(rootTitleColor));
+
+                container.setCardBackgroundColor(Color.parseColor(backColor));
+            }
+            else {
+                category1.setTextColor(Color.parseColor(titleColor));
+                source1.setTextColor(Color.parseColor(titleColor));
+                title1.setTextColor(Color.parseColor(titleColor));
+
+                rootTitle1.setTextColor(Color.parseColor(rootTitleColor));
+
+                container1.setCardBackgroundColor(Color.parseColor(backColor));
+            }
+        }
+
+        private void changeToNormal(int cell) {
+            if (G.themeColor == Theme.DARK) {
+                changeToNormalDark(cell);
+                return;
+            }
+            if (cell == 0) {
+                category.setTextColor(G.context.getResources().getColor(R.color.news_red));
+                source.setTextColor(G.context.getResources().getColor(R.color.black_register));
+                title.setTextColor(Color.BLACK);
+                container.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
+            }
+            else {
+                category1.setTextColor(G.context.getResources().getColor(R.color.news_red));
+                source1.setTextColor(G.context.getResources().getColor(R.color.black_register));
+                title1.setTextColor(Color.BLACK);
+                container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
+            }
+        }
+
+        private void changeToNormalDark(int cell) {
             if (cell == 0) {
                 category.setTextColor(Color.WHITE);
                 source.setTextColor(Color.WHITE);
                 title.setTextColor(Color.WHITE);
-                container.setCardBackgroundColor(Color.parseColor(color));
+                container.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
             }
             else {
                 category1.setTextColor(Color.WHITE);
                 source1.setTextColor(Color.WHITE);
                 title1.setTextColor(Color.WHITE);
-                container1.setCardBackgroundColor(Color.parseColor(color));
+                container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
             }
-        }
-
-        private void changeToNormal() {
-            if (G.themeColor == Theme.DARK) {
-                changeToNormalDark();
-                return;
-            }
-            category.setTextColor(G.context.getResources().getColor(R.color.news_red));
-            source.setTextColor(G.context.getResources().getColor(R.color.black_register));
-            title.setTextColor(Color.BLACK);
-            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
-
-            category1.setTextColor(G.context.getResources().getColor(R.color.news_red));
-            source1.setTextColor(G.context.getResources().getColor(R.color.black_register));
-            title1.setTextColor(Color.BLACK);
-            container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
-        }
-
-        private void changeToNormalDark() {
-            category.setTextColor(Color.WHITE);
-            source.setTextColor(Color.WHITE);
-            title.setTextColor(Color.WHITE);
-            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
-
-            category1.setTextColor(Color.WHITE);
-            source1.setTextColor(Color.WHITE);
-            title1.setTextColor(Color.WHITE);
-            container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
         }
     }
 
@@ -327,15 +342,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*3)));
-
-            if (mData.getmNews().get(position*3).getNews().get(0).getColor().equals("#000")) {
-                // Normal
-                changeToNormal();
-            }
-            else {
-                // Red
-                changeToRed(0, mData.getmNews().get(position*3).getNews().get(0).getColor());
-            }
+            setColor(0, mData.getmNews().get(position*3));
 
             if (position*3+1>mData.getmNews().size())
                 return;
@@ -346,15 +353,7 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image1);
             container1.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*3+1)));
-
-            if (mData.getmNews().get(position*3+1).getNews().get(0).getColor().equals("#000")) {
-                // Normal
-                changeToNormal();
-            }
-            else {
-                // Red
-                changeToRed(1, mData.getmNews().get(position*3+1).getNews().get(0).getColor());
-            }
+            setColor(1, mData.getmNews().get(position*3+1));
 
             if (position*3+2>mData.getmNews().size())
                 return;
@@ -365,55 +364,67 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image2);
             container2.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getmNews().get(position*3+2)));
+            setColor(2, mData.getmNews().get(position*3+2));
+        }
 
-            if (mData.getmNews().get(position*3+2).getNews().get(0).getColor().equals("#000")) {
+        private void setColor(int cell, NewsFPList data) {
+            if (data.getNews().get(0).getColor().equals("#000000")) {
                 // Normal
-                changeToNormal();
+                changeToNormal(cell);
             }
             else {
-                // Red
-                changeToRed(2, mData.getmNews().get(position*3+2).getNews().get(0).getColor());
+                // color
+                changeToServerColor(cell, data.getNews().get(0).getColor(), data.getNews().get(0).getColorTitle());
             }
         }
-        private void changeToRed(int cell, String color) {
+
+        private void changeToServerColor(int cell, String backColor, String titleColor) {
+            if (cell == 0) {
+                category.setTextColor(Color.parseColor(titleColor));
+                container.setCardBackgroundColor(Color.parseColor(backColor));
+            }
+            else if (cell == 1) {
+                category1.setTextColor(Color.parseColor(titleColor));
+                container1.setCardBackgroundColor(Color.parseColor(backColor));
+            }
+            else {
+                category2.setTextColor(Color.parseColor(titleColor));
+                container2.setCardBackgroundColor(Color.parseColor(backColor));
+            }
+        }
+
+        private void changeToNormal(int cell) {
+            if (G.themeColor == Theme.DARK) {
+                changeToNormalDark(cell);
+                return;
+            }
+            if (cell == 0) {
+                category.setTextColor(G.context.getResources().getColor(R.color.news_red));
+                container.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
+            }
+            else if (cell == 1) {
+                category1.setTextColor(G.context.getResources().getColor(R.color.news_red));
+                container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
+            }
+            else {
+                category2.setTextColor(G.context.getResources().getColor(R.color.news_red));
+                container2.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
+            }
+        }
+
+        private void changeToNormalDark(int cell) {
             if (cell == 0) {
                 category.setTextColor(Color.WHITE);
-                container.setCardBackgroundColor(Color.parseColor(color));
+                container.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
             }
             else if (cell == 1) {
                 category1.setTextColor(Color.WHITE);
-                container1.setCardBackgroundColor(Color.parseColor(color));
+                container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
             }
             else {
                 category2.setTextColor(Color.WHITE);
-                container2.setCardBackgroundColor(Color.parseColor(color));
+                container2.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
             }
-        }
-
-        private void changeToNormal() {
-            if (G.themeColor == Theme.DARK) {
-                changeToNormalDark();
-                return;
-            }
-            category.setTextColor(G.context.getResources().getColor(R.color.news_red));
-            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
-
-            category1.setTextColor(G.context.getResources().getColor(R.color.news_red));
-            container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
-
-            category2.setTextColor(G.context.getResources().getColor(R.color.news_red));
-            container2.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
-        }
-
-        private void changeToNormalDark() {
-            category.setTextColor(Color.WHITE);
-            container.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
-
-            category1.setTextColor(Color.WHITE);
-            container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
-
-            category2.setTextColor(Color.WHITE);
-            container2.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
         }
     }
 

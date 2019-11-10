@@ -50,6 +50,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.fotoapparat.Fotoapparat;
 import io.fotoapparat.selector.ResolutionSelectorsKt;
@@ -208,7 +209,7 @@ public class ChatAttachmentPopup {
         int height = getKeyboardHeight();
         if (height == 0) {
             height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            contentView.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(contentView.getContext(),R.drawable.popup_background),contentView.getContext(),R.attr.rootBackgroundColor));
+            contentView.setBackground(new Theme().tintDrawable(ContextCompat.getDrawable(contentView.getContext(), R.drawable.popup_background), contentView.getContext(), R.attr.rootBackgroundColor));
             contentView.setElevation(4);
 
             if ((contentView.getMeasuredHeight() + mChatBoxHeight) >= getDeviceScreenHeight()) {
@@ -340,14 +341,14 @@ public class ChatAttachmentPopup {
                         FragmentEditImage.itemGalleryList.clear();
                         FragmentEditImage.textImageList.clear();
 
-                        Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO , ()->{
+                        Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO, () -> {
                             try {
                                 attachFile.requestOpenGalleryForImageMultipleSelect(mFragment);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                         });
-                        new HelperFragment(mFrgActivity.getSupportFragmentManager() , fragment).setReplace(false).load();
+                        new HelperFragment(mFrgActivity.getSupportFragmentManager(), fragment).setReplace(false).load();
                     }
 
                     @Override
@@ -364,7 +365,34 @@ public class ChatAttachmentPopup {
         video.setOnClickListener(v -> {
             dismiss();
             try {
-                attachFile.requestOpenGalleryForVideoMultipleSelect(mFragment);
+
+                HelperPermission.getStoragePermision(mContext, new OnGetPermission() {
+                    @Override
+                    public void Allow() {
+                        Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.VIDEO, new FragmentGallery.GalleryFragmentListener() {
+                            @Override
+                            public void openOsGallery() {
+                                try {
+                                    attachFile.requestOpenGalleryForVideoMultipleSelect(mFragment);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onVideoPickerResult(List<String> videos) {
+                                mPopupListener.onAttachPopupVideoPickerResult(videos);
+                            }
+                        });
+                        new HelperFragment(mFrgActivity.getSupportFragmentManager(), fragment).setReplace(false).load();
+                    }
+
+                    @Override
+                    public void deny() {
+
+                    }
+                });
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -829,7 +857,7 @@ public class ChatAttachmentPopup {
 
     public interface ChatPopupListener {
 
-        void onAttachPopupImageSelected();
+        void onAttachPopupVideoPickerResult(List<String> results);
 
         void onAttachPopupShowed();
 

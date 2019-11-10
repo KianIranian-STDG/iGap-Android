@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
+import net.iGap.helper.HelperCalander;
 import net.iGap.news.repository.model.NewsList;
 
 import java.util.ArrayList;
@@ -138,7 +139,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void initVH(int position) {
-            time.setText(mData.getNews().get(position).getDate());
+            time.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(mData.getNews().get(position).getDate()) : mData.getNews().get(position).getDate());
             source.setText(mData.getNews().get(position).getSource());
             title.setText(mData.getNews().get(position).getTitle());
 

@@ -2,7 +2,9 @@ package net.iGap.news.view.Adapter;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -134,7 +136,23 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter{
         void initSlider(int position) {
             NewsSliderAdapter adapter = new NewsSliderAdapter();
             adapter.setData(mData.get(position).getmNews());
-            adapter.setCallBack(slide -> callBack.onSliderClick(slide));
+            adapter.setCallBack(new NewsSliderAdapter.onClickListener() {
+                @Override
+                public void onSliderClick(NewsFPList.NewsContent slide) {
+                    callBack.onSliderClick(slide);
+                }
+
+                @Override
+                public void onSliderTouch(boolean down) {
+                    if (down)
+                        sliderView.setAutoCycle(false);
+                    else {
+                        sliderView.setAutoCycle(true);
+                        sliderView.startAutoCycle();
+                    }
+                }
+            });
+//            adapter.setCallBack(slide -> callBack.onSliderClick(slide));
             sliderView.setSliderAdapter(adapter);
             // set animation
             sliderView.setIndicatorAnimation(IndicatorAnimations.THIN_WORM); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!

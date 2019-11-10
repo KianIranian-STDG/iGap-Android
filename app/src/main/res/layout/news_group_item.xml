@@ -40,7 +40,6 @@
                 android:textSize="@dimen/dp14"
                 android:textStyle="bold"
                 android:textColor="@color/white"
-                android:justificationMode="inter_word"
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:paddingRight="@dimen/dp4"

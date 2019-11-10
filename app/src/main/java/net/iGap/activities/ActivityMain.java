@@ -61,6 +61,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.FragmentGallery;
 import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
@@ -99,6 +100,7 @@ import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.view.KuknosSendFrag;
 import net.iGap.module.AppUtils;
+import net.iGap.module.AttachFile;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
 import net.iGap.module.LoginActions;
@@ -921,6 +923,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 // set a flag here, which will cause the fragment to delay until
                 // onPostResume.
                 retryProviderInstall = true;
+                break;
+
+            case AttachFile.request_code_trim_video:
+                if (resultCode == RESULT_OK){
+                    Fragment fragmentGallery = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                    if (fragmentGallery instanceof FragmentGallery){
+                        getSupportFragmentManager().popBackStack();
+                        getSupportFragmentManager().popBackStack();
+                        Fragment fragmentChat = getSupportFragmentManager().findFragmentByTag(FragmentChat.class.getName());
+                        if (fragmentChat instanceof FragmentChat){
+                            ((FragmentChat) fragmentChat).manageTrimVideoResult(data);
+                        }
+                    }
+                }
                 break;
         }
     }

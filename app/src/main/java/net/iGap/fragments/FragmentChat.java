@@ -1308,24 +1308,8 @@ public class FragmentChat extends BaseFragment
                 }
 
                 if (requestCode == AttachFile.request_code_trim_video) {
-                    latestRequestCode = request_code_VIDEO_CAPTURED;
-                    showDraftLayout();
-                    setDraftMessage(request_code_VIDEO_CAPTURED);
-                    if ((sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1)) {
-                        File mediaStorageDir = new File(G.DIR_VIDEOS);
-                        listPathString = new ArrayList<>();
-
-                        //                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                        //                        String savePathVideoCompress = getCacheDir() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                        String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-
-                        listPathString.add(savePathVideoCompress);
-                        mainVideoPath = data.getData().getPath();
-                        new VideoCompressor().execute(data.getData().getPath(), savePathVideoCompress);
-                    } else {
-                        compressedPath.put(data.getData().getPath(), true);
-                    }
-                    return;
+                    manageTrimVideoResult(data);
+                return;
                 }
             }
 
@@ -1489,6 +1473,26 @@ public class FragmentChat extends BaseFragment
                     }
                 }
             }
+        }
+    }
+
+    public void manageTrimVideoResult(Intent data) {
+        latestRequestCode = request_code_VIDEO_CAPTURED;
+        showDraftLayout();
+        setDraftMessage(request_code_VIDEO_CAPTURED);
+        if ((sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1)) {
+            File mediaStorageDir = new File(G.DIR_VIDEOS);
+            listPathString = new ArrayList<>();
+
+            //                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+            //                        String savePathVideoCompress = getCacheDir() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+            String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+
+            listPathString.add(savePathVideoCompress);
+            mainVideoPath = data.getData().getPath();
+            new VideoCompressor().execute(data.getData().getPath(), savePathVideoCompress);
+        } else {
+            compressedPath.put(data.getData().getPath(), true);
         }
     }
 
@@ -8970,7 +8974,20 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onAttachPopupImageSelected() {
+    public void onAttachPopupVideoPickerResult(List<String> results) {
+        if (results.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
+            final String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+            mainVideoPath = results.get(0);
+            G.handler.postDelayed(() -> new VideoCompressor().execute(mainVideoPath, savePathVideoCompress), 200);
+            sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
+
+        } else {
+            for (String path : results){
+                compressedPath.put(path, true);
+                sendMessage(request_code_VIDEO_CAPTURED, path);
+            }
+        }
+        edtChat.setText("");
 
     }
 

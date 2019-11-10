@@ -10,15 +10,15 @@
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/dp8"
         android:layout_marginLeft="@dimen/dp8"
-        android:layout_marginTop="@dimen/dp2"
-        android:layout_marginBottom="@dimen/dp2"
+        android:layout_marginTop="@dimen/dp1"
+        android:layout_marginBottom="@dimen/dp1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/container1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:cardCornerRadius="6dp"
+        app:cardCornerRadius="3dp"
         app:cardBackgroundColor="@color/kuknos_WH_itembg"
         app:cardUseCompatPadding="true">
 
@@ -35,7 +35,6 @@
                 android:textStyle="bold"
                 android:textColor="@color/news_red"
                 android:textSize="@dimen/dp10"
-                android:justificationMode="inter_word"
                 android:gravity="center|right"
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginRight="@dimen/dp8"
@@ -44,7 +43,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/image"
                 app:layout_constraintVertical_chainStyle="packed"/>
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <net.iGap.module.RadiusImageView
                 android:id="@+id/image"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -55,6 +54,7 @@
                 android:layout_marginBottom="@dimen/dp4"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
+                app:riv_radius="3dp"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/category"
@@ -72,14 +72,14 @@
         android:layout_marginLeft="@dimen/dp4"
         android:layout_marginEnd="@dimen/dp4"
         android:layout_marginRight="@dimen/dp4"
-        android:layout_marginTop="@dimen/dp2"
-        android:layout_marginBottom="@dimen/dp2"
+        android:layout_marginTop="@dimen/dp1"
+        android:layout_marginBottom="@dimen/dp1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/container"
         app:layout_constraintEnd_toStartOf="@+id/container2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
-        app:cardCornerRadius="6dp"
+        app:cardCornerRadius="3dp"
         app:cardBackgroundColor="@color/kuknos_WH_itembg"
         app:cardUseCompatPadding="true">
 
@@ -96,7 +96,6 @@
                 android:textStyle="bold"
                 android:textColor="@color/news_red"
                 android:textSize="@dimen/dp10"
-                android:justificationMode="inter_word"
                 android:gravity="center|right"
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginRight="@dimen/dp8"
@@ -105,7 +104,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/image1"
                 app:layout_constraintVertical_chainStyle="packed"/>
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <net.iGap.module.RadiusImageView
                 android:id="@+id/image1"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -116,6 +115,7 @@
                 android:layout_marginBottom="@dimen/dp4"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
+                app:riv_radius="3dp"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/category1"
@@ -131,14 +131,14 @@
         android:layout_height="0dp"
         android:layout_marginEnd="@dimen/dp8"
         android:layout_marginRight="@dimen/dp8"
-        android:layout_marginTop="@dimen/dp2"
-        android:layout_marginBottom="@dimen/dp2"
+        android:layout_marginTop="@dimen/dp1"
+        android:layout_marginBottom="@dimen/dp1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/container1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
-        app:cardCornerRadius="6dp"
+        app:cardCornerRadius="3dp"
         app:cardBackgroundColor="@color/kuknos_WH_itembg"
         app:cardUseCompatPadding="true">
 
@@ -155,7 +155,6 @@
                 android:textStyle="bold"
                 android:textColor="@color/news_red"
                 android:textSize="@dimen/dp10"
-                android:justificationMode="inter_word"
                 android:gravity="center|right"
                 android:layout_marginTop="@dimen/dp4"
                 android:layout_marginRight="@dimen/dp8"
@@ -164,7 +163,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/image2"
                 app:layout_constraintVertical_chainStyle="packed"/>
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <net.iGap.module.RadiusImageView
                 android:id="@+id/image2"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -175,6 +174,7 @@
                 android:layout_marginBottom="@dimen/dp4"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
+                app:riv_radius="3dp"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/category2"
