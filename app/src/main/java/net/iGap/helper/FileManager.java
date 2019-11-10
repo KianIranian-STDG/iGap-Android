@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import net.iGap.R;
 import net.iGap.model.GalleryAlbumModel;
 import net.iGap.model.GalleryItemModel;
+import net.iGap.model.GalleryMusicModel;
 import net.iGap.model.GalleryVideoModel;
 
 import java.util.ArrayList;
@@ -128,9 +129,9 @@ public class FileManager {
 
         new Thread(() -> {
 
-            List<GalleryVideoModel> photos = new ArrayList<>();
+            List<GalleryVideoModel> videos = new ArrayList<>();
             if (context == null) {
-                callback.onFetch(photos);
+                callback.onFetch(videos);
                 return;
             }
 
@@ -156,16 +157,16 @@ public class FileManager {
                 while (cursor.moveToNext()) {
                     try {
                         GalleryVideoModel video = new GalleryVideoModel();
-                        video.setId(photos.size() + "");
+                        video.setId(videos.size() + "");
                         video.setPath(cursor.getString(COLUMN_DATA));
-                        photos.add(video);
+                        videos.add(video);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 cursor.close();
             }
-            callback.onFetch(photos);
+            callback.onFetch(videos);
 
         }).start();
 
@@ -227,6 +228,59 @@ public class FileManager {
             callback.onFetch(albums);
 
         }).start();
+    }
+
+    public static void getDeviceMusics(Context context , FetchListener<List<GalleryMusicModel>> callback){
+
+        new Thread(() -> {
+
+            List<GalleryMusicModel> musics = new ArrayList<>();
+            if (context == null) {
+                callback.onFetch(musics);
+                return;
+            }
+
+            Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            String[] projection = {
+                    MediaStore.Audio.Media.DATA ,
+                    MediaStore.Audio.Media._ID ,
+                    MediaStore.Audio.Media.ARTIST ,
+                    MediaStore.Audio.Media.TITLE
+            };
+
+            Cursor cursor = context.getContentResolver().query(
+                    uri,
+                    projection,
+                    null,
+                    null,
+                    MediaStore.Audio.Media.DATE_ADDED + " DESC"
+            );
+
+            if (cursor != null) {
+
+                final int COLUMN_ID = cursor.getColumnIndex(MediaStore.Audio.Media._ID);
+                final int COLUMN_DATA = cursor.getColumnIndex(MediaStore.Audio.Media.DATA);
+                final int COLUMN_ARTIST = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+                final int COLUMN_TITLE = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
+
+                while (cursor.moveToNext()) {
+                    try {
+                        GalleryMusicModel music = new GalleryMusicModel();
+                        music.setId(cursor.getLong(COLUMN_ID));
+                        music.setPath(cursor.getString(COLUMN_DATA));
+                        music.setTitle(cursor.getString(COLUMN_TITLE));
+                        music.setArtist(cursor.getString(COLUMN_ARTIST));
+                        musics.add(music);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                cursor.close();
+            }
+            callback.onFetch(musics);
+
+        }).start();
+
     }
 
     public interface FetchListener<T> {
