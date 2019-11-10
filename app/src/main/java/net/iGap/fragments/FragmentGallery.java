@@ -311,6 +311,7 @@ public class FragmentGallery extends BaseFragment {
         List<String> videos = new ArrayList<>();
         videos.add(path);
         mGalleryListener.onVideoPickerResult(videos);
+        popBackStackFragment();
     }
 
     private void openImageForEdit(String path) {
