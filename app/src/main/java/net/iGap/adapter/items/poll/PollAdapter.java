@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.data.BarEntry;
@@ -127,9 +129,13 @@ public class PollAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (pollList.size() == i) {
             ((TypeChartViewHolder) viewHolder).bindView(labels, barEntries);
         } else {
-            String[] scales = pollList.get(i).scale.split(":");
-            float height = Resources.getSystem().getDisplayMetrics().widthPixels *1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
-            viewHolder.itemView.getLayoutParams().height = Math.round(height);
+            ConstraintSet set = new ConstraintSet();
+            set.clone((ConstraintLayout) viewHolder.itemView);
+            set.setDimensionRatio(R.id.type1_card0, pollList.get(i).scale);
+            set.applyTo((ConstraintLayout) viewHolder.itemView);
+//            String[] scales = pollList.get(i).scale.split(":");
+//            float height = Resources.getSystem().getDisplayMetrics().widthPixels *1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+//            viewHolder.itemView.getLayoutParams().height = Math.round(height);
             ((BaseViewHolder) viewHolder).bindView(pollList.get(i));
         }
     }
