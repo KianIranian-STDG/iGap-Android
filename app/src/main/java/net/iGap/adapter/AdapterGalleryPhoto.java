@@ -13,26 +13,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.ImageHelper;
-import net.iGap.interfaces.OnRotateImage;
+import net.iGap.interfaces.GalleryItemListener;
 import net.iGap.model.GalleryAlbumModel;
-import net.iGap.model.GalleryPhotoModel;
+import net.iGap.model.GalleryItemModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHolderGallery> {
+public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhoto.ViewHolderGallery> {
 
     private boolean isPhotoMode;
     private boolean isMultiSelect;
     private List<GalleryAlbumModel> albumsItem = new ArrayList<>();
-    private List<GalleryPhotoModel> photosItem = new ArrayList<>();
-    private List<GalleryPhotoModel> mSelectedPhotos = new ArrayList<>();
+    private List<GalleryItemModel> photosItem = new ArrayList<>();
+    private List<GalleryItemModel> mSelectedPhotos = new ArrayList<>();
     private GalleryItemListener listener;
 
-    public AdapterGallery(boolean isPhotoMode) {
+    public AdapterGalleryPhoto(boolean isPhotoMode) {
         this.isPhotoMode = isPhotoMode;
     }
 
@@ -41,7 +39,7 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
         notifyDataSetChanged();
     }
 
-    public void setPhotosItem(List<GalleryPhotoModel> photosItem) {
+    public void setPhotosItem(List<GalleryItemModel> photosItem) {
         this.photosItem = photosItem;
         notifyDataSetChanged();
     }
@@ -56,7 +54,7 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
         notifyDataSetChanged();
     }
 
-    public List<GalleryPhotoModel> getPhotosItem() {
+    public List<GalleryItemModel> getPhotosItem() {
         return photosItem;
     }
 
@@ -68,7 +66,7 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
         return isMultiSelect;
     }
 
-    public List<GalleryPhotoModel> getSelectedPhotos() {
+    public List<GalleryItemModel> getSelectedPhotos() {
         return mSelectedPhotos;
     }
 
@@ -112,12 +110,12 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
         //handle item click
         holder.image.setOnClickListener(v -> {
 
-            if (!isMultiSelect){
+            if (!isMultiSelect) {
                 listener.onItemClicked(
-                        isPhotoMode ? photosItem.get(holder.getAdapterPosition()).getAddress() : albumsItem.get(holder.getAdapterPosition()).getCaption() ,
+                        isPhotoMode ? photosItem.get(holder.getAdapterPosition()).getAddress() : albumsItem.get(holder.getAdapterPosition()).getCaption(),
                         isPhotoMode ? null : albumsItem.get(holder.getAdapterPosition()).getId()
                 );
-            }else{
+            } else {
                 holder.check.setChecked(!holder.check.isChecked());
                 listener.onMultiSelect(mSelectedPhotos.size());
             }
@@ -147,13 +145,6 @@ public class AdapterGallery extends RecyclerView.Adapter<AdapterGallery.ViewHold
             caption = itemView.findViewById(R.id.caption);
             check = itemView.findViewById(R.id.check);
         }
-
-    }
-
-    public interface GalleryItemListener {
-
-        void onItemClicked(String name , String id);
-        void onMultiSelect(int size);
 
     }
 }

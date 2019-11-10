@@ -1,10 +1,8 @@
 package net.iGap.model;
 
-import android.util.Log;
-
 import androidx.annotation.Nullable;
 
-public class GalleryPhotoModel {
+public class GalleryItemModel {
 
     private long id ;
     private String address ;
@@ -27,8 +25,8 @@ public class GalleryPhotoModel {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (obj instanceof GalleryPhotoModel){
-            return ((GalleryPhotoModel) obj).getId() == this.id ;
+        if (obj instanceof GalleryItemModel){
+            return ((GalleryItemModel) obj).getId() == this.id ;
         }
         return super.equals(obj);
     }

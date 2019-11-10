@@ -3,6 +3,7 @@ package net.iGap.news.view;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsMainPageBinding;
+import net.iGap.fragments.BottomNavigationFragment;
+import net.iGap.fragments.discovery.DiscoveryFragment;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
@@ -136,13 +141,33 @@ public class NewsMainFrag extends BaseAPIViewFrag {
         adapter.setCallBack(new NewsFirstPageAdapter.onClickListener() {
             @Override
             public void onButtonClick(NewsMainBTN btn) {
-                // open Link
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
-                int checkedInAppBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
-                if (checkedInAppBrowser == 1 && !HelperUrl.isNeedOpenWithoutBrowser(btn.getLink())) {
-                    HelperUrl.openBrowser(btn.getLink());
-                } else {
-                    HelperUrl.openWithoutBrowser(btn.getLink());
+                // open deepLink
+                if (btn.getLink() == null || btn.getLink().equals(""))
+                    return;
+                if (btn.getLink().startsWith("igap")) {
+                    BottomNavigationFragment navigationFragment = (BottomNavigationFragment) getFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+                    if (navigationFragment != null)
+                        navigationFragment.autoLinkCrawler(btn.getLink().replace("igap://", ""), new DiscoveryFragment.CrawlerStruct.OnDeepValidLink() {
+                            @Override
+                            public void linkValid(String link) {
+                                popBackStackFragment();
+                            }
+
+                            @Override
+                            public void linkInvalid(String link) {
+                                HelperError.showSnackMessage(link + " " + getResources().getString(R.string.link_not_valid), false);
+                            }
+                        });
+                }
+                else {
+                    // open Link
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+                    int checkedInAppBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
+                    if (checkedInAppBrowser == 1 && !HelperUrl.isNeedOpenWithoutBrowser(btn.getLink())) {
+                        HelperUrl.openBrowser(btn.getLink());
+                    } else {
+                        HelperUrl.openWithoutBrowser(btn.getLink());
+                    }
                 }
             }
 

@@ -91,7 +91,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.vanniktech.emoji.EmojiPopup;
@@ -238,7 +237,6 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileListerDialog.FileListerDialog;
 import net.iGap.module.FileListerDialog.OnFileSelectedListener;
-import net.iGap.module.FileUploadStructure;
 import net.iGap.module.FileUtils;
 import net.iGap.module.FontIconTextView;
 import net.iGap.module.IntentRequests;
@@ -258,14 +256,11 @@ import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.ProgressState;
-import net.iGap.module.enums.SendingStep;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.module.structs.StructBottomSheetForward;
-import net.iGap.module.structs.StructCompress;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.module.structs.StructSendSticker;
-import net.iGap.module.structs.StructUploadVideo;
 import net.iGap.module.structs.StructWebView;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
 import net.iGap.proto.ProtoClientGetRoomHistory;
@@ -340,7 +335,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmQuery;
@@ -1279,19 +1273,8 @@ public class FragmentChat extends BaseFragment
                 }
 
                 if (requestCode == AttachFile.request_code_trim_video) {
-                    latestRequestCode = request_code_VIDEO_CAPTURED;
-                    showDraftLayout();
-                    setDraftMessage(request_code_VIDEO_CAPTURED);
-                    if ((sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1)) {
-                        File mediaStorageDir = new File(G.DIR_VIDEOS);
-                        listPathString = new ArrayList<>();
-
-                        mainVideoPath = data.getData().getPath();
-                        listPathString.add(mainVideoPath);
-                    } else {
-                        compressedPath.put(data.getData().getPath(), true);
-                    }
-                    return;
+                    manageTrimVideoResult(data);
+                return;
                 }
             }
 
@@ -1453,6 +1436,21 @@ public class FragmentChat extends BaseFragment
                     }
                 }
             }
+        }
+    }
+
+    public void manageTrimVideoResult(Intent data) {
+        latestRequestCode = request_code_VIDEO_CAPTURED;
+        showDraftLayout();
+        setDraftMessage(request_code_VIDEO_CAPTURED);
+        if ((sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1)) {
+            File mediaStorageDir = new File(G.DIR_VIDEOS);
+            listPathString = new ArrayList<>();
+
+            mainVideoPath = data.getData().getPath();
+            listPathString.add(mainVideoPath);
+        } else {
+            compressedPath.put(data.getData().getPath(), true);
         }
     }
 
@@ -8983,7 +8981,11 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onAttachPopupImageSelected() {
+    public void onAttachPopupVideoPickerResult(List<String> results) {
+        for (String path : results){
+            sendMessage(request_code_VIDEO_CAPTURED, path);
+        }
+        edtChat.setText("");
 
     }
 

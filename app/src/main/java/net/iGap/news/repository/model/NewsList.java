@@ -140,10 +140,11 @@ public class NewsList {
                 return "";
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat time_sdf = new SimpleDateFormat("HH:mm");
             try {
                 Date mDate = sdf.parse(date);
                 long timeInMilliseconds = mDate.getTime();
-                return HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS);
+                return HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS) + " | " + time_sdf.format(mDate.getTime());
             } catch (ParseException e) {
                 e.printStackTrace();
                 return "";
