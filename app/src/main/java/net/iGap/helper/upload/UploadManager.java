@@ -123,6 +123,7 @@ public class UploadManager {
         if ((message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO ||
                 message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT ) &&
                 !message.getAttachment().isLocalFileCompressedExist() &&
+                G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1 &&
                         compressTask == null)
             return;
 
