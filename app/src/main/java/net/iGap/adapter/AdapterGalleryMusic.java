@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.helper.HelperVideo;
+import net.iGap.helper.HelperThumbnail;
 import net.iGap.interfaces.GalleryItemListener;
 import net.iGap.model.GalleryMusicModel;
 import net.iGap.module.CircleImageView;
@@ -23,10 +23,10 @@ public class AdapterGalleryMusic extends RecyclerView.Adapter<AdapterGalleryMusi
     private List<GalleryMusicModel> musicsItem = new ArrayList<>();
     private List<GalleryMusicModel> mSelectedMusics = new ArrayList<>();
     private GalleryItemListener listener;
-    private HelperVideo mHelperVideo;
+    private HelperThumbnail mHelperVideo;
 
     public AdapterGalleryMusic() {
-        mHelperVideo = new HelperVideo(0);
+        mHelperVideo = new HelperThumbnail(0);
     }
 
     @NonNull

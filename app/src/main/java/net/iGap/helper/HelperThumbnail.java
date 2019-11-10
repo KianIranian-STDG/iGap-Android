@@ -14,14 +14,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class HelperVideo {
+public class HelperThumbnail {
 
     private LruCache<String, Drawable> mThumbnailCacher;
     private int mThumbnailMode;
     private Map<String, AsyncTask> mTasks = new HashMap<>();
     private boolean isAbleToRemoveTask = true;
 
-    public HelperVideo(int thumbMode) {
+    public HelperThumbnail(int thumbMode) {
         mThumbnailMode = thumbMode;
         int maxMemory = (int) Runtime.getRuntime().maxMemory();
         int maxSize = maxMemory / 4;
