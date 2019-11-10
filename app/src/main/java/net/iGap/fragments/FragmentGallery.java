@@ -304,7 +304,7 @@ public class FragmentGallery extends BaseFragment {
             }
         });
 
-        FileManager.getDeviceMusics(getContext(), result -> {
+        FileManager.getDeviceMusics(getContext(), result ->  {
             if (getActivity() == null) return;
             getActivity().runOnUiThread(() -> {
                 mGalleryMusicAdapter.setMusicsItem(result);
@@ -341,11 +341,9 @@ public class FragmentGallery extends BaseFragment {
     }
 
     private void setMusicGalleryUI(View view, RecyclerView rvGallery) {
-        if ( mGalleryMusicAdapter.getMusicsItem().size() < 1) {
-            mHelperToolbar.getRightButton().setVisibility(View.GONE);
+        if (mGalleryMusicAdapter.getMusicsItem().size() == 0) {
             showNoItemInGallery(rvGallery, view);
         }
-
         view.findViewById(R.id.loading).setVisibility(View.GONE);
     }
 
@@ -444,9 +442,9 @@ public class FragmentGallery extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        if (mGalleryVideoAdapter != null) {
-            mGalleryVideoAdapter.clearThumbnailCache();
-        }
+        if (mGalleryVideoAdapter != null) mGalleryVideoAdapter.clearThumbnailCache();
+        if (mGalleryMusicAdapter != null) mGalleryMusicAdapter.clearThumbnailCache();
+
         super.onDestroy();
     }
 
@@ -456,7 +454,8 @@ public class FragmentGallery extends BaseFragment {
         default void onVideoPickerResult(List<String> videos) {
         }
 
-        default void onMusicPickerResult(String music){}
+        default void onMusicPickerResult(String music) {
+        }
     }
 
     public enum GalleryMode {
