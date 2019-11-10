@@ -78,7 +78,10 @@ public class AccountManager {
     }
 
     public AccountUser getUser(long userId) {
-        return userAccountList.get(userAccountList.indexOf(new AccountUser(userId)));
+        int i = userAccountList.indexOf(new AccountUser(userId));
+        if (i >= 0)
+            return userAccountList.get(i);
+        return null;
     }
 
     private void setCurrentUserInSharedPreferences() {

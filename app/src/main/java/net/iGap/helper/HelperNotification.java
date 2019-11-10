@@ -24,6 +24,7 @@ import android.view.Display;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -33,6 +34,7 @@ import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.libs.Tuple;
+import net.iGap.model.AccountUser;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ChatSendMessageUtil;
@@ -176,7 +178,7 @@ public class HelperNotification {
             }
         }
 
-        private void show(int vibrator, int sound, int led, boolean messagePreview, Realm realm) {
+        private void show(int vibrator, int sound, int led, boolean messagePreview, Realm realm, AccountUser accountUser) {
             int[] result = AppUtils.updateBadgeOnly(realm, -1);
             unreadMessageCount = result[0];
             countUniqueChat = result[1];
@@ -187,10 +189,10 @@ public class HelperNotification {
             this.messagePreview = messagePreview;
             this.realm = realm;
 
-            setNotification();
+            setNotification(accountUser);
         }
 
-        private void setNotification() {
+        private void setNotification(AccountUser accountUser) {
             int notificationId = 21;
             if (settingValue.separateNotification) {
                 SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.KEY_NOTIF_KEYS, Context.MODE_PRIVATE);
@@ -209,6 +211,7 @@ public class HelperNotification {
 
             if (countUniqueChat == 1 || settingValue.separateNotification) {
                 intent.putExtra(ActivityMain.openChat, messageList.get(0).roomId);
+                intent.putExtra(ActivityMain.userId, accountUser.getId());
             }
 
             pi = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -226,6 +229,7 @@ public class HelperNotification {
                     .setChannelId(CHANNEL_ID)
                     .setContentTitle(mHeader)
                     .setContentText(mContent)
+                    .setSubText(accountUser.getName())
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                     .setStyle(getBigStyle())
                     .setContentIntent(pi);
@@ -235,7 +239,7 @@ public class HelperNotification {
                 builder.setWhen(mTime * 1000);
             }
 
-            if (settingValue.separateNotification) {
+            if (settingValue.separateNotification && AccountManager.getInstance().getCurrentUser().equals(accountUser)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && messageList.get(0).roomType != ProtoGlobal.Room.Type.CHANNEL) {
                     builder.addAction(getReplayAction(notificationId));
                 }
@@ -620,16 +624,14 @@ public class HelperNotification {
         showPopUp = new ShowPopUp();
     }
 
-    public void addMessage(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-            if (room != null) {
-                addMessage(roomId, roomMessage, roomType, room, realm);
-            }
-        });
+    public void addMessage(Realm realm, long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, AccountUser accountUser) {
+        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (room != null) {
+            addMessage(roomId, roomMessage, roomType, room, realm, accountUser);
+        }
     }
 
-    public void addMessage(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, RealmRoom room, Realm realm) {
+    public void addMessage(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, RealmRoom room, Realm realm, AccountUser accountUser) {
 
         if (roomId == FragmentChat.lastChatRoomId) {
             return;
@@ -704,7 +706,7 @@ public class HelperNotification {
 
 
             if ((!G.isAppInFg && !AttachFile.isInAttach) || settingValue.inAppPreview || settingValue.inAppSound || settingValue.inAppVibration || settingValue.soundInChat) {
-                showNotification.show(vibrator, sound, led, messagePreview, realm);
+                showNotification.show(vibrator, sound, led, messagePreview, realm, accountUser);
             }
 
             if (!G.isAppInFg && !AttachFile.isInAttach) {

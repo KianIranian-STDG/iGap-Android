@@ -141,6 +141,7 @@ import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
 
     public static final String openChat = "openChat";
+    public static final String userId = "userId";
     public static final String OPEN_DEEP_LINK = "openDeepLink";
 
     public static final String DEEP_LINK = "deepLink";
@@ -1945,5 +1946,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }*/
         WebSocketClient.connectNewAccount();
         initTabStrip(getIntent());
+
+        // Clear all notification
+        NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nMgr.cancelAll();
     }
 }

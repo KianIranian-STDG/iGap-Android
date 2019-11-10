@@ -10,6 +10,7 @@
 
 package net.iGap.helper;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.module.structs.StructMessageOption;
@@ -100,7 +101,7 @@ public class HelperMessageResponse {
 
                             if (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN && RealmNotificationRoomMessage.canShowNotif(realm, roomMessage.getMessageId(), roomId)) {
                                 RealmNotificationRoomMessage.putToDataBase(realm, roomMessage.getMessageId(), roomId);
-                                HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType, room, realm);
+                                HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType, room, realm, AccountManager.getInstance().getCurrentUser());
                             }
                         }
 
