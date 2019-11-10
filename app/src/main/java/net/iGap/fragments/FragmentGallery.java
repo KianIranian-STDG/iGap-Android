@@ -304,7 +304,7 @@ public class FragmentGallery extends BaseFragment {
             }
         });
 
-        FileManager.getDeviceMusics(getContext(), result -> {
+        FileManager.getDeviceMusics(getContext(), result ->  {
             if (getActivity() == null) return;
             getActivity().runOnUiThread(() -> {
                 mGalleryMusicAdapter.setMusicsItem(result);
@@ -341,11 +341,9 @@ public class FragmentGallery extends BaseFragment {
     }
 
     private void setMusicGalleryUI(View view, RecyclerView rvGallery) {
-        if (mGalleryMusicAdapter.getMusicsItem().size() < 1) {
-            mHelperToolbar.getRightButton().setVisibility(View.GONE);
+        if (mGalleryMusicAdapter.getMusicsItem().size() == 0) {
             showNoItemInGallery(rvGallery, view);
         }
-
         view.findViewById(R.id.loading).setVisibility(View.GONE);
     }
 
