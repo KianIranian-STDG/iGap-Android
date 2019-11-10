@@ -13,6 +13,7 @@ import net.iGap.G;
 import net.iGap.eventbus.EventManager;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.module.ChatSendMessageUtil;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAttachmentFields;
@@ -28,6 +29,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class UploadManager {
     private static final UploadManager ourInstance = new UploadManager();
@@ -63,7 +66,7 @@ public class UploadManager {
     }
 
     public void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message) {
-        uploadMessageAndSend(roomType, message, false);
+        uploadMessageAndSend(roomType, message, G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_COMPRESS, 1) != 1);
     }
 
     private void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message, boolean ignoreCompress) {
@@ -78,7 +81,7 @@ public class UploadManager {
         }
         Log.d("bagi", "uploadMessageAndSend222");
 
-        if (message.getAttachment().isLocalFileCompressedExist() && !ignoreCompress && message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+        if (!message.getAttachment().isLocalFileCompressedExist() && !ignoreCompress && message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
             if (pendingCompressTasks.containsKey(message.getMessageId() + ""))
                 return;
 
@@ -119,7 +122,7 @@ public class UploadManager {
         CompressTask compressTask = pendingCompressTasks.remove(message.getMessageId() + "");
         if ((message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO ||
                 message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT ) &&
-                message.getAttachment().isLocalFileCompressedExist() &&
+                !message.getAttachment().isLocalFileCompressedExist() &&
                         compressTask == null)
             return;
 
@@ -134,9 +137,8 @@ public class UploadManager {
             @Override
             public void onFinish(String id, String token) {
                 Log.d("bagi", "uploadMessageAndSendonFinish");
-
-                File fileCompressed = new File(message.getAttachment().getLocalFilePathCompressed());
-                if (fileCompressed.exists()) {
+                if (message.getAttachment().isLocalFileCompressedExist()) {
+                    File fileCompressed = new File(message.getAttachment().getLocalFilePathCompressed());
                     fileCompressed.delete();
                 }
 
