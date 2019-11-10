@@ -113,10 +113,10 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
         });
 
         //load image
-        String path = videosItem.get(position).getPath();
+        String key = videosItem.get(position).getPath() + videosItem.get(position).getId();
         holder.image.setImageBitmap(null);
-        holder.image.setTag(path);
-        mHelperVideo.loadVideoThumbnail(path, holder.image);
+        holder.image.setTag(key);
+        mHelperVideo.loadVideoThumbnail(key , videosItem.get(position).getPath(), holder.image);
 
     }
 

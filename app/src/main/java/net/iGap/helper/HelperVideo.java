@@ -36,13 +36,13 @@ public class HelperVideo {
         mThumbnailCacher = null;
     }
 
-    public void loadVideoThumbnail(String path, ImageView iv) {
-        if (mThumbnailCacher != null && mThumbnailCacher.get(path) != null) {
-            iv.setImageDrawable(mThumbnailCacher.get(path));
+    public void loadVideoThumbnail(String key ,String path, ImageView iv) {
+        if (mThumbnailCacher != null && mThumbnailCacher.get(key) != null) {
+            iv.setImageDrawable(mThumbnailCacher.get(key));
         } else {
-            if (!mTasks.containsKey(path)) {
-                VideoThumbLoader videoThumbLoader = new VideoThumbLoader(iv, path);
-                mTasks.put(path, videoThumbLoader);
+            if (!mTasks.containsKey(key)) {
+                VideoThumbLoader videoThumbLoader = new VideoThumbLoader(iv, path , key);
+                mTasks.put(key, videoThumbLoader);
                 videoThumbLoader.execute();
             }
         }
@@ -51,10 +51,12 @@ public class HelperVideo {
     private class VideoThumbLoader extends AsyncTask<String, Void, Drawable> {
         private ImageView imgView;
         private String path;
+        private String key ;
 
-        public VideoThumbLoader(ImageView imageView, String path) {
+        public VideoThumbLoader(ImageView imageView, String path , String key) {
             this.imgView = imageView;
             this.path = path;
+            this.key = key ;
         }
 
         @Override
@@ -64,19 +66,19 @@ public class HelperVideo {
             Drawable drawable = new BitmapDrawable(imgView.getResources(), bitmap);
 
             // save cache
-            if (mThumbnailCacher != null && mThumbnailCacher.get(path) == null) {
-                mThumbnailCacher.put(path, drawable);
+            if (mThumbnailCacher != null && mThumbnailCacher.get(key) == null) {
+                mThumbnailCacher.put(key, drawable);
             }
             return drawable;
         }
 
         @Override
         protected void onPostExecute(Drawable image) {
-            if (image != null && imgView != null && imgView.getTag().equals(path)) {
+            if (image != null && imgView != null && imgView.getTag().equals(key)) {
                 imgView.setImageDrawable(image);
             }
             //remove task from list when ended
-            if (isAbleToRemoveTask) mTasks.remove(path);
+            if (isAbleToRemoveTask) mTasks.remove(key);
         }
     }
 }

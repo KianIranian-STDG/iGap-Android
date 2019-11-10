@@ -128,9 +128,7 @@ public class FragmentGallery extends BaseFragment {
         if (mGalleryMode == GalleryMode.PHOTO) {
             setupGalleryWithPhotoAdapter(view, rvGallery);
         } else if (mGalleryMode == GalleryMode.VIDEO) {
-            //create thumbnail for every image take time and has lag to open fragment
-            //this delay cause to open fragment then adapter initialize
-            G.handler.postDelayed(() -> setupGalleryWithVideoAdapter(view, rvGallery), 500);
+            setupGalleryWithVideoAdapter(view, rvGallery);
         }
     }
 
