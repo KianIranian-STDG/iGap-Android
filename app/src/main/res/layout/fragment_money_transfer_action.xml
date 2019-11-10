@@ -196,7 +196,7 @@
             android:layout_marginLeft="16dp"
             android:text="@string/cancel"
             android:textAllCaps="false"
-            android:textColor="?attr/iGapButtonTextColor"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/btn_moneyAction_confirm"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btn_moneyAction_confirm" />
@@ -388,7 +388,7 @@
             android:layout_marginBottom="16dp"
             android:text="@string/send"
             android:textAllCaps="false"
-            android:textColor="?attr/iGapButtonTextColor"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_cardToCard_cancel"
@@ -402,7 +402,7 @@
             android:layout_marginLeft="16dp"
             android:text="@string/cancel"
             android:textAllCaps="false"
-            android:textColor="?attr/iGapButtonTextColor"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/btn_cardToCard_confirm"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btn_cardToCard_confirm" />
