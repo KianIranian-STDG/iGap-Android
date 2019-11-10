@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.helper.HelperVideo;
+import net.iGap.helper.HelperThumbnail;
 import net.iGap.interfaces.GalleryItemListener;
 import net.iGap.model.GalleryVideoModel;
 
@@ -26,11 +26,11 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
     private List<GalleryVideoModel> videosItem = new ArrayList<>();
     private List<GalleryVideoModel> mSelectedVideos = new ArrayList<>();
     private GalleryItemListener listener;
-    private HelperVideo mHelperVideo;
+    private HelperThumbnail mHelperVideo;
 
     public AdapterGalleryVideo(boolean isVideoMode) {
         this.isVideoMode = isVideoMode;
-        this.mHelperVideo = new HelperVideo(isVideoMode ? MediaStore.Video.Thumbnails.MICRO_KIND : MediaStore.Video.Thumbnails.MINI_KIND);
+        this.mHelperVideo = new HelperThumbnail(isVideoMode ? MediaStore.Video.Thumbnails.MICRO_KIND : MediaStore.Video.Thumbnails.MINI_KIND);
     }
 
     public void setVideosItem(List<GalleryVideoModel> videosItem) {
@@ -116,7 +116,7 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
         String key = videosItem.get(position).getPath() + videosItem.get(position).getId();
         holder.image.setImageBitmap(null);
         holder.image.setTag(key);
-        mHelperVideo.loadVideoThumbnail(key , videosItem.get(position).getPath(), holder.image);
+        mHelperVideo.loadThumbnail(true, key, videosItem.get(position).getPath(), holder.image);
 
     }
 
