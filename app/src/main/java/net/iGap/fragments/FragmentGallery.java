@@ -13,13 +13,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityTrimVideo;
+import net.iGap.adapter.AdapterGalleryMusic;
 import net.iGap.adapter.AdapterGalleryPhoto;
-import net.iGap.adapter.items.AdapterGalleryVideo;
+import net.iGap.adapter.AdapterGalleryVideo;
 import net.iGap.helper.FileManager;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -41,6 +43,7 @@ public class FragmentGallery extends BaseFragment {
 
     private AdapterGalleryPhoto mGalleryPhotoAdapter;
     private AdapterGalleryVideo mGalleryVideoAdapter;
+    private AdapterGalleryMusic mGalleryMusicAdapter;
     private String mFolderName, mFolderId;
     private boolean isSubFolder = false;
     private HelperToolbar mHelperToolbar;
@@ -124,11 +127,21 @@ public class FragmentGallery extends BaseFragment {
     private void initRecyclerView(View view) {
 
         RecyclerView rvGallery = view.findViewById(R.id.rv_gallery);
-        rvGallery.setLayoutManager(new GridLayoutManager(rvGallery.getContext(), isSubFolder ? 3 : 2));
-        if (mGalleryMode == GalleryMode.PHOTO) {
-            setupGalleryWithPhotoAdapter(view, rvGallery);
-        } else if (mGalleryMode == GalleryMode.VIDEO) {
-            setupGalleryWithVideoAdapter(view, rvGallery);
+        switch (mGalleryMode) {
+            case PHOTO:
+                rvGallery.setLayoutManager(new GridLayoutManager(rvGallery.getContext(), isSubFolder ? 3 : 2));
+                setupGalleryWithPhotoAdapter(view, rvGallery);
+                break;
+
+            case VIDEO:
+                rvGallery.setLayoutManager(new GridLayoutManager(rvGallery.getContext(), isSubFolder ? 3 : 2));
+                setupGalleryWithVideoAdapter(view, rvGallery);
+                break;
+
+            case MUSIC:
+                rvGallery.setLayoutManager(new LinearLayoutManager(rvGallery.getContext()));
+                setupGalleryWithMusicAdapter(view, rvGallery);
+                break;
         }
     }
 
@@ -271,6 +284,36 @@ public class FragmentGallery extends BaseFragment {
 
     }
 
+    private void setupGalleryWithMusicAdapter(View view, RecyclerView rvGallery) {
+
+        mGalleryMusicAdapter = new AdapterGalleryMusic();
+        rvGallery.setAdapter(mGalleryMusicAdapter);
+        mGalleryMusicAdapter.setListener(new GalleryItemListener() {
+            @Override
+            public void onItemClicked(String path, String id) {
+                if (path == null) return;
+                if (mGalleryListener != null) mGalleryListener.onMusicPickerResult(path);
+                popBackStackFragment();
+            }
+
+            @Override
+            public void onMultiSelect(int size) {
+                //don't support yet
+
+                //handleUiWithMultiSelect(size);
+            }
+        });
+
+        FileManager.getDeviceMusics(getContext(), result -> {
+            if (getActivity() == null) return;
+            getActivity().runOnUiThread(() -> {
+                mGalleryMusicAdapter.setMusicsItem(result);
+                setMusicGalleryUI(view, rvGallery);
+            });
+        });
+
+    }
+
     private void setVideoGalleryAdapter(List<GalleryVideoModel> result, View view, RecyclerView rvGallery) {
         mGalleryVideoAdapter.setVideosItem(result);
 
@@ -291,6 +334,15 @@ public class FragmentGallery extends BaseFragment {
         }
 
         if (!isSubFolder && (mGalleryPhotoAdapter.getAlbumsItem().size() == 1 || mGalleryPhotoAdapter.getAlbumsItem().size() == 0)) {//check 1 because we add all statically
+            showNoItemInGallery(rvGallery, view);
+        }
+
+        view.findViewById(R.id.loading).setVisibility(View.GONE);
+    }
+
+    private void setMusicGalleryUI(View view, RecyclerView rvGallery) {
+        if ( mGalleryMusicAdapter.getMusicsItem().size() < 1) {
+            mHelperToolbar.getRightButton().setVisibility(View.GONE);
             showNoItemInGallery(rvGallery, view);
         }
 
@@ -405,10 +457,12 @@ public class FragmentGallery extends BaseFragment {
 
         default void onVideoPickerResult(List<String> videos) {
         }
+
+        default void onMusicPickerResult(String music){}
     }
 
     public enum GalleryMode {
-        PHOTO, VIDEO
+        PHOTO, VIDEO, MUSIC
     }
 
 }

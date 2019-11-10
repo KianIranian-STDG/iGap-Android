@@ -1,4 +1,4 @@
-package net.iGap.adapter.items;
+package net.iGap.adapter;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;

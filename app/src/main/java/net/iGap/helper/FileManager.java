@@ -269,7 +269,9 @@ public class FileManager {
                         music.setId(cursor.getLong(COLUMN_ID));
                         music.setPath(cursor.getString(COLUMN_DATA));
                         music.setTitle(cursor.getString(COLUMN_TITLE));
-                        music.setArtist(cursor.getString(COLUMN_ARTIST));
+                        String artist = cursor.getString(COLUMN_ARTIST) ;
+                        if (artist.contains("unknown")) artist = context.getString(R.string.unknown);
+                        music.setArtist(artist);
                         musics.add(music);
                     } catch (Exception e) {
                         e.printStackTrace();
