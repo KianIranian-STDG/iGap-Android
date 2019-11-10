@@ -1,6 +1,5 @@
 package net.iGap.fragments.populaChannel;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,6 +102,7 @@ public class PopularChannelHomeFragment extends BaseAPIViewFrag implements Toolb
         });
     }
 
+
     private void setupViews() {
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(G.fragmentActivity)
@@ -125,11 +125,5 @@ public class PopularChannelHomeFragment extends BaseAPIViewFrag implements Toolb
     public void onLeftIconClickListener(View view) {
         if (getActivity() != null)
             getActivity().onBackPressed();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        adapter.onConfigurationChanged(newConfig);
     }
 }
