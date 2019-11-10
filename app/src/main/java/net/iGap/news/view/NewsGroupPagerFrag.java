@@ -1,6 +1,7 @@
 package net.iGap.news.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,6 +93,11 @@ public class NewsGroupPagerFrag extends BaseFragment {
 
         NewsListFrag frag = new NewsListFrag();
         frag.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.GROUP_NEWS));
+        frag.setHandler(newsPicAdd -> {
+            Picasso.get()
+                    .load(newsPicAdd)
+                    .into(binding.groupImage);
+        });
         adapter.addFragment(frag, getResources().getString(R.string.news_latest));
 
         NewsListFrag frag2 = new NewsListFrag();
