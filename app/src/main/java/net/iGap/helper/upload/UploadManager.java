@@ -19,6 +19,7 @@ import net.iGap.realm.RealmAttachmentFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -94,6 +95,9 @@ public class UploadManager {
                 public void onCompressFinish(String id, boolean compress) {
 
                     Log.d("bagi", "onCompressFinish" + message.getMessageId());
+
+                    EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
+
                     if (compress) {
                         message.getAttachment().setLocalFilePathCompressed(savePathVideoCompress);
                     }
@@ -130,7 +134,11 @@ public class UploadManager {
             public void onFinish(String id, String token) {
                 Log.d("bagi", "uploadMessageAndSendonFinish");
 
-                // if ignoreCompress then delete file.
+                File fileCompressed = new File(message.getAttachment().getLocalFilePathCompressed());
+                if (fileCompressed.exists()) {
+                    fileCompressed.delete();
+                }
+
                 HelperSetAction.sendCancel(message.getMessageId());
 
                 DbManager.getInstance().doRealmTask(realm -> {

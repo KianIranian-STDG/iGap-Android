@@ -42,6 +42,7 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
         this.onUploadListener = onUploadListener;
         this.uploadType = type;
         this.amountPendingUpload = 0L;
+        this.progress = 1;
     }
 
     public UploadTask(RealmRoomMessage message, OnUploadListener onUploadListener) {
@@ -55,6 +56,7 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
         this.onUploadListener = onUploadListener;
         this.uploadType = message.getMessageType();
         this.amountPendingUpload = 0L;
+        this.progress = 1;
     }
 
     public int getUploadProgress() {

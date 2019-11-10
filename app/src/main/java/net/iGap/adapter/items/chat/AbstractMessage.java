@@ -359,7 +359,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 public void run() {
                     if (message[0].equals(mMessage.getMessageId() + "") && holder instanceof VideoWithTextItem.ViewHolder) {
                         int percent = (int) message[1];
-                        if (percent < 98) {
+                        if (percent <= 99) {
 
                             String p = percent + "";
 
