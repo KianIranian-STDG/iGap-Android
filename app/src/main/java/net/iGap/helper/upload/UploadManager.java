@@ -76,7 +76,7 @@ public class UploadManager {
         }
         Log.d("bagi", "uploadMessageAndSend222");
 
-        if (!ignoreCompress && message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+        if (message.getAttachment().getLocalFilePathCompressed() == null && !ignoreCompress && message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
             if (pendingCompressTasks.containsKey(message.getMessageId() + ""))
                 return;
 
@@ -94,8 +94,20 @@ public class UploadManager {
 
                     Log.d("bagi", "onCompressFinish" + message.getMessageId());
                     if (compress) {
-                        message.getAttachment().setLocalFilePath(savePathVideoCompress);
+                        message.getAttachment().setLocalFilePathCompressed(savePathVideoCompress);
                     }
+
+//                    DbManager.getInstance().doRealmTask(realm -> {
+//                        realm.executeTransaction(new Realm.Transaction() {
+//                            @Override
+//                            public void execute(Realm realm) {
+//                                RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, message.getAttachment().getId()).findFirst();
+//                                if (attachment != null) {
+//                                    attachment.setLocalFilePathCompressed(savePathVideoCompress);
+//                                }
+//                            }
+//                        });
+//                    });
 
                     uploadMessageAndSend(roomType, message, true);
                 }

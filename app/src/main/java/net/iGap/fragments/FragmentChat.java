@@ -7308,7 +7308,6 @@ public class FragmentChat extends BaseFragment
                 roomMessage.getAttachment().setLocalThumbnailPath(AndroidUtils.saveBitmap(bitmap));
                 roomMessage.getAttachment().setWidth(bitmap.getWidth());
                 roomMessage.getAttachment().setHeight(bitmap.getHeight());
-                roomMessage.getAttachment().setLocalFilePath(finalFilePath);
             }
         }
 

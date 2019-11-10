@@ -45,7 +45,16 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
     }
 
     public UploadTask(RealmRoomMessage message, OnUploadListener onUploadListener) {
-        this(message.getMessageId() + "", new File(message.getAttachment().getLocalFilePath()), message.getMessageType(), onUploadListener);
+        this.identity = message.getMessageId() + "";
+        if (message.getAttachment().getLocalFilePathCompressed() != null) {
+            this.file = new File(message.getAttachment().getLocalFilePathCompressed());
+        } else {
+            this.file = new File(message.getAttachment().getLocalFilePath());
+        }
+
+        this.onUploadListener = onUploadListener;
+        this.uploadType = message.getMessageType();
+        this.amountPendingUpload = 0L;
     }
 
     public int getUploadProgress() {

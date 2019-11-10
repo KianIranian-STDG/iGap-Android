@@ -30,6 +30,7 @@ import java.io.IOException;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 import io.realm.net_iGap_realm_RealmAttachmentRealmProxy;
@@ -57,6 +58,9 @@ public class RealmAttachment extends RealmObject {
     private String localThumbnailPath;
     @Nullable
     private String localFilePath;
+
+    @Ignore
+    private String localFilePathCompressed;
 
     public static void updateToken(long fakeId, String token) {
         DbManager.getInstance().doRealmTask(realm -> {
@@ -406,5 +410,13 @@ public class RealmAttachment extends RealmObject {
      */
     public boolean isThumbnailExistsOnLocal() {
         return localThumbnailPath != null && new File(localThumbnailPath).exists() && new File(localThumbnailPath).canRead();
+    }
+
+    public String getLocalFilePathCompressed() {
+        return localFilePathCompressed;
+    }
+
+    public void setLocalFilePathCompressed(String localFilePathCompressed) {
+        this.localFilePathCompressed = localFilePathCompressed;
     }
 }
