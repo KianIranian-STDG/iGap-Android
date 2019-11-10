@@ -58,8 +58,7 @@ public class RealmAttachment extends RealmObject {
     private String localThumbnailPath;
     @Nullable
     private String localFilePath;
-
-    @Ignore
+    @Nullable
     private String localFilePathCompressed;
 
     public static void updateToken(long fakeId, String token) {

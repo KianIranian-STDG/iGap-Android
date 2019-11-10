@@ -15,6 +15,7 @@ import net.iGap.helper.HelperSetAction;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
+import net.iGap.realm.RealmAttachmentFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 
@@ -81,7 +82,7 @@ public class UploadManager {
                 return;
 
             Log.d("bagi", "uploadMessageAndSend33");
-            String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+            String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + message.getAttachment().getName() + "_" + new SimpleDateFormat("HHmmss", Locale.US).format(new Date()) + ".mp4";
             CompressTask compressTask = new CompressTask(message.getMessageId() + "", message.getAttachment().getLocalFilePath(), savePathVideoCompress, new OnCompress() {
                 @Override
                 public void onCompressProgress(String id, int percent) {
@@ -97,17 +98,12 @@ public class UploadManager {
                         message.getAttachment().setLocalFilePathCompressed(savePathVideoCompress);
                     }
 
-//                    DbManager.getInstance().doRealmTask(realm -> {
-//                        realm.executeTransaction(new Realm.Transaction() {
-//                            @Override
-//                            public void execute(Realm realm) {
-//                                RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, message.getAttachment().getId()).findFirst();
-//                                if (attachment != null) {
-//                                    attachment.setLocalFilePathCompressed(savePathVideoCompress);
-//                                }
-//                            }
-//                        });
-//                    });
+                    DbManager.getInstance().doRealmTransaction(realm -> {
+                        RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, message.getAttachment().getId()).findFirst();
+                        if (attachment != null) {
+                            attachment.setLocalFilePathCompressed(savePathVideoCompress);
+                        }
+                    });
 
                     uploadMessageAndSend(roomType, message, true);
                 }
@@ -118,8 +114,8 @@ public class UploadManager {
         }
         CompressTask compressTask = pendingCompressTasks.remove(message.getMessageId() + "");
         if ((message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO ||
-                message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT )&&
-                        compressTask == null)
+                message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT ) &&
+                        compressTask == null && message.getAttachment().getLocalFilePathCompressed() == null)
             return;
 
         Log.d("bagi", "after Compress");
