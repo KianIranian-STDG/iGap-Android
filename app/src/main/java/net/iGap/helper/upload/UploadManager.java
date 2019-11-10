@@ -78,7 +78,7 @@ public class UploadManager {
         }
         Log.d("bagi", "uploadMessageAndSend222");
 
-        if (message.getAttachment().getLocalFilePathCompressed() == null && !ignoreCompress && message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+        if (message.getAttachment().isLocalFileCompressedExist() && !ignoreCompress && message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
             if (pendingCompressTasks.containsKey(message.getMessageId() + ""))
                 return;
 
@@ -119,7 +119,8 @@ public class UploadManager {
         CompressTask compressTask = pendingCompressTasks.remove(message.getMessageId() + "");
         if ((message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO ||
                 message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT ) &&
-                        compressTask == null && message.getAttachment().getLocalFilePathCompressed() == null)
+                message.getAttachment().isLocalFileCompressedExist() &&
+                        compressTask == null)
             return;
 
         Log.d("bagi", "after Compress");

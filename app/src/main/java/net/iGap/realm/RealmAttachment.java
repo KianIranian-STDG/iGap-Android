@@ -415,6 +415,10 @@ public class RealmAttachment extends RealmObject {
         return localFilePathCompressed;
     }
 
+    public boolean isLocalFileCompressedExist() {
+        return localFilePathCompressed != null && new File(localFilePathCompressed).exists();
+    }
+
     public void setLocalFilePathCompressed(String localFilePathCompressed) {
         this.localFilePathCompressed = localFilePathCompressed;
     }
