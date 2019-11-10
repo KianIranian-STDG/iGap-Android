@@ -47,8 +47,8 @@ public class NewsMainBTN {
     }
 
     public String getLink() {
-        if (!link.startsWith("http"))
-            link = "http:\\" + link;
+        if (!link.startsWith("http") && !link.startsWith("igap"))
+            link = "http://" + link;
         return link;
     }
 

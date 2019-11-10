@@ -1,5 +1,7 @@
 package net.iGap.news.repository.model;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -62,6 +64,10 @@ public class NewsFPList {
     public class News {
         @SerializedName("source")
         private String source;
+        @SerializedName("colorRooTitr")
+        private String colorRootTitile;
+        @SerializedName("colorTitr")
+        private String colorTitle;
         @SerializedName("color")
         private String color;
         @SerializedName("contents")
@@ -91,11 +97,35 @@ public class NewsFPList {
             this.contents = contents;
         }
 
+        public String getColorRootTitile() {
+            if (colorRootTitile == null || !(colorRootTitile.length() == 6 || colorRootTitile.length() == 3))
+                return "#000000";
+            if (!colorRootTitile.startsWith("#"))
+                return "#" + colorRootTitile;
+            return colorRootTitile;
+        }
+
+        public void setColorRootTitile(String colorRootTitile) {
+            this.colorRootTitile = colorRootTitile;
+        }
+
+        public String getColorTitle() {
+            if (colorTitle == null || !(colorTitle.length() == 6 || colorTitle.length() == 3))
+                return "#000000";
+            if (!colorTitle.startsWith("#"))
+                return "#" + colorTitle;
+            return colorTitle;
+        }
+
+        public void setColorTitle(String colorTitle) {
+            this.colorTitle = colorTitle;
+        }
+
         public String getColor() {
+            if (color == null || !(color.length() == 6 || color.length() == 3))
+                return "#000000";
             if (!color.startsWith("#"))
-                color = "#" + color;
-            if (!(color.length() == 7 || color.length() == 4))
-                return "#000";
+                return "#" + color;
             return color;
         }
 

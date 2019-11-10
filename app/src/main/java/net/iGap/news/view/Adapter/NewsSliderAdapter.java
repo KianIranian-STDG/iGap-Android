@@ -1,10 +1,16 @@
 package net.iGap.news.view.Adapter;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.squareup.picasso.Picasso;
@@ -40,29 +46,53 @@ public class NewsSliderAdapter extends SliderViewAdapter {
         ImageView imageViewBackground;
         TextView textViewTitle;
         TextView textViewDescription;
+        ConstraintLayout container;
 
         SliderVH(View itemView) {
             super(itemView);
             imageViewBackground = itemView.findViewById(R.id.sliderImage);
             textViewTitle = itemView.findViewById(R.id.sliderTitle);
             textViewDescription = itemView.findViewById(R.id.sliderDesc);
+            container = itemView.findViewById(R.id.container);
         }
 
+        @SuppressLint("ClickableViewAccessibility")
         void initView(int position) {
             NewsFPList.NewsContent temp = data.get(0).getNews().get(position).getContents();
             textViewTitle.setText(temp.getTitle());
             textViewDescription.setText(temp.getLead());
-            imageViewBackground.setOnClickListener(v -> callBack.onSliderClick(temp));
+            container.setOnClickListener(v -> callBack.onSliderClick(temp));
+            container.setOnLongClickListener(null);
+            container.setOnTouchListener((v, event) -> {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                    case MotionEvent.ACTION_MOVE:
+                        callBack.onSliderTouch(true);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        callBack.onSliderTouch(false);
+                        break;
+                }
+                return false;
+            });
             Picasso.get()
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     .load(temp.getImage().get(0).getOriginal())
                     .placeholder(R.mipmap.news_temp_banner)
                     .into(imageViewBackground);
+
+            if (!data.get(0).getNews().get(position).getColor().equals("#000000")) {
+                textViewTitle.setTextColor(Color.parseColor(data.get(0).getNews().get(position).getColorTitle()));
+                textViewDescription.setTextColor(Color.parseColor(data.get(0).getNews().get(position).getColorRootTitile()));
+                container.setBackgroundColor(Color.parseColor(data.get(0).getNews().get(position).getColor()));
+            }
         }
     }
 
     public interface onClickListener {
         void onSliderClick(NewsFPList.NewsContent slide);
+        void onSliderTouch(boolean down);
     }
 
     public List<NewsFPList> getData() {
