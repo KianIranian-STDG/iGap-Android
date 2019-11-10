@@ -358,6 +358,7 @@ import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
+import static net.iGap.module.AttachFile.request_code_pic_audi;
 import static net.iGap.module.AttachFile.request_code_pic_file;
 import static net.iGap.module.MessageLoader.getLocalMessage;
 import static net.iGap.module.enums.ProgressState.HIDE;
@@ -8883,6 +8884,14 @@ public class FragmentChat extends BaseFragment
             data.setData(Uri.parse(path));
             onActivityResult(request_code_pic_file, Activity.RESULT_OK, data);
         }
+    }
+
+    @Override
+    public void onAttachPopupMusicPickerResult(String result) {
+        if (result == null) return;
+        Intent data = new Intent();
+        data.setData(Uri.parse(result));
+        onActivityResult(request_code_pic_audi, Activity.RESULT_OK, data);
     }
 
     @Override

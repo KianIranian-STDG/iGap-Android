@@ -36,6 +36,7 @@ public class NewsListFrag extends BaseAPIViewFrag {
     private int totalPage = 10;
     private boolean isLoading = false;
     private NewsListAdapter adapter;
+    private onImageListener handler;
 
     public static NewsListFrag newInstance() {
         return new NewsListFrag();
@@ -151,6 +152,9 @@ public class NewsListFrag extends BaseAPIViewFrag {
         if (data.getNews() == null || data.getNews().size() == 0)
             return;
 
+        if (apiArg.getStart() == 1 && handler != null)
+            handler.onImageLoader(data.getNews().get(0).getImage());
+
         adapter.addItems(data);
 
         // check weather is last page or not
@@ -164,5 +168,17 @@ public class NewsListFrag extends BaseAPIViewFrag {
 
     void setApiArg(NewsApiArg apiArg) {
         this.apiArg = apiArg;
+    }
+
+    public interface onImageListener {
+        void onImageLoader(String newsPicAdd);
+    }
+
+    public onImageListener getHandler() {
+        return handler;
+    }
+
+    public void setHandler(onImageListener handler) {
+        this.handler = handler;
     }
 }

@@ -332,79 +332,17 @@ public class ChatAttachmentPopup {
 
         photo.setOnClickListener(v -> {
             dismiss();
-            try {
-
-                HelperPermission.getStoragePermision(mContext, new OnGetPermission() {
-                    @Override
-                    public void Allow() {
-                        //clear at first time to load image gallery
-                        FragmentEditImage.itemGalleryList.clear();
-                        FragmentEditImage.textImageList.clear();
-
-                        Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO, () -> {
-                            try {
-                                attachFile.requestOpenGalleryForImageMultipleSelect(mFragment);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        });
-                        new HelperFragment(mFrgActivity.getSupportFragmentManager(), fragment).setReplace(false).load();
-                    }
-
-                    @Override
-                    public void deny() {
-
-                    }
-                });
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            openPhotoGallery();
         });
 
         video.setOnClickListener(v -> {
             dismiss();
-            try {
-
-                HelperPermission.getStoragePermision(mContext, new OnGetPermission() {
-                    @Override
-                    public void Allow() {
-                        Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.VIDEO, new FragmentGallery.GalleryFragmentListener() {
-                            @Override
-                            public void openOsGallery() {
-                                try {
-                                    attachFile.requestOpenGalleryForVideoMultipleSelect(mFragment);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            public void onVideoPickerResult(List<String> videos) {
-                                mPopupListener.onAttachPopupVideoPickerResult(videos);
-                            }
-                        });
-                        new HelperFragment(mFrgActivity.getSupportFragmentManager(), fragment).setReplace(false).load();
-                    }
-
-                    @Override
-                    public void deny() {
-
-                    }
-                });
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            openVideoGallery();
         });
 
         music.setOnClickListener(v -> {
             dismiss();
-            try {
-                attachFile.requestPickAudio(mFragment);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            openMusicGallery();
         });
 
         file.setOnClickListener(v -> {
@@ -510,33 +448,106 @@ public class ChatAttachmentPopup {
                 }
             }
         });
+    }
 
+    private void openPhotoGallery() {
+        try {
 
-       /* rcvBottomSheet.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
-            @Override
-            public void onChildViewAttachedToWindow(final View view) {
-                if (isPermissionCamera) {
+            HelperPermission.getStoragePermision(mContext, new OnGetPermission() {
+                @Override
+                public void Allow() {
+                    //clear at first time to load image gallery
+                    FragmentEditImage.itemGalleryList.clear();
+                    FragmentEditImage.textImageList.clear();
 
-                    if (rcvBottomSheet.getChildAdapterPosition(view) == 0) {
-                        isCameraAttached = true;
-                    }
-                   enableCamera(view);
+                    Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO, () -> {
+                        try {
+                            attachFile.requestOpenGalleryForImageMultipleSelect(mFragment);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    new HelperFragment(mFrgActivity.getSupportFragmentManager(), fragment).setReplace(false).load();
                 }
-            }
 
-            @Override
-            public void onChildViewDetachedFromWindow(final View view) {
-
-                if (isPermissionCamera) {
-                    if (rcvBottomSheet.getChildAdapterPosition(view) == 0) {
-                        isCameraAttached = false;
-                    }
-                    disableCamera(view);
+                @Override
+                public void deny() {
 
                 }
-            }
-        });*/
+            });
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openVideoGallery() {
+        try {
+
+            HelperPermission.getStoragePermision(mContext, new OnGetPermission() {
+                @Override
+                public void Allow() {
+                    Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.VIDEO, new FragmentGallery.GalleryFragmentListener() {
+                        @Override
+                        public void openOsGallery() {
+                            try {
+                                attachFile.requestOpenGalleryForVideoMultipleSelect(mFragment);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onVideoPickerResult(List<String> videos) {
+                            mPopupListener.onAttachPopupVideoPickerResult(videos);
+                        }
+                    });
+                    new HelperFragment(mFrgActivity.getSupportFragmentManager(), fragment).setReplace(false).load();
+                }
+
+                @Override
+                public void deny() {
+
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openMusicGallery() {
+        try {
+            HelperPermission.getStoragePermision(mContext, new OnGetPermission() {
+                @Override
+                public void Allow() {
+                    Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.MUSIC, new FragmentGallery.GalleryFragmentListener() {
+                        @Override
+                        public void openOsGallery() {
+                            try {
+                                attachFile.requestPickAudio(mFragment);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onMusicPickerResult(String music) {
+                            mPopupListener.onAttachPopupMusicPickerResult(music);
+                        }
+                    });
+                    new HelperFragment(mFrgActivity.getSupportFragmentManager(), fragment).setReplace(false).load();
+                }
+
+                @Override
+                public void deny() {
+
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void enableCamera() {
@@ -858,6 +869,8 @@ public class ChatAttachmentPopup {
     public interface ChatPopupListener {
 
         void onAttachPopupVideoPickerResult(List<String> results);
+
+        void onAttachPopupMusicPickerResult(String result);
 
         void onAttachPopupShowed();
 

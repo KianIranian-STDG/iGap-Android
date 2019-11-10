@@ -22,7 +22,7 @@
         <net.iGap.libs.bannerslider.BannerSlider
             android:id="@+id/fc_advertisementItem"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +33,6 @@
             app:slider_loopSlides="true"
             app:slider_selectedSlideIndicator="@drawable/indicator_circle_selected"
             app:slider_unselectedSlideIndicator="@drawable/indicator_circle_unselected" />
-
 
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
