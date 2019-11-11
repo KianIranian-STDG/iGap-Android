@@ -178,7 +178,7 @@ public class FragmentShowImage extends BaseFragment {
                 return false;
             }
 
-            mRealmList = DbManager.getInstance().doRealmTask(realm -> {
+            RealmResults<RealmRoomMessage> mRealmList = DbManager.getInstance().doRealmTask(realm -> {
                 return RealmRoomMessage.findSorted(realm, mRoomId, RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
             });
             if (mRealmList.size() < 1) {
