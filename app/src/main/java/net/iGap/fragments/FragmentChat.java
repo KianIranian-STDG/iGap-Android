@@ -4065,7 +4065,7 @@ public class FragmentChat extends BaseFragment
                     openFragmentAddStickerToFavorite(groupId, token);
                 }
             });
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
