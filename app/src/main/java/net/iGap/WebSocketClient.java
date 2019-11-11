@@ -119,6 +119,7 @@ public class WebSocketClient {
                     RequestQueue.timeOutImmediately(null, true);
                     RequestQueue.clearPriorityQueue();
                     resetMainInfo();
+                    connectNewAccount();
                     reconnect(true);
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
                 }
@@ -247,6 +248,8 @@ public class WebSocketClient {
                     }
                 }, Config.REPEAT_CONNECTION_CHECKING);
             }
+        } else {
+            G.handler.postDelayed(() -> reconnect(true), Config.REPEAT_CONNECTION_CHECKING);
         }
     }
 
@@ -369,7 +372,5 @@ public class WebSocketClient {
 
     public static void connectNewAccount() {
         changeAccountTime = false;
-
-        reconnect(true);
     }
 }

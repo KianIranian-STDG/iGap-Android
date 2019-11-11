@@ -178,8 +178,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     }
 
     private void getTermsAndConditionData() {
-        Log.wtf(this.getClass().getName(), "getTermsAndConditionData");
-        if (G.socketConnection) {
+        if (G.isSecure) {
             repository.getTermsOfServiceBody(new RegisterRepository.RepositoryCallback<String>() {
                 @Override
                 public void onSuccess(String data) {
@@ -191,6 +190,7 @@ public class FragmentRegisterViewModel extends ViewModel {
                         public void onSuccess(LocationModel data) {
                             repository.inRegisterMode(hideDialogQRCode, goToTwoStepVerificationPage);
                             isShowLoading.set(View.INVISIBLE);
+                            showRetryView.set(View.GONE);
                             viewVisibility.set(View.VISIBLE);
                             callbackEdtCodeNumber.set("+" + data.getCountryCode());
                             callbackBtnChoseCountry.set(data.getCountryName());
@@ -224,7 +224,7 @@ public class FragmentRegisterViewModel extends ViewModel {
                     Log.wtf(this.getClass().getName(), "not connected");
                     getTermsAndConditionData();
                 }
-            }, 500);
+            }, 1000);
         }
     }
 

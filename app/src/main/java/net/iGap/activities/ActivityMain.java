@@ -1969,7 +1969,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (G.twoPaneMode) {
             getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }*/
-        WebSocketClient.connectNewAccount();
+        /*WebSocketClient.connectNewAccount();*/
         initTabStrip(getIntent());
 
         // Clear all notification

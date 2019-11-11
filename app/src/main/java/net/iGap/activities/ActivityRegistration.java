@@ -156,7 +156,7 @@ public class ActivityRegistration extends ActivityEnhanced {
                     RequestClientGetRoomList.pendingRequest.remove(0);
                     FragmentMain.mOffset = 0;
                     DbManager.getInstance().changeRealmConfiguration();
-                    WebSocketClient.connectNewAccount();
+                    /*WebSocketClient.connectNewAccount();*/
                     Log.wtf(this.getClass().getName(), "current user: " + AccountManager.getInstance().getCurrentUser());
                     finish();
                     startActivity(new Intent(this, ActivityMain.class));

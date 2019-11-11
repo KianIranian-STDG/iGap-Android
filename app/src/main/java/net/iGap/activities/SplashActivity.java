@@ -42,21 +42,18 @@ public class SplashActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, ActivityRegistration.class);
                 startActivity(intent);
                 finish();
-                Log.wtf(this.getClass().getName(), "user registered before");
             } else if (userInfo.getUserInfo() == null || userInfo.getUserInfo().getDisplayName() == null || userInfo.getUserInfo().getDisplayName().isEmpty()) {
                 Intent intent = new Intent(this, ActivityRegistration.class);
                 intent.putExtra(ActivityRegistration.showProfile, true);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
-                Log.wtf(this.getClass().getName(), "getDisplayName is empty");
             } else {
                 if (checkValidationForRealm(userInfo)) {
                     ActivityMain.userPhoneNumber = userInfo.getUserInfo().getPhoneNumber();
                 }
                 startActivity(new Intent(this, ActivityMain.class));
                 finish();
-                Log.wtf(this.getClass().getName(), "go to main activity");
             }
         }
     }

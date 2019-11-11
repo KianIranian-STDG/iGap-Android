@@ -123,6 +123,15 @@ public class AccountManager {
         return userAccountList.contains(new AccountUser(userId));
     }
 
+    public boolean isExistThisAccount(String phoneNumber){
+        for (int i = 0; i < userAccountList.size(); i++) {
+            if (phoneNumber.equals(userAccountList.get(i).getPhoneNumber())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void changeCurrentUserForAddAccount() {
         currentUser = 0;
     }

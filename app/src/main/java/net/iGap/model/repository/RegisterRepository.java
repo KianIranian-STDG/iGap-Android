@@ -177,21 +177,20 @@ public class RegisterRepository {
     }
 
     public void getTermsOfServiceBody(RepositoryCallback<String> callback) {
-        G.onReceivePageInfoTOS = new OnReceivePageInfoTOS() {
+        new RequestInfoPage().infoPageAgreementDiscovery("TOS",new RequestInfoPage.OnInfoPage(){
+
             @Override
-            public void onReceivePageInfo(String bodyR) {
-                callback.onSuccess(bodyR);
+            public void onInfo(String body) {
+                Log.wtf(this.getClass().getName(),"onReceivePageInfo");
+                callback.onSuccess(body);
             }
 
             @Override
-            public void onError(int majorCode, int minorCode) {
-                //todo: fixed it and handle is Secure
-                /*G.handler.postDelayed(()->new RequestInfoPage().infoPage("TOS"),2000);*/
+            public void onError(int major, int minor) {
                 Log.wtf(this.getClass().getName(), "onReceivePageInfoTOS: on Error");
                 callback.onError();
             }
-        };
-        new RequestInfoPage().infoPage("TOS");
+        });
     }
 
     public void getInfoLocation(RepositoryCallback<LocationModel> callback) {

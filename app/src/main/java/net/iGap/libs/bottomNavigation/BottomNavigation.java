@@ -20,7 +20,6 @@ import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.AccountManager;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
@@ -116,7 +115,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
                 }
             }
         } else {
-            if (onItemChangeListener != null && position != 4) {
+            if (onItemChangeListener != null /*&& position != 4*/) {
                 onItemChangeListener.onSelectAgain(tabItems.get(position).getPosition());
             }
         }
@@ -246,7 +245,9 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
 
     @Override
     public void onClick(View v) {
-        v.setSelected(!v.isSelected());
+        if (selectedItemPosition != 4) {
+            v.setSelected(!v.isSelected());
+        }
         selectedTabItem(4);
     }
 

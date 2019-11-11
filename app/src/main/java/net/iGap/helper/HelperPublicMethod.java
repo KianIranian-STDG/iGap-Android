@@ -13,6 +13,7 @@ package net.iGap.helper;
 import android.content.Context;
 import android.content.Intent;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -269,6 +270,7 @@ public class HelperPublicMethod {
 
         Intent intent = new Intent(G.context, ActivityMain.class);
         intent.putExtra(ActivityMain.openChat, roomid);
+        intent.putExtra(ActivityMain.userId, AccountManager.getInstance().getCurrentUser().getId());
         if (peerId >= 0) {
             intent.putExtra("PeerID", peerId);
         }
@@ -288,6 +290,7 @@ public class HelperPublicMethod {
                         AsyncTransaction.executeTransactionWithLoading(context, realm, realm1 -> realm1.copyToRealmOrUpdate(roomMessage), () -> {
                             Intent intent = new Intent(G.context, ActivityMain.class);
                             intent.putExtra(ActivityMain.openChat, roomId);
+                            intent.putExtra(ActivityMain.userId, AccountManager.getInstance().getCurrentUser().getId());
                             if (peerId >= 0) {
                                 intent.putExtra("PeerID", peerId);
                             }

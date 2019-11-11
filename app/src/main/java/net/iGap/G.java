@@ -193,8 +193,6 @@ public class G extends ApplicationContext {
     /*public static OnUserRegistration onUserRegistration;*/
     public static OnClientSearchRoomHistory onClientSearchRoomHistory;
     /*public static OnUserVerification onUserVerification;*/
-    public static OnReceivePageInfoTOS onReceivePageInfoTOS;
-    public static OnReceivePageInfoWalletAgreement onReceivePageInfoWalletAgreement;
     public static OnUserLogin onUserLogin;
     /*public static OnUserProfileSetEmailResponse onUserProfileSetEmailResponse;*/
     /*public static OnUserProfileSetGenderResponse onUserProfileSetGenderResponse;*/

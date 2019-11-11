@@ -71,7 +71,7 @@ public class AccountsDialog extends BottomSheetDialogFragment {
                     AccountManager.getInstance().changeCurrentUserForAddAccount();
                     DbManager.getInstance().changeRealmConfiguration();
                     RaadApp.onCreate(getContext());
-                    WebSocketClient.connectNewAccount();
+                   // WebSocketClient.connectNewAccount();
                     Intent intent = new Intent(getActivity(), ActivityRegistration.class);
                     intent.putExtra("add account", true);
                     getActivity().startActivity(intent);

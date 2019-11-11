@@ -99,7 +99,6 @@ public class AccountUser {
 
     public void setRealmConfiguration(String key) {
         this.realmConfiguration = getConfiguration(key);
-        Log.wtf(this.getClass().getName(), "setRealmConfiguration: " + realmConfiguration.getRealmFileName());
     }
 
     public void setRealmConfiguration(RealmConfiguration realmConfiguration) {
@@ -133,7 +132,6 @@ public class AccountUser {
                 .compactOnLaunch()
                 .migration(new RealmMigration()).build();
         RealmConfiguration newConfig;
-        Log.wtf(this.getClass().getName(), "Db name: " + dbName);
         newConfig = new RealmConfiguration.Builder()
                 .name(dbName)
                 .encryptionKey(mKey)
