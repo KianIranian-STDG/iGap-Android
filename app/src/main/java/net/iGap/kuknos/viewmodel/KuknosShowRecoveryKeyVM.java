@@ -1,5 +1,7 @@
 package net.iGap.kuknos.viewmodel;
 
+import android.util.Log;
+
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -18,19 +20,19 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
     private MutableLiveData<Boolean> nextPage;
     private MutableLiveData<Boolean> progressState;
     private ObservableField<String> mnemonic = new ObservableField<>();
-    private ObservableField<Boolean> pinCheck = new ObservableField<>();
+    private ObservableField<Boolean> pinCheck = new ObservableField<>(false);
     private String token, username;
 
     public KuknosShowRecoveryKeyVM() {
         if (nextPage == null) {
-            nextPage = new MutableLiveData<Boolean>();
+            nextPage = new MutableLiveData<>();
             nextPage.setValue(false);
         }
         if (error == null) {
-            error = new MutableLiveData<ErrorM>();
+            error = new MutableLiveData<>();
         }
         if (progressState == null) {
-            progressState = new MutableLiveData<Boolean>();
+            progressState = new MutableLiveData<>();
             progressState.setValue(false);
         }
     }

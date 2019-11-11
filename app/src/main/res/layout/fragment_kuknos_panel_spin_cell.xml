@@ -42,7 +42,7 @@
             android:minWidth="30dp"
             android:minHeight="30dp"
             android:text="test"
-            android:textColor="?iGapSubtitleTextColor"
+            android:textColor="?attr/iGapSubtitleTextColor"
             android:textSize="@dimen/dp12" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
