@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:exitFadeDuration="@android:integer/config_mediumAnimTime">
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:exitFadeDuration="@android:integer/config_mediumAnimTime">
     <item android:state_pressed="true">
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="?iGapButtonColor" />
+                    <solid android:color="#b5e663" />
                     <corners android:radius="10dp" />
                 </shape>
             </item>
@@ -17,7 +17,7 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="?iGapButtonColor" />
+                    <solid android:color="#b5e663" />
                     <corners android:radius="10dp" />
                 </shape>
             </item>
@@ -30,19 +30,9 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="?iGapButtonColor" />
+                    <solid android:color="#9dc756" />
                     <corners android:radius="10dp" />
                 </shape>
-            </item>
-            <item>
-                <ripple android:color="?iGapLogoutButtonColor" tools:targetApi="LOLLIPOP">
-                    <item android:id="@android:id/mask">
-                        <shape android:shape="rectangle">
-                            <solid android:color="?iGapButtonColor" />
-                            <corners android:radius="10dp" />
-                        </shape>
-                    </item>
-                </ripple>
             </item>
             <item android:right="@dimen/dp10" android:left="@dimen/dp10">
                 <bitmap android:gravity="center_vertical|right" android:src="@mipmap/down_arrow" />

@@ -92,6 +92,7 @@
     <attr name="iGapBottomNavigationIconEnd" format="reference|color" />
     <!--for support theme under android version 21-->
     <attr name="iGapToolbarBackground" format="reference" />
+    <attr name="iGapSpinnerShape" format="reference" />
     <attr name="iGapToolbarBackgroundSharp" format="reference" />
     <attr name="iGapAvatarBackground" format="reference" />
     <attr name="iGapReceivedReplayBackground" format="reference" />
