@@ -94,9 +94,11 @@ public class NewsGroupPagerFrag extends BaseFragment {
         NewsListFrag frag = new NewsListFrag();
         frag.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.GROUP_NEWS));
         frag.setHandler(newsPicAdd -> {
-            Picasso.get()
-                    .load(newsPicAdd)
-                    .into(binding.groupImage);
+            if (arg.getString("GroupPic").equals("")) {
+                Picasso.get()
+                        .load(newsPicAdd)
+                        .into(binding.groupImage);
+            }
         });
         adapter.addFragment(frag, getResources().getString(R.string.news_latest));
 
