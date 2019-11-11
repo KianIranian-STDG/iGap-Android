@@ -84,7 +84,7 @@ public class UploadManager {
         File compressFile = new File(savePathVideoCompress);
         File CompletedCompressFile = new File(savePathVideoCompress.replace(".mp4", "_finish.mp4"));
 
-        if (!CompletedCompressFile.exists() && !ignoreCompress && message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+        if (!CompletedCompressFile.exists() && !ignoreCompress && (message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT)) {
             if (pendingCompressTasks.containsKey(message.getMessageId() + ""))
                 return;
 
