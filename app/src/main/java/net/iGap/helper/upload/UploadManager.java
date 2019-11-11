@@ -82,8 +82,9 @@ public class UploadManager {
         Log.d("bagi", "uploadMessageAndSend222");
         String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + message.getMessageId() + ".mp4";
         File compressFile = new File(savePathVideoCompress);
+        File CompletedCompressFile = new File(savePathVideoCompress.replace(".mp4", "_finish.mp4"));
 
-        if (!compressFile.exists() && !ignoreCompress && message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+        if (!CompletedCompressFile.exists() && !ignoreCompress && message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
             if (pendingCompressTasks.containsKey(message.getMessageId() + ""))
                 return;
 
@@ -99,12 +100,17 @@ public class UploadManager {
                 public void onCompressFinish(String id, boolean compress) {
 
                     Log.d("bagi", "onCompressFinish" + message.getMessageId());
+                    if (compressFile.exists()) {
+                        compressFile.renameTo(CompletedCompressFile);
+                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
 
-                    EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
-
-                    uploadMessageAndSend(roomType, message, true);
+                        uploadMessageAndSend(roomType, message, true);
+                    }
                 }
             });
+            if (compressFile.exists()) {
+                compressFile.delete();
+            }
             pendingCompressTasks.put(message.getMessageId() + "", compressTask);
             mThreadPoolExecutor.execute(compressTask);
             return;
@@ -112,7 +118,7 @@ public class UploadManager {
         CompressTask compressTask = pendingCompressTasks.remove(message.getMessageId() + "");
         if ((message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO ||
                 message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT ) &&
-                !compressFile.exists() &&
+                !CompletedCompressFile.exists() &&
                 G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1 &&
                         compressTask == null)
             return;
@@ -129,8 +135,8 @@ public class UploadManager {
             @Override
             public void onFinish(String id, String token) {
                 Log.d("bagi", "uploadMessageAndSendonFinish");
-                if (compressFile.exists()) {
-                    compressFile.delete();
+                if (CompletedCompressFile.exists()) {
+                    CompletedCompressFile.delete();
                 }
 
                 HelperSetAction.sendCancel(message.getMessageId());
@@ -175,8 +181,8 @@ public class UploadManager {
             }
         };
         UploadTask uploadTask;
-        if (compressFile.exists()) {
-            uploadTask = new UploadTask(message, compressFile.getAbsolutePath(), onUploadListener);
+        if (CompletedCompressFile.exists()) {
+            uploadTask = new UploadTask(message, CompletedCompressFile.getAbsolutePath(), onUploadListener);
         } else {
             uploadTask = new UploadTask(message, onUploadListener);
         }
