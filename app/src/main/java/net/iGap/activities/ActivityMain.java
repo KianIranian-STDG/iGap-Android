@@ -82,6 +82,7 @@ import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
+import net.iGap.interfaces.DataTransformerListener;
 import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnChatClearMessageResponse;
@@ -175,6 +176,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static String userPhoneNumber;
     private BroadcastReceiver audioManagerReciver;
     private MyPhonStateService myPhonStateService;
+    public DataTransformerListener<Intent> dataTransformer ;
 
     public static void setMediaLayout() {
         try {
@@ -927,18 +929,28 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             case AttachFile.request_code_trim_video:
                 if (resultCode == RESULT_OK){
-                    Fragment fragmentGallery = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                    Fragment fragmentGallery = getSupportFragmentManager().findFragmentById(G.twoPaneMode ? R.id.detailFrame : R.id.mainFrame);
                     if (fragmentGallery instanceof FragmentGallery){
                         getSupportFragmentManager().popBackStack();
                         getSupportFragmentManager().popBackStack();
+                        goneDetailFrameInTabletMode();
                         Fragment fragmentChat = getSupportFragmentManager().findFragmentByTag(FragmentChat.class.getName());
                         if (fragmentChat instanceof FragmentChat){
                             ((FragmentChat) fragmentChat).manageTrimVideoResult(data);
+                        }else{
+                            //todo:// fix fragment chat backstack
+                            if (dataTransformer != null){
+                                dataTransformer.transform(AttachFile.request_code_trim_video , data);
+                            }
                         }
                     }
                 }
                 break;
         }
+    }
+
+    public void goneDetailFrameInTabletMode(){
+        if (G.twoPaneMode) findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
     }
 
     /**
