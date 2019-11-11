@@ -269,6 +269,10 @@
         <item name="rippleColor">?iGapButtonColor</item>
     </style>
 
+    <style name="iGapSpinner" parent="@style/Widget.AppCompat.Spinner">
+        <item name="android:background">@drawable/kuknos_spinner_style</item>
+    </style>
+
     <style name="iGapButtonStroke" parent="BaseIGapStrokeButtonStyle">
         <item name="android:textColor">?iGapButtonTextColor</item>
         <item name="strokeColor">?iGapButtonColor</item>
