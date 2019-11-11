@@ -793,6 +793,19 @@ public class FragmentChat extends BaseFragment
         if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
             sendMoney.setVisibility(View.VISIBLE);
         }
+
+        setupIntentReceiverForGetDataInTwoPanMode();
+    }
+
+    private void setupIntentReceiverForGetDataInTwoPanMode() {
+        //todo://fix chat fragment back stack and remove this code
+        if (getActivity() instanceof ActivityMain){
+            ((ActivityMain) getActivity()).dataTransformer = (id, data) -> {
+                if (id == AttachFile.request_code_trim_video){
+                    manageTrimVideoResult(data);
+                }
+            };
+        }
     }
 
     private void soundInChatInit() {

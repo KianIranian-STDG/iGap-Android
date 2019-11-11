@@ -18,6 +18,7 @@ import net.iGap.fragments.FragmentChannelProfile;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.fragments.FragmentEditImage;
+import net.iGap.fragments.FragmentGallery;
 import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.fragments.FragmentShowAvatars;
@@ -343,6 +344,6 @@ public class HelperFragment {
                 fragmentName.equals(FragmentGroupProfile.class.getName()) || fragmentName.equals(EditGroupFragment.class.getName()) ||
                 fragmentName.equals(FragmentContactsProfile.class.getName()) || fragmentName.equals(ShowCustomList.class.getName()) ||
                 fragmentName.equals(FragmentShearedMedia.class.getName()) || fragmentName.equals(FragmentEditImage.class.getName()) ||
-                fragmentName.equals(FragmentShowMember.class.getName());
+                fragmentName.equals(FragmentShowMember.class.getName()) || fragmentName.equals(FragmentGallery.class.getName());
     }
 }
