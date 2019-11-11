@@ -106,6 +106,7 @@ public class WalletSpinnerArrayAdapter extends ArrayAdapter<AccountResponse.Bala
             // config text
             walletName.setTypeface(null, Typeface.BOLD);
             walletName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            walletName.setTextColor(context.getResources().getColor(R.color.white));
             // set style
             ConstraintLayout constraintLayout = layout.findViewById(R.id.fragKuknosPconstraint);
             constraintLayout.setBackgroundResource(R.drawable.kuknos_s_last_item_style);
