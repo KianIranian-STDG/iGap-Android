@@ -564,11 +564,12 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         }
     }
 
-    private void showDialogContactLongClicked(long id, long phone, String name, String family) {
+    private void showDialogContactLongClicked(int itemPosition ,long id, long phone, String name, String family) {
         if (getFragmentManager() != null) {
             List<String> items = new ArrayList<>();
             items.add(getString(R.string.edit));
             items.add(getString(R.string.delete));
+            items.add(getString(R.string.mark_as_several));
 
             new BottomSheetFragment().setData(items, -1, position -> {
                 if (position == 0) {
@@ -577,8 +578,11 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     );
                     if (getActivity() != null)
                         new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-                } else {
+                } else if (position == 1){
                     new RequestUserContactsDelete().contactsDelete("" + phone);
+                }else if (position == 2){
+                    setMultiSelectState(isMultiSelect);
+                    multi_select(itemPosition);
                 }
             }).show(getFragmentManager(), "contactLongClicked");
         }
@@ -875,7 +879,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
                 root.setOnLongClickListener(v -> {
                     if (!isMultiSelect) {
-                        showDialogContactLongClicked(realmContacts.getId(), realmContacts.getPhone(), realmContacts.getFirst_name(), realmContacts.getLast_name());
+                        showDialogContactLongClicked(getAdapterPosition() , realmContacts.getId(), realmContacts.getPhone(), realmContacts.getFirst_name(), realmContacts.getLast_name());
                     }
                     return true;
                 });

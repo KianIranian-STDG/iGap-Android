@@ -79,7 +79,7 @@ public class NewsMainFrag extends BaseAPIViewFrag {
         super.onViewCreated(view, savedInstanceState);
 
         if (specificGroupID != null && !specificGroupID.equals("")&& !specificGroupID.equals("showDetail"))
-            openGroupNews(new NewsFPList("IGap News", specificGroupID, null));
+            openGroupNews(new NewsFPList(getResources().getString(R.string.news_mainTitle), specificGroupID, null));
         else if (specificNewsID != null && !specificNewsID.equals(""))
             openNewsDetail(specificNewsID);
 
