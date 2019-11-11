@@ -41,6 +41,7 @@ import net.iGap.R;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
@@ -238,6 +239,9 @@ public class FragmentShowImage extends BaseFragment {
         RippleView rippleMenu = view.findViewById(R.id.asi_ripple_menu);
         rippleMenu.setOnRippleCompleteListener(rippleView -> popUpMenuShowImage());
 
+        TextView btnShare = view.findViewById(R.id.asi_btn_share);
+        btnShare.setOnClickListener(v -> shareImage());
+
         viewPager = view.findViewById(R.id.asi_view_pager);
 
         txtImageNumber = view.findViewById(R.id.asi_txt_image_number);
@@ -387,6 +391,8 @@ public class FragmentShowImage extends BaseFragment {
                     startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
                 }
 
+            }else {
+                HelperError.showSnackMessage(getString(R.string.file_not_download_yet) , false);
             }
         }
     }

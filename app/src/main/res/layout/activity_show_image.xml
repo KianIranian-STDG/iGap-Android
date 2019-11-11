@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rooShowImage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,13 +9,11 @@
     android:clickable="true"
     android:layoutDirection="ltr">
 
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/asi_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false" />
-
 
     <LinearLayout
         android:id="@+id/toolbarShowImage"
@@ -76,15 +75,16 @@
                 style="@style/myIconTextViewStyle"
                 android:textColor="@android:color/white" />
         </net.iGap.libs.rippleeffect.RippleView>
+
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/asi_layout_image_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="#55000000"
-        android:orientation="vertical"
+        android:layoutDirection="ltr"
         android:paddingBottom="@dimen/dp4"
         android:paddingLeft="@dimen/dp32"
         android:paddingRight="@dimen/dp32">
@@ -92,39 +92,71 @@
         <net.iGap.module.EmojiTextViewE
             android:id="@+id/asi_txt_image_desc"
             style="@style/ChatMessages.EmojiTextView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="10"
             android:paddingLeft="0dp"
             android:paddingRight="0dp"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/dp14" />
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/asi_btn_share"
+            app:layout_constraintVertical_bias="0"/>
 
         <TextView
             android:id="@+id/asi_txt_image_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="name"
+            tools:text="name"
+            android:gravity="left"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/dp14"
-            android:visibility="visible" />
+            android:textSize="@dimen/standardTextSize"
+            android:visibility="visible"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/asi_btn_share"
+            app:layout_constraintTop_toBottomOf="@id/asi_txt_image_desc"
+            app:layout_constraintHorizontal_bias="0"/>
 
         <TextView
             android:id="@+id/asi_txt_image_time"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="time"
+            tools:text="time"
+            android:gravity="left"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/dp14" />
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/asi_btn_share"
+            app:layout_constraintTop_toBottomOf="@id/asi_txt_image_name"
+            app:layout_constraintHorizontal_bias="0"/>
 
         <TextView
             android:id="@+id/asi_txt_image_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="date"
+            android:gravity="left"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/asi_btn_share"
+            app:layout_constraintTop_toBottomOf="@id/asi_txt_image_time"
+            app:layout_constraintHorizontal_bias="0"/>
+
+        <TextView
+            android:id="@+id/asi_btn_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="date"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/dp14" />
-    </LinearLayout>
+            style="@style/myIconToolbarStyle"
+            android:text="@string/share_icon"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/asi_txt_image_desc"
+            app:layout_constraintVertical_bias="1"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>
