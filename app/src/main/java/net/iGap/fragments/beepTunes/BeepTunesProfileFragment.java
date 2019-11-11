@@ -50,7 +50,7 @@ public class BeepTunesProfileFragment extends BottomSheetDialogFragment {
         ViewGroup syncSong = rootView.findViewById(R.id.cl_beepTunesProfile_syncSong);
         ViewGroup favoriteSong = rootView.findViewById(R.id.cl_beepTunesProfile_favoriteSong);
 
-        userName.setText(G.displayName);
+        userName.setText(AccountManager.getInstance().getCurrentUser().getName());
 
         syncSong.setOnClickListener(v -> {
             callBack.onClick(SYNC_FRAGMENT);

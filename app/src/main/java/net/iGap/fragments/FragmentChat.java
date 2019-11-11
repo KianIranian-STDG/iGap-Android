@@ -7280,7 +7280,7 @@ public class FragmentChat extends BaseFragment
             RealmChannelExtra realmChannelExtra = new RealmChannelExtra();
             realmChannelExtra.setMessageId(messageId);
             if (RealmRoom.showSignature(mRoomId)) {
-                realmChannelExtra.setSignature(G.displayName);
+                realmChannelExtra.setSignature(AccountManager.getInstance().getCurrentUser().getName());
             } else {
                 realmChannelExtra.setSignature("");
             }

@@ -74,7 +74,6 @@ import static net.iGap.G.IMAGE_NEW_CHANEL;
 import static net.iGap.G.IMAGE_NEW_GROUP;
 import static net.iGap.G.authorHash;
 import static net.iGap.G.context;
-import static net.iGap.G.displayName;
 import static net.iGap.G.imageFile;
 import static net.iGap.G.imageLoader;
 import static net.iGap.G.isSaveToGallery;
@@ -538,11 +537,6 @@ public final class StartupActions {
                 if (userInfo.getAuthorHash() != null) {
                     authorHash = userInfo.getAuthorHash();
                 }
-
-                if (userInfo.getUserInfo().getDisplayName() != null) {
-                    displayName = userInfo.getUserInfo().getDisplayName();
-                }
-
             }
         });
     }

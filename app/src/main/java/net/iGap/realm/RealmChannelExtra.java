@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.module.structs.StructChannelExtra;
@@ -62,7 +63,7 @@ public class RealmChannelExtra extends RealmObject {
         realmChannelExtra.setThumbsUp("0");
         realmChannelExtra.setThumbsDown("0");
         if (RealmRoom.showSignature(roomId)) {
-            realmChannelExtra.setSignature(G.displayName);
+            realmChannelExtra.setSignature(AccountManager.getInstance().getCurrentUser().getName());
         } else {
             realmChannelExtra.setSignature("");
         }

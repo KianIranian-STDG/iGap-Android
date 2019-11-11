@@ -262,7 +262,6 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
                             0,
                             true
                     ));
-                    G.displayName = user.getDisplayName();
                     prgVisibility.set(View.GONE);
                     goToMain.setValue(userId);
                 });

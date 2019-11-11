@@ -1100,7 +1100,7 @@ public class RealmRoomMessage extends RealmObject {
             channelExtra.setViewsLabel("1");
 
             if (RealmRoom.showSignature(roomId)) {
-                channelExtra.setSignature(G.displayName);
+                channelExtra.setSignature(AccountManager.getInstance().getCurrentUser().getName());
             } else {
                 channelExtra.setSignature("");
             }
