@@ -61,7 +61,7 @@ public class KuknosTradeVM extends ViewModel {
             public void onFailed(String errorM) {
                 balance.set("0.0");
                 currency.set("currency");
-                error.setValue(new ErrorM(true, "Fail to get data", "0", 0));
+                error.setValue(new ErrorM(true, "Fail to get data", "0", R.string.kuknos_trade_emptyOriginAmount));
             }
 
             @Override

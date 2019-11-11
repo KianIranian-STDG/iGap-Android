@@ -263,8 +263,7 @@
     <string name="horizontal_more_icon">\ue9b8</string>
 
     <string name="error_icon">\ue938</string>
-    <string name="valid_icon">ß</string>
-    <string name="valid_wallet">4</string>
-    <string name="download_ic">ï</string>
-    <string name="upload_ic">ì</string>
+    <string name="valid_icon">\ue9a9</string>
+    <string name="download_ic">\ue933</string>
+    <string name="upload_ic">\ue99f</string>
 </resources>
