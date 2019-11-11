@@ -34,6 +34,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.service.model.ErrorM;
 import net.iGap.kuknos.view.adapter.WalletSpinnerAdapter;
+import net.iGap.kuknos.view.adapter.WalletSpinnerArrayAdapter;
 import net.iGap.kuknos.viewmodel.KuknosPanelVM;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 
@@ -190,7 +191,7 @@ public class KuknosPanelFrag extends BaseFragment {
             @Override
             public void onChanged(@Nullable AccountResponse accountResponse) {
                 if (accountResponse.getBalances().length != 0) {
-                    WalletSpinnerAdapter adapter = new WalletSpinnerAdapter(getContext(),
+                    WalletSpinnerArrayAdapter adapter = new WalletSpinnerArrayAdapter(getContext(),
                             Arrays.asList(accountResponse.getBalances()));
                     walletSpinner.setAdapter(adapter);
                     binding.fragKuknosPError.setVisibility(View.GONE);
