@@ -226,6 +226,7 @@ import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.MyWebViewClient;
 import net.iGap.libs.Tuple;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
@@ -1191,7 +1192,7 @@ public class FragmentChat extends BaseFragment
          * If it's in the app and the screen lock is activated after receiving the result of the camera and .... The page code is displayed.
          * The wizard will  be set ActivityMain.isUseCamera = true to prevent the page from being opened....
          */
-        if (G.isPassCode) ActivityMain.isUseCamera = true;
+        if (PassCode.getInstance().isPassCode()) ActivityMain.isUseCamera = true;
 
         if (resultCode == RESULT_CANCELED) {
             HelperSetAction.sendCancel(messageId);

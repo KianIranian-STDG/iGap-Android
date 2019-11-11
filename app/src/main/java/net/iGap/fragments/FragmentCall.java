@@ -33,6 +33,7 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.OnCallLogClear;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
@@ -406,7 +407,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
             mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
             mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
-            if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
+            if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
 
             refreshCallList(0, true);
 
@@ -420,7 +421,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
             mHelperToolbar.getScannerButton().setVisibility(View.GONE);
             mHelperToolbar.getRightButton().setVisibility(View.GONE);
-            if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+            if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
 
             refreshCallList(0, true);
 

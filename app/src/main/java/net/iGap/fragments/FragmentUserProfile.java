@@ -38,6 +38,7 @@ import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
@@ -204,7 +205,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
          * If it's in the app and the screen lock is activated after receiving the result of the camera and .... The page code is displayed.
          * The wizard will  be set ActivityMain.isUseCamera = true to prevent the page from being opened....
          */
-        if (G.isPassCode) ActivityMain.isUseCamera = true;
+        if (PassCode.getInstance().isPassCode()) ActivityMain.isUseCamera = true;
 
         if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
         if (FragmentEditImage.itemGalleryList != null) FragmentEditImage.itemGalleryList.clear();

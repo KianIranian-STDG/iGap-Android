@@ -36,7 +36,6 @@ import net.iGap.realm.RealmMigration;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.webrtc.CallObserver;
 
 import org.jetbrains.annotations.NotNull;
@@ -132,7 +131,6 @@ public final class StartupActions {
                 });
             });
             new Thread(() -> checkDataUsage()).start();
-            new Thread(() -> mainUserInfo()).start();
             new Thread(this::connectToServer).start();
             Log.wtf(this.getClass().getName(), "StartupActions");
         }
@@ -521,19 +519,6 @@ public final class StartupActions {
         imageLoader = ImageLoader.getInstance();
 
         HelperFillLookUpClass.fillArrays();
-    }
-
-    /**
-     * fill main user info in global variables
-     */
-    private void mainUserInfo() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-
-            if (userInfo != null && userInfo.getUserRegistrationState()) {
-                G.isPassCode = userInfo.isPassCode();
-            }
-        });
     }
 
     /**

@@ -21,6 +21,7 @@ import net.iGap.WebSocketClient;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.model.AccountUser;
+import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
 import net.iGap.module.SHP_SETTING;
@@ -127,7 +128,6 @@ public final class HelperLogout {
         G.userLogin = false;
         G.isTimeWhole = false;
         G.isFirstPassCode = false;
-        G.isPassCode = false;
         G.isSaveToGallery = false;
         G.showSenderNameInGroup = false;
         G.themeColor = Theme.DEFAULT;

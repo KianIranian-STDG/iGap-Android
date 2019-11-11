@@ -36,6 +36,7 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.UserStatusController;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.model.PassCode;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
@@ -101,7 +102,7 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
 
             boolean allowScreen = sharedPreferences.getBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, true);
 
-            if (G.isPassCode && !allowScreen) {
+            if (PassCode.getInstance().isPassCode() && !allowScreen) {
                 try {
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
                 } catch (Exception e) {

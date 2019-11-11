@@ -26,15 +26,9 @@ public class RealmUserInfo extends RealmObject {
     private boolean registrationStatus;
     private String email;
     private int gender;
-    private boolean isPassCode;
-    private boolean isPattern;
-    private boolean isFingerPrint;
-    private String passCode;
-    private int kindPassCode;
     private int selfRemove;
     private String token;
     private String authorHash;
-    private boolean importContactLimit;
     private String pushNotificationToken;
     private String representPhoneNumber;
     private RealmKuknos kuknosM;
@@ -198,33 +192,6 @@ public class RealmUserInfo extends RealmObject {
         });
     }
 
-
-    public static void updateImportContactLimit() {
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                    if (realmUserInfo != null) {
-                        realmUserInfo.setImportContactLimit(true);
-                    }
-                }
-            });
-        });
-    }
-
-    public static boolean isLimitImportContacts() {
-        return DbManager.getInstance().doRealmTask(realm -> {
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (userInfo != null) {
-                return userInfo.isImportContactLimit();
-            } else {
-                return false;
-            }
-        });
-    }
-
-
     public RealmRegisteredInfo getUserInfo() {
         return userInfo;
     }
@@ -255,52 +222,12 @@ public class RealmUserInfo extends RealmObject {
 
     }
 
-    public boolean isFingerPrint() {
-        return isFingerPrint;
-    }
-
-    public void setFingerPrint(boolean fingerPrint) {
-        isFingerPrint = fingerPrint;
-    }
-
-    public int getKindPassCode() {
-        return kindPassCode;
-    }
-
-    public void setKindPassCode(int kindPassCode) {
-        this.kindPassCode = kindPassCode;
-    }
-
     public ProtoGlobal.Gender getGender() {
         return ProtoGlobal.Gender.valueOf(this.gender);
     }
 
     public void setGender(ProtoGlobal.Gender value) {
         this.gender = value.getNumber();
-    }
-
-    public boolean isPassCode() {
-        return isPassCode;
-    }
-
-    public boolean isPattern() {
-        return isPattern;
-    }
-
-    public void setPattern(boolean pattern) {
-        isPattern = pattern;
-    }
-
-    public void setPassCode(boolean passCode) {
-        isPassCode = passCode;
-    }
-
-    public String getPassCode() {
-        return passCode;
-    }
-
-    public void setPassCode(String passCode) {
-        this.passCode = passCode;
     }
 
     public String getToken() {
@@ -333,14 +260,6 @@ public class RealmUserInfo extends RealmObject {
 
     public boolean isAuthorMe(String author) {
         return author.equals(authorHash);
-    }
-
-    public boolean isImportContactLimit() {
-        return importContactLimit;
-    }
-
-    public void setImportContactLimit(boolean value) {
-        importContactLimit = value;
     }
 
     public String getPushNotificationToken() {

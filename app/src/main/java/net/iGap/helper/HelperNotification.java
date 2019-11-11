@@ -35,6 +35,7 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.libs.Tuple;
 import net.iGap.model.AccountUser;
+import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ChatSendMessageUtil;
@@ -764,7 +765,7 @@ public class HelperNotification {
     }
 
     private String parseMessage(ProtoGlobal.RoomMessage roomMessage) {
-        if (G.isPassCode && ActivityMain.isLock) {
+        if (PassCode.getInstance().isPassCode() && ActivityMain.isLock) {
             return context.getString(R.string.new_message_notif);
         }
 

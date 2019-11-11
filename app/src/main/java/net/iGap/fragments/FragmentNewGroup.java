@@ -68,6 +68,7 @@ import net.iGap.interfaces.OnGroupAddMember;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
@@ -519,7 +520,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
          * If it's in the app and the screen lock is activated after receiving the result of the camera and .... The page code is displayed.
          * The wizard will  be set ActivityMain.isUseCamera = true to prevent the page from being opened....
          */
-        if (G.isPassCode) ActivityMain.isUseCamera = true;
+        if (PassCode.getInstance().isPassCode()) ActivityMain.isUseCamera = true;
 
         if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
         if (FragmentEditImage.itemGalleryList != null) FragmentEditImage.itemGalleryList.clear();

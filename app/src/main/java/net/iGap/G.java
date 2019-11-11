@@ -42,6 +42,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.interfaces.*;
+import net.iGap.model.PassCode;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ChatUpdateStatusUtil;
 import net.iGap.module.ClearMessagesUtil;
@@ -351,7 +352,6 @@ public class G extends ApplicationContext {
     public static ISignalingGetCallLog iSignalingGetCallLog;
     public static ISignalingCallBack iSignalingCallBack;
     public static ISignalingErrore iSignalingErrore;
-    public static boolean isPassCode;
     public static OneFragmentIsOpen oneFragmentIsOpen;
     public static boolean isFragmentMapActive = false; // for check network
     public static boolean isRestartActivity = false; // for check passCode
@@ -454,6 +454,8 @@ public class G extends ApplicationContext {
     public void onCreate() {
         Log.wtf(this.getClass().getName(), "onCreate");
         super.onCreate();
+        context = getApplicationContext();
+        PassCode.initPassCode(getApplicationContext());
         //init account manager for handle multi account
 
         try {
@@ -483,7 +485,6 @@ public class G extends ApplicationContext {
             }
         }).start();
 
-        context = getApplicationContext();
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 

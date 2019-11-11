@@ -39,6 +39,7 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.model.PassCode;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.GroupChatRole;
@@ -195,7 +196,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (G.isPassCode) ActivityMain.isUseCamera = true;
+        if (PassCode.getInstance().isPassCode()) ActivityMain.isUseCamera = true;
 
         if (resultCode == Activity.RESULT_OK) {
             String filePath = null;

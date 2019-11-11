@@ -104,6 +104,7 @@ import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.kuknos.view.KuknosSendFrag;
+import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ContactUtils;
@@ -1205,11 +1206,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void openActivityPassCode() {
-        if (G.isPassCode) {
+        if (PassCode.getInstance().isPassCode()) {
             ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
         }
 
-        if (G.isPassCode && isLock && !G.isRestartActivity && !isUseCamera) {
+        if (PassCode.getInstance().isPassCode() && isLock && !G.isRestartActivity && !isUseCamera) {
             enterPassword();
         } else if (!G.isRestartActivity) {
             long currentTime = System.currentTimeMillis();

@@ -53,6 +53,7 @@ import net.iGap.interfaces.OnChannelRemoveUsername;
 import net.iGap.interfaces.OnChannelUpdateUsername;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.MEditText;
@@ -230,7 +231,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (G.isPassCode) ActivityMain.isUseCamera = true;
+        if (PassCode.getInstance().isPassCode()) ActivityMain.isUseCamera = true;
 
         if (resultCode == Activity.RESULT_OK) {
             String filePath = null;

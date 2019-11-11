@@ -47,6 +47,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.model.PassCode;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MusicPlayer;
@@ -673,7 +674,7 @@ public class HelperToolbar {
 
     public void checkPassCodeVisibility() {
         if (passCodeBtn != null) {
-            if (G.isPassCode) {
+            if (PassCode.getInstance().isPassCode()) {
                 passCodeBtn.setVisibility(View.VISIBLE);
                 ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
 
