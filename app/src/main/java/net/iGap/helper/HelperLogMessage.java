@@ -33,6 +33,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestUserInfo;
@@ -208,7 +209,7 @@ public class HelperLogMessage {
                 messageID = R.string.Room_Deleted_log;
                 break;
             case MISSED_VOICE_CALL:
-                if (G.authorHash.equals(author.getHash())) {
+                if (RealmUserInfo.getCurrentUserAuthorHash().equals(author.getHash())) {
                     messageID = R.string.not_answerd_call;
                 } else {
                     messageID = R.string.MISSED_VOICE_CALL;

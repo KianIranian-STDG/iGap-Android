@@ -383,6 +383,16 @@ public class RealmUserInfo extends RealmObject {
         });
     }
 
+    public static String getCurrentUserAuthorHash() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            RealmUserInfo realmUser = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUser != null) {
+                return realmUser.getAuthorHash();
+            }
+            return "";
+        });
+    }
+
     // Kuknos seed key save and get process
 
 

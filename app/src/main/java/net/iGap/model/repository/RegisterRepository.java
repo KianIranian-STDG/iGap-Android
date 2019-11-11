@@ -155,7 +155,7 @@ public class RegisterRepository {
                 userName = userNameR;
                 new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
                 userId = userIdR;
-                G.authorHash = authorHash = authorHashR;
+                authorHash = authorHashR;
                 hideDialogQRCode.postValue(true);
                 userLogin(token);
             }
@@ -170,7 +170,7 @@ public class RegisterRepository {
                 userName = userNameR;
                 new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
                 userId = userIdR;
-                G.authorHash = authorHash = authorHashR;
+                authorHash = authorHashR;
                 goToTwoStepVerificationPage.postValue(userIdR);
             }
         };

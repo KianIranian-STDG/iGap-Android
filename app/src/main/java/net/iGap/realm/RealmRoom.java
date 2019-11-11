@@ -418,7 +418,7 @@ public class RealmRoom extends RealmObject {
      * @param authorHash updater author hash
      */
     public static void clearUnreadCount(long roomId, String authorHash, ProtoGlobal.RoomMessageStatus messageStatus, long messageId) {
-        if (G.authorHash.equals(authorHash) && messageStatus == ProtoGlobal.RoomMessageStatus.SEEN) {
+        if (RealmUserInfo.getCurrentUserAuthorHash().equals(authorHash) && messageStatus == ProtoGlobal.RoomMessageStatus.SEEN) {
             DbManager.getInstance().doRealmTask(realm -> {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null && (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getMessageId() <= messageId)) {

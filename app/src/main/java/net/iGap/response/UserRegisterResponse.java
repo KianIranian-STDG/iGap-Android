@@ -42,7 +42,6 @@ public class UserRegisterResponse extends MessageHandler {
         } else {
             throw new ClassCastException("identity must be : " + OnUserRegistration.class.getName());
         }
-        G.authorHash = builder.getAuthorHash();
 
         PackageManager pm = G.context.getPackageManager();
         String installationSource = pm.getInstallerPackageName(G.context.getPackageName());

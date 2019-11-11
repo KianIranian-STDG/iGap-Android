@@ -72,7 +72,6 @@ import static net.iGap.G.DIR_VIDEOS;
 import static net.iGap.G.IGAP;
 import static net.iGap.G.IMAGE_NEW_CHANEL;
 import static net.iGap.G.IMAGE_NEW_GROUP;
-import static net.iGap.G.authorHash;
 import static net.iGap.G.context;
 import static net.iGap.G.imageFile;
 import static net.iGap.G.imageLoader;
@@ -533,10 +532,6 @@ public final class StartupActions {
 
             if (userInfo != null && userInfo.getUserRegistrationState()) {
                 G.isPassCode = userInfo.isPassCode();
-
-                if (userInfo.getAuthorHash() != null) {
-                    authorHash = userInfo.getAuthorHash();
-                }
             }
         });
     }
