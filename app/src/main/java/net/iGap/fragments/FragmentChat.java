@@ -5287,6 +5287,9 @@ public class FragmentChat extends BaseFragment
                 imm.showSoftInput(edtChat, InputMethodManager.SHOW_IMPLICIT);
             }
 
+            //disable chat search when reply a message
+            if (ll_Search != null && ll_Search.isShown()) goneSearchBox(edtSearchMessage);
+
         }
     }
 
