@@ -75,10 +75,10 @@ public class NewsDetailVM extends BaseAPIViewModel {
                 data.setValue(newsDetail);
                 title.set(newsDetail.getLead());
                 rootTitle.set(newsDetail.getTitle());
-                if (newsDetail.getView().equals("0"))
-                    viewVisibility.set(View.GONE);
-                else
+                if (!newsDetail.getView().equals("0")){
                     viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(newsDetail.getView()) : newsDetail.getView());
+                    viewVisibility.set(View.VISIBLE);
+                }
                 commentNum.set(newsDetail.getView());
                 source.set(newsDetail.getSource());
                 if (newsDetail.getTags() == null || newsDetail.getTags().equals("null"))
