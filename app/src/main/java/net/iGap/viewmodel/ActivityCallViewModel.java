@@ -383,6 +383,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                         txtAviVisibility.set(View.GONE);
                         break;
                     case REJECT:
+                    case TOO_LONG:
                         setPhoneSpeaker();
                         playSound.setValue(R.raw.igap_discounect);
                         txtAviVisibility.set(View.GONE);
@@ -395,28 +396,16 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                         new RequestSignalingLeave().signalingLeave();
 
                         isConnected = false;
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                stopTimer();
-                                endVoiceAndFinish();
-                            }
+                        G.handler.postDelayed(() -> {
+                            stopTimer();
+                            endVoiceAndFinish();
                         }, 500);
 
                         break;
                     case NOT_ANSWERED:
-                        setPhoneSpeaker();
-                        playSound.setValue(R.raw.igap_noresponse);
-                        txtAviVisibility.set(View.GONE);
-                        break;
                     case UNAVAILABLE:
                         setPhoneSpeaker();
                         playSound.setValue(R.raw.igap_noresponse);
-                        txtAviVisibility.set(View.GONE);
-                        break;
-                    case TOO_LONG:
-                        setPhoneSpeaker();
-                        playSound.setValue(R.raw.igap_discounect);
                         txtAviVisibility.set(View.GONE);
                         break;
                 }
@@ -511,13 +500,13 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         isSendLeave = true;
         isConnected = false;
 
-        G.handler.postDelayed(new Runnable() {
+        /*G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
 
                 endVoiceAndFinish();
             }
-        }, 1000);
+        }, 1000);*/
     }
 
     private void endVoiceAndFinish() {
