@@ -2371,4 +2371,18 @@ Want to get it?</string>
     <string name="news_add_comment_errorComment" tools:ignore="ExtraTranslation">لطفا نظر خود را وارد کنید.</string>
     <string name="delete_from_storage">Delete from Storage</string>
 
+
+    <string name="your_profile">Your Profile</string>
+    <string name="dialog_done">Done</string>
+    <string name="new_text">new</string>
+    <string name="set_as_default_card">Set as Default Card</string>
+    <string name="driver_wallet_balance">Balance of Driver\'s Wallet</string>
+    <string name="wallet_store_balance">Balance of Shop\'s Wallet</string>
+    <string name="gift_is_used">This Gift Barcode Is Already Used</string>
+    <string name="please_fill_form_data_correctly">Please fill the form information correctly</string>
+    <string name="qr_code_scanner">Qr Code Scanner</string>
+    <string name="msg_security_two_step_verification">In Order to retrieve your accountPlease Answer the following security questions,after answering correctly your two step verification password will be disabled and need to be activated again</string>
+    <string name="show_and_login_using_qr_title">Scan this QR Code using your other device to log in to your iGap Account</string>
+    <string name="two_step_verficatiion_header">You have enabled Two-Step verification; so your account is protected with an additional password</string>
+
 </resources>
