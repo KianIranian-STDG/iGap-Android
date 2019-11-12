@@ -323,7 +323,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                 switch (callState) {
                     case RINGING:
                         setPhoneSpeaker();
-                        playSound.setValue(R.raw.igap_ringing);
+                        playSound.postValue(R.raw.igap_ringing);
                         txtAviVisibility.set(View.VISIBLE);
                         G.isVideoCallRinging = true;
                         break;
@@ -379,19 +379,19 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                         break;
                     case BUSY:
                         setPhoneSpeaker();
-                        playSound.setValue(R.raw.igap_busy);
+                        playSound.postValue(R.raw.igap_busy);
                         txtAviVisibility.set(View.GONE);
                         break;
                     case REJECT:
                     case TOO_LONG:
                         setPhoneSpeaker();
-                        playSound.setValue(R.raw.igap_discounect);
+                        playSound.postValue(R.raw.igap_discounect);
                         txtAviVisibility.set(View.GONE);
                         break;
                     case FAILD:
                         showRippleView.postValue(true);
                         setPhoneSpeaker();
-                        playSound.setValue(R.raw.igap_noresponse);
+                        playSound.postValue(R.raw.igap_noresponse);
                         txtAviVisibility.set(View.GONE);
                         new RequestSignalingLeave().signalingLeave();
 
@@ -405,7 +405,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                     case NOT_ANSWERED:
                     case UNAVAILABLE:
                         setPhoneSpeaker();
-                        playSound.setValue(R.raw.igap_noresponse);
+                        playSound.postValue(R.raw.igap_noresponse);
                         txtAviVisibility.set(View.GONE);
                         break;
                 }
