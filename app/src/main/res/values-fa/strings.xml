@@ -2322,4 +2322,5 @@
     <string name="elecBill_error_notPossible">این عملیات در حال حاضر امکان پذیر نیست.</string>
     <string name="elecBill_success_title">موفقیت</string>
     <string name="elecBill_success_pay">پرداخت با موفقیت انجام شد.</string>
+    <string name="login_exist_account_error">حساب کاربری شماره وارد شده برای این گوشی فعال است.</string>
 </resources>

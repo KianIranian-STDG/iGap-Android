@@ -1826,5 +1826,5 @@
     <string name="elecBill_error_zeroResultBill">Никакие счета не зарегистрированы под вашим именем.</string>
     <string name="elecBill_success_title">успех</string>
     <string name="elecBill_success_pay">Оплата прошла успешно.</string>
-
+    <string name="login_exist_account_error">This account is login on this device</string>
 </resources>

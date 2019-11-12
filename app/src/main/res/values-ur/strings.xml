@@ -1800,4 +1800,5 @@
     <string name = "link_not_valid">لینکی بڕواپێنەکراو</string>
     <string name = "popular_channel">کەناڵی سەرنجڕاکێش</string>
     <string name="edit_contact">ویرایش مخاطب</string>
+    <string name="login_exist_account_error">This account is login on this device</string>
 </resources>

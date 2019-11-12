@@ -67,7 +67,7 @@ import java.util.Locale;
 
 public class FragmentRegister extends BaseFragment {
 
-    public static int positionRadioButton = -1;
+    private int positionRadioButton = -1;
 
     private FragmentRegisterViewModel fragmentRegisterViewModel;
     private ActivityRegisterBinding fragmentRegisterBinding;
@@ -209,7 +209,6 @@ public class FragmentRegister extends BaseFragment {
         });
 
         fragmentRegisterViewModel.goToTwoStepVerificationPage.observe(getViewLifecycleOwner(), userId -> {
-            Log.wtf(this.getClass().getName(), "goToTwoStepVerificationPage");
             if (getActivity() instanceof ActivityRegistration && userId != null) {
                 if (dialogQrCode != null && dialogQrCode.isShowing()) {
                     dialogQrCode.dismiss();

@@ -8,13 +8,13 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
+import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTracker;
 import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnReceiveInfoLocation;
-import net.iGap.interfaces.OnReceivePageInfoTOS;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
 import net.iGap.interfaces.OnUserRegistration;
@@ -177,11 +177,11 @@ public class RegisterRepository {
     }
 
     public void getTermsOfServiceBody(RepositoryCallback<String> callback) {
-        new RequestInfoPage().infoPageAgreementDiscovery("TOS",new RequestInfoPage.OnInfoPage(){
+        new RequestInfoPage().infoPageAgreementDiscovery("TOS", new RequestInfoPage.OnInfoPage() {
 
             @Override
             public void onInfo(String body) {
-                Log.wtf(this.getClass().getName(),"onReceivePageInfo");
+                Log.wtf(this.getClass().getName(), "onReceivePageInfo");
                 callback.onSuccess(body);
             }
 
@@ -244,6 +244,8 @@ public class RegisterRepository {
     }
 
     private void requestRegister(String phoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
+
+        Log.wtf(this.getClass().getName(), "not exist");
         this.phoneNumber = phoneNumber.replace("-", "");
         new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_NUMBER, this.phoneNumber);
         ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
@@ -254,26 +256,18 @@ public class RegisterRepository {
         RequestWrapper requestWrapper = new RequestWrapper(100, builder, new OnUserRegistration() {
             @Override
             public void onRegister(String userNameR, long userIdR, ProtoUserRegister.UserRegisterResponse.Method methodValue, List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, String authorHashR, boolean callMethodSupported) {
-                if (AccountManager.getInstance().isExistThisAccount(userIdR)) {
-                    loginExistUser.postValue(true);
-                } else {
-                    /*isCallMethodSupported = callMethodSupported;*/
-                    //because is new ui verification code number is 5 and number not not use it more
-                    /*digitCount = verifyCodeDigitCount;*/
-                    regexFetchCodeVerification = regex;
-                    userName = userNameR;
-                    new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
-                    userId = userIdR;
-                    authorHash = authorHashR;
-                    G.smsNumbers = smsNumbersR;
-                /*SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("callingCode", callingCode);
-                editor.putString("countryName", countryName);
-                editor.putString("pattern", pattern);
-                editor.putString("regex", regex);
-                editor.apply();*/
-                    callback.onSuccess();
-                }
+
+                /*isCallMethodSupported = callMethodSupported;*/
+                //because is new ui verification code number is 5 and number not not use it more
+                /*digitCount = verifyCodeDigitCount;*/
+                regexFetchCodeVerification = regex;
+                userName = userNameR;
+                new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
+                userId = userIdR;
+                authorHash = authorHashR;
+                G.smsNumbers = smsNumbersR;
+                callback.onSuccess();
+
             }
 
             @Override
@@ -286,6 +280,7 @@ public class RegisterRepository {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+
     }
 
     public void userLogin(String token) {
@@ -332,7 +327,7 @@ public class RegisterRepository {
     }
 
     private void requestLogin() {
-        if (G.socketConnection) {
+        if (WebSocketClient.getInstance().isConnect()) {
             if (token == null) {
                 DbManager.getInstance().doRealmTask(realm -> {
                     RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -414,7 +409,7 @@ public class RegisterRepository {
     }
 
     private void requestUserInfo() {
-        if (G.socketConnection) {
+        if (WebSocketClient.getInstance().isConnect()) {
             if (userId == 0) {
                 DbManager.getInstance().doRealmTask(realm -> {
                     RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();

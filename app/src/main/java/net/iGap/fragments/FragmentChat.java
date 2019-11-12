@@ -3973,10 +3973,14 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onMessageFailed(long roomId, long messageId) {
-
-        if (roomId == mRoomId && mAdapter != null) {
-            mAdapter.updateMessageStatus(messageId, ProtoGlobal.RoomMessageStatus.FAILED);
-        }
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (roomId == mRoomId && mAdapter != null) {
+                    mAdapter.updateMessageStatus(messageId, ProtoGlobal.RoomMessageStatus.FAILED);
+                }
+            }
+        });
     }
 
     @Override

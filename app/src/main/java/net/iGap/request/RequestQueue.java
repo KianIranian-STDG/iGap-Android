@@ -172,11 +172,8 @@ public class RequestQueue {
             if (G.isSecure) {
                 if (G.userLogin || G.unLogin.contains(requestWrapper.actionId + "")) {
                     message = AESCrypt.encrypt(G.symmetricKey, message);
-                    WebSocket webSocket = WebSocketClient.getInstance();
-                    if (webSocket != null) {
-                        Log.i("MSGR", "prepareRequest: " + G.lookupMap.get(30000 + requestWrapper.actionId));
-                        webSocket.sendBinary(message, requestWrapper);
-                    }
+                    Log.i("MSGR", "prepareRequest: " + G.lookupMap.get(30000 + requestWrapper.actionId));
+                    WebSocketClient.getInstance().sendBinary(message, requestWrapper);
                 } else {
                     if (G.waitingActionIds.contains(requestWrapper.actionId + "")) {
                         /**
@@ -186,10 +183,7 @@ public class RequestQueue {
                     }
                 }
             } else if (G.unSecure.contains(requestWrapper.actionId + "")) {
-                WebSocket webSocket = WebSocketClient.getInstance();
-                if (webSocket != null) {
-                    webSocket.sendBinary(message, requestWrapper);
-                }
+                WebSocketClient.getInstance().sendBinary(message, requestWrapper);
             } else { //if (G.waitingActionIds.contains(requestWrapper.actionId + "")) {
                 timeOutImmediately(randomId, false);
                 /**

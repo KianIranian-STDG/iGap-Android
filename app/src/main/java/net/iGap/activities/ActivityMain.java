@@ -374,7 +374,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 long peerId = extras.getLong("PeerID");
                 long userId = extras.getLong(ActivityMain.userId);
                 if (AccountManager.getInstance().getCurrentUser().getId() != userId) {
-                    WebSocketClient.disconnectSocket();
+                    WebSocketClient.getInstance().disconnectSocket();
                     G.handler.removeCallbacksAndMessages(null);
                     DbManager.getInstance().closeUiRealm();
                     signOutWallet();

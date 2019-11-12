@@ -46,7 +46,6 @@ public class NotificationService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        WebSocketClient.reconnect(false);
 
         if (remoteMessage.getNotification() != null && remoteMessage.getData().containsKey(ActivityMain.DEEP_LINK)) {
             HelperNotification.sendDeepLink(remoteMessage.getData(), remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.WebSocketClient;
 import net.iGap.module.SingleLiveEvent;
 
 public class IntroductionViewModel extends ViewModel {
@@ -26,7 +27,7 @@ public class IntroductionViewModel extends ViewModel {
     }
 
     public void onLanguageChangeClick() {
-        if (G.socketConnection) {
+        if (WebSocketClient.getInstance().isConnect()) {
             goToChangeLanguagePage.setValue(false);
         } else {
             showErrorMessage.setValue(R.string.waiting_for_connection);
@@ -34,7 +35,7 @@ public class IntroductionViewModel extends ViewModel {
     }
 
     public void onStartClick() {
-        if (G.socketConnection) {
+        if (WebSocketClient.getInstance().isConnect()) {
             goToRegistrationPage.setValue(true);
         } else {
             showErrorMessage.setValue(R.string.waiting_for_connection);

@@ -1,7 +1,6 @@
 package net.iGap.model;
 
 import android.util.Base64;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -119,6 +118,7 @@ public class AccountUser {
         return "id: " + id + "\n" +
                 "dbName: " + dbName + "\n" +
                 "name: " + name + "\n" +
+                "phoneNumber: " + phoneNumber + "\n" +
                 "unReadMessageCount: " + unReadMessageCount + "\n" +
                 "isAssigned: " + isAssigned + "\n" +
                 "db configuration: " + realmConfiguration.getRealmFileName();

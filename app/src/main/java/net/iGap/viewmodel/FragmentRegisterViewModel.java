@@ -23,8 +23,10 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.protobuf.ByteString;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.interfaces.OnQrCodeNewDevice;
 import net.iGap.model.LocationModel;
@@ -52,7 +54,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     public SingleLiveEvent<String> showConfirmPhoneNumberDialog = new SingleLiveEvent<>();
     public MutableLiveData<Boolean> showConnectionErrorDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogUserBlock = new MutableLiveData<>();
-    public MutableLiveData<Long> goToTwoStepVerificationPage = new MutableLiveData<>();
+    public SingleLiveEvent<Long> goToTwoStepVerificationPage = new SingleLiveEvent<>();
     public MutableLiveData<WaitTimeModel> showDialogWaitTime = new MutableLiveData<>();
     public MutableLiveData<Boolean> showErrorMessageEmptyErrorPhoneNumberDialog = new MutableLiveData<>();
     public SingleLiveEvent<Integer> showDialogQrCode = new SingleLiveEvent<>();
@@ -160,7 +162,7 @@ public class FragmentRegisterViewModel extends ViewModel {
         }
         if (phoneNumber.length() > 0 && regex.equals("") || (!regex.equals("") && phoneNumber.replace("-", "").matches(regex))) {
             if (termsAndConditionIsChecked) {
-                showConfirmPhoneNumberDialog.setValue(callbackEdtCodeNumber.get() + "" + callBackEdtPhoneNumber.get());
+                showConfirmPhoneNumberDialog.setValue(callbackEdtCodeNumber.get() + callBackEdtPhoneNumber.get());
             } else {
                 showConditionErrorDialog.setValue(true);
             }
@@ -229,16 +231,22 @@ public class FragmentRegisterViewModel extends ViewModel {
     }
 
     public void confirmPhoneNumber() {
-        if (G.socketConnection) { //connection ok
+        if (WebSocketClient.getInstance().isConnect()) { //connection ok
             btnStartEnable.set(false);
             isShowLoading.set(View.VISIBLE);
-            if (G.socketConnection) {
-                registerUser();
-            } else {
-                showError.setValue(R.string.connection_error);
-                edtPhoneNumberEnable.set(true);
+            if (AccountManager.getInstance().isExistThisAccount(callbackEdtCodeNumber.get().replace("+", "") + callBackEdtPhoneNumber.get().replace("-", ""))) {
+                Log.wtf(this.getClass().getName(), "exist");
                 btnStartEnable.set(true);
-                /*new Handler().postDelayed(this::registerUser, 1000);*/
+                isShowLoading.set(View.GONE);
+                repository.getLoginExistUser().postValue(true);
+            } else {
+                if (WebSocketClient.getInstance().isConnect()) {
+                    registerUser();
+                } else {
+                    showError.setValue(R.string.connection_error);
+                    edtPhoneNumberEnable.set(true);
+                    btnStartEnable.set(true);
+                }
             }
         } else { // connection error
             edtPhoneNumberEnable.set(true);

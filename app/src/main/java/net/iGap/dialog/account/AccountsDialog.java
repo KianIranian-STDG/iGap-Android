@@ -49,7 +49,7 @@ public class AccountsDialog extends BottomSheetDialogFragment {
         binding.bottomSheetList.setAdapter(new AccountsDialogAdapter(mAvatarHandler, (isAssigned, id) -> {
             if (isAssigned) {
                 if (getActivity() instanceof ActivityMain && AccountManager.getInstance().getCurrentUser().getId() != id) {
-                    WebSocketClient.disconnectSocket();
+                    WebSocketClient.getInstance().disconnectSocket();
                     G.handler.removeCallbacksAndMessages(null);
                     DbManager.getInstance().closeUiRealm();
                     signOutWallet();
@@ -62,7 +62,7 @@ public class AccountsDialog extends BottomSheetDialogFragment {
                 }
             } else {
                 if (getActivity() != null) {
-                    WebSocketClient.disconnectSocket();
+                    WebSocketClient.getInstance().disconnectSocket();
                     G.handler.removeCallbacksAndMessages(null);
                     DbManager.getInstance().closeUiRealm();
                     pendingRequest.remove(0);

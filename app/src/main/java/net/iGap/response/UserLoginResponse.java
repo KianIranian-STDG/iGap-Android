@@ -106,8 +106,6 @@ public class UserLoginResponse extends MessageHandler {
             }
         });
 
-        WebSocketClient.waitingForReconnecting = false;
-        WebSocketClient.allowForReconnecting = true;
         G.onUserLogin.onLogin();
         RealmUserInfo.sendPushNotificationToServer();
 
@@ -131,7 +129,7 @@ public class UserLoginResponse extends MessageHandler {
                 }
             });
         } else {
-            WebSocketClient.getInstance().disconnect();
+            WebSocketClient.getInstance().disconnectSocket();
         }
     }
 

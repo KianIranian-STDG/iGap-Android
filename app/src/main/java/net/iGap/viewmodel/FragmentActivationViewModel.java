@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperString;
 import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;
@@ -85,7 +86,7 @@ public class FragmentActivationViewModel extends ViewModel {
     public void loginButtonOnClick(String enteredCode) {
         closeKeyword.setValue(true);
         if (enteredCode.length() == 5) {
-            if (G.socketConnection) {
+            if (WebSocketClient.getInstance().isConnect()) {
                 showLoading.setValue(true);
                 userVerification(enteredCode);
             } else {

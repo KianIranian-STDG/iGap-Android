@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -38,7 +37,6 @@ import static org.paygear.utils.Utils.signOutWallet;
 public class ActivityRegistration extends ActivityEnhanced {
 
     public static final String showProfile = "showProfile";
-    private static final String KEY_SAVE_DATA = "SAVE_DATA";
 
     private RegistrationViewModel viewModel;
 
@@ -78,7 +76,13 @@ public class ActivityRegistration extends ActivityEnhanced {
 
         viewModel.getExistUser().observe(this, isExist -> {
             if (isExist != null && isExist) {
-                Toast.makeText(this, "this user exist", Toast.LENGTH_SHORT).show();
+                new DefaultRoundDialog(this)
+                        .setTitle(R.string.warning)
+                        .setMessage(R.string.login_exist_account_error)
+                        .setPositiveButton(R.string.dialog_ok, (dialog, which) -> {
+
+                        })
+                        .show();
             }
         });
 
@@ -148,7 +152,7 @@ public class ActivityRegistration extends ActivityEnhanced {
                 super.onBackPressed();
             } else {
                 if (getIntent().getBooleanExtra("add account", false)) {
-                    WebSocketClient.disconnectSocket();
+                    WebSocketClient.getInstance().disconnectSocket();
                     DbManager.getInstance().closeUiRealm();
                     signOutWallet();
                     AccountManager.getInstance().setCurrentUser();
