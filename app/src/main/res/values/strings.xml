@@ -2369,5 +2369,6 @@ Want to get it?</string>
     <string name="news_add_comment_errorEmail" tools:ignore="ExtraTranslation">لطفا ایمیل خود را وارد کنید.</string>
     <string name="news_add_comment_errorEmail2" tools:ignore="ExtraTranslation">فرمت ایمیل وارد شده صحیح نیست.</string>
     <string name="news_add_comment_errorComment" tools:ignore="ExtraTranslation">لطفا نظر خود را وارد کنید.</string>
+    <string name="delete_from_storage">Delete from Storage</string>
 
 </resources>
