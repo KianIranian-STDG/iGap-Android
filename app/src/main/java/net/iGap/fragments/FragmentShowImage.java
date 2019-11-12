@@ -59,6 +59,7 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
+import net.iGap.realm.RealmUserInfo;
 
 import java.io.File;
 import java.io.IOException;
@@ -366,7 +367,7 @@ public class FragmentShowImage extends BaseFragment {
      * show image info, time , name , description
      */
     private void showImageInfo(RealmRoomMessage realmRoomMessage) {
-        if (realmRoomMessage == null || G.authorHash == null) {
+        if (realmRoomMessage == null || RealmUserInfo.getCurrentUserAuthorHash().equals("")) {
             return;
         }
         RealmRoomMessage realmRoomMessageFinal = RealmRoomMessage.getFinalMessage(realmRoomMessage);
@@ -388,7 +389,7 @@ public class FragmentShowImage extends BaseFragment {
             txtImageName.setText("");
         }
 
-        if (realmRoomMessageFinal.getAuthorHash() != null && G.authorHash.equals(realmRoomMessageFinal.getAuthorHash())) {
+        if (realmRoomMessageFinal.getAuthorHash() != null && RealmUserInfo.getCurrentUserAuthorHash().equals(realmRoomMessageFinal.getAuthorHash())) {
 
             txtImageName.setText(R.string.you);
         }

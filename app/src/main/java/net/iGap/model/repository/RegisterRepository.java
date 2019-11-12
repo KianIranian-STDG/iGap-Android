@@ -152,10 +152,10 @@ public class RegisterRepository {
             } else {
                 Log.wtf(this.getClass().getName(), "not Exist");
                 token = tokenQrCode;
-                G.displayName = userName = userNameR;
+                userName = userNameR;
                 new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
                 userId = userIdR;
-                G.authorHash = authorHash = authorHashR;
+                authorHash = authorHashR;
                 hideDialogQRCode.postValue(true);
                 userLogin(token);
             }
@@ -167,10 +167,10 @@ public class RegisterRepository {
                 loginExistUser.postValue(true);
             } else {
                 Log.wtf(this.getClass().getName(), "not Exist");
-                G.displayName = userName = userNameR;
+                userName = userNameR;
                 new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME, userName);
                 userId = userIdR;
-                G.authorHash = authorHash = authorHashR;
+                authorHash = authorHashR;
                 goToTwoStepVerificationPage.postValue(userIdR);
             }
         };
@@ -392,7 +392,6 @@ public class RegisterRepository {
                             true));
                     DbManager.getInstance().doRealmTask(realm -> {
                         realm.executeTransactionAsync(realm1 -> RealmUserInfo.putOrUpdate(realm1, user), () -> {
-                            G.displayName = user.getDisplayName();
                             user.getId();
                             G.onUserInfoResponse = null;
                         });

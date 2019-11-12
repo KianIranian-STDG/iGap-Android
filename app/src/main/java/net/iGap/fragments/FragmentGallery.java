@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterGalleryMusic;
 import net.iGap.adapter.AdapterGalleryPhoto;
@@ -193,6 +194,9 @@ public class FragmentGallery extends BaseFragment {
                 }
                 mGalleryListener.onVideoPickerResult(videos);
                 popBackStackFragment();
+                if (getActivity() instanceof ActivityMain){
+                    ((ActivityMain) getActivity()).goneDetailFrameInTabletMode();
+                }
             }
         } else {
             mHelperToolbar.getRightButton().setText(R.string.close_icon);

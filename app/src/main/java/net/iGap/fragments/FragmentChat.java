@@ -793,6 +793,19 @@ public class FragmentChat extends BaseFragment
         if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
             sendMoney.setVisibility(View.VISIBLE);
         }
+
+        setupIntentReceiverForGetDataInTwoPanMode();
+    }
+
+    private void setupIntentReceiverForGetDataInTwoPanMode() {
+        //todo://fix chat fragment back stack and remove this code
+        if (getActivity() instanceof ActivityMain){
+            ((ActivityMain) getActivity()).dataTransformer = (id, data) -> {
+                if (id == AttachFile.request_code_trim_video){
+                    manageTrimVideoResult(data);
+                }
+            };
+        }
     }
 
     private void soundInChatInit() {
@@ -2586,7 +2599,7 @@ public class FragmentChat extends BaseFragment
             boolean backToMenu = true;
 
             RealmResults<RealmRoomMessage> result = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash).findAll();
+                return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, RealmUserInfo.getCurrentUserAuthorHash()).findAll();
             });
 
             if (result.size() > 0) {
@@ -3720,7 +3733,7 @@ public class FragmentChat extends BaseFragment
                         }
                         //final long senderId = G.userId;
                         //ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, messageSender);
-                        if (!G.authorHash.equals(message.mMessage.getAuthorHash())) {  // if message dose'nt belong to owner
+                        if (!RealmUserInfo.getCurrentUserAuthorHash().equals(message.mMessage.getAuthorHash())) {  // if message dose'nt belong to owner
                             if (channelRole == ChannelChatRole.MEMBER) {
                                 mBtnDeleteSelected.setVisibility(View.GONE);
                                 isAllSenderId = false;
@@ -3743,7 +3756,7 @@ public class FragmentChat extends BaseFragment
                         //final long senderId = G.userId;
                         //GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, messageSender);
 
-                        if (!G.authorHash.equals(message.mMessage.getAuthorHash())) {  // if message dose'nt belong to owner
+                        if (!RealmUserInfo.getCurrentUserAuthorHash().equals(message.mMessage.getAuthorHash())) {  // if message dose'nt belong to owner
                             if (groupRole == GroupChatRole.MEMBER) {
                                 mBtnDeleteSelected.setVisibility(View.GONE);
                                 isAllSenderId = false;
@@ -3835,7 +3848,7 @@ public class FragmentChat extends BaseFragment
                         boolean backToMenu = true;
                         RealmResults<RealmRoomMessage> result = DbManager.getInstance().doRealmTask(realm -> {
                             return realm.where(RealmRoomMessage.class).
-                                    equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash).findAll();
+                                    equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, RealmUserInfo.getCurrentUserAuthorHash()).findAll();
                         });
                         if (result.size() > 0) {
                             rm = result.last();
@@ -4052,7 +4065,7 @@ public class FragmentChat extends BaseFragment
                     openFragmentAddStickerToFavorite(groupId, token);
                 }
             });
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -4335,7 +4348,7 @@ public class FragmentChat extends BaseFragment
                     showLayoutPin = true;
                 }
                 //ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, message.realmRoomMessage.getUserId());
-                if (!G.authorHash.equals(message.realmRoomMessage.getAuthorHash())) {
+                if (!RealmUserInfo.getCurrentUserAuthorHash().equals(message.realmRoomMessage.getAuthorHash())) {
                     if (channelRole == ChannelChatRole.MEMBER) {
                         items.remove(getString(R.string.delete_item_dialog));
                     } else if (channelRole == ChannelChatRole.MODERATOR) {
@@ -4357,7 +4370,7 @@ public class FragmentChat extends BaseFragment
                     showLayoutPin = true;
                 }
                 //GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, message.realmRoomMessage.getUserId());
-                if (!G.authorHash.equals(message.realmRoomMessage.getAuthorHash())) {
+                if (!RealmUserInfo.getCurrentUserAuthorHash().equals(message.realmRoomMessage.getAuthorHash())) {
                     if (groupRole == GroupChatRole.MEMBER) {
                         items.remove(getString(R.string.delete_item_dialog));
                     } else if (groupRole == GroupChatRole.MODERATOR) {
@@ -5655,7 +5668,7 @@ public class FragmentChat extends BaseFragment
                         roomMessage.setAttachment(realmAttachment);
 
                         roomMessage.getAttachment().setToken(st.getToken());
-                        roomMessage.setAuthorHash(G.authorHash);
+                        roomMessage.setAuthorHash(RealmUserInfo.getCurrentUserAuthorHash());
                         roomMessage.setShowMessage(true);
                         roomMessage.setCreateTime(TimeUtils.currentLocalTime());
 
@@ -7245,7 +7258,7 @@ public class FragmentChat extends BaseFragment
         roomMessage.setAttachment(realmAttachment);
 
         roomMessage.setUserId(senderID);
-        roomMessage.setAuthorHash(G.authorHash);
+        roomMessage.setAuthorHash(RealmUserInfo.getCurrentUserAuthorHash());
         roomMessage.setShowMessage(true);
         roomMessage.setCreateTime(updateTime);
         if (isReply()) {
@@ -7267,7 +7280,7 @@ public class FragmentChat extends BaseFragment
             RealmChannelExtra realmChannelExtra = new RealmChannelExtra();
             realmChannelExtra.setMessageId(messageId);
             if (RealmRoom.showSignature(mRoomId)) {
-                realmChannelExtra.setSignature(G.displayName);
+                realmChannelExtra.setSignature(AccountManager.getInstance().getCurrentUser().getName());
             } else {
                 realmChannelExtra.setSignature("");
             }
@@ -7392,7 +7405,7 @@ public class FragmentChat extends BaseFragment
         roomMessage.setMessageType(ProtoGlobal.RoomMessageType.LOCATION);
         roomMessage.setRoomId(mRoomId);
         roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
-        roomMessage.setAuthorHash(G.authorHash);
+        roomMessage.setAuthorHash(RealmUserInfo.getCurrentUserAuthorHash());
         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
 
         if (replyMessageId() > 0) {

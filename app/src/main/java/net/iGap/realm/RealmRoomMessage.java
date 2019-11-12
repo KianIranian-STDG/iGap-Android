@@ -142,7 +142,7 @@ public class RealmRoomMessage extends RealmObject {
         return realm.where(RealmRoomMessage.class)
                 .in(RealmRoomMessageFields.STATUS, new String[]{ProtoGlobal.RoomMessageStatus.SENT.toString(), ProtoGlobal.RoomMessageStatus.DELIVERED.toString()})
                 .equalTo(RealmRoomMessageFields.DELETED, false)
-                .notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash)
+                .notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, RealmUserInfo.getCurrentUserAuthorHash())
                 .notEqualTo(RealmRoomMessageFields.USER_ID, AccountManager.getInstance().getCurrentUser().getId())
                 .notEqualTo(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.LOG.toString())
                 .findAll().sort(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
@@ -996,7 +996,7 @@ public class RealmRoomMessage extends RealmObject {
             roomMessage.setRoomId(roomId);
             roomMessage.setShowMessage(true);
             roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
-            roomMessage.setAuthorHash(G.authorHash);
+            roomMessage.setAuthorHash(RealmUserInfo.getCurrentUserAuthorHash());
             roomMessage.setCreateTime(currentTime);
             if (additinalData != null) {
                 RealmAdditional realmAdditional = new RealmAdditional();
@@ -1100,7 +1100,7 @@ public class RealmRoomMessage extends RealmObject {
             channelExtra.setViewsLabel("1");
 
             if (RealmRoom.showSignature(roomId)) {
-                channelExtra.setSignature(G.displayName);
+                channelExtra.setSignature(AccountManager.getInstance().getCurrentUser().getName());
             } else {
                 channelExtra.setSignature("");
             }
@@ -1393,7 +1393,7 @@ public class RealmRoomMessage extends RealmObject {
 
         boolean output = false;
         if (getAuthorHash() != null) {
-            output = getAuthorHash().equals(G.authorHash);
+            output = getAuthorHash().equals(RealmUserInfo.getCurrentUserAuthorHash());
         }
 
         return output;
