@@ -323,7 +323,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                 switch (callState) {
                     case RINGING:
                         setPhoneSpeaker();
-                        playSound.setValue(R.raw.igap_ringing);
+                        playSound.postValue(R.raw.igap_ringing);
                         txtAviVisibility.set(View.VISIBLE);
                         G.isVideoCallRinging = true;
                         break;
@@ -379,44 +379,33 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
                         break;
                     case BUSY:
                         setPhoneSpeaker();
-                        playSound.setValue(R.raw.igap_busy);
+                        playSound.postValue(R.raw.igap_busy);
                         txtAviVisibility.set(View.GONE);
                         break;
                     case REJECT:
+                    case TOO_LONG:
                         setPhoneSpeaker();
-                        playSound.setValue(R.raw.igap_discounect);
+                        playSound.postValue(R.raw.igap_discounect);
                         txtAviVisibility.set(View.GONE);
                         break;
                     case FAILD:
                         showRippleView.postValue(true);
                         setPhoneSpeaker();
-                        playSound.setValue(R.raw.igap_noresponse);
+                        playSound.postValue(R.raw.igap_noresponse);
                         txtAviVisibility.set(View.GONE);
                         new RequestSignalingLeave().signalingLeave();
 
                         isConnected = false;
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                stopTimer();
-                                endVoiceAndFinish();
-                            }
+                        G.handler.postDelayed(() -> {
+                            stopTimer();
+                            endVoiceAndFinish();
                         }, 500);
 
                         break;
                     case NOT_ANSWERED:
-                        setPhoneSpeaker();
-                        playSound.setValue(R.raw.igap_noresponse);
-                        txtAviVisibility.set(View.GONE);
-                        break;
                     case UNAVAILABLE:
                         setPhoneSpeaker();
-                        playSound.setValue(R.raw.igap_noresponse);
-                        txtAviVisibility.set(View.GONE);
-                        break;
-                    case TOO_LONG:
-                        setPhoneSpeaker();
-                        playSound.setValue(R.raw.igap_discounect);
+                        playSound.postValue(R.raw.igap_noresponse);
                         txtAviVisibility.set(View.GONE);
                         break;
                 }
@@ -511,13 +500,13 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         isSendLeave = true;
         isConnected = false;
 
-        G.handler.postDelayed(new Runnable() {
+        /*G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
 
                 endVoiceAndFinish();
             }
-        }, 1000);
+        }, 1000);*/
     }
 
     private void endVoiceAndFinish() {
@@ -675,7 +664,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         Log.wtf(this.getClass().getName(), "onLeaveView");
         isConnected = false;
         if (type.equals("error")) {
-            playRingTone.setValue(false);
+            playRingTone.postValue(false);
             txtAviVisibility.set(View.GONE);
             callBackTxtStatus.set(R.string.empty_error_message);
             G.handler.postDelayed(this::endVoiceAndFinish, 2000);
