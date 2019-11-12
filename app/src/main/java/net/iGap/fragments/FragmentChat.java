@@ -4655,21 +4655,21 @@ public class FragmentChat extends BaseFragment
     private void confirmAndDeleteMessage(StructMessageInfo message , boolean isFromMultiSelect) {
         if (getContext() == null || message == null) return;
 
-        boolean bothDelete = RealmRoomMessage.isBothDelete(message.time);
+        boolean bothDelete = RealmRoomMessage.isBothDelete(message.realmRoomMessage.getUpdateOrCreateTime());
         bothDeleteMessageId = new ArrayList<>();
         if (bothDelete) {
-            bothDeleteMessageId.add(Long.parseLong(message.messageID));
+            bothDeleteMessageId.add(message.realmRoomMessage.getMessageId());
         }
 
         final ArrayList<Long> messageIds = new ArrayList<>();
-        messageIds.add(Long.parseLong(message.messageID));
+        messageIds.add(message.realmRoomMessage.getMessageId());
 
         String dialogContent = "";
         String textDeleteForBoth = null;
         String count = "1";
         boolean isCanDeleteAttachFromDevice = isFileExistInLocalStorage(message);
 
-        if (chatType == ProtoGlobal.Room.Type.CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 && message.senderID.equalsIgnoreCase(Long.toString(G.userId))) {
+        if (chatType == ProtoGlobal.Room.Type.CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 &&  message.realmRoomMessage.getUserId()== AccountManager.getInstance().getCurrentUser().getId()) {
             // show both Delete check box
             textDeleteForBoth = getString(R.string.st_checkbox_delete) + " " + title;
 
@@ -4722,7 +4722,9 @@ public class FragmentChat extends BaseFragment
                 deleteFileFromStorageIfExist(message);
             }
 
-            deleteMassage(getRealmChat(), message, messageIds, bothDeleteMessageId, chatType);
+            DbManager.getInstance().doRealmTask(realm -> {
+                deleteMassage(realm, message, messageIds, bothDeleteMessageId, chatType);
+            });
             if (isFromMultiSelect) deleteSelectedMessageFromAdapter(messageIds);
             dialog.dismiss();
         });
@@ -6842,7 +6844,7 @@ public class FragmentChat extends BaseFragment
                     //delete one message with multiple are different , when list size one do job in another method that able to remove from storage
                     //todo:// do multiple delete in single method
                     if (mAdapter.getSelectedItems().size() == 1){
-                        confirmAndDeleteMessage(item.mMessage , true);
+                        confirmAndDeleteMessage(item.structMessage , true);
                         return;
                     }
 
@@ -8526,12 +8528,12 @@ public class FragmentChat extends BaseFragment
 
         String filepath;
 
-        if (message.forwardedFrom != null) {
-            ProtoGlobal.RoomMessageType fileType = message.forwardedFrom.getMessageType();
-            String filename = message.forwardedFrom.getAttachment().getName();
-            filepath = message.forwardedFrom.getAttachment().getLocalFilePath() != null ? message.forwardedFrom.getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(message.forwardedFrom.getAttachment().getCacheId(), filename, fileType);
+        if (message.realmRoomMessage.getForwardMessage() != null) {
+            ProtoGlobal.RoomMessageType fileType = message.realmRoomMessage.getForwardMessage().getMessageType();
+            String filename = message.realmRoomMessage.getForwardMessage().getAttachment().getName();
+            filepath = message.realmRoomMessage.getForwardMessage().getAttachment().getLocalFilePath() != null ? message.realmRoomMessage.getForwardMessage().getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(message.realmRoomMessage.getForwardMessage().getAttachment().getCacheId(), filename, fileType);
         } else {
-            filepath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
+            filepath = message.getAttachment().getLocalFilePath() != null ? message.getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(message.getAttachment().getCacheId(), message.getAttachment().getName(), message.realmRoomMessage.getMessageType());
         }
 
         return filepath;
