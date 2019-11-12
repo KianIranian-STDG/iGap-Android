@@ -664,7 +664,7 @@ public class ActivityCallViewModel extends ViewModel implements BluetoothProfile
         Log.wtf(this.getClass().getName(), "onLeaveView");
         isConnected = false;
         if (type.equals("error")) {
-            playRingTone.setValue(false);
+            playRingTone.postValue(false);
             txtAviVisibility.set(View.GONE);
             callBackTxtStatus.set(R.string.empty_error_message);
             G.handler.postDelayed(this::endVoiceAndFinish, 2000);
