@@ -73,7 +73,7 @@ public class WebRTC {
     private ProtoSignalingOffer.SignalingOffer.Type callTYpe;
 
     private static WebRTC webRTCInstance;
-    EglBase.Context eglBaseContext = null;
+    private EglBase.Context eglBaseContext = null;
 
     public static WebRTC getInstance() {
         if (webRTCInstance == null) {
@@ -120,17 +120,15 @@ public class WebRTC {
         mediaStream.addTrack(audioTrack);
     }
 
-
     public void setCallType(ProtoSignalingOffer.SignalingOffer.Type callTYpe) {
         this.callTYpe = callTYpe;
     }
 
-    public EglBase.Context getEglBaseContext() {
+    private EglBase.Context getEglBaseContext() {
         if (eglBaseContext == null)
             eglBaseContext = EglBase.create().getEglBaseContext();
         return eglBaseContext;
     }
-
 
     private void addVideoTrack(MediaStream mediaStream) {
 
@@ -143,22 +141,15 @@ public class WebRTC {
             videoTrackFromCamera = peerConnectionFactoryInstance().createVideoTrack(VIDEO_TRACK_ID, videoSource);
             videoTrackFromCamera.setEnabled(true);
 
-            videoTrackFromCamera.addSink(new VideoSink() {
-                @Override
-                public void onFrame(VideoFrame videoFrame) {
-                    if (G.onVideoCallFrame != null) {
-                        G.onVideoCallFrame.onPeerFrame(videoFrame);
-                    /*    Log.i("#peymanW2",videoFrame.getRotatedWidth()+"");
-                        Log.i("#peymanH2",videoFrame.getRotatedHeight()+"");*/
-                    }
+            videoTrackFromCamera.addSink(videoFrame -> {
+                if (G.onVideoCallFrame != null) {
+                    G.onVideoCallFrame.onPeerFrame(videoFrame);
                 }
             });
-
 
             mediaStream.addTrack(videoTrackFromCamera);
         }
     }
-
 
     private VideoCapturer createCameraCapturer(CameraEnumerator enumerator) {
         final String[] deviceNames = enumerator.getDeviceNames();
@@ -207,7 +198,6 @@ public class WebRTC {
             }
         }
     }
-
 
     /**
      * First, we initiate the PeerConnectionFactory with our application context and some options.

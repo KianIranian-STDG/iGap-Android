@@ -61,8 +61,10 @@ import io.realm.Realm;
 
 import static androidx.constraintlayout.widget.ConstraintSet.BOTTOM;
 import static androidx.constraintlayout.widget.ConstraintSet.END;
+import static androidx.constraintlayout.widget.ConstraintSet.LEFT;
 import static androidx.constraintlayout.widget.ConstraintSet.MATCH_CONSTRAINT;
 import static androidx.constraintlayout.widget.ConstraintSet.PARENT_ID;
+import static androidx.constraintlayout.widget.ConstraintSet.RIGHT;
 import static androidx.constraintlayout.widget.ConstraintSet.START;
 import static androidx.constraintlayout.widget.ConstraintSet.TOP;
 import static androidx.constraintlayout.widget.ConstraintSet.WRAP_CONTENT;
@@ -1442,9 +1444,13 @@ public class HelperToolbar {
                     setRoot.constrainWidth(searchLayout.getId(), MATCH_CONSTRAINT);
 
                     if (isBigSearchBox) {
+                        setRoot.setMargin(searchLayout.getId(), LEFT, i_Dp(R.dimen.dp40));
+                        setRoot.setMargin(searchLayout.getId(), RIGHT, i_Dp(R.dimen.dp40));
                         setRoot.setMargin(searchLayout.getId(), START, i_Dp(R.dimen.dp40));
                         setRoot.setMargin(searchLayout.getId(), END, i_Dp(R.dimen.dp40));
                     } else {
+                        setRoot.setMargin(searchLayout.getId(), LEFT, i_Dp(R.dimen.dp52));
+                        setRoot.setMargin(searchLayout.getId(), RIGHT, i_Dp(R.dimen.dp52));
                         setRoot.setMargin(searchLayout.getId(), START, i_Dp(R.dimen.dp52));
                         setRoot.setMargin(searchLayout.getId(), END, i_Dp(R.dimen.dp52));
                     }

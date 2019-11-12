@@ -2323,4 +2323,5 @@
     <string name="elecBill_success_title">موفقیت</string>
     <string name="elecBill_success_pay">پرداخت با موفقیت انجام شد.</string>
     <string name="login_exist_account_error">حساب کاربری شماره وارد شده برای این گوشی فعال است.</string>
+    <string name="delete_from_storage">حذف از حافظه</string>
 </resources>
