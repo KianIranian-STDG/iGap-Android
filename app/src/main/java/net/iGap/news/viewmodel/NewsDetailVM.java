@@ -1,6 +1,5 @@
 package net.iGap.news.viewmodel;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
@@ -29,12 +28,14 @@ public class NewsDetailVM extends BaseAPIViewModel {
 
     private ObservableField<String> title;
     private ObservableField<String> rootTitle;
+    private ObservableField<String> lead;
     private ObservableField<String> viewNum;
     private ObservableField<String> commentNum;
     private ObservableField<String> source;
     private ObservableField<String> tag;
     private ObservableField<String> date;
     private ObservableField<Integer> viewVisibility;
+    private ObservableField<Integer> rootTitleVisibility;
     private ObservableField<Integer> pageVisibility;
 
     private int newsID = -1;
@@ -52,20 +53,21 @@ public class NewsDetailVM extends BaseAPIViewModel {
 
         title = new ObservableField<>("عنوان خبر های ایران");
         rootTitle = new ObservableField<>("زیر عنوان خبرهای ایران");
+        lead = new ObservableField<>("توضیح کوتاه خبرهای ایران");
         viewNum = new ObservableField<>("0");
         commentNum = new ObservableField<>("0");
         source = new ObservableField<>("منبع خبری");
         tag = new ObservableField<>("ورزشی، اجتماعی و...");
         date = new ObservableField<>("دو ساعت پیش");
         viewVisibility = new ObservableField<>(View.INVISIBLE);
-        pageVisibility = new ObservableField<>(View.INVISIBLE);
+        pageVisibility = new ObservableField<>(View.VISIBLE);
+        rootTitleVisibility = new ObservableField<>(View.VISIBLE);
     }
 
     public void getDataFromServer(String newsID) {
         try {
             this.newsID = Integer.parseInt(newsID);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             error.setValue(new NewsError(true, "", "API Input is NOT valid.", 0));
             return;
         }
@@ -73,12 +75,22 @@ public class NewsDetailVM extends BaseAPIViewModel {
             @Override
             public void onSuccess(NewsDetail newsDetail) {
                 data.setValue(newsDetail);
-                title.set(newsDetail.getLead());
-                rootTitle.set(newsDetail.getTitle());
-                if (!newsDetail.getView().equals("0")){
-                    viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(newsDetail.getView()) : newsDetail.getView());
-                    viewVisibility.set(View.VISIBLE);
+                title.set(newsDetail.getTitle());
+                if (newsDetail.getRootTitle() == null || newsDetail.getRootTitle().isEmpty() || newsDetail.getRootTitle().length() < 2)
+                    rootTitleVisibility.set(View.GONE);
+                rootTitle.set(newsDetail.getRootTitle());
+                lead.set(newsDetail.getLead());
+                int viewTemp = Integer.valueOf(newsDetail.getView()) + Integer.valueOf(newsID);
+                if (viewTemp > 1000000) {
+                    viewTemp = viewTemp / 1000000;
+                    viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : viewTemp + "M");
+                } else if (viewTemp > 1000) {
+                    viewTemp = viewTemp / 1000;
+                    viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : viewTemp + "K");
+                } else {
+                    viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp));
                 }
+                viewVisibility.set(View.VISIBLE);
                 commentNum.set(newsDetail.getView());
                 source.set(newsDetail.getSource());
                 if (newsDetail.getTags() == null || newsDetail.getTags().equals("null"))
@@ -86,14 +98,14 @@ public class NewsDetailVM extends BaseAPIViewModel {
                 else
                     tag.set("برچسب ها: " + newsDetail.getTags());
                 date.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(newsDetail.getDate()) : newsDetail.getDate());
-                pageVisibility.set(View.VISIBLE);
+                pageVisibility.set(View.GONE);
                 getNewsComment();
                 getRelatedNewsS();
             }
 
             @Override
             public void onError(ErrorModel errorM) {
-                error.setValue(new NewsError(true, "", errorM.getMessage(), R.string.news_serverError));
+                error.setValue(new NewsError(true, "001", errorM.getMessage(), R.string.news_serverError));
             }
 
             @Override
@@ -139,10 +151,6 @@ public class NewsDetailVM extends BaseAPIViewModel {
                 progressStateRelated.setValue(visibility);
             }
         });
-    }
-
-    public void setData(MutableLiveData<NewsDetail> data) {
-        this.data = data;
     }
 
     public MutableLiveData<NewsComment> getComments() {
@@ -229,12 +237,16 @@ public class NewsDetailVM extends BaseAPIViewModel {
         return data;
     }
 
-    public void setRelatedNews(MutableLiveData<NewsList> relatedNews) {
-        this.relatedNews = relatedNews;
+    public void setData(MutableLiveData<NewsDetail> data) {
+        this.data = data;
     }
 
     public MutableLiveData<NewsList> getRelatedNews() {
         return relatedNews;
+    }
+
+    public void setRelatedNews(MutableLiveData<NewsList> relatedNews) {
+        this.relatedNews = relatedNews;
     }
 
     public MutableLiveData<Boolean> getProgressStateContext() {
@@ -275,5 +287,21 @@ public class NewsDetailVM extends BaseAPIViewModel {
 
     public void setPageVisibility(ObservableField<Integer> pageVisibility) {
         this.pageVisibility = pageVisibility;
+    }
+
+    public ObservableField<String> getLead() {
+        return lead;
+    }
+
+    public void setLead(ObservableField<String> lead) {
+        this.lead = lead;
+    }
+
+    public ObservableField<Integer> getRootTitleVisibility() {
+        return rootTitleVisibility;
+    }
+
+    public void setRootTitleVisibility(ObservableField<Integer> rootTitleVisibility) {
+        this.rootTitleVisibility = rootTitleVisibility;
     }
 }

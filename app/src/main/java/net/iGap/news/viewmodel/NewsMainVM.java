@@ -2,6 +2,7 @@ package net.iGap.news.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
@@ -9,13 +10,11 @@ import net.iGap.news.repository.MainRepo;
 import net.iGap.news.repository.model.NewsError;
 import net.iGap.news.repository.model.NewsFirstPage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class NewsMainVM extends BaseAPIViewModel {
 
     private MutableLiveData<List<NewsFirstPage>> mainList;
-    private List<NewsFirstPage> temp;
     private MutableLiveData<NewsError> error;
     private MutableLiveData<Boolean> progressState;
     private MainRepo repo;
@@ -25,7 +24,6 @@ public class NewsMainVM extends BaseAPIViewModel {
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
         repo = new MainRepo();
-        temp = new ArrayList<>();
     }
 
     public void getNews() {
@@ -36,8 +34,8 @@ public class NewsMainVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
-
+            public void onError(ErrorModel errorM) {
+                error.setValue(new NewsError(true, errorM.getName(), errorM.getMessage(), R.string.news_serverError));
             }
 
             @Override

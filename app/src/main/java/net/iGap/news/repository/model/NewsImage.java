@@ -12,16 +12,6 @@ public class NewsImage {
     @SerializedName("thumb512")
     private String tmb512;
 
-    public NewsImage() {
-    }
-
-    public NewsImage(String original, String tmb128, String tmb256, String tmb512) {
-        this.original = original;
-        this.tmb128 = tmb128;
-        this.tmb256 = tmb256;
-        this.tmb512 = tmb512;
-    }
-
     public String getOriginal() {
         if (original == null || original.isEmpty())
             return null;

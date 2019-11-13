@@ -31,6 +31,15 @@ public class NewsGroup {
         this.groups = groups;
     }
 
+    public List<Groups> getFake() {
+        List<Groups> groups = new ArrayList<>();
+        groups.add(new Groups("101", "temp", "", "", null));
+        groups.add(new Groups("101", "temp", "", "", null));
+        groups.add(new Groups("101", "temp", "", "", null));
+        groups.add(new Groups("101", "temp", "", "", null));
+        return groups;
+    }
+
     public class Groups {
 
         @SerializedName("id")
@@ -96,14 +105,5 @@ public class NewsGroup {
         public void setImage(String image) {
             this.image = image;
         }
-    }
-
-    public List<Groups> getFake() {
-        List<Groups> groups = new ArrayList<>();
-        groups.add(new Groups("101", "temp", "", "", null));
-        groups.add(new Groups("101", "temp", "", "", null));
-        groups.add(new Groups("101", "temp", "", "", null));
-        groups.add(new Groups("101", "temp", "", "", null));
-        return groups;
     }
 }

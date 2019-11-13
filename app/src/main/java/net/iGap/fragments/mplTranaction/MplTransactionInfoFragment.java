@@ -1,7 +1,6 @@
 package net.iGap.fragments.mplTranaction;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
 import android.os.Build;
@@ -24,6 +23,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -289,13 +290,14 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
 
     @Override
     public void onRightIconClickListener(View view) {
-        if (isInValid)
-            new AlertDialog.Builder(getContext())
-                    .setMessage(getResources().getString(R.string.mpl_do_you_want_save_receipt))
-                    .setPositiveButton(getResources().getString(R.string.yes), (dialog, which) -> saveReceipt())
-                    .setNegativeButton(getResources().getString(R.string.no), (dialog, which) -> dialog.dismiss())
-                    .create()
+        if (isInValid && getContext() != null)
+            new MaterialDialog.Builder(getContext())
+                    .content(getResources().getString(R.string.mpl_do_you_want_save_receipt))
+                    .positiveText(R.string.yes)
+                    .negativeText(R.string.no)
+                    .onPositive((dialog, which) -> saveReceipt())
                     .show();
+
     }
 
 

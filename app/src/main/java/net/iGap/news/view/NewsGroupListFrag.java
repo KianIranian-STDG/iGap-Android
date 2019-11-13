@@ -59,7 +59,6 @@ public class NewsGroupListFrag extends BaseAPIViewFrag {
     }
 
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
@@ -124,10 +123,10 @@ public class NewsGroupListFrag extends BaseAPIViewFrag {
             FragmentManager fragmentManager = getChildFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment fragment = fragmentManager.findFragmentByTag(NewsGroupPagerFrag.class.getName());
-                if (fragment == null) {
-                    fragment = NewsGroupPagerFrag.newInstance();
-                    fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                }
+            if (fragment == null) {
+                fragment = NewsGroupPagerFrag.newInstance();
+                fragmentTransaction.addToBackStack(fragment.getClass().getName());
+            }
             Bundle args = new Bundle();
             args.putString("GroupID", news.getId());
             args.putString("GroupTitle", news.getTitle());

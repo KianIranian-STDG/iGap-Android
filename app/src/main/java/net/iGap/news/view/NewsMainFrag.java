@@ -3,7 +3,6 @@ package net.iGap.news.view;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsMainPageBinding;
@@ -78,7 +76,7 @@ public class NewsMainFrag extends BaseAPIViewFrag {
 
         super.onViewCreated(view, savedInstanceState);
 
-        if (specificGroupID != null && !specificGroupID.equals("")&& !specificGroupID.equals("showDetail"))
+        if (specificGroupID != null && !specificGroupID.equals("") && !specificGroupID.equals("showDetail"))
             openGroupNews(new NewsFPList(getResources().getString(R.string.news_mainTitle), specificGroupID, null));
         else if (specificNewsID != null && !specificNewsID.equals(""))
             openNewsDetail(specificNewsID);
@@ -158,8 +156,7 @@ public class NewsMainFrag extends BaseAPIViewFrag {
                                 HelperError.showSnackMessage(link + " " + getResources().getString(R.string.link_not_valid), false);
                             }
                         });
-                }
-                else {
+                } else {
                     // open Link
                     SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
                     int checkedInAppBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);

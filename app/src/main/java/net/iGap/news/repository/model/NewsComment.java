@@ -49,7 +49,7 @@ public class NewsComment {
         private String date;
         private String email;
 
-        public Comment(String author, String body, String date, String email) {
+        Comment(String author, String body, String date, String email) {
             this.author = author;
             this.body = body;
             this.date = date;

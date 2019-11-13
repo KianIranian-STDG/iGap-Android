@@ -171,6 +171,7 @@
                 android:layout_height="@dimen/dp48"
                 android:clickable="true"
                 android:gravity="center"
+                android:background="?rootBackgroundColor"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
@@ -451,6 +452,8 @@
                         android:background="@null"
                         android:hint="@string/search"
                         android:padding="@dimen/dp8"
+                        android:singleLine="true"
+                        android:imeOptions="actionSearch"
                         android:textColor="@color/white"
                         android:textColorHint="#FDFDFD"
                         android:textCursorDrawable="@drawable/white_cursor_color"

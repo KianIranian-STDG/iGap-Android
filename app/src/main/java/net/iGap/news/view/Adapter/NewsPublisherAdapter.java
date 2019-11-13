@@ -42,12 +42,16 @@ public class NewsPublisherAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((GroupViewHolder)holder).initView(position);
+        ((GroupViewHolder) holder).initView(position);
     }
 
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    public interface onClickListener {
+        void onNewsGroupClick(NewsPublisher news);
     }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
@@ -72,9 +76,5 @@ public class NewsPublisherAdapter extends RecyclerView.Adapter<RecyclerView.View
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.get(position)));
         }
-    }
-
-    public interface onClickListener {
-        void onNewsGroupClick(NewsPublisher news);
     }
 }

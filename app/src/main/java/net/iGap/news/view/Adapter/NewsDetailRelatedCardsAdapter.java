@@ -36,14 +36,34 @@ public class NewsDetailRelatedCardsAdapter extends RecyclerView.Adapter<Recycler
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((DoubleViewHolder)holder).initDoubleVH(position);
+        ((DoubleViewHolder) holder).initDoubleVH(position);
     }
 
     @Override
     public int getItemCount() {
         if (mData.getNews().size() == 1)
             return 1;
-        return mData.getNews().size()/2;
+        return mData.getNews().size() / 2;
+    }
+
+    public NewsList getmData() {
+        return mData;
+    }
+
+    public void setmData(NewsList mData) {
+        this.mData = mData;
+    }
+
+    public onClickListener getCallback() {
+        return callBack;
+    }
+
+    public void setCallback(onClickListener callback) {
+        this.callBack = callback;
+    }
+
+    public interface onClickListener {
+        void onNewsGroupClick(NewsList.News slide);
     }
 
     public class DoubleViewHolder extends RecyclerView.ViewHolder {
@@ -76,31 +96,31 @@ public class NewsDetailRelatedCardsAdapter extends RecyclerView.Adapter<Recycler
             if (G.themeColor == Theme.DARK)
                 changeToNormalDark();
 
-            if (position*2 >= mData.getNews().size())
+            if (position * 2 >= mData.getNews().size())
                 return;
-            source.setText(mData.getNews().get(position*2).getSource());
-            rootTitle.setText(mData.getNews().get(position*2).getRootTitle());
-            title.setText(mData.getNews().get(position*2).getTitle());
+            source.setText(mData.getNews().get(position * 2).getSource());
+            rootTitle.setText(mData.getNews().get(position * 2).getRootTitle());
+            title.setText(mData.getNews().get(position * 2).getTitle());
             Picasso.get()
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-                    .load(mData.getNews().get(position*2).getImage())
+                    .load(mData.getNews().get(position * 2).getImage())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
-            container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position*2)));
+            container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position * 2)));
 
-            if ((position*2+1) >= mData.getNews().size()) {
+            if ((position * 2 + 1) >= mData.getNews().size()) {
                 container1.setVisibility(View.INVISIBLE);
                 return;
             }
-            source1.setText(mData.getNews().get(position*2+1).getSource());
-            rootTitle1.setText(mData.getNews().get(position*2+1).getRootTitle());
-            title1.setText(mData.getNews().get(position*2+1).getTitle());
+            source1.setText(mData.getNews().get(position * 2 + 1).getSource());
+            rootTitle1.setText(mData.getNews().get(position * 2 + 1).getRootTitle());
+            title1.setText(mData.getNews().get(position * 2 + 1).getTitle());
             Picasso.get()
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-                    .load(mData.getNews().get(position*2+1).getImage())
+                    .load(mData.getNews().get(position * 2 + 1).getImage())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image1);
-            container1.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position*2+1)));
+            container1.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position * 2 + 1)));
 
         }
 
@@ -113,25 +133,5 @@ public class NewsDetailRelatedCardsAdapter extends RecyclerView.Adapter<Recycler
             title1.setTextColor(Color.WHITE);
             container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_send_dark));
         }
-    }
-
-    public interface onClickListener {
-        void onNewsGroupClick(NewsList.News slide);
-    }
-
-    public NewsList getmData() {
-        return mData;
-    }
-
-    public void setmData(NewsList mData) {
-        this.mData = mData;
-    }
-
-    public onClickListener getCallback() {
-        return callBack;
-    }
-
-    public void setCallback(onClickListener callback) {
-        this.callBack = callback;
     }
 }

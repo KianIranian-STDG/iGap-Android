@@ -30,7 +30,7 @@ public class NewsCommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((GroupViewHolder)holder).initView(position);
+        ((GroupViewHolder) holder).initView(position);
     }
 
     @Override

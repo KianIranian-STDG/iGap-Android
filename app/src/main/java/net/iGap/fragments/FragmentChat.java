@@ -6389,36 +6389,21 @@ public class FragmentChat extends BaseFragment
         searchHash = new SearchHash();
 
         btnHashLayoutClose = rootView.findViewById(R.id.ac_btn_hash_close);
-        btnHashLayoutClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnHashLayoutClose.setOnClickListener(v -> {
 
-                ll_navigateHash.setVisibility(View.GONE);
-
-                mAdapter.toggleSelection(searchHash.lastMessageId, false, null);
-
-                if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER && !isNotJoin) {
-                    layoutMute.setVisibility(View.VISIBLE);
-                } else {
-                    if (!isNotJoin) viewAttachFile.setVisibility(View.VISIBLE);
-                }
+            ll_navigateHash.setVisibility(View.GONE);
+            mAdapter.toggleSelection(searchHash.lastMessageId, false, null);
+            if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER && !isNotJoin) {
+                layoutMute.setVisibility(View.VISIBLE);
+            } else {
+                if (!isNotJoin) viewAttachFile.setVisibility(View.VISIBLE);
             }
+
         });
 
-        btnUpHash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnUpHash.setOnClickListener(view -> searchHash.upHash());
 
-                searchHash.upHash();
-            }
-        });
-
-        btnDownHash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                searchHash.downHash();
-            }
-        });
+        btnDownHash.setOnClickListener(view -> searchHash.downHash());
     }
 
     /**
