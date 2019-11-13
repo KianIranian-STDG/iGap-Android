@@ -76,7 +76,7 @@ public class NewsDetailVM extends BaseAPIViewModel {
             public void onSuccess(NewsDetail newsDetail) {
                 data.setValue(newsDetail);
                 title.set(newsDetail.getTitle());
-                if (newsDetail.getRootTitle() == null || newsDetail.getRootTitle().isEmpty())
+                if (newsDetail.getRootTitle() == null || newsDetail.getRootTitle().isEmpty() || newsDetail.getRootTitle().length() < 2)
                     rootTitleVisibility.set(View.GONE);
                 rootTitle.set(newsDetail.getRootTitle());
                 lead.set(newsDetail.getLead());
