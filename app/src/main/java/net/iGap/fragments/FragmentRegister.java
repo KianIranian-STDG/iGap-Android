@@ -368,7 +368,6 @@ public class FragmentRegister extends BaseFragment {
             Dialog dialogTermsAndCondition = new Dialog(getActivity());
             dialogTermsAndCondition.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialogTermsAndCondition.setContentView(R.layout.terms_condition_dialog);
-            dialogTermsAndCondition.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             AppCompatTextView termsText = dialogTermsAndCondition.findViewById(R.id.termAndConditionTextView);
             termsText.setText(fragmentRegisterViewModel.getAgreementDescription());
             dialogTermsAndCondition.findViewById(R.id.okButton).setOnClickListener(v -> dialogTermsAndCondition.dismiss());

@@ -96,6 +96,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="..."
+                        android:textColor="?attr/iGapTitleTextColor"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -149,6 +150,7 @@
                 android:layout_height="wrap_content"
                 android:button="@drawable/check_box_background"
                 android:onCheckedChanged="@{(v,isChecked)->fragmentRegisterViewModel.termsOnCheckChange(isChecked)}"
+                android:textColor="?attr/iGapTitleTextColor"
                 android:textColorLink="?attr/colorPrimary"
                 android:visibility="@{fragmentRegisterViewModel.viewVisibility}"
                 app:layout_constraintBottom_toTopOf="@id/registerButton"
