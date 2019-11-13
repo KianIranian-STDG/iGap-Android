@@ -1258,12 +1258,8 @@
     <string name = "wallpapers">وێنەکانی بەکگراوەند</string>
     <string name = "verify_register_sms">ناردنی کورتەنامە</string>
     <string name = "verify_register_call">پەیوەندی</string>
-    <string name = "way_receive_register_code"></string>
-    <string name = "reply_label"></string>
     <string name = "separate_notifications">ڕاگەیاندنی جیا</string>
     <string name = "mark_as_unread">خوێنراوە</string>
-    <string name = "planDB"></string>
-    <string name = "encriptedDB"></string>
     <string name = "start">دەستپێک</string>
     <string name = "bot">ربۆت</string>
     <string name = "back_to_menu">گەڕانەوە بۆ پێڕستی سەرەکی</string>
