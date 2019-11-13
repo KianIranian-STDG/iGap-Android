@@ -5,21 +5,34 @@ import android.os.Parcelable;
 
 public class NewsApiArg implements Parcelable {
 
-    public enum NewsType {Latest, MOST_HITS, FEATURED_NEWS, GROUP_NEWS, FEATURED_GROUP, ERGENT_GROUP, ERGENT, CONTROVERSIAL_NEWS, RELATED_NEWS}
+    public static final Creator<NewsApiArg> CREATOR = new Creator<NewsApiArg>() {
+        @Override
+        public NewsApiArg createFromParcel(Parcel in) {
+            return new NewsApiArg(in);
+        }
 
+        @Override
+        public NewsApiArg[] newArray(int size) {
+            return new NewsApiArg[size];
+        }
+    };
     private int start;
     private int display;
     private int groupID;
     private NewsType mType;
-
-    public NewsApiArg() {
-    }
 
     public NewsApiArg(int start, int display, int groupID, NewsType mType) {
         this.start = start;
         this.display = display;
         this.groupID = groupID;
         this.mType = mType;
+    }
+
+    private NewsApiArg(Parcel in) {
+        start = in.readInt();
+        display = in.readInt();
+        groupID = in.readInt();
+        mType = NewsType.values()[in.readInt()];
     }
 
     public int getStart() {
@@ -67,23 +80,5 @@ public class NewsApiArg implements Parcelable {
         dest.writeInt(mType.ordinal());
     }
 
-
-    public NewsApiArg(Parcel in) {
-        start = in.readInt();
-        display = in.readInt();
-        groupID = in.readInt();
-        mType = NewsType.values()[in.readInt()];
-    }
-
-    public static final Creator<NewsApiArg> CREATOR = new Creator<NewsApiArg>() {
-        @Override
-        public NewsApiArg createFromParcel(Parcel in) {
-            return new NewsApiArg(in);
-        }
-
-        @Override
-        public NewsApiArg[] newArray(int size) {
-            return new NewsApiArg[size];
-        }
-    };
+    public enum NewsType {Latest, MOST_HITS, FEATURED_NEWS, GROUP_NEWS, FEATURED_GROUP, ERGENT_GROUP, ERGENT, CONTROVERSIAL_NEWS, RELATED_NEWS}
 }

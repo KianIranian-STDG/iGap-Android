@@ -2347,6 +2347,7 @@ Want to get it?</string>
     <string name="news_MHits" tools:ignore="ExtraTranslation">پربازدیدترین</string>
     <string name="news_comment" tools:ignore="ExtraTranslation">نظرات</string>
     <string name="news_emptyList" tools:ignore="ExtraTranslation">هیچ موردی برای نمایش موجود نیست. \n برای بارگزاری مجدد صفحه را به سمت پایین بکشید.</string>
+    <string name="news_noData" tools:ignore="ExtraTranslation">جزئیات خبر مورد نظر دریافت نشد. \nلطفا دوباره تلاش کنید.</string>
     <string name="news_ergent" tools:ignore="ExtraTranslation">پربحث ترین</string>
     <string name="news_groupTitle" tools:ignore="ExtraTranslation">گروه های خبری</string>
     <string name="news_latest" tools:ignore="ExtraTranslation">آخرین خبرها</string>
@@ -2365,6 +2366,7 @@ Want to get it?</string>
     <string name="news_add_comment_success" tools:ignore="ExtraTranslation">ثبت شد.</string>
     <string name="news_add_comment_fail" tools:ignore="ExtraTranslation">خطا!</string>
     <string name="news_add_comment_successToast" tools:ignore="ExtraTranslation">نظر شما با موفقیت ثبت شد.</string>
+    <string name="news_add_comment_failToast" tools:ignore="ExtraTranslation">ثبت نظر با خطا مواجه شد.</string>
     <string name="news_add_comment_errorAuthor" tools:ignore="ExtraTranslation">لطفا نام خود را وارد کنید.</string>
     <string name="news_add_comment_errorEmail" tools:ignore="ExtraTranslation">لطفا ایمیل خود را وارد کنید.</string>
     <string name="news_add_comment_errorEmail2" tools:ignore="ExtraTranslation">فرمت ایمیل وارد شده صحیح نیست.</string>

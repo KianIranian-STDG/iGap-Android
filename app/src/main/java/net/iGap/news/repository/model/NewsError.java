@@ -7,9 +7,6 @@ public class NewsError {
     private boolean state;
     private int resID;
 
-    public NewsError() {
-    }
-
     public NewsError(boolean state, String title, String message, int resID) {
         this.state = state;
         this.title = title;
@@ -37,12 +34,12 @@ public class NewsError {
         return state;
     }
 
-    public void setState(boolean state) {
-        this.state = state;
-    }
-
     public boolean isState() {
         return state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
     }
 
     public int getResID() {
