@@ -152,8 +152,10 @@ public class NewsListFrag extends BaseAPIViewFrag {
         if (data.getNews() == null || data.getNews().size() == 0)
             return;
 
-        if (apiArg.getStart() == 1 && handler != null)
-            handler.onImageLoader(data.getNews().get(0).getImage());
+        if (apiArg.getStart() == 1 && handler != null) {
+            handler.onImageLoader(data.getNews().get(0));
+            data.getNews().remove(0);
+        }
 
         adapter.addItems(data);
 
@@ -171,7 +173,7 @@ public class NewsListFrag extends BaseAPIViewFrag {
     }
 
     public interface onImageListener {
-        void onImageLoader(String newsPicAdd);
+        void onImageLoader(NewsList.News news);
     }
 
     public onImageListener getHandler() {

@@ -36,6 +36,7 @@ public class NewsDetailVM extends BaseAPIViewModel {
     private ObservableField<String> tag;
     private ObservableField<String> date;
     private ObservableField<Integer> viewVisibility;
+    private ObservableField<Integer> rootTitleVisibility;
     private ObservableField<Integer> pageVisibility;
 
     private int newsID = -1;
@@ -61,6 +62,7 @@ public class NewsDetailVM extends BaseAPIViewModel {
         date = new ObservableField<>("دو ساعت پیش");
         viewVisibility = new ObservableField<>(View.INVISIBLE);
         pageVisibility = new ObservableField<>(View.INVISIBLE);
+        rootTitleVisibility = new ObservableField<>(View.INVISIBLE);
     }
 
     public void getDataFromServer(String newsID) {
@@ -76,6 +78,8 @@ public class NewsDetailVM extends BaseAPIViewModel {
             public void onSuccess(NewsDetail newsDetail) {
                 data.setValue(newsDetail);
                 title.set(newsDetail.getTitle());
+                if (newsDetail.getRootTitle() == null || newsDetail.getRootTitle().isEmpty())
+                    rootTitleVisibility.set(View.GONE);
                 rootTitle.set(newsDetail.getRootTitle());
                 lead.set(newsDetail.getLead());
                 int viewTemp = Integer.valueOf(newsDetail.getView())+Integer.valueOf(newsID);
@@ -295,5 +299,13 @@ public class NewsDetailVM extends BaseAPIViewModel {
 
     public void setLead(ObservableField<String> lead) {
         this.lead = lead;
+    }
+
+    public ObservableField<Integer> getRootTitleVisibility() {
+        return rootTitleVisibility;
+    }
+
+    public void setRootTitleVisibility(ObservableField<Integer> rootTitleVisibility) {
+        this.rootTitleVisibility = rootTitleVisibility;
     }
 }
