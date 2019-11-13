@@ -29,8 +29,6 @@ import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
-import net.iGap.WebSocketClient;
-import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;

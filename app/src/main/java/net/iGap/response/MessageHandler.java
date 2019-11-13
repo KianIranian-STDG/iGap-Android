@@ -57,7 +57,7 @@ public abstract class MessageHandler {
                     }
                 });
             }
-            WebSocketClient.getInstance().disconnectSocket();
+            WebSocketClient.getInstance().disconnectSocket(true);
         }
         error();
     }

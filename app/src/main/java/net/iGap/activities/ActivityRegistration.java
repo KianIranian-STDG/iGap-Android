@@ -152,7 +152,7 @@ public class ActivityRegistration extends ActivityEnhanced {
                 super.onBackPressed();
             } else {
                 if (getIntent().getBooleanExtra("add account", false)) {
-                    WebSocketClient.getInstance().disconnectSocket();
+                    WebSocketClient.getInstance().disconnectSocket(false);
                     DbManager.getInstance().closeUiRealm();
                     signOutWallet();
                     AccountManager.getInstance().setCurrentUser();
@@ -160,7 +160,7 @@ public class ActivityRegistration extends ActivityEnhanced {
                     RequestClientGetRoomList.pendingRequest.remove(0);
                     FragmentMain.mOffset = 0;
                     DbManager.getInstance().changeRealmConfiguration();
-                    /*WebSocketClient.connectNewAccount();*/
+                    WebSocketClient.getInstance().connect(true);
                     Log.wtf(this.getClass().getName(), "current user: " + AccountManager.getInstance().getCurrentUser());
                     finish();
                     startActivity(new Intent(this, ActivityMain.class));

@@ -1,15 +1,12 @@
 package net.iGap.libs.notification;
 
 
-import android.util.Log;
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
-import net.iGap.WebSocketClient;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperNotification;
 import net.iGap.model.AccountUser;
@@ -18,8 +15,6 @@ import net.iGap.realm.RealmNotificationRoomMessage;
 import net.iGap.realm.RealmUserInfo;
 
 import org.json.JSONArray;
-
-import io.realm.Realm;
 
 
 public class NotificationService extends FirebaseMessagingService {

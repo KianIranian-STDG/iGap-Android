@@ -83,7 +83,7 @@ public class ConnectionManager {
                              * change connectivity type
                              */
                             latestConnectivityType = HelperCheckInternetConnection.currentConnectivityType;
-                            WebSocketClient.getInstance().disconnectSocket();
+                            WebSocketClient.getInstance().disconnectSocket(true);
                         } else {
                             /**
                              * not change connectivity type
@@ -111,7 +111,7 @@ public class ConnectionManager {
 
                     hasNetworkBefore = false;
                     HelperConnectionState.connectionState(ConnectionState.WAITING_FOR_NETWORK);
-                    WebSocketClient.getInstance().disconnectSocket();
+                    WebSocketClient.getInstance().disconnectSocket(true);
                 }
             }
         };

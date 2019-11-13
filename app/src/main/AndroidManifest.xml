@@ -323,6 +323,14 @@
                 android:resource="@xml/contacts" />
         </service>
         <service android:name=".module.BeepTunesPlayerService" />
+
+        <service
+            android:exported="false"
+            android:name=".webservice.JobServiceReconnect">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

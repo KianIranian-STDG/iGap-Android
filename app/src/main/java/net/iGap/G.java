@@ -51,6 +51,7 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoClientCondition;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestWrapper;
+import net.iGap.webservice.JobServiceReconnect;
 
 import org.paygear.RaadApp;
 import org.paygear.model.Card;
@@ -454,6 +455,7 @@ public class G extends ApplicationContext {
         Fabric.with(getApplicationContext(), new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
         CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
 
+        JobServiceReconnect.scheduleJob(getApplicationContext());
         PassCode.initPassCode(getApplicationContext());
         //init account manager for handle multi account
 

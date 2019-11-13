@@ -20,7 +20,6 @@ import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
-import net.iGap.module.SHP_SETTING;
 
 public class HelperError {
 
@@ -48,7 +47,7 @@ public class HelperError {
                 //if (minorCode == 1) error = "time out  server not response";
                 break;
             case 7:
-                WebSocketClient.getInstance().disconnectSocket();
+                WebSocketClient.getInstance().disconnectSocket(true);
                 break;
             case 9:
                 /*if (G.currentActivity != null) {

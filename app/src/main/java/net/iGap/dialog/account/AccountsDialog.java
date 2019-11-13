@@ -49,7 +49,7 @@ public class AccountsDialog extends BottomSheetDialogFragment {
         binding.bottomSheetList.setAdapter(new AccountsDialogAdapter(mAvatarHandler, (isAssigned, id) -> {
             if (isAssigned) {
                 if (getActivity() instanceof ActivityMain && AccountManager.getInstance().getCurrentUser().getId() != id) {
-                    WebSocketClient.getInstance().disconnectSocket();
+                    WebSocketClient.getInstance().disconnectSocket(false);
                     G.handler.removeCallbacksAndMessages(null);
                     DbManager.getInstance().closeUiRealm();
                     signOutWallet();
@@ -62,7 +62,7 @@ public class AccountsDialog extends BottomSheetDialogFragment {
                 }
             } else {
                 if (getActivity() != null) {
-                    WebSocketClient.getInstance().disconnectSocket();
+                    WebSocketClient.getInstance().disconnectSocket(false);
                     G.handler.removeCallbacksAndMessages(null);
                     DbManager.getInstance().closeUiRealm();
                     pendingRequest.remove(0);
@@ -70,6 +70,7 @@ public class AccountsDialog extends BottomSheetDialogFragment {
                     signOutWallet();
                     AccountManager.getInstance().changeCurrentUserForAddAccount();
                     DbManager.getInstance().changeRealmConfiguration();
+                    WebSocketClient.getInstance().connect(true);
                     RaadApp.onCreate(getContext());
                    // WebSocketClient.connectNewAccount();
                     Intent intent = new Intent(getActivity(), ActivityRegistration.class);

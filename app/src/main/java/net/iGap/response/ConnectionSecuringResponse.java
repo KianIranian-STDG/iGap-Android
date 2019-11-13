@@ -91,7 +91,7 @@ public class ConnectionSecuringResponse extends MessageHandler {
          * internet connection these steps will be done
          */
         if (WebSocketClient.getInstance().isConnect()) {
-            WebSocketClient.getInstance().disconnectSocket();
+            WebSocketClient.getInstance().disconnectSocket(true);
         }
         super.timeOut();
     }

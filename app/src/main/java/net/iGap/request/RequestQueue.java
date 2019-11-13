@@ -14,8 +14,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.neovisionaries.ws.client.WebSocket;
-
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;

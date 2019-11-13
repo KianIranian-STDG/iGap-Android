@@ -3,7 +3,6 @@ package net.iGap.fragments;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +35,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.FragmentSettingViewModel;
+import net.iGap.WebSocketClient;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -172,6 +172,7 @@ public class FragmentSetting extends BaseFragment {
                     MusicPlayer.stopSound();
                     MusicPlayer.closeLayoutMediaPlayer();
                 }
+                WebSocketClient.getInstance().connect(true);
                 startActivity(new Intent(getActivity(), ActivityRegistration.class));
                 getActivity().finish();
             }

@@ -13,7 +13,6 @@ package net.iGap;
 import android.text.format.DateUtils;
 import android.util.Log;
 
-import com.neovisionaries.ws.client.ThreadType;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
@@ -21,8 +20,8 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import com.neovisionaries.ws.client.WebSocketState;
 
+import net.iGap.eventbus.EventManager;
 import net.iGap.helper.HelperConnectionState;
-import net.iGap.helper.HelperTimeOut;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestQueue;
@@ -33,17 +32,19 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static net.iGap.Config.ALLOW_RECONNECT_AGAIN_NORMAL;
 import static net.iGap.G.latestHearBeatTime;
 import static net.iGap.G.latestResponse;
 import static net.iGap.request.RequestClientGetRoomList.pendingRequest;
 
 public class WebSocketClient {
 
-    private WebSocket webSocketClient;
     private static WebSocketClient instance;
 
+    private WebSocket webSocketClient;
+    private boolean autoConnect;
+
     private WebSocketClient() {
+        autoConnect = true;
         try {
             this.webSocketClient = new WebSocketFactory().setConnectionTimeout((int) (10 * DateUtils.SECOND_IN_MILLIS)).createSocket(Config.URL_WEBSOCKET);
             this.webSocketClient.setPingInterval(60 * DateUtils.SECOND_IN_MILLIS);
@@ -56,6 +57,10 @@ public class WebSocketClient {
                     latestResponse = System.currentTimeMillis();
                     HelperConnectionState.connectionState(ConnectionState.CONNECTING);
                     checkFirstResponse();
+                    EventManager.getInstance().postEvent(
+                            EventManager.SOCKET_CONNECT_OK,
+                            ""
+                    );
 
                     super.onConnected(websocket, headers);
                 }
@@ -100,7 +105,15 @@ public class WebSocketClient {
                     RequestQueue.timeOutImmediately(null, true);
                     RequestQueue.clearPriorityQueue();
                     resetMainInfo();
-                    reconnect();
+
+                    if (autoConnect)
+                        G.handler.postDelayed(() -> connect(true), DateUtils.SECOND_IN_MILLIS);
+
+                    EventManager.getInstance().postEvent(
+                            EventManager.SOCKET_DISCONNECT,
+                            ""
+                    );
+
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
                 }
 
@@ -108,7 +121,13 @@ public class WebSocketClient {
                 public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
                     Log.wtf(this.getClass().getName(), "onConnectError");
                     resetMainInfo();
-                    reconnect();
+
+                    if (autoConnect)
+                        G.handler.postDelayed(() -> connect(true), DateUtils.SECOND_IN_MILLIS);
+                    EventManager.getInstance().postEvent(
+                            EventManager.SOCKET_CONNECT_ERROR,
+                            exception.getError().name() + ": " + exception.getMessage()
+                    );
                     super.onConnectError(websocket, exception);
                 }
             });
@@ -128,31 +147,8 @@ public class WebSocketClient {
         return instance;
     }
 
-    public boolean isConnect() {
-        return webSocketClient != null && webSocketClient.isOpen();
-    }
-
     public void sendBinary(byte[] message,RequestWrapper requestWrapper){
         webSocketClient.sendBinary(message, requestWrapper);
-    }
-
-    private void reconnect() {
-        G.handler.postDelayed(() -> {
-            if (webSocketClient.getState() != WebSocketState.CONNECTING && webSocketClient.getState() != WebSocketState.OPEN) {
-                resetWebsocketInfo();
-                HelperConnectionState.connectionState(ConnectionState.CONNECTING);
-                if (webSocketClient.getState() == WebSocketState.CLOSED) {
-                    try {
-                        webSocketClient = webSocketClient.recreate((int) (10 * DateUtils.SECOND_IN_MILLIS));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                webSocketClient.connectAsynchronously();
-            }
-        }, Config.REPEAT_CONNECTION_CHECKING);
-
     }
 
     /**
@@ -216,7 +212,36 @@ public class WebSocketClient {
         thread.start();
     }
 
-    public void disconnectSocket() {
+    public boolean isAutoConnect() {
+        return autoConnect;
+    }
+
+    public boolean isConnect() {
+        return webSocketClient != null && webSocketClient.isOpen();
+    }
+
+    public void connect(boolean autoConnect) {
+        this.autoConnect = autoConnect;
+
+        if (webSocketClient.getState() != WebSocketState.CONNECTING && webSocketClient.getState() != WebSocketState.OPEN) {
+            resetWebsocketInfo();
+            HelperConnectionState.connectionState(ConnectionState.CONNECTING);
+            if (webSocketClient.getState() == WebSocketState.CLOSED) {
+                try {
+                    webSocketClient = webSocketClient.recreate();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            webSocketClient.connectAsynchronously();
+        } else {
+            EventManager.getInstance().postEvent(EventManager.SOCKET_CONNECT_DENY, "state of socket is : " + webSocketClient.getState().name());
+        }
+    }
+
+    public void disconnectSocket(boolean autoConnect) {
+        this.autoConnect = autoConnect;
         webSocketClient.disconnect();
     }
 }

@@ -21,7 +21,6 @@ import net.iGap.WebSocketClient;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.model.AccountUser;
-import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
 import net.iGap.module.SHP_SETTING;
@@ -91,7 +90,7 @@ public final class HelperLogout {
             @Override
             public void onUserSessionLogout() {
                 G.userLogin = false;
-                WebSocketClient.getInstance().disconnectSocket();
+                WebSocketClient.getInstance().disconnectSocket(false);
                 G.handler.removeCallbacksAndMessages(null);
                 logOutUserCallBack.onLogOut(logoutUser(AccountManager.getInstance().getCurrentUser()));
                 /*new LoginActions();*/

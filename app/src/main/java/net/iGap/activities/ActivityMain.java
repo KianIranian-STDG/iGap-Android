@@ -374,7 +374,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 long peerId = extras.getLong("PeerID");
                 long userId = extras.getLong(ActivityMain.userId);
                 if (AccountManager.getInstance().getCurrentUser().getId() != userId) {
-                    WebSocketClient.getInstance().disconnectSocket();
+                    WebSocketClient.getInstance().disconnectSocket(false);
                     G.handler.removeCallbacksAndMessages(null);
                     DbManager.getInstance().closeUiRealm();
                     signOutWallet();
@@ -1961,6 +1961,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Log.wtf(this.getClass().getName(), "updateUiForChangeAccount");
         Log.wtf(this.getClass().getName(), "back stack count: " + getSupportFragmentManager().getBackStackEntryCount());
         DbManager.getInstance().changeRealmConfiguration();
+        WebSocketClient.getInstance().connect(true);
         int t = getSupportFragmentManager().getBackStackEntryCount();
         for (int i = 0; i < t; i++) {
             getSupportFragmentManager().popBackStackImmediate();

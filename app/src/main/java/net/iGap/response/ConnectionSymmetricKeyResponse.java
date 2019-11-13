@@ -44,7 +44,7 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
         //builder.getSecurityIssue(); true means reject
 
         if (statusNumber == Config.REJECT) { //go to upgrade page
-            WebSocketClient.getInstance().disconnectSocket();
+            WebSocketClient.getInstance().disconnectSocket(true);
         } else if (statusNumber == Config.ACCEPT) {
             Log.wtf(this.getClass().getName(),"statusNumber: ACCEPT");
             /**
@@ -72,7 +72,7 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
          * internet connection these steps will be done
          */
         if (WebSocketClient.getInstance().isConnect()) {
-            WebSocketClient.getInstance().disconnectSocket();
+            WebSocketClient.getInstance().disconnectSocket(true);
         }
         super.timeOut();
     }

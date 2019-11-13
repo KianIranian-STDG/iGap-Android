@@ -25,8 +25,6 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestWalletGetAccessToken;
 
-import io.realm.Realm;
-
 public class UserLoginResponse extends MessageHandler {
 
     public int actionId;
@@ -129,7 +127,7 @@ public class UserLoginResponse extends MessageHandler {
                 }
             });
         } else {
-            WebSocketClient.getInstance().disconnectSocket();
+            WebSocketClient.getInstance().disconnectSocket(true);
         }
     }
 

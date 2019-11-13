@@ -3,7 +3,6 @@ package net.iGap.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.module.SingleLiveEvent;
