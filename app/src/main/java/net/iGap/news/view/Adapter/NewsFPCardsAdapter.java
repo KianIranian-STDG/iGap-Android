@@ -144,9 +144,9 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         private void changeToServerColor(String backColor, String rootTitleColor, String titleColor) {
             category.setTextColor(Color.parseColor(titleColor));
-            lead.setTextColor(Color.parseColor(titleColor));
+            lead.setTextColor(Color.parseColor(rootTitleColor));
 
-            title.setTextColor(Color.parseColor(rootTitleColor));
+            title.setTextColor(Color.parseColor(titleColor));
 
             container.setCardBackgroundColor(Color.parseColor(backColor));
         }
