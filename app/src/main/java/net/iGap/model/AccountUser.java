@@ -5,6 +5,8 @@ import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.gson.annotations.SerializedName;
+
 import net.iGap.helper.HelperLog;
 import net.iGap.realm.RealmMigration;
 
@@ -18,12 +20,25 @@ import static net.iGap.Config.REALM_SCHEMA_VERSION;
 
 public class AccountUser {
     //ToDo: should be review and change and remove not use item
+
+    @SerializedName("id")
     private long id;
+
+    @SerializedName("dbName")
     private String dbName;
+
+    @SerializedName("name")
     private String name;
+
+    @SerializedName("phoneNumber")
     private String phoneNumber;
+
+    @SerializedName("unReadMessageCount")
     private int unReadMessageCount;
+
+    @SerializedName("isAssigned")
     private boolean isAssigned; // flag for show add new or not
+
     private transient RealmConfiguration realmConfiguration;
 
     public AccountUser(long id) {
