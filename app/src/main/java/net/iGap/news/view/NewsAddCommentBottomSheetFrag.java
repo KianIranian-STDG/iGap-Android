@@ -60,8 +60,7 @@ public class NewsAddCommentBottomSheetFrag extends BottomSheetDialogFragment {
     private void onComplete() {
         addCommentVM.getComplete().observe(getViewLifecycleOwner(), aBoolean -> {
 
-            if (aBoolean)
-                completeListener.onCompleted();
+            completeListener.onCompleted(aBoolean);
             this.dismiss();
 
         });
@@ -132,6 +131,6 @@ public class NewsAddCommentBottomSheetFrag extends BottomSheetDialogFragment {
     }
 
     interface CompleteListener {
-        void onCompleted();
+        void onCompleted(boolean result);
     }
 }

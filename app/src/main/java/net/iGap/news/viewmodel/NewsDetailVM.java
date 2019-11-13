@@ -60,8 +60,8 @@ public class NewsDetailVM extends BaseAPIViewModel {
         tag = new ObservableField<>("ورزشی، اجتماعی و...");
         date = new ObservableField<>("دو ساعت پیش");
         viewVisibility = new ObservableField<>(View.INVISIBLE);
-        pageVisibility = new ObservableField<>(View.INVISIBLE);
-        rootTitleVisibility = new ObservableField<>(View.INVISIBLE);
+        pageVisibility = new ObservableField<>(View.VISIBLE);
+        rootTitleVisibility = new ObservableField<>(View.VISIBLE);
     }
 
     public void getDataFromServer(String newsID) {
@@ -98,14 +98,14 @@ public class NewsDetailVM extends BaseAPIViewModel {
                 else
                     tag.set("برچسب ها: " + newsDetail.getTags());
                 date.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(newsDetail.getDate()) : newsDetail.getDate());
-                pageVisibility.set(View.VISIBLE);
+                pageVisibility.set(View.GONE);
                 getNewsComment();
                 getRelatedNewsS();
             }
 
             @Override
             public void onError(ErrorModel errorM) {
-                error.setValue(new NewsError(true, "", errorM.getMessage(), R.string.news_serverError));
+                error.setValue(new NewsError(true, "001", errorM.getMessage(), R.string.news_serverError));
             }
 
             @Override

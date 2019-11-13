@@ -41,8 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="@{viewmodel.pageVisibility}"
-                    app:constraint_referenced_ids="title_back,banner_slider,image,lead,title,dateTXT,view_icon,detail_TV,share_newsBTN,share_news,comment_back,comments_title,write_comment,news_back,date,view,tags" />
-
+                    app:constraint_referenced_ids="blueScreen"/>
                 <View
                     android:id="@+id/title_back"
                     android:layout_width="match_parent"
@@ -178,7 +177,7 @@
                     android:id="@+id/ProgressTitleV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:elevation="2dp"
+                    android:elevation="4dp"
                     android:visibility="visible"
                     app:layout_constraintTop_toTopOf="@+id/title_back"
                     app:layout_constraintStart_toStartOf="@+id/title_back"
@@ -500,11 +499,40 @@
                 </LinearLayout><!--
                 </androidx.cardview.widget.CardView>-->
 
+                <View
+                    android:id="@+id/blueScreen"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="@color/white"
+                    android:elevation="@dimen/dp2"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/noDataError"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/news_noData"
+                    android:gravity="center"
+                    android:textSize="@dimen/dp12"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:elevation="@dimen/dp4"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
                 <ProgressBar
                     android:id="@+id/ProgressNewsV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:elevation="2dp"
+                    android:elevation="@dimen/dp2"
                     android:visibility="gone"
                     app:layout_constraintTop_toTopOf="@+id/news_back"
                     app:layout_constraintStart_toStartOf="@+id/news_back"

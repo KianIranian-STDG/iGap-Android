@@ -102,12 +102,13 @@ public class NewsDetailFrag extends BaseAPIViewFrag {
         });
 
         binding.writeComment.setOnClickListener(v -> {
-            NewsAddCommentBottomSheetFrag bottomSheetFragment = new NewsAddCommentBottomSheetFrag().setData(arg.getString("NewsID"), new NewsAddCommentBottomSheetFrag.CompleteListener() {
-                @Override
-                public void onCompleted() {
-                    Toast.makeText(getContext(), R.string.news_add_comment_successToast, Toast.LENGTH_SHORT).show();
-                }
-            });
+            NewsAddCommentBottomSheetFrag bottomSheetFragment = new NewsAddCommentBottomSheetFrag()
+                    .setData(arg.getString("NewsID"), result -> {
+                        if (result)
+                            Toast.makeText(getContext(), R.string.news_add_comment_successToast, Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(getContext(), R.string.news_add_comment_failToast, Toast.LENGTH_SHORT).show();
+                    });
             bottomSheetFragment.show(getFragmentManager(), "AddCommentBottomSheet");
         });
 
@@ -124,6 +125,8 @@ public class NewsDetailFrag extends BaseAPIViewFrag {
                 Snackbar snackbar = Snackbar.make(binding.Container, getString(newsError.getResID()), Snackbar.LENGTH_LONG);
                 snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
                 snackbar.show();
+                if (newsError.getTitle().equals("001"))
+                    binding.noDataError.setVisibility(View.VISIBLE);
             }
         });
     }
