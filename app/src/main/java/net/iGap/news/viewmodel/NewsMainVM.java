@@ -2,6 +2,7 @@ package net.iGap.news.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.apiService.ResponseCallback;
 import net.iGap.api.errorhandler.ErrorModel;
@@ -33,8 +34,8 @@ public class NewsMainVM extends BaseAPIViewModel {
             }
 
             @Override
-            public void onError(ErrorModel error) {
-
+            public void onError(ErrorModel errorM) {
+                error.setValue(new NewsError(true, errorM.getName(), errorM.getMessage(), R.string.news_serverError));
             }
 
             @Override
