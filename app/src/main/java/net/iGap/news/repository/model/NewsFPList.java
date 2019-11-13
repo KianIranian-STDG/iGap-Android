@@ -1,7 +1,5 @@
 package net.iGap.news.repository.model;
 
-import android.util.Log;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -16,25 +14,10 @@ public class NewsFPList {
     @SerializedName("news")
     private List<News> news;
 
-    public NewsFPList() {
-    }
-
     public NewsFPList(String category, String catID, List<News> news) {
         this.category = category;
         this.catID = catID;
         this.news = news;
-    }
-
-    public NewsFPList addFakeData() {
-        List<NewsImage> imageTemp = new ArrayList<>();
-        imageTemp.add(new NewsImage(null, null, null, null));
-        List<NewsContent> tempContent = new ArrayList<>();
-        tempContent.add(new NewsContent("101", "Root Title", "Title", "Lead",
-                imageTemp, "10/10/1993", "11/10/1993", "www.google.com", "www.google.com"));
-        List<News> tempNews = new ArrayList<>();
-        //tempNews.add(new News("bbc", tempContent));
-        NewsFPList news = new NewsFPList("sport", "101", tempNews);
-        return news;
     }
 
     public String getCategory() {
@@ -155,22 +138,6 @@ public class NewsFPList {
         private String internalLink;
         @SerializedName("externalLink")
         private String externalLink;
-
-        public NewsContent() {
-        }
-
-        public NewsContent(String id, String rootTitle, String title, String lead, List<NewsImage> image,
-                           String originalDate, String publishedDate, String internalLink, String externalLink) {
-            this.id = id;
-            this.rootTitle = rootTitle;
-            this.title = title;
-            this.lead = lead;
-            this.image = image;
-            this.originalDate = originalDate;
-            this.publishedDate = publishedDate;
-            this.internalLink = internalLink;
-            this.externalLink = externalLink;
-        }
 
         public String getId() {
             return id;

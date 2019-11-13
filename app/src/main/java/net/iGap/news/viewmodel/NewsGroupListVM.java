@@ -45,13 +45,6 @@ public class NewsGroupListVM extends BaseAPIViewModel {
         });
     }
 
-    private NewsGroup addFakeData() {
-        NewsGroup temp = new NewsGroup();
-        temp.setGroups(new ArrayList<>());
-        temp.getGroups().addAll(temp.getFake());
-        return temp;
-    }
-
     public MutableLiveData<NewsGroup> getmGroups() {
         return mGroups;
     }

@@ -1,6 +1,5 @@
 package net.iGap.news.viewmodel;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
@@ -85,11 +84,11 @@ public class NewsDetailVM extends BaseAPIViewModel {
                 int viewTemp = Integer.valueOf(newsDetail.getView())+Integer.valueOf(newsID);
                 if (viewTemp>1000000) {
                     viewTemp = viewTemp/1000000;
-                    viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp) + "M");
+                    viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : viewTemp + "M");
                 }
                 else if (viewTemp>1000) {
                     viewTemp = viewTemp/1000;
-                    viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp) + "K");
+                    viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : viewTemp + "K");
                 }
                 else {
                     viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp));

@@ -1,7 +1,6 @@
 package net.iGap.news.repository.model;
 
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -47,13 +47,6 @@ public class NewsListVM extends BaseAPIViewModel {
         });
     }
 
-    private NewsList addFakeData() {
-        NewsList temp = new NewsList();
-        temp.setNews(new ArrayList<>());
-        temp.getNews().addAll(temp.getFake());
-        return temp;
-    }
-
     public MutableLiveData<NewsList> getmData() {
         return mData;
     }

@@ -12,9 +12,6 @@ public class NewsApiArg implements Parcelable {
     private int groupID;
     private NewsType mType;
 
-    public NewsApiArg() {
-    }
-
     public NewsApiArg(int start, int display, int groupID, NewsType mType) {
         this.start = start;
         this.display = display;
@@ -68,7 +65,7 @@ public class NewsApiArg implements Parcelable {
     }
 
 
-    public NewsApiArg(Parcel in) {
+    private NewsApiArg(Parcel in) {
         start = in.readInt();
         display = in.readInt();
         groupID = in.readInt();

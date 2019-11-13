@@ -9,13 +9,11 @@ import net.iGap.news.repository.MainRepo;
 import net.iGap.news.repository.model.NewsError;
 import net.iGap.news.repository.model.NewsFirstPage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class NewsMainVM extends BaseAPIViewModel {
 
     private MutableLiveData<List<NewsFirstPage>> mainList;
-    private List<NewsFirstPage> temp;
     private MutableLiveData<NewsError> error;
     private MutableLiveData<Boolean> progressState;
     private MainRepo repo;
@@ -25,7 +23,6 @@ public class NewsMainVM extends BaseAPIViewModel {
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
         repo = new MainRepo();
-        temp = new ArrayList<>();
     }
 
     public void getNews() {
