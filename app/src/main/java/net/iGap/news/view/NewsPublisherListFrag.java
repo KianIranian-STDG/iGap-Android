@@ -54,7 +54,6 @@ public class NewsPublisherListFrag extends BaseAPIViewFrag {
     }
 
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 

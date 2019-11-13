@@ -40,6 +40,29 @@ public class NewsSliderAdapter extends SliderViewAdapter {
         return data.get(0).getNews().size();
     }
 
+    public List<NewsFPList> getData() {
+        return data;
+    }
+
+    public void setData(List<NewsFPList> data) {
+        this.data = data;
+        notifyDataSetChanged();
+    }
+
+    public onClickListener getCallBack() {
+        return callBack;
+    }
+
+    public void setCallBack(onClickListener callBack) {
+        this.callBack = callBack;
+    }
+
+    public interface onClickListener {
+        void onSliderClick(NewsFPList.NewsContent slide);
+
+        void onSliderTouch(boolean down);
+    }
+
     class SliderVH extends SliderViewAdapter.ViewHolder {
 
         ImageView imageViewBackground;
@@ -87,27 +110,5 @@ public class NewsSliderAdapter extends SliderViewAdapter {
                 container.setBackgroundColor(Color.parseColor(data.get(0).getNews().get(position).getColor()));
             }
         }
-    }
-
-    public interface onClickListener {
-        void onSliderClick(NewsFPList.NewsContent slide);
-        void onSliderTouch(boolean down);
-    }
-
-    public List<NewsFPList> getData() {
-        return data;
-    }
-
-    public void setData(List<NewsFPList> data) {
-        this.data = data;
-        notifyDataSetChanged();
-    }
-
-    public onClickListener getCallBack() {
-        return callBack;
-    }
-
-    public void setCallBack(onClickListener callBack) {
-        this.callBack = callBack;
     }
 }

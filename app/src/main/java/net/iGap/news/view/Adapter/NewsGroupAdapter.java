@@ -40,12 +40,24 @@ public class NewsGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((GroupViewHolder)holder).initView(position);
+        ((GroupViewHolder) holder).initView(position);
     }
 
     @Override
     public int getItemCount() {
         return mData.getGroups().size();
+    }
+
+    public onClickListener getCallBack() {
+        return callBack;
+    }
+
+    public void setCallBack(onClickListener callBack) {
+        this.callBack = callBack;
+    }
+
+    public interface onClickListener {
+        void onNewsGroupClick(NewsGroup.Groups news);
     }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
@@ -70,17 +82,5 @@ public class NewsGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getGroups().get(position)));
         }
-    }
-
-    public interface onClickListener {
-        void onNewsGroupClick(NewsGroup.Groups news);
-    }
-
-    public onClickListener getCallBack() {
-        return callBack;
-    }
-
-    public void setCallBack(onClickListener callBack) {
-        this.callBack = callBack;
     }
 }

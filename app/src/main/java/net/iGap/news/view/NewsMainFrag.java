@@ -76,7 +76,7 @@ public class NewsMainFrag extends BaseAPIViewFrag {
 
         super.onViewCreated(view, savedInstanceState);
 
-        if (specificGroupID != null && !specificGroupID.equals("")&& !specificGroupID.equals("showDetail"))
+        if (specificGroupID != null && !specificGroupID.equals("") && !specificGroupID.equals("showDetail"))
             openGroupNews(new NewsFPList(getResources().getString(R.string.news_mainTitle), specificGroupID, null));
         else if (specificNewsID != null && !specificNewsID.equals(""))
             openNewsDetail(specificNewsID);
@@ -156,8 +156,7 @@ public class NewsMainFrag extends BaseAPIViewFrag {
                                 HelperError.showSnackMessage(link + " " + getResources().getString(R.string.link_not_valid), false);
                             }
                         });
-                }
-                else {
+                } else {
                     // open Link
                     SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
                     int checkedInAppBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);

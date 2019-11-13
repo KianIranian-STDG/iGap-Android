@@ -67,8 +67,7 @@ public class NewsDetailVM extends BaseAPIViewModel {
     public void getDataFromServer(String newsID) {
         try {
             this.newsID = Integer.parseInt(newsID);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             error.setValue(new NewsError(true, "", "API Input is NOT valid.", 0));
             return;
         }
@@ -81,16 +80,14 @@ public class NewsDetailVM extends BaseAPIViewModel {
                     rootTitleVisibility.set(View.GONE);
                 rootTitle.set(newsDetail.getRootTitle());
                 lead.set(newsDetail.getLead());
-                int viewTemp = Integer.valueOf(newsDetail.getView())+Integer.valueOf(newsID);
-                if (viewTemp>1000000) {
-                    viewTemp = viewTemp/1000000;
+                int viewTemp = Integer.valueOf(newsDetail.getView()) + Integer.valueOf(newsID);
+                if (viewTemp > 1000000) {
+                    viewTemp = viewTemp / 1000000;
                     viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : viewTemp + "M");
-                }
-                else if (viewTemp>1000) {
-                    viewTemp = viewTemp/1000;
+                } else if (viewTemp > 1000) {
+                    viewTemp = viewTemp / 1000;
                     viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : viewTemp + "K");
-                }
-                else {
+                } else {
                     viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp));
                 }
                 viewVisibility.set(View.VISIBLE);
@@ -154,10 +151,6 @@ public class NewsDetailVM extends BaseAPIViewModel {
                 progressStateRelated.setValue(visibility);
             }
         });
-    }
-
-    public void setData(MutableLiveData<NewsDetail> data) {
-        this.data = data;
     }
 
     public MutableLiveData<NewsComment> getComments() {
@@ -244,12 +237,16 @@ public class NewsDetailVM extends BaseAPIViewModel {
         return data;
     }
 
-    public void setRelatedNews(MutableLiveData<NewsList> relatedNews) {
-        this.relatedNews = relatedNews;
+    public void setData(MutableLiveData<NewsDetail> data) {
+        this.data = data;
     }
 
     public MutableLiveData<NewsList> getRelatedNews() {
         return relatedNews;
+    }
+
+    public void setRelatedNews(MutableLiveData<NewsList> relatedNews) {
+        this.relatedNews = relatedNews;
     }
 
     public MutableLiveData<Boolean> getProgressStateContext() {

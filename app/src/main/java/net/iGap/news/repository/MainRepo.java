@@ -28,7 +28,7 @@ public class MainRepo {
     }
 
     public void getNewsPublishers(int start, int display, HandShakeCallback handShakeCallback, ResponseCallback<List<NewsPublisher>> apiResponse) {
-        repository.getNewsPublishers(start, display, handShakeCallback,  apiResponse);
+        repository.getNewsPublishers(start, display, handShakeCallback, apiResponse);
     }
 
     public void getNewsList(NewsApiArg arg, HandShakeCallback handShakeCallback, ResponseCallback<NewsList> apiResponse) {

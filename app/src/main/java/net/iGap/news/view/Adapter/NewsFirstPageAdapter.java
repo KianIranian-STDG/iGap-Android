@@ -24,7 +24,7 @@ import net.iGap.news.repository.model.NewsMainBTN;
 
 import java.util.List;
 
-public class NewsFirstPageAdapter extends RecyclerView.Adapter{
+public class NewsFirstPageAdapter extends RecyclerView.Adapter {
 
     private static final int Slider = 5;
     private static final int doubleButton = 4;
@@ -70,16 +70,16 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter{
         int viewType = holder.getItemViewType();
         switch (viewType) {
             case Slider:
-                ((SliderViewHolder)holder).initSlider(position);
+                ((SliderViewHolder) holder).initSlider(position);
                 break;
             case doubleButton:
-                ((DoubleBtnHolder)holder).initDoubleBTN(position);
+                ((DoubleBtnHolder) holder).initDoubleBTN(position);
                 break;
             case singleButton:
-                ((SingleBtnHolder)holder).initSingleBTN(position);
+                ((SingleBtnHolder) holder).initSingleBTN(position);
                 break;
             default:
-                ((NewsCardHolder)holder).initNewsListVH(position);
+                ((NewsCardHolder) holder).initNewsListVH(position);
                 break;
         }
     }
@@ -89,24 +89,16 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter{
         return mData.get(position).getmType();
     }
 
-    public interface onClickListener {
-        void onButtonClick(NewsMainBTN btn);
-
-        void onNewsCategoryClick(NewsFPList channel);
-
-        void onSliderClick(NewsFPList.NewsContent slide);
-    }
-
     @Override
     public int getItemCount() {
         return mData.size();
     }
 
-    // *************** getter and setter
-
     public List<NewsFirstPage> getmData() {
         return mData;
     }
+
+    // *************** getter and setter
 
     public void setmData(List<NewsFirstPage> mData) {
         this.mData = mData;
@@ -118,6 +110,14 @@ public class NewsFirstPageAdapter extends RecyclerView.Adapter{
 
     public void setCallBack(onClickListener callBack) {
         this.callBack = callBack;
+    }
+
+    public interface onClickListener {
+        void onButtonClick(NewsMainBTN btn);
+
+        void onNewsCategoryClick(NewsFPList channel);
+
+        void onSliderClick(NewsFPList.NewsContent slide);
     }
 
     // *************** View Holders

@@ -34,12 +34,12 @@ public class NewsError {
         return state;
     }
 
-    public void setState(boolean state) {
-        this.state = state;
-    }
-
     public boolean isState() {
         return state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
     }
 
     public int getResID() {

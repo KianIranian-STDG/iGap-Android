@@ -10,8 +10,6 @@ import net.iGap.news.repository.MainRepo;
 import net.iGap.news.repository.model.NewsError;
 import net.iGap.news.repository.model.NewsGroup;
 
-import java.util.ArrayList;
-
 public class NewsGroupListVM extends BaseAPIViewModel {
 
     private MutableLiveData<NewsGroup> mGroups;

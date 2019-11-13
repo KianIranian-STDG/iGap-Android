@@ -39,6 +39,16 @@ public class NewsList {
         this.news = news;
     }
 
+    public List<News> getFake() {
+        List<News> groups = new ArrayList<>();
+        groups.add(new News("101", "temp", null, 0));
+        groups.add(new News("101", "temp", null, 1));
+        groups.add(new News("101", "temp", null, 0));
+        groups.add(new News("101", "temp", null, 0));
+        groups.add(new News("101", "temp", null, 1));
+        return groups;
+    }
+
     public class News {
 
         @SerializedName("id")
@@ -149,16 +159,5 @@ public class NewsList {
                 return "";
             }
         }
-    }
-
-
-    public List<News> getFake() {
-        List<News> groups = new ArrayList<>();
-        groups.add(new News("101", "temp", null, 0));
-        groups.add(new News("101", "temp", null, 1));
-        groups.add(new News("101", "temp", null, 0));
-        groups.add(new News("101", "temp", null, 0));
-        groups.add(new News("101", "temp", null, 1));
-        return groups;
     }
 }

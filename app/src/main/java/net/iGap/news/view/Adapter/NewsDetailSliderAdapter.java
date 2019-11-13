@@ -33,6 +33,14 @@ public class NewsDetailSliderAdapter extends SliderViewAdapter {
         return data.size();
     }
 
+    public List<NewsImage> getData() {
+        return data;
+    }
+
+    public void setData(List<NewsImage> data) {
+        this.data = data;
+    }
+
     class SliderVH extends ViewHolder {
 
         ImageView imageViewBackground;
@@ -49,13 +57,5 @@ public class NewsDetailSliderAdapter extends SliderViewAdapter {
                     .placeholder(R.mipmap.news_temp_banner)
                     .into(imageViewBackground);
         }
-    }
-
-    public List<NewsImage> getData() {
-        return data;
-    }
-
-    public void setData(List<NewsImage> data) {
-        this.data = data;
     }
 }

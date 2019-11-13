@@ -103,11 +103,11 @@ public class NewsDetailFrag extends BaseAPIViewFrag {
 
         binding.writeComment.setOnClickListener(v -> {
             NewsAddCommentBottomSheetFrag bottomSheetFragment = new NewsAddCommentBottomSheetFrag().setData(arg.getString("NewsID"), new NewsAddCommentBottomSheetFrag.CompleteListener() {
-                        @Override
-                        public void onCompleted() {
-                            Toast.makeText(getContext(), R.string.news_add_comment_successToast, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                @Override
+                public void onCompleted() {
+                    Toast.makeText(getContext(), R.string.news_add_comment_successToast, Toast.LENGTH_SHORT).show();
+                }
+            });
             bottomSheetFragment.show(getFragmentManager(), "AddCommentBottomSheet");
         });
 
@@ -190,8 +190,7 @@ public class NewsDetailFrag extends BaseAPIViewFrag {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             binding.detailTV.setText(Html.fromHtml(data.getBody(), Html.FROM_HTML_MODE_COMPACT));
-        }
-        else {
+        } else {
             binding.detailTV.setText(Html.fromHtml(data.getBody()));
         }
 

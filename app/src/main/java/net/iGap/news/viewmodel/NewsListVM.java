@@ -11,8 +11,6 @@ import net.iGap.news.repository.model.NewsApiArg;
 import net.iGap.news.repository.model.NewsError;
 import net.iGap.news.repository.model.NewsList;
 
-import java.util.ArrayList;
-
 public class NewsListVM extends BaseAPIViewModel {
 
     private MutableLiveData<NewsList> mData;
