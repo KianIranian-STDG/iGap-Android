@@ -56,6 +56,7 @@
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_dark</item>
 
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_dark</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_dark</item>
     </style>
 
     <style name="BaseTheme.baseLightTheme">
@@ -116,6 +117,7 @@
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_dark</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_default</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_light</item>
     </style>
 
     <style name="BaseTheme.baseRedTheme">
@@ -174,6 +176,7 @@
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_red</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_red</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_red</item>
     </style>
 
     <style name="BaseTheme.basePinkTheme">
@@ -231,6 +234,7 @@
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_pink</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_pink</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_pink</item>
     </style>
 
     <style name="BaseTheme.basePurpleTheme">
@@ -291,6 +295,7 @@
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_purple</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_purple</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_purple</item>
     </style>
 
     <style name="BaseTheme.baseBlueTheme">
@@ -348,6 +353,7 @@
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_blue</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_blue</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_blue</item>
     </style>
 
     <style name="BaseTheme.baseGreenTheme">
@@ -406,6 +412,7 @@
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_green</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_green</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_green</item>
     </style>
 
     <style name="BaseTheme.baseAmberTheme">
@@ -464,6 +471,7 @@
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_amber</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_amber</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_amber</item>
     </style>
 
     <style name="BaseTheme.baseOrangeTheme">
@@ -526,6 +534,7 @@
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_orange</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_orange</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_orange</item>
     </style>
 
     <style name="BaseTheme.baseDarkGrayTheme">
@@ -586,6 +595,7 @@
         <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
         <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_gray</item>
         <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_dark_gray</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_dark_gray</item>
     </style>
 
     <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">

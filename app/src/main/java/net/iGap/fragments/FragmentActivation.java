@@ -21,6 +21,7 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.transition.ChangeBounds;
 import androidx.transition.TransitionManager;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -77,6 +78,7 @@ public class FragmentActivation extends BaseFragment {
                 ConstraintSet set = new ConstraintSet();
                 set.clone(binding.root);
                 set.constrainCircle(binding.timerPosition.getId(), binding.timerView.getId(), binding.timerView.getWidth() / 2, 0);
+                set.constrainCircle(binding.timerTextView.getId(), binding.timerPosition.getId(), (int) getResources().getDimension(R.dimen.dp20), 0);
                 set.applyTo(binding.root);
             }
         });
@@ -96,8 +98,9 @@ public class FragmentActivation extends BaseFragment {
                 ConstraintSet set1 = new ConstraintSet();
                 set1.clone(binding.root);
                 set1.constrainCircle(binding.timerPosition.getId(), binding.timerView.getId(), binding.timerView.getWidth() / 2, -integer);
+                set1.constrainCircle(binding.timerTextView.getId(), binding.timerPosition.getId(), (int) getResources().getDimension(R.dimen.dp20), -integer);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    TransitionManager.beginDelayedTransition(binding.root);
+                    TransitionManager.beginDelayedTransition(binding.root, new ChangeBounds());
                     set1.applyTo(binding.root);
                 } else {
                     set1.applyTo(binding.root);

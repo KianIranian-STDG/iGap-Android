@@ -4,8 +4,6 @@
 
     <data>
 
-        <import type="android.view.View" />
-
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.FragmentActivationViewModel" />
@@ -13,15 +11,17 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/root"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/register_background">
+        android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/logo"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:src="@mipmap/logo"
+            android:background="@color/white"
+            android:padding="@dimen/dp8"
+            android:src="@drawable/logo"
             app:layout_constraintBottom_toTopOf="@id/timerView"
             app:layout_constraintDimensionRatio="16:9"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -45,23 +45,25 @@
             android:id="@+id/timerPosition"
             android:layout_width="@dimen/dp16"
             android:layout_height="@dimen/dp16"
-            android:background="@drawable/timer_position"
+            android:background="?attr/iGapTimerPinter"
             app:layout_constraintCircle="@id/timerView"
-            app:layout_constraintCircleAngle="0" />
+            app:layout_constraintCircleAngle="0"
+            app:layout_constraintCircleRadius="0dp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/timerTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{viewModel.timerValue}"
-            android:textColor="@color/green"
-            app:layout_constraintBottom_toTopOf="@id/timerPosition"
-            app:layout_constraintLeft_toLeftOf="@id/timerPosition"
-            app:layout_constraintRight_toRightOf="@id/timerPosition" />
+            android:textColor="?attr/colorAccent"
+            app:layout_constraintCircle="@id/timerPosition"
+            app:layout_constraintCircleAngle="0"
+            app:layout_constraintCircleRadius="@dimen/dp20" />
 
         <!--TODO: change this and create custom view-->
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/activationCodeEditText1"
+            style="@style/iGapEditTextStyle"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -75,6 +77,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/activationCodeEditText2"
+            style="@style/iGapEditTextStyle"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -88,6 +91,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/activationCodeEditText3"
+            style="@style/iGapEditTextStyle"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -101,6 +105,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/activationCodeEditText4"
+            style="@style/iGapEditTextStyle"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -114,6 +119,7 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/activationCodeEditText5"
+            style="@style/iGapEditTextStyle"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -125,9 +131,9 @@
             app:layout_constraintRight_toRightOf="@id/timerView"
             app:layout_constraintTop_toTopOf="@id/activationCodeEditText1" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/resentActivationCode"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            style="@style/iGapOutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="@{viewModel.enabledResendCodeButton}"
@@ -140,12 +146,11 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/loginButton"
-            style="@style/BaseIGapButtonStyle"
+            style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{()->viewModel.loginButtonOnClick(activationCodeEditText1.getEditableText().toString() + activationCodeEditText2.getEditableText().toString() + activationCodeEditText3.getEditableText().toString() + activationCodeEditText4.getEditableText().toString()+activationCodeEditText5.getEditableText().toString())}"
             android:text="@string/login"
-            app:backgroundTint="@color/buttonColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -156,7 +161,7 @@
             android:id="@+id/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.showLoading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.showLoading}"
             app:layout_constraintBottom_toTopOf="@id/loginButton"
             app:layout_constraintLeft_toLeftOf="@id/loginButton"
             app:layout_constraintRight_toRightOf="@id/loginButton" />

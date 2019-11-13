@@ -3,7 +3,6 @@ package net.iGap;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -138,10 +137,12 @@ public class AccountManager {
     }
 
     public void changeCurrentUserForAddAccount() {
+        clearSomeStaticValue();
         currentUser = 0;
     }
 
     public void changeCurrentUserAccount(long userId) {
+        clearSomeStaticValue();
         int t = userAccountList.indexOf(new AccountUser(userId));
         if (t != -1) {
             currentUser = t;
@@ -156,11 +157,9 @@ public class AccountManager {
         if (accountUser.isAssigned()) {
             if (userAccountList.contains(accountUser)) {
                 userAccountList.remove(accountUser);
+                clearSomeStaticValue();
                 currentUser = userAccountList.size() - 1;
                 userAccountList.get(0).setDbName(getDbName());
-                for (int i = 0; i < userAccountList.size(); i++) {
-                    Log.wtf(this.getClass().getName(), "user\n: " + userAccountList.get(i).toString());
-                }
                 setCurrentUserInSharedPreferences();
                 setUserAccountListInSharedPreferences();
                 return userAccountList.get(currentUser).isAssigned();
@@ -186,5 +185,13 @@ public class AccountManager {
             }
         }
         return defaultDBName;
+    }
+
+    private void clearSomeStaticValue(){
+        G.serverHashContact = null;
+        G.isMplActive = false;
+        G.isWalletActive = false;
+        G.isWalletRegister = false;
+        G.jwt = null;
     }
 }

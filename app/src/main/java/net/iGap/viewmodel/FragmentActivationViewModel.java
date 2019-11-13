@@ -2,9 +2,11 @@ package net.iGap.viewmodel;
 
 import android.os.CountDownTimer;
 import android.text.format.DateUtils;
+import android.view.View;
 
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -28,7 +30,7 @@ public class FragmentActivationViewModel extends ViewModel {
     public MutableLiveData<Integer> currentTimePosition = new MutableLiveData<>();
     public MutableLiveData<WaitTimeModel> showWaitDialog = new MutableLiveData<>();
     public SingleLiveEvent<Integer> showEnteredCodeErrorServer = new SingleLiveEvent<>();
-    public MutableLiveData<Boolean> showLoading = new MutableLiveData<>();
+    public ObservableInt showLoading = new ObservableInt(View.GONE);
     public MutableLiveData<Boolean> closeKeyword = new MutableLiveData<>();
     public MutableLiveData<Boolean> clearActivationCode = new MutableLiveData<>();
     public MutableLiveData<Long> goToTwoStepVerificationPage = new MutableLiveData<>();
@@ -41,7 +43,7 @@ public class FragmentActivationViewModel extends ViewModel {
 
     public FragmentActivationViewModel() {
         repository = RegisterRepository.getInstance();
-        timerValue.set("1:00");
+        timerValue.set("60");
         counterTimer();
     }
 
@@ -57,12 +59,12 @@ public class FragmentActivationViewModel extends ViewModel {
                 int seconds = (int) ((millisUntilFinished) / 1000);
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
-                timerValue.set(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
+                timerValue.set(String.format(Locale.getDefault(), "%02d", seconds));
                 currentTimePosition.setValue(seconds * 6);
             }
 
             public void onFinish() {
-                timerValue.set(String.format(Locale.getDefault(), "%02d:%02d", 0, 0));
+                timerValue.set(String.format(Locale.getDefault(), "%02d", 0));
                 currentTimePosition.setValue(60 * 6);
                 enabledResendCodeButton.set(true);
                 cancelTimer();
@@ -87,7 +89,7 @@ public class FragmentActivationViewModel extends ViewModel {
         closeKeyword.setValue(true);
         if (enteredCode.length() == 5) {
             if (WebSocketClient.getInstance().isConnect()) {
-                showLoading.setValue(true);
+                showLoading.set(View.VISIBLE);
                 userVerification(enteredCode);
             } else {
                 requestRegister();
@@ -106,7 +108,7 @@ public class FragmentActivationViewModel extends ViewModel {
 
             @Override
             public void onError(ErrorWithWaitTime error) {
-                showLoading.setValue(false);
+                showLoading.set(View.GONE);
                 if (error.getMajorCode() == 184 && error.getMinorCode() == 1) {
                     goToTwoStepVerificationPage.setValue(repository.getUserId());
                 } else if (error.getMajorCode() == 102 && error.getMinorCode() == 1) {

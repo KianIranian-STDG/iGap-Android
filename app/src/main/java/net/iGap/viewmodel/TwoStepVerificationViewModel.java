@@ -12,6 +12,7 @@ import net.iGap.model.SecurityRecoveryModel;
 import net.iGap.model.UserPasswordDetail;
 import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.enums.Security;
 
 public class TwoStepVerificationViewModel extends ViewModel {
@@ -21,7 +22,7 @@ public class TwoStepVerificationViewModel extends ViewModel {
     public MutableLiveData<Long> showDialogWaitTime = new MutableLiveData<>();
     public MutableLiveData<Boolean> isHideKeyword = new MutableLiveData<>();
     public MutableLiveData<Integer> showDialogForgotPassword = new MutableLiveData<>();
-    public MutableLiveData<SecurityRecoveryModel> goToSecurityRecoveryPage = new MutableLiveData<>();
+    public SingleLiveEvent<SecurityRecoveryModel> goToSecurityRecoveryPage = new SingleLiveEvent<>();
 
     private ObservableField<String> passwordHint = new ObservableField<>("");
     private ObservableField<String> password = new ObservableField<>("");

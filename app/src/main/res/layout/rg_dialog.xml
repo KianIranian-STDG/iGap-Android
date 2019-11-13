@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/country_root"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?rootBackgroundColor"
-    android:clickable="true"
-    android:layoutDirection="ltr"
     android:orientation="vertical">
 
     <!-- Pretty hint text, and maxLines -->
@@ -22,33 +19,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:theme="@style/MySearch"
-            app:submitBackground="@color/red" />
+            android:theme="@style/MySearch" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/rg_txt_titleToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:layoutDirection="rtl"
             android:maxLines="1"
-            android:paddingStart="@dimen/dp52"
-            android:paddingLeft="@dimen/dp24"
-            android:paddingRight="@dimen/dp52"
+            android:padding="@dimen/dp8"
             android:singleLine="true"
             android:text="@string/rg_Select_Country"
-            android:textColor="?colorPrimary"
+            android:textColor="?attr/iGapPrimaryIconTextColor"
             android:textSize="@dimen/dp20"
             android:textStyle="bold" />
 
     </RelativeLayout>
 
-
     <View
         android:id="@+id/rg_borderButton"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?iGapDividerLine"
+        android:background="?attr/iGapDividerLine"
         android:visibility="visible" />
 
     <ListView
@@ -57,16 +49,16 @@
         android:layout_height="0dip"
         android:layout_weight="1"
         android:choiceMode="singleChoice"
-        android:divider="@color/rg_background_editText"
+        android:divider="?attr/iGapDividerLine"
         android:fadeScrollbars="false"
         android:layoutDirection="rtl"
         android:scrollbarSize="@dimen/dp4"
-        android:scrollbarThumbVertical="@color/rg_start_background" />
+        android:scrollbarThumbVertical="?attr/colorPrimary" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?iGapDividerLine" />
+        android:background="?attr/iGapDividerLine" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -79,15 +71,16 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/rg_txt_okDialog"
-            android:layout_width="@dimen/dp60"
-            android:layout_height="@dimen/dp36"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp8"
             android:layout_marginRight="@dimen/dp8"
-            android:background="@android:color/transparent"
+            android:background="?attr/selectableItemBackground"
             android:gravity="center"
+            android:padding="@dimen/dp8"
             android:text="@string/B_cancel"
-            android:textColor="?colorPrimary"
-            android:textSize="@dimen/dp14"
+            android:textColor="?attr/iGapPrimaryIconTextColor"
+            android:textSize="@dimen/largeTextSize"
             android:textStyle="bold" />
 
     </LinearLayout>

@@ -30,8 +30,6 @@ import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.viewmodel.RegistrationViewModel;
 
 import org.paygear.RaadApp;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static org.paygear.utils.Utils.signOutWallet;
 
 public class ActivityRegistration extends ActivityEnhanced {
@@ -175,7 +173,7 @@ public class ActivityRegistration extends ActivityEnhanced {
     private void goToMainPage(long userId) {
         Intent intent = new Intent(this, ActivityMain.class);
         intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, userId);
-        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }

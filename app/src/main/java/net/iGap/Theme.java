@@ -195,6 +195,10 @@ public class Theme {
         return getColorFromAttr(context, R.attr.colorAccent);
     }
 
+    public int getDarkAccentColor(Context context) {
+        return getColorFromAttr(context, R.attr.colorAccentDark);
+    }
+
     public int getPrimaryDarkColor(Context context) {
         return getColorFromAttr(context, R.attr.colorPrimaryDark);
     }

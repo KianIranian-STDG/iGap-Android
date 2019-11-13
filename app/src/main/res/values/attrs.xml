@@ -108,6 +108,7 @@
     <attr name="iGapCheckButton" format="reference" />
     <attr name="iGapProfileStroke" format="reference" />
     <attr name="iGapProfileToolbar" format="reference" />
+    <attr name="iGapTimerPinter" format="reference" />
 
     <!--=======================custom theme=====================-->
 

@@ -23,7 +23,6 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,8 +65,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Locale;
 
 public class FragmentRegister extends BaseFragment {
-
-    private int positionRadioButton = -1;
 
     private FragmentRegisterViewModel fragmentRegisterViewModel;
     private ActivityRegisterBinding fragmentRegisterBinding;
@@ -306,7 +303,7 @@ public class FragmentRegister extends BaseFragment {
                 }
             });
 
-            AdapterDialog.mSelectedVariation = positionRadioButton;
+            AdapterDialog.mSelectedVariation = -1;
 
             adapterDialog.notifyDataSetChanged();
 
