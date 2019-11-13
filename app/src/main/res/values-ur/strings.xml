@@ -1244,7 +1244,7 @@
     <string name="igap_update">بەڕۆژکردنەوە</string>
     <string name="permission_auto_start">تکایە بۆ گەیشتنی پەیامەکان، تەنانەت کاتێ ئای­گەپ لە بەک­گرانددا چالاک نییە، لە مێنۆدا ئای­گەپ هەڵبژێرە و چالاکی بکەرەوە</string>
     <string name="dont_show_again">دیسان پیشانی مەدەرەوە</string>
-    <string name="invitation_message">سڵاو!</string>
+    <string name="invitation_message">سلام!از طریق لینک زیر میتونی تو آیگپ عضو بشی، منتظرتیم  http://d.igap.net/invite \nشماره معرف :</string>
     <string name="namma_per_uh">FileLister</string>
     <string name="Please_enter_valid_folder_name">تکایە ناوی فوڵدێرەکە بنووسە</string>
     <string name="This_folder_already_exists">ئەم فوڵدێرە لە ئێستادا هەیە، تکایە ناوێکی تر هەڵبژێرە </string>
