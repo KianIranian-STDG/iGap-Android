@@ -451,6 +451,9 @@ public class G extends ApplicationContext {
         Log.wtf(this.getClass().getName(), "onCreate");
         super.onCreate();
         context = getApplicationContext();
+        Fabric.with(getApplicationContext(), new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
+
         PassCode.initPassCode(getApplicationContext());
         //init account manager for handle multi account
 
@@ -472,14 +475,6 @@ public class G extends ApplicationContext {
             Metrix.getInstance().setStore(BuildConfig.Store);
             Metrix.getInstance().setAppSecret(1, 1728320174, 43612053, 1626881868, 580653578);
         }
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Fabric.with(getApplicationContext(), new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
-                CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
-            }
-        }).start();
 
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
