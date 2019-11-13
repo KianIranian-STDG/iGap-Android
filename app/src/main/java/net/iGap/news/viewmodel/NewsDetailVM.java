@@ -29,6 +29,7 @@ public class NewsDetailVM extends BaseAPIViewModel {
 
     private ObservableField<String> title;
     private ObservableField<String> rootTitle;
+    private ObservableField<String> lead;
     private ObservableField<String> viewNum;
     private ObservableField<String> commentNum;
     private ObservableField<String> source;
@@ -52,6 +53,7 @@ public class NewsDetailVM extends BaseAPIViewModel {
 
         title = new ObservableField<>("عنوان خبر های ایران");
         rootTitle = new ObservableField<>("زیر عنوان خبرهای ایران");
+        lead = new ObservableField<>("توضیح کوتاه خبرهای ایران");
         viewNum = new ObservableField<>("0");
         commentNum = new ObservableField<>("0");
         source = new ObservableField<>("منبع خبری");
@@ -73,12 +75,22 @@ public class NewsDetailVM extends BaseAPIViewModel {
             @Override
             public void onSuccess(NewsDetail newsDetail) {
                 data.setValue(newsDetail);
-                title.set(newsDetail.getLead());
-                rootTitle.set(newsDetail.getTitle());
-                if (!newsDetail.getView().equals("0")){
-                    viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(newsDetail.getView()) : newsDetail.getView());
-                    viewVisibility.set(View.VISIBLE);
+                title.set(newsDetail.getTitle());
+                rootTitle.set(newsDetail.getRootTitle());
+                lead.set(newsDetail.getLead());
+                int viewTemp = Integer.valueOf(newsDetail.getView())+Integer.valueOf(newsID);
+                if (viewTemp>1000000) {
+                    viewTemp = viewTemp/1000000;
+                    viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp) + "M");
                 }
+                else if (viewTemp>1000) {
+                    viewTemp = viewTemp/1000;
+                    viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp) + "K");
+                }
+                else {
+                    viewNum.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp));
+                }
+                viewVisibility.set(View.VISIBLE);
                 commentNum.set(newsDetail.getView());
                 source.set(newsDetail.getSource());
                 if (newsDetail.getTags() == null || newsDetail.getTags().equals("null"))
@@ -275,5 +287,13 @@ public class NewsDetailVM extends BaseAPIViewModel {
 
     public void setPageVisibility(ObservableField<Integer> pageVisibility) {
         this.pageVisibility = pageVisibility;
+    }
+
+    public ObservableField<String> getLead() {
+        return lead;
+    }
+
+    public void setLead(ObservableField<String> lead) {
+        this.lead = lead;
     }
 }

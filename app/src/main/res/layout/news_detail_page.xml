@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="@{viewmodel.pageVisibility}"
-                    app:constraint_referenced_ids="title_back,banner_slider,image,rootTitle,title,dateTXT,view_icon,detail_TV,share_newsBTN,share_news,comment_back,comments_title,write_comment,news_back,date,view,tags" />
+                    app:constraint_referenced_ids="title_back,banner_slider,image,rootTitle,lead,title,dateTXT,view_icon,detail_TV,share_newsBTN,share_news,comment_back,comments_title,write_comment,news_back,date,view,tags" />
 
                 <View
                     android:id="@+id/title_back"
@@ -112,7 +112,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/banner_slider"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintBottom_toBottomOf="@+id/title"
-                    app:layout_constraintWidth_percent="0.2"
+                    app:layout_constraintWidth_percent="0.1"
                     app:layout_constraintDimensionRatio="1:1" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -136,28 +136,44 @@
                     android:id="@+id/title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:minHeight="@dimen/dp24"
+                    android:text="@={viewmodel.title}"
+                    android:textSize="@dimen/dp16"
+                    android:gravity="center|right"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:ellipsize="end"
+                    app:layout_constraintTop_toBottomOf="@+id/rootTitle"
+                    app:layout_constraintRight_toRightOf="@+id/rootTitle"
+                    app:layout_constraintLeft_toLeftOf="@+id/rootTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/lead"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:gravity="center|right"
                     android:minHeight="@dimen/dp24"
-                    android:text="@={viewmodel.title}"
+                    android:text="@={viewmodel.lead}"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dp12"
-                    android:textStyle="bold"
-                    app:layout_constraintLeft_toLeftOf="@+id/rootTitle"
-                    app:layout_constraintRight_toRightOf="@+id/rootTitle"
-                    app:layout_constraintTop_toBottomOf="@+id/rootTitle" />
+                    android:textSize="@dimen/dp14"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/title" />
 
                 <androidx.constraintlayout.widget.Barrier
                     android:id="@+id/topBarrier"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:barrierDirection="bottom"
-                    app:constraint_referenced_ids="title,image"/>
+                    app:constraint_referenced_ids="title,image,lead"/>
 
                 <View
                     android:id="@+id/bottonMargin"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp8"
+                    android:layout_height="@dimen/dp12"
                     app:layout_constraintTop_toBottomOf="@+id/topBarrier"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />

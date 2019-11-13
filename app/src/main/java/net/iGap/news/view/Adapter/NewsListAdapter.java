@@ -143,13 +143,24 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             source.setText(mData.getNews().get(position).getSource());
             title.setText(mData.getNews().get(position).getTitle());
 
-            String tempView = mData.getNews().get(position).getViewNum();
-            if (tempView == null || tempView.equals("0")) {
+            int viewTemp = Integer.valueOf(mData.getNews().get(position).getViewNum())+Integer.valueOf(mData.getNews().get(position).getId());
+            if (viewTemp == 0) {
                 view.setVisibility(View.GONE);
                 view_icon.setVisibility(View.GONE);
             }
-            else
-                view.setText(tempView);
+            else {
+                if (viewTemp>1000000) {
+                    viewTemp = viewTemp/1000000;
+                    view.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : viewTemp + "M");
+                }
+                else if (viewTemp>1000) {
+                    viewTemp = viewTemp/1000;
+                    view.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : viewTemp + "K");
+                }
+                else {
+                    view.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp));
+                }
+            }
 
             String tempRoot = mData.getNews().get(position).getRootTitle();
             if (tempRoot == null || tempRoot.equals(""))

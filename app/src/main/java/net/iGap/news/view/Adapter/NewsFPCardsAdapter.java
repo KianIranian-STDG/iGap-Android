@@ -1,9 +1,6 @@
 package net.iGap.news.view.Adapter;
 
 import android.graphics.Color;
-import android.graphics.Point;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +35,8 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
-        Display display = G.currentActivity.getWindowManager().getDefaultDisplay();
-        Point size = new Point();
+//        Display display = G.currentActivity.getWindowManager().getDefaultDisplay();
+//        Point size = new Point();
         switch (viewType) {
             case newsSingle:
                 View singleVH = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_single_news_item, parent, false);
@@ -107,16 +104,15 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public class SingleViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView category, source, rootTitle, title;
+        private TextView category, title, lead;
         private ImageView image;
         private CardView container;
 
         SingleViewHolder(@NonNull View itemView) {
             super(itemView);
             category = itemView.findViewById(R.id.category);
-            source = itemView.findViewById(R.id.source);
-            rootTitle = itemView.findViewById(R.id.rootTitle);
-            title = itemView.findViewById(R.id.title);
+            title = itemView.findViewById(R.id.rootTitle);
+            lead = itemView.findViewById(R.id.title);
             image = itemView.findViewById(R.id.image);
             container = itemView.findViewById(R.id.container);
         }
@@ -124,13 +120,9 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         void initSingleVH(int position) {
             NewsFPList temp = mData.getmNews().get(position);
             category.setText(temp.getCategory());
-            source.setText(temp.getNews().get(0).getSource());
-            rootTitle.setText(temp.getNews().get(0).getContents().getRootTitle());
-            if (rootTitle.getText().equals(""))
-                rootTitle.setVisibility(View.GONE);
             title.setText(temp.getNews().get(0).getContents().getTitle());
+            lead.setText(temp.getNews().get(0).getContents().getLead());
             Picasso.get()
-//                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
                     .load(temp.getNews().get(0).getContents().getImage().get(0).getTmb256())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
@@ -152,10 +144,9 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         private void changeToServerColor(String backColor, String rootTitleColor, String titleColor) {
             category.setTextColor(Color.parseColor(titleColor));
-            source.setTextColor(Color.parseColor(titleColor));
-            title.setTextColor(Color.parseColor(titleColor));
+            lead.setTextColor(Color.parseColor(titleColor));
 
-            rootTitle.setTextColor(Color.parseColor(rootTitleColor));
+            title.setTextColor(Color.parseColor(rootTitleColor));
 
             container.setCardBackgroundColor(Color.parseColor(backColor));
         }
@@ -166,41 +157,35 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return;
             }
             category.setTextColor(G.context.getResources().getColor(R.color.news_red));
-            source.setTextColor(G.context.getResources().getColor(R.color.black_register));
-            title.setTextColor(Color.BLACK);
+            lead.setTextColor(Color.BLACK);
             container.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
         }
 
         private void changeToNormalDark() {
             category.setTextColor(Color.WHITE);
-            source.setTextColor(Color.WHITE);
-            title.setTextColor(Color.WHITE);
+            lead.setTextColor(Color.WHITE);
             container.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
         }
     }
 
     public class DoubleViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView category, source, rootTitle, title;
+        private TextView category, title;
         private ImageView image;
         private CardView container;
 
-        private TextView category1, source1, rootTitle1, title1;
+        private TextView category1, title1;
         private ImageView image1;
         private CardView container1;
 
         DoubleViewHolder(@NonNull View itemView) {
             super(itemView);
             category = itemView.findViewById(R.id.category);
-            source = itemView.findViewById(R.id.source);
-            rootTitle = itemView.findViewById(R.id.rootTitle);
             title = itemView.findViewById(R.id.title);
             image = itemView.findViewById(R.id.image);
             container = itemView.findViewById(R.id.container);
 
             category1 = itemView.findViewById(R.id.category1);
-            source1 = itemView.findViewById(R.id.source1);
-            rootTitle1 = itemView.findViewById(R.id.rootTitle1);
             title1 = itemView.findViewById(R.id.title1);
             image1 = itemView.findViewById(R.id.image1);
             container1 = itemView.findViewById(R.id.container1);
@@ -210,8 +195,6 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if (position*2 >= mData.getmNews().size())
                 return;
             category.setText(mData.getmNews().get(position*2).getCategory());
-            source.setText(mData.getmNews().get(position*2).getNews().get(0).getSource());
-            rootTitle.setText(mData.getmNews().get(position*2).getNews().get(0).getContents().getRootTitle());
             title.setText(mData.getmNews().get(position*2).getNews().get(0).getContents().getTitle());
             Picasso.get()
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
@@ -224,8 +207,6 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             if ((position*2+1) >= mData.getmNews().size())
                 return;
             category1.setText(mData.getmNews().get(position*2+1).getCategory());
-            source1.setText(mData.getmNews().get(position*2+1).getNews().get(0).getSource());
-            rootTitle1.setText(mData.getmNews().get(position*2+1).getNews().get(0).getContents().getRootTitle());
             title1.setText(mData.getmNews().get(position*2+1).getNews().get(0).getContents().getTitle());
             Picasso.get()
 //                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
@@ -243,26 +224,20 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
             else {
                 // color
-                changeToServerColor(cell, data.getNews().get(0).getColor(), data.getNews().get(0).getColorRootTitile(), data.getNews().get(0).getColorTitle());
+                changeToServerColor(cell, data.getNews().get(0).getColor(), data.getNews().get(0).getColorTitle());
             }
         }
 
-        private void changeToServerColor(int cell, String backColor, String rootTitleColor, String titleColor) {
+        private void changeToServerColor(int cell, String backColor, String titleColor) {
             if (cell == 0) {
                 category.setTextColor(Color.parseColor(titleColor));
-                source.setTextColor(Color.parseColor(titleColor));
                 title.setTextColor(Color.parseColor(titleColor));
-
-                rootTitle.setTextColor(Color.parseColor(rootTitleColor));
 
                 container.setCardBackgroundColor(Color.parseColor(backColor));
             }
             else {
                 category1.setTextColor(Color.parseColor(titleColor));
-                source1.setTextColor(Color.parseColor(titleColor));
                 title1.setTextColor(Color.parseColor(titleColor));
-
-                rootTitle1.setTextColor(Color.parseColor(rootTitleColor));
 
                 container1.setCardBackgroundColor(Color.parseColor(backColor));
             }
@@ -275,13 +250,11 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
             if (cell == 0) {
                 category.setTextColor(G.context.getResources().getColor(R.color.news_red));
-                source.setTextColor(G.context.getResources().getColor(R.color.black_register));
                 title.setTextColor(Color.BLACK);
                 container.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
             }
             else {
                 category1.setTextColor(G.context.getResources().getColor(R.color.news_red));
-                source1.setTextColor(G.context.getResources().getColor(R.color.black_register));
                 title1.setTextColor(Color.BLACK);
                 container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.kuknos_WH_itembg));
             }
@@ -290,13 +263,11 @@ public class NewsFPCardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         private void changeToNormalDark(int cell) {
             if (cell == 0) {
                 category.setTextColor(Color.WHITE);
-                source.setTextColor(Color.WHITE);
                 title.setTextColor(Color.WHITE);
                 container.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
             }
             else {
                 category1.setTextColor(Color.WHITE);
-                source1.setTextColor(Color.WHITE);
                 title1.setTextColor(Color.WHITE);
                 container1.setCardBackgroundColor(G.context.getResources().getColor(R.color.chat_item_receive_dark));
             }
