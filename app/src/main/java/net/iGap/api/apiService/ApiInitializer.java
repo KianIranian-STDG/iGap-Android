@@ -1,11 +1,11 @@
 package net.iGap.api.apiService;
 
-import android.util.Log;
-
 import net.iGap.api.errorhandler.ErrorHandler;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.interfaces.OnRefreshToken;
 import net.iGap.request.RequestUserRefreshToken;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -20,7 +20,7 @@ public class ApiInitializer<T> {
         retrofitCallback.setProgressIndicator(true);
         retrofitCall.enqueue(new Callback<T>() {
             @Override
-            public void onResponse(Call<T> call, Response<T> response) {
+            public void onResponse(@NotNull Call<T> call, @NotNull Response<T> response) {
                 if (response.isSuccessful())
                     retrofitCallback.onSuccess(response.body());
                 else {
@@ -53,7 +53,7 @@ public class ApiInitializer<T> {
             }
 
             @Override
-            public void onFailure(Call<T> call, Throwable t) {
+            public void onFailure(@NotNull Call<T> call, @NotNull Throwable t) {
                 t.printStackTrace();
                 retrofitCallback.setProgressIndicator(false);
                 retrofitCallback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
@@ -76,7 +76,7 @@ public class ApiInitializer<T> {
         retrofitCallback.setProgressIndicator(true);
         retrofitCall.enqueue(new Callback<T>() {
             @Override
-            public void onResponse(Call<T> call, Response<T> response) {
+            public void onResponse(@NotNull Call<T> call, @NotNull Response<T> response) {
                 if (response.isSuccessful())
                     retrofitCallback.onSuccess(response.body());
                 else {
@@ -109,7 +109,7 @@ public class ApiInitializer<T> {
             }
 
             @Override
-            public void onFailure(Call<T> call, Throwable t) {
+            public void onFailure(@NotNull Call<T> call, @NotNull Throwable t) {
                 t.printStackTrace();
                 retrofitCallback.setProgressIndicator(false);
                 retrofitCallback.onFailed(new ErrorHandler().checkHandShakeFailure(t));
