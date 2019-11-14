@@ -102,6 +102,11 @@ public class AccountManager {
         }.getType())).apply();
     }
 
+    public void updateCurrentUserName(String name) {
+        userAccountList.get(currentUser).setName(name);
+        setUserAccountListInSharedPreferences();
+    }
+
     public void setCurrentUser() {
         getCurrentUserFromSharedPreferences();
     }
@@ -123,9 +128,9 @@ public class AccountManager {
         return userAccountList.contains(new AccountUser(userId));
     }
 
-    public boolean isExistThisAccount(String phoneNumber){
+    public boolean isExistThisAccount(String phoneNumber) {
         for (int i = 0; i < userAccountList.size(); i++) {
-            if (phoneNumber.equals(userAccountList.get(i).getPhoneNumber())){
+            if (phoneNumber.equals(userAccountList.get(i).getPhoneNumber())) {
                 return true;
             }
         }

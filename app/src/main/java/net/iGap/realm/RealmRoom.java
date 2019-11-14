@@ -616,13 +616,10 @@ public class RealmRoom extends RealmObject {
 
     public static void updateChatTitle(final long userId, final String title) {// TODO [Saeed Mozaffari] [2017-10-24 3:36 PM] - Can Write Better Code?
         DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.TYPE, ProtoGlobal.Room.Type.CHAT.toString()).findAll()) {
-                        if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == userId) {
-                            realmRoom.setTitle(title.trim());
-                        }
+            realm.executeTransaction(realm1 -> {
+                for (RealmRoom realmRoom : realm1.where(RealmRoom.class).equalTo(RealmRoomFields.TYPE, ProtoGlobal.Room.Type.CHAT.toString()).findAll()) {
+                    if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == userId) {
+                        realmRoom.setTitle(title.trim());
                     }
                 }
             });
@@ -632,17 +629,14 @@ public class RealmRoom extends RealmObject {
     public static void updateMemberCount(long roomId, final ProtoGlobal.Room.Type roomType, final long memberCount) {
         DbManager.getInstance().doRealmTask(realm -> {
             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    if (roomType == CHANNEL) {
-                        if (realmRoom != null && realmRoom.getChannelRoom() != null) {
-                            realmRoom.getChannelRoom().setParticipantsCountLabel(memberCount + "");
-                        }
-                    } else {
-                        if (realmRoom != null && realmRoom.getGroupRoom() != null) {
-                            realmRoom.getGroupRoom().setParticipantsCountLabel(memberCount + "");
-                        }
+            realm.executeTransaction(realm1 -> {
+                if (roomType == CHANNEL) {
+                    if (realmRoom != null && realmRoom.getChannelRoom() != null) {
+                        realmRoom.getChannelRoom().setParticipantsCountLabel(memberCount + "");
+                    }
+                } else {
+                    if (realmRoom != null && realmRoom.getGroupRoom() != null) {
+                        realmRoom.getGroupRoom().setParticipantsCountLabel(memberCount + "");
                     }
                 }
             });

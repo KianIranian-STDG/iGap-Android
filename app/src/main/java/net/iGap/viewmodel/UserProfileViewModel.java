@@ -773,11 +773,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             public void onUserProfileNickNameResponse(final String nickName, String initials) {
                 //setAvatar();
                 RealmRoom.updateChatTitle(userId, nickName);
-                G.handler.post(() -> {
-                    currentName = nickName;
-                    showLoading.set(View.GONE);
-                    submitData();
-                });
+                AccountManager.getInstance().updateCurrentUserName(nickName);
+                currentName = nickName;
+                showLoading.set(View.GONE);
+                submitData();
             }
 
             @Override
