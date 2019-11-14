@@ -31,7 +31,7 @@
             android:id="@+id/timerPosition"
             android:layout_width="@dimen/dp16"
             android:layout_height="@dimen/dp16"
-            android:background="@drawable/timer_position"
+            android:background="?attr/iGapTimerPinter"
             app:layout_constraintCircle="@id/timerView"
             app:layout_constraintCircleAngle="0"
             app:layout_constraintCircleRadius="0dp" />

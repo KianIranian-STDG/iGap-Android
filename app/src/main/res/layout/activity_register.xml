@@ -116,6 +116,7 @@
                 android:maxLines="@{fragmentRegisterViewModel.edtPhoneNumberMaskMaxCount}"
                 android:text="@={fragmentRegisterViewModel.callBackEdtPhoneNumber}"
                 android:textAlignment="gravity"
+                android:padding="@dimen/dp4"
                 android:textSize="@dimen/dp14"
                 android:visibility="@{fragmentRegisterViewModel.viewVisibility}"
                 app:layout_constraintBottom_toTopOf="@id/conditionCheckBox"
