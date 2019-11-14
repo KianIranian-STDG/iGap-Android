@@ -57,9 +57,9 @@ public class AccountsDialog extends BottomSheetDialogFragment {
                     RaadApp.onCreate(getContext());
                     pendingRequest.remove(0);
                     FragmentMain.mOffset = 0;
-                    dismiss();
                     ((ActivityMain) getActivity()).updateUiForChangeAccount();
                 }
+                dismiss();
             } else {
                 if (getActivity() != null) {
                     WebSocketClient.getInstance().disconnectSocket(false);

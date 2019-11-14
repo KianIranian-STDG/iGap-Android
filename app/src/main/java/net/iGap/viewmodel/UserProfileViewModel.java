@@ -227,7 +227,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void init() {
-        /*setCurrentFragment.setValue(isEditMode());*/
         isDarkMode.set(G.themeColor == Theme.DARK);
         //set credit amount
         if (G.selectedCard != null) {
@@ -260,7 +259,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         new RequestUserProfileGetBio().getBio();
         if (G.isNeedToCheckProfileWallpaper)
             getProfileWallpaperFromServer();
-
+        updateUserInfoUI();
     }
 
     private void updateUserInfoUI() {
@@ -428,7 +427,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         showAddAvatarButton.set(isEditProfile ? View.VISIBLE : View.GONE);
     }
 
-    public void onAccountsClicked(){
+    public void onAccountsClicked() {
         openAccountsDialog.setValue(true);
     }
 
@@ -559,7 +558,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onAvatarClick() {
-        if (DbManager.getInstance().doRealmTask(realm -> { return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst();}) != null) {
+        if (DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst();
+        }) != null) {
             goToShowAvatarPage.setValue(userInfo.getUserId());
         }
     }
@@ -667,7 +668,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                         if (currentUserEmail.equals(email.get())) {
                             if (currentBio.equals(bio.get())) {
                                 editProfileIcon.set(R.string.close_icon);
-                            gender.set(currentGender);
+                                gender.set(currentGender);
                             }
                         }
                     }
@@ -1235,25 +1236,21 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         new RequestUserProfileGetRepresentative().userProfileGetRepresentative(new RequestUserProfileGetRepresentative.OnRepresentReady() {
             @Override
             public void onRepresent(String phoneNumber) {
-                Log.wtf(this.getClass().getName(), "onRepresent, phone Number: " + phoneNumber);
-                G.handler.postDelayed(() -> {
-                    referralNumberObservableField.set(phoneNumber);
-                    referralError.set(R.string.empty_error_message);
-                    if (phoneNumber.equals("")) {
-                        referralEnableLiveData.postValue(true);
-                        countryReader();
-                        sendReferral = true;
-                    } else {
-                        referralCountryCodeObservableField.set("");
-                        referralEnableLiveData.postValue(false);
-                        sendReferral = false;
-                    }
-                }, 0);
+                referralNumberObservableField.set(phoneNumber);
+                referralError.set(R.string.empty_error_message);
+                if (phoneNumber.equals("")) {
+                    referralEnableLiveData.postValue(true);
+                    countryReader();
+                    sendReferral = true;
+                } else {
+                    referralCountryCodeObservableField.set("");
+                    referralEnableLiveData.postValue(false);
+                    sendReferral = false;
+                }
             }
 
             @Override
             public void onFailed() {
-                Log.wtf(this.getClass().getName(), "onFailed");
                 referralEnableLiveData.postValue(false);
             }
         });
