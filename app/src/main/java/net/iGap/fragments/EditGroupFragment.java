@@ -3,7 +3,6 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
@@ -16,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -70,7 +70,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isNeedResume = true ;
+        isNeedResume = true;
         viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
@@ -145,7 +145,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
             }
         });
 
-        viewModel.closePageImediatly.observe(getViewLifecycleOwner() , isClose -> {
+        viewModel.closePageImediatly.observe(getViewLifecycleOwner(), isClose -> {
             if (isClose == null || !isClose) return;
             popBackStackFragment();
         });
@@ -251,7 +251,34 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
 
                 if (which == 0) {
                     try {
-                        attachFile.requestOpenGalleryForImageSingleSelect(EditGroupFragment.this);
+                        HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
+                            @Override
+                            public void Allow() {
+                                if (getActivity() == null) return;
+                                Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO, true, getString(R.string.gallery), "-1", new FragmentGallery.GalleryFragmentListener() {
+                                    @Override
+                                    public void openOsGallery() {
+                                        try {
+                                            attachFile.requestOpenGalleryForImageSingleSelect(EditGroupFragment.this);
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onGalleryResult(String path) {
+                                        popBackStackFragment();
+                                        handleGalleryImageResult(path);
+                                    }
+                                });
+                                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).load();
+                            }
+
+                            @Override
+                            public void deny() {
+
+                            }
+                        });
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -280,6 +307,16 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                 }
             }
         }).show();
+    }
+
+    private void handleGalleryImageResult(String path) {
+        if (getActivity() != null) {
+            ImageHelper.correctRotateImage(path, true);
+            FragmentEditImage.insertItemList(path, false);
+            FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
+            fragmentEditImage.setOnProfileImageEdited(this);
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+        }
     }
 
     private void useCamera() {
@@ -347,7 +384,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
     }
 
     private void setUpEmojiPopup() {
-        setEmojiColor(new Theme().getRootColor(getContext()), new Theme().getTitleTextColor(getContext()),new Theme().getTitleTextColor(getContext()));
+        setEmojiColor(new Theme().getRootColor(getContext()), new Theme().getTitleTextColor(getContext()), new Theme().getTitleTextColor(getContext()));
     }
 
     private void setEmojiColor(int BackgroundColor, int iconColor, int dividerColor) {
