@@ -205,37 +205,23 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
             if (FragmentEditImage.itemGalleryList != null)
                 FragmentEditImage.itemGalleryList.clear();
 
-            switch (requestCode) {
-                case AttachFile.request_code_TAKE_PICTURE:
-                    if (getActivity() != null) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
-                            FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false, null);
-                            FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
-                            fragmentEditImage.setOnProfileImageEdited(this);
-                            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
-
-                        } else {
-                            ImageHelper.correctRotateImage(AttachFile.imagePath, true);
-                            FragmentEditImage.insertItemList(AttachFile.imagePath, false, null);
-                            FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0);
-                            fragmentEditImage.setOnProfileImageEdited(this);
-                            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
-                        }
-                    }
-                    break;
-                case AttachFile.request_code_image_from_gallery_single_select:
-                    if (data.getData() == null) {
-                        return;
-                    }
-                    if (getActivity() != null) {
-                        ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true);
-                        FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
+            if (requestCode == AttachFile.request_code_TAKE_PICTURE) {
+                if (getActivity() != null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
+                        FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false, null);
                         FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
                         fragmentEditImage.setOnProfileImageEdited(this);
                         new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+
+                    } else {
+                        ImageHelper.correctRotateImage(AttachFile.imagePath, true);
+                        FragmentEditImage.insertItemList(AttachFile.imagePath, false, null);
+                        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0);
+                        fragmentEditImage.setOnProfileImageEdited(this);
+                        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                     }
-                    break;
+                }
             }
         }
     }
@@ -258,11 +244,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                                 Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO, true, getString(R.string.gallery), "-1", new FragmentGallery.GalleryFragmentListener() {
                                     @Override
                                     public void openOsGallery() {
-                                        try {
-                                            attachFile.requestOpenGalleryForImageSingleSelect(EditGroupFragment.this);
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
+
                                     }
 
                                     @Override

@@ -241,26 +241,24 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
             if (FragmentEditImage.itemGalleryList != null)
                 FragmentEditImage.itemGalleryList.clear();
 
-            switch (requestCode) {
-                case AttachFile.request_code_TAKE_PICTURE:
-                    if (getActivity() != null) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
+            if (requestCode == AttachFile.request_code_TAKE_PICTURE) {
+                if (getActivity() != null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
 
-                            FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
-                            FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
-                            fragmentEditImage.setOnProfileImageEdited(this);
-                            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
-                        } else {
-                            ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
+                        FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
+                        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
+                        fragmentEditImage.setOnProfileImageEdited(this);
+                        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+                    } else {
+                        ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
 
-                            FragmentEditImage.insertItemList(AttachFile.imagePath, false);
-                            FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0);
-                            fragmentEditImage.setOnProfileImageEdited(this);
-                            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
-                        }
+                        FragmentEditImage.insertItemList(AttachFile.imagePath, false);
+                        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0);
+                        fragmentEditImage.setOnProfileImageEdited(this);
+                        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                     }
-                    break;
+                }
             }
         }
     }
