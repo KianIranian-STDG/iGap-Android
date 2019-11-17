@@ -985,9 +985,11 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         //check first time state then for every changes observer will change title
         if (G.connectionState != null) {
             if (G.connectionState == ConnectionState.CONNECTING) {
-                mHelperToolbar.setDefaultTitle(getString(R.string.connecting));
+                mHelperToolbar.getTextViewLogo().setText(getString(R.string.connecting));
+                mHelperToolbar.checkIGapFont();
             } else if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
-                mHelperToolbar.setDefaultTitle(getString(R.string.waiting_for_network));
+                mHelperToolbar.getTextViewLogo().setText(getString(R.string.waiting_for_network));
+                mHelperToolbar.checkIGapFont();
             }else {
                 mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
             }
