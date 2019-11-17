@@ -37,8 +37,10 @@
     <string name="Re_dialog_verify_number_part1">Вы ввели следующий номер:</string>
     <string name="Re_dialog_verify_number_part2">Если введеный номер верен, подтвердите, если иначе, исправьте</string>
     <string name="Re_Enter_Verify_Code_Please">Пожалуйста, введите код подтверждения вручную</string>
-    <string name="verify_socket_message">Вы зашли в свой аккаунт через другое устройство, iGap отправил код активации на вашу учетную запись через систему уведомлений, пожалуйста, проверьте предыдущее устройство и введите код вручную.</string>
-    <string name="verify_time_out_message">iGap автоматически обнаружит и введет подтверждающее сообщение, в противном случае вы получите его и сможете ввести его вручную, а если вы не получите проверочный код, выберите «Повторно отправить».</string>
+    <string name="verify_socket_message">کد تایید ارسال شده توسط آیگپ را وارد نمایید.</string>
+    <string name="verify_sms_message">کد تایید ارسال شده توسط پیامک را وارد نمایید.</string>
+    <string name="verify_call_message">کد تایید ارسال شده توسط تماس را وارد نمایید.</string>
+    <string name="verify_sms_socket_message">کد تایید ارسال شده توسط پیامک و آیگپ را وارد نمایید.</string>
     <string name="verify_invalid_code_message">К сожалению, ваш код подтверждения недействителен, пожалуйста, введите правильный код еще раз.</string>
     <string name="resend_message">Повторно отправить код активации</string>
     <string name="phone_number">Номер телефона</string>

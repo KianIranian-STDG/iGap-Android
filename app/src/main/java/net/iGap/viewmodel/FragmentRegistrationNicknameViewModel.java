@@ -9,6 +9,7 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableField;
@@ -110,6 +111,8 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
     public void selectAvatarOnClick() {
         if (existAvatar) {
             showDialog.setValue(true);
+        } else {
+            Log.wtf(this.getClass().getName(), "selectAvatarOnClick: else");
         }
     }
 
@@ -169,7 +172,7 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
                                 public void onError(ErrorWithWaitTime error) {// if error is not null set reagent request is have error
                                     if (error != null) {
                                         prgVisibility.set(View.GONE);
-                                        if (error.getMajorCode()== 10177 && error.getMinorCode() == 2) {
+                                        if (error.getMajorCode() == 10177 && error.getMinorCode() == 2) {
                                             HelperError.showSnackMessage(G.context.getString(R.string.referral_error_yourself), false);
                                         }
                                     } else {
@@ -224,11 +227,15 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
 
             @Override
             public void onFinish(String id, String token) {
+                Log.wtf(this.getClass().getName(), "onFinish: id: " + id);
+                existAvatar = true;
                 new RequestUserAvatarAdd().userAddAvatar(token);
             }
 
             @Override
             public void onError(String id) {
+                Log.wtf(this.getClass().getName(), "onError: id: " + id);
+                existAvatar = true;
                 prgVisibility.set(View.GONE);
             }
         }));

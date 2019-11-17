@@ -38,6 +38,8 @@ import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.structs.StructCountry;
 import net.iGap.request.RequestQrCodeNewDevice;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -126,7 +128,7 @@ public class FragmentRegisterViewModel extends ViewModel {
         showChooseCountryDialog.setValue(true);
     }
 
-    public void setCountry(StructCountry country) {
+    public void setCountry(@NotNull StructCountry country) {
         isShowLoading.set(View.VISIBLE);
         repository.getCountryInfo(country.getAbbreviation(), new RegisterRepository.RepositoryCallback<LocationModel>() {
             @Override
@@ -290,6 +292,8 @@ public class FragmentRegisterViewModel extends ViewModel {
                     showDialogWaitTime.postValue(new WaitTimeModel(R.string.USER_VERIFY_MANY_TRIES_SEND, error.getWaitTime(), error.getMajorCode()));
                 } else if (error.getMajorCode() == 5 && error.getMinorCode() == 1) { // timeout
                     showError.postValue(R.string.connection_error);
+                }else if (error.getMajorCode() == 1038 && error.getMinorCode() == 1){
+                    showError.postValue(R.string.error);
                 }
             }
         });

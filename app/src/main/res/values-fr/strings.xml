@@ -38,8 +38,10 @@
     <string name="Re_dialog_verify_number_part1">Vous avez entré ce numéro de téléphone:</string>
     <string name="Re_dialog_verify_number_part2">Si le numéro entré est correct, confirmez sinon le corriger </string>
     <string name="Re_Enter_Verify_Code_Please">Entrez le code de confirmation manuellement</string>
-    <string name="verify_socket_message">Vous êtes connecté à votre compte par un autre appareil ,igap a envoyé le code d\'activation à votre compte via son système de notification,  S\'il vous plaît vérifier l\'appareil  précédent.Entrez le code manuellement.</string>
-    <string name="verify_time_out_message">iGap identifie et entre le code de validation automatiquement, si non vous allez recovoir le code et  Vous pouvez l\'entrer manuellement.Si vous ne recevez pas le code de vérification, sélectionnez la demande de nouvelle soumission. </string>
+    <string name="verify_socket_message">کد تایید ارسال شده توسط آیگپ را وارد نمایید.</string>
+    <string name="verify_sms_message">کد تایید ارسال شده توسط پیامک را وارد نمایید.</string>
+    <string name="verify_call_message">کد تایید ارسال شده توسط تماس را وارد نمایید.</string>
+    <string name="verify_sms_socket_message">کد تایید ارسال شده توسط پیامک و آیگپ را وارد نمایید.</string>
     <string name="verify_invalid_code_message">Désolé! Votre code de validation n\'est pas valable. Veuillez l\'entrer correctement</string>
     <string name="resend_message">Envoyer de nouveau  code d\'activation</string>
     <string name="phone_number">Numéro de téléphone</string>

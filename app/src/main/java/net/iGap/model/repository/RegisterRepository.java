@@ -69,6 +69,7 @@ public class RegisterRepository {
     private String pattern = "";
     private String regexFetchCodeVerification;
     private boolean forgetTwoStepVerification = false;
+    private ProtoUserRegister.UserRegisterResponse.Method method;
 
     private SingleLiveEvent<GoToMainFromRegister> goToMainPage = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> loginExistUser = new SingleLiveEvent<>();
@@ -135,6 +136,10 @@ public class RegisterRepository {
         this.token = token;
     }
 
+    public ProtoUserRegister.UserRegisterResponse.Method getMethod() {
+        return method;
+    }
+
     public void setForgetTwoStepVerification(boolean forgetTwoStepVerification) {
         this.forgetTwoStepVerification = forgetTwoStepVerification;
     }
@@ -185,13 +190,11 @@ public class RegisterRepository {
 
             @Override
             public void onInfo(String body) {
-                Log.wtf(this.getClass().getName(), "onReceivePageInfo");
                 callback.onSuccess(body);
             }
 
             @Override
             public void onError(int major, int minor) {
-                Log.wtf(this.getClass().getName(), "onReceivePageInfoTOS: on Error");
                 callback.onError();
             }
         });
@@ -267,6 +270,7 @@ public class RegisterRepository {
                 userId = userIdR;
                 authorHash = authorHashR;
                 G.smsNumbers = smsNumbersR;
+                method = methodValue;
                 callback.onSuccess();
 
             }
@@ -291,6 +295,15 @@ public class RegisterRepository {
                 DbManager.getInstance().doRealmTask(realm -> {
                     if (userName == null || userName.isEmpty())
                         userName = new HelperPreferences().readString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_USERNAME);
+
+                    AccountManager.getInstance().addAccount(new AccountUser(
+                            userId,
+                            null,
+                            "",
+                            phoneNumber,
+                            0,
+                            true));
+
                     realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, userId, userName, phoneNumber, token, authorHash));
                     BotInit.setCheckDrIgap(true);
                     if (newUser) {
@@ -334,7 +347,7 @@ public class RegisterRepository {
                     getUserInfo();
                     requestUserInfo();
                 } else {
-                    setReagent(reagentPhoneNumber,callback);
+                    setReagent(reagentPhoneNumber, callback);
                 }
             }
 
@@ -395,25 +408,15 @@ public class RegisterRepository {
     }
 
     private void getUserInfo() {
-        Log.wtf(this.getClass().getName(),"getUserInfo");
+        Log.wtf(this.getClass().getName(), "getUserInfo");
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-                if (AccountManager.getInstance().isExistThisAccount(user.getId())) {
-                    loginExistUser.setValue(true);
-                } else {
-                    AccountManager.getInstance().addAccount(new AccountUser(
-                            user.getId(),
-                            null,
-                            user.getDisplayName(),
-                            String.valueOf(user.getPhone()),
-                            0,
-                            true));
-                    DbManager.getInstance().doRealmTask(realm -> {
-                        realm.executeTransactionAsync(realm1 -> RealmUserInfo.putOrUpdate(realm1, user), () -> G.onUserInfoResponse = null);
-                    });
-                    goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
-                }
+                AccountManager.getInstance().updateCurrentUserName(user.getDisplayName());
+                DbManager.getInstance().doRealmTask(realm -> {
+                    realm.executeTransactionAsync(realm1 -> RealmUserInfo.putOrUpdate(realm1, user), () -> G.onUserInfoResponse = null);
+                });
+                goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
 
             }
 
@@ -445,13 +448,12 @@ public class RegisterRepository {
 
                     @Override
                     public void onErrorSetRepresentative(int majorCode, int minorCode) {
-                        callback.onError(new ErrorWithWaitTime(majorCode,minorCode,0));
+                        callback.onError(new ErrorWithWaitTime(majorCode, minorCode, 0));
                     }
                 });
     }
 
     private void requestUserInfo() {
-        Log.wtf(this.getClass().getName(),"requestUserInfo");
         if (WebSocketClient.getInstance().isConnect()) {
             if (userId == 0) {
                 DbManager.getInstance().doRealmTask(realm -> {

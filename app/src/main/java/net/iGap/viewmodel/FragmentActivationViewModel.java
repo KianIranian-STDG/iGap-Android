@@ -18,6 +18,7 @@ import net.iGap.helper.HelperString;
 import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;
 import net.iGap.module.SingleLiveEvent;
+import net.iGap.proto.ProtoUserRegister;
 
 import java.util.Locale;
 
@@ -31,6 +32,7 @@ public class FragmentActivationViewModel extends ViewModel {
     public MutableLiveData<WaitTimeModel> showWaitDialog = new MutableLiveData<>();
     public SingleLiveEvent<Integer> showEnteredCodeErrorServer = new SingleLiveEvent<>();
     public ObservableInt showLoading = new ObservableInt(View.GONE);
+    public ObservableInt sendActivationStatus = new ObservableInt();
     public MutableLiveData<Boolean> closeKeyword = new MutableLiveData<>();
     public MutableLiveData<Boolean> clearActivationCode = new MutableLiveData<>();
     public MutableLiveData<Long> goToTwoStepVerificationPage = new MutableLiveData<>();
@@ -45,6 +47,15 @@ public class FragmentActivationViewModel extends ViewModel {
         repository = RegisterRepository.getInstance();
         timerValue.set("60");
         counterTimer();
+        if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS) {
+            sendActivationStatus.set(R.string.verify_sms_message);
+        } else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {
+            sendActivationStatus.set(R.string.verify_socket_message);
+        }else if(repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS_SOCKET){
+            sendActivationStatus.set(R.string.verify_sms_socket_message);
+        } else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_CALL) {
+            sendActivationStatus.set(R.string.verify_call_message);
+        }
     }
 
     @Override
@@ -180,11 +191,9 @@ public class FragmentActivationViewModel extends ViewModel {
         int message = 0;
 
         if (reason == Reason.SOCKET) {
-            message = R.string.verify_socket_message;
             isNeedTimer = false;
             enabledResendCodeButton.set(false);
         } else if (reason == Reason.TIME_OUT) {
-            message = R.string.verify_time_out_message;
             isNeedTimer = true;
             enabledResendCodeButton.set(false);
         } else if (reason == Reason.INVALID_CODE) {

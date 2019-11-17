@@ -58,9 +58,10 @@
     <string name="Re_dialog_verify_number_part1">"شما شماره زیر را وارد کردید:</string>
     <string name="Re_dialog_verify_number_part2">"اگر شماره وارد شده صحیح است تأیید و در غیر اینصورت اصلاح نمایید"</string>
     <string name="Re_Enter_Verify_Code_Please">"لطفاً کد تأیید را دستی وارد کنید"</string>
-    <string name="verify_socket_message">‫شما با دستگاه دیگری در حساب خود هستید، آیگپ کد فعال سازی را توسط سیستم اطلاع رسانی خود به حساب شما ارسال  کرد، لطفاً دستگاه قبلی را چک کرده و کد را بصورت دستی وارد کنید.</string>
-    ‬‬‬‬‬‬
-    <string name="verify_time_out_message">"آیگپ بصورت خودکار پیام تأیید را تشخیص داده و وارد می کند، در غیر اینصورت شما آن را دریافت کرده و می توانید به صورت دستی وارد نمایید، در صورت عدم دریافت کد تأیید، درخواست ارسال مجدد را انتخاب کنید."</string>
+    <string name="verify_socket_message">کد تایید ارسال شده توسط آیگپ را وارد نمایید.</string>
+    <string name="verify_sms_message">کد تایید ارسال شده توسط پیامک را وارد نمایید.</string>
+    <string name="verify_call_message">کد تایید ارسال شده توسط تماس را وارد نمایید.</string>
+    <string name="verify_sms_socket_message">کد تایید ارسال شده توسط پیامک و آیگپ را وارد نمایید.</string>
     <string name="verify_invalid_code_message">متأسفیم، کد تأیید شما نامعتبر است، لطفاً کد صحیح را مجدد وارد نمایید.</string>
     <string name="resend_message">"ارسال مجدد کد فعال سازی"</string>
     <string name="phone_number">"شماره تلفن"</string>

@@ -115,6 +115,7 @@ public class LoginActions {
                     if (userInfo != null) {
                         if (userInfo.getUserRegistrationState()) {
                             Log.wtf(LoginActions.class.getName(), "LoginActions.login: RequestUserLogin().userLogin");
+                            Log.wtf(LoginActions.class.getName(), "LoginActions.login: userInfo phone number: "+ userInfo.getUserInfo().getPhoneNumber());
                             new RequestUserLogin().userLogin(userInfo.getToken());
                         } else {
                             Log.wtf(LoginActions.class.getName(), "LoginActions.login:getUserRegistrationState" + userInfo.getUserRegistrationState());
