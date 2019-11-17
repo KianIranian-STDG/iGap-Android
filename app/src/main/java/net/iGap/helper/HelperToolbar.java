@@ -38,6 +38,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -1025,14 +1026,14 @@ public class HelperToolbar {
                 if (userInfo != null) {
                     return userInfo.getUserInfo().getPhoneNumber().substring(2);
                 } else {
-                    return ActivityMain.userPhoneNumber.substring(2) ;
+                    return AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2) ;
                 }
             });
 
         }catch (Exception e){
             //maybe exception was for realm substring
             try{
-                phoneNumber = ActivityMain.userPhoneNumber.substring(2);
+                phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
             }catch (Exception ex){
                 //nothing
             }

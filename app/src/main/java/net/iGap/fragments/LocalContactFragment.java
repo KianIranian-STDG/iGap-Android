@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
@@ -210,7 +211,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
     public void onRightIconClickListener(View view) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.invitation_message) + "+" + ActivityMain.userPhoneNumber);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.invitation_message) + "+" + AccountManager.getInstance().getCurrentUser().getPhoneNumber());
         sendIntent.setType("text/plain");
         Intent openInChooser = Intent.createChooser(sendIntent, "Open in...");
         getActivity().startActivity(openInChooser);

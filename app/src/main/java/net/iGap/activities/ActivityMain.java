@@ -177,7 +177,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private SharedPreferences sharedPreferences;
     private TextView iconLock;
     private int retryConnectToWallet = 0;
-    public static String userPhoneNumber;
     private MyPhonStateService myPhonStateService;
     public DataTransformerListener<Intent> dataTransformer ;
     private BroadcastReceiver audioManagerReciver;

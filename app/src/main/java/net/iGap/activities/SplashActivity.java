@@ -49,9 +49,6 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             } else {
-                if (checkValidationForRealm(userInfo)) {
-                    ActivityMain.userPhoneNumber = userInfo.getUserInfo().getPhoneNumber();
-                }
                 startActivity(new Intent(this, ActivityMain.class));
                 finish();
             }
@@ -62,9 +59,5 @@ public class SplashActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         DbManager.getInstance().closeUiRealm();
-    }
-
-    private boolean checkValidationForRealm(RealmUserInfo realmUserInfo) {
-        return realmUserInfo != null && realmUserInfo.isManaged() && realmUserInfo.isValid() && realmUserInfo.isLoaded();
     }
 }
