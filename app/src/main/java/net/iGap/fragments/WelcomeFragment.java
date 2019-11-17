@@ -29,11 +29,7 @@ public class WelcomeFragment extends BaseFragment {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                long userId = 0;
-                if (getArguments() != null) {
-                    userId = getArguments().getLong("userId");
-                }
-                return (T) new WelcomeFragmentViewModel(userId);
+                return (T) new WelcomeFragmentViewModel();
             }
         }).get(WelcomeFragmentViewModel.class);
     }
@@ -51,13 +47,9 @@ public class WelcomeFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel.getGoToRegistrationNicknamePage().observe(getViewLifecycleOwner(), userId -> {
-            if (getActivity() instanceof ActivityRegistration && userId != null) {
-                FragmentRegistrationNickname fragment = new FragmentRegistrationNickname();
-                Bundle bundle = new Bundle();
-                bundle.putLong(FragmentRegistrationNickname.ARG_USER_ID, userId);
-                fragment.setArguments(bundle);
-                ((ActivityRegistration) getActivity()).loadFragment(fragment, true);
+        viewModel.getGoToRegistrationNicknamePage().observe(getViewLifecycleOwner(), isShow -> {
+            if (getActivity() instanceof ActivityRegistration && isShow != null && isShow) {
+                ((ActivityRegistration) getActivity()).loadFragment(new FragmentRegistrationNickname(), true);
             }
         });
     }

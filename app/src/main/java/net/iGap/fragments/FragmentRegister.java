@@ -133,9 +133,9 @@ public class FragmentRegister extends BaseFragment {
             }
         });
 
-        fragmentRegisterViewModel.showEnteredPhoneNumberStartWithZeroError.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean != null && aBoolean) {
-                Toast.makeText(getContext(), R.string.Toast_First_0, Toast.LENGTH_SHORT).show();
+        fragmentRegisterViewModel.showEnteredPhoneNumberStartWithZeroError.observe(getViewLifecycleOwner(), errorMessage -> {
+            if (errorMessage != null) {
+                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
 

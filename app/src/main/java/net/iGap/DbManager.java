@@ -46,8 +46,10 @@ public class DbManager {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             throw new IllegalStateException("You must close realm in ui thread.");
         }
-        uiRealm.removeAllChangeListeners();
-        uiRealm.close();
+        if (uiRealm != null) {
+            uiRealm.removeAllChangeListeners();
+            uiRealm.close();
+        }
     }
 
     public void changeRealmConfiguration() {

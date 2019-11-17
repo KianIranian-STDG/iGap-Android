@@ -110,7 +110,7 @@ public class FragmentActivationViewModel extends ViewModel {
             public void onError(ErrorWithWaitTime error) {
                 showLoading.set(View.GONE);
                 if (error.getMajorCode() == 184 && error.getMinorCode() == 1) {
-                    goToTwoStepVerificationPage.setValue(repository.getUserId());
+                    goToTwoStepVerificationPage.postValue(repository.getUserId());
                 } else if (error.getMajorCode() == 102 && error.getMinorCode() == 1) {
                     errorVerifySms(Reason.INVALID_CODE);
                 } else if (error.getMajorCode() == 102 && error.getMinorCode() == 2) {
@@ -118,15 +118,15 @@ public class FragmentActivationViewModel extends ViewModel {
                 } else if (error.getMajorCode() == 103) {
                     //empty
                 } else if (error.getMajorCode() == 104) {
-                    showDialogUserBlocked.setValue(true);
+                    showDialogUserBlocked.postValue(true);
                 } else if (error.getMajorCode() == 105) {
                     showDialogUserBlocked.setValue(true);
                 } else if (error.getMajorCode() == 106) {
                     errorVerifySms(Reason.INVALID_CODE);
                 } else if (error.getMajorCode() == 107) {
-                    showDialogVerificationCodeExpired.setValue(true);
+                    showDialogVerificationCodeExpired.postValue(true);
                 } else if (error.getMajorCode() == 108) {
-                    showWaitDialog.setValue(new WaitTimeModel(R.string.USER_VERIFY_MANY_TRIES, error.getWaitTime(), error.getMajorCode()));
+                    showWaitDialog.postValue(new WaitTimeModel(R.string.USER_VERIFY_MANY_TRIES, error.getWaitTime(), error.getMajorCode()));
                 } else if (error.getMajorCode() == 5 && error.getMinorCode() == 1) {
                     userVerification(verificationCode);
                 }
@@ -193,8 +193,8 @@ public class FragmentActivationViewModel extends ViewModel {
             enabledResendCodeButton.set(true);
         }
 
-        showEnteredCodeErrorServer.setValue(message);
-        clearActivationCode.setValue(true);
+        showEnteredCodeErrorServer.postValue(message);
+        clearActivationCode.postValue(true);
         if (isNeedTimer) {
             counterTimer();
         }

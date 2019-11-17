@@ -55,6 +55,7 @@ import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
+import net.iGap.module.CountryReader;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SoftKeyboard;
 import net.iGap.viewmodel.FragmentRegistrationNicknameViewModel;
@@ -68,7 +69,6 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentRegistrationNickname extends BaseFragment implements FragmentEditImage.OnImageEdited {
 
-    public final static String ARG_USER_ID = "arg_user_id";
     private FragmentRegistrationNicknameViewModel viewModel;
     private FragmentRegistrationNicknameBinding binding;
 
@@ -79,7 +79,10 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new FragmentRegistrationNicknameViewModel(getArguments() != null ? getArguments().getLong(ARG_USER_ID, -1) : -1, avatarHandler, getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE));
+                return (T) new FragmentRegistrationNicknameViewModel(
+                        avatarHandler,
+                        new CountryReader().readFromAssetsTextFile("country.txt", getContext())
+                );
             }
         }).get(FragmentRegistrationNicknameViewModel.class);
     }
@@ -97,36 +100,13 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ProgressBar prgWait = binding.prg;
-        AppUtils.setProgresColler(prgWait);
+        AppUtils.setProgresColler(binding.prg);
 
         AndroidUtils.setBackgroundShapeColor(binding.puProfileCircleImage, new Theme().getPrimaryColor(getContext()));
 
         viewModel.progressValue.observe(getViewLifecycleOwner(), integer -> {
             if (integer != null) {
                 binding.prg.setProgress(integer);
-            }
-        });
-
-        viewModel.showErrorName.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean != null && aBoolean) {
-                binding.name.setErrorEnabled(true);
-                binding.name.setError(getString(R.string.Toast_Write_NickName));
-                binding.name.setHintTextAppearance(R.style.error_appearance);
-            } else {
-                binding.name.setErrorEnabled(false);
-                binding.name.setError("");
-            }
-        });
-
-        viewModel.showErrorLastName.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean != null && aBoolean) {
-                binding.lastName.setErrorEnabled(true);
-                binding.lastName.setError(getString(R.string.Toast_Write_NickName));
-                binding.lastName.setHintTextAppearance(R.style.error_appearance);
-            } else {
-                binding.lastName.setErrorEnabled(false);
-                binding.lastName.setError("");
             }
         });
 
@@ -311,7 +291,6 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
                                         e.printStackTrace();
                                     }
                                 } else {
-
                                     HelperError.showSnackMessage(getString(R.string.please_check_your_camera), false);
                                 }
                                 break;

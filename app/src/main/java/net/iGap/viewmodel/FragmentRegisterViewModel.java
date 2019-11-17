@@ -48,7 +48,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     public MutableLiveData<Boolean> closeKeyword = new MutableLiveData<>();
     public MutableLiveData<Boolean> showConditionErrorDialog = new MutableLiveData<>();
     public SingleLiveEvent<Boolean> goNextStep = new SingleLiveEvent<>();
-    public MutableLiveData<Boolean> showEnteredPhoneNumberStartWithZeroError = new MutableLiveData<>();
+    public MutableLiveData<Integer> showEnteredPhoneNumberStartWithZeroError = new MutableLiveData<>();
     public MutableLiveData<Boolean> showEnteredPhoneNumberError = new MutableLiveData<>();
     public MutableLiveData<Boolean> showChooseCountryDialog = new MutableLiveData<>();
     public SingleLiveEvent<String> showConfirmPhoneNumberDialog = new SingleLiveEvent<>();
@@ -118,7 +118,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     public void onTextChanged(String s) {
         if (s.startsWith("0")) {
             callBackEdtPhoneNumber.set("");
-            showEnteredPhoneNumberStartWithZeroError.setValue(true);
+            showEnteredPhoneNumberStartWithZeroError.setValue(R.string.Toast_First_0);
         }
     }
 
@@ -170,7 +170,7 @@ public class FragmentRegisterViewModel extends ViewModel {
             if (phoneNumber.length() == 0) {
                 showErrorMessageEmptyErrorPhoneNumberDialog.setValue(true);
             } else {
-                showEnteredPhoneNumberStartWithZeroError.setValue(phoneNumber.replace("-", "").matches(regex));
+                showEnteredPhoneNumberStartWithZeroError.setValue(R.string.Toast_Minimum_Characters);
             }
         }
     }

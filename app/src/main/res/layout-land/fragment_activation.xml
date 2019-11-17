@@ -126,8 +126,6 @@
             android:id="@+id/logo"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/white"
-            android:padding="@dimen/dp8"
             android:src="@drawable/logo"
             app:layout_constraintBottom_toTopOf="@id/resentActivationCode"
             app:layout_constraintDimensionRatio="16:9"

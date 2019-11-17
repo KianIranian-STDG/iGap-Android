@@ -17,6 +17,8 @@ import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnReceiveInfoLocation;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
+import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
+import net.iGap.interfaces.OnUserProfileSetRepresentative;
 import net.iGap.interfaces.OnUserRegistration;
 import net.iGap.interfaces.OnUserVerification;
 import net.iGap.interfaces.TwoStepVerificationGetPasswordDetail;
@@ -32,6 +34,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoRequest;
 import net.iGap.proto.ProtoUserRegister;
 import net.iGap.proto.ProtoUserVerify;
+import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestInfoCountry;
 import net.iGap.request.RequestInfoLocation;
@@ -39,9 +42,13 @@ import net.iGap.request.RequestInfoPage;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
+import net.iGap.request.RequestUserProfileSetNickname;
+import net.iGap.request.RequestUserProfileSetRepresentative;
 import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
 import net.iGap.request.RequestUserTwoStepVerificationVerifyPassword;
 import net.iGap.request.RequestWrapper;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -108,10 +115,6 @@ public class RegisterRepository {
         return pattern;
     }
 
-    public String getCountryName() {
-        return countryName;
-    }
-
     public String getRegex() {
         return regex;
     }
@@ -136,12 +139,13 @@ public class RegisterRepository {
         this.forgetTwoStepVerification = forgetTwoStepVerification;
     }
 
-    public void saveInstance(int callingCode, String pattern, String phoneNumber, String countryName, String regex) {
-        this.callingCode = callingCode;
-        this.pattern = pattern;
-        this.phoneNumber = phoneNumber;
-        this.countryName = countryName;
-        this.regex = regex;
+    public void removeUserAvatar() {
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                RealmAvatar.deleteAvatarWithOwnerId(userId);
+            }
+        });
     }
 
     public void inRegisterMode(MutableLiveData<Boolean> hideDialogQRCode, MutableLiveData<Long> goToTwoStepVerificationPage) {
@@ -220,13 +224,12 @@ public class RegisterRepository {
                 RegisterRepository.this.callingCode = callingCode;
                 RegisterRepository.this.countryName = name;
                 RegisterRepository.this.pattern = pattern;
-                G.handler.post(() -> callback.onSuccess(new LocationModel(callingCode, name, pattern)));
+                callback.onSuccess(new LocationModel(callingCode, name, pattern));
             }
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                //empty
-                G.handler.post(callback::onError);
+                callback.onError();
             }
         });
     }
@@ -243,9 +246,7 @@ public class RegisterRepository {
         requestRegister(phoneNumber, callback);
     }
 
-    private void requestRegister(String phoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
-
-        Log.wtf(this.getClass().getName(), "not exist");
+    private void requestRegister(@NotNull String phoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
         this.phoneNumber = phoneNumber.replace("-", "");
         new HelperPreferences().putString(SHP_SETTING.FILE_NAME, SHP_SETTING.REGISTER_NUMBER, this.phoneNumber);
         ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
@@ -322,8 +323,31 @@ public class RegisterRepository {
                 }
             }
         };
-
         requestLogin();
+    }
+
+    public void setNickName(String name, String lastName, String reagentPhoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
+        new RequestUserProfileSetNickname().userProfileNickName(name + " " + lastName, new OnUserProfileSetNickNameResponse() {
+            @Override
+            public void onUserProfileNickNameResponse(final String nickName, String initials) {
+                if (reagentPhoneNumber == null || reagentPhoneNumber.isEmpty()) {
+                    getUserInfo();
+                    requestUserInfo();
+                } else {
+                    setReagent(reagentPhoneNumber,callback);
+                }
+            }
+
+            @Override
+            public void onUserProfileNickNameError(int majorCode, int minorCode) {
+                callback.onError(null);
+            }
+
+            @Override
+            public void onUserProfileNickNameTimeOut() {
+                callback.onError(null);
+            }
+        });
     }
 
     private void requestLogin() {
@@ -342,7 +366,7 @@ public class RegisterRepository {
         }
     }
 
-    public void userVerify(String verificationCode, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
+    public void userVerify(@NotNull String verificationCode, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
         try {
             ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
             userVerify.setCode(Integer.parseInt(verificationCode
@@ -361,7 +385,7 @@ public class RegisterRepository {
 
                 @Override
                 public void onUserVerifyError(int majorCode, int minorCode, int time) {
-                    G.handler.post(() -> callback.onError(new ErrorWithWaitTime(majorCode, minorCode, time)));
+                    callback.onError(new ErrorWithWaitTime(majorCode, minorCode, time));
                 }
             });
             RequestQueue.sendRequest(requestWrapper);
@@ -371,6 +395,7 @@ public class RegisterRepository {
     }
 
     private void getUserInfo() {
+        Log.wtf(this.getClass().getName(),"getUserInfo");
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
@@ -385,13 +410,9 @@ public class RegisterRepository {
                             0,
                             true));
                     DbManager.getInstance().doRealmTask(realm -> {
-                        realm.executeTransactionAsync(realm1 -> RealmUserInfo.putOrUpdate(realm1, user), () -> {
-                            user.getId();
-                            G.onUserInfoResponse = null;
-                        });
+                        realm.executeTransactionAsync(realm1 -> RealmUserInfo.putOrUpdate(realm1, user), () -> G.onUserInfoResponse = null);
                     });
                     goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
-
                 }
 
             }
@@ -408,7 +429,29 @@ public class RegisterRepository {
         };
     }
 
+    private void setReagent(String reagentPhoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
+        new RequestUserProfileSetRepresentative().userProfileSetRepresentative(
+                reagentPhoneNumber,
+                new OnUserProfileSetRepresentative() {
+                    @Override
+                    public void onSetRepresentative(String phone) {
+                        DbManager.getInstance().doRealmTask(realm -> {
+                            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                            RealmUserInfo.setRepresentPhoneNumber(realm, realmUserInfo, phone);
+                        });
+                        getUserInfo();
+                        requestUserInfo();
+                    }
+
+                    @Override
+                    public void onErrorSetRepresentative(int majorCode, int minorCode) {
+                        callback.onError(new ErrorWithWaitTime(majorCode,minorCode,0));
+                    }
+                });
+    }
+
     private void requestUserInfo() {
+        Log.wtf(this.getClass().getName(),"requestUserInfo");
         if (WebSocketClient.getInstance().isConnect()) {
             if (userId == 0) {
                 DbManager.getInstance().doRealmTask(realm -> {
