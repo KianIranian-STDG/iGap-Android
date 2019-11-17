@@ -161,11 +161,13 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 view_icon.setVisibility(View.GONE);
             } else {
                 if (viewTemp > 1000000) {
-                    viewTemp = viewTemp / 1000000;
-                    view.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : viewTemp + "M");
+                    viewTemp /= 1000000;
+                    view.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp));
+                    view.append(" M");
                 } else if (viewTemp > 1000) {
-                    viewTemp = viewTemp / 1000;
-                    view.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : viewTemp + "K");
+                    viewTemp /= 1000;
+                    view.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp));
+                    view.append(" K");
                 } else {
                     view.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewTemp)) : String.valueOf(viewTemp));
                 }

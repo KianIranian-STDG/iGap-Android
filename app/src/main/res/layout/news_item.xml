@@ -64,6 +64,7 @@
                     android:textSize="@dimen/dp12"
                     android:gravity="center"
                     android:textColor="@color/white"
+                    android:singleLine="true"
                     android:layout_marginRight="@dimen/dp8"
                     app:layout_constraintBottom_toBottomOf="@+id/image"
                     app:layout_constraintRight_toRightOf="@+id/image"
