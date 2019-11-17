@@ -58,6 +58,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.BotInit;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.ChannelChatRole;
+import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
@@ -260,7 +261,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         //check is available forward,shared message
         setForwardMessage(true);
-        checkHasSharedData(false);
+        checkHasSharedData();
 
         //just check at first time page loaded
         notifyChatRoomsList();
@@ -972,11 +973,27 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         FragmentChat.mForwardMessages = null;
         HelperGetDataFromOtherApp.hasSharedData = false ;
         HelperGetDataFromOtherApp.sharedList.clear();
-        mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
+        checkConnectionStateAndSetToolbarTitle();
         mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
         mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
         if (G.isPassCode) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
         mHelperToolbar.getLeftButton().setVisibility(View.GONE);
+    }
+
+    private void checkConnectionStateAndSetToolbarTitle() {
+
+        //check first time state then for every changes observer will change title
+        if (G.connectionState != null) {
+            if (G.connectionState == ConnectionState.CONNECTING) {
+                mHelperToolbar.setDefaultTitle(getString(R.string.connecting));
+            } else if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
+                mHelperToolbar.setDefaultTitle(getString(R.string.waiting_for_network));
+            }else {
+                mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
+            }
+        }else {
+            mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
+        }
     }
 
     @Override
@@ -1171,7 +1188,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     }
 
-    public void checkHasSharedData(boolean couldRevert){
+    public void checkHasSharedData(){
 
         if (!(G.isLandscape && G.twoPaneMode)) {
             if (HelperGetDataFromOtherApp.hasSharedData) {
@@ -1182,7 +1199,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 mHelperToolbar.getLeftButton().setVisibility(View.VISIBLE);
                 mHelperToolbar.setLeftIcon(R.string.back_icon);
             } else {
-                if (couldRevert) revertToolbarFromForwardMode();
+                revertToolbarFromForwardMode();
             }
         }
     }

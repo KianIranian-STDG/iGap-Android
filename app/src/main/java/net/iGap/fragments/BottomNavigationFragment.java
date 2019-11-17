@@ -242,7 +242,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
 
         if (fragment instanceof FragmentMain) {
             if (enable) {
-                ((FragmentMain) fragment).checkHasSharedData(true);
+                ((FragmentMain) fragment).checkHasSharedData();
             }else {
                 ((FragmentMain) fragment).revertToolbarFromForwardMode();
             }
