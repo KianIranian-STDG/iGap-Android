@@ -193,5 +193,7 @@ public class AccountManager {
         G.isWalletActive = false;
         G.isWalletRegister = false;
         G.jwt = null;
+        G.selectedCard = null;
+        G.cardamount = 0;
     }
 }
