@@ -153,7 +153,7 @@ public class NewsList {
             try {
                 Date mDate = sdf.parse(date);
                 long timeInMilliseconds = mDate.getTime();
-                return HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS) + " | " + time_sdf.format(mDate.getTime());
+                return HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS) + " | " + HelperCalander.getClocktime(timeInMilliseconds, HelperCalander.isLanguagePersian);
             } catch (ParseException e) {
                 e.printStackTrace();
                 return "";

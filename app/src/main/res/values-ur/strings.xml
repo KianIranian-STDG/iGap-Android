@@ -1984,9 +1984,9 @@
     <string name="wheelchair_textView">ویلچەیر</string>
     <string name="prayerRoom_textView">شوێنی نوێژکردن</string>
     <string name="user_edited">بەکارهێنەر چاک کرا.</string>
-    <string name="edit_contact">چاک کردنی بەردەنگ</string>
+    <string name="edit_contact">ئیدتی بەردەنگ</string>
     <string name="iland">ئایلەند</string>
-    <string name="all_calls">پێوەندی</string>
+    <string name="all_calls">پەیوەندییەکان</string>
 
     <array name="onboard_titles">
         <item>جانتای پارەی مۆبایل</item>
@@ -2016,15 +2016,15 @@
     <string name="news_ergent">زیاترین باس</string>
     <string name="news_groupTitle">گرووپەکانی هەواڵ</string>
     <string name="news_latest">دواین هەواڵەکان</string>
-    <string name="news_mainTitle">هەواڵەکانی ئای گەپ</string>
+    <string name="news_mainTitle">الخبر الأول</string>
     <string name="news_related_news">هەواڵی پەیوەندیدار</string>
     <string name="news_share">بڵاوکردنەوی هەواڵ</string>
     <string name="news_write_comment">ڕای تۆ چیە؟</string>
 
     <string name="error_ivand_limit_gift">بەداخەوە پاداشتەکان تەواو بووە</string>
-    <string name="referral_error_yourself">ناکرێت ژمارەی خۆت وەک ناسە دابنی</string>
+    <string name="referral_error_yourself">ناکرێت ژمارەی خۆت وەک ناسێنەر دابنێی</string>
     <string name="open_url">کردنەوەی لینک</string>
-    <string name="copied">ککۆپی کرا</string>
+    <string name="copied">کۆپی کرا</string>
     <string name="message_is_long">پەیامەکەت درێژە.\nپەیامەکە دەبێتە</string>
 
     <string name="elecBill_Entry_lengthError">ناسەی قەبزەکە دبێت ۱۳ دانە بێت</string>
@@ -2066,7 +2066,7 @@
     <string name="elecBill_deleteBill_desc">دڵنیان لە سڕینەوەی ئەم قەبزە؟</string>
     <string name="elecBill_deleteBill_pos">سڕینەوە</string>
     <string name="elecBill_deleteBill_neg">قەبزەکە نەسڕدرێتەوە</string>
-    <string name="elecBill_deleteAccount_title">سڕینەوەی ئەکاونتی بەکارهێنەر</string>
+    <string name="elecBill_deleteAccount_title">سڕینەوەی ئەکانتی بەکارهێنەر</string>
     <string name="elecBill_deleteAccount_desc">دڵنیان لە سڕینەوەی ئەم ئەکانتەی خۆتان؟</string>
     <string name="elecBill_deleteAccount_pos">سڕینەوەی ئەکانت</string>
     <string name="elecBill_deleteAccount_neg">پووچەڵ کردنەوەی سڕینەوەی ئەکانتەکەی من</string>
@@ -2088,13 +2088,13 @@
     <string name="elecBill_error_bellowMin">ئەگەری حساب کردنی قەبزی کەمتر لە 10000 ڕیال بوونی نییە</string>
     <string name="elecBill_error_MPLError">بازنەی حساب کردن پچڕاوە</string>
     <string name="elecBill_error_title">هەڵە</string>
-    <string name="elecBill_error_listView">هیچێک بۆ ۆنشان دان نییە. تکایە چەند خولەکی دیکە هەوڵ بدە.</string>
-    <string name="elecBill_error_company">ئێوە دەبێت کۆمپانیای دابینکاری کارەبای خۆتان هەڵبژێرن.</string>
+    <string name="elecBill_error_listView">هیچێک بۆ نیشان دان نییە. تکایە چەند خولەکی دیکە هەوڵ بدە.</string>
+    <string name="elecBill_error_company">ئێوە دەبێت کۆمپانیای دابینکەری کارەبای خۆتان هەڵبژێرن.</string>
     <string name="elecBill_error_billSerial">ژمارەی کۆنتۆر ناکرێت خاڵی بێت</string>
     <string name="elecBill_error_billSerialLength">ژمارەی کۆنتۆر دەبێت لانی کەم حەوت دانە بێت.</string>
     <string name="elecBill_error_openCompanySpinner">کردنەوە</string>
     <string name="elecBill_error_zeroResultSearch">ئەنجامەکان: هیچ قەبزێک نەدۆزرایەوە</string>
-    <string name="elecBill_error_zeroResultBill">هیچ قەزێک بەم ناوەوە بوونی نییە.</string>
+    <string name="elecBill_error_zeroResultBill">هیچ قەبزێک بەم ناوەوە بوونی نییە.</string>
     <string name="elecBill_error_notPossible">ئەم کارە ئێستە جێبەجێ ناکرێت.</string>
     <string name="elecBill_success_title">سەرکەوتن</string>
     <string name="elecBill_success_pay">حساب کردن بە سەرکەوتوویی ئەنجام بوو.</string>

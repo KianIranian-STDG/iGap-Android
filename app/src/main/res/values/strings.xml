@@ -2353,7 +2353,7 @@ Want to get it?</string>
     <string name="news_ergent" tools:ignore="ExtraTranslation">پربحث ترین</string>
     <string name="news_groupTitle" tools:ignore="ExtraTranslation">گروه های خبری</string>
     <string name="news_latest" tools:ignore="ExtraTranslation">آخرین خبرها</string>
-    <string name="news_mainTitle" tools:ignore="ExtraTranslation">اخبار آیگپ</string>
+    <string name="news_mainTitle" tools:ignore="ExtraTranslation">اولین خبر</string>
     <string name="news_related_news" tools:ignore="ExtraTranslation">اخبار مرتبط</string>
     <string name="news_share" tools:ignore="ExtraTranslation">اشتراک گذاری خبر</string>
     <string name="news_write_comment" tools:ignore="ExtraTranslation">نظر شما چیست؟</string>

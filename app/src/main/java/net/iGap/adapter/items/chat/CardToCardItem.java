@@ -28,6 +28,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.model.CardToCardValue;
+import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FontIconTextView;
 import net.iGap.proto.ProtoGlobal;
 
@@ -67,7 +68,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
 
     protected static class ViewHolder extends NewChatItemHolder {
         private TextView cardToCardAmountTv;
-        private TextView messageTv;
+        private EmojiTextViewE messageTv;
         private Button payButton;
         private FontIconTextView cardIcon;
         private ConstraintLayout rootView;
@@ -82,7 +83,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
             rootView = new ConstraintLayout(view.getContext());
             set = new ConstraintSet();
             innerLayout = new LinearLayout(view.getContext());
-            messageTv = new TextView(view.getContext());
+            messageTv = new EmojiTextViewE(view.getContext());
             payButton = new Button(view.getContext());
             cardToCardAmountTv = new TextView(view.getContext());
             cardIcon = new FontIconTextView(view.getContext());

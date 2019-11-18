@@ -62,6 +62,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.BotInit;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.ChannelChatRole;
+import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
@@ -993,11 +994,29 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         FragmentChat.mForwardMessages = null;
         HelperGetDataFromOtherApp.hasSharedData = false;
         HelperGetDataFromOtherApp.sharedList.clear();
-        mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
+        checkConnectionStateAndSetToolbarTitle();
         mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
         mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
         if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
         mHelperToolbar.getLeftButton().setVisibility(View.GONE);
+    }
+
+    private void checkConnectionStateAndSetToolbarTitle() {
+
+        //check first time state then for every changes observer will change title
+        if (G.connectionState != null) {
+            if (G.connectionState == ConnectionState.CONNECTING) {
+                mHelperToolbar.getTextViewLogo().setText(getString(R.string.connecting));
+                mHelperToolbar.checkIGapFont();
+            } else if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
+                mHelperToolbar.getTextViewLogo().setText(getString(R.string.waiting_for_network));
+                mHelperToolbar.checkIGapFont();
+            }else {
+                mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
+            }
+        }else {
+            mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
+        }
     }
 
     @Override
