@@ -5757,7 +5757,7 @@ public class FragmentChat extends BaseFragment
                         mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
                         scrollToEnd();
 
-                        new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage).sendMessage(identity + "");
+                        new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
 
                         if (isReply()) {
                             mReplayLayout.setTag(null);

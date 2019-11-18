@@ -1861,7 +1861,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         });
                     }).start();
 
-                    G.chatSendMessageUtil.build(type, mMessage.getRoomId(), roomMessage).sendMessage(messageId + "");
+                    G.chatSendMessageUtil.build(type, mMessage.getRoomId(), roomMessage);
                     messageClickListener.sendFromBot(roomMessage);
 
                 } else if (v.getId() == ButtonActionType.JOIN_LINK) {
@@ -1885,7 +1885,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     public void execute(Realm realm) {
                                         RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
                                         RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.getRoomId(), identity, realmUserInfo.getUserInfo().getPhoneNumber(), null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                        G.chatSendMessageUtil.build(type, mMessage.getRoomId(), realmRoomMessage).sendMessage(identity + "");
+                                        G.chatSendMessageUtil.build(type, mMessage.getRoomId(), realmRoomMessage);
                                         messageClickListener.sendFromBot(realmRoomMessage);
                                     }
                                 });
