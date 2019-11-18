@@ -3993,6 +3993,20 @@ public class FragmentChat extends BaseFragment
 
         RealmRoomMessage roomMessage = RealmRoomMessage.makeVoiceMessage(mRoomId, chatType, savedPath, getWrittenMessage());
 
+        if (isReply()) {
+            RealmRoomMessage copyReplyMessage = DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoomMessage copyReplyMessage1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, getReplyMessageId()).findFirst();
+                if (copyReplyMessage1 != null) {
+                    return realm.copyFromRealm(copyReplyMessage1);
+                }
+                return null;
+            });
+
+            if (copyReplyMessage != null) {
+                roomMessage.setReplyTo(copyReplyMessage);
+            }
+        }
+
         new Thread(() -> {
             DbManager.getInstance().doRealmTask(realm -> {
                 realm.executeTransaction(realm1 -> {
