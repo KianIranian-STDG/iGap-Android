@@ -663,7 +663,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (!(holder instanceof StickerItem.ViewHolder)) {
             if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
                 showVote(holder);
-            } else if ((type == ProtoGlobal.Room.Type.CHAT)) {
+            } else {
                 if (mMessage.getForwardMessage() != null) {
                     if (mMessage.getForwardMessage().getAuthorRoomId() > 0) {
                         if (realmRoomForwardedFrom != null && realmRoomForwardedFrom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
