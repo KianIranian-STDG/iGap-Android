@@ -263,10 +263,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             phoneNumber = userInfo.getUserInfo().getPhoneNumber();
             userPhoneNumber.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(phoneNumber) : phoneNumber);
             setUserAvatar.setValue(userInfo.getUserId());
-            currentName = userInfo.getUserInfo().getDisplayName();
-            currentUserName = userInfo.getUserInfo().getUsername();
-            currentUserEmail = userInfo.getEmail();
-            currentBio = userInfo.getUserInfo().getBio();
+            currentName = userInfo.getUserInfo().getDisplayName() != null ? userInfo.getUserInfo().getDisplayName() : "";
+            currentUserName = userInfo.getUserInfo().getUsername() != null ? userInfo.getUserInfo().getUsername() : "" ;
+            currentUserEmail = userInfo.getEmail() != null ? userInfo.getEmail() : "";
+            currentBio = userInfo.getUserInfo().getBio() != null ? userInfo.getUserInfo().getBio() : "";
             ProtoGlobal.Gender userGender = userInfo.getGender();
             if (userGender != null) {
                 if (userGender == ProtoGlobal.Gender.MALE) {
