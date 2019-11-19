@@ -514,6 +514,7 @@ public class FragmentChat extends BaseFragment
     private TextView btnUp;
     private TextView btnDown;
     private TextView txtChannelMute;
+    private TextView iconChannelMute;
     private TextView btnUpHash;
     private TextView btnDownHash;
     private TextView txtHashCounter;
@@ -787,7 +788,9 @@ public class FragmentChat extends BaseFragment
         cardFloatingTime = rootView.findViewById(R.id.cardFloatingTime);
         txtFloatingTime = rootView.findViewById(R.id.txtFloatingTime);
         txtChannelMute = rootView.findViewById(R.id.chl_txt_mute_channel);
+        iconChannelMute = rootView.findViewById(R.id.chl_icon_mute_channel);
         layoutMute = rootView.findViewById(R.id.chl_ll_channel_footer);
+        layoutMute.setBackground(new Theme().tintDrawable(layoutMute.getBackground(), layoutMute.getContext(), R.attr.iGapButtonColor));
 
         gongingRunnable = new Runnable() {
             @Override
@@ -1091,6 +1094,7 @@ public class FragmentChat extends BaseFragment
             isMuteNotification = realmRoom.getMute();
             if (!isBot) {
                 txtChannelMute.setText(isMuteNotification ? R.string.unmute : R.string.mute);
+                iconChannelMute.setText(isMuteNotification ? R.string.unmute_icon : R.string.mute_icon);
             }
             iconMute.setVisibility(isMuteNotification ? View.VISIBLE : View.GONE);
 
@@ -1582,6 +1586,7 @@ public class FragmentChat extends BaseFragment
                         if (getMessagesCount() == 0) {
                             layoutMute.setVisibility(View.VISIBLE);
                             txtChannelMute.setText(R.string.start);
+                            iconChannelMute.setText("");
 
                             View layoutAttach = rootView.findViewById(R.id.layout_attach_file);
                             layoutAttach.setVisibility(View.GONE);
@@ -1870,6 +1875,7 @@ public class FragmentChat extends BaseFragment
         if (isBot) {
             txtEmptyMessages.setText(G.fragmentActivity.getResources().getString(R.string.empty_text_dr_bot));
             txtChannelMute.setText(R.string.start);
+            iconChannelMute.setText("");
         }
 
         lastDateCalendar.clear();
@@ -5561,9 +5567,11 @@ public class FragmentChat extends BaseFragment
 
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);
+            iconChannelMute.setText(R.string.unmute_icon);
             iconMute.setVisibility(View.VISIBLE);
         } else {
             txtChannelMute.setText(R.string.mute);
+            iconChannelMute.setText(R.string.mute_icon);
             iconMute.setVisibility(View.GONE);
         }
     }
@@ -6851,8 +6859,10 @@ public class FragmentChat extends BaseFragment
 
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);
+            iconChannelMute.setText(R.string.unmute_icon);
         } else {
             txtChannelMute.setText(R.string.mute);
+            iconChannelMute.setText(R.string.mute_icon);
         }
     }
 
