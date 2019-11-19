@@ -73,7 +73,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
         }
     }
 
-
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -83,18 +82,18 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
     private void setupChildren() {
         try {
             for (int i = 0; i < getChildCount(); i++) {
-                if (i != 4) {
+                if (i != 5) {
                     final TabItem tabItem = (TabItem) getChildAt(i);
                     tabItem.setPosition(i);
                     tabItems.add(tabItem);
                     tabItem.setOnTabItemSelected(this);
-                } else {
+                }/* else {
                     avatarImageView = (CircleImageView) ((FrameLayout) getChildAt(4)).getChildAt(0);
                     textView = (TextView) ((FrameLayout) getChildAt(4)).getChildAt(1);
                     textView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
                     getChildAt(4).setOnLongClickListener(this);
                     getChildAt(4).setOnClickListener(this);
-                }
+                }*/
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,14 +107,14 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
             selectedItemPosition = position;
             onSelectedItemChanged();
             if (onItemChangeListener != null) {
-                if (position != 4) {
+                if (position != 5) {
                     onItemChangeListener.onSelectedItemChanged(tabItems.get(position).getPosition());
                 } else {
                     onItemChangeListener.onSelectedItemChanged(position);
                 }
             }
         } else {
-            if (onItemChangeListener != null && position != 4) {
+            if (onItemChangeListener != null && position != 5) {
                 onItemChangeListener.onSelectAgain(tabItems.get(position).getPosition());
             }
         }

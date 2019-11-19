@@ -119,7 +119,6 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         this.crawlerMap = crawlerMap;
     }
 
-
     private void openAccountsDialog() {
         new AccountsDialog().setData(bottomNavigation.getAvatarHandler(), new AccountDialogListener() {
             @Override
@@ -129,7 +128,6 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
         }).show(getActivity().getSupportFragmentManager(), "account");
 
     }
-
 
     private void loadFragment(int position) {
         currentTab = position;
@@ -190,7 +188,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
                 }
                 fragmentTransaction.add(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
-            default:
+            case 4:
                 fragment = fragmentManager.findFragmentByTag(FragmentUserProfile.class.getName());
                 if (fragment == null) {
                     fragment = new FragmentUserProfile();
