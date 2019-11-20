@@ -264,7 +264,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/join"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dp18" />
+                    android:textSize="@dimen/largeTextSize" />
 
             </LinearLayout>
 
