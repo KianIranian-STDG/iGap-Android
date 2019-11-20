@@ -3423,9 +3423,24 @@ public class FragmentChat extends BaseFragment
         */
 
         urlWebViewForSpecialUrlChat = mUrl;
-        if (webViewChatPage == null) webViewChatPage = rootView.findViewById(R.id.webViewChatPage);
         if (rootWebView == null) rootWebView = rootView.findViewById(R.id.rootWebView);
         if (progressWebView == null) progressWebView = rootView.findViewById(R.id.progressWebView);
+        if (webViewChatPage == null) {
+            try {
+                webViewChatPage = new WebView(getContext());
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+                params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+                rootWebView.addView(webViewChatPage, params);
+//                webViewChatPage = rootView.findViewById(R.id.webViewChatPage);
+            }
+            catch (Exception e) {
+                return;
+            }
+        }
         recyclerView.setVisibility(View.GONE);
         viewAttachFile.setVisibility(View.GONE);
         rootWebView.setVisibility(View.VISIBLE);
