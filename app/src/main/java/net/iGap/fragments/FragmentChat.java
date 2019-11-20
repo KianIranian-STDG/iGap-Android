@@ -2033,8 +2033,8 @@ public class FragmentChat extends BaseFragment
     private void manageExtraLayout() {
         if (isNotJoin) {
             final LinearLayout layoutJoin = rootView.findViewById(R.id.ac_ll_join);
+            layoutJoin.setBackground(new Theme().tintDrawable(layoutJoin.getBackground(), layoutJoin.getContext(), R.attr.iGapButtonColor));
 
-            layoutJoin.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
             layoutJoin.setVisibility(View.VISIBLE);
             layoutMute.setVisibility(View.GONE);
             viewAttachFile.setVisibility(View.GONE);
