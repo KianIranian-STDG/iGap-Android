@@ -10,6 +10,7 @@
 
 package net.iGap.helper;
 
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -46,8 +47,12 @@ public class HelperError {
             case 5:
                 //if (minorCode == 1) error = "time out  server not response";
                 break;
-            case 7:
+            case 7:// socket connected to not ok core
                 WebSocketClient.getInstance().disconnectSocket(true);
+                break;
+            case 8://session is terminate
+                Log.wtf(HelperError.class.getName(),"case 8:");
+                G.logoutAccount.postValue(new HelperLogout().logoutUser());
                 break;
             case 9:
                 /*if (G.currentActivity != null) {
@@ -59,6 +64,7 @@ public class HelperError {
                 break;
             case 109:
                 error = G.fragmentActivity.getResources().getString(R.string.E_109);
+                Log.wtf(HelperError.class.getName(),"case 109:");
                 G.logoutAccount.postValue(new HelperLogout().logoutUser());
                 break;
             case 110:
@@ -67,6 +73,7 @@ public class HelperError {
                 break;
             case 111:
                 if (minorCode != 4) {
+                    Log.wtf(HelperError.class.getName(),"case 111:");
                     G.logoutAccount.postValue(new HelperLogout().logoutUser());
                 } else {
                     error = G.fragmentActivity.getResources().getString(R.string.E_111);

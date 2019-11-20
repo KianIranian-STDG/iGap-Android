@@ -1,7 +1,6 @@
 package net.iGap.fragments;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +27,7 @@ import net.iGap.Config;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityCall;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.SelectedItemAdapter;
@@ -85,7 +85,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -239,7 +238,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             });
 
             refreshChatList(position, false);
-            Log.wtf(this.getClass().getName(), "count item: " + multiSelectRv.getAdapter().getItemCount());
         };
 
         if (MusicPlayer.playerStateChangeListener != null) {
@@ -297,19 +295,19 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         });
 
         if (unreadList.size() == 0) {
-            Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.no_item, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
-                .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
-                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+        new MaterialDialog.Builder(getActivity()).title(getString(R.string.are_you_sure))
+                .positiveText(R.string.B_ok)
+                .negativeText(R.string.B_cancel)
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
                     DbManager.getInstance().doRealmTask(realm -> {
                         AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, new Realm.Transaction() {
                             @Override
-                            public void execute(Realm realm) {
+                            public void execute(@NotNull Realm realm) {
                                 if (unreadList.size() > 0) {
                                     for (RealmRoom room : unreadList) {
                                         markAsRead(realm, room.getType(), room.getId());
@@ -365,16 +363,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         }
     }
 
-    private void setColorToDarkMode(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.round_button_enabled_bg));
-        textView.setTextColor(getResources().getColor(R.color.white));
-    }
-
-    private void setColorToLightMode(TextView textView) {
-        textView.setBackground(getResources().getDrawable(R.drawable.round_button_disabled_bg));
-        textView.setTextColor(getResources().getColor(R.color.gray_4c));
-    }
-
     private void refreshChatList(int pos, boolean isRefreshAll) {
         if (mRecyclerView.getAdapter() != null) {
             if (isRefreshAll) {
@@ -388,21 +376,20 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private void initRecycleView() {
 
         if (results == null) {
-            String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
-            Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
-            RealmQuery<RealmRoom> temp = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false);
+            Log.wtf(this.getClass().getName(), "initRecycleView");
+            results = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).sort(new String[]{RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING}).findAllAsync();
             });
-            results = temp.sort(fieldNames, sort).findAllAsync();
             roomListAdapter = new RoomListAdapter(results, viewById, pbLoading, avatarHandler, mSelectedRoomList);
             getChatLists();
         } else {
+            Log.wtf(this.getClass().getName(), "initRecycleView: else");
             pbLoading.setVisibility(View.GONE);
         }
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NotNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (isThereAnyMoreItemToLoad) {
                     if (mOffset > 0) {
@@ -521,6 +508,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void getChatLists() {
+        Log.wtf(this.getClass().getName(), "isSecure: " + G.isSecure);
+        Log.wtf(this.getClass().getName(), "userLogin: " + G.userLogin);
+        Log.wtf(this.getClass().getName(), "mOffset: " + mOffset);
         if (G.isSecure && G.userLogin && mOffset == 0) {
             boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
             if (send)
@@ -530,7 +520,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         }
     }
 
-    private void deleteChat(RealmRoom item, boolean exit) {
+    private void deleteChat(@NotNull RealmRoom item, boolean exit) {
 
         if (item.getType() == CHAT) {
             new RequestChatDelete().chatDelete(item.getId());
@@ -588,11 +578,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             }
         }, 50);
     }
-
-    private boolean checkValidationForRealm(RealmRoom realmRoom) {
-        return realmRoom != null && realmRoom.isManaged() && realmRoom.isValid() && realmRoom.isLoaded();
-    }
-
 
     /**
      * ************************************ Callbacks ************************************
@@ -778,6 +763,18 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     @Override
+    public void onDestroy() {
+        Log.wtf(this.getClass().getName(),"onDestroy");
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        Log.wtf(this.getClass().getName(),"onDetach");
+        super.onDetach();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
@@ -837,7 +834,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                             new MaterialDialog.Builder(getActivity())
                                     .cancelable(false)
                                     .title(R.string.new_version_alert).titleGravity(GravityEnum.CENTER)
-                                    .titleColor(Color.parseColor("#f44336"))
+                                    .titleColor(new Theme().getAccentColor(getActivity()))
                                     .content(R.string.deprecated)
                                     .contentGravity(GravityEnum.CENTER)
                                     .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive((dialog, which) -> {
@@ -864,17 +861,23 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 getActivity().runOnUiThread(() -> {
                     if (getActivity().hasWindowFocus()) {
                         new MaterialDialog.Builder(getActivity())
-                                .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
+                                .title(R.string.igap_update)
+                                .titleColor(new Theme().getAccentColor(getActivity()))
                                 .titleGravity(GravityEnum.CENTER)
                                 .buttonsGravity(GravityEnum.CENTER)
-                                .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
-                                .negativeText(R.string.ignore).negativeColor(Color.parseColor("#798e89")).onNegative((dialog, which) -> dialog.dismiss()).positiveText(R.string.startUpdate).onPositive((dialog, which) -> {
-                            String url = "http://d.igap.net/update";
-                            Intent i = new Intent(Intent.ACTION_VIEW);
-                            i.setData(Uri.parse(url));
-                            startActivity(i);
-                            dialog.dismiss();
-                        })
+                                .content(R.string.new_version_avilable)
+                                .contentGravity(GravityEnum.CENTER)
+                                .negativeText(R.string.ignore)
+                                .negativeColor(new Theme().getAccentColor(getActivity()))
+                                .onNegative((dialog, which) -> dialog.dismiss())
+                                .positiveText(R.string.startUpdate)
+                                .onPositive((dialog, which) -> {
+                                    String url = "http://d.igap.net/update";
+                                    Intent i = new Intent(Intent.ACTION_VIEW);
+                                    i.setData(Uri.parse(url));
+                                    startActivity(i);
+                                    dialog.dismiss();
+                                })
                                 .show();
                     }
                 });
@@ -917,7 +920,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
             mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
             mHelperToolbar.getLeftButton().setVisibility(View.GONE);
-            if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
+            if (PassCode.getInstance().isPassCode())
+                mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
             mSelectedRoomList.clear();
             roomListAdapter.setMultiSelect(false);
             roomListAdapter.notifyDataSetChanged();
@@ -996,7 +1000,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
         mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
         mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
-        if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
+        if (PassCode.getInstance().isPassCode())
+            mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
         mHelperToolbar.getLeftButton().setVisibility(View.GONE);
     }
 
@@ -1057,8 +1062,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void confirmActionForRemoveItem(RealmRoom item) {
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.delete_chat))
-                .content(getString(R.string.are_you_sure_request)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+        new MaterialDialog.Builder(getActivity()).title(R.string.delete_chat)
+                .content(R.string.are_you_sure_request).positiveText(R.string.B_ok).negativeText(R.string.B_cancel)
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
                     deleteChat(item, true);
@@ -1076,8 +1081,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void confirmActionForClearHistoryOfSelected() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.clear_history))
-                .content(getString(R.string.do_you_want_clear_history_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+        new MaterialDialog.Builder(getActivity()).title(R.string.clear_history)
+                .content(R.string.do_you_want_clear_history_this).positiveText(R.string.B_ok).negativeText(R.string.B_cancel)
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
                     for (RealmRoom item : mSelectedRoomList) {
@@ -1178,7 +1183,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 mHelperToolbar.setDefaultTitle(getString(R.string.send_message_to) + "...");
                 mHelperToolbar.getRightButton().setVisibility(View.GONE);
                 mHelperToolbar.getScannerButton().setVisibility(View.GONE);
-                if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+                if (PassCode.getInstance().isPassCode())
+                    mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
                 mHelperToolbar.getLeftButton().setVisibility(View.VISIBLE);
                 mHelperToolbar.setLeftIcon(R.string.back_icon);
             } else {
@@ -1195,7 +1201,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 mHelperToolbar.setDefaultTitle(getString(R.string.send_message_to) + "...");
                 mHelperToolbar.getRightButton().setVisibility(View.GONE);
                 mHelperToolbar.getScannerButton().setVisibility(View.GONE);
-                if (PassCode.getInstance().isPassCode()) mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+                if (PassCode.getInstance().isPassCode())
+                    mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
                 mHelperToolbar.getLeftButton().setVisibility(View.VISIBLE);
                 mHelperToolbar.setLeftIcon(R.string.back_icon);
             } else {

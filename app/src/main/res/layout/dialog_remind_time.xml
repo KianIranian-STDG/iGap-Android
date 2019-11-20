@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
+    android:background="?attr/rootBackgroundColor"
     android:orientation="vertical"
-    android:background="@android:color/transparent"
     android:padding="@dimen/dp16">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textRemindTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp8"
+        android:gravity="center"
         android:text="@string/Toast_time_wait"
-        android:textColor="?iGapTitleTextColor"
-        android:textSize="@dimen/dp18" />
+        android:textColor="?attr/iGapTitleTextColor"
+        android:textSize="@dimen/dp18"
+        app:layout_constraintBottom_toTopOf="@id/remindTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/remindTime"
@@ -22,8 +27,22 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp16"
         android:gravity="center_horizontal"
-        android:text="356 secend"
-        android:textColor="?colorPrimary"
-        android:textSize="@dimen/dp18" />
+        android:textColor="?attr/colorPrimary"
+        android:textSize="@dimen/dp18"
+        app:layout_constraintBottom_toTopOf="@id/positiveButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textRemindTime" />
 
-</LinearLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/positiveButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp16"
+        android:text="@string/ok"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/remindTime" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

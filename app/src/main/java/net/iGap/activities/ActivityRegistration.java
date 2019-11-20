@@ -167,6 +167,7 @@ public class ActivityRegistration extends ActivityEnhanced {
     }
 
     private void goToMainPage(long userId) {
+        Log.wtf(this.getClass().getName(), "goToMainPage");
         Intent intent = new Intent(this, ActivityMain.class);
         intent.putExtra("arg_user_id", userId);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

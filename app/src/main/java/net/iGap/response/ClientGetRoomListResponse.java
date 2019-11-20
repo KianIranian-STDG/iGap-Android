@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import android.util.Log;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.helper.LooperThreadHelper;
@@ -43,8 +45,10 @@ public class ClientGetRoomListResponse extends MessageHandler {
 
         final ProtoClientGetRoomList.ClientGetRoomListResponse.Builder clientGetRoomListResponse = (ProtoClientGetRoomList.ClientGetRoomListResponse.Builder) message;
         if (G.onClientGetRoomListResponse != null) {
+            Log.wtf(this.getClass().getName(),"handler, onClientGetRoomListResponse not null");
             G.onClientGetRoomListResponse.onClientGetRoomList(clientGetRoomListResponse.getRoomsList(), clientGetRoomListResponse.getResponse(), identity);
         } else {
+            Log.wtf(this.getClass().getName(),"handler, onClientGetRoomListResponse null");
             new RequestClientCondition().clientCondition(RealmClientCondition.computeClientCondition(null));
             putChatToDatabase(clientGetRoomListResponse.getRoomsList());
         }

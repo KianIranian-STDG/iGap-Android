@@ -46,6 +46,7 @@ import net.iGap.model.PassCode;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ChatUpdateStatusUtil;
 import net.iGap.module.ClearMessagesUtil;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StartupActions;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoClientCondition;
@@ -374,7 +375,7 @@ public class G extends ApplicationContext {
     public static boolean isNeedToCheckProfileWallpaper = false;
 
     public static MutableLiveData<ConnectionState> connectionStateMutableLiveData = new MutableLiveData<>();
-    public static MutableLiveData<Boolean> logoutAccount = new MutableLiveData<>();
+    public static SingleLiveEvent<Boolean> logoutAccount = new SingleLiveEvent<>();
 
     private static int makeColorTransparent100(String color) {
         if (color.length() == 9) {

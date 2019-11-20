@@ -183,6 +183,9 @@ public class FragmentRegisterViewModel extends ViewModel {
 
     private void getTermsAndConditionData() {
         if (G.isSecure) {
+            isShowLoading.set(View.VISIBLE);
+            showRetryView.set(View.GONE);
+            viewVisibility.set(View.INVISIBLE);
             repository.getTermsOfServiceBody(new RegisterRepository.RepositoryCallback<String>() {
                 @Override
                 public void onSuccess(String data) {
@@ -222,13 +225,9 @@ public class FragmentRegisterViewModel extends ViewModel {
                 }
             });
         } else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Log.wtf(this.getClass().getName(), "not connected");
-                    getTermsAndConditionData();
-                }
-            }, 1000);
+            isShowLoading.set(View.GONE);
+            showRetryView.set(View.VISIBLE);
+            viewVisibility.set(View.INVISIBLE);
         }
     }
 

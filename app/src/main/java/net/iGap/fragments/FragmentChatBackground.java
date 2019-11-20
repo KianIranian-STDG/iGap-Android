@@ -22,7 +22,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +34,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.adapter.AdapterSolidChatBackground;
+import net.iGap.databinding.ActivityChatBackgroundBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperToolbar;
@@ -48,13 +52,14 @@ import net.iGap.realm.RealmWallpaper;
 import net.iGap.realm.RealmWallpaperFields;
 import net.iGap.realm.RealmWallpaperProto;
 import net.iGap.request.RequestInfoWallpaper;
+import net.iGap.viewmodel.ChatBackgroundViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.MODE_PRIVATE;
@@ -62,31 +67,36 @@ import static net.iGap.G.DIR_CHAT_BACKGROUND;
 
 public class FragmentChatBackground extends BaseFragment implements ToolbarListener {
 
+    private ActivityChatBackgroundBinding binding;
+    private ChatBackgroundViewModel viewModel;
+
     private String savePath;
     private RecyclerView mRecyclerView, rcvSolidColor;
     private ImageView imgFullImage;
     private AdapterChatBackground adapterChatBackgroundSetting;
     private AdapterSolidChatBackground adapterSolidChatbackground;
     private ArrayList<StructWallpaper> wList;
-    private Fragment fragment;
-    private RippleView chB_ripple_menu_button;
     private boolean isSolidColor = false;
     private HelperToolbar toolbar;
     ArrayList<String> solidList = new ArrayList<>();
 
-
-    public static FragmentChatBackground newInstance() {
-        return new FragmentChatBackground();
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(ChatBackgroundViewModel.class);
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return attachToSwipeBack(inflater.inflate(R.layout.activity_chat_background, container, false));
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater,R.layout.activity_chat_background, container, false);
+        binding.setLifecycleOwner(this);
+        binding.setViewModel(viewModel);
+        return attachToSwipeBack(binding.getRoot());
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         try {
@@ -96,8 +106,6 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
             e.printStackTrace();
         }
 
-        fragment = this;
-
         toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLeftIcon(R.string.back_icon)
@@ -106,13 +114,12 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
                 .setDefaultTitle(getString(R.string.st_title_Background))
                 .setListener(this);
 
-        ViewGroup layoutToolbar = view.findViewById(R.id.fcb_layout_toolbar);
-        layoutToolbar.addView(toolbar.getView());
+        ((ViewGroup) view.findViewById(R.id.fcb_layout_toolbar)).addView(toolbar.getView());
 
         toolbar.getSecondRightButton().setVisibility(View.GONE);
         imgFullImage = view.findViewById(R.id.stchf_fullImage);
 
-        SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
         if (backGroundPath.length() > 0) {
             File f = new File(backGroundPath);
@@ -172,11 +179,6 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         rcvSolidColor.clearAnimation();
 
 
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     @Override

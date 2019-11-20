@@ -25,7 +25,6 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,7 +55,6 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CountryReader;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SoftKeyboard;
 import net.iGap.viewmodel.FragmentRegistrationNicknameViewModel;
 
@@ -65,7 +63,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentRegistrationNickname extends BaseFragment implements FragmentEditImage.OnImageEdited {
 
@@ -327,7 +324,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
             });
 
             ListView listView = dialogChooseCountry.findViewById(R.id.lstContent);
-            AdapterDialog adapterDialog = new AdapterDialog(getContext(), viewModel.getStructCountryArrayList());
+            AdapterDialog adapterDialog = new AdapterDialog(viewModel.getStructCountryArrayList());
             listView.setAdapter(adapterDialog);
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 viewModel.setCountry(adapterDialog.getItem(position));

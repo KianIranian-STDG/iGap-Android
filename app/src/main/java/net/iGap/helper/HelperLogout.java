@@ -12,6 +12,7 @@ package net.iGap.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import net.iGap.AccountManager;
 import net.iGap.DbManager;
@@ -82,6 +83,7 @@ public final class HelperLogout {
     }
 
     public boolean logoutUser() {
+        Log.wtf(this.getClass().getName(), "logoutUser");
         return logoutUser(AccountManager.getInstance().getCurrentUser());
     }
 

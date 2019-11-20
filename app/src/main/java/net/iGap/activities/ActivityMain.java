@@ -381,7 +381,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     RaadApp.onCreate(this);
                     pendingRequest.remove(0);
                     FragmentMain.mOffset = 0;
+                    Log.wtf(this.getClass().getName(),"checkIntent,updateUiForChangeAccount");
                     updateUiForChangeAccount();
+                    Log.wtf(this.getClass().getName(),"checkIntent,updateUiForChangeAccount");
                 }
                 HelperUrl.goToActivityFromFCM(this, roomId, peerId);
             }
@@ -406,12 +408,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         G.logoutAccount.observe(this, haveOtherAccount -> {
-            Log.wtf(this.getClass().getName(), "current user: " + AccountManager.getInstance().getCurrentUser().getDbName() + " : " + AccountManager.getInstance().getCurrentUser().getName());
+            Log.wtf(this.getClass().getName(), "G.logoutAccount,current user: " + AccountManager.getInstance().getCurrentUser().getDbName() + " : " + AccountManager.getInstance().getCurrentUser().getName());
             if (haveOtherAccount != null) {
                 DbManager.getInstance().closeUiRealm();
                 if (haveOtherAccount) {
                     //toDo: handel notification for logout user
+                    Log.wtf(this.getClass().getName(),"G.logoutAccount,updateUiForChangeAccount");
                     updateUiForChangeAccount();
+                    Log.wtf(this.getClass().getName(),"G.logoutAccount,updateUiForChangeAccount");
                 } else {
                     try {
                         NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);

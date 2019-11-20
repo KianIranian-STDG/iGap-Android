@@ -43,7 +43,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.Config;
@@ -53,6 +52,7 @@ import net.iGap.activities.ActivityRegistration;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.ActivityRegisterBinding;
 import net.iGap.dialog.DefaultRoundDialog;
+import net.iGap.dialog.WaitingDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CountryReader;
@@ -254,7 +254,7 @@ public class FragmentRegister extends BaseFragment {
             });
 
             final ListView listView = dialogChooseCountry.findViewById(R.id.lstContent);
-            AdapterDialog adapterDialog = new AdapterDialog(getActivity(), fragmentRegisterViewModel.structCountryArrayList);
+            AdapterDialog adapterDialog = new AdapterDialog(fragmentRegisterViewModel.structCountryArrayList);
             listView.setAdapter(adapterDialog);
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 fragmentRegisterViewModel.setCountry(adapterDialog.getItem(position));
@@ -329,38 +329,9 @@ public class FragmentRegister extends BaseFragment {
     }
 
     private void dialogWaitTime(WaitTimeModel data) {
-
-        if (getActivity() != null && getActivity().isFinishing()) {
-            return;
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            new WaitingDialog(getActivity(), data).show();
         }
-
-        MaterialDialog dialogWait = new MaterialDialog.Builder(getActivity()).title(data.getTitle()).customView(R.layout.dialog_remind_time, true)
-                .positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).cancelable(false).onPositive((dialog, which) -> {
-                    fragmentRegisterViewModel.timerFinished();
-                    dialog.dismiss();
-                }).show();
-
-        View v = dialogWait.getCustomView();
-
-        final TextView remindTime = v.findViewById(R.id.remindTime);
-        CountDownTimer countWaitTimer = new CountDownTimer(data.getTime() * 1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                long seconds = millisUntilFinished / 1000 % 60;
-                long minutes = millisUntilFinished / (60 * 1000) % 60;
-                long hour = millisUntilFinished / (3600 * 1000);
-
-                remindTime.setText(String.format(Locale.getDefault(), "%02d:%02d:%02d", hour, minutes, seconds));
-                dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(false);
-            }
-
-            @Override
-            public void onFinish() {
-                dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(true);
-                remindTime.setText("00:00");
-            }
-        };
-        countWaitTimer.start();
     }
 
     private void showDialogTermAndCondition() {

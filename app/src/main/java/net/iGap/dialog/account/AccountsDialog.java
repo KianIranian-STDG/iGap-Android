@@ -3,6 +3,7 @@ package net.iGap.dialog.account;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,9 @@ public class AccountsDialog extends BottomSheetDialogFragment {
                     RaadApp.onCreate(getContext());
                     pendingRequest.remove(0);
                     FragmentMain.mOffset = 0;
+                    Log.wtf(this.getClass().getName(),"updateUiForChangeAccount");
                     ((ActivityMain) getActivity()).updateUiForChangeAccount();
+                    Log.wtf(this.getClass().getName(),"updateUiForChangeAccount");
                 }
                 dismiss();
             } else {

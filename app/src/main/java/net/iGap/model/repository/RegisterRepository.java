@@ -473,12 +473,12 @@ public class RegisterRepository {
         new RequestUserTwoStepVerificationGetPasswordDetail().getPasswordDetail(new TwoStepVerificationGetPasswordDetail() {
             @Override
             public void getDetailPassword(String questionOne, String questionTwo, String hint, boolean hasConfirmedRecoveryEmail, String unconfirmedEmailPattern) {
-                G.handler.post(() -> callback.onSuccess(new UserPasswordDetail(questionOne, questionTwo, hint, hasConfirmedRecoveryEmail, unconfirmedEmailPattern)));
+                callback.onSuccess(new UserPasswordDetail(questionOne, questionTwo, hint, hasConfirmedRecoveryEmail, unconfirmedEmailPattern));
             }
 
             @Override
             public void errorGetPasswordDetail(int majorCode, int minorCode) {
-
+                callback.onError();
             }
         });
     }
