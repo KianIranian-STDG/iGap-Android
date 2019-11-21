@@ -225,19 +225,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 fragmentEditImage.setOnProfileImageEdited(this);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
             }
-        } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
-            if (data != null) {
-                if (data.getData() == null) {
-                    return;
-                }
-                if (getActivity() != null) {
-                    ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true);
-                    FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
-                    FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
-                    fragmentEditImage.setOnProfileImageEdited(this);
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
-                }
-            }
         }
     }
 
@@ -267,9 +254,19 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                         HelperPermission.getStoragePermision(getActivity(), new OnGetPermission() {
                             @Override
                             public void Allow() {
-                                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                intent.setType("image/*");
-                                startActivityForResult(Intent.createChooser(intent, getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                                if (getActivity() == null) return;
+                                Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO , true,getString(R.string.gallery) ,"-1" , new FragmentGallery.GalleryFragmentListener() {
+                                    @Override
+                                    public void openOsGallery() {
+                                    }
+
+                                    @Override
+                                    public void onGalleryResult(String path) {
+                                        popBackStackFragment();
+                                        handleGalleryImageResult(path);
+                                    }
+                                });
+                                new HelperFragment(getActivity().getSupportFragmentManager() , fragment).load();
                             }
 
                             @Override
@@ -284,6 +281,16 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 }
             }
         }).show();
+    }
+
+    private void handleGalleryImageResult(String path) {
+        if (getActivity() != null) {
+            ImageHelper.correctRotateImage(path, true);
+            FragmentEditImage.insertItemList(path, false);
+            FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
+            fragmentEditImage.setOnProfileImageEdited(this);
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+        }
     }
 
     private void useCamera() {

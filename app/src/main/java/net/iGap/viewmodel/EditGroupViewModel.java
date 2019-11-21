@@ -22,6 +22,7 @@ import net.iGap.interfaces.OnGroupDelete;
 import net.iGap.interfaces.OnGroupEdit;
 import net.iGap.interfaces.OnGroupLeft;
 import net.iGap.module.SUID;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
@@ -57,7 +58,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
     public MutableLiveData<Boolean> goToModeratorPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> goToPermissionPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showSelectImageDialog = new MutableLiveData<>();
+    public SingleLiveEvent<Boolean> showSelectImageDialog = new SingleLiveEvent<>();
     public MutableLiveData<Boolean> showDialogChatHistory = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogLeaveGroup = new MutableLiveData<>();
     public MutableLiveData<Boolean> initEmoji = new MutableLiveData<>();

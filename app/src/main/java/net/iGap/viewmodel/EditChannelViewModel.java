@@ -23,6 +23,7 @@ import net.iGap.interfaces.OnChannelEdit;
 import net.iGap.interfaces.OnChannelUpdateReactionStatus;
 import net.iGap.interfaces.OnChannelUpdateSignature;
 import net.iGap.module.SUID;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
@@ -58,7 +59,7 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     public MutableLiveData<Boolean> goToModeratorPage = new MutableLiveData<>();
     public MutableLiveData<Boolean> initEmoji = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDialogLeaveGroup = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showSelectImageDialog = new MutableLiveData<>();
+    public SingleLiveEvent<Boolean> showSelectImageDialog = new SingleLiveEvent<>();
     public MutableLiveData<Boolean> showConvertChannelDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> showDeleteChannelDialog = new MutableLiveData<>();
     public MutableLiveData<Boolean> goBack = new MutableLiveData<>();

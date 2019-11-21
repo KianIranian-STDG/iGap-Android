@@ -552,7 +552,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                             @Override
                             public void execute(Realm realm) {
                                 RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, ((ArrayList<String>) v.getTag()).get(1), ((ArrayList<String>) v.getTag()).get(2), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
+                                G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage);
                                 if (G.onBotClick != null) {
                                     G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
                                 }
@@ -578,7 +578,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                                     public void execute(Realm realm) {
                                         RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
                                         RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                        G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
+                                        G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage);
                                         if (G.onBotClick != null) {
                                             G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
                                         }

@@ -107,7 +107,7 @@ public class ResendMessage implements IResendMessage {
                                                     G.chatSendMessageUtil.build(roomType, roomMessage.getRoomId(), roomMessage);
                                                 } else {
                                                     if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
-                                                        new ChatSendMessageUtil().build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage).sendMessage(roomMessage.getMessageId() + "");
+                                                        new ChatSendMessageUtil().build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage);
                                                     } else {
                                                         UploadManager.getInstance().uploadMessageAndSend(realmRoom.getType(), roomMessage);
                                                    }
@@ -130,7 +130,7 @@ public class ResendMessage implements IResendMessage {
                                             G.chatSendMessageUtil.build(roomType, roomMessage.getRoomId(), roomMessage);
                                         } else {
                                             if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
-                                                new ChatSendMessageUtil().build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage).sendMessage(roomMessage.getMessageId() + "");
+                                                new ChatSendMessageUtil().build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage);
                                             } else {
                                                 UploadManager.getInstance().uploadMessageAndSend(realmRoom.getType(), roomMessage);
                                             }

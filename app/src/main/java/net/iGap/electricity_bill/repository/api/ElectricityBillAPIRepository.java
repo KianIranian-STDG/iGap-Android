@@ -39,7 +39,7 @@ public class ElectricityBillAPIRepository {
 
     public void editBill(BillRegister info, HandShakeCallback handShakeCallback, ResponseCallback<ElectricityResponseModel<String>> apiResponse) {
         new ApiInitializer<ElectricityResponseModel<String>>().initAPI(apiService.editBill(info.getID(), phone,
-                info.getNID(), info.getEmail(), info.getTitle(), info.isSMSEnable(), info.isPrintEnable(), info.isEmailEnable(),
+                null/*info.getNID()*/, info.getEmail(), info.getTitle(), info.isSMSEnable(), info.isPrintEnable(), info.isEmailEnable(),
                 info.isAppEnable()), handShakeCallback, apiResponse);
     }
 

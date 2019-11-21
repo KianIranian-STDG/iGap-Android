@@ -819,7 +819,7 @@ public class HelperToolbar {
         }
     }
 
-    private void checkIGapFont() {
+    public void checkIGapFont() {
 
         if (mTxtLogo == null)
             return;
