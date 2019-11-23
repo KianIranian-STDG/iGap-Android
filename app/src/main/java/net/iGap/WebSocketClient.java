@@ -23,8 +23,10 @@ import net.iGap.helper.HelperConnectionState;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.realm.RealmRoom;
+import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestWrapper;
+import net.iGap.response.ClientGetRoomListResponse;
 import net.iGap.response.HandleResponse;
 
 import java.io.IOException;
@@ -34,7 +36,6 @@ import java.util.Map;
 import static net.iGap.Config.ALLOW_RECONNECT_AGAIN_NORMAL;
 import static net.iGap.G.latestHearBeatTime;
 import static net.iGap.G.latestResponse;
-import static net.iGap.request.RequestClientGetRoomList.pendingRequest;
 
 public class WebSocketClient {
 
@@ -295,7 +296,9 @@ public class WebSocketClient {
      * role back main data for preparation reconnecting to socket
      */
     private static void resetWebsocketInfo() {
-        pendingRequest.remove(0);
+
+        ClientGetRoomListResponse.roomListFetched = false;
+        RequestClientGetRoomList.isPendingGetRoomList = false;
         count = 0;
         G.canRunReceiver = true;
         G.symmetricKey = null;

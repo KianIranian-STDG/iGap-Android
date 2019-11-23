@@ -23,8 +23,9 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.request.RequestClientGetRoomList;
+import net.iGap.response.ClientGetRoomListResponse;
 
-import static net.iGap.request.RequestClientGetRoomList.pendingRequest;
 import static org.paygear.utils.Utils.signOutWallet;
 
 
@@ -40,7 +41,8 @@ public final class HelperLogout {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                pendingRequest.remove(0);
+                ClientGetRoomListResponse.roomListFetched = false;
+                RequestClientGetRoomList.isPendingGetRoomList = false;
                 FragmentMain.mOffset = 0;
                 signOutWallet();
                 HelperRealm.realmTruncate();
