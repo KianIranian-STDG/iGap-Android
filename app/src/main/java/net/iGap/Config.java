@@ -35,6 +35,7 @@ public class Config {
     public static final long drIgapPeerId = 2297310;
 
     public static final int TIME_OUT_DELAY_MS = (int) (DateUtils.SECOND_IN_MILLIS);
+    public static final int ACTION_EXPIRE_LOOP = (int) (DateUtils.SECOND_IN_MILLIS);
     public static final int FAKE_PM_DELAY = (int) (10 * DateUtils.SECOND_IN_MILLIS);
     public static final int TIME_OUT_MS = (int) (10 * DateUtils.SECOND_IN_MILLIS);
     public static final int ALLOW_RECONNECT_AGAIN_NORMAL = (int) (3 * DateUtils.SECOND_IN_MILLIS);
@@ -45,6 +46,7 @@ public class Config {
     public static final int COUNTER_TIMER_DELAY = (int) (DateUtils.SECOND_IN_MILLIS);
     public static final int UPDATE_STATUS_TIME = (int) (3 * DateUtils.SECOND_IN_MILLIS);// after this time check that program is in background
     public static final int ACTION_TIME_OUT = (int) (2 * DateUtils.SECOND_IN_MILLIS);
+    public static final int CLIENT_ACTION_TIME_OUT = (int) (10 * DateUtils.SECOND_IN_MILLIS);
     public static final int GET_MESSAGE_STATE_TIME_OUT = (int) (5 * DateUtils.SECOND_IN_MILLIS);
     public static final int GET_MESSAGE_STATE_TIME_OUT_CHECKING = (int) (DateUtils.SECOND_IN_MILLIS);
     public static final int LAST_SEEN_DELAY_CHECKING = (int) (60 * DateUtils.SECOND_IN_MILLIS);
