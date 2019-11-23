@@ -15,10 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -28,13 +26,14 @@ import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.AttachFile;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
+import net.iGap.viewmodel.ChatBackgroundViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -43,26 +42,27 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
     private final int ALL = 1;
 
     private ArrayList<FragmentChatBackground.StructWallpaper> mList;
-    private FragmentChatBackground.OnImageClick onImageClick;
-    private Fragment fragment;
+    private ChatBackgroundViewModel.OnImageWallpaperListClick onImageClick;
 
 
-    public AdapterChatBackground(Fragment fragment, ArrayList<FragmentChatBackground.StructWallpaper> List, FragmentChatBackground.OnImageClick onImageClick) {
-        this.fragment = fragment;
+    public AdapterChatBackground(ArrayList<FragmentChatBackground.StructWallpaper> List, ChatBackgroundViewModel.OnImageWallpaperListClick onImageClick) {
         this.mList = List;
         this.onImageClick = onImageClick;
-
     }
 
+    public void setmList(ArrayList<FragmentChatBackground.StructWallpaper> mList) {
+        this.mList = mList;
+        notifyDataSetChanged();
+    }
+
+    @NotNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
 
         if (viewType == CHOOSE) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_background_choose, parent, false);
-            return new ViewHolderImage(view);
+            return new ViewHolderImage(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_background_choose, parent, false));
         } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_background_image, parent, false);
-            return new ViewHolderItem(view);
+            return new ViewHolderItem(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_background_image, parent, false));
         }
     }
 
@@ -122,20 +122,26 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
             if (new File(bigImagePath).exists()) {
                 holder2.messageProgress.setVisibility(View.GONE);
-
-                holder2.mPath = bigImagePath;
-
             } else {
-                holder2.mPath = "";
                 holder2.messageProgress.setVisibility(View.VISIBLE);
                 startDownload(position, holder2.messageProgress);
             }
+
+            holder2.img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (bigImagePath.length() > 0) {
+                        if (onImageClick != null) {
+                            onImageClick.onClick(holder.getAdapterPosition()-1);
+                        }
+                    }
+                }
+            });
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-
         if (position == 0) {
             return CHOOSE;
         } else {
@@ -145,7 +151,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
-        return mList.size();
+        return mList != null ? mList.size() + 1 : 0;
     }
 
     private void startDownload(final int position, final MessageProgress messageProgress) {
@@ -199,48 +205,18 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
     private class ViewHolderImage extends RecyclerView.ViewHolder {
 
-        private ImageView imageView;
+        private AppCompatImageView imageView;
 
         public ViewHolderImage(View itemView) {
             super(itemView);
-
             imageView = itemView.findViewById(R.id.imgBackgroundImage);
-
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getString(R.string.choose_picture)).negativeText(G.context.getString(R.string.cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
-                        @Override
-                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                            AttachFile attachFile = new AttachFile(G.fragmentActivity);
-
-                            if (text.toString().equals(G.context.getString(R.string.from_camera))) {
-                                try {
-                                    attachFile.requestTakePicture(fragment);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                try {
-                                    attachFile.requestOpenGalleryForImageSingleSelect(fragment);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            dialog.dismiss();
-                        }
-                    }).show();
-                }
-            });
+            imageView.setOnClickListener(view -> onImageClick.onAddImageClick());
         }
     }
 
     private class ViewHolderItem extends RecyclerView.ViewHolder {
 
-        public MessageProgress messageProgress;
-        public String mPath = "";
+        private MessageProgress messageProgress;
         private ImageView img;
 
         ViewHolderItem(View itemView) {
@@ -250,18 +226,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
             messageProgress = itemView.findViewById(R.id.progress);
             AppUtils.setProgresColor(messageProgress.progressBar);
-
             messageProgress.withDrawable(R.drawable.ic_download, true);
-            img.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mPath.length() > 0) {
-                        if (onImageClick != null) {
-                            onImageClick.onClick(mPath);
-                        }
-                    }
-                }
-            });
         }
     }
 }
