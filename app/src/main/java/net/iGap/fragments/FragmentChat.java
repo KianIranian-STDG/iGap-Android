@@ -4977,7 +4977,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onSetAction(final long roomId, final long userIdR, final ProtoGlobal.ClientAction clientAction) {
         if (mRoomId == roomId && (userId != userIdR || (isCloudRoom))) {
-            final String action = HelperGetAction.getAction(roomId, chatType, clientAction);
+            final String action = HelperGetAction.getAction(roomId, userIdR, chatType, clientAction);
 
             RealmRoom.setAction(roomId, userIdR, action);
 
