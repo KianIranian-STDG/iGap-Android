@@ -27,19 +27,19 @@ import static net.iGap.helper.HelperConvertEnumToString.convertActionEnum;
 public class HelperGetAction {
 
     private static CopyOnWriteArrayList<StructAction> structActions = new CopyOnWriteArrayList<>();
+    // this array contains all of NOT canceled user and their rooms
     private static CopyOnWriteArrayList<StructAction> activeActions = new CopyOnWriteArrayList<>();
+    // this var indicates that function for checking the user action is running.
     private static Boolean handler = false;
 
     public static String getAction(long roomId, long userID, ProtoGlobal.Room.Type type, ProtoGlobal.ClientAction clientAction) {
         if (!checkExistAction(roomId, userID, clientAction) && type != null && type != ProtoGlobal.Room.Type.CHANNEL) {
-            int randomNumber = HelperNumerical.generateRandomNumber(8);
+            // in here we add user and its room id to the list and starts the observer.
             final StructAction structAction = new StructAction();
             structAction.roomId = roomId;
             structAction.userId = userID;
             structAction.currentTime = System.currentTimeMillis();
             structAction.action = ProtoGlobal.ClientAction.TYPING;
-            structAction.chatType = type;
-            structAction.randomKey = randomNumber;
 
             activeActions.add(structAction);
 //            timeOutChecking(structAction);
@@ -203,14 +203,12 @@ public class HelperGetAction {
         public long roomId;
         public long userId;
         public long currentTime;
-        public int randomKey;
-        public ProtoGlobal.Room.Type chatType;
         public ProtoGlobal.ClientAction action;
     }
 
     /**
      * check that action with same roomId is exist or not.
-     * return true if exist and update time otherwise just return false.
+     * return true if exist and update time otherwise just return false. and if the status is cancel so we will delete it from out lists.
      *
      * @param roomId roomId that send action from that
      * @param action action that send
@@ -238,6 +236,12 @@ public class HelperGetAction {
         return false;
     }
 
+    /**
+     * this function will repeat itself until there is no item in the list.
+     *
+     * @param isCallInside is it send inside the observer or not
+     */
+
     private static void checkTimeOut(boolean isCallInside) {
         if (handler != isCallInside)
             return;
@@ -263,20 +267,6 @@ public class HelperGetAction {
     }
 
     /**
-     * check that exist this value or not
-     *
-     * @param randomKey check with randomKey that exist in StructAction
-     */
-    private static boolean existStruct(int randomKey) {
-        for (int i = 0; i < activeActions.size(); i++) {
-            if (activeActions.get(i).randomKey == randomKey) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * check difference time from latest set action .
      * if time difference was more than Config.ACTION_TIME_OUT second
      * return true for send cancel request for that action
@@ -294,19 +284,6 @@ public class HelperGetAction {
         return difference >= Config.CLIENT_ACTION_TIME_OUT;
     }
 
-    /**
-     * remove item from structActions array with randomKey.
-     *
-     * @param randomKey randomKey that should remove struct with that
-     */
-    private static void removeStruct(int randomKey) {
-        for (int i = 0; i < activeActions.size(); i++) {
-            if (activeActions.get(i).randomKey == randomKey) {
-                activeActions.remove(i);
-                break;
-            }
-        }
-    }
 
     /**
      * remove item from structActions array with roodID.
