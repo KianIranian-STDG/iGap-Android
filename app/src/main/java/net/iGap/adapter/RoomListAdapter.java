@@ -12,6 +12,7 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.libs.MyRealmRecyclerViewAdapter;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.Room;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -22,21 +23,26 @@ import io.realm.OrderedRealmCollection;
 import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.RealmResults;
 
+import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
+import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
+
 public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomListAdapter.ViewHolder> {
 
     private View emptyView;
     private View loadingView;
     private AvatarHandler avatarHandler;
-    private List<RealmRoom> mSelectedRoomList;
+    private List<Room> mSelectedRoomList;
     private OnMainFragmentCallBack callBack;
     private boolean isChatMultiSelectEnable;
+    private OnCloseSelectMode onCloseSelctMode;
 
-    public RoomListAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, View emptyView, View loadingView, AvatarHandler avatarHandler, List<RealmRoom> mSelectedRoomList) {
+    public RoomListAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, View emptyView, View loadingView, AvatarHandler avatarHandler, List<Room> mSelectedRoomList, OnCloseSelectMode onCloseSelctMode) {
         super(data, true);
         this.emptyView = emptyView;
         this.loadingView = loadingView;
         this.avatarHandler = avatarHandler;
         this.mSelectedRoomList = mSelectedRoomList;
+        this.onCloseSelctMode = onCloseSelctMode;
     }
 
     @NotNull
@@ -76,6 +82,11 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
                 OrderedCollectionChangeSet.Range range = deletions[i];
                 notifyItemRangeRemoved(range.startIndex, range.length);
             }
+            if (deletions.length > 0 && mSelectedRoomList.size() > 0) {
+                mSelectedRoomList.clear();
+                if (onCloseSelctMode != null)
+                    onCloseSelctMode.close();
+            }
 
             OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
             for (OrderedCollectionChangeSet.Range range : insertions) {
@@ -96,11 +107,12 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int i) {
         final RealmRoom mInfo = holder.realmRoom = getItem(i);
-        if (mInfo == null) {
+        holder.setSelectedRoom();
+        if (!mInfo.isValid() || mInfo == null) {
             return;
         }
         holder.getRootView().setData(mInfo, avatarHandler, isChatMultiSelectEnable);
-        holder.getRootView().setCheck(mSelectedRoomList.contains(mInfo));
+        holder.getRootView().setCheck(mSelectedRoomList.contains(holder.SelectedModel));
     }
 
     public void setCallBack(OnMainFragmentCallBack callBack) {
@@ -114,6 +126,7 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
     public class ViewHolder extends RecyclerView.ViewHolder {
         private RealmRoom realmRoom;
         private RoomListCell rootView;
+        private Room SelectedModel;
 
         public ViewHolder(View view) {
             super(view);
@@ -126,11 +139,25 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
         public RoomListCell getRootView() {
             return rootView;
         }
+
+        public void setSelectedRoom() {
+            SelectedModel = new Room(realmRoom.getId(), realmRoom.getType().name(), realmRoom.getTitle(), "", "");
+            if (realmRoom.getType() == GROUP) {
+                SelectedModel.setGroupRole(realmRoom.getGroupRoom().getRole().toString());
+            } else if (realmRoom.getType() == CHANNEL) {
+                SelectedModel.setChannelRole(realmRoom.getChannelRoom().getRole().toString());
+            }
+        }
     }
 
     public interface OnMainFragmentCallBack {
         void onClick(RoomListCell roomListCell, RealmRoom realmRoom, int adapterPosition);
 
-        boolean onLongClick(RoomListCell roomListCell, RealmRoom realmRoom,int position);
+        boolean onLongClick(RoomListCell roomListCell, RealmRoom realmRoom, int position);
+    }
+
+    @FunctionalInterface
+    public interface OnCloseSelectMode {
+        void close();
     }
 }
