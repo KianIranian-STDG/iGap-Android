@@ -348,16 +348,17 @@ public class RegisterRepository {
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-                try (Realm realm = Realm.getDefaultInstance()) {
-                    realm.executeTransaction(realm1 -> {
-                        G.displayName = user.getDisplayName();
-                        G.userId = user.getId();
-                        RealmUserInfo.putOrUpdate(realm1, user);
-                        G.onUserInfoResponse = null;
-                        goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
-                    });
+                if (user.getId() == userId) {
+                    G.onUserInfoResponse = null;
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        realm.executeTransaction(realm1 -> {
+                            G.displayName = user.getDisplayName();
+                            G.userId = user.getId();
+                            RealmUserInfo.putOrUpdate(realm1, user);
+                            goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
+                        });
+                    }
                 }
-
             }
 
             @Override
