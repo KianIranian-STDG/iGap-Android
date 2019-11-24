@@ -46,15 +46,6 @@ public class UserRegisterResponse extends MessageHandler {
         G.authorHash = builder.getAuthorHash();
         G.displayName = builder.getUsername();
 
-        PackageManager pm = G.context.getPackageManager();
-        String installationSource = pm.getInstallerPackageName(G.context.getPackageName());
-
-        if (installationSource == null) {
-            installationSource = "(Unknown Market)";
-        }
-
-        Crashlytics.logException(new Exception("installationSource : " + installationSource));
-
         HelperTracker.sendTracker(HelperTracker.TRACKER_SUBMIT_NUMBER);
     }
 
