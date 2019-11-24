@@ -75,6 +75,7 @@ import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
+import net.iGap.response.ClientGetRoomListResponse;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -374,16 +375,16 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (isThereAnyMoreItemToLoad) {
-                    if (mOffset > 0) {
-                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                        if (lastVisiblePosition + 10 >= mOffset) {
-                            boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-                            if (send)
-                                progressBar.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }
+//                if (isThereAnyMoreItemToLoad) {
+//                    if (mOffset > 0) {
+//                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+//                        if (lastVisiblePosition + 10 >= mOffset) {
+//                            boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+//                            if (send)
+//                                progressBar.setVisibility(View.VISIBLE);
+//                        }
+//                    }
+//                }
 
                 //check if music player was enable disable scroll detecting for search box
                 if (G.isInCall || isChatMultiSelectEnable || (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown())) {
@@ -477,26 +478,20 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     //***************************************************************************************************************************
 
-    private void sendClientCondition() {
-        if (clientConditionGlobal != null) {
-            new RequestClientCondition().clientCondition(clientConditionGlobal);
-        } else {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    sendClientCondition();
-                }
-            }, 1000);
-        }
-    }
 
     private void getChatLists() {
-        if (G.isSecure && G.userLogin && mOffset == 0) {
-            boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-            if (send)
-                progressBar.setVisibility(View.VISIBLE);
+        Log.wtf(this.getClass().getName(),"progress: "+(progressBar.getVisibility() == View.VISIBLE));
+        if (!ClientGetRoomListResponse.roomListFetched) {
+            Log.wtf(this.getClass().getName(),"if:");
+            progressBar.setVisibility(View.VISIBLE);
         } else {
-            G.handler.postDelayed(this::getChatLists, 1000);
+            Log.wtf(this.getClass().getName(),"else");
+            progressBar.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    progressBar.setVisibility(View.GONE);
+                }
+            },1000);
         }
     }
 
@@ -648,55 +643,12 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     @Override
     public synchronized void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, RequestClientGetRoomList.IdentityGetRoomList identity) {
-        // todo : we must change roomList with the change of out client condition. merge roomList with clientCondition.
-        boolean fromLogin = false;
-        if (identity.isFromLogin) {
-            mOffset = 0;
-            fromLogin = true;
-        } else if (Long.parseLong(identity.content) < tagId) {
-            return;
-        }
-
-        if (mOffset == 0) {
-            BotInit.checkDrIgap();
-        }
-
-
-        isThereAnyMoreItemToLoad = roomList.size() != 0;
-
-        putChatToDatabase(roomList);
-
-        /**
-         * to first enter to app , client first compute clientCondition then
-         * getRoomList and finally send condition that before get clientCondition;
-         * in else changeState compute new client condition with latest messaging changeState
-         */
-        if (!G.userLogin) {
-            G.userLogin = true;
-            sendClientCondition();
-        } else if (fromLogin || mOffset == 0) {
-            if (G.clientConditionGlobal != null) {
-                new RequestClientCondition().clientCondition(G.clientConditionGlobal);
-            } else {
-                new RequestClientCondition().clientCondition(RealmClientCondition.computeClientCondition(null));
-            }
-
-        }
-
-        mOffset += roomList.size();
-
         G.handler.post(new Runnable() {
             @Override
             public void run() {
                 progressBar.setVisibility(View.GONE);
             }
         });
-
-        //else {
-        //    mOffset = 0;
-        //}
-
-
     }
 
     @Override
@@ -716,13 +668,13 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     @Override
     public void onClientGetRoomListTimeout() {
 
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.GONE);
-                getChatLists();
-            }
-        });
+//        G.handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                progressBar.setVisibility(View.GONE);
+//                getChatLists();
+//            }
+//        });
     }
 
 
