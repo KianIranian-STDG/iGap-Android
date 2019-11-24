@@ -7,7 +7,8 @@
     android:clickable="true"
     android:gravity="center"
     android:layoutDirection="ltr"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/transparent">
 
     <RelativeLayout
         android:layout_width="@dimen/dp300"

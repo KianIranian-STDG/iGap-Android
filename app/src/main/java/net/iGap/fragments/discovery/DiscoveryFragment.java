@@ -326,9 +326,13 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         String json = pref.getString("page0", "");
         String title = pref.getString("title", "");
         if (json != null && !json.equals("")) {
-            ArrayList<DiscoveryItem> discoveryArrayList = gson.fromJson(json, new TypeToken<ArrayList<DiscoveryItem>>() {
-            }.getType());
-            setAdapterData(discoveryArrayList, title);
+            try {
+                ArrayList<DiscoveryItem> discoveryArrayList = gson.fromJson(json, new TypeToken<ArrayList<DiscoveryItem>>() {
+                }.getType());
+                setAdapterData(discoveryArrayList, title);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

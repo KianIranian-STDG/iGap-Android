@@ -18,6 +18,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
@@ -136,11 +137,17 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparent)));
         super.onCreate(savedInstanceState);
+        setThemeSetting();
         setContentView(R.layout.activity_popup_notification);
 
         mList = HelperNotification.getInstance().getMessageList();
         new InitComponent();
+    }
+
+    private void setThemeSetting() {
+        this.setTheme(new Theme().getTheme(this));
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////

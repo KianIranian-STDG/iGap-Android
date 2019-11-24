@@ -60,17 +60,10 @@
                             android:layout_height="match_parent"
                             android:visibility="gone">
 
-
-                            <WebView xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/webViewChatPage"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent" />
-
                             <ProgressBar
                                 android:id="@+id/progressWebView"
-                                style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/dp10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
                                 android:indeterminateOnly="true" />
 
@@ -259,6 +252,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
                 android:clickable="true"
+                android:background="?attr/iGapBottomSheetBackground"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -270,36 +264,42 @@
                     android:layout_height="wrap_content"
                     android:text="@string/join"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dp18" />
+                    android:textSize="@dimen/largeTextSize" />
 
             </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/chl_ll_channel_footer"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp52"
-                android:background="?attr/selectableItemBackground"
+                android:layout_height="@dimen/dp48"
+                android:background="?attr/iGapBottomSheetBackground"
                 android:orientation="vertical"
                 android:visibility="gone">
 
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/chl_txt_mute_channel"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentBottom="true"
-                    android:background="?attr/iGapButtonColor"
-                    android:orientation="horizontal">
+                    android:gravity="center"
+                    android:text="Mute"
+                    android:layout_centerInParent="true"
+                    android:textColor="?attr/iGapPrimaryTextColor"
+                    android:textSize="@dimen/largeTextSize" />
 
-                    <TextView
-                        android:id="@+id/chl_txt_mute_channel"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:textColor="?attr/iGapPrimaryTextColor"
-                        android:textSize="@dimen/dp16" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/chl_icon_mute_channel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:layout_marginEnd="@dimen/dp10"
+                    android:paddingBottom="@dimen/dp10"
+                    android:textColor="?iGapPrimaryTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:layout_toLeftOf="@id/chl_txt_mute_channel"
+                    android:layout_toStartOf="@id/chl_txt_mute_channel"
+                    android:text="@string/mute_icon" />
 
             </RelativeLayout>
 
