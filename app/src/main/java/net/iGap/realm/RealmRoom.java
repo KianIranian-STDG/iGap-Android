@@ -1148,7 +1148,7 @@ public class RealmRoom extends RealmObject {
     }
 
     public ProtoGlobal.Room.Type getType() {
-        return (type != null) ? ProtoGlobal.Room.Type.valueOf(type) : null;
+        return (isValid() && type != null) ? ProtoGlobal.Room.Type.valueOf(type) : null;
     }
 
     public void setType(RoomType type) {
