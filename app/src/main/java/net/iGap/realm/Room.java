@@ -10,42 +10,17 @@
 
 package net.iGap.realm;
 
-import android.text.format.DateUtils;
-
 import androidx.annotation.Nullable;
 
-import net.iGap.G;
-import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperString;
-import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
-import net.iGap.module.structs.StructMessageOption;
-import net.iGap.proto.ProtoClientGetPromote;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.request.RequestChannelUpdateDraft;
-import net.iGap.request.RequestChatUpdateDraft;
-import net.iGap.request.RequestClientGetRoom;
-import net.iGap.request.RequestClientGetRoomMessage;
-import net.iGap.request.RequestGroupUpdateDraft;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import io.realm.annotations.PrimaryKey;
 
-import static net.iGap.G.userId;
-import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
-import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
-import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
-
-public class Room{
+public class Room {
 
     private long id;
     private String type;
@@ -124,6 +99,6 @@ public class Room{
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        return id == ((Room)obj).getId();
+        return id == ((Room) obj).getId();
     }
 }

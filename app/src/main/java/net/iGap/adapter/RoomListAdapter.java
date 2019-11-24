@@ -133,7 +133,7 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
 
             rootView = (RoomListCell) itemView;
             itemView.setOnClickListener(v -> callBack.onClick(rootView, realmRoom, getAdapterPosition()));
-            itemView.setOnLongClickListener(v -> callBack.onLongClick(rootView, realmRoom,getAdapterPosition()));
+            itemView.setOnLongClickListener(v -> callBack.onLongClick(rootView, realmRoom, getAdapterPosition()));
         }
 
         public RoomListCell getRootView() {

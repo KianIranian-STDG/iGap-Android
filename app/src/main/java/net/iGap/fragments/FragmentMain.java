@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
@@ -55,14 +54,12 @@ import net.iGap.interfaces.OnVersionCallBack;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.model.MultiSelectStruct;
 import net.iGap.module.AppUtils;
-import net.iGap.module.BotInit;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
-import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -70,7 +67,6 @@ import net.iGap.realm.Room;
 import net.iGap.request.RequestChannelDelete;
 import net.iGap.request.RequestChannelLeft;
 import net.iGap.request.RequestChatDelete;
-import net.iGap.request.RequestClientCondition;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientPinRoom;
@@ -89,13 +85,11 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.isAppRtl;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
-import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 public class FragmentMain extends BaseMainFragments implements ToolbarListener, EventListener, OnClientGetRoomListResponse, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
@@ -209,9 +203,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 return;
             }
 
-            ((SelectedItemAdapter)multiSelectRv.getAdapter()).setItemsList(setMultiSelectAdapterItem(item, mSelectedRoomList.size() == 1));
+            ((SelectedItemAdapter) multiSelectRv.getAdapter()).setItemsList(setMultiSelectAdapterItem(item, mSelectedRoomList.size() == 1));
 
-            ((SelectedItemAdapter)multiSelectRv.getAdapter()).setCallBack(action -> {
+            ((SelectedItemAdapter) multiSelectRv.getAdapter()).setCallBack(action -> {
                 switch (action) {
                     case 0:
                         pinToTop(item.getId(), item.isPinned());
@@ -379,7 +373,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
                 }
             });
-            roomListAdapter = new RoomListAdapter(results, viewById, pbLoading, avatarHandler, mSelectedRoomList,this::disableMultiSelect);
+            roomListAdapter = new RoomListAdapter(results, viewById, pbLoading, avatarHandler, mSelectedRoomList, this::disableMultiSelect);
             getChatLists();
 
         } else {
@@ -495,18 +489,18 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
 
     private void getChatLists() {
-        Log.wtf(this.getClass().getName(),"progress: "+(progressBar.getVisibility() == View.VISIBLE));
+        Log.wtf(this.getClass().getName(), "progress: " + (progressBar.getVisibility() == View.VISIBLE));
         if (!ClientGetRoomListResponse.roomListFetched) {
-            Log.wtf(this.getClass().getName(),"if:");
+            Log.wtf(this.getClass().getName(), "if:");
             progressBar.setVisibility(View.VISIBLE);
         } else {
-            Log.wtf(this.getClass().getName(),"else");
+            Log.wtf(this.getClass().getName(), "else");
             progressBar.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     progressBar.setVisibility(View.GONE);
                 }
-            },1000);
+            }, 1000);
         }
     }
 
@@ -967,7 +961,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     public void revertToolbarFromForwardMode() {
         FragmentChat.mForwardMessages = null;
-        HelperGetDataFromOtherApp.hasSharedData = false ;
+        HelperGetDataFromOtherApp.hasSharedData = false;
         HelperGetDataFromOtherApp.sharedList.clear();
         checkConnectionStateAndSetToolbarTitle();
         mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
@@ -986,10 +980,10 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             } else if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
                 mHelperToolbar.getTextViewLogo().setText(getString(R.string.waiting_for_network));
                 mHelperToolbar.checkIGapFont();
-            }else {
+            } else {
                 mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
             }
-        }else {
+        } else {
             mHelperToolbar.setDefaultTitle(getString(R.string.app_name));
         }
     }
@@ -1186,7 +1180,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     }
 
-    public void checkHasSharedData(){
+    public void checkHasSharedData() {
 
         if (!(G.isLandscape && G.twoPaneMode)) {
             if (HelperGetDataFromOtherApp.hasSharedData) {
