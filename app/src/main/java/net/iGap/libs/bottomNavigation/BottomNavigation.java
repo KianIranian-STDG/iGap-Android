@@ -10,13 +10,11 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewOutlineProvider;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.AccountManager;
 import net.iGap.R;
@@ -98,8 +96,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
+ }
 
     @Override
     public void selectedTabItem(final int position) {

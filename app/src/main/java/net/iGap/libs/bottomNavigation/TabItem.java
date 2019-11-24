@@ -20,6 +20,7 @@ import net.iGap.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
+import net.iGap.module.CircleImageView;
 import net.iGap.view.TextBadge;
 
 import static android.view.View.MeasureSpec.AT_MOST;
@@ -35,7 +36,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
     private int darkUnSelectedIcon;
     private int position;
     private int text;
-
+    private boolean haveAvatarImage;
     private ImageView imageView;
     private TextBadge badgeView;
     private AppCompatTextView textView;
@@ -62,9 +63,13 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
 
     private void init(@Nullable AttributeSet attributeSet) {
         parseAttr(attributeSet);
-
-        if (imageView == null)
-            imageView = new AppCompatImageView(getContext());
+        if (haveAvatarImage) {
+            if (imageView == null)
+                imageView = new CircleImageView(getContext());
+        } else {
+            if (imageView == null)
+                imageView = new AppCompatImageView(getContext());
+        }
 
         if (textView == null)
             textView = new AppCompatTextView(getContext());
@@ -159,7 +164,8 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
                 unSelectedIcon = typedArray.getResourceId(R.styleable.TabItem_unselected_icon, -1);
                 darkSelectedIcon = typedArray.getResourceId(R.styleable.TabItem_dark_selected_icon, -1);
                 darkUnSelectedIcon = typedArray.getResourceId(R.styleable.TabItem_dark_unselected_icon, -1);
-                text = typedArray.getResourceId(R.styleable.TabItem_item_text, R.string.error);
+                text = typedArray.getResourceId(R.styleable.TabItem_item_text, R.string.profile);
+                haveAvatarImage = typedArray.getBoolean(R.styleable.TabItem_haveAvatarImage, false);
             } finally {
                 typedArray.recycle();
             }
@@ -213,6 +219,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
     public void setImageView(ImageView imageView) {
         this.imageView = imageView;
     }
+
 
     public void setBadgeCount(int count) {
         if (badgeView != null) {
