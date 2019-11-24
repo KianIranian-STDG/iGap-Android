@@ -369,12 +369,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onSuccess(MciPurchaseResponse data) {
                 HelperUrl.closeDialogWaiting();
-                new HelperFragment(activity.getSupportFragmentManager()).loadPayment(activity.getString(R.string.charity_title), data.getToken(), new PaymentCallBack() {
-                    @Override
-                    public void onPaymentFinished(PaymentResult result) {
-
-                    }
-                });
+                new HelperFragment(activity.getSupportFragmentManager()).loadPayment(activity.getString(R.string.charity_title), data.getToken(), null);
             }
 
             @Override

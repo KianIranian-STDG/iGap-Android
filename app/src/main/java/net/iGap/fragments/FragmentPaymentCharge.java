@@ -97,12 +97,9 @@ public class FragmentPaymentCharge extends BaseAPIViewFrag {
 
         paymentChargeViewModel.getGoToPaymentPage().observe(getViewLifecycleOwner(), token -> {
             if (getActivity() != null && token != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.mci_topup_payment_title), token, new PaymentCallBack() {
-                    @Override
-                    public void onPaymentFinished(PaymentResult result) {
-                        if (result.isSuccess()) {
-                            goBack();
-                        }
+                new HelperFragment(getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.mci_topup_payment_title), token, result -> {
+                    if (result.isSuccess()) {
+                        goBack();
                     }
                 });
             }

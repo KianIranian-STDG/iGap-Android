@@ -1,6 +1,7 @@
 package net.iGap.viewmodel;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -8,12 +9,15 @@ import androidx.lifecycle.ViewModel;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.fragments.FragmentChatBackground;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.interfaces.OnGetWallpaper;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
+import net.iGap.module.StructWallpaper;
+import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoInfoWallpaper;
 import net.iGap.realm.RealmAttachment;
@@ -25,37 +29,58 @@ import net.iGap.request.RequestInfoWallpaper;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ChatBackgroundViewModel extends ViewModel {
 
     private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
     private MutableLiveData<WallpaperImage> loadSelectedImage = new MutableLiveData<>();
-    private MutableLiveData<String> loadSelectedColor = new MutableLiveData<>();
+    private MutableLiveData<WallpaperSolidColor> loadSelectedColor = new MutableLiveData<>();
     private MutableLiveData<List<Integer>> menuList = new MutableLiveData<>();
-    private MutableLiveData<Boolean> loadChatBackgroundImage = new MutableLiveData<>();
-    private MutableLiveData<Boolean> loadChatBackgroundSolidColor = new MutableLiveData<>();
-    private SingleLiveEvent<Boolean> removeChatBackgroundFileSelectedFromMemory = new SingleLiveEvent<>();
+    private MutableLiveData<List<StructWallpaper>> loadChatBackgroundImage = new MutableLiveData<>();
+    private MutableLiveData<List<String>> loadChatBackgroundSolidColor = new MutableLiveData<>();
     private SingleLiveEvent<Boolean> showAddImage = new SingleLiveEvent<>();
 
     private List<Integer> menuItemList;
     private SharedPreferences sharedPreferences;
-    private ArrayList<FragmentChatBackground.StructWallpaper> wList;
-    private ArrayList<String> solidList;
+    private List<StructWallpaper> wList;
+    private List<String> solidList;
     private boolean isSolidColor = false;
     private String savePath;
+    private File privateDirectory;
     private OnImageWallpaperListClick onImageWallpaperListClick;
-    private OnImageClick onImageClick;
 
-    public ChatBackgroundViewModel(SharedPreferences sharedPreferences) {
+    public ChatBackgroundViewModel(SharedPreferences sharedPreferences, File privateDirectory) {
         this.sharedPreferences = sharedPreferences;
+        this.privateDirectory = privateDirectory;
+        this.solidList = new ArrayList<>(Arrays.asList("#2962ff", "#00b8d4",
+                "#b71c1c", "#e53935", "#e57373",
+                "#880e4f", "#d81b60", "#f06292",
+                "#4a148c", "#8e24aa", "#ba68c8",
+                "#311b92", "#5e35b1", "#9575cd",
+                "#1a237e", "#3949ab", "#7986cb",
+                "#0d47a1", "#1e88e5", "#64b5f6",
+                "#01579b", "#039be5", "#4fc3f7",
+                "#006064", "#00acc1", "#4dd0e1",
+                "#004d40", "#00897b", "#4db6ac",
+                "#1b5e20", "#43a047", "#81c784",
+                "#33691e", "#7cb342", "#aed581",
+                "#827717", "#c0ca33", "#dce775",
+                "#f57f17", "#fdd835", "#fff176",
+                "#ff6f00", "#ffb300", "#ffd54f",
+                "#e65100", "#fb8c00", "#fb8c00",
+                "#bf360c", "#f4511e", "#ff8a65",
+                "#3e2723", "#6d4c41", "#a1887f",
+                "#212121", "#757575", "#e0e0e0",
+                "#263238", "#546e7a", "#90a4ae"));
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
         if (backGroundPath.length() > 0) {
             File f = new File(backGroundPath);
             if (f.exists()) {
-                loadSelectedImage.setValue(new WallpaperImage(AndroidUtils.suitablePath(backGroundPath),false));
+                loadSelectedImage.setValue(new WallpaperImage(AndroidUtils.suitablePath(backGroundPath), false));
             } else {
-                loadSelectedColor.setValue(backGroundPath);
+                loadSelectedColor.setValue(new WallpaperSolidColor(Color.parseColor(backGroundPath), false));
             }
         }
 
@@ -64,38 +89,28 @@ public class ChatBackgroundViewModel extends ViewModel {
         menuItemList.add(R.string.wallpapers);
         onImageWallpaperListClick = new ChatBackgroundViewModel.OnImageWallpaperListClick() {
             @Override
-            public void onClick(int position) {
-                String bigImagePath;
-                if (wList.get(position).getWallpaperType() == FragmentChatBackground.WallpaperType.proto) {
-                    RealmAttachment pf = wList.get(position).getProtoWallpaper().getFile();
-                    bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
+            public void onClick(int type, int position) {
+                if (type == AdapterChatBackground.WALLPAPER_IMAGE) {
+                    String bigImagePath;
+                    if (wList.get(position).getWallpaperType() == FragmentChatBackground.WallpaperType.proto) {
+                        RealmAttachment pf = wList.get(position).getProtoWallpaper().getFile();
+                        bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
+                    } else {
+                        bigImagePath = wList.get(position).getPath();
+                    }
+                    loadSelectedImage.setValue(new WallpaperImage(AndroidUtils.suitablePath(bigImagePath), true));
+                    savePath = bigImagePath;
+                    isSolidColor = false;
                 } else {
-                    bigImagePath = wList.get(position).getPath();
+                    isSolidColor = true;
+                    savePath = solidList.get(position);
+                    loadSelectedColor.setValue(new WallpaperSolidColor(Color.parseColor(savePath), true));
                 }
-                loadSelectedImage.setValue(new WallpaperImage(AndroidUtils.suitablePath(bigImagePath),true));
-                savePath = bigImagePath;
-                isSolidColor = false;
             }
 
             @Override
             public void onAddImageClick() {
                 showAddImage.setValue(true);
-            }
-        };
-
-        onImageClick = new OnImageClick() {
-            @Override
-            public void onClick(int position) {
-
-                //   G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgFullImage);
-                imgFullImage.setImageDrawable(null);
-                imgFullImage.setBackgroundColor(Color.parseColor(imagePath));
-
-                savePath = imagePath;
-
-                toolbar.getSecondRightButton().setVisibility(View.VISIBLE);
-                toolbar.getThirdRightButton().setVisibility(View.GONE);
-                isSolidColor = true;
             }
         };
     }
@@ -108,7 +123,7 @@ public class ChatBackgroundViewModel extends ViewModel {
         return loadSelectedImage;
     }
 
-    public MutableLiveData<String> getLoadSelectedColor() {
+    public MutableLiveData<WallpaperSolidColor> getLoadSelectedColor() {
         return loadSelectedColor;
     }
 
@@ -116,11 +131,11 @@ public class ChatBackgroundViewModel extends ViewModel {
         return menuList;
     }
 
-    public MutableLiveData<Boolean> getLoadChatBackgroundImage() {
+    public MutableLiveData<List<StructWallpaper>> getLoadChatBackgroundImage() {
         return loadChatBackgroundImage;
     }
 
-    public MutableLiveData<Boolean> getLoadChatBackgroundSolidColor() {
+    public MutableLiveData<List<String>> getLoadChatBackgroundSolidColor() {
         return loadChatBackgroundSolidColor;
     }
 
@@ -128,16 +143,8 @@ public class ChatBackgroundViewModel extends ViewModel {
         return showAddImage;
     }
 
-    public SingleLiveEvent<Boolean> getRemoveChatBackgroundFileSelectedFromMemory() {
-        return removeChatBackgroundFileSelectedFromMemory;
-    }
-
     public OnImageWallpaperListClick getOnImageWallpaperListClick() {
         return onImageWallpaperListClick;
-    }
-
-    public OnImageClick getOnImageClick() {
-        return onImageClick;
     }
 
     public void init() {
@@ -158,11 +165,11 @@ public class ChatBackgroundViewModel extends ViewModel {
 
     public void onMenuItemClicked(int position) {
         if (menuItemList.get(position) == R.string.solid_colors) {
-            loadChatBackgroundImage.setValue(true);
-            loadChatBackgroundSolidColor.setValue(false);
+            loadChatBackgroundSolidColor.setValue(solidList);
+            isSolidColor = true;
         } else if (menuItemList.get(position) == R.string.wallpapers) {
-            loadChatBackgroundSolidColor.setValue(true);
-            loadChatBackgroundImage.setValue(false);
+            loadChatBackgroundImage.setValue(wList);
+            isSolidColor = false;
         }
     }
 
@@ -171,14 +178,14 @@ public class ChatBackgroundViewModel extends ViewModel {
     }
 
     public void onAcceptMenuItemClick() {
-        if (getActivity() != null && savePath != null && savePath.length() > 0) {
+        if (savePath != null && savePath.length() > 0) {
             String finalPath = "";
             if (isSolidColor) {
                 finalPath = savePath;
-                HelperSaveFile.removeFromPrivateDirectory(getActivity());
+                HelperSaveFile.removeFromPrivateDirectory(privateDirectory);
             } else {
                 try {
-                    finalPath = HelperSaveFile.saveInPrivateDirectory(getActivity(), savePath);
+                    finalPath = HelperSaveFile.saveInPrivateDirectory(privateDirectory, savePath);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -197,7 +204,7 @@ public class ChatBackgroundViewModel extends ViewModel {
     }
 
     public void onMenuResetItemClick() {
-        removeChatBackgroundFileSelectedFromMemory.setValue(true);
+        HelperSaveFile.removeFromPrivateDirectory(privateDirectory);
         sharedPreferences.edit()
                 .putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "")
                 .putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true)
@@ -222,7 +229,7 @@ public class ChatBackgroundViewModel extends ViewModel {
                 if (realmWallpaper.getLocalList() != null) {
                     for (String localPath : realmWallpaper.getLocalList()) {
                         if (new File(localPath).exists()) {
-                            FragmentChatBackground.StructWallpaper _swl = new FragmentChatBackground.StructWallpaper();
+                            StructWallpaper _swl = new StructWallpaper();
                             _swl.setWallpaperType(FragmentChatBackground.WallpaperType.local);
                             _swl.setPath(localPath);
                             wList.add(_swl);
@@ -233,11 +240,10 @@ public class ChatBackgroundViewModel extends ViewModel {
 
                 if (realmWallpaper.getWallPaperList() != null) {
                     for (RealmWallpaperProto wallpaper : realmWallpaper.getWallPaperList()) {
-                        FragmentChatBackground.StructWallpaper _swp = new StructWallpaper();
+                        StructWallpaper _swp = new StructWallpaper();
                         _swp.setWallpaperType(FragmentChatBackground.WallpaperType.proto);
                         _swp.setProtoWallpaper(wallpaper);
                         wList.add(_swp);
-                        solidList.add(_swp.getProtoWallpaper().getColor());
                     }
 
                 } else if (getInfoFromServer) {
@@ -269,8 +275,11 @@ public class ChatBackgroundViewModel extends ViewModel {
                     @Override
                     public void run() {
                         fillList(false);
-                        adapterChatBackgroundSetting.notifyDataSetChanged();
-                        adapterSolidChatbackground.notifyDataSetChanged();
+                        if (isSolidColor){
+                            loadChatBackgroundSolidColor.setValue(solidList);
+                        }else{
+                            loadChatBackgroundImage.setValue(wList);
+                        }
                     }
                 });
             }
@@ -279,25 +288,52 @@ public class ChatBackgroundViewModel extends ViewModel {
         new RequestInfoWallpaper().infoWallpaper(ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND);
     }
 
-    public interface OnImageClick {
-        void onClick(int position);
+    public void setUserCustomImage(String filePath){
+        if (filePath != null) {
+            if (new File(filePath).exists()) {
+                RealmWallpaper.updateField(null, filePath, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE);
+                fillList(false);
+                loadChatBackgroundImage.setValue(wList);
+
+            }
+        }
     }
 
-    public interface OnImageWallpaperListClick extends OnImageClick {
+    public interface OnImageWallpaperListClick {
+        void onClick(int type, int position);
+
         void onAddImageClick();
     }
 
-    public class WallpaperImage{
+    public class WallpaperImage {
         private String imagePath;
         private boolean isNew;
 
-        public WallpaperImage(String imagePath, boolean isNew) {
+        WallpaperImage(String imagePath, boolean isNew) {
             this.imagePath = imagePath;
             this.isNew = isNew;
         }
 
         public String getImagePath() {
             return imagePath;
+        }
+
+        public boolean isNew() {
+            return isNew;
+        }
+    }
+
+    public class WallpaperSolidColor {
+        private int color;
+        private boolean isNew;
+
+        WallpaperSolidColor(int color, boolean isNew) {
+            this.color = color;
+            this.isNew = isNew;
+        }
+
+        public int getColor() {
+            return color;
         }
 
         public boolean isNew() {

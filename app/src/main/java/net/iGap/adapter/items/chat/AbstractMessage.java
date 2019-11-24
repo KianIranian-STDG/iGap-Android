@@ -1924,12 +1924,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     } else {
                         peerId = mMessage.getUserId();
                     }
-                    new HelperFragment(G.currentActivity.getSupportFragmentManager()).loadPayment(room.getTitle(), jsonObject.getString("token"), new PaymentCallBack() {
-                        @Override
-                        public void onPaymentFinished(PaymentResult result) {
-
-                        }
-                    });
+                    new HelperFragment(G.currentActivity.getSupportFragmentManager()).loadPayment(room.getTitle(), jsonObject.getString("token"), null);
                 } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
                     JSONObject rootJsonObject = new JSONObject(buttonEntity.getJsonObject());
                     JSONObject valueObject = rootJsonObject.getJSONObject("value");

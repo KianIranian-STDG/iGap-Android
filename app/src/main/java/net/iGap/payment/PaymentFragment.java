@@ -88,7 +88,9 @@ public class PaymentFragment extends BaseAPIViewFrag {
         paymentViewModel.getGoBack().observe(getViewLifecycleOwner(), paymentResult -> {
             if (getActivity() != null && paymentResult != null) {
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
-                callBack.onPaymentFinished(paymentResult);
+                if (callBack != null) {
+                    callBack.onPaymentFinished(paymentResult);
+                }
             }
         });
 

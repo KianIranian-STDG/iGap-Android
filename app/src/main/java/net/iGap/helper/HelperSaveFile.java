@@ -270,20 +270,18 @@ public class HelperSaveFile {
         }
     }
 
-    public static String saveInPrivateDirectory(Activity activity, String filePath) throws IOException {
-        File fileWithinMyDir = getPrivateDirectory(activity);
+    public static String saveInPrivateDirectory(File fileWithinMyDir, String filePath) throws IOException {
         FileUtils.copyFile(filePath, fileWithinMyDir.getPath());
         return fileWithinMyDir.getPath();
     }
 
-    public static void removeFromPrivateDirectory(Activity activity) {
-        File fileWithinMyDir = getPrivateDirectory(activity);
+    public static void removeFromPrivateDirectory(File fileWithinMyDir) {
         if (fileWithinMyDir.exists()) {
             fileWithinMyDir.delete();
         }
     }
 
-    private static File getPrivateDirectory(Activity activity) {
+    public static File getPrivateDirectory(Activity activity) {
         return new File(new ContextWrapper(activity).getDir("ChatBackground", Context.MODE_PRIVATE), "kb24");
     }
 

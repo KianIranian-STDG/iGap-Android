@@ -8,12 +8,22 @@
     app:cardElevation="@dimen/dp4"
     app:cardUseCompatPadding="true">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imgBackgroundImage"
-        android:layout_width="@dimen/dp80"
-        android:layout_height="@dimen/dp100"
-        android:layout_gravity="center"
-        android:scaleType="centerInside"
-        app:srcCompat="@drawable/add_chat_background_setting" />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgBackground"
+            android:layout_width="@dimen/dp80"
+            android:layout_height="@dimen/dp100"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/add_chat_background_setting" />
+
+        <include
+            android:id="@+id/progress"
+            layout="@layout/msg_progress_item"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center" />
+    </FrameLayout>
 </androidx.cardview.widget.CardView>

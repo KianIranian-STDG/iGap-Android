@@ -13,7 +13,6 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,7 +32,6 @@ import com.squareup.picasso.Picasso;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterChatBackground;
-import net.iGap.adapter.AdapterSolidChatBackground;
 import net.iGap.databinding.ActivityChatBackgroundBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperSaveFile;
@@ -51,15 +49,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+
+import static net.iGap.helper.HelperSaveFile.getPrivateDirectory;
 
 public class FragmentChatBackground extends BaseFragment implements ToolbarListener {
 
     private ActivityChatBackgroundBinding binding;
     private ChatBackgroundViewModel viewModel;
 
-    private AdapterChatBackground adapterChatBackgroundSetting;
-    private AdapterSolidChatBackground adapterSolidChatbackground;
     private HelperToolbar toolbar;
 
     @Override
@@ -69,12 +66,9 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new ChatBackgroundViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE));
+                return (T) new ChatBackgroundViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE),getPrivateDirectory(getActivity()));
             }
         }).get(ChatBackgroundViewModel.class);
-
-        adapterChatBackgroundSetting = new AdapterChatBackground(new ArrayList<>(), viewModel.getOnImageWallpaperListClick());
-        adapterSolidChatbackground = new AdapterSolidChatBackground(new ArrayList<>(), viewModel.getOnImageClick());
     }
 
     @Nullable
@@ -104,18 +98,23 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
 
         toolbar.getSecondRightButton().setVisibility(View.GONE);
 
+        binding.rcvContent.setAdapter(new AdapterChatBackground(viewModel.getOnImageWallpaperListClick()));
+
         viewModel.getLoadSelectedImage().observe(getViewLifecycleOwner(), wallpaper -> {
             if (wallpaper != null) {
                 Picasso.get().load(wallpaper.getImagePath()).fit().into(binding.stchfFullImage);
                 if (wallpaper.isNew()) {
                     toolbar.getSecondRightButton().setVisibility(View.VISIBLE);
                     toolbar.getThirdRightButton().setVisibility(View.GONE);
+                } else {
+                    toolbar.getSecondRightButton().setVisibility(View.GONE);
+                    toolbar.getThirdRightButton().setVisibility(View.VISIBLE);
                 }
             }
         });
 
-        viewModel.getShowAddImage().observe(getViewLifecycleOwner(),isShow->{
-            if (getActivity() != null&&isShow != null && isShow){
+        viewModel.getShowAddImage().observe(getViewLifecycleOwner(), isShow -> {
+            if (getActivity() != null && isShow != null && isShow) {
                 new MaterialDialog.Builder(getActivity()).title(R.string.choose_picture).negativeText(R.string.cancel).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -141,7 +140,15 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
 
         viewModel.getLoadSelectedColor().observe(getViewLifecycleOwner(), colorValue -> {
             if (colorValue != null) {
-                binding.stchfFullImage.setBackgroundColor(Color.parseColor(colorValue));
+                binding.stchfFullImage.setImageDrawable(null);
+                binding.stchfFullImage.setBackgroundColor(colorValue.getColor());
+                if (colorValue.isNew()) {
+                    toolbar.getSecondRightButton().setVisibility(View.VISIBLE);
+                    toolbar.getThirdRightButton().setVisibility(View.GONE);
+                } else {
+                    toolbar.getSecondRightButton().setVisibility(View.GONE);
+                    toolbar.getThirdRightButton().setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -162,12 +169,6 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         viewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
             if (getActivity() != null && isGoBack != null && isGoBack) {
                 getActivity().onBackPressed();
-            }
-        });
-
-        viewModel.getRemoveChatBackgroundFileSelectedFromMemory().observe(getViewLifecycleOwner(), isClear -> {
-            if (getActivity() != null && isClear != null && isClear) {
-                HelperSaveFile.removeFromPrivateDirectory(getActivity());
             }
         });
     }
@@ -194,8 +195,8 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
 
                     if (data != null && data.getData() != null) {
 
-                        if (G.fragmentActivity != null) {
-                            AttachFile attachFile = new AttachFile(G.fragmentActivity);
+                        if (getActivity() != null) {
+                            AttachFile attachFile = new AttachFile(getActivity());
                             filePath = attachFile.saveGalleryPicToLocal(AttachFile.getFilePathFromUri(data.getData()));
                         }
                     }
@@ -203,16 +204,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
                     break;
             }
 
-            if (filePath != null) {
-
-                if (new File(filePath).exists()) {
-                    RealmWallpaper.updateField(null, filePath, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE);
-
-                    fillList(false);
-
-                    adapterChatBackgroundSetting.notifyItemInserted(1);
-                }
-            }
+            viewModel.setUserCustomImage(filePath);
         }
     }
 
@@ -238,39 +230,5 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
 
     public enum WallpaperType {
         addNew, local, proto
-    }
-
-    public class StructWallpaper {
-
-        private WallpaperType wallpaperType;
-        private String path;
-        private RealmWallpaperProto protoWallpaper;
-
-
-        public WallpaperType getWallpaperType() {
-            return wallpaperType;
-        }
-
-        public void setWallpaperType(WallpaperType wallpaperType) {
-            this.wallpaperType = wallpaperType;
-        }
-
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
-        public RealmWallpaperProto getProtoWallpaper() {
-            return protoWallpaper;
-        }
-
-        public void setProtoWallpaper(RealmWallpaperProto mProtoWallpaper) {
-
-            this.protoWallpaper = mProtoWallpaper;
-
-        }
     }
 }

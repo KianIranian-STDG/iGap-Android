@@ -30,11 +30,11 @@ public class AdapterSolidChatBackground extends RecyclerView.Adapter<AdapterSoli
 
 
     private ArrayList<String> mList;
-    private ChatBackgroundViewModel.OnImageClick onImageClick;
+    /*private ChatBackgroundViewModel.OnImageClick onImageClick;*/
 
-    public AdapterSolidChatBackground(ArrayList<String> List, ChatBackgroundViewModel.OnImageClick onImageClick) {
+    public AdapterSolidChatBackground(ArrayList<String> List/*, ChatBackgroundViewModel.OnImageClick onImageClick*/) {
         this.mList = List;
-        this.onImageClick = onImageClick;
+        /*this.onImageClick = onImageClick;*/
         this.mList.addAll(new ArrayList<>(Arrays.asList("#2962ff", "#00b8d4",
                 "#b71c1c", "#e53935", "#e57373",
                 "#880e4f", "#d81b60", "#f06292",
@@ -65,7 +65,7 @@ public class AdapterSolidChatBackground extends RecyclerView.Adapter<AdapterSoli
 
     @Override
     public void onBindViewHolder(@NotNull ViewHolder holder, final int position) {
-        holder.imageView.setOnClickListener(v -> onImageClick.onClick(holder.getAdapterPosition()));
+        /*holder.imageView.setOnClickListener(v -> onImageClick.onClick(holder.getAdapterPosition()));*/
         holder.imageView.setBackgroundColor(Color.parseColor(mList.get(position)));
     }
 
@@ -87,7 +87,7 @@ public class AdapterSolidChatBackground extends RecyclerView.Adapter<AdapterSoli
         public ViewHolder(View itemView) {
             super(itemView);
 
-            imageView = itemView.findViewById(R.id.imgBackgroundImage);
+            /*imageView = itemView.findViewById(R.id.imgBackgroundImage);*/
         }
     }
 }

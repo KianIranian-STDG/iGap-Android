@@ -22,8 +22,6 @@ public class WebAppInterface {
      */
     @JavascriptInterface
     public void IGapPayment(String token, String title) {
-        new HelperFragment(activity.getSupportFragmentManager()).loadPayment(title, token, result -> {
-
-        });
+        new HelperFragment(activity.getSupportFragmentManager()).loadPayment(title, token, null);
     }
 }
