@@ -27,6 +27,8 @@ import net.iGap.helper.avatar.AvatarHandler;
 
 import org.paygear.RaadApp;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static org.paygear.utils.Utils.signOutWallet;
 
 public class AccountsDialog extends BottomSheetDialogFragment {
@@ -50,6 +52,7 @@ public class AccountsDialog extends BottomSheetDialogFragment {
                 if (getActivity() instanceof ActivityMain && AccountManager.getInstance().getCurrentUser().getId() != id) {
                     WebSocketClient.getInstance().disconnectSocket(false);
                     G.handler.removeCallbacksAndMessages(null);
+                    G.pullRequestQueueRunned = new AtomicBoolean(false);
                     DbManager.getInstance().closeUiRealm();
                     signOutWallet();
                     AccountManager.getInstance().changeCurrentUserAccount(id);
@@ -62,6 +65,7 @@ public class AccountsDialog extends BottomSheetDialogFragment {
                 if (getActivity() != null) {
                     WebSocketClient.getInstance().disconnectSocket(false);
                     G.handler.removeCallbacksAndMessages(null);
+                    G.pullRequestQueueRunned = new AtomicBoolean(false);
                     DbManager.getInstance().closeUiRealm();
                     FragmentMain.mOffset = 0;
                     signOutWallet();

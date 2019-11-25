@@ -134,6 +134,7 @@ import org.paygear.fragment.PaymentHistoryFragment;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.realm.Realm;
 import ir.pec.mpl.pecpayment.view.PaymentInitiator;
@@ -374,6 +375,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (AccountManager.getInstance().getCurrentUser().getId() != userId) {
                     WebSocketClient.getInstance().disconnectSocket(false);
                     G.handler.removeCallbacksAndMessages(null);
+                    G.pullRequestQueueRunned = new AtomicBoolean(false);
                     DbManager.getInstance().closeUiRealm();
                     signOutWallet();
                     AccountManager.getInstance().changeCurrentUserAccount(userId);

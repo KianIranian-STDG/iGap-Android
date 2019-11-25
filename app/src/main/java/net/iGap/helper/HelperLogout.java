@@ -30,6 +30,8 @@ import net.iGap.response.ClientGetRoomListResponse;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import io.realm.Realm;
 
 import static org.paygear.utils.Utils.signOutWallet;
@@ -95,6 +97,7 @@ public final class HelperLogout {
                 G.userLogin = false;
                 WebSocketClient.getInstance().disconnectSocket(false);
                 G.handler.removeCallbacksAndMessages(null);
+                G.pullRequestQueueRunned = new AtomicBoolean(false);
                 logOutUserCallBack.onLogOut(logoutUser(AccountManager.getInstance().getCurrentUser()));
                 /*new LoginActions();*/
             }
