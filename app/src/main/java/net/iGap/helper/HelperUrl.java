@@ -236,20 +236,7 @@ public class HelperUrl {
                         openEmail(context , mUrl);
 
                     }else { //text is url
-
-                        SharedPreferences sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
-                        int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
-
-                        if (!mUrl.startsWith("https://") && !mUrl.startsWith("http://")) {
-                            mUrl = "http://" + mUrl;
-                        }
-
-                        if (checkedInappBrowser == 1 && !isNeedOpenWithoutBrowser(mUrl)) {
-                            openBrowser(mUrl); //internal chrome
-                        } else {
-                            openWithoutBrowser(mUrl);//external intent
-                        }
-
+                        openWebBrowser(context , mUrl);
                     }
                 }
             }
@@ -263,6 +250,21 @@ public class HelperUrl {
         };
 
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    public static void openWebBrowser(Context context, String mUrl) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+        int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
+
+        if (!mUrl.startsWith("https://") && !mUrl.startsWith("http://")) {
+            mUrl = "http://" + mUrl;
+        }
+
+        if (checkedInappBrowser == 1 && !isNeedOpenWithoutBrowser(mUrl)) {
+            openBrowser(mUrl); //internal chrome
+        } else {
+            openWithoutBrowser(mUrl);//external intent
+        }
     }
 
     private static void openEmail(Context context ,String email) {
@@ -1525,15 +1527,7 @@ public class HelperUrl {
                     Toast.makeText(fa, R.string.copied, Toast.LENGTH_SHORT).show();
 
                 } else if (items.get(position).equals(fa.getString(R.string.open_url))) {
-
-                    SharedPreferences sharedPreferences = fa.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-
-                    if (sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1) == 1&& !HelperUrl.isNeedOpenWithoutBrowser(finalUrl)) {
-                        HelperUrl.openBrowser(finalUrl); //internal chrome
-                    } else {
-                        HelperUrl.openWithoutBrowser(finalUrl);//external intent
-                    }
-
+                    openWebBrowser(fa , finalUrl);
                 }else if (items.get(position).equals(fa.getString(R.string.email))){
                     openEmail(fa , finalUrl);
                 }
