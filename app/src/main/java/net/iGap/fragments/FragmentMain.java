@@ -195,6 +195,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 mSelectedRoomList.add(temp);
             } else {
                 mSelectedRoomList.remove(temp);
+                if (mSelectedRoomList.size() > 0)
+                    item = getRealmFragmentMain().where(RealmRoom.class)
+                            .equalTo(RealmRoomFields.ID, mSelectedRoomList.get(mSelectedRoomList.size()-1).getId()).findFirst();
             }
 
             if (mSelectedRoomList.size() == 0) {
@@ -205,20 +208,21 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
             ((SelectedItemAdapter) multiSelectRv.getAdapter()).setItemsList(setMultiSelectAdapterItem(item, mSelectedRoomList.size() == 1));
 
+            RealmRoom finalItem = item;
             ((SelectedItemAdapter) multiSelectRv.getAdapter()).setCallBack(action -> {
                 switch (action) {
                     case 0:
-                        pinToTop(item.getId(), item.isPinned());
+                        pinToTop(finalItem.getId(), finalItem.isPinned());
                         break;
                     case 1:
-                        muteNotification(item.getId(), item.getMute());
+                        muteNotification(finalItem.getId(), finalItem.getMute());
                         disableMultiSelect();
                         break;
                     case 2:
-                        clearHistory(item.getId(), true);
+                        clearHistory(finalItem.getId(), true);
                         break;
                     case 3:
-                        confirmActionForRemoveItem(item);
+                        confirmActionForRemoveItem(finalItem);
                         break;
                     case 4:
                         readAllRoom();
