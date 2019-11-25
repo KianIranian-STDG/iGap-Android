@@ -56,8 +56,8 @@
             android:gravity="center"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_chat_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_chat_off_darkmode"
-            app:item_text="@string/chat"
             app:haveAvatarImage="false"
+            app:item_text="@string/chat"
             app:selected_icon="@drawable/ic_bottomnavigation_chat_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_chat_off" />
 
@@ -80,36 +80,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            app:dark_selected_icon="@drawable/shape_background_profile_navigation"
-            app:dark_unselected_icon="@drawable/logo"
+            app:haveAvatarImage="true"
             app:item_text="@string/profile"
-            app:selected_icon="@drawable/shape_background_profile_navigation"
-            app:unselected_icon="@drawable/logo" />
-     <!--   <FrameLayout
-            android:id="@+id/profileTabItem"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <net.iGap.module.CircleImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="6dp"
-                android:background="?attr/iGapProfileStroke"
-                android:padding="4dp" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="4dp"
-                android:gravity="center"
-                android:text="@string/profile"
-                android:textColor="@color/bottom_navigation_text_color"
-                android:textSize="9dp" />
-        </FrameLayout>-->
-
+            app:dark_selected_icon="?attr/iGapProfileStroke"
+            app:dark_unselected_icon="?attr/iGapProfileStroke"
+            app:selected_icon="?attr/iGapProfileStroke"
+            app:unselected_icon="?attr/iGapProfileStroke"/>
     </net.iGap.libs.bottomNavigation.BottomNavigation>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
