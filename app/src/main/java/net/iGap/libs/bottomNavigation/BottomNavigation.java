@@ -42,9 +42,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
     private int badgeColor;
     private OnLongClickListener onLongClickListener;
     private CircleImageView avatarImageView;
-
     private AvatarHandler avatarHandler;
-    private TextView textView;
 
     public BottomNavigation(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -96,7 +94,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
         } catch (Exception e) {
             e.printStackTrace();
         }
- }
+    }
 
     @Override
     public void selectedTabItem(final int position) {
@@ -127,14 +125,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
         } else {
             super.dispatchDraw(canvas);
         }
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        avatarHandler = new AvatarHandler();
-        avatarHandler.registerChangeFromOtherAvatarHandler();
-        avatarHandler.getAvatar(new ParamWithAvatarType(avatarImageView, AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -259,7 +249,13 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
     public void setProfileOnLongClickListener(OnLongClickListener onLongClickListener) {
         this.onLongClickListener = onLongClickListener;
     }
-
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        avatarHandler = new AvatarHandler();
+        avatarHandler.registerChangeFromOtherAvatarHandler();
+        avatarHandler.getAvatar(new ParamWithAvatarType(avatarImageView, AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
+    }
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
