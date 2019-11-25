@@ -66,6 +66,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
     }
 
     private void init(@Nullable AttributeSet attributeSet) {
+
         parseAttr(attributeSet);
         if (haveAvatarImage) {
             if (imageView == null) {
@@ -76,7 +77,9 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         } else {
             if (imageView == null)
                 imageView = new AppCompatImageView(getContext());
+
         }
+
 
         if (textView == null)
             textView = new AppCompatTextView(getContext());
@@ -154,11 +157,24 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
 
     private void setupViews() {
         if (isDarkTheme) {
+            if (active) {
+                imageView.setImageResource(darkSelectedIcon);
+            } else {
+                imageView.setImageResource(darkUnSelectedIcon);
+            }
+        } else {
+            if (active) {
+                imageView.setImageResource(selectedIcon);
+            } else {
+                imageView.setImageResource(unSelectedIcon);
+            }
+        }
+/*
+        if (isDarkTheme) {
             imageView.setImageResource(darkSelectedIcon);
         } else {
             imageView.setImageResource(selectedIcon);
-        }
-
+        }*/
         if (position == bottomNavigation.getDefaultItem())
             active = true;
         setSelectedItem(active);
