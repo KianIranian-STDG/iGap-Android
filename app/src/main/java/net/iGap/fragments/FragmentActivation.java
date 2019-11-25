@@ -115,7 +115,7 @@ public class FragmentActivation extends BaseFragment {
             }
         });
         viewModel.showEnteredCodeErrorServer.observe(getViewLifecycleOwner(), integer -> {
-            if (integer != null && getContext() != null) {
+            if (integer != null && integer > 0 && getContext() != null) {
                 new DefaultRoundDialog(getContext()).setTitle(R.string.error).setMessage(integer).setPositiveButton(R.string.ok, null).show();
             }
         });
