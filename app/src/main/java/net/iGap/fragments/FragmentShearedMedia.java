@@ -2438,7 +2438,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                         }
                         TextView tvLink = new TextView(tvMessage.getContext());
                         tvLink.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                        tvLink.setSingleLine();
+                        tvLink.setSingleLine(true);
                         tvLink.setLinkTextColor(txtColor);
                         Utils.setTextSize(tvLink, R.dimen.standardTextSize);
                         tvLink.setText(link);
@@ -2456,7 +2456,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     BetterLinkMovementMethod
                             .linkify(Linkify.ALL, txt)
                             .setOnLinkClickListener((tv, url) -> {
-                                return false;
+                                HelperUrl.openWebBrowser(getActivity() , url);
+                                return true;
                             })
                             .setOnLinkLongClickListener((tv, url) -> {
                                 if (HelperUrl.isTextLink(url)){
