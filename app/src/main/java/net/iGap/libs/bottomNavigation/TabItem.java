@@ -14,11 +14,14 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 
+import net.iGap.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
 import net.iGap.module.CircleImageView;
 import net.iGap.view.TextBadge;
@@ -40,6 +43,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
     private ImageView imageView;
     private TextBadge badgeView;
     private AppCompatTextView textView;
+    private AvatarHandler avatarHandler;
 
     private boolean active = false;
     private boolean isRtl = G.isAppRtl;
@@ -64,8 +68,11 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
     private void init(@Nullable AttributeSet attributeSet) {
         parseAttr(attributeSet);
         if (haveAvatarImage) {
-            if (imageView == null)
+            if (imageView == null) {
                 imageView = new CircleImageView(getContext());
+                imageView.setBackgroundResource(new Theme().getUserProfileTabSelector(getContext()));
+                imageView.setPadding((int) getResources().getDimension(R.dimen.dp2), (int) getResources().getDimension(R.dimen.dp2), (int) getResources().getDimension(R.dimen.dp2), (int) getResources().getDimension(R.dimen.dp2));
+            }
         } else {
             if (imageView == null)
                 imageView = new AppCompatImageView(getContext());
@@ -140,8 +147,10 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
                 bottomNavigation = (BottomNavigation) getParent();
                 setupViews();
             }
+
         });
     }
+
 
     private void setupViews() {
         if (isDarkTheme) {
@@ -153,7 +162,11 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
         if (position == bottomNavigation.getDefaultItem())
             active = true;
         setSelectedItem(active);
+/*        avatarHandler = new AvatarHandler();
+        avatarHandler.registerChangeFromOtherAvatarHandler();
+        avatarHandler.getAvatar(new ParamWithAvatarType(imageView, AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());*/
     }
+
 
     private void parseAttr(AttributeSet attributeSet) {
         if (attributeSet != null) {
@@ -164,7 +177,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
                 unSelectedIcon = typedArray.getResourceId(R.styleable.TabItem_unselected_icon, -1);
                 darkSelectedIcon = typedArray.getResourceId(R.styleable.TabItem_dark_selected_icon, -1);
                 darkUnSelectedIcon = typedArray.getResourceId(R.styleable.TabItem_dark_unselected_icon, -1);
-                text = typedArray.getResourceId(R.styleable.TabItem_item_text, R.string.profile);
+                text = typedArray.getResourceId(R.styleable.TabItem_item_text, R.string.error);
                 haveAvatarImage = typedArray.getBoolean(R.styleable.TabItem_haveAvatarImage, false);
             } finally {
                 typedArray.recycle();
