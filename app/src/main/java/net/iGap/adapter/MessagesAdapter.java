@@ -178,6 +178,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                     } else {
                         item.mMessage.setLinkInfo(HelperUrl.getLinkInfo(updatedText));
                     }
+                    item.mMessage.setHasMessageLink(item.mMessage.getLinkInfo().length() > 0);
 
                     item.updateMessageText(updatedText);
                     set(i, item);

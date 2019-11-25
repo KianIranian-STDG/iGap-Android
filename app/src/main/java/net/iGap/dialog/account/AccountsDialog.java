@@ -27,7 +27,6 @@ import net.iGap.helper.avatar.AvatarHandler;
 
 import org.paygear.RaadApp;
 
-import static net.iGap.request.RequestClientGetRoomList.pendingRequest;
 import static org.paygear.utils.Utils.signOutWallet;
 
 public class AccountsDialog extends BottomSheetDialogFragment {
@@ -55,7 +54,6 @@ public class AccountsDialog extends BottomSheetDialogFragment {
                     signOutWallet();
                     AccountManager.getInstance().changeCurrentUserAccount(id);
                     RaadApp.onCreate(getContext());
-                    pendingRequest.remove(0);
                     FragmentMain.mOffset = 0;
                     ((ActivityMain) getActivity()).updateUiForChangeAccount();
                 }
@@ -65,7 +63,6 @@ public class AccountsDialog extends BottomSheetDialogFragment {
                     WebSocketClient.getInstance().disconnectSocket(false);
                     G.handler.removeCallbacksAndMessages(null);
                     DbManager.getInstance().closeUiRealm();
-                    pendingRequest.remove(0);
                     FragmentMain.mOffset = 0;
                     signOutWallet();
                     AccountManager.getInstance().changeCurrentUserForAddAccount();

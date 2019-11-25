@@ -142,7 +142,6 @@ import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
-import static net.iGap.request.RequestClientGetRoomList.pendingRequest;
 import static org.paygear.utils.Utils.signOutWallet;
 
 public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
@@ -379,7 +378,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     signOutWallet();
                     AccountManager.getInstance().changeCurrentUserAccount(userId);
                     RaadApp.onCreate(this);
-                    pendingRequest.remove(0);
                     FragmentMain.mOffset = 0;
                     updateUiForChangeAccount();
                 }

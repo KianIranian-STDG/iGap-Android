@@ -60,17 +60,10 @@
                             android:layout_height="match_parent"
                             android:visibility="gone">
 
-
-                            <WebView xmlns:android="http://schemas.android.com/apk/res/android"
-                                android:id="@+id/webViewChatPage"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent" />
-
                             <ProgressBar
                                 android:id="@+id/progressWebView"
-                                style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/dp10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
                                 android:indeterminateOnly="true" />
 
@@ -259,6 +252,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
                 android:clickable="true"
+                android:background="?attr/iGapBottomSheetBackground"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -270,7 +264,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/join"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dp18" />
+                    android:textSize="@dimen/largeTextSize" />
 
             </LinearLayout>
 

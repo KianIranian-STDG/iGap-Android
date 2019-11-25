@@ -27,6 +27,7 @@ import net.iGap.fragments.FragmentRegistrationNickname;
 import net.iGap.fragments.WelcomeFragment;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.request.RequestClientGetRoomList;
+import net.iGap.response.ClientGetRoomListResponse;
 import net.iGap.viewmodel.RegistrationViewModel;
 
 import org.paygear.RaadApp;
@@ -151,8 +152,9 @@ public class ActivityRegistration extends ActivityEnhanced {
                     signOutWallet();
                     AccountManager.getInstance().setCurrentUser();
                     RaadApp.onCreate(this);
-                    RequestClientGetRoomList.pendingRequest.remove(0);
                     FragmentMain.mOffset = 0;
+                    ClientGetRoomListResponse.roomListFetched = false;
+                    RequestClientGetRoomList.isPendingGetRoomList = false;
                     DbManager.getInstance().changeRealmConfiguration();
                     WebSocketClient.getInstance().connect(true);
                     Log.wtf(this.getClass().getName(), "current user: " + AccountManager.getInstance().getCurrentUser());
