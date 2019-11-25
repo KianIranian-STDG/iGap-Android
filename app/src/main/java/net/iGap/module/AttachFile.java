@@ -429,9 +429,6 @@ public class AttachFile {
                     ((Activity) context).startActivityForResult(intent, requestOpenGalleryForImageMultipleSelect);
                 }
 
-                if (G.onHelperSetAction != null) {
-                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_IMAGE);
-                }
                 isInAttach = true;
             }
 
@@ -471,9 +468,6 @@ public class AttachFile {
                 }
 
 
-                if (G.onHelperSetAction != null) {
-                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_VIDEO);
-                }
                 isInAttach = true;
             }
 
@@ -611,9 +605,6 @@ public class AttachFile {
                 }
 
 
-                if (G.onHelperSetAction != null) {
-                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_AUDIO);
-                }
                 isInAttach = true;
             }
 

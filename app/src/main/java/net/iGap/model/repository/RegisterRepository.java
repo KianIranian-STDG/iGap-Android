@@ -60,6 +60,7 @@ public class RegisterRepository {
     private String pattern = "";
     private String regexFetchCodeVerification;
     private boolean forgetTwoStepVerification = false;
+    private ProtoUserRegister.UserRegisterResponse.Method method;
 
     private SingleLiveEvent<GoToMainFromRegister> goToMainPage = new SingleLiveEvent<>();
     private SingleLiveEvent<Long> goToWelcomePage = new SingleLiveEvent<>();
@@ -123,6 +124,10 @@ public class RegisterRepository {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public ProtoUserRegister.UserRegisterResponse.Method getMethod() {
+        return method;
     }
 
     public void setForgetTwoStepVerification(boolean forgetTwoStepVerification) {
@@ -241,6 +246,7 @@ public class RegisterRepository {
                 userId = userIdR;
                 authorHash = authorHashR;
                 G.smsNumbers = smsNumbersR;
+                method = methodValue;
                 /*SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("callingCode", callingCode);
                 editor.putString("countryName", countryName);
@@ -348,16 +354,17 @@ public class RegisterRepository {
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-                try (Realm realm = Realm.getDefaultInstance()) {
-                    realm.executeTransaction(realm1 -> {
-                        G.displayName = user.getDisplayName();
-                        G.userId = user.getId();
-                        RealmUserInfo.putOrUpdate(realm1, user);
-                        G.onUserInfoResponse = null;
-                        goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
-                    });
+                if (user.getId() == userId) {
+                    G.onUserInfoResponse = null;
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        realm.executeTransaction(realm1 -> {
+                            G.displayName = user.getDisplayName();
+                            G.userId = user.getId();
+                            RealmUserInfo.putOrUpdate(realm1, user);
+                            goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
+                        });
+                    }
                 }
-
             }
 
             @Override

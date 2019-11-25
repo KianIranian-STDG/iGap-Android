@@ -1,8 +1,6 @@
 package net.iGap.fragments;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +24,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -350,21 +350,19 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             if (remember) {
                 getLocation(origin, callback);
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(getActivity().getString(R.string.location_dialog_message))
-                        .setCancelable(true).setPositiveButton(getActivity().getString(R.string.yes), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        getLocation(origin, callback);
-                        remember = true;
-
-                    }
-                }).setNegativeButton(getActivity().getString(R.string.no), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        callback.invoke(origin, false, false);
-                    }
-                });
-                AlertDialog alert = builder.create();
-                alert.show();
+                if (getActivity() == null) return;
+                new MaterialDialog.Builder(getActivity())
+                        .content(R.string.location_dialog_message)
+                        .positiveText(R.string.yes)
+                        .negativeText(R.string.no)
+                        .onPositive((dialog, which) -> {
+                            getLocation(origin, callback);
+                            remember = true;
+                        })
+                        .onNegative((dialog, which) -> {
+                            callback.invoke(origin, false, false);
+                        })
+                        .show();
             }
         }
     }

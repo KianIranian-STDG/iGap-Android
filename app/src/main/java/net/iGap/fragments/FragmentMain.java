@@ -372,12 +372,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
             RealmQuery<RealmRoom> temp = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false);
             results = temp.sort(fieldNames, sort).findAllAsync();
-            results.addChangeListener(new RealmChangeListener<RealmResults<RealmRoom>>() {
-                @Override
-                public void onChange(RealmResults<RealmRoom> realmRooms) {
-
-                }
-            });
             roomListAdapter = new RoomListAdapter(results, viewById, pbLoading, avatarHandler, mSelectedRoomList, this::disableMultiSelect);
             getChatLists();
 
@@ -494,18 +488,16 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
 
     private void getChatLists() {
-        Log.wtf(this.getClass().getName(), "progress: " + (progressBar.getVisibility() == View.VISIBLE));
         if (!ClientGetRoomListResponse.roomListFetched) {
-            Log.wtf(this.getClass().getName(), "if:");
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            Log.wtf(this.getClass().getName(), "else");
             progressBar.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    progressBar.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.VISIBLE);
                 }
-            }, 1000);
+            },500);
+
+        } else {
+            progressBar.setVisibility(View.GONE);
         }
     }
 
