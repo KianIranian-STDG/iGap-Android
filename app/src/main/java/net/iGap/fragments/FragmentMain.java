@@ -481,14 +481,15 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     private void getChatLists() {
         if (!ClientGetRoomListResponse.roomListFetched) {
-//            progressBar.setVisibility(View.VISIBLE);
+            progressBar.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+            },500);
+
         } else {
-//            progressBar.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    progressBar.setVisibility(View.GONE);
-//                }
-//            },1000);
+            progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -640,12 +641,12 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     @Override
     public synchronized void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, RequestClientGetRoomList.IdentityGetRoomList identity) {
-//        G.handler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                progressBar.setVisibility(View.GONE);
-//            }
-//        });
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override

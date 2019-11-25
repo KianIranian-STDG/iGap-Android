@@ -12,6 +12,7 @@ package net.iGap.response;
 
 import android.os.Looper;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperConnectionState;
@@ -19,7 +20,9 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserLogin;
 import net.iGap.realm.RealmCallConfig;
+import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestWalletGetAccessToken;
@@ -108,6 +111,12 @@ public class UserLoginResponse extends MessageHandler {
 
         WebSocketClient.waitingForReconnecting = false;
         WebSocketClient.allowForReconnecting = true;
+        new Thread(() -> {
+            G.clientConditionGlobal = RealmClientCondition.computeClientCondition(null);
+            new RequestClientGetRoomList().clientGetRoomList(0, Config.LIMIT_LOAD_ROOM, "0");
+
+        }).start();
+
         G.onUserLogin.onLogin();
         RealmUserInfo.sendPushNotificationToServer();
 
