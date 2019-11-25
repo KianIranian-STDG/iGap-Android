@@ -258,10 +258,6 @@ public class Theme {
         return getDrawableAttr(context, R.attr.iGapToolbarBackground);
     }
 
-    public int getUserProfileTabSelector(Context context) {
-        return getDrawableAttr(context, R.attr.iGapProfileStroke);
-    }
-
     public int getToolbarDrawableSharpe(Context context) {
         return getDrawableAttr(context, R.attr.iGapToolbarBackgroundSharp);
     }
