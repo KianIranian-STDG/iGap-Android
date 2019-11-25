@@ -2428,14 +2428,12 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     lytLinks.removeAllViews();
                     for (String link : links) {
 
-                        //limit to 60 length
-                        if (tvMessage.getText().toString().length() < 60){
-                            if (message.contains(link)) {
-                                tvMessage.setText(message.replace(link, "").trim());
-                            } else if (message.contains(link.replace("http://", ""))) {
-                                tvMessage.setText(message.replace(link.replace("http://", ""), "").trim());
-                            }
+                        if (message.contains(link)) {
+                            tvMessage.setText(message.replace(link, "").trim());
+                        } else if (message.contains(link.replace("http://", ""))) {
+                            tvMessage.setText(message.replace(link.replace("http://", ""), "").trim());
                         }
+
                         TextView tvLink = new TextView(tvMessage.getContext());
                         tvLink.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         tvLink.setSingleLine(true);
