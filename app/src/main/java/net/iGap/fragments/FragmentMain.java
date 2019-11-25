@@ -78,6 +78,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -108,7 +109,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private HelperToolbar mHelperToolbar;
     private boolean isChatMultiSelectEnable = false;
     private onChatCellClick onChatCellClickedInEditMode;
-    private List<Room> mSelectedRoomList = new ArrayList<>();
+    private CopyOnWriteArrayList<Room> mSelectedRoomList = new CopyOnWriteArrayList<>();
     //    private TextView mBtnRemoveSelected;
     private RealmResults<RealmRoom> results;
     private ConstraintLayout root;
@@ -197,7 +198,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 mSelectedRoomList.remove(temp);
                 if (mSelectedRoomList.size() > 0)
                     item = getRealmFragmentMain().where(RealmRoom.class)
-                            .equalTo(RealmRoomFields.ID, mSelectedRoomList.get(mSelectedRoomList.size()-1).getId()).findFirst();
+                            .equalTo(RealmRoomFields.ID, mSelectedRoomList.get(mSelectedRoomList.size() - 1).getId()).findFirst();
             }
 
             if (mSelectedRoomList.size() == 0) {
