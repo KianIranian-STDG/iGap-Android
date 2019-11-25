@@ -5,9 +5,4 @@
             <solid android:color="?attr/colorAccent" />
         </shape>
     </item>
-    <item android:state_selected="false">
-        <shape android:innerRadiusRatio="2.5" android:shape="ring" android:thickness="@dimen/dp2" android:useLevel="false">
-            <solid android:color="?attr/iGapHintTextColor" />
-        </shape>
-    </item>
 </selector>

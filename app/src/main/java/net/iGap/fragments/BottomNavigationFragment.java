@@ -34,7 +34,7 @@ import net.iGap.news.view.NewsMainFrag;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BottomNavigationFragment extends Fragment implements OnUnreadChange {
+public class BottomNavigationFragment extends BaseFragment implements OnUnreadChange {
 
     private static final int CONTACT_FRAGMENT = 0;
     private static final int CALL_FRAGMENT = 1;
@@ -120,7 +120,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
     }
 
     private void openAccountsDialog() {
-        new AccountsDialog().setData(bottomNavigation.getAvatarHandler(), new AccountDialogListener() {
+        new AccountsDialog().setData(avatarHandler, new AccountDialogListener() {
             @Override
             public void onAccountClick(boolean isAssigned, long id) {
 
@@ -420,8 +420,7 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
             }
         }
     }
-
-    private void hideKeyboard() {
+    protected void hideKeyboard() {
         if (getActivity() != null) {
             View view = getActivity().getCurrentFocus();
             if (view != null) {
@@ -430,7 +429,6 @@ public class BottomNavigationFragment extends Fragment implements OnUnreadChange
             }
         }
     }
-
     public DiscoveryFragment.CrawlerStruct getCrawlerStruct() {
         return crawlerStruct;
     }

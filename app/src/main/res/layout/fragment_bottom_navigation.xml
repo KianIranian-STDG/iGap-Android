@@ -81,11 +81,7 @@
             android:layout_weight="1"
             android:gravity="center"
             app:haveAvatarImage="true"
-            app:item_text="@string/profile"
-            app:dark_selected_icon="?attr/iGapProfileStroke"
-            app:dark_unselected_icon="?attr/iGapProfileStroke"
-            app:selected_icon="?attr/iGapProfileStroke"
-            app:unselected_icon="?attr/iGapProfileStroke"/>
+            app:item_text="@string/profile" />
     </net.iGap.libs.bottomNavigation.BottomNavigation>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

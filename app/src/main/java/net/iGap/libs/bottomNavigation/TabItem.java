@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -66,20 +67,23 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
     }
 
     private void init(@Nullable AttributeSet attributeSet) {
-
         parseAttr(attributeSet);
         if (haveAvatarImage) {
             if (imageView == null) {
                 imageView = new CircleImageView(getContext());
                 imageView.setBackgroundResource(new Theme().getUserProfileTabSelector(getContext()));
                 imageView.setPadding((int) getResources().getDimension(R.dimen.dp2), (int) getResources().getDimension(R.dimen.dp2), (int) getResources().getDimension(R.dimen.dp2), (int) getResources().getDimension(R.dimen.dp2));
+                if (avatarHandler == null) {
+                    avatarHandler = new AvatarHandler();
+                    avatarHandler.registerChangeFromOtherAvatarHandler();
+                    avatarHandler.getAvatar(new ParamWithAvatarType(imageView, AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
+                }
             }
         } else {
             if (imageView == null)
                 imageView = new AppCompatImageView(getContext());
 
         }
-
 
         if (textView == null)
             textView = new AppCompatTextView(getContext());
@@ -156,33 +160,18 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
 
 
     private void setupViews() {
-        if (isDarkTheme) {
-            if (active) {
+        if (!haveAvatarImage) {
+            if (isDarkTheme) {
                 imageView.setImageResource(darkSelectedIcon);
             } else {
-                imageView.setImageResource(darkUnSelectedIcon);
-            }
-        } else {
-            if (active) {
                 imageView.setImageResource(selectedIcon);
-            } else {
-                imageView.setImageResource(unSelectedIcon);
             }
         }
-/*
-        if (isDarkTheme) {
-            imageView.setImageResource(darkSelectedIcon);
-        } else {
-            imageView.setImageResource(selectedIcon);
-        }*/
         if (position == bottomNavigation.getDefaultItem())
             active = true;
         setSelectedItem(active);
-/*        avatarHandler = new AvatarHandler();
-        avatarHandler.registerChangeFromOtherAvatarHandler();
-        avatarHandler.getAvatar(new ParamWithAvatarType(imageView, AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());*/
-    }
 
+    }
 
     private void parseAttr(AttributeSet attributeSet) {
         if (attributeSet != null) {
@@ -220,22 +209,46 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
             onTabItemSelected.selectedTabItem(position);
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        Log.wtf(this.getClass().getName(),"onAttachedToWindow");
+        if (haveAvatarImage && avatarHandler == null) {
+            avatarHandler = new AvatarHandler();
+            avatarHandler.registerChangeFromOtherAvatarHandler();
+            avatarHandler.getAvatar(new ParamWithAvatarType(imageView, AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Log.wtf(this.getClass().getName(),"onAttachedToWindow");
+        if (avatarHandler != null) {
+            avatarHandler.unregisterChangeFromOtherAvatarHandler();
+        }
+    }
+
     public void setSelectedItem(boolean isActive) {
         if (active != isActive) {
             active = isActive;
         }
-        textView.setSelected(isActive);
-        if (isDarkTheme) {
-            if (active) {
-                imageView.setImageResource(darkSelectedIcon);
+        this.setSelected(isActive);
+        /*textView.setSelected(isActive);*/
+        /*imageView.setSelected(isActive);*/
+        if (!haveAvatarImage) {
+            if (isDarkTheme) {
+                if (active) {
+                    imageView.setImageResource(darkSelectedIcon);
+                } else {
+                    imageView.setImageResource(darkUnSelectedIcon);
+                }
             } else {
-                imageView.setImageResource(darkUnSelectedIcon);
-            }
-        } else {
-            if (active) {
-                imageView.setImageResource(selectedIcon);
-            } else {
-                imageView.setImageResource(unSelectedIcon);
+                if (active) {
+                    imageView.setImageResource(selectedIcon);
+                } else {
+                    imageView.setImageResource(unSelectedIcon);
+                }
             }
         }
 
