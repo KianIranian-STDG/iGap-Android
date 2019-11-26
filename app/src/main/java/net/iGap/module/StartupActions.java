@@ -469,7 +469,7 @@ public final class StartupActions {
      */
     private void languageDetection(SharedPreferences sharedPreferences) {
 
-        String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
+        String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "فارسی");
 
         switch (language) {
             case "فارسی":
