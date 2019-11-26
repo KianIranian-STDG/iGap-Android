@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.adapter.AdapterSolidChatBackground;
 import net.iGap.dialog.topsheet.TopSheetDialog;
@@ -346,6 +347,9 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
             if (G.twoPaneMode && G.onBackgroundChanged != null) {
                 G.onBackgroundChanged.onBackgroundChanged(finalPath);
             }
+            if (getActivity() instanceof ActivityMain){
+                ((ActivityMain) getActivity()).chatBackgroundChanged();
+            }
 
             popBackStackFragment();
         }
@@ -363,6 +367,9 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
             editor.apply();
             if (G.twoPaneMode && G.onBackgroundChanged != null) {
                 G.onBackgroundChanged.onBackgroundChanged("");
+            }
+            if (getActivity() instanceof ActivityMain){
+                ((ActivityMain) getActivity()).chatBackgroundChanged();
             }
             popBackStackFragment();
         }

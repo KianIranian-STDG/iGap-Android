@@ -61,6 +61,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.FragmentChatSettings;
 import net.iGap.fragments.FragmentGallery;
 import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMediaPlayer;
@@ -1968,5 +1969,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public Fragment getFragment(String fragmentTag) {
         return getSupportFragmentManager().findFragmentByTag(fragmentTag);
+    }
+
+    public void chatBackgroundChanged(){
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FragmentChatSettings.class.getName());
+        if (fragment instanceof FragmentChatSettings){
+            ((FragmentChatSettings) fragment).chatBackgroundChange();
+        }
+        if (G.twoPaneMode){
+            Fragment f = getSupportFragmentManager().findFragmentByTag(TabletEmptyChatFragment.class.getName());
+            if (f instanceof TabletEmptyChatFragment){
+                ((TabletEmptyChatFragment) f).getChatBackground();
+            }
+        }
     }
 }

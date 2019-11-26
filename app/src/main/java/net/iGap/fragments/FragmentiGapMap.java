@@ -93,6 +93,7 @@ import net.iGap.request.RequestGeoRegister;
 import net.iGap.request.RequestGeoUpdateComment;
 import net.iGap.request.RequestGeoUpdatePosition;
 
+import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.config.IConfigurationProvider;
@@ -438,7 +439,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         HelperTracker.sendTracker(HelperTracker.TRACKER_NEARBY_PAGE);
         G.onLocationChanged = this;
@@ -1628,7 +1629,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                             isSendRequestGeoCoordinate = true;
                         }
                     } else if (items.get(position).equals(getString(R.string.map_registration))) {
-                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(getActivity()).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 

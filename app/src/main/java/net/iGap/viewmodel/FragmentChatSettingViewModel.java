@@ -268,7 +268,6 @@ public class FragmentChatSettingViewModel extends ViewModel {
 
     public void getChatBackground() {
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
-        Log.wtf(this.getClass().getName(), "value of background: " + backGroundPath);
         if (backGroundPath.length() > 0) {
             setChatBackground.setValue(backGroundPath);
         } else {
