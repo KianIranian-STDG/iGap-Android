@@ -28,7 +28,7 @@ public class FragmentDataViewModel extends ViewModel {
 
     public FragmentDataViewModel(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
-        int typeData = sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 0);
+        int typeData = sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 1);
 
         isMiladi.set(typeData == MILADI ? View.VISIBLE : View.GONE);
         isShamsi.set(typeData == SHAMSI ? View.VISIBLE : View.GONE);
