@@ -2438,10 +2438,16 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                         tvLink.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                         tvLink.setSingleLine(true);
                         tvLink.setLinkTextColor(txtColor);
+                        tvLink.setTextColor(txtColor);
                         Utils.setTextSize(tvLink, R.dimen.standardTextSize);
                         tvLink.setText(link);
                         lytLinks.addView(tvLink);
                         enableLinkOperation(tvLink);
+
+                        itemView.setOnClickListener(v-> {
+                            if (getActivity() == null || links[0] == null) return;
+                            HelperUrl.openWebBrowser(getActivity() , links[0]);
+                        });
                     }
 
                 }
