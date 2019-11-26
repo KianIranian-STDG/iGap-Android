@@ -36,7 +36,7 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
     private boolean isLoadMore = false;
     private int page = 0;
     private String id;
-    private String title = "";
+    private String title;
     private String scale;
 
     public PopularMoreChannelViewModel(String id, String title) {
@@ -46,7 +46,7 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
         if (id == null) {
             goBack.setValue(true);
         } else {
-            getFirstPage();
+            getFirstPage(true);
         }
     }
 
@@ -66,7 +66,7 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
         return showAdvertisement;
     }
 
-    private void getFirstPage() {
+    private void getFirstPage(boolean isRefresh) {
         isLoadMore = true;
         progressMutableLiveData.postValue(true);
         showRetryView.setValue(false);
@@ -91,8 +91,11 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
                         showAdvertisement.setValue(data.getInfo().getAdvertisement());
                         scale = data.getInfo().getAdvertisement().getmScale();
                     }
-                    items.addAll(data.getChannels());
                     totalItemSize = (int) data.getPagination().getTotalDocs();
+                    if (isRefresh){
+                        items.clear();
+                    }
+                    items.addAll(data.getChannels());
                     moreChannelMutableLiveData.setValue(items);
                     progressMutableLiveData.postValue(false);
                     emptyViewMutableLiveData.setValue(items.size() == 0);
@@ -117,8 +120,7 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
         if (!isLoadMore) {
             page = 0;
             totalItemSize = 0;
-            items.clear();
-            getFirstPage();
+            getFirstPage(true);
         }
     }
 
@@ -138,7 +140,7 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
 
     public void loadMoreData() {
         if (!isLoadMore && totalItemSize > items.size()) {
-            getFirstPage();
+            getFirstPage(false);
         }
     }
 
@@ -162,7 +164,7 @@ public class PopularMoreChannelViewModel extends BaseViewModel {
         private String slug;
         private boolean isPrivate;
 
-        public goToChannel(String slug, boolean isPrivate) {
+        goToChannel(String slug, boolean isPrivate) {
             this.slug = slug;
             this.isPrivate = isPrivate;
         }
