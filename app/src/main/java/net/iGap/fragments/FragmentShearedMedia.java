@@ -2402,12 +2402,19 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         @Override
         void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
-
+            String link = ((ViewHolder) holder).rawLink;
+            if (getActivity() == null || link == null) return;
+            if (HelperUrl.isTextEmail(link)){
+                HelperUrl.openEmail(getActivity() , link);
+            }else {
+                HelperUrl.openWebBrowser(getActivity() , link);
+            }
         }
 
         public class ViewHolder extends mHolder {
             private EmojiTextViewE tvMessage;
             private LinearLayout lytLinks ;
+            String rawLink = "";
 
             public ViewHolder(View view) {
                 super(view);
@@ -2432,7 +2439,15 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                             tvMessage.setText(message.replace(link, "").trim());
                         } else if (message.contains(link.replace("http://", ""))) {
                             tvMessage.setText(message.replace(link.replace("http://", ""), "").trim());
+                        }else if (message.contains(link.replace("mailto:", ""))) {
+                            tvMessage.setText(message.replace(link.replace("mailto:", ""), "").trim());
                         }
+
+                        if (link.startsWith("mailto:")){
+                            link = link.replace("mailto:" , "");
+                        }
+
+                        rawLink = link ;
 
                         TextView tvLink = new TextView(tvMessage.getContext());
                         tvLink.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -2444,10 +2459,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                         lytLinks.addView(tvLink);
                         enableLinkOperation(tvLink);
 
-                        itemView.setOnClickListener(v-> {
-                            if (getActivity() == null || links[0] == null) return;
-                            HelperUrl.openWebBrowser(getActivity() , links[0]);
-                        });
                     }
 
                 }
@@ -2460,13 +2471,17 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     BetterLinkMovementMethod
                             .linkify(Linkify.ALL, txt)
                             .setOnLinkClickListener((tv, url) -> {
-                                HelperUrl.openWebBrowser(getActivity() , url);
+                                if (HelperUrl.isTextEmail(url.replace("mailto:" , ""))){
+                                    HelperUrl.openEmail(getActivity() , url.replace("mailto:" , ""));
+                                }else {
+                                    HelperUrl.openWebBrowser(getActivity() , url);
+                                }
                                 return true;
                             })
                             .setOnLinkLongClickListener((tv, url) -> {
                                 if (HelperUrl.isTextLink(url)){
                                     G.isLinkClicked = true ;
-                                    HelperUrl.openLinkDialog(getActivity() , url);
+                                    HelperUrl.openLinkDialog(getActivity() , url.replace("mailto:" , ""));
                                 }
                                 return true;
                             });

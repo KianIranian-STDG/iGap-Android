@@ -203,7 +203,7 @@ public class HelperUrl {
         return false;
     }
 
-    private static boolean isTextEmail(String email) {
+    public static boolean isTextEmail(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(email);
@@ -267,7 +267,7 @@ public class HelperUrl {
         }
     }
 
-    private static void openEmail(Context context ,String email) {
+    public static void openEmail(Context context ,String email) {
 
         try{
             Intent intent = new Intent(Intent.ACTION_SENDTO , Uri.fromParts("mailto" , email , null));
