@@ -523,7 +523,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 };
 
                 designLayout(chatLayoutMode.none);
-                new HelperFragment(getSupportFragmentManager(), new TabletEmptyChatFragment()).load(true);
                 setDialogFragmentSize();
 
                 G.iTowPanModDesinLayout = new ITowPanModDesinLayout() {
@@ -1161,27 +1160,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.rotationState = newConfig.orientation;
     }
 
-    private void setViewConfigurationChanged() {
-        if (G.twoPaneMode) {
-            if (G.isLandscape) {
-                Log.wtf(this.getClass().getName(), "isLandscape");
-                findViewById(R.id.mainFrame).setVisibility(View.VISIBLE);
-                findViewById(R.id.roomListFrame).setVisibility(View.VISIBLE);
-            } else {
-                Log.wtf(this.getClass().getName(), "not Landscape");
-                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
-                if (fragment instanceof FragmentChat) {
-                    findViewById(R.id.roomListFrame).setVisibility(View.GONE);
-                } else {
-                    findViewById(R.id.mainFrame).setVisibility(View.GONE);
-                }
-            }
-        }
-    }
-
     //******************************************************************************************************************************
 
     private void initTabStrip(Intent intent) {
+        if (G.twoPaneMode) {
+            new HelperFragment(getSupportFragmentManager(), new TabletEmptyChatFragment()).load(true);
+        }
         BottomNavigationFragment bottomNavigationFragment = new BottomNavigationFragment();
 
         if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
@@ -1898,14 +1882,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void goToUserProfile() {
+        getSupportFragmentManager().popBackStackImmediate(BottomNavigationFragment.class.getName(),0);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.roomListFrame);
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).goToUserProfile();
+        }else{
+            Log.wtf(this.getClass().getName(),"test");
         }
     }
 
     public void goToChatPage(FragmentChat fragmentChat) {
-        Log.wtf(this.getClass().getName(), "goToChatPage");
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
         if (fragment instanceof FragmentChat) {
             getSupportFragmentManager().beginTransaction().remove(fragment).commit();
