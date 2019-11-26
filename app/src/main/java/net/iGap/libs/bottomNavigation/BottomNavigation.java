@@ -22,7 +22,7 @@ import net.iGap.libs.bottomNavigation.Event.OnItemSelected;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.module.AppUtils;
 
-public class BottomNavigation extends LinearLayout implements OnItemSelected, View.OnClickListener, View.OnLongClickListener {
+public class BottomNavigation extends LinearLayout implements OnItemSelected, View.OnClickListener {
 
     public static final String TAG = "aabolfazlNavigation";
     private OnItemChangeListener onItemChangeListener;
@@ -70,6 +70,9 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
                 TabItem tabItem = (TabItem) getChildAt(i);
                 tabItem.setPosition(i);
                 tabItem.setOnTabItemSelected(this);
+                if (i == 4) {
+                    tabItem.setOnLongClickListener(this::onLongClick);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -210,7 +213,6 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
         selectedTabItem(4);
     }
 
-    @Override
     public boolean onLongClick(View v) {
         if (onItemChangeListener != null) {
             onLongClickListener.onLongClick(v);
