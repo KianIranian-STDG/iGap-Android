@@ -2419,7 +2419,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             public void bind(String message){
 
                 tvMessage.setText(message);
-                Linkify.addLinks(tvMessage, Linkify.WEB_URLS);
+                Linkify.addLinks(tvMessage, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
 
                 String[] links = getUrlsFromText(tvMessage);
                 if (links.length != 0){

@@ -1570,7 +1570,7 @@ public class HelperUrl {
         }
     }
 
-    enum linkType {
+    public enum linkType {
         hash, atSighn, igapLink, igapResolve, webLink, bot, digitLink, igapDeepLink
 
     }
