@@ -70,7 +70,7 @@ public class BottomNavigation extends LinearLayout implements OnItemSelected, Vi
                 TabItem tabItem = (TabItem) getChildAt(i);
                 tabItem.setPosition(i);
                 tabItem.setOnTabItemSelected(this);
-                if (i == 4) {
+                if (tabItem.haveAvatarImage) {
                     tabItem.setOnLongClickListener(this::onLongClick);
                 }
             }

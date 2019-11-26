@@ -40,7 +40,7 @@ public class TabItem extends LinearLayout implements View.OnClickListener {
     private int darkUnSelectedIcon;
     private int position;
     private int text;
-    private boolean haveAvatarImage;
+    public boolean haveAvatarImage;
     private ImageView imageView;
     private TextBadge badgeView;
     private AppCompatTextView textView;
