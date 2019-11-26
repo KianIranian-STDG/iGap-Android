@@ -2402,13 +2402,13 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         @Override
         void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
-            String link = ((ViewHolder) holder).rawLink;
+            /*String link = ((ViewHolder) holder).rawLink;
             if (getActivity() == null || link == null) return;
             if (HelperUrl.isTextEmail(link)){
                 HelperUrl.openEmail(getActivity() , link);
             }else {
                 HelperUrl.openWebBrowser(getActivity() , link);
-            }
+            }*/
         }
 
         public class ViewHolder extends mHolder {
