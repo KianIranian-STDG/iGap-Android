@@ -1827,5 +1827,6 @@
     <string name="elecBill_success_title">успех</string>
     <string name="elecBill_success_pay">Оплата прошла успешно.</string>
     <string name="delete_from_storage">Удалить из хранилища</string>
+    <string name="map_registration_enable">Включить видимость поблизости</string>
 
 </resources>

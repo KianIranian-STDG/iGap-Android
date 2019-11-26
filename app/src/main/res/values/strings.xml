@@ -1123,6 +1123,7 @@ Want to get it?</string>
     <string name="nearby">Manually Update the Map</string>
     <string name="list_user_map">List of People Nearby</string>
     <string name="map_registration">Disable "Nearby" Visibility</string>
+    <string name="map_registration_enable">Enable "Nearby" Visibility</string>
     <string name="comment_waiting">Receiving notes...</string>
     <string name="comment_no">No Status</string>
     <string name="distance" formatted="false">about %d m</string>
