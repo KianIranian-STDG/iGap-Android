@@ -25,6 +25,7 @@ import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.bannerslider.BannerSlider;
+import net.iGap.model.popularChannel.Channel;
 import net.iGap.viewmodel.PopularMoreChannelViewModel;
 
 
@@ -44,6 +45,7 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag implements Toolb
     private String scale;
     private int pageMax = 20;
     private int itemSize;
+    private boolean isLoadMore = false;
 
     private PopularChannelMoreSliderAdapter sliderAdapter;
     private PopularMoreChannelViewModel popularMoreChannelViewModel;
@@ -54,13 +56,13 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag implements Toolb
         super.onCreate(savedInstanceState);
         popularMoreChannelViewModel = ViewModelProviders.of(this).get(PopularMoreChannelViewModel.class);
         viewModel = popularMoreChannelViewModel;
+        adapter = new PopularMoreChannelAdapter();
     }
 
     @NonNull
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @NonNull Bundle savedInstanceState) {
-        rootView = LayoutInflater.from(G.fragmentActivity).inflate(R.layout.fragment_popular_channel_more, container, false);
-        adapter = new PopularMoreChannelAdapter();
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        rootView = LayoutInflater.from(container.getContext()).inflate(R.layout.fragment_popular_channel_more, container, false);
         return rootView;
     }
 
@@ -79,6 +81,7 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag implements Toolb
 
 
         popularMoreChannelViewModel.getMoreChannelMutableLiveData().observe(getViewLifecycleOwner(), childChannel -> {
+            isLoadMore = false;
             if (childChannel != null) {
 
                 if (title.equals("")) {
@@ -117,11 +120,20 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag implements Toolb
 
                     itemSize = childChannel.getChannels().size();
                 }
-
             }
         });
 
-        adapter.setCallBack(channel -> popularMoreChannelViewModel.onChannelClick(channel, PopularMoreChannelFragment.this));
+        adapter.setCallBack(new PopularMoreChannelAdapter.OnMoreChannelCallBack() {
+            @Override
+            public void onChannelClick(Channel channel) {
+                popularMoreChannelViewModel.onChannelClick(channel, PopularMoreChannelFragment.this);
+            }
+
+            @Override
+            public void onLoadMore() {
+                loadMoreData();
+            }
+        });
 
         popularMoreChannelViewModel.getProgressMutableLiveData().observe(getViewLifecycleOwner(), progress -> {
             if (progress != null && progress)
@@ -139,11 +151,7 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag implements Toolb
 
 
         scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (nestedScrollView1, i, i1, i2, i3) -> {
-            if (itemSize >= pageMax) {
-                int nextPage = pageMax + pageMax;
-                popularMoreChannelViewModel.getFirstPage(id, pageMax, nextPage);
-                page = page + 1;
-            }
+            loadMoreData();
         });
     }
 
@@ -158,9 +166,18 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag implements Toolb
         }
     }
 
+    private void loadMoreData() {
+        if (itemSize >= pageMax && !isLoadMore) {
+            isLoadMore = true;
+            int nextPage = pageMax + pageMax;
+            popularMoreChannelViewModel.getFirstPage(id, pageMax, nextPage);
+            page = page + 1;
+        }
+    }
+
     public void setupViews() {
         helperToolbar = HelperToolbar.create()
-                .setContext(G.fragmentActivity)
+                .setContext(getContext())
                 .setListener(this)
                 .setLogoShown(true)
                 .setDefaultTitle(title)

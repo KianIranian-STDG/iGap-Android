@@ -62,7 +62,7 @@ public class RegisterRepository {
     private String authorHash;
     private long userId;
     private boolean newUser;
-    private String regex;
+    private String regex = "^\\d{10}$";
     private int callingCode;
     private String isoCode = "IR";
     private String countryName = "";
@@ -187,7 +187,6 @@ public class RegisterRepository {
 
     public void getTermsOfServiceBody(RepositoryCallback<String> callback) {
         new RequestInfoPage().infoPageAgreementDiscovery("TOS", new RequestInfoPage.OnInfoPage() {
-
             @Override
             public void onInfo(String body) {
                 callback.onSuccess(body);
@@ -260,7 +259,6 @@ public class RegisterRepository {
         RequestWrapper requestWrapper = new RequestWrapper(100, builder, new OnUserRegistration() {
             @Override
             public void onRegister(String userNameR, long userIdR, ProtoUserRegister.UserRegisterResponse.Method methodValue, List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, String authorHashR, boolean callMethodSupported) {
-
                 /*isCallMethodSupported = callMethodSupported;*/
                 //because is new ui verification code number is 5 and number not not use it more
                 /*digitCount = verifyCodeDigitCount;*/
@@ -272,7 +270,6 @@ public class RegisterRepository {
                 G.smsNumbers = smsNumbersR;
                 method = methodValue;
                 callback.onSuccess();
-
             }
 
             @Override
@@ -285,7 +282,6 @@ public class RegisterRepository {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-
     }
 
     public void userLogin(String token) {
@@ -412,11 +408,13 @@ public class RegisterRepository {
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-                AccountManager.getInstance().updateCurrentUserName(user.getDisplayName());
-                DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransactionAsync(realm1 -> RealmUserInfo.putOrUpdate(realm1, user), () -> G.onUserInfoResponse = null);
-                });
-                goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
+                if (user.getId() == userId) {
+                    AccountManager.getInstance().updateCurrentUserName(user.getDisplayName());
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        realm.executeTransactionAsync(realm1 -> RealmUserInfo.putOrUpdate(realm1, user), () -> G.onUserInfoResponse = null);
+                    });
+                    goToMainPage.postValue(new GoToMainFromRegister(forgetTwoStepVerification, userId));
+                }
 
             }
 
