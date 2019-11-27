@@ -779,7 +779,7 @@ public class ChatAttachmentPopup {
 
     private void animateViewWithCircularReveal(View myView) {
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP && myView != null) {
 
             int cx = myView.getMeasuredWidth() / 2;
             int cy = myView.getMeasuredHeight() / 2;
