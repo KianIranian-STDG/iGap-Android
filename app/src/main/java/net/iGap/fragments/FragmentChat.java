@@ -6076,8 +6076,8 @@ public class FragmentChat extends BaseFragment
     private void sendButtonVisibility(boolean visibility) {
 
         if (animGone == null || animVisible == null) {
-            animGone = AnimationUtils.loadAnimation(getContext(), R.anim.fade_scale_hide);
-            animVisible = AnimationUtils.loadAnimation(getContext(), R.anim.fade_scale_show);
+            animGone = AnimationUtils.loadAnimation(imvSendButton.getContext(), R.anim.fade_scale_hide);
+            animVisible = AnimationUtils.loadAnimation(imvSendButton.getContext(), R.anim.fade_scale_show);
         }
 
         //animGone.setDuration(70);
