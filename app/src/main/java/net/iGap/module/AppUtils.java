@@ -668,7 +668,13 @@ public final class AppUtils {
             if (message != null) {
                 intent.putExtra(Intent.EXTRA_TEXT, message);
             }
-            String filePath = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : messageInfo.attachment.getLocalFilePath();
+            String filePath;
+            if (messageInfo.forwardedFrom != null) {
+                filePath = messageInfo.forwardedFrom.getAttachment().getLocalFilePath() != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(messageInfo.forwardedFrom.getAttachment().getCacheId(), messageInfo.forwardedFrom.getAttachment().getName(), messageInfo.messageType);
+            } else {
+                filePath = messageInfo.getAttachment().localFilePath != null ? messageInfo.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(messageInfo.getAttachment().cashID, messageInfo.getAttachment().name, messageInfo.messageType);
+            }
+
             if (filePath != null) {
 
                 Uri uri;
