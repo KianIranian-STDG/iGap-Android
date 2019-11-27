@@ -1447,7 +1447,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (state) {
