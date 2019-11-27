@@ -5,25 +5,25 @@ import com.google.gson.annotations.SerializedName;
 public class Pagination {
 
     @SerializedName("hasNextPage")
-    private Boolean mHasNextPage;
+    private boolean mHasNextPage;
     @SerializedName("hasPrevPage")
-    private Boolean mHasPrevPage;
+    private boolean mHasPrevPage;
     @SerializedName("limit")
     private Long mLimit;
     @SerializedName("nextPage")
     private Object mNextPage;
     @SerializedName("page")
-    private Long mPage;
+    private long mPage;
     @SerializedName("pagingCounter")
-    private Long mPagingCounter;
+    private long mPagingCounter;
     @SerializedName("prevPage")
-    private Long mPrevPage;
+    private long mPrevPage;
     @SerializedName("totalDocs")
-    private Long mTotalDocs;
+    private long mTotalDocs;
     @SerializedName("totalPages")
-    private Long mTotalPages;
+    private long mTotalPages;
 
-    public Boolean getHasNextPage() {
+    public boolean getHasNextPage() {
         return mHasNextPage;
     }
 
@@ -31,7 +31,7 @@ public class Pagination {
         mHasNextPage = hasNextPage;
     }
 
-    public Boolean getHasPrevPage() {
+    public boolean getHasPrevPage() {
         return mHasPrevPage;
     }
 
@@ -39,7 +39,7 @@ public class Pagination {
         mHasPrevPage = hasPrevPage;
     }
 
-    public Long getLimit() {
+    public long getLimit() {
         return mLimit;
     }
 
@@ -55,7 +55,7 @@ public class Pagination {
         mNextPage = nextPage;
     }
 
-    public Long getPage() {
+    public long getPage() {
         return mPage;
     }
 
@@ -63,7 +63,7 @@ public class Pagination {
         mPage = page;
     }
 
-    public Long getPagingCounter() {
+    public long getPagingCounter() {
         return mPagingCounter;
     }
 
@@ -71,7 +71,7 @@ public class Pagination {
         mPagingCounter = pagingCounter;
     }
 
-    public Long getPrevPage() {
+    public long getPrevPage() {
         return mPrevPage;
     }
 
@@ -79,7 +79,7 @@ public class Pagination {
         mPrevPage = prevPage;
     }
 
-    public Long getTotalDocs() {
+    public long getTotalDocs() {
         return mTotalDocs;
     }
 
@@ -87,7 +87,7 @@ public class Pagination {
         mTotalDocs = totalDocs;
     }
 
-    public Long getTotalPages() {
+    public long getTotalPages() {
         return mTotalPages;
     }
 

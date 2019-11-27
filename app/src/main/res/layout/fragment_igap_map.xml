@@ -204,11 +204,11 @@
                         android:paddingTop="10dp">
 
                         <TextView
+                            style="@style/baseFontIcon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/md_igap_alert"
-                            android:textAppearance="@style/TextIconAppearance_toolbar"
+                            android:text="@string/error_icon"
                             android:textColor="@color/layout_background_top_connectivity"
                             android:textSize="@dimen/dp70" />
 

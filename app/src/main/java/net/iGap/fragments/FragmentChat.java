@@ -2380,19 +2380,31 @@ public class FragmentChat extends BaseFragment
 
         G.onChatSendMessage = new OnChatSendMessage() {
             @Override
-            public void Error(int majorCode, int minorCode, final int waitTime) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            if (G.fragmentActivity.hasWindowFocus()) {
-                                showErrorDialog(waitTime);
+            public void Error(int majorCode, int minorCode, final int waitTime, long messageId) {
+                if (majorCode == 234) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (G.fragmentActivity.hasWindowFocus()) {
+                                    showErrorDialog(waitTime);
+                                }
+                            } catch (Exception e) {
                             }
-                        } catch (Exception e) {
-                        }
 
-                    }
-                });
+                        }
+                    });
+                } else if (majorCode == 233 && minorCode == 1) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (getContext() != null && mAdapter != null) {
+                                mAdapter.removeMessage(messageId);
+                            }
+                        }
+                    });
+                }
+
             }
         };
 
@@ -4050,10 +4062,11 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onMessageFailed(long roomId, long messageId) {
-
-        if (roomId == mRoomId && mAdapter != null) {
-            mAdapter.updateMessageStatus(messageId, ProtoGlobal.RoomMessageStatus.FAILED);
-        }
+        G.handler.post(() -> {
+            if (roomId == mRoomId && mAdapter != null) {
+                mAdapter.updateMessageStatus(messageId, ProtoGlobal.RoomMessageStatus.FAILED);
+            }
+        });
     }
 
     @Override

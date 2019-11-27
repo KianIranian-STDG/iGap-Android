@@ -80,7 +80,7 @@ public class HelperCalander {
     public static int isTimeHijri() {
 
         SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 0);
+        return sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 1);
     }
 
     public static String checkHijriAndReturnTime(long time) {

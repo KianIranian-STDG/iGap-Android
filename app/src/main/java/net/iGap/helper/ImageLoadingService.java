@@ -22,6 +22,6 @@ public class ImageLoadingService {
             }
 
         if (picasso != null)
-            picasso.load(url).error(R.drawable.ic_error).into(imageView);
+            picasso.load(url).fit().centerCrop().error(R.drawable.ic_error).into(imageView);
     }
 }

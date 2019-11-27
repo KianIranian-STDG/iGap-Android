@@ -669,7 +669,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             try {
                 mMainRole = realmMembers1.get(0).getRole();
                 mAdapter.setMainRole(mMainRole);
-            }catch (NullPointerException ex){
+            }catch (Exception ex){
                 ex.printStackTrace();
             }
         });
