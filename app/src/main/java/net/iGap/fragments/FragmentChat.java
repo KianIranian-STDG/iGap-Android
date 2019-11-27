@@ -559,7 +559,7 @@ public class FragmentChat extends BaseFragment
     private boolean isEmojiSHow = false;
     private boolean isPublicGroup = false;
     private ArrayList<Long> bothDeleteMessageId;
-    private RelativeLayout layoutMute;
+    private ViewGroup layoutMute;
     private String report = "";
     private View rootView;
     private boolean isAllSenderId = true;
