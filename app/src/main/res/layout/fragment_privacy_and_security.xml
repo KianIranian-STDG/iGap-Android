@@ -553,6 +553,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="top"
+                        android:textColor="?iGapSubtitleTextColor"
+                        android:fontFamily="@font/main_font"
                         android:padding="@dimen/dp16"
                         android:text="@string/desc_self_destroy"
                         android:textSize="@dimen/smallTextSize"

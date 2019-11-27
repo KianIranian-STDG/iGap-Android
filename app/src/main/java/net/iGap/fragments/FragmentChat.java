@@ -559,7 +559,7 @@ public class FragmentChat extends BaseFragment
     private boolean isEmojiSHow = false;
     private boolean isPublicGroup = false;
     private ArrayList<Long> bothDeleteMessageId;
-    private RelativeLayout layoutMute;
+    private ViewGroup layoutMute;
     private String report = "";
     private View rootView;
     private boolean isAllSenderId = true;
@@ -6076,8 +6076,8 @@ public class FragmentChat extends BaseFragment
     private void sendButtonVisibility(boolean visibility) {
 
         if (animGone == null || animVisible == null) {
-            animGone = AnimationUtils.loadAnimation(getContext(), R.anim.fade_scale_hide);
-            animVisible = AnimationUtils.loadAnimation(getContext(), R.anim.fade_scale_show);
+            animGone = AnimationUtils.loadAnimation(imvSendButton.getContext(), R.anim.fade_scale_hide);
+            animVisible = AnimationUtils.loadAnimation(imvSendButton.getContext(), R.anim.fade_scale_show);
         }
 
         //animGone.setDuration(70);
