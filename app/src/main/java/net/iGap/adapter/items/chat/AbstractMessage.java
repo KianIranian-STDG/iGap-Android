@@ -1647,7 +1647,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                                 MusicPlayer.downloadNewItem = true;
                                             }
                                         }
-                                        onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
+                                        if (attachment.isValid())
+                                            onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
                                     }
                                 }
                             }
