@@ -39,6 +39,7 @@ import net.iGap.adapter.items.AdapterCamera;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.FragmentGallery;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnClickCamera;
 import net.iGap.interfaces.OnGetPermission;
@@ -849,6 +850,7 @@ public class ChatAttachmentPopup {
                 .cameraErrorCallback(e -> {
                     fotoapparatSwitcher = null;
                     Toast.makeText(mFrgActivity.getBaseContext(), R.string.str_frag_sync_error, Toast.LENGTH_SHORT).show();
+                    new HelperLog().setErrorLog(e);
                 })
                 .build();
 
