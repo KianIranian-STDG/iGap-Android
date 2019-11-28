@@ -2,7 +2,10 @@ package net.iGap.viewmodel;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
+import android.view.View;
 
+import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -26,6 +29,8 @@ import net.iGap.realm.RealmWallpaperFields;
 import net.iGap.realm.RealmWallpaperProto;
 import net.iGap.request.RequestInfoWallpaper;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,6 +46,7 @@ public class ChatBackgroundViewModel extends ViewModel {
     private MutableLiveData<List<StructWallpaper>> loadChatBackgroundImage = new MutableLiveData<>();
     private MutableLiveData<List<String>> loadChatBackgroundSolidColor = new MutableLiveData<>();
     private SingleLiveEvent<Boolean> showAddImage = new SingleLiveEvent<>();
+    private ObservableInt showLoadingView = new ObservableInt(View.GONE);
 
     private List<Integer> menuItemList;
     private SharedPreferences sharedPreferences;
@@ -51,7 +57,7 @@ public class ChatBackgroundViewModel extends ViewModel {
     private File privateDirectory;
     private OnImageWallpaperListClick onImageWallpaperListClick;
 
-    public ChatBackgroundViewModel(SharedPreferences sharedPreferences, File privateDirectory) {
+    public ChatBackgroundViewModel(@NotNull SharedPreferences sharedPreferences, File privateDirectory) {
         this.sharedPreferences = sharedPreferences;
         this.privateDirectory = privateDirectory;
         this.solidList = new ArrayList<>(Arrays.asList("#2962ff", "#00b8d4",
@@ -113,6 +119,8 @@ public class ChatBackgroundViewModel extends ViewModel {
                 showAddImage.setValue(true);
             }
         };
+
+        fillList(true);
     }
 
     public MutableLiveData<Boolean> getGoBack() {
@@ -143,6 +151,10 @@ public class ChatBackgroundViewModel extends ViewModel {
         return showAddImage;
     }
 
+    public ObservableInt getShowLoadingView() {
+        return showLoadingView;
+    }
+
     public OnImageWallpaperListClick getOnImageWallpaperListClick() {
         return onImageWallpaperListClick;
     }
@@ -153,10 +165,8 @@ public class ChatBackgroundViewModel extends ViewModel {
             new File(G.DIR_CHAT_BACKGROUND + "/.nomedia").createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
-            goBack.setValue(true);
+            goBack.setValue(false);
         }
-
-        fillList(true);
     }
 
     public void onMenuClick() {
@@ -174,7 +184,7 @@ public class ChatBackgroundViewModel extends ViewModel {
     }
 
     public void onBackMenuItemClick() {
-        goBack.setValue(true);
+        goBack.setValue(false);
     }
 
     public void onAcceptMenuItemClick() {
@@ -216,7 +226,6 @@ public class ChatBackgroundViewModel extends ViewModel {
     }
 
     private void fillList(boolean getInfoFromServer) {
-
         if (wList == null) wList = new ArrayList<>();
 
         wList.clear();
@@ -225,29 +234,32 @@ public class ChatBackgroundViewModel extends ViewModel {
             RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
 
             if (realmWallpaper != null) {
-
+                Log.wtf(this.getClass().getName(), "realmWallpaper != null");
                 if (realmWallpaper.getLocalList() != null) {
+                    Log.wtf(this.getClass().getName(), "realmWallpaper.getLocalList() != null");
                     for (String localPath : realmWallpaper.getLocalList()) {
                         if (new File(localPath).exists()) {
                             StructWallpaper _swl = new StructWallpaper();
                             _swl.setWallpaperType(FragmentChatBackground.WallpaperType.local);
                             _swl.setPath(localPath);
                             wList.add(_swl);
-
+                            loadChatBackgroundImage.postValue(wList);
                         }
                     }
                 }
 
                 if (realmWallpaper.getWallPaperList() != null) {
+                    Log.wtf(this.getClass().getName(), "realmWallpaper.getWallPaperList() != null");
                     for (RealmWallpaperProto wallpaper : realmWallpaper.getWallPaperList()) {
                         StructWallpaper _swp = new StructWallpaper();
                         _swp.setWallpaperType(FragmentChatBackground.WallpaperType.proto);
                         _swp.setProtoWallpaper(wallpaper);
                         wList.add(_swp);
+                        loadChatBackgroundImage.postValue(wList);
                     }
 
                 } else if (getInfoFromServer) {
-
+                    Log.wtf(this.getClass().getName(), "getInfoFromServer");
                     long time = realmWallpaper.getLastTimeGetList();
                     if (time > 0) {
 
@@ -259,6 +271,7 @@ public class ChatBackgroundViewModel extends ViewModel {
                     }
                 }
             } else {
+                Log.wtf(this.getClass().getName(), "realmWallpaper == null");
                 if (getInfoFromServer) {
                     getImageListFromServer();
                 }
@@ -267,28 +280,20 @@ public class ChatBackgroundViewModel extends ViewModel {
     }
 
     private void getImageListFromServer() {
+        showLoadingView.set(View.VISIBLE);
         G.onGetWallpaper = new OnGetWallpaper() {
             @Override
             public void onGetWallpaperList(final List<ProtoGlobal.Wallpaper> list) {
                 RealmWallpaper.updateField(list, "", ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE);
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        fillList(false);
-                        if (isSolidColor){
-                            loadChatBackgroundSolidColor.setValue(solidList);
-                        }else{
-                            loadChatBackgroundImage.setValue(wList);
-                        }
-                    }
-                });
+                fillList(false);
+                showLoadingView.set(View.GONE);
             }
         };
 
         new RequestInfoWallpaper().infoWallpaper(ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND);
     }
 
-    public void setUserCustomImage(String filePath){
+    public void setUserCustomImage(String filePath) {
         if (filePath != null) {
             if (new File(filePath).exists()) {
                 RealmWallpaper.updateField(null, filePath, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE);

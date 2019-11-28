@@ -4,7 +4,5 @@
     android:id="@+id/item"
     android:layout_width="@dimen/dp80"
     android:layout_height="@dimen/dp100"
-    android:layout_margin="0dp"
-    android:padding="0dp"
     app:cardElevation="@dimen/dp4"
     app:cardUseCompatPadding="true" />

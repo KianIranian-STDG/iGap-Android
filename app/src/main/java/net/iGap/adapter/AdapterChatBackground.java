@@ -36,16 +36,15 @@ import net.iGap.viewmodel.ChatBackgroundViewModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int SOLID_COLOR = 0;
     public static final int WALLPAPER_IMAGE = 1;
 
-    private ArrayList<StructWallpaper> mList;
-    private ArrayList<String> solidColorList;
+    private List<StructWallpaper> mList;
+    private List<String> solidColorList;
     private int type;
     private ChatBackgroundViewModel.OnImageWallpaperListClick onImageClick;
 
@@ -53,6 +52,18 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
     public AdapterChatBackground(ChatBackgroundViewModel.OnImageWallpaperListClick onImageClick) {
         this.type = WALLPAPER_IMAGE;
         this.onImageClick = onImageClick;
+    }
+
+    public void wallpaperList(List<StructWallpaper> mList) {
+        this.mList = mList;
+        this.type = WALLPAPER_IMAGE;
+        notifyDataSetChanged();
+    }
+
+    public void setSolidColor(List<String> solidColorList) {
+        this.solidColorList = solidColorList;
+        this.type = SOLID_COLOR;
+        notifyDataSetChanged();
     }
 
     public void setType(int type) {
@@ -63,6 +74,15 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public int getItemViewType(int position) {
         return type;
+    }
+
+    @Override
+    public int getItemCount() {
+        if (type == WALLPAPER_IMAGE) {
+            return mList != null ? mList.size() + 1 : 0;
+        } else {
+            return solidColorList != null ? solidColorList.size() : 0;
+        }
     }
 
     @NotNull
@@ -81,11 +101,11 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
         if (holder instanceof ViewHolderImage) {
             if (position == 0) {
                 ((ViewHolderImage) holder).messageProgress.setVisibility(View.GONE);
-                holder.itemView.setOnClickListener(v -> onImageClick.onAddImageClick());
+                ((ViewHolderImage) holder).imageView.setImageResource(R.drawable.add_chat_background_setting);
             } else {
                 ((ViewHolderImage) holder).messageProgress.setVisibility(View.VISIBLE);
                 ((ViewHolderImage) holder).imageView.setImageDrawable(null);
-                StructWallpaper wallpaper = mList.get(position);
+                StructWallpaper wallpaper = mList.get(position - 1);
 
                 if (wallpaper.getWallpaperType() == FragmentChatBackground.WallpaperType.proto) {
                     RealmAttachment pf = wallpaper.getProtoWallpaper().getFile();
@@ -131,27 +151,22 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                     ((ViewHolderImage) holder).messageProgress.setVisibility(View.GONE);
                 } else {
                     ((ViewHolderImage) holder).messageProgress.setVisibility(View.VISIBLE);
-                    startDownload(position, ((ViewHolderImage) holder).messageProgress);
+                    startDownload(position - 1, ((ViewHolderImage) holder).messageProgress);
                 }
-
-                ((ViewHolderImage) holder).imageView.setOnClickListener(v -> {
-                    if (bigImagePath.length() > 0) {
-                        if (onImageClick != null) {
-                            onImageClick.onClick(type, holder.getAdapterPosition() - 1);
-                        }
-                    }
-                });
             }
+            holder.itemView.setOnClickListener(v -> {
+                if (position == 0) {
+                    onImageClick.onAddImageClick();
+                } else {
+                    onImageClick.onClick(type, holder.getAdapterPosition() - 1);
+                }
+            });
+
         } else if (holder instanceof ViewHolderSolid) {
-            ((ViewHolderSolid) holder).cardView.setBackgroundColor(Color.parseColor(solidColorList.get(position)));
+            ((ViewHolderSolid) holder).cardView.setCardBackgroundColor(Color.parseColor(solidColorList.get(position)));
             holder.itemView.setOnClickListener(v -> onImageClick.onClick(type, holder.getAdapterPosition()));
 
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return mList != null ? mList.size() + 1 : 0;
     }
 
     private void startDownload(final int position, final MessageProgress messageProgress) {
@@ -208,7 +223,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
         private AppCompatImageView imageView;
         private MessageProgress messageProgress;
 
-        public ViewHolderImage(View itemView) {
+        ViewHolderImage(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imgBackground);
             messageProgress = itemView.findViewById(R.id.progress);
@@ -223,7 +238,6 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
         ViewHolderSolid(View itemView) {
             super(itemView);
-
             cardView = itemView.findViewById(R.id.item);
         }
     }

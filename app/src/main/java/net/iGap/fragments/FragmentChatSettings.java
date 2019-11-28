@@ -216,4 +216,8 @@ public class FragmentChatSettings extends BaseFragment {
             getContext().getTheme().applyStyle(new Theme().getTheme(getContext()), true);
         }
     }
+
+    public void chatBackgroundChange(){
+        viewModel.getChatBackground();
+    }
 }

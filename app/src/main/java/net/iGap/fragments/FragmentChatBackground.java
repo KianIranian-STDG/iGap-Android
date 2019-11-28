@@ -31,23 +31,19 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.databinding.ActivityChatBackgroundBinding;
 import net.iGap.dialog.topsheet.TopSheetDialog;
-import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.proto.ProtoInfoWallpaper;
-import net.iGap.realm.RealmWallpaper;
-import net.iGap.realm.RealmWallpaperProto;
 import net.iGap.viewmodel.ChatBackgroundViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.io.IOException;
 
 import static net.iGap.helper.HelperSaveFile.getPrivateDirectory;
@@ -66,7 +62,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new ChatBackgroundViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE),getPrivateDirectory(getActivity()));
+                return (T) new ChatBackgroundViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), getPrivateDirectory(getActivity()));
             }
         }).get(ChatBackgroundViewModel.class);
     }
@@ -102,7 +98,8 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
 
         viewModel.getLoadSelectedImage().observe(getViewLifecycleOwner(), wallpaper -> {
             if (wallpaper != null) {
-                Picasso.get().load(wallpaper.getImagePath()).fit().into(binding.stchfFullImage);
+                binding.stchfFullImage.setBackground(null);
+                Picasso.get().load(wallpaper.getImagePath()).fit().centerCrop().into(binding.stchfFullImage);
                 if (wallpaper.isNew()) {
                     toolbar.getSecondRightButton().setVisibility(View.VISIBLE);
                     toolbar.getThirdRightButton().setVisibility(View.GONE);
@@ -119,7 +116,7 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         AttachFile attachFile = new AttachFile(getActivity());
-                        if (text.toString().equals(G.context.getString(R.string.from_camera))) {
+                        if (text.toString().equals(getString(R.string.from_camera))) {
                             try {
                                 attachFile.requestTakePicture(FragmentChatBackground.this);
                             } catch (IOException e) {
@@ -159,15 +156,22 @@ public class FragmentChatBackground extends BaseFragment implements ToolbarListe
         });
 
         viewModel.getLoadChatBackgroundImage().observe(getViewLifecycleOwner(), isLoad -> {
-
+            if (binding.rcvContent.getAdapter() instanceof AdapterChatBackground && isLoad != null) {
+                ((AdapterChatBackground) binding.rcvContent.getAdapter()).wallpaperList(isLoad);
+            }
         });
 
         viewModel.getLoadChatBackgroundSolidColor().observe(getViewLifecycleOwner(), isLoad -> {
-
+            if (binding.rcvContent.getAdapter() instanceof AdapterChatBackground && isLoad != null) {
+                ((AdapterChatBackground) binding.rcvContent.getAdapter()).setSolidColor(isLoad);
+            }
         });
 
         viewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
-            if (getActivity() != null && isGoBack != null && isGoBack) {
+            if (getActivity() instanceof ActivityMain && isGoBack != null) {
+                if (isGoBack) {
+                    ((ActivityMain) getActivity()).chatBackgroundChanged();
+                }
                 getActivity().onBackPressed();
             }
         });

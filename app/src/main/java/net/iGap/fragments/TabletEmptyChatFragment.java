@@ -30,6 +30,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class TabletEmptyChatFragment extends Fragment {
 
+    private AppCompatImageView imgBackGround;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,14 +42,21 @@ public class TabletEmptyChatFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        imgBackGround = view.findViewById(R.id.backgroundView);
+
+        getChatBackground();
+
         view.findViewById(R.id.goToSetting).setOnClickListener(v -> {
             if (getActivity() instanceof ActivityMain) {
                 ((ActivityMain) getActivity()).goToUserProfile();
             }
         });
 
+
+    }
+
+    public void getChatBackground(){
         String backGroundPath = getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
-        AppCompatImageView imgBackGround = view.findViewById(R.id.backgroundView);
         if (backGroundPath.length() > 0) {
             File f = new File(backGroundPath);
             if (f.exists()) {
