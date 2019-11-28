@@ -2,13 +2,13 @@ package net.iGap.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.realm.RealmUserInfo;
@@ -39,9 +39,14 @@ public class SplashActivity extends AppCompatActivity {
             });
 
             if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
-                Intent intent = new Intent(this, ActivityRegistration.class);
-                startActivity(intent);
-                finish();
+                if (AccountManager.getInstance().haveAccount()) {//Todo: this is fucking code and must find cause of this bug
+                    startActivity(new Intent(this, ActivityMain.class));
+                    finish();
+                } else {
+                    Intent intent = new Intent(this, ActivityRegistration.class);
+                    startActivity(intent);
+                    finish();
+                }
             } else if (userInfo.getUserInfo() == null || userInfo.getUserInfo().getDisplayName() == null || userInfo.getUserInfo().getDisplayName().isEmpty()) {
                 Intent intent = new Intent(this, ActivityRegistration.class);
                 intent.putExtra(ActivityRegistration.showProfile, true);

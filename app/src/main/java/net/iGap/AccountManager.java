@@ -189,7 +189,7 @@ public class AccountManager {
         return defaultDBName;
     }
 
-    private void clearSomeStaticValue(){
+    private void clearSomeStaticValue() {
         ClientGetRoomListResponse.roomListFetched = false;
         RequestClientGetRoomList.isPendingGetRoomList = false;
         G.serverHashContact = null;
@@ -199,5 +199,19 @@ public class AccountManager {
         G.jwt = null;
         G.selectedCard = null;
         G.cardamount = 0;
+    }
+
+    public boolean haveAccount() {
+        if (userAccountList.get(currentUser).isAssigned()) {
+            return true;
+        } else {
+            if (userAccountList.size() > 1) {
+                currentUser = userAccountList.size() - 1;
+                setCurrentUser();
+                return userAccountList.get(userAccountList.size() - 1).isAssigned();
+            } else {
+                return false;
+            }
+        }
     }
 }
