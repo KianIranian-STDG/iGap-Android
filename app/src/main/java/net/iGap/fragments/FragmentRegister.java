@@ -100,7 +100,7 @@ public class FragmentRegister extends BaseFragment {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(@NotNull View textView) {
-                showDialogTermAndCondition();
+                fragmentRegisterViewModel.onTermsAndConditionClick();
             }
 
             @Override
@@ -225,6 +225,12 @@ public class FragmentRegister extends BaseFragment {
                 HelperError.showSnackMessage(getString(messageRes), false);
             }
         });
+
+        fragmentRegisterViewModel.showTermsAndConditionDialog.observe(getViewLifecycleOwner(), termsAndConditionText -> {
+            if (termsAndConditionText != null) {
+                showDialogTermAndCondition(termsAndConditionText);
+            }
+        });
     }
 
     private void showCountryDialog() {
@@ -334,13 +340,13 @@ public class FragmentRegister extends BaseFragment {
         }
     }
 
-    private void showDialogTermAndCondition() {
+    private void showDialogTermAndCondition(String message) {
         if (getActivity() != null) {
             Dialog dialogTermsAndCondition = new Dialog(getActivity());
             dialogTermsAndCondition.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialogTermsAndCondition.setContentView(R.layout.terms_condition_dialog);
             AppCompatTextView termsText = dialogTermsAndCondition.findViewById(R.id.termAndConditionTextView);
-            termsText.setText(fragmentRegisterViewModel.getAgreementDescription());
+            termsText.setText(message);
             dialogTermsAndCondition.findViewById(R.id.okButton).setOnClickListener(v -> dialogTermsAndCondition.dismiss());
             dialogTermsAndCondition.show();
         }

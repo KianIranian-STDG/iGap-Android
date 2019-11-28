@@ -16,8 +16,7 @@ import net.iGap.proto.ProtoClientGetRoomList;
 import java.util.HashSet;
 
 public class RequestClientGetRoomList {
-
-    public static HashSet<Integer> pendingRequest = new HashSet<>();
+    public static boolean isPendingGetRoomList = false;
 
     public static class IdentityGetRoomList {
         public boolean isFromLogin;
@@ -32,10 +31,9 @@ public class RequestClientGetRoomList {
     }
 
     public synchronized boolean clientGetRoomList(int offset, int limit, String identity) {
-        if (pendingRequest.contains(offset)) {
+        if (isPendingGetRoomList) {
             return false;
         }
-
         ProtoClientGetRoomList.ClientGetRoomList.Builder clientGetRoomList = ProtoClientGetRoomList.ClientGetRoomList.newBuilder();
         clientGetRoomList.setPagination(new RequestPagination().pagination(offset, limit));
 
@@ -44,8 +42,8 @@ public class RequestClientGetRoomList {
         try {
 
             if (G.userLogin) {
+                isPendingGetRoomList = true;
                 RequestQueue.sendRequest(requestWrapper);
-                pendingRequest.add(offset);
                 return true;
             } else {
                 return false;

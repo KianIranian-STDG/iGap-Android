@@ -944,6 +944,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         if (isEditProfile) {
             isEditProfile = false;
             getEditProfileIcon().set(R.string.edit_icon);
+            showAddAvatarButton.set(View.GONE);
             popBackStack.setValue(true);
             showAddAvatarButton.set(View.GONE);
             return false;

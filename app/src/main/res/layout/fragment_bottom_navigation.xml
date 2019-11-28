@@ -56,6 +56,7 @@
             android:gravity="center"
             app:dark_selected_icon="@drawable/ic_bottomnavigation_chat_on_darkmode"
             app:dark_unselected_icon="@drawable/ic_bottomnavigation_chat_off_darkmode"
+            app:haveAvatarImage="false"
             app:item_text="@string/chat"
             app:selected_icon="@drawable/ic_bottomnavigation_chat_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_chat_off" />
@@ -72,33 +73,15 @@
             app:selected_icon="@drawable/ic_bottomnavigation_discovery_on"
             app:unselected_icon="@drawable/ic_bottomnavigation_discovery_off" />
 
-        <FrameLayout
-            android:id="@+id/profileTabItem"
+
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:id="@+id/ti_main_setting"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
-
-            <net.iGap.module.CircleImageView
-                android:id="@+id/ti_main_setting"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="6dp"
-                android:background="?attr/iGapProfileStroke"
-                android:padding="4dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="4dp"
-                android:gravity="center"
-                android:text="@string/profile"
-                android:textColor="@color/bottom_navigation_text_color"
-                android:textSize="9dp" />
-        </FrameLayout>
-
+            android:gravity="center"
+            app:haveAvatarImage="true"
+            app:item_text="@string/profile" />
     </net.iGap.libs.bottomNavigation.BottomNavigation>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

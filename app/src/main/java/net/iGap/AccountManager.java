@@ -8,6 +8,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import net.iGap.model.AccountUser;
+import net.iGap.request.RequestClientGetRoomList;
+import net.iGap.response.ClientGetRoomListResponse;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -188,6 +190,8 @@ public class AccountManager {
     }
 
     private void clearSomeStaticValue(){
+        ClientGetRoomListResponse.roomListFetched = false;
+        RequestClientGetRoomList.isPendingGetRoomList = false;
         G.serverHashContact = null;
         G.isMplActive = false;
         G.isWalletActive = false;

@@ -10,19 +10,20 @@
 
 package net.iGap.response;
 
-import android.util.Log;
-
 import net.iGap.Config;
 import net.iGap.G;
+import net.iGap.fragments.FragmentMain;
 import net.iGap.helper.LooperThreadHelper;
+import net.iGap.module.BotInit;
 import net.iGap.proto.ProtoClientGetRoomList;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.request.RequestClientCondition;
 import net.iGap.request.RequestClientGetRoomList;
 
+import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
-import static net.iGap.request.RequestClientGetRoomList.pendingRequest;
+import static net.iGap.request.RequestClientGetRoomList.isPendingGetRoomList;
 
 public class ClientGetRoomListResponse extends MessageHandler {
 
@@ -30,6 +31,7 @@ public class ClientGetRoomListResponse extends MessageHandler {
     public Object message;
     public RequestClientGetRoomList.IdentityGetRoomList identity;
     public static int retryCountZeroOffset = 0;
+    public static boolean roomListFetched = false;
 
     public ClientGetRoomListResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
@@ -44,19 +46,62 @@ public class ClientGetRoomListResponse extends MessageHandler {
         super.handler();
 
         final ProtoClientGetRoomList.ClientGetRoomListResponse.Builder clientGetRoomListResponse = (ProtoClientGetRoomList.ClientGetRoomListResponse.Builder) message;
-        if (G.onClientGetRoomListResponse != null) {
-            Log.wtf(this.getClass().getName(),"handler, onClientGetRoomListResponse not null");
-            G.onClientGetRoomListResponse.onClientGetRoomList(clientGetRoomListResponse.getRoomsList(), clientGetRoomListResponse.getResponse(), identity);
-        } else {
-            Log.wtf(this.getClass().getName(),"handler, onClientGetRoomListResponse null");
-            new RequestClientCondition().clientCondition(RealmClientCondition.computeClientCondition(null));
-            putChatToDatabase(clientGetRoomListResponse.getRoomsList());
+
+        boolean fromLogin = false;
+        if (identity.isFromLogin) {
+            FragmentMain.mOffset = 0;
+            fromLogin = true;
         }
 
-        if (identity.offset != 0)
-            pendingRequest.remove(identity.offset);
-        else
-            retryCountZeroOffset = 0;
+        if (FragmentMain.mOffset == 0) {
+            BotInit.checkDrIgap();
+        }
+
+        putChatToDatabase(clientGetRoomListResponse.getRoomsList(), identity.offset, clientGetRoomListResponse.getRoomsCount());
+
+        /**
+         * to first enter to app , client first compute clientCondition then
+         * getRoomList and finally send condition that before get clientCondition;
+         * in else changeState compute new client condition with latest messaging changeState
+         */
+        if (!G.userLogin) {
+            G.userLogin = true;
+            sendClientCondition();
+        } else if (fromLogin || FragmentMain.mOffset == 0) {
+            if (G.clientConditionGlobal != null) {
+                new RequestClientCondition().clientCondition(G.clientConditionGlobal);
+            } else {
+                new RequestClientCondition().clientCondition(RealmClientCondition.computeClientCondition(null));
+            }
+        }
+
+        FragmentMain.mOffset += clientGetRoomListResponse.getRoomsCount();
+        isPendingGetRoomList = false;
+        if (clientGetRoomListResponse.getRoomsCount() == 0) {
+            if (G.onClientGetRoomListResponse != null) {
+                G.onClientGetRoomListResponse.onClientGetRoomList(null, null, null);
+            }
+            roomListFetched = true;
+        } else {
+            boolean send = new RequestClientGetRoomList().clientGetRoomList(FragmentMain.mOffset, Config.LIMIT_LOAD_ROOM, "");
+
+        }
+
+        retryCountZeroOffset = 0;
+    }
+
+
+    private void sendClientCondition() {
+        if (clientConditionGlobal != null) {
+            new RequestClientCondition().clientCondition(clientConditionGlobal);
+        } else {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    sendClientCondition();
+                }
+            }, 1000);
+        }
     }
 
     @Override
@@ -70,13 +115,13 @@ public class ClientGetRoomListResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-        pendingRequest.remove(identity.offset);
-        if (identity.offset == 0 && retryCountZeroOffset < 10) {
+        isPendingGetRoomList = false;
+        if (retryCountZeroOffset < 10) {
             retryCountZeroOffset++;
             LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    new RequestClientGetRoomList().clientGetRoomList(0, Config.LIMIT_LOAD_ROOM, "0");
+                    new RequestClientGetRoomList().clientGetRoomList(identity.offset, Config.LIMIT_LOAD_ROOM, identity.offset + "");
                 }
             }, retryCountZeroOffset * 300);
         }

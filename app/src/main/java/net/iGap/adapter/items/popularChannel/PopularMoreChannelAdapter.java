@@ -44,6 +44,9 @@ public class PopularMoreChannelAdapter extends RecyclerView.Adapter<PopularMoreC
 
     @Override
     public void onBindViewHolder(@NonNull MoreChannelViewHolder categoryViewHolder, int i) {
+        if (i + 4 > getItemCount() -1 ){
+            callBack.onLoadMore();
+        }
         categoryViewHolder.bindChannel(channels.get(i));
     }
 
@@ -52,9 +55,9 @@ public class PopularMoreChannelAdapter extends RecyclerView.Adapter<PopularMoreC
         return channels.size();
     }
 
-    @FunctionalInterface
     public interface OnMoreChannelCallBack {
         void onChannelClick(Channel channel);
+        void onLoadMore();
     }
 
     public class MoreChannelViewHolder extends RecyclerView.ViewHolder {

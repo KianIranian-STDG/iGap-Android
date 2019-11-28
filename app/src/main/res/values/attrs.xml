@@ -126,6 +126,7 @@
         <attr name="dark_unselected_icon" format="reference" />
         <attr name="item_text" format="reference" />
         <attr name="item_text_size" format="dimension" />
+        <attr name="haveAvatarImage" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="PlaqueView">

@@ -58,6 +58,14 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
     private FragmentUserProfileBinding binding;
     private UserProfileViewModel viewModel;
 
+    public static FragmentUserProfile newInstance() {
+        
+        Bundle args = new Bundle();
+        
+        FragmentUserProfile fragment = new FragmentUserProfile();
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

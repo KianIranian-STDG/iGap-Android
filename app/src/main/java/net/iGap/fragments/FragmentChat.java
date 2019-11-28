@@ -1422,6 +1422,7 @@ public class FragmentChat extends BaseFragment
     }
 
     public void manageTrimVideoResult(Intent data) {
+        if (data.getData() == null) return;
         latestRequestCode = request_code_VIDEO_CAPTURED;
         listPathString = new ArrayList<>();
         mainVideoPath = data.getData().getPath();
@@ -1981,8 +1982,8 @@ public class FragmentChat extends BaseFragment
     private void manageExtraLayout() {
         if (isNotJoin) {
             final LinearLayout layoutJoin = rootView.findViewById(R.id.ac_ll_join);
+            layoutJoin.setBackground(new Theme().tintDrawable(layoutJoin.getBackground(), layoutJoin.getContext(), R.attr.iGapButtonColor));
 
-            layoutJoin.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
             layoutJoin.setVisibility(View.VISIBLE);
             layoutMute.setVisibility(View.GONE);
             viewAttachFile.setVisibility(View.GONE);
@@ -3381,9 +3382,24 @@ public class FragmentChat extends BaseFragment
         */
 
         urlWebViewForSpecialUrlChat = mUrl;
-        if (webViewChatPage == null) webViewChatPage = rootView.findViewById(R.id.webViewChatPage);
         if (rootWebView == null) rootWebView = rootView.findViewById(R.id.rootWebView);
         if (progressWebView == null) progressWebView = rootView.findViewById(R.id.progressWebView);
+        if (webViewChatPage == null) {
+            try {
+                webViewChatPage = new WebView(getContext());
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+                params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+                rootWebView.addView(webViewChatPage, params);
+//                webViewChatPage = rootView.findViewById(R.id.webViewChatPage);
+            }
+            catch (Exception e) {
+                return;
+            }
+        }
         recyclerView.setVisibility(View.GONE);
         viewAttachFile.setVisibility(View.GONE);
         rootWebView.setVisibility(View.VISIBLE);
@@ -4900,7 +4916,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onSetAction(final long roomId, final long userIdR, final ProtoGlobal.ClientAction clientAction) {
         if (mRoomId == roomId && (userId != userIdR || (isCloudRoom))) {
-            final String action = HelperGetAction.getAction(roomId, chatType, clientAction);
+            final String action = HelperGetAction.getAction(roomId, userIdR, chatType, clientAction);
 
             RealmRoom.setAction(roomId, userIdR, action);
 

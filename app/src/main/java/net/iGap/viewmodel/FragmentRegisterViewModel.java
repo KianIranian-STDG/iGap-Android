@@ -63,18 +63,19 @@ public class FragmentRegisterViewModel extends ViewModel {
     public MutableLiveData<Uri> shareQrCodeIntent = new MutableLiveData<>();
     public MutableLiveData<Boolean> hideDialogQRCode = new MutableLiveData<>();
     public MutableLiveData<Integer> showError = new MutableLiveData<>();
+    public SingleLiveEvent<String> showTermsAndConditionDialog = new SingleLiveEvent<>();
 
     public ObservableField<String> callbackBtnChoseCountry = new ObservableField<>("Iran");
     public ObservableField<String> callbackEdtCodeNumber = new ObservableField<>("+98");
     public ObservableField<String> callBackEdtPhoneNumber = new ObservableField<>("");
     public ObservableField<String> edtPhoneNumberMask = new ObservableField<>("###-###-####");
     public ObservableInt edtPhoneNumberMaskMaxCount = new ObservableInt(11);
-    public ObservableInt isShowLoading = new ObservableInt(View.VISIBLE);
+    public ObservableInt isShowLoading = new ObservableInt(View.GONE);
     public ObservableInt showRetryView = new ObservableInt(View.GONE);
     public ObservableBoolean btnChoseCountryEnable = new ObservableBoolean(true);
     public ObservableBoolean edtPhoneNumberEnable = new ObservableBoolean(true);
     public ObservableBoolean btnStartEnable = new ObservableBoolean(true);
-    public ObservableInt viewVisibility = new ObservableInt(View.INVISIBLE);
+    public ObservableInt viewVisibility = new ObservableInt(View.VISIBLE);
 
     public ArrayList<StructCountry> structCountryArrayList = new ArrayList<>();
     private boolean termsAndConditionIsChecked = false;
@@ -110,11 +111,8 @@ public class FragmentRegisterViewModel extends ViewModel {
         }
 
         Collections.sort(structCountryArrayList, new CountryListComparator());
-        getTermsAndConditionData();
-    }
-
-    public String getAgreementDescription() {
-        return agreementDescription;
+        repository.inRegisterMode(hideDialogQRCode, goToTwoStepVerificationPage);
+        /*getTermsAndConditionData();*/
     }
 
     public void onTextChanged(String s) {
@@ -182,6 +180,8 @@ public class FragmentRegisterViewModel extends ViewModel {
     }
 
     private void getTermsAndConditionData() {
+        isShowLoading.set(View.VISIBLE);
+        showRetryView.set(View.GONE);
         if (G.isSecure) {
             isShowLoading.set(View.VISIBLE);
             showRetryView.set(View.GONE);
@@ -192,36 +192,35 @@ public class FragmentRegisterViewModel extends ViewModel {
                     if (data != null) {
                         agreementDescription = HtmlCompat.fromHtml(data, HtmlCompat.FROM_HTML_MODE_LEGACY).toString();
                     }
-                    repository.getInfoLocation(new RegisterRepository.RepositoryCallback<LocationModel>() {
-                        @Override
-                        public void onSuccess(LocationModel data) {
-                            repository.inRegisterMode(hideDialogQRCode, goToTwoStepVerificationPage);
-                            isShowLoading.set(View.INVISIBLE);
-                            showRetryView.set(View.GONE);
-                            viewVisibility.set(View.VISIBLE);
-                            callbackEdtCodeNumber.set("+" + data.getCountryCode());
-                            callbackBtnChoseCountry.set(data.getCountryName());
-                            if (data.getPhoneMask() != null && !data.getPhoneMask().equals("")) {
-                                edtPhoneNumberMask.set(data.getPhoneMask().replace("X", "#").replace(" ", "-"));
-                            } else {
-                                edtPhoneNumberMask.set("##################");
-                            }
+                    isShowLoading.set(View.INVISIBLE);
+                    showTermsAndConditionDialog.postValue(agreementDescription);
+                /*repository.getInfoLocation(new RegisterRepository.RepositoryCallback<LocationModel>() {
+                    @Override
+                    public void onSuccess(LocationModel data) {
+                        repository.inRegisterMode(hideDialogQRCode, goToTwoStepVerificationPage);
+                        isShowLoading.set(View.INVISIBLE);
+                        viewVisibility.set(View.VISIBLE);
+                        callbackEdtCodeNumber.set("+" + data.getCountryCode());
+                        callbackBtnChoseCountry.set(data.getCountryName());
+                        if (data.getPhoneMask() != null && !data.getPhoneMask().equals("")) {
+                            edtPhoneNumberMask.set(data.getPhoneMask().replace("X", "#").replace(" ", "-"));
+                        } else {
+                            edtPhoneNumberMask.set("##################");
                         }
+                    }
 
-                        @Override
-                        public void onError() {
-                            Log.wtf(this.getClass().getName(), "onError");
-                            isShowLoading.set(View.INVISIBLE);
-                            showRetryView.set(View.VISIBLE);
-                        }
-                    });
+                    @Override
+                    public void onError() {
+                        isShowLoading.set(View.INVISIBLE);
+                        showRetryView.set(View.VISIBLE);
+                    }
+                });*/
                 }
 
                 @Override
                 public void onError() {
-                    Log.wtf(this.getClass().getName(), "onError");
                     isShowLoading.set(View.INVISIBLE);
-                    showRetryView.set(View.VISIBLE);
+                    //showRetryView.set(View.VISIBLE);
                 }
             });
         } else {
@@ -352,6 +351,15 @@ public class FragmentRegisterViewModel extends ViewModel {
                         }
                     }
                 });
+    }
+
+    //that is fucking code i wrote because top manager in Pressure :D
+    public void onTermsAndConditionClick() {
+        if (agreementDescription == null || agreementDescription.isEmpty()) {
+            getTermsAndConditionData();
+        } else {
+            showTermsAndConditionDialog.setValue(agreementDescription);
+        }
     }
 
     public void timerFinished() {
