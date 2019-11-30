@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperMessageResponse;
 import net.iGap.proto.ProtoChatSendMessage;
@@ -53,14 +54,12 @@ public class ChatSendMessageResponse extends MessageHandler {
         int minorCode = errorResponse.getMinorCode();
         int waitTime = errorResponse.getWait();
         if (majorCode == 233 && minorCode == 1) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(realm1 -> {
-                RealmRoomMessage message = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(this.identity)).findFirst();
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
                 if (message != null) {
-                    message.removeFromRealm(realm1);
+                    message.removeFromRealm(realm);
                 }
             });
-            realm.close();
         }
 
         if (G.onChatSendMessage != null) {
