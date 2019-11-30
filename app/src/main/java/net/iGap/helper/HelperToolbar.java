@@ -1475,6 +1475,7 @@ public class HelperToolbar {
                     edtSearch.setTypeface(tfMain);
                     edtSearch.setHint(R.string.search);
                     edtSearch.setSingleLine();
+                    edtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
                     Utils.setTextSize(edtSearch, R.dimen.smallTextSize);
                     setLayoutParams(edtSearch, i_Dp(R.dimen.dp20), 0, 0, i_Dp(R.dimen.dp20), i_Dp(R.dimen.dp32), i_Dp(R.dimen.dp32));
                     searchLayout.addView(edtSearch);
