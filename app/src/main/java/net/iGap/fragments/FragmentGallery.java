@@ -338,7 +338,7 @@ public class FragmentGallery extends BaseFragment {
     }
 
     private void setPhotoGalleryUI(View view, RecyclerView rvGallery) {
-        if (isSubFolder && mGalleryPhotoAdapter.getPhotosItem().size() < 2) {//disable multi select when photo count was 1 or 0
+        if (!isReturnResultDirectly && isSubFolder && mGalleryPhotoAdapter.getPhotosItem().size() < 2) {//disable multi select when photo count was 1 or 0
             mHelperToolbar.getRightButton().setVisibility(View.GONE);
         }
 
