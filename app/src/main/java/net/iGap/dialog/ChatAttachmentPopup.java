@@ -843,16 +843,23 @@ public class ChatAttachmentPopup {
 
     private void buildCameraSwitcher() {
 
-        fotoapparatSwitcher = Fotoapparat.with(mFrgActivity)
-                .into(rcvBottomSheet.findViewById(R.id.cameraView))// view which will draw the camera preview
-                .photoResolution(ResolutionSelectorsKt.highestResolution())   // we want to have the biggest photo possible
+        try {
+            fotoapparatSwitcher = Fotoapparat.with(mContext)
+                    .into(rcvBottomSheet.findViewById(R.id.cameraView))// view which will draw the camera preview
+                    .photoResolution(ResolutionSelectorsKt.highestResolution())   // we want to have the biggest photo possible
 //                .lensPosition(back())     // we want back camera
-                .cameraErrorCallback(e -> {
-                    fotoapparatSwitcher = null;
-                    Toast.makeText(mFrgActivity.getBaseContext(), R.string.str_frag_sync_error, Toast.LENGTH_SHORT).show();
-                    new HelperLog().setErrorLog(e);
-                })
-                .build();
+                    .cameraErrorCallback(e -> {
+                        fotoapparatSwitcher = null;
+                        Toast.makeText(mFrgActivity.getBaseContext(), R.string.str_frag_sync_error, Toast.LENGTH_SHORT).show();
+                        new HelperLog().setErrorLog(e);
+                    })
+                    .build();
+        }
+        catch (Exception e) {
+            fotoapparatSwitcher = null;
+            Toast.makeText(mFrgActivity.getBaseContext(), R.string.str_frag_sync_error, Toast.LENGTH_SHORT).show();
+            new HelperLog().setErrorLog(e);
+        }
 
     }
 
