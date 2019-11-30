@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import net.iGap.AccountHelper;
 import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
@@ -147,16 +148,7 @@ public class ActivityRegistration extends ActivityEnhanced {
                 super.onBackPressed();
             } else {
                 if (getIntent().getBooleanExtra("add account", false)) {
-                    WebSocketClient.getInstance().disconnectSocket(false);
-                    DbManager.getInstance().closeUiRealm();
-                    signOutWallet();
-                    AccountManager.getInstance().setCurrentUser();
-                    RaadApp.onCreate(this);
-                    FragmentMain.mOffset = 0;
-                    ClientGetRoomListResponse.roomListFetched = false;
-                    RequestClientGetRoomList.isPendingGetRoomList = false;
-                    DbManager.getInstance().changeRealmConfiguration();
-                    WebSocketClient.getInstance().connect(true);
+                    new AccountHelper().changeAccount();
                     Log.wtf(this.getClass().getName(), "current user: " + AccountManager.getInstance().getCurrentUser());
                     finish();
                     startActivity(new Intent(this, ActivityMain.class));

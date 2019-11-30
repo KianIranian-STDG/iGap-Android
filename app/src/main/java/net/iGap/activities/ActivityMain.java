@@ -50,6 +50,7 @@ import com.google.android.gms.security.ProviderInstaller;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import net.iGap.AccountHelper;
 import net.iGap.AccountManager;
 import net.iGap.DbManager;
 import net.iGap.G;
@@ -374,17 +375,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 long peerId = extras.getLong("PeerID");
                 long userId = extras.getLong(ActivityMain.userId);
                 if (AccountManager.getInstance().getCurrentUser().getId() != userId) {
-                    WebSocketClient.getInstance().disconnectSocket(false);
-                    G.handler.removeCallbacksAndMessages(null);
-                    G.pullRequestQueueRunned = new AtomicBoolean(false);
-                    DbManager.getInstance().closeUiRealm();
-                    signOutWallet();
-                    AccountManager.getInstance().changeCurrentUserAccount(userId);
+                    new AccountHelper().changeAccount(userId);
                     RaadApp.onCreate(this);
-                    FragmentMain.mOffset = 0;
-                    Log.wtf(this.getClass().getName(),"checkIntent,updateUiForChangeAccount");
                     updateUiForChangeAccount();
-                    Log.wtf(this.getClass().getName(),"checkIntent,updateUiForChangeAccount");
                 }
                 HelperUrl.goToActivityFromFCM(this, roomId, peerId);
             }
@@ -408,15 +401,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         detectDeviceType();
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-        G.logoutAccount.observe(this, haveOtherAccount -> {
-            Log.wtf(this.getClass().getName(), "G.logoutAccount,current user: " + AccountManager.getInstance().getCurrentUser().getDbName() + " : " + AccountManager.getInstance().getCurrentUser().getName());
-            if (haveOtherAccount != null) {
-                DbManager.getInstance().closeUiRealm();
+        G.logoutAccount.observe(this, isLogout -> {
+            if (isLogout != null && isLogout) {
+                boolean haveOtherAccount = new AccountHelper().logoutAccount();
+                RaadApp.onCreate(this);
                 if (haveOtherAccount) {
-                    //toDo: handel notification for logout user
-                    Log.wtf(this.getClass().getName(),"G.logoutAccount,updateUiForChangeAccount");
                     updateUiForChangeAccount();
-                    Log.wtf(this.getClass().getName(),"G.logoutAccount,updateUiForChangeAccount");
                 } else {
                     try {
                         NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -1151,6 +1141,24 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.rotationState = newConfig.orientation;
     }
 
+    private void setViewConfigurationChanged() {
+        if (G.twoPaneMode) {
+            if (G.isLandscape) {
+                Log.wtf(this.getClass().getName(), "isLandscape");
+                findViewById(R.id.mainFrame).setVisibility(View.VISIBLE);
+                findViewById(R.id.roomListFrame).setVisibility(View.VISIBLE);
+            } else {
+                Log.wtf(this.getClass().getName(), "not Landscape");
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                if (fragment instanceof FragmentChat) {
+                    findViewById(R.id.roomListFrame).setVisibility(View.GONE);
+                } else {
+                    findViewById(R.id.mainFrame).setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
     //******************************************************************************************************************************
 
     private void initTabStrip(Intent intent) {
@@ -1873,8 +1881,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.roomListFrame);
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).goToUserProfile();
-        }else{
-            Log.wtf(this.getClass().getName(),"test");
         }
     }
 
@@ -1945,21 +1951,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void updateUiForChangeAccount() {
-        Log.wtf(this.getClass().getName(), "updateUiForChangeAccount");
-        Log.wtf(this.getClass().getName(), "back stack count: " + getSupportFragmentManager().getBackStackEntryCount());
-        DbManager.getInstance().changeRealmConfiguration();
-        WebSocketClient.getInstance().connect(true);
         int t = getSupportFragmentManager().getBackStackEntryCount();
         for (int i = 0; i < t; i++) {
             getSupportFragmentManager().popBackStackImmediate();
         }
-        /*getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        if (G.twoPaneMode) {
-            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        }*/
-        /*WebSocketClient.connectNewAccount();*/
         initTabStrip(getIntent());
-
         // Clear all notification
         NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         nMgr.cancelAll();

@@ -12,6 +12,7 @@ package net.iGap.response;
 
 import android.util.Log;
 
+import net.iGap.AccountHelper;
 import net.iGap.G;
 import net.iGap.helper.HelperLogout;
 import net.iGap.proto.ProtoError;
@@ -38,7 +39,7 @@ public class UserDeleteResponse extends MessageHandler {
     public void handler() {
         super.handler();
         Log.wtf(this.getClass().getName(), "handler");
-        G.logoutAccount.postValue(new HelperLogout().logoutUser());
+        G.logoutAccount.postValue(true);
         deleteRecursive(new File(G.DIR_APP));
         if (G.onUserDelete != null) {
             G.onUserDelete.onUserDeleteResponse();

@@ -7,6 +7,7 @@ import android.util.Base64;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import net.iGap.fragments.FragmentMain;
 import net.iGap.model.AccountUser;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.response.ClientGetRoomListResponse;
@@ -17,6 +18,9 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.paygear.utils.Utils.signOutWallet;
 
 public class AccountManager {
 
@@ -189,9 +193,10 @@ public class AccountManager {
         return defaultDBName;
     }
 
-    private void clearSomeStaticValue() {
+    public void clearSomeStaticValue() {
         ClientGetRoomListResponse.roomListFetched = false;
         RequestClientGetRoomList.isPendingGetRoomList = false;
+        FragmentMain.mOffset = 0;
         G.serverHashContact = null;
         G.isMplActive = false;
         G.isWalletActive = false;
@@ -199,6 +204,7 @@ public class AccountManager {
         G.jwt = null;
         G.selectedCard = null;
         G.cardamount = 0;
+        G.pullRequestQueueRunned = new AtomicBoolean(false);
     }
 
     public boolean haveAccount() {
@@ -213,5 +219,12 @@ public class AccountManager {
                 return false;
             }
         }
+    }
+
+    public void firstStepOfChangeAccount(){
+        WebSocketClient.getInstance().disconnectSocket(false);
+        G.handler.removeCallbacksAndMessages(null);
+
+        signOutWallet();
     }
 }
