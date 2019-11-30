@@ -129,12 +129,7 @@ public class UserLoginResponse extends MessageHandler {
         super.timeOut();
 
         if (G.isSecure) {
-            DbManager.getInstance().doRealmTask(realm -> {
-                RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
-                    new RequestUserLogin().userLogin(userInfo.getToken());
-                }
-            });
+            retryLogin();
         } else {
             WebSocketClient.getInstance().disconnectSocket(true);
         }
@@ -146,7 +141,19 @@ public class UserLoginResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
+        if (majorCode == 110 || (majorCode == 10 && minorCode == 100)) {
+            G.handler.postDelayed(this::retryLogin, 1000);
+        }
         G.onUserLogin.onLoginError(majorCode, minorCode);
+    }
+
+    private void retryLogin() {
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
+                new RequestUserLogin().userLogin(userInfo.getToken());
+            }
+        });
     }
 
 
