@@ -268,7 +268,7 @@ public class HelperUrl {
         }
     }
 
-    private static void openEmail(Context context ,String email) {
+    public static void openEmail(Context context ,String email) {
 
         try {
             Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", email, null));

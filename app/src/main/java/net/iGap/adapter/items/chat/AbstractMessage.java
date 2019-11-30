@@ -64,7 +64,6 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetMessageState;
 import net.iGap.helper.HelperLog;
-import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;

@@ -200,8 +200,10 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             } else {
                 mSelectedRoomList.remove(temp);
                 if (mSelectedRoomList.size() > 0)
-                    item = getRealmFragmentMain().where(RealmRoom.class)
-                            .equalTo(RealmRoomFields.ID, mSelectedRoomList.get(mSelectedRoomList.size() - 1).getId()).findFirst();
+                    item = DbManager.getInstance().doRealmTask(realm -> {
+                        return realm.where(RealmRoom.class)
+                                .equalTo(RealmRoomFields.ID, mSelectedRoomList.get(mSelectedRoomList.size() - 1).getId()).findFirst();
+                    });
             }
 
             if (mSelectedRoomList.size() == 0) {
@@ -281,13 +283,12 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     private void markAsRead() {
         DbManager.getInstance().doRealmTask(realm -> {
-            List<RealmRoom> rooms = realm.copyFromRealm(mSelectedRoomList);
             AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    if (rooms.size() > 0) {
-                        for (int i = 0; i < rooms.size(); i++) {
-                            markAsRead(realm, rooms.get(i).getType(), rooms.get(i).getId());
+                    if (mSelectedRoomList.size() > 0) {
+                        for (int i = 0; i < mSelectedRoomList.size(); i++) {
+                            markAsRead(realm, mSelectedRoomList.get(i).getType(), mSelectedRoomList.get(i).getId());
                         }
                     }
                 }

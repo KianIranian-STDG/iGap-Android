@@ -665,10 +665,10 @@ public final class AppUtils {
                 intent.putExtra(Intent.EXTRA_TEXT, message);
             }
             String filePath;
-            if (messageInfo.forwardedFrom != null) {
-                filePath = messageInfo.forwardedFrom.getAttachment().getLocalFilePath() != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(messageInfo.forwardedFrom.getAttachment().getCacheId(), messageInfo.forwardedFrom.getAttachment().getName(), messageInfo.messageType);
+            if (messageInfo.realmRoomMessage.getForwardMessage() != null) {
+                filePath = messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getLocalFilePath() != null ? messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getCacheId(), messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getName(), messageInfo.realmRoomMessage.getMessageType());
             } else {
-                filePath = messageInfo.getAttachment().localFilePath != null ? messageInfo.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(messageInfo.getAttachment().cashID, messageInfo.getAttachment().name, messageInfo.messageType);
+                filePath = messageInfo.getAttachment().getLocalFilePath() != null ? messageInfo.getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(messageInfo.getAttachment().getCacheId(), messageInfo.getAttachment().getCacheId(), messageInfo.realmRoomMessage.getMessageType());
             }
 
             if (filePath != null) {
